@@ -1,0 +1,3 @@
+-Waggregate-return
+-Wpadded (très dur a faire et a maintenir askip)
+-Wswitch-enum (doit avoir tout les enumerations dans le switch (default:break; ne suffit pas))
