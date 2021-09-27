@@ -2,12 +2,10 @@
 
 class ButtonVector final
 {
-public:
+  public:
     ButtonVector() = default;
-    ButtonVector(
-        sf::Font const & font,
-        std::vector<std::string> const & buttonsString
-    );
+    ButtonVector( sf::Font const & font,
+                  std::vector<std::string> const & buttonsString );
 
     /** @brief Check if the mouse's click is inside the button.
      * @param position position of the mouse's click
@@ -17,7 +15,8 @@ public:
 
     /** @brief Check if the mouse's click is inside the button.
      * @param position position of the mouse's click
-     * @param buttonNumber number that you want to get if the click is outside all the buttons
+     * @param buttonNumber number that you want to get if the click is outside
+     * all the buttons
      * @returns key of the button pressed, if none, return buttonNumer
      */
     int update_press( sf::Vector2f const & position, int const & buttonNumber );
@@ -29,8 +28,8 @@ public:
 
     void render( sf::RenderWindow & target );
 
-private:
-    std::map< unsigned int, Button > m_buttonArray {};
+  private:
+    std::map<unsigned int, Button> m_buttonArray {};
 
     void reset_press();
     void reset_selection();

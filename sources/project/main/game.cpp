@@ -1,25 +1,18 @@
 #include "game.hpp"
 
 Game::Game()
-    : m_textures( RessourcesInit::init_textures() ),
+  : m_textures( RessourcesInit::init_textures() ),
     m_fonts( RessourcesInit::init_fonts() ),
-    m_timePerFrame( 1. / 60 )
+    m_timePerFrame( 1. / 60. )
 {
     this->init_window();
     this->init_state();
 }
 
-/* A block comment with the symbol /*
-Note that the compiler is not affected by the second /*
-however, once the end-block-comment symbol is reached,
-the comment ends.
-*/
-
-
 void Game::init_window()
 {
     std::ifstream file { "./ressources/window.txt", std::ios::in };
-    if ( !file )
+    if ( ! file )
     {
         throw std::runtime_error { "There's no file named ./ressources/window.txt" };
     }
@@ -29,21 +22,16 @@ void Game::init_window()
 
     file >> windowWidth >> windowHeight >> verticalSync;
 
-    this->m_window.create(
-        sf::VideoMode( windowWidth, windowHeight ),
-        "Project Engine"
-    );
-
+    this->m_window.create( sf::VideoMode( windowWidth, windowHeight ),
+                           "Toody Engine (In Developpement)" );
     this->m_window.setVerticalSyncEnabled( verticalSync );
 }
 
 void Game::init_state()
 {
     this->m_states = std::make_shared<MainMenuState>(
-        this->m_textures,
-        this->m_fonts,
-        this->m_window.getSize()
-    );
+        this->m_textures, this->m_fonts, this->m_window.getSize() );
+
     this->m_lastState = this->m_states->get_next();
 }
 
@@ -97,47 +85,36 @@ void Game::change_state( StateName const & newState )
 
     switch ( newState )
     {
-    case StateName::MainMenu:
-    {
-        this->m_states = std::make_shared<MainMenuState>(
-            this->m_textures,
-            this->m_fonts,
-            this->m_window.getSize()
-        );
-    }
-    break;
-    case StateName::Game:
-    {
-        this->m_states = std::make_shared<GameState>(
-            this->m_textures,
-            this->m_fonts,
-            this->m_window.getSize()
-        );
-    }
-    break;
-    case StateName::Editor:
-    {
-        this->m_states = std::make_shared<EditorState>(
-            this->m_textures,
-            this->m_fonts,
-            this->m_window.getSize()
-        );
-    }
-    break;
-    case StateName::Quit:
-        this->m_window.close();
+    case StateName::MainMenu :
+        {
+            this->m_states = std::make_shared<MainMenuState>(
+                this->m_textures, this->m_fonts, this->m_window.getSize() );
+        }
         break;
-    default:
-        throw std::invalid_argument( "StateName unsupported" );
+
+    case StateName::Game :
+        {
+            this->m_states = std::make_shared<GameState>(
+                this->m_textures, this->m_fonts, this->m_window.getSize() );
+        }
         break;
+
+    case StateName::Editor :
+        {
+            this->m_states = std::make_shared<EditorState>(
+                this->m_textures, this->m_fonts, this->m_window.getSize() );
+        }
+        break;
+
+    case StateName::Quit : this->m_window.close(); break;
+
+    default : throw std::invalid_argument( "StateName unsupported" ); break;
     }
 }
 
 void Game::render()
 {
     this->m_window.clear( sf::Color::White );
-
     this->m_states->render( this->m_window );
-
     this->m_window.display();
 }

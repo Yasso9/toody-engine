@@ -1,14 +1,14 @@
 #pragma once
 
-#include <project/utility/utility.hpp>
 #include <project/output-info/information.hpp>
 #include <project/utility/read_file.hpp>
+#include <project/utility/utility.hpp>
 
 constexpr unsigned int g_totalDepth { 2 };
 
 class TileMap : public sf::Drawable, public sf::Transformable
 {
-public:
+  public:
     TileMap();
 
     void set_texture( sf::Texture const & texture );
@@ -16,12 +16,13 @@ public:
     sf::Vector2f get_size() const;
 
     virtual ~TileMap() = default;
-protected:
+
+  protected:
     std::shared_ptr<sf::Texture const> m_texture { nullptr };
     std::array<sf::VertexArray, g_totalDepth> m_vertices {};
 
     /// @brief vector containing the value of each tile of the tilemap
-    std::array< std::vector<int>, g_totalDepth > m_table {};
+    std::array<std::vector<int>, g_totalDepth> m_table {};
 
     /// @brief number of tiles in the tilemap
     sf::Vector2u m_tileNumber {};
@@ -39,12 +40,9 @@ protected:
     virtual void draw( sf::RenderTarget & target, sf::RenderStates states ) const;
 };
 
-
-
-
 class EditorMap final : public TileMap
 {
-public:
+  public:
     EditorMap();
 
     void set_depth( unsigned int const & actualDepth );
@@ -53,11 +51,13 @@ public:
     void save() const;
     void resize();
 
-    void update( sf::Vector2f const cursorPosition, unsigned int const tile, bool const inputIsPress );
+    void update( sf::Vector2f const cursorPosition,
+                 unsigned int const tile,
+                 bool const inputIsPress );
 
     ~EditorMap() = default;
 
-private:
+  private:
     TileCursor m_tileCursor {};
 
     bool m_isMouseOn {};

@@ -1,14 +1,13 @@
 #pragma once
 
-#include <project/state/game_state.hpp>
-#include <project/state/editor_state.hpp>
-#include <project/state/main_menu_state.hpp>
-
 #include <project/ressources-handling/ressources_init.hpp>
+#include <project/state/editor_state.hpp>
+#include <project/state/game_state.hpp>
+#include <project/state/main_menu_state.hpp>
 
 class Game final
 {
-public:
+  public:
     Game();
 
     void run();
@@ -18,11 +17,11 @@ public:
 
     void render();
 
-private:
+  private:
     std::shared_ptr<State> m_states { nullptr };
 
-    std::map< TextureKey, sf::Texture > const m_textures;
-    std::map< FontKey, sf::Font > const m_fonts;
+    std::map<TextureKey, sf::Texture> const m_textures;
+    std::map<FontKey, sf::Font> const m_fonts;
 
     sf::RenderWindow m_window {};
     sf::Event m_event {};

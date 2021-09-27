@@ -4,56 +4,73 @@ namespace RessourcesInit
 {
     namespace
     {
-        template <typename T>
-        // TYPO pas trop compris ce que ça fait
-        T & increment( T & value )
+        std::string get_texture_localisation( TextureKey const & textureKey )
         {
-            assert( std::is_integral< std::underlying_type_t<T> >::value && "Can't increment value" );
-
-            ++((std::underlying_type_t<T> &) value);
-            return value;
+            switch ( textureKey )
+            {
+            case TextureKey::Tileset :
+                // Credit GragarLink10
+                return "./ressources/sprites/players/gold.png";
+                break;
+            case TextureKey::Player :
+                return "./ressources/sprites/players/gold.png";
+                break;
+            case TextureKey::HomeWallpaper :
+                return "./ressources/sprites/players/gold.png";
+                break;
+            default :
+                /* TYPO the best thing here is the possibility
+                to use the c++20 std::format, but as of now
+                g++ 11.2.0 doesn't support it */
+                throw std::runtime_error(
+                    "The texture n" + std::to_string( static_cast<int>( textureKey ) )
+                    + "of the TextureKey class hasn't been loaded"
+                      "or the key doesn't exist in this enum" );
+                break;
+            }
         }
-    }
+    } // namespace
 
-    std::map< TextureKey, sf::Texture > init_textures()
+    std::map<TextureKey, sf::Texture> init_textures()
     {
-        std::map< TextureKey, sf::Texture > textures {};
+        assert( TextureKey::Tileset == static_cast<TextureKey>( 0 )
+                && ( "Tileset isn't the first key of TextureKey,"
+                     "this can create a dangerous load of ressources" ) );
 
-        for (
-            TextureKey textureKey { static_cast<TextureKey>(0) };
-            textureKey < TextureKey::Count;
-            increment( textureKey )
-        )
-        {
-            std::cout << "TextureKey" << std::endl;
-            std::cout << static_cast<int>(textureKey) << std::endl;
+        std::map<TextureKey, sf::Texture> textures {};
 
-            textures.insert( std::make_pair( textureKey, sf::Texture() ) );
-        }
+        for ( int textureKey { static_cast<int>( TextureKey::Tileset ) };
+              textureKey < static_cast<int>( TextureKey::Count );
+              ++textureKey )
+        {
+            sf::Texture texture {};
+            std::string const textureLocalisation { get_texture_localisation(
+                static_cast<TextureKey>( textureKey ) ) };
+            if ( ! texture.loadFromFile( textureLocalisation ) )
+            {
+                throw std::runtime_error( "There isn't a file named \""
+                                          + textureLocalisation + "\"" );
+            }
 
-        if ( !textures.at( TextureKey::Player ).loadFromFile( "./ressources/sprites/players/gold.png" ) ) // Credit GragarLink10
-        {
-            throw std::runtime_error( "There isn't a file named \"Sprites/Players/Gold.png\"" );
-        }
-        if ( !textures.at( TextureKey::Player ).loadFromFile( "./ressources/sprites/tileset/tileset.png" ) )
-        {
-            throw std::runtime_error( "There isn't a file named \"Sprites/Tileset/tileset.png\"" );
+            textures.insert(
+                std::make_pair( static_cast<TextureKey>( textureKey ), texture ) );
         }
 
         return textures;
     }
 
-    std::map< FontKey, sf::Font > init_fonts()
+    // TYPO change this function to make it look like init_textures
+    std::map<FontKey, sf::Font> init_fonts()
     {
         sf::Font fontArial {};
-
-        if ( !fontArial.loadFromFile( "./ressources/arial.ttf" ) )
+        if ( ! fontArial.loadFromFile( "./ressources/arial.ttf" ) )
         {
-            throw std::runtime_error( "There isn't a file named \"Police/arial.ttf\"" );
+            throw std::runtime_error(
+                "There isn't a file named \"Police/arial.ttf\"" );
         }
 
         return {
             { FontKey::Arial, fontArial },
         };
     }
-}
+} // namespace RessourcesInit

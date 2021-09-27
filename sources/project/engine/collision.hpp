@@ -4,10 +4,10 @@
 
 class Collision
 {
-public:
+  public:
     Collision();
 
     ~Collision();
-private:
-    
+
+  private:
 };

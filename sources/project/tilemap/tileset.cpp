@@ -3,16 +3,14 @@
 // TYPO trouver une meilleurs place à ce convertisseur
 inline sf::Vector2f to_Vector2f( sf::Rect<int> const & intRectangle )
 {
-    return sf::Vector2f {
-        static_cast<float>(intRectangle.width),
-        static_cast<float>(intRectangle.height)
-    };
+    return sf::Vector2f { static_cast<float>( intRectangle.width ),
+                          static_cast<float>( intRectangle.height ) };
 }
 
 Tileset::Tileset()
 {
     this->isMouseOn = false;
-    this->isPrint = false;
+    this->isPrint   = false;
 
     this->setOrigin( sf::Vector2f { 0.f, 0.f } );
     this->setPosition( sf::Vector2f { 0.f, 0.f } );
@@ -22,10 +20,9 @@ Tileset::Tileset()
     this->setFillColor( sf::Color { 255, 255, 255, 200 } );
 }
 
-
 void Tileset::create( sf::Texture const & texture )
 {
-    // true sert a mettre automatiquement setTextureRect 
+    // true sert a mettre automatiquement setTextureRect
     // en fonction de la taille de la texture
     this->setTexture( &texture, true );
     this->setSize( to_Vector2f( this->getTextureRect() ) );
@@ -46,14 +43,12 @@ void Tileset::update_tile_cursor( sf::Vector2f const cursorPosition )
 bool Tileset::include( sf::Vector2f const position ) const
 {
     return is_in_part(
-        position,
-        this->getPosition(),
-        to_Vector2f( this->getTextureRect() )
-    );
+        position, this->getPosition(), to_Vector2f( this->getTextureRect() ) );
 }
 
-void Tileset::update( sf::Vector2f const mousePosition, unsigned int & tile,
-bool const buttonIsPress )
+void Tileset::update( sf::Vector2f const mousePosition,
+                      unsigned int & tile,
+                      bool const buttonIsPress )
 {
     if ( this->isPrint && this->include( mousePosition ) )
     {
@@ -63,16 +58,14 @@ bool const buttonIsPress )
 
         if ( buttonIsPress )
         {
-            sf::Vector2u const tilesetPosition {
-                to_tile_position(
-                    to_Vector2f( this->getTextureRect() ) + mousePosition - this->getPosition()
-                )
-            };
+            sf::Vector2u const tilesetPosition { to_tile_position(
+                to_Vector2f( this->getTextureRect() ) + mousePosition
+                - this->getPosition() ) };
 
             tile = tilesetPosition.x
-                + tilesetPosition.y
-                * static_cast<unsigned int>(this->getTextureRect().width)
-                / static_cast<unsigned int>(g_squareSize);
+                   + tilesetPosition.y
+                         * static_cast<unsigned int>( this->getTextureRect().width )
+                         / static_cast<unsigned int>( g_squareSize );
         }
     }
     else

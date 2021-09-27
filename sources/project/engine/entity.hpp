@@ -4,7 +4,7 @@
 
 class Entity
 {
-public:
+  public:
     Entity();
 
     virtual ~Entity();

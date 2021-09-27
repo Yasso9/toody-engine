@@ -7,7 +7,7 @@ void MousePosition::set_overall( sf::Vector2f const & position )
 
 void MousePosition::set_press( sf::Vector2f const & position )
 {
-    this->m_press = position;
+    this->m_press   = position;
     this->m_overall = position;
 }
 

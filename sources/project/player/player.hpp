@@ -1,11 +1,11 @@
 #pragma once
 
-#include <project/ressources-handling/texture_sprite.hpp>
 #include <project/engine/entity.hpp>
+#include <project/ressources-handling/texture_sprite.hpp>
 
 class Player
 {
-public:
+  public:
     Player();
 
     sf::Vector2f get_position() const;
@@ -20,7 +20,8 @@ public:
     void render( sf::RenderWindow & target );
 
     ~Player();
-private:
+
+  private:
     TextureSprite m_textureSprite {};
 
     sf::Texture m_texture {};

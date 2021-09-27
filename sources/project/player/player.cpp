@@ -3,13 +3,10 @@
 Player::Player()
 {
     this->m_sprite.setPosition( 200.f, 200.f );
-
     this->m_direction = Direction::Down;
-    this->m_state = PlayerState::Normal;
-
-    this->m_name = "Unkown";
-    this->m_speed = 1.f;
-
+    this->m_state     = PlayerState::Normal;
+    this->m_name      = "Unkown";
+    this->m_speed     = 1.f;
     this->m_textureSprite.change( this->m_sprite, this->m_state, this->m_direction );
 }
 
@@ -31,8 +28,7 @@ void Player::stay()
 void Player::walk( Direction const & dir )
 {
     this->m_direction = dir;
-    this->m_state = PlayerState::Walking;
-
+    this->m_state     = PlayerState::Walking;
     this->m_sprite.move( get_movement( this->m_direction, 1.f ) * this->m_speed );
 }
 
@@ -41,8 +37,8 @@ void Player::run()
     if ( this->m_state == PlayerState::Walking )
     {
         this->m_state = PlayerState::Running;
-
-        this->m_sprite.move( get_movement( this->m_direction, 2.f ) * this->m_speed );
+        this->m_sprite.move( get_movement( this->m_direction, 2.f )
+                             * this->m_speed );
     }
 }
 
@@ -56,7 +52,4 @@ void Player::render( sf::RenderWindow & target )
     target.draw( this->m_sprite );
 }
 
-Player::~Player()
-{
-
-}
+Player::~Player() {}

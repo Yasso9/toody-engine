@@ -1,11 +1,9 @@
 #include "game_state.hpp"
 
-GameState::GameState(
-    std::map< TextureKey, sf::Texture > const & textures,
-    std::map< FontKey, sf::Font > const & fonts,
-    sf::Vector2u const & windowSize
-)
-    : State( textures, fonts, windowSize, StateName::Game )
+GameState::GameState( std::map<TextureKey, sf::Texture> const & textures,
+                      std::map<FontKey, sf::Font> const & fonts,
+                      sf::Vector2u const & windowSize )
+  : State( textures, fonts, windowSize, StateName::Game )
 {
     this->init_map();
 
@@ -16,7 +14,8 @@ void GameState::init_map()
 {
     this->m_tilemap.set_texture( this->m_textures.at( TextureKey::Tileset ) );
 
-    this->m_view.reset( sf::FloatRect( this->m_player.get_position(), sf::Vector2f( 400.f, 400.f ) ) );
+    this->m_view.reset( sf::FloatRect( this->m_player.get_position(),
+                                       sf::Vector2f( 400.f, 400.f ) ) );
 }
 
 void GameState::handle_keyboard_press( std::string const & input )
@@ -51,8 +50,10 @@ void GameState::handle_global_input()
         this->m_player.run();
     }
 
-    if ( !this->m_keyboard.at( "MoveUp" ).second && !this->m_keyboard.at( "MoveDown" ).second &&
-    !this->m_keyboard.at( "MoveLeft" ).second && !this->m_keyboard.at( "MoveRight" ).second )
+    if ( ! this->m_keyboard.at( "MoveUp" ).second
+         && ! this->m_keyboard.at( "MoveDown" ).second
+         && ! this->m_keyboard.at( "MoveLeft" ).second
+         && ! this->m_keyboard.at( "MoveRight" ).second )
     {
         this->m_player.stay();
     }
@@ -66,24 +67,27 @@ void GameState::update_map()
     {
         viewCenter.x = this->m_view.getSize().x / 2;
     }
-    else if ( viewCenter.x > static_cast<float>(this->m_windowSize.x) - this->m_view.getSize().x / 2 )
+    else if ( viewCenter.x > static_cast<float>( this->m_windowSize.x )
+                                 - this->m_view.getSize().x / 2 )
     {
-        viewCenter.x = static_cast<float>(this->m_windowSize.x) - this->m_view.getSize().x / 2;
+        viewCenter.x = static_cast<float>( this->m_windowSize.x )
+                       - this->m_view.getSize().x / 2;
     }
 
     if ( viewCenter.y < this->m_view.getSize().y / 2 )
     {
         viewCenter.y = this->m_view.getSize().y / 2;
     }
-    else if ( viewCenter.y > static_cast<float>(this->m_windowSize.x) - this->m_view.getSize().y / 2 )
+    else if ( viewCenter.y > static_cast<float>( this->m_windowSize.x )
+                                 - this->m_view.getSize().y / 2 )
     {
-        viewCenter.y = static_cast<float>(this->m_windowSize.x) - this->m_view.getSize().y / 2;
+        viewCenter.y = static_cast<float>( this->m_windowSize.x )
+                       - this->m_view.getSize().y / 2;
     }
 
     this->m_view.setCenter( viewCenter );
     this->m_view.setSize( sf::Vector2f( 400.f, 400.f ) );
 }
-
 
 void GameState::update()
 {

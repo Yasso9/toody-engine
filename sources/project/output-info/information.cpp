@@ -1,10 +1,6 @@
 #include "information.hpp"
 
-Message::Message()
-{
-
-}
-
+Message::Message() {}
 
 void Message::create( sf::Font const & font, unsigned int const textNumber )
 {
@@ -23,21 +19,22 @@ void Message::create( sf::Font const & font, unsigned int const textNumber )
     }
 }
 
-void Message::update( sf::Vector2f const position, std::vector<std::string> const & message )
+void Message::update( sf::Vector2f const position,
+                      std::vector<std::string> const & message )
 {
-    assert( message.size() == this->m_textArray.size() &&
-    "Number of argument not comptatible with this variable of the class Information" );
+    assert( message.size() == this->m_textArray.size()
+            && "Number of argument not comptatible with this variable of the "
+               "class "
+               "Information" );
 
     for ( unsigned int i_text { 0u }; i_text < this->m_textArray.size(); ++i_text )
     {
         this->m_textArray[i_text].setPosition(
             position
-            + sf::Vector2f(
-                0.f,
-                static_cast<float>(i_text * this->m_textArray[i_text].getCharacterSize() * 1.5)
-            )
-        );
-
+            + sf::Vector2f( 0.f,
+                            static_cast<float>(
+                                i_text * this->m_textArray[i_text].getCharacterSize()
+                                * 1.5 ) ) );
         this->m_textArray[i_text].setString( message[i_text] );
     }
 }
@@ -50,9 +47,6 @@ void Message::render( sf::RenderWindow & target ) const
     }
 }
 
-
-
-
 TileCursor::TileCursor()
 {
     this->setPosition( 0.f, 0.f );
@@ -62,10 +56,11 @@ TileCursor::TileCursor()
     // this->shape.setOutlineColor(sf::Color(100, 100, 255, 200));
 }
 
-void TileCursor::update( sf::Vector2f const cursorPosition, sf::Vector2f const mapBeginPosition )
+void TileCursor::update( sf::Vector2f const cursorPosition,
+                         sf::Vector2f const mapBeginPosition )
 {
     this->setPosition(
         sf::Vector2f( to_tile_position( cursorPosition - mapBeginPosition ) )
-        * g_squareSize + mapBeginPosition
-    );
+            * g_squareSize
+        + mapBeginPosition );
 }

@@ -1,11 +1,11 @@
 #pragma once
 
-#include <project/utility/utility.hpp>
 #include <project/output-info/information.hpp>
+#include <project/utility/utility.hpp>
 
 class Tileset : public sf::RectangleShape
 {
-public:
+  public:
     Tileset();
 
     // Mettre public et mettre m_ devant
@@ -15,8 +15,9 @@ public:
     /* Créer l'objet avec sa texture et sa police */
     void create( sf::Texture const & texture );
 
-    void update( sf::Vector2f const mousePosition, unsigned int & tile,
-    bool const buttonIsPress );
+    void update( sf::Vector2f const mousePosition,
+                 unsigned int & tile,
+                 bool const buttonIsPress );
 
     /* Affiche ou n'affiche pas la Tileset en fonction de isPrint
     Affiche aussi le carré du curseur de la souris si elle
@@ -24,7 +25,8 @@ public:
     void render( sf::RenderWindow & target ) const;
 
     ~Tileset() = default;
-private:
+
+  private:
     TileCursor m_tileCursor {};
 
     void update_tile_cursor( sf::Vector2f const cursorPosition );

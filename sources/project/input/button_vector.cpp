@@ -3,23 +3,18 @@
 // Changer unsigned int => size_t ?
 
 ButtonVector::ButtonVector( sf::Font const & font,
-    std::vector<std::string> const & buttonsString )
+                            std::vector<std::string> const & buttonsString )
 {
-    assert(
-        !buttonsString.empty()
-        && "There must be at least one button on the ButtonVector constructor class"
-    );
+    assert( ! buttonsString.empty()
+            && "There must be at least one button on the "
+               "ButtonVector constructor class" );
 
     for ( unsigned int key { 0u }; key < buttonsString.size(); ++key )
     {
-        this->m_buttonArray.insert( {
-            key,
-            Button { font, buttonsString[key] }
-        } );
+        this->m_buttonArray.insert( { key, Button { font, buttonsString[key] } } );
 
         this->m_buttonArray.at( key ).set_position(
-            static_cast<float>(key) * 200.f + 400.f, 400.f
-        );
+            static_cast<float>( key ) * 200.f + 400.f, 400.f );
     }
 }
 
@@ -34,7 +29,7 @@ int ButtonVector::update_press( sf::Vector2f const & position )
         {
             button.second.set_pressed( true );
 
-            return static_cast<int>(button.first);
+            return static_cast<int>( button.first );
         }
     }
 
@@ -42,7 +37,8 @@ int ButtonVector::update_press( sf::Vector2f const & position )
     return -1;
 }
 
-int ButtonVector::update_press( sf::Vector2f const & position, int const & buttonNumber )
+int ButtonVector::update_press( sf::Vector2f const & position,
+                                int const & buttonNumber )
 {
     int const buttonNumberPressed { this->update_press( position ) };
 

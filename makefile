@@ -26,6 +26,7 @@ WARNING_FLAG := -pedantic -pedantic-errors \
 -Wwrite-strings \
 -Weffc++ \
 -Wlong-long
+
 COMPILER_FLAGS := -O0 -g $(WARNING_FLAG) -c -o
 LINKER_FLAGS :=
 
@@ -93,9 +94,9 @@ info : # for debuging
 
 ############################## project path ##############################
 
-# PS : You also have to define includes in c_cpp_properties.json project config
-PROJECT_DIRECTORY := C:/Users/Turki/Google Drive/Informatique/Projets/Moteur-2D/sources
-SFML_PATH := C:/Informatique/SFML-2.5.1
+# PS : If using vscode, you also have to define includes in c_cpp_properties.json project config
+PROJECT_DIRECTORY := C:/Users/Turki/Google Drive/Computing/Projets/ToodyEngine/sources
+SFML_PATH := C:/Users/Turki/Google Drive/Programs/Windows/SFML-2.5.1
 INCLUDE := -I"$(SFML_PATH)/include" -I"$(PROJECT_DIRECTORY)"
 LIBRARIES := -L"$(SFML_PATH)/lib" -lsfml-graphics -lsfml-system -lsfml-window
 

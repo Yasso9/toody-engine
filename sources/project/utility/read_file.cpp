@@ -14,7 +14,7 @@ void erase_space( std::string & text )
 std::string read_file( std::string const & fileName )
 {
     std::ifstream file { fileName, std::ios::in };
-    if ( !file )
+    if ( ! file )
     {
         throw FileError( "File not found", fileName );
     }
@@ -31,7 +31,7 @@ std::string read_file( std::string const & fileName )
 
     file.close();
 
-    // On ne s'embete pas avec les espaces inutile, 
+    // On ne s'embete pas avec les espaces inutile,
     // il y'a de toute façon d'autres caractères de séparations
     erase_space( fileContent );
 
@@ -48,7 +48,7 @@ std::string read_definition( std::string const & fileContent, unsigned int & ind
         {
             throw std::invalid_argument( R"(Il n'y a pas de ':' qui permettent 
             de distinguer une definition. La definition actuel est egal a : ")"
-                + definition + "\"" );
+                                         + definition + "\"" );
         }
 
         definition.push_back( fileContent[index] );
@@ -72,10 +72,12 @@ int read_number( std::string const & fileContent, unsigned int & index )
         {
             throw std::invalid_argument( "End of file while we must read a number" );
         }
-        else if ( !std::isdigit( fileContent[index] ) )
+        else if ( ! std::isdigit( fileContent[index] ) )
         {
-            throw std::invalid_argument( "Non-number value in tilemap : " +
-                std::to_string( fileContent[index] ) + " - in position : " + std::to_string( index ) );
+            throw std::invalid_argument( "Non-number value in tilemap : "
+                                         + std::to_string( fileContent[index] )
+                                         + " - in position : "
+                                         + std::to_string( index ) );
         }
 
         temp.push_back( fileContent[index] );
@@ -86,30 +88,36 @@ int read_number( std::string const & fileContent, unsigned int & index )
 }
 
 void vericafication_string_inconsistency( unsigned int const & loopIterator,
-    unsigned int & lastValue, unsigned int & newValue, std::string const & coordinate )
+                                          unsigned int & lastValue,
+                                          unsigned int & newValue,
+                                          std::string const & coordinate )
 {
     // Cas ou on est soit dans la première ligne soit la verification est bonne
     if ( loopIterator == 0 || lastValue == newValue )
     {
         lastValue = newValue;
-        newValue = 0;
+        newValue  = 0;
     }
     else
     {
         std::cout << loopIterator << coordinate << std::endl;
-        throw std::invalid_argument( "Different size in " + coordinate + " coordinnate in the tilemap file : " +
-            std::to_string( lastValue ) + " and " + std::to_string( newValue ) );
+        throw std::invalid_argument(
+            "Different size in " + coordinate + " coordinnate in the tilemap file : "
+            + std::to_string( lastValue ) + " and " + std::to_string( newValue ) );
     }
 }
 
-void read_tilemap_line( std::string const & fileContent, unsigned int & index,
-    std::vector<int> & tilemapTable, sf::Vector2u & verificationSize,
-    FileStep & FileStep, bool shouldReadNumber )
+void read_tilemap_line( std::string const & fileContent,
+                        unsigned int & index,
+                        std::vector<int> & tilemapTable,
+                        sf::Vector2u & verificationSize,
+                        FileStep & FileStep,
+                        bool shouldReadNumber )
 {
     // Boucle de lecture de nombres horizontale (en X)
     while ( FileStep == FileStep::SameLine )
     {
-        // On a fini de lire le fichier, on quitte la boucle 
+        // On a fini de lire le fichier, on quitte la boucle
         // et on procéde aux verifications
         if ( index >= fileContent.size() )
         {
@@ -119,15 +127,15 @@ void read_tilemap_line( std::string const & fileContent, unsigned int & index,
         else if ( fileContent[index] == '|' )
         {
             // Cas ou il y'a une alternance normal entre une barre et un nombre
-            if ( !shouldReadNumber )
+            if ( ! shouldReadNumber )
             {
                 index++;
                 shouldReadNumber = true;
             }
-            // Cas ou il y'a deux barres d'affilées. 
+            // Cas ou il y'a deux barres d'affilées.
             else
             {
-                FileStep = FileStep::NextLine;
+                FileStep         = FileStep::NextLine;
                 // A chaque nouvelle ligne on doit commencé par une barre
                 shouldReadNumber = false;
             }
@@ -140,13 +148,14 @@ void read_tilemap_line( std::string const & fileContent, unsigned int & index,
         // On doit lire un nombre
         else if ( std::isdigit( fileContent[index] ) )
         {
-            if ( !shouldReadNumber )
+            if ( ! shouldReadNumber )
             {
-                throw std::invalid_argument( "We have a number without having a '|' in position : "
+                throw std::invalid_argument(
+                    "We have a number without having a '|' in position : "
                     + std::to_string( index ) );
             }
-            // Il n'y a pas de barre, à la prochaine itération 
-            // il doit normalement y en avoir une. 
+            // Il n'y a pas de barre, à la prochaine itération
+            // il doit normalement y en avoir une.
             shouldReadNumber = false;
 
             tilemapTable.push_back( read_number( fileContent, index ) );
@@ -156,14 +165,17 @@ void read_tilemap_line( std::string const & fileContent, unsigned int & index,
         }
         else
         {
-            throw std::invalid_argument( "Character not handled by the program : \"" +
-                std::to_string( fileContent[index] ) + "\"" );
+            throw std::invalid_argument( "Character not handled by the program : \""
+                                         + std::to_string( fileContent[index] )
+                                         + "\"" );
         }
     }
 }
 
-std::vector<int> read_tilemap( std::string const & fileContent, unsigned int & index,
-    sf::Vector2u & tilemapSize, unsigned int & superiorLoopIndex )
+std::vector<int> read_tilemap( std::string const & fileContent,
+                               unsigned int & index,
+                               sf::Vector2u & tilemapSize,
+                               unsigned int & superiorLoopIndex )
 {
     std::vector<int> tilemapTable {};
 
@@ -181,24 +193,28 @@ std::vector<int> read_tilemap( std::string const & fileContent, unsigned int & i
     FileStep FileStep { FileStep::SameLine };
 
     // Boucle de lecture de ligne vertical (en Y)
-    while ( FileStep != FileStep::NextDefinition && FileStep != FileStep::End && index < fileContent.size() )
+    while ( FileStep != FileStep::NextDefinition && FileStep != FileStep::End
+            && index < fileContent.size() )
     {
         // On doit lire une ligne
         FileStep = FileStep::SameLine;
 
-        read_tilemap_line(
-            fileContent, index, tilemapTable,
-            verificationSize, FileStep, shouldReadNumber
-        );
+        read_tilemap_line( fileContent,
+                           index,
+                           tilemapTable,
+                           verificationSize,
+                           FileStep,
+                           shouldReadNumber );
 
-        vericafication_string_inconsistency( verificationSize.y, tilemapSize.x, verificationSize.x, "x" );
+        vericafication_string_inconsistency(
+            verificationSize.y, tilemapSize.x, verificationSize.x, "x" );
 
         // On a fini cette ligne là on passe à la ligne suivante
         verificationSize.y++;
     }
 
-    vericafication_string_inconsistency( superiorLoopIndex, tilemapSize.y, verificationSize.y, "y" );
-
+    vericafication_string_inconsistency(
+        superiorLoopIndex, tilemapSize.y, verificationSize.y, "y" );
 
     // std::cout << "table" << std::endl;
     // unsigned int compteur { 0 };

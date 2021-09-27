@@ -1,19 +1,15 @@
-#include <string>
 #include <stdexcept>
+#include <string>
 
 class FileError : public std::runtime_error
 {
-public:
+  public:
     FileError( std::string const & message, std::string const & fileName )
-        : std::runtime_error( message ), m_fileName( fileName )
+      : std::runtime_error( message ), m_fileName( fileName )
     {
-
     }
 
-    std::string get_file_name() const
-    {
-        return m_fileName;
-    }
+    std::string get_file_name() const { return m_fileName; }
 
     virtual const char * what() const noexcept
     {
@@ -25,6 +21,6 @@ public:
         return errorInfo.c_str();
     }
 
-private:
+  private:
     std::string const m_fileName;
 };

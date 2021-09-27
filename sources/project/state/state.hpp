@@ -1,42 +1,42 @@
 #pragma once
 
-#include <project/utility/utility.hpp>
 #include <project/input/button_vector.hpp>
 #include <project/input/mouse_position.hpp>
 #include <project/state/input_initialization.hpp>
+#include <project/utility/utility.hpp>
 
 class State
 {
-public:
+  public:
     /** @brief Know the next state to render after the input update.
      * @returns StateName value of the next state to print
      */
     StateName get_next();
 
-    /// @brief Update any change made by the play action.
+    /// @brief Update any change that can happen by an event.
     void update_input( sf::Event const & event );
 
     /// @brief Update any change in the state.
-    virtual void update() = 0;
+    virtual void update()                            = 0;
     virtual void render( sf::RenderWindow & target ) = 0;
 
     virtual ~State() = default;
 
-protected:
-    State(
-        std::map< TextureKey, sf::Texture > const & textures,
-        std::map< FontKey, sf::Font > const & fonts,
-        sf::Vector2u const & windowSize,
-        StateName const & stateName
-    );
+  protected:
+    State( std::map<TextureKey, sf::Texture> const & textures,
+           std::map<FontKey, sf::Font> const & fonts,
+           sf::Vector2u const & windowSize,
+           StateName const & stateName );
 
-    std::map< TextureKey, sf::Texture > const m_textures;
-    std::map< FontKey, sf::Font > const m_fonts;
-    std::map< std::string const, std::pair< sf::Keyboard::Key const, bool > > m_keyboard;
-    std::map< std::string const, std::pair< sf::Mouse::Button const, bool > > m_mouseButton;
+    std::map<TextureKey, sf::Texture> const m_textures;
+    std::map<FontKey, sf::Font> const m_fonts;
+    std::map<std::string const, std::pair<sf::Keyboard::Key const, bool>> m_keyboard;
+    std::map<std::string const, std::pair<sf::Mouse::Button const, bool>> m_mouseButton;
+
     sf::Vector2u const m_windowSize;
 
     MousePosition m_mousePosition {};
+
     /// @brief value corresponding of the state that the game should run
     StateName m_stateName {};
 
@@ -47,6 +47,8 @@ protected:
     en fonctions des states il faut utiliser handle_press_input */
     void update_keyboard_pressed( sf::Event const & event );
     void update_keyboard_released( sf::Event const & event );
+    void update_overall_input( sf::Event const & event );
+
     /* Met a jour les evenements liés à la souris
     Cette fonction est appelé dans update_input(event) */
     void update_mouse_button( sf::Event const & event );
