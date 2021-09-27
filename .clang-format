@@ -1,0 +1,118 @@
+Language: Cpp
+Standard: c++20
+BasedOnStyle: Google
+# Mozilla
+# Google
+
+
+AlignAfterOpenBracket: Align
+# AlignArrayOfStructures: Right # Ne marche pas ?
+AlignConsecutiveAssignments: AcrossComments
+AlignConsecutiveDeclarations: None
+AlignConsecutiveMacros: AcrossEmptyLinesAndComments
+AlignEscapedNewlines: Left
+AlignOperands: Align
+AlignTrailingComments: true
+
+AllowAllArgumentsOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Inline
+AllowShortLoopsOnASingleLine: false
+
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakTemplateDeclarations: Yes
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
+
+BinPackArguments: false
+BinPackParameters: false
+CompactNamespaces: false
+
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeBraces: Allman
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializers: BeforeColon
+BreakInheritanceList: BeforeColon
+BreakStringLiterals: true
+# PackConstructorInitializers: CurrentLine # NMP
+
+ColumnLimit: 86
+
+# EmptyLineAfterAccessModifier: Never # NMP
+EmptyLineBeforeAccessModifier: LogicalBlock
+
+FixNamespaceComments: true
+
+IncludeBlocks: Regroup
+# SortIncludes: CaseInsensitive # NMP
+
+IndentWidth: 4
+AccessModifierOffset: -2
+ConstructorInitializerIndentWidth: 2
+ContinuationIndentWidth: 4
+# PPIndentWidth: 2 # NMP
+# IndentAccessModifiers: true # NMP
+IndentPPDirectives: BeforeHash
+IndentCaseBlocks: true
+IndentCaseLabels: false
+IndentGotoLabels: false
+IndentPPDirectives: BeforeHash
+IndentWrappedFunctionNames: true
+NamespaceIndentation: All
+
+KeepEmptyLinesAtTheStartOfBlocks: false
+
+MaxEmptyLinesToKeep: 1
+
+DerivePointerAlignment: false
+PointerAlignment: Middle
+# ReferenceAlignment: Middle # NMP
+
+# PenaltyBreakAssignment: 90
+# PenaltyBreakBeforeFirstCallParameter: 90
+PenaltyBreakComment: 120
+# PenaltyBreakFirstLessLess: 80
+# PenaltyBreakString: 90
+# PenaltyBreakTemplateDeclaration: 200
+PenaltyExcessCharacter: 8
+# PenaltyIndentedWhitespace: 150
+# PenaltyReturnTypeOnItsOwnLine: 150
+
+# ShortNamespaceLines: 0 # NMP
+
+ReflowComments: true
+
+SortUsingDeclarations: true
+
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: true
+SpaceAfterTemplateKeyword: true
+SpaceAroundPointerQualifiers: Default
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCaseColon: true
+SpaceBeforeCpp11BracedList: true
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceBeforeSquareBrackets: false
+SpaceInEmptyBlock: false
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 1
+# SpacesInAngles: Always # NMP
+SpacesInCStyleCastParentheses: true
+SpacesInConditionalStatement: true
+SpacesInParentheses: true
+SpacesInSquareBrackets: false
+
+Cpp11BracedListStyle: false
+
+UseCRLF: true
+UseTab: Never
+
+
