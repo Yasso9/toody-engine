@@ -18,9 +18,10 @@ EditorState::EditorState( std::map<TextureKey, sf::Texture> const & textures,
 void EditorState::init_map()
 {
     this->m_tilemap.set_texture( this->m_textures.at( TextureKey::Tileset ) );
-    this->m_tilemap.setPosition( ( static_cast<sf::Vector2f>( this->m_windowSize )
-                                   - this->m_tilemap.get_size() )
-                                 / 2.f );
+    this->m_tilemap.setPosition(
+        ( static_cast<sf::Vector2f>( this->m_windowSize )
+          - this->m_tilemap.get_size() )
+        / 2.f );
 
     this->m_sheet.create( this->m_textures.at( TextureKey::Tileset ) );
     this->m_sheet.setPosition( sf::Vector2f( 150.f, 150.f ) );
@@ -57,14 +58,15 @@ void EditorState::init_selection_rect()
 
 void EditorState::handle_mouse_wheel_up()
 {
-    if ( this->m_mapView.getSize().x >= 50 && this->m_mapView.getSize().y >= 20 )
+    if ( this->m_mapView.getSize().x >= 50.f
+         && this->m_mapView.getSize().y >= 20.f )
     {
         this->m_mapView.zoom( 0.8f );
     }
     if ( this->m_mapView.getSize().x
-             < static_cast<float>( this->m_windowSize.x ) * 2
+             < static_cast<float>( this->m_windowSize.x ) * 2.f
          && this->m_mapView.getSize().y
-                < static_cast<float>( this->m_windowSize.y ) * 2 )
+                < static_cast<float>( this->m_windowSize.y ) * 2.f )
     {
         this->m_mapView.zoom( 1.2f );
     }
@@ -72,14 +74,15 @@ void EditorState::handle_mouse_wheel_up()
 
 void EditorState::handle_mouse_wheel_down()
 {
-    if ( this->m_mapView.getSize().x >= 50 && this->m_mapView.getSize().y >= 20 )
+    if ( this->m_mapView.getSize().x >= 50.f
+         && this->m_mapView.getSize().y >= 20.f )
     {
         this->m_mapView.zoom( 0.8f );
     }
     if ( this->m_mapView.getSize().x
-             < static_cast<float>( this->m_windowSize.x ) * 2
+             < static_cast<float>( this->m_windowSize.x ) * 2.f
          && this->m_mapView.getSize().y
-                < static_cast<float>( this->m_windowSize.y ) * 2 )
+                < static_cast<float>( this->m_windowSize.y ) * 2.f )
     {
         this->m_mapView.zoom( 1.2f );
     }
@@ -165,11 +168,11 @@ void EditorState::update_selection_mode()
 {
     if ( this->m_mouseButton.at( "Action" ).second )
     {
-        // this->update_selection( to_map_view( this->m_mousePosition.get_press()
-        //                                      + sf::Vector2f( 16.f, 16.f ) ),
-        //                         to_map_view( this->m_mousePosition.get_overall()
-        //                                      + sf::Vector2f( SQUARE, SQUARE ) )
-        //                                      );
+        // this->update_selection(
+        //     to_map_view( this->m_mousePosition.get_press()
+        //                  + sf::Vector2f( 16.f, 16.f ) ),
+        //     to_map_view( this->m_mousePosition.get_overall()
+        //                  + sf::Vector2f( SQUARE, SQUARE ) ) );
     }
 }
 
@@ -199,14 +202,12 @@ void EditorState::update()
                       0.1f * static_cast<float>( this->m_windowSize.y ) ),
 
         { "Depth : " + std::to_string( this->m_tilemap.get_depth() ),
-
           "Mode : " + std::to_string( static_cast<int>( this->m_mode ) ),
-
           "Mouse : " + std::to_string( this->m_mousePosition.get_overall().x )
               + ", " + std::to_string( this->m_mousePosition.get_overall().y ),
-
-          "Mouse Press : " + std::to_string( this->m_mousePosition.get_press().x )
-              + ", " + std::to_string( this->m_mousePosition.get_press().y ) } );
+          "Mouse Press : "
+              + std::to_string( this->m_mousePosition.get_press().x ) + ", "
+              + std::to_string( this->m_mousePosition.get_press().y ) } );
 }
 
 void EditorState::render( sf::RenderWindow & target )
@@ -219,8 +220,8 @@ void EditorState::render( sf::RenderWindow & target )
     /* ########################## WINDOW VIEW ############################# */
     target.setView( this->m_screenView );
 
-    this->m_sheet.render(
-        target ); // La fonction regarde si le sprite sheet doit etre afficher
+    // La fonction regarde si le sprite sheet doit etre afficher
+    this->m_sheet.render( target );
 
     this->m_buttons.render( target );
     this->m_debugInfo.render( target );

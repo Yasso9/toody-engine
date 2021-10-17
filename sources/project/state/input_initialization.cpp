@@ -2,7 +2,7 @@
 
 namespace InputInitialization
 {
-    namespace // Works like private
+    namespace
     {
         std::map<std::string const, std::pair<sf::Keyboard::Key const, bool>>
             main_menu_keyboard()
@@ -40,9 +40,12 @@ namespace InputInitialization
                 { "TilemapRight", std::make_pair( sf::Keyboard::D, false ) },
 
                 { "SpriteSheetUp", std::make_pair( sf::Keyboard::Up, false ) },
-                { "SpriteSheetDown", std::make_pair( sf::Keyboard::Down, false ) },
-                { "SpriteSheetLeft", std::make_pair( sf::Keyboard::Left, false ) },
-                { "SpriteSheetRight", std::make_pair( sf::Keyboard::Right, false ) },
+                { "SpriteSheetDown",
+                  std::make_pair( sf::Keyboard::Down, false ) },
+                { "SpriteSheetLeft",
+                  std::make_pair( sf::Keyboard::Left, false ) },
+                { "SpriteSheetRight",
+                  std::make_pair( sf::Keyboard::Right, false ) },
 
                 { "Profondeur1", std::make_pair( sf::Keyboard::Num1, false ) },
                 { "Profondeur2", std::make_pair( sf::Keyboard::Num2, false ) }
@@ -81,17 +84,28 @@ namespace InputInitialization
         }
     } // namespace
 
-    std::map<std::string const, std::pair<sf::Keyboard::Key const, bool>> keyboard(
-        StateName const & stateName )
+    std::map<std::string const, std::pair<sf::Keyboard::Key const, bool>>
+        keyboard( StateName const & stateName )
     {
         switch ( stateName )
         {
-        case StateName::MainMenu : return main_menu_keyboard(); break;
-        case StateName::Game : return game_keyboard(); break;
-        case StateName::Editor : return editor_keyboard(); break;
+        case StateName::MainMenu :
+            return main_menu_keyboard();
+            break;
+        case StateName::Game :
+            return game_keyboard();
+            break;
+        case StateName::Editor :
+            return editor_keyboard();
+            break;
         default :
-            throw std::invalid_argument(
-                "StateName invalid for input initialization" );
+            std::string const debugString {
+                "StateName n "s
+                + std::to_string( static_cast<int>( stateName ) )
+                + " unsupported for input initialization"s
+            };
+            assert( false && debugString.c_str() );
+            return {};
             break;
         }
     }
@@ -101,12 +115,18 @@ namespace InputInitialization
     {
         switch ( stateName )
         {
-        case StateName::MainMenu : return main_menu_mouse_button(); break;
-        case StateName::Game : return game_mouse_button(); break;
-        case StateName::Editor : return editor_mouse_button(); break;
+        case StateName::MainMenu :
+            return main_menu_mouse_button();
+            break;
+        case StateName::Game :
+            return game_mouse_button();
+            break;
+        case StateName::Editor :
+            return editor_mouse_button();
+            break;
         default :
-            throw std::invalid_argument(
-                "StateName invalid for input initialization" );
+            assert( false && "StateName unsupported for input initialization" );
+            return {};
             break;
         }
     }

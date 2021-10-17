@@ -14,7 +14,9 @@ void Game::init_window()
     std::ifstream file { "./ressources/window.txt", std::ios::in };
     if ( ! file )
     {
-        throw std::runtime_error { "There's no file named ./ressources/window.txt" };
+        throw std::runtime_error {
+            "There's no file named ./ressources/window.txt"
+        };
     }
 
     unsigned int windowWidth, windowHeight;
@@ -29,8 +31,10 @@ void Game::init_window()
 
 void Game::init_state()
 {
-    this->m_states = std::make_shared<MainMenuState>(
-        this->m_textures, this->m_fonts, this->m_window.getSize() );
+    this->m_states =
+        std::make_shared<MainMenuState>( this->m_textures,
+                                         this->m_fonts,
+                                         this->m_window.getSize() );
 
     this->m_lastState = this->m_states->get_next();
 }
@@ -87,28 +91,38 @@ void Game::change_state( StateName const & newState )
     {
     case StateName::MainMenu :
         {
-            this->m_states = std::make_shared<MainMenuState>(
-                this->m_textures, this->m_fonts, this->m_window.getSize() );
+            this->m_states =
+                std::make_shared<MainMenuState>( this->m_textures,
+                                                 this->m_fonts,
+                                                 this->m_window.getSize() );
         }
         break;
 
     case StateName::Game :
         {
-            this->m_states = std::make_shared<GameState>(
-                this->m_textures, this->m_fonts, this->m_window.getSize() );
+            this->m_states =
+                std::make_shared<GameState>( this->m_textures,
+                                             this->m_fonts,
+                                             this->m_window.getSize() );
         }
         break;
 
     case StateName::Editor :
         {
-            this->m_states = std::make_shared<EditorState>(
-                this->m_textures, this->m_fonts, this->m_window.getSize() );
+            this->m_states =
+                std::make_shared<EditorState>( this->m_textures,
+                                               this->m_fonts,
+                                               this->m_window.getSize() );
         }
         break;
 
-    case StateName::Quit : this->m_window.close(); break;
+    case StateName::Quit :
+        this->m_window.close();
+        break;
 
-    default : throw std::invalid_argument( "StateName unsupported" ); break;
+    default :
+        throw std::invalid_argument( "StateName unsupported" );
+        break;
     }
 }
 

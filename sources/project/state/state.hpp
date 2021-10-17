@@ -23,10 +23,11 @@ class State
     virtual ~State() = default;
 
   protected:
-    State( std::map<TextureKey, sf::Texture> const & textures,
-           std::map<FontKey, sf::Font> const & fonts,
-           sf::Vector2u const & windowSize,
-           StateName const & stateName );
+    State(
+        std::map<TextureKey, sf::Texture> const & textures,
+        std::map<FontKey, sf::Font> const & fonts,
+        sf::Vector2u const & windowSize,
+        StateName const & stateName );
 
     std::map<TextureKey, sf::Texture> const m_textures;
     std::map<FontKey, sf::Font> const m_fonts;
@@ -66,9 +67,9 @@ class State
     virtual void handle_mouse_button_press( std::string const & inputName );
     virtual void handle_mouse_button_release( std::string const & inputName );
 
-    /// @brief function called when the mouse wheel goes up
+    /// @brief Must be called when the mouse wheel goes up
     virtual void handle_mouse_wheel_up();
-    /// @brief function called when the mouse wheel goes down
+    /// @brief Must be called when the mouse wheel goes down
     virtual void handle_mouse_wheel_down();
 
     /* Effectue les actions général lié au touche

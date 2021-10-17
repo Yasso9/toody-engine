@@ -24,9 +24,10 @@ void TileMap::load()
         // tableIndex commence a partir de 0
         if ( definition != "tilemap" + std::to_string( tableIndex + 1 ) )
         {
-            throw std::invalid_argument( "Definition : \"" + definition
-                                         + " is not handled. We must have \"tilemap"
-                                         + std::to_string( tableIndex ) );
+            throw std::invalid_argument(
+                "Definition : \"" + definition
+                + " is not handled. We must have \"tilemap"
+                + std::to_string( tableIndex ) );
         }
 
         this->m_table[tableIndex] =
@@ -38,7 +39,8 @@ void TileMap::load()
 
 void TileMap::reset()
 {
-    for ( unsigned int tilemapNumber { 0 }; tilemapNumber < this->m_vertices.size();
+    for ( unsigned int tilemapNumber { 0 };
+          tilemapNumber < this->m_vertices.size();
           ++tilemapNumber )
     {
         this->m_vertices[tilemapNumber].setPrimitiveType( sf::Quads );
@@ -62,7 +64,9 @@ void TileMap::reset()
                     &this->m_vertices[tilemapNumber]
                                      [( x + y * this->m_tileNumber.x ) * 4];
 
-                set_quad_position( quad, this->getPosition(), sf::Vector2u( x, y ) );
+                set_quad_position( quad,
+                                   this->getPosition(),
+                                   sf::Vector2u( x, y ) );
 
                 // Pour une deuxième ou autre tilemap, -1 signifie que la case doit
                 // être invisible
@@ -101,7 +105,8 @@ void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
 
     states.texture = this->m_texture.get();
 
-    for ( unsigned int tilemapNumber { 0u }; tilemapNumber < this->m_vertices.size();
+    for ( unsigned int tilemapNumber { 0u };
+          tilemapNumber < this->m_vertices.size();
           ++tilemapNumber )
     {
         target.draw( this->m_vertices[tilemapNumber], states );
@@ -110,14 +115,15 @@ void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
 
 EditorMap::EditorMap()
 {
-    this->m_isMouseOn   = true;
+    this->m_isMouseOn = true;
     this->m_actualDepth = 0u;
 }
 
 void EditorMap::set_depth( unsigned int const & actualDepth )
 {
-    assert( actualDepth < g_totalDepth
-            && "EditorMap::actualDepth can only be between 0 and g_totalDepth" );
+    assert(
+        actualDepth < g_totalDepth
+        && "EditorMap::actualDepth can only be between 0 and g_totalDepth" );
 
     this->m_actualDepth = actualDepth;
 }
@@ -132,7 +138,7 @@ void EditorMap::save() const
     std::ofstream file { this->m_fileName, std::ios::out };
     if ( ! file )
     {
-        throw FileError( "File not found", this->m_fileName );
+        throw FileError { this->m_fileName };
     }
 
     for ( unsigned int depth { 0 }; depth < g_totalDepth; ++depth )
@@ -163,8 +169,9 @@ void EditorMap::save() const
 void EditorMap::change_tile( sf::Vector2u const tilePosition,
                              unsigned int const newTile )
 {
-    unsigned int const tilePositionValue { tilePosition.x
-                                           + tilePosition.y * this->m_tileNumber.x };
+    unsigned int const tilePositionValue {
+        tilePosition.x + tilePosition.y * this->m_tileNumber.x
+    };
 
     // On actualise les valeurs du tableau
     this->m_table[this->m_actualDepth][tilePositionValue] =
@@ -176,8 +183,9 @@ void EditorMap::change_tile( sf::Vector2u const tilePosition,
     // On enlève la transparence du quad
     set_quad_visible( quad );
 
-    set_quad_texture_coordinate( quad,
-                                 to_tile_position( newTile, this->m_tileNumber.x ) );
+    set_quad_texture_coordinate(
+        quad,
+        to_tile_position( newTile, this->m_tileNumber.x ) );
 }
 
 void EditorMap::resize()
@@ -269,8 +277,7 @@ void EditorMap::resize()
 }
 
 void EditorMap::update( sf::Vector2f const cursorPosition,
-                        unsigned int const newTile,
-                        bool const inputIsPress )
+                        unsigned int const newTile, bool const inputIsPress )
 {
     // Si cursorPosition est dans la tilemap
     if ( is_in_part( cursorPosition, this->getPosition(), this->m_size ) )
@@ -302,7 +309,8 @@ void EditorMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
 
     states.texture = this->m_texture.get();
 
-    for ( unsigned int tilemapNumber { 0 }; tilemapNumber < this->m_vertices.size();
+    for ( unsigned int tilemapNumber { 0 };
+          tilemapNumber < this->m_vertices.size();
           ++tilemapNumber )
     {
         target.draw( this->m_vertices[tilemapNumber], states );

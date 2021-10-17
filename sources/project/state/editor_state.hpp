@@ -8,9 +8,10 @@
 class EditorState final : public State
 {
   public:
-    EditorState( std::map<TextureKey, sf::Texture> const & textures,
-                 std::map<FontKey, sf::Font> const & fonts,
-                 sf::Vector2u const & windowSize );
+    EditorState(
+        std::map<TextureKey, sf::Texture> const & textures,
+        std::map<FontKey, sf::Font> const & fonts,
+        sf::Vector2u const & windowSize );
 
     // void copy_selection();
     // void paste_selection(sf::Vector2f const tablePosition);

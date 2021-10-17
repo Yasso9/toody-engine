@@ -10,12 +10,19 @@ class Game final
   public:
     Game();
 
+    Game & operator=( const Game & ) = delete;
+    Game & operator=( Game && ) = delete;
+    Game( const Game & ) = delete;
+    Game( Game && ) = delete;
+
     void run();
 
     void update_events();
     void update_state();
 
     void render();
+
+    virtual ~Game() {}
 
   private:
     std::shared_ptr<State> m_states { nullptr };

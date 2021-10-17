@@ -16,7 +16,7 @@ std::string read_file( std::string const & fileName )
     std::ifstream file { fileName, std::ios::in };
     if ( ! file )
     {
-        throw FileError( "File not found", fileName );
+        throw FileError { fileName };
     }
 
     /* Contient tout le contenu du fichier */
@@ -38,7 +38,8 @@ std::string read_file( std::string const & fileName )
     return fileContent;
 }
 
-std::string read_definition( std::string const & fileContent, unsigned int & index )
+std::string read_definition( std::string const & fileContent,
+                             unsigned int & index )
 {
     /* Doit contenir la valeur de la definition */
     std::string definition { "" };
@@ -70,7 +71,8 @@ int read_number( std::string const & fileContent, unsigned int & index )
     {
         if ( index >= fileContent.size() )
         {
-            throw std::invalid_argument( "End of file while we must read a number" );
+            throw std::invalid_argument(
+                "End of file while we must read a number" );
         }
         else if ( ! std::isdigit( fileContent[index] ) )
         {
@@ -96,22 +98,21 @@ void vericafication_string_inconsistency( unsigned int const & loopIterator,
     if ( loopIterator == 0 || lastValue == newValue )
     {
         lastValue = newValue;
-        newValue  = 0;
+        newValue = 0;
     }
     else
     {
         std::cout << loopIterator << coordinate << std::endl;
-        throw std::invalid_argument(
-            "Different size in " + coordinate + " coordinnate in the tilemap file : "
-            + std::to_string( lastValue ) + " and " + std::to_string( newValue ) );
+        throw std::invalid_argument( "Different size in " + coordinate
+                                     + " coordinnate in the tilemap file : "
+                                     + std::to_string( lastValue ) + " and "
+                                     + std::to_string( newValue ) );
     }
 }
 
-void read_tilemap_line( std::string const & fileContent,
-                        unsigned int & index,
+void read_tilemap_line( std::string const & fileContent, unsigned int & index,
                         std::vector<int> & tilemapTable,
-                        sf::Vector2u & verificationSize,
-                        FileStep & FileStep,
+                        sf::Vector2u & verificationSize, FileStep & FileStep,
                         bool shouldReadNumber )
 {
     // Boucle de lecture de nombres horizontale (en X)
@@ -135,7 +136,7 @@ void read_tilemap_line( std::string const & fileContent,
             // Cas ou il y'a deux barres d'affilées.
             else
             {
-                FileStep         = FileStep::NextLine;
+                FileStep = FileStep::NextLine;
                 // A chaque nouvelle ligne on doit commencé par une barre
                 shouldReadNumber = false;
             }
@@ -165,16 +166,15 @@ void read_tilemap_line( std::string const & fileContent,
         }
         else
         {
-            throw std::invalid_argument( "Character not handled by the program : \""
-                                         + std::to_string( fileContent[index] )
-                                         + "\"" );
+            throw std::invalid_argument(
+                "Character not handled by the program : \""
+                + std::to_string( fileContent[index] ) + "\"" );
         }
     }
 }
 
 std::vector<int> read_tilemap( std::string const & fileContent,
-                               unsigned int & index,
-                               sf::Vector2u & tilemapSize,
+                               unsigned int & index, sf::Vector2u & tilemapSize,
                                unsigned int & superiorLoopIndex )
 {
     std::vector<int> tilemapTable {};
@@ -206,15 +206,19 @@ std::vector<int> read_tilemap( std::string const & fileContent,
                            FileStep,
                            shouldReadNumber );
 
-        vericafication_string_inconsistency(
-            verificationSize.y, tilemapSize.x, verificationSize.x, "x" );
+        vericafication_string_inconsistency( verificationSize.y,
+                                             tilemapSize.x,
+                                             verificationSize.x,
+                                             "x" );
 
         // On a fini cette ligne là on passe à la ligne suivante
         verificationSize.y++;
     }
 
-    vericafication_string_inconsistency(
-        superiorLoopIndex, tilemapSize.y, verificationSize.y, "y" );
+    vericafication_string_inconsistency( superiorLoopIndex,
+                                         tilemapSize.y,
+                                         verificationSize.y,
+                                         "y" );
 
     // std::cout << "table" << std::endl;
     // unsigned int compteur { 0 };

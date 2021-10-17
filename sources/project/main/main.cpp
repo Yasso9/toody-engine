@@ -4,15 +4,11 @@ int main()
 {
     Game game {};
 
-    try
-    {
-        game.run();
-    }
-    catch ( FileError const & exception )
-    {
-        std::cout << "FileError : " << exception.what() << std::endl;
-        return EXIT_FAILURE;
-    }
+    std::cout << "Game Opened"s << std::endl;
+
+    game.run();
+
+    std::cout << "Game Closed"s << std::endl;
 
     return EXIT_SUCCESS;
 }

@@ -15,11 +15,6 @@
 // turn the warnings back on
 #pragma GCC diagnostic pop
 
-// Lire des fichier
-#include <fstream>
-// Pour osstringstream
-#include <sstream>
-
 // Pour les states
 #include <stack>
 
@@ -33,17 +28,23 @@
 #include <array>
 #include <vector>
 
-// Gérer les erreurs
+// Errors and exception handling
 #include <cassert>
 #include <exception>
 #include <stdexcept>
+
+// String and stream manipulation
+#include <charconv>
+#include <fstream>
+#include <sstream>
 #include <string>
 
 // A enlever a la fin (peut être)
 #include <iostream>
-
 // Pour les pair (make_pair quand on initialise les valeurs des inputs)
 #include <utility>
+
+using namespace std::string_literals;
 
 constexpr float const g_framerate { 60 };
 
@@ -54,53 +55,8 @@ constexpr float const g_squareSize { 32 };
 // d'enfant de State
 constexpr int const g_numberOfState { 3 };
 
-enum class Direction
-{
-    Up = 0,
-    Down,
-    Right,
-    Left,
-};
-
-enum class PlayerState
-{
-    Normal = 0,
-    Walking,
-    Running,
-    Poketech,
-    Cycling,
-    PokemonCenter,
-    Watering,
-    Surfing,
-    UsingPokemon,
-    Fishing,
-    Saving,
-};
-
-enum class TextureKey
-{
-    Tileset = 0,
-    Player,
-    HomeWallpaper,
-    /// @brief number of element in the TextureKey enum class
-    Count,
-};
-
-// Numero of all the states of the project
-enum class StateName
-{
-    MainMenu = 0,
-    Game,
-    Editor,
-    Quit,
-};
-
-enum class FontKey
-{
-    Arial = 0,
-};
-
 #include <project/tilemap/tile_utility.hpp>
+#include <project/tools/enumeration.hpp>
 #include <project/utility/error.hpp>
 
 void secure_entry( unsigned int & size );
@@ -114,8 +70,8 @@ std::ostream & operator<<( std::ostream & flux, sf::Vector2u const & vector );
 // d'une vitesse donné (si il cours ou pas)
 sf::Vector2f get_movement( Direction const direction, float const value );
 
-/* Convertie une position lié à la lastView à une position lié à une newView donnée
+/* Convertie une position lié à la lastView à une position lié à une newView
+ * donnée
  */
-sf::Vector2f to_view( sf::Vector2f const & position,
-                      sf::View const & lastView,
+sf::Vector2f to_view( sf::Vector2f const & position, sf::View const & lastView,
                       sf::View const & newView );
