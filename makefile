@@ -95,8 +95,8 @@ info : # for debuging
 ############################## project path ##############################
 
 # PS : If using vscode, you also have to define includes in c_cpp_properties.json project config
-PROJECT_DIRECTORY := C:/Users/Turki/Google Drive/Computing/Projets/ToodyEngine/sources
-SFML_PATH := C:/Users/Turki/Google Drive/Programs/Windows/SFML-2.5.1
+PROJECT_DIRECTORY := C:/Users/Turki/Mon Drive/Computing/Projects/ToodyEngine/sources
+SFML_PATH := C:/Users/Turki/Mon Drive/Programs/Windows/SFML-2.5.1
 INCLUDE := -I"$(SFML_PATH)/include" -I"$(PROJECT_DIRECTORY)"
 LIBRARIES := -L"$(SFML_PATH)/lib" -lsfml-graphics -lsfml-system -lsfml-window
 
@@ -110,7 +110,7 @@ $(OBJECT_PAIR) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/%.cpp $(FILES_DIRE
 	rm -rf -- $@
 #	create the object directory if not exist
 	mkdir -p $(dir $@)
-#	g++ -std=c++2a -Wall -Wextra -c -o object/sub_directory/filename.o sources/project/sub_directory/filename.cpp -I"C:/Users/Turki/Google Drive/Informatique/Projets/Moteur-2D/sources" -I"C:/Informatique/SFML-2.5.1/include"
+#	g++ -std=c++2a -Wall -Wextra -c -o object/sub_directory/filename.o sources/project/sub_directory/filename.cpp -I"C:/Users/Turki/Mon Drive/Informatique/Projets/Moteur-2D/sources" -I"C:/Informatique/SFML-2.5.1/include"
 	$(CPP20) $(COMPILER_FLAGS) $@ $< $(INCLUDE)
 
 # Creating the object file of OBJECT_SOLO with gather the dependencies of the .cpp's only
