@@ -1,15 +1,13 @@
 #pragma once
 
 #include <project/player/player.hpp>
-#include <project/state/state.hpp>
+#include <project/states/state.hpp>
 #include <project/tilemap/tilemap.hpp>
 
 class GameState final : public State
 {
   public:
-    GameState( std::map<TextureKey, sf::Texture> const & textures,
-               std::map<FontKey, sf::Font> const & fonts,
-               sf::Vector2u const & windowSize );
+    GameState( t_texturesMap const & textures, t_fontsMap const & fonts );
 
     void update() override;
     void render( sf::RenderWindow & target ) override;
@@ -18,7 +16,7 @@ class GameState final : public State
 
   private:
     Player m_player {};
-    TileMap m_tilemap {};
+    TileMap m_tilemap;
 
     sf::View m_view {};
 

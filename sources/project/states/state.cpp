@@ -1,15 +1,11 @@
 #include "state.hpp"
 
-State::State(
-    std::map<TextureKey, sf::Texture> const & textures,
-    std::map<FontKey, sf::Font> const & fonts,
-    sf::Vector2u const & windowSize,
-    StateName const & stateName )
+State::State( t_texturesMap const & textures, t_fontsMap const & fonts,
+              StateName const & stateName )
   : m_textures( textures ),
     m_fonts( fonts ),
     m_keyboard( InputInitialization::keyboard( stateName ) ),
     m_mouseButton( InputInitialization::mouse_button( stateName ) ),
-    m_windowSize( windowSize ),
     m_stateName( stateName )
 {
 }
@@ -128,23 +124,25 @@ void State::update_mouse_button( sf::Event const & event )
 
 void State::update_mouse_position( sf::Event const & event )
 {
-    if ( event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left )
+    if ( event.type == sf::Event::MouseButtonPressed
+         && event.mouseButton.button == sf::Mouse::Left )
     {
-        this->m_mousePosition.set_press( sf::Vector2f(
-            static_cast<float>( event.mouseButton.x ),
-            static_cast<float>( event.mouseButton.y ) ) );
+        this->m_mousePosition.set_press(
+            sf::Vector2f( static_cast<float>( event.mouseButton.x ),
+                          static_cast<float>( event.mouseButton.y ) ) );
     }
-    else if ( event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left )
+    else if ( event.type == sf::Event::MouseButtonReleased
+              && event.mouseButton.button == sf::Mouse::Left )
     {
-        this->m_mousePosition.set_release( sf::Vector2f(
-            static_cast<float>( event.mouseButton.x ),
-            static_cast<float>( event.mouseButton.y ) ) );
+        this->m_mousePosition.set_release(
+            sf::Vector2f( static_cast<float>( event.mouseButton.x ),
+                          static_cast<float>( event.mouseButton.y ) ) );
     }
     else if ( event.type == sf::Event::MouseMoved )
     {
-        this->m_mousePosition.set_overall( sf::Vector2f(
-            static_cast<float>( event.mouseMove.x ),
-            static_cast<float>( event.mouseMove.y ) ) );
+        this->m_mousePosition.set_overall(
+            sf::Vector2f( static_cast<float>( event.mouseMove.x ),
+                          static_cast<float>( event.mouseMove.y ) ) );
     }
 }
 

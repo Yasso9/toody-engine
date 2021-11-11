@@ -3,7 +3,7 @@
 Game::Game()
   : m_textures( RessourcesInit::init_textures() ),
     m_fonts( RessourcesInit::init_fonts() ),
-    m_timePerFrame( 1. / 60. )
+    m_settings()
 {
     this->init_window();
     this->init_state();
@@ -11,30 +11,19 @@ Game::Game()
 
 void Game::init_window()
 {
-    std::ifstream file { "./ressources/window.txt", std::ios::in };
-    if ( ! file )
-    {
-        throw std::runtime_error {
-            "There's no file named ./ressources/window.txt"
-        };
-    }
-
-    unsigned int windowWidth, windowHeight;
-    bool verticalSync;
-
-    file >> windowWidth >> windowHeight >> verticalSync;
-
-    this->m_window.create( sf::VideoMode( windowWidth, windowHeight ),
-                           "Toody Engine (In Developpement)" );
-    this->m_window.setVerticalSyncEnabled( verticalSync );
+    std::string const gameTitle { "Toody Engine (In Developpement)"s };
+    this->m_window.create(
+        sfaddon::to_video_mode( this->m_settings.get_window_size() ),
+        gameTitle );
+    this->m_window.setVerticalSyncEnabled(
+        this->m_settings.get_vertical_sync() );
 }
 
 void Game::init_state()
 {
+    // Game start with main menu
     this->m_states =
-        std::make_shared<MainMenuState>( this->m_textures,
-                                         this->m_fonts,
-                                         this->m_window.getSize() );
+        std::make_shared<MainMenuState>( this->m_textures, this->m_fonts );
 
     this->m_lastState = this->m_states->get_next();
 }
@@ -49,7 +38,7 @@ void Game::run()
     {
         deltaTime += this->m_clock.restart().asSeconds();
 
-        if ( deltaTime > this->m_timePerFrame )
+        if ( deltaTime > this->m_settings.get_refresh_rate() )
         {
             this->update_events();
             this->update_state();
@@ -91,28 +80,22 @@ void Game::change_state( StateName const & newState )
     {
     case StateName::MainMenu :
         {
-            this->m_states =
-                std::make_shared<MainMenuState>( this->m_textures,
-                                                 this->m_fonts,
-                                                 this->m_window.getSize() );
+            this->m_states = std::make_shared<MainMenuState>( this->m_textures,
+                                                              this->m_fonts );
         }
         break;
 
     case StateName::Game :
         {
             this->m_states =
-                std::make_shared<GameState>( this->m_textures,
-                                             this->m_fonts,
-                                             this->m_window.getSize() );
+                std::make_shared<GameState>( this->m_textures, this->m_fonts );
         }
         break;
 
     case StateName::Editor :
         {
-            this->m_states =
-                std::make_shared<EditorState>( this->m_textures,
-                                               this->m_fonts,
-                                               this->m_window.getSize() );
+            this->m_states = std::make_shared<EditorState>( this->m_textures,
+                                                            this->m_fonts );
         }
         break;
 
@@ -121,7 +104,9 @@ void Game::change_state( StateName const & newState )
         break;
 
     default :
-        throw std::invalid_argument( "StateName unsupported" );
+        assert( ( "StateName"s + std::to_string( static_cast<int>( newState ) )
+                  + "unsupported"s )
+                    .c_str() );
         break;
     }
 }

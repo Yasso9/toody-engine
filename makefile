@@ -1,33 +1,73 @@
 ############################## Global Variable ##############################
 
-CPP := g++
-CPP20 := g++ -std=c++2a
-WARNING_FLAG := -pedantic -pedantic-errors \
+# TYPO regarder le makefile du projet de groupe automate pour voir les petits détatils qu'on a rajouté
+
+# CPP_COMMAND := g++
+CPP_COMMAND := clang++
+# CPP_COMMAND_STD20 := $(CPP_COMMAND) -std=c++2a # g++
+CPP_COMMAND_STD20 := $(CPP_COMMAND) -std=c++20 # clang++
+WARNING_FLAGS := -pedantic -Wpedantic -pedantic-errors \
 -Wall -Wextra \
--Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization \
--Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs \
--Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow \
--Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 \
--Wswitch-default -Wundef -Werror -Wno-unused \
--Wconversion -Wfloat-equal \
--Wformat-nonliteral -Wformat-security  \
+-Wcast-align \
+-Wcast-qual \
+-Wctor-dtor-privacy \
+-Wdisabled-optimization \
+-Wformat=2 \
+-Winit-self \
+-Wmissing-declarations \
+-Wmissing-include-dirs \
+-Wold-style-cast \
+-Woverloaded-virtual \
+-Wredundant-decls \
+-Wshadow \
+-Wsign-conversion \
+-Wsign-promo \
+-Wstrict-overflow=5 \
+-Wswitch-default \
+-Wundef \
+-Wno-unused \
+-Wconversion \
+-Wfloat-equal \
+-Wformat-nonliteral \
+-Wundef \
+-Wformat=2 \
+-Wformat-security  \
 -Wformat-y2k \
 -Wimport \
 -Winline \
 -Winvalid-pch \
--Wmissing-field-initializers -Wmissing-format-attribute   \
+-Wmissing-field-initializers \
+-Wmissing-format-attribute   \
 -Wmissing-noreturn \
--Wpacked -Wpointer-arith \
+-Wpacked \
+-Wpointer-arith \
 -Wstack-protector \
 -Wstrict-aliasing=2  \
--Wunreachable-code -Wunused \
--Wunused-parameter \
+-Wunreachable-code \
+-Wunused \
 -Wvariadic-macros \
 -Wwrite-strings \
 -Weffc++ \
--Wlong-long
+-Werror \
+-Wunused-parameter \
+-Wlong-long \
+-fno-common \
 
-COMPILER_FLAGS := -O0 -g $(WARNING_FLAG) -c -o
+# -Wpadded
+# -Wdouble-promotion
+
+# Warnings that works only on clang :
+# adding 'no' after '-W' remove the warning
+
+# Warnings that works only on gcc : \
+-Wlogical-op \
+-Wnoexcept \
+-Wstrict-null-sentinel \
+-Wformat-truncation \
+
+
+
+COMPILER_FLAGS := -O0 -g $(WARNING_FLAGS) -c -o
 LINKER_FLAGS :=
 
 # .cpp and .hpp files
@@ -55,7 +95,7 @@ SOURCES_FILES := $(subst $(FILES_DIRECTORY)/,,$(SOURCES_FILES))
 # Object files of the all cpp hpp pair
 OBJECT_PAIR := $(basename $(HEADERS_FILES)) # sub_directory/filename.hpp :=> sub_directory/filename
 OBJECT_PAIR := $(addprefix $(OBJECT_DIRECTORY)/, $(OBJECT_PAIR)) # :=> ./object/sub_directory/filename
-OBJECT_PAIR := $(addsuffix .o,$(OBJECT_PAIR)) # :=> ./object/sub_directory/filename.c
+OBJECT_PAIR := $(addsuffix .o,$(OBJECT_PAIR)) # :=> ./object/sub_directory/filename.o
 
 # All the object (needed for all prerequesites)
 OBJECT_ALL := $(basename $(SOURCES_FILES))
@@ -95,10 +135,12 @@ info : # for debuging
 ############################## project path ##############################
 
 # PS : If using vscode, you also have to define includes in c_cpp_properties.json project config
-PROJECT_DIRECTORY := C:/Users/Turki/Mon Drive/Computing/Projects/ToodyEngine/sources
-SFML_PATH := C:/Users/Turki/Mon Drive/Programs/Windows/SFML-2.5.1
-INCLUDE := -I"$(SFML_PATH)/include" -I"$(PROJECT_DIRECTORY)"
-LIBRARIES := -L"$(SFML_PATH)/lib" -lsfml-graphics -lsfml-system -lsfml-window
+PROJECT_DIRECTORY := C:/Users/Turki/GoogleDrive/Computing/Projects/ToodyEngine
+SFML_PATH := C:/Users/Turki/GoogleDrive/Programs/Windows/SFML-2.5.1
+SQLITE_PATH := C:/Users/Turki/GoogleDrive/Programs/Windows/Sqlite
+NLOHMANN_JSON_PATH := C:/Users/Turki/GoogleDrive/Programs/Windows/cpp-json-nlohmann
+INCLUDES := -I"$(SFML_PATH)/include" -I"$(SQLITE_PATH)/sources" -I"$(NLOHMANN_JSON_PATH)/include" -I"$(PROJECT_DIRECTORY)/sources"
+LIBRARIES :=  "$(SQLITE_PATH)/object/sqlite3.o" -L"$(SFML_PATH)/lib" -lsfml-graphics -lsfml-system -lsfml-window
 
 
 
@@ -110,17 +152,17 @@ $(OBJECT_PAIR) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/%.cpp $(FILES_DIRE
 	rm -rf -- $@
 #	create the object directory if not exist
 	mkdir -p $(dir $@)
-#	g++ -std=c++2a -Wall -Wextra -c -o object/sub_directory/filename.o sources/project/sub_directory/filename.cpp -I"C:/Users/Turki/Mon Drive/Informatique/Projets/Moteur-2D/sources" -I"C:/Informatique/SFML-2.5.1/include"
-	$(CPP20) $(COMPILER_FLAGS) $@ $< $(INCLUDE)
+#	g++ -std=c++2a -Wall -Wextra -c -o object/sub_directory/filename.o sources/project/sub_directory/filename.cpp -I"C:/Users/Turki/GoogleDrive/Informatique/Projets/Moteur-2D/sources" -I"C:/Informatique/SFML-2.5.1/include"
+	$(CPP_COMMAND_STD20) $(COMPILER_FLAGS) $@ $< $(INCLUDES)
 
 # Creating the object file of OBJECT_SOLO with gather the dependencies of the .cpp's only
 # commands are the same than above
 $(OBJECT_SOLO) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/%.cpp
 	rm -rf -- $@
 	mkdir -p $(dir $@)
-	$(CPP20) $(COMPILER_FLAGS) $@ $< $(INCLUDE)
+	$(CPP_COMMAND_STD20) $(COMPILER_FLAGS) $@ $< $(INCLUDES)
 
 # Create the executable by Linking all the object files and the SFML together
 $(EXECUTABLE) : $(OBJECT_ALL)
 #	g++ object/sub_directory_A/filename_A.o object/sub_directory_B/filename_B.o etc... -o executable -L"C:/Informatique/SFML-2.5.1/lib" -lsfml-graphics -lsfml-system -lsfml-window
-	$(CPP) $^ -o $@ $(LINKER_FLAGS) $(LIBRARIES)
+	$(CPP_COMMAND) $^ -o $@ $(LINKER_FLAGS) $(LIBRARIES)

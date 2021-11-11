@@ -4,6 +4,6 @@
 
 namespace RessourcesInit
 {
-    std::map<TextureKey, sf::Texture> init_textures();
-    std::map<FontKey, sf::Font> init_fonts();
+    t_texturesMap init_textures();
+    t_fontsMap init_fonts();
 } // namespace RessourcesInit

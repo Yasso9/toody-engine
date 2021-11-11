@@ -1,17 +1,14 @@
 #pragma once
 
 #include <project/output-info/information.hpp>
-#include <project/state/state.hpp>
+#include <project/states/state.hpp>
 #include <project/tilemap/tilemap.hpp>
 #include <project/tilemap/tileset.hpp>
 
 class EditorState final : public State
 {
   public:
-    EditorState(
-        std::map<TextureKey, sf::Texture> const & textures,
-        std::map<FontKey, sf::Font> const & fonts,
-        sf::Vector2u const & windowSize );
+    EditorState( t_texturesMap const & textures, t_fontsMap const & fonts );
 
     // void copy_selection();
     // void paste_selection(sf::Vector2f const tablePosition);
@@ -27,11 +24,11 @@ class EditorState final : public State
         Selection
     };
 
-    EditorMap m_tilemap {};
+    EditorMap m_tilemap;
     Tileset m_sheet {};
 
     // Widget
-    ButtonVector m_buttons {};
+    ButtonArray m_buttons {};
     Mode m_mode {};
     Message m_debugInfo {};
 

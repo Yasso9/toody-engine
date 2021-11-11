@@ -1,18 +1,19 @@
 #pragma once
 
-// To turn off warning that are caused by the sfml
-// save diagnostic state
 #pragma GCC diagnostic push
-// turn off the specific warning. Can also use "-Wall"
+
 #pragma GCC diagnostic ignored "-Weffc++"
 #pragma GCC diagnostic ignored "-Wlong-long"
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#pragma GCC diagnostic ignored "-Wsign-conversion"
 
+// JSON handling in C++
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
+// SFML
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 
-// turn the warnings back on
 #pragma GCC diagnostic pop
 
 // Pour les states
@@ -39,6 +40,8 @@
 #include <sstream>
 #include <string>
 
+#include <algorithm>
+
 // A enlever a la fin (peut être)
 #include <iostream>
 // Pour les pair (make_pair quand on initialise les valeurs des inputs)
@@ -46,18 +49,25 @@
 
 using namespace std::string_literals;
 
-constexpr float const g_framerate { 60 };
+constexpr float const g_framerate { 60.f };
 
 /// @brief size of the a tile sqare in pixel
-constexpr float const g_squareSize { 32 };
+constexpr float const g_squareSize { 32.f };
 
 // TYPO a enlever, peut se calculer automatiquement en comptant le nb d'instance
 // d'enfant de State
-constexpr int const g_numberOfState { 3 };
+constexpr unsigned int const g_numberOfState { 3 };
 
 #include <project/tilemap/tile_utility.hpp>
+#include <project/tools/databases.hpp>
 #include <project/tools/enumeration.hpp>
-#include <project/utility/error.hpp>
+#include <project/tools/json_addon.hpp>
+#include <project/tools/sfml_addon.hpp>
+#include <project/utility/error_handling.hpp>
+
+// Type renaming
+using t_texturesMap = std::map<TextureKey, sf::Texture>;
+using t_fontsMap = std::map<FontKey, sf::Font>;
 
 void secure_entry( unsigned int & size );
 

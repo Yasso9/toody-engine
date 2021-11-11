@@ -3,7 +3,7 @@
 Button::Button()
 {
     this->m_shape.setFillColor( sf::Color::White );
-    this->m_shape.setSize( sf::Vector2f( 200.f, 100.f ) );
+    this->m_shape.setSize( sf::Vector2f( 50.f, 50.f ) );
     this->m_shape.setPosition( 0.f, 0.f );
     this->m_shape.setOutlineColor( sf::Color::Black );
     this->m_shape.setOutlineThickness( 2.f );
@@ -32,8 +32,18 @@ void Button::set_position( sf::Vector2f const & position )
 
 void Button::set_position( float const & positionX, float const & positionY )
 {
-    this->m_shape.setPosition( positionX, positionY );
+    this->set_position( sf::Vector2f { positionX, positionY } );
+}
+
+void Button::set_size( sf::Vector2f const & size )
+{
+    this->m_shape.setSize( size );
     this->adjust_text_position();
+}
+
+void Button::set_size( float const & sizeX, float const & sizeY )
+{
+    this->set_size( sf::Vector2f { sizeX, sizeY } );
 }
 
 void Button::set_string( std::string const & string )
@@ -41,10 +51,11 @@ void Button::set_string( std::string const & string )
     this->m_text.setString( string );
 
     // ? Global Local
-    this->m_text.setOrigin( this->m_text.getLocalBounds().left
-                                + ( this->m_text.getLocalBounds().width / 2 ),
-                            this->m_text.getLocalBounds().top
-                                + ( this->m_text.getGlobalBounds().height / 2 ) );
+    this->m_text.setOrigin(
+        this->m_text.getLocalBounds().left
+            + ( this->m_text.getLocalBounds().width / 2 ),
+        this->m_text.getLocalBounds().top
+            + ( this->m_text.getGlobalBounds().height / 2 ) );
 
     this->adjust_text_position();
 }
@@ -58,8 +69,10 @@ void Button::adjust_text_position()
 void Button::set_selected( bool const & isSelected )
 {
     sf::Color const shapeColor { this->m_shape.getFillColor() };
-    this->m_shape.setFillColor( sf::Color(
-        shapeColor.r, shapeColor.g, shapeColor.b, ( isSelected ) ? 128 : 255 ) );
+    this->m_shape.setFillColor( sf::Color( shapeColor.r,
+                                           shapeColor.g,
+                                           shapeColor.b,
+                                           ( isSelected ) ? 128 : 255 ) );
 
     this->m_isSelected = isSelected;
 }
@@ -86,11 +99,12 @@ bool Button::is_inside( sf::Vector2f const & mousePosition ) const
              && mousePosition.x
                     <= this->m_shape.getPosition().x + this->m_shape.getSize().x
              && mousePosition.y >= this->m_shape.getPosition().y
-             && mousePosition.y
-                    <= this->m_shape.getPosition().y + this->m_shape.getSize().y );
+             && mousePosition.y <= this->m_shape.getPosition().y
+                                       + this->m_shape.getSize().y );
 }
 
-void Button::draw( sf::RenderTarget & target, sf::RenderStates /* states */ ) const
+void Button::draw( sf::RenderTarget & target,
+                   sf::RenderStates /* states */ ) const
 {
     // states.transform *= m_shape.getTransform();
 

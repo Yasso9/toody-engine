@@ -1,9 +1,11 @@
 #pragma once
 
 #include <project/ressources-handling/ressources_init.hpp>
-#include <project/state/editor_state.hpp>
-#include <project/state/game_state.hpp>
-#include <project/state/main_menu_state.hpp>
+#include <project/settings/settings.hpp>
+
+#include <project/states/editor_state.hpp>
+#include <project/states/game_state.hpp>
+#include <project/states/main_menu_state.hpp>
 
 class Game final
 {
@@ -27,15 +29,14 @@ class Game final
   private:
     std::shared_ptr<State> m_states { nullptr };
 
-    std::map<TextureKey, sf::Texture> const m_textures;
-    std::map<FontKey, sf::Font> const m_fonts;
+    t_texturesMap const m_textures {};
+    t_fontsMap const m_fonts {};
 
     sf::RenderWindow m_window {};
     sf::Event m_event {};
     sf::Clock m_clock {};
 
-    // TYPO lire cette variable à l'aide du config.ini
-    double const m_timePerFrame {};
+    Settings const m_settings {};
 
     /// @brief state that was print before the update of the state
     StateName m_lastState {};

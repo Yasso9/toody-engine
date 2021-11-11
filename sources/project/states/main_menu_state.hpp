@@ -1,14 +1,11 @@
 #pragma once
 
-#include <project/state/state.hpp>
+#include <project/states/state.hpp>
 
 class MainMenuState final : public State
 {
   public:
-    MainMenuState(
-        std::map<TextureKey, sf::Texture> const & textures,
-        std::map<FontKey, sf::Font> const & fonts,
-        sf::Vector2u const & windowSize );
+    MainMenuState( t_texturesMap const & textures, t_fontsMap const & fonts );
 
     void update() override;
     void render( sf::RenderWindow & target ) override;
@@ -17,7 +14,7 @@ class MainMenuState final : public State
     sf::RectangleShape m_background {};
     sf::Text m_text {};
 
-    ButtonVector m_buttons {};
+    ButtonArray m_buttons {};
 
     void init_background();
     void init_text();

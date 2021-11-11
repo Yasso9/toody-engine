@@ -1,9 +1,9 @@
 #include "editor_state.hpp"
 
-EditorState::EditorState( std::map<TextureKey, sf::Texture> const & textures,
-                          std::map<FontKey, sf::Font> const & fonts,
-                          sf::Vector2u const & windowSize )
-  : State( textures, fonts, windowSize, StateName::Editor )
+EditorState::EditorState( t_texturesMap const & textures,
+                          t_fontsMap const & fonts )
+  : State( textures, fonts, StateName::Editor ),
+    m_tilemap( textures.at( TextureKey::Tileset ) )
 {
     this->m_tile = 0;
     this->m_mode = Mode::Normal;
@@ -17,11 +17,8 @@ EditorState::EditorState( std::map<TextureKey, sf::Texture> const & textures,
 
 void EditorState::init_map()
 {
-    this->m_tilemap.set_texture( this->m_textures.at( TextureKey::Tileset ) );
     this->m_tilemap.setPosition(
-        ( static_cast<sf::Vector2f>( this->m_windowSize )
-          - this->m_tilemap.get_size() )
-        / 2.f );
+        ( sfaddon::window_size_f() - this->m_tilemap.get_size() ) / 2.f );
 
     this->m_sheet.create( this->m_textures.at( TextureKey::Tileset ) );
     this->m_sheet.setPosition( sf::Vector2f( 150.f, 150.f ) );
@@ -29,23 +26,19 @@ void EditorState::init_map()
 
 void EditorState::init_widget()
 {
-    this->m_buttons = ButtonVector { this->m_fonts.at( FontKey::Arial ),
-                                     { "Normal", "Selection" } };
+    this->m_buttons = ButtonArray { this->m_fonts.at( FontKey::Arial ),
+                                    { "Normal", "Selection" } };
     this->m_debugInfo.create( this->m_fonts.at( FontKey::Arial ), 4 );
 }
 
 void EditorState::init_views()
 {
+    sf::Vector2f const windowSize { sfaddon::window_size_f() };
+
     this->m_screenView.reset(
-        sf::FloatRect( 0.f,
-                       0.f,
-                       static_cast<float>( this->m_windowSize.x ),
-                       static_cast<float>( this->m_windowSize.y ) ) );
+        sf::FloatRect( 0.f, 0.f, windowSize.x, windowSize.y ) );
     this->m_mapView.reset(
-        sf::FloatRect( 0.f,
-                       0.f,
-                       static_cast<float>( this->m_windowSize.x ),
-                       static_cast<float>( this->m_windowSize.y ) ) );
+        sf::FloatRect( 0.f, 0.f, windowSize.x, windowSize.y ) );
 }
 
 // Apres
@@ -63,10 +56,11 @@ void EditorState::handle_mouse_wheel_up()
     {
         this->m_mapView.zoom( 0.8f );
     }
-    if ( this->m_mapView.getSize().x
-             < static_cast<float>( this->m_windowSize.x ) * 2.f
-         && this->m_mapView.getSize().y
-                < static_cast<float>( this->m_windowSize.y ) * 2.f )
+
+    sf::Vector2f const windowSize { sfaddon::window_size_f() };
+
+    if ( this->m_mapView.getSize().x < windowSize.x * 2.f
+         && this->m_mapView.getSize().y < windowSize.y * 2.f )
     {
         this->m_mapView.zoom( 1.2f );
     }
@@ -79,10 +73,11 @@ void EditorState::handle_mouse_wheel_down()
     {
         this->m_mapView.zoom( 0.8f );
     }
-    if ( this->m_mapView.getSize().x
-             < static_cast<float>( this->m_windowSize.x ) * 2.f
-         && this->m_mapView.getSize().y
-                < static_cast<float>( this->m_windowSize.y ) * 2.f )
+
+    sf::Vector2f const windowSize { sfaddon::window_size_f() };
+
+    if ( this->m_mapView.getSize().x < windowSize.x * 2.f
+         && this->m_mapView.getSize().y < windowSize.y * 2.f )
     {
         this->m_mapView.zoom( 1.2f );
     }
@@ -92,11 +87,11 @@ void EditorState::handle_keyboard_press( std::string const & input )
 {
     if ( input == "Profondeur1" )
     {
-        this->m_tilemap.set_depth( 0 );
+        this->m_tilemap.set_actual_depth( 0 );
     }
     else if ( input == "Profondeur2" )
     {
-        this->m_tilemap.set_depth( 1 );
+        this->m_tilemap.set_actual_depth( 1 );
     }
     else if ( input == "Center" )
     {
@@ -196,12 +191,12 @@ void EditorState::update()
     //     this->update_colision_mode();
     // }
 
+    sf::Vector2f const windowSize { sfaddon::window_size_f() };
     // Mise a jour des informations
     this->m_debugInfo.update(
-        sf::Vector2f( 0.8f * static_cast<float>( this->m_windowSize.x ),
-                      0.1f * static_cast<float>( this->m_windowSize.y ) ),
+        sf::Vector2f( 0.8f * windowSize.x, 0.1f * windowSize.y ),
 
-        { "Depth : " + std::to_string( this->m_tilemap.get_depth() ),
+        { "Depth : " + std::to_string( this->m_tilemap.get_actual_depth() ),
           "Mode : " + std::to_string( static_cast<int>( this->m_mode ) ),
           "Mouse : " + std::to_string( this->m_mousePosition.get_overall().x )
               + ", " + std::to_string( this->m_mousePosition.get_overall().y ),

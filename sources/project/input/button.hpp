@@ -11,6 +11,10 @@ class Button final : public sf::Drawable
 
     void set_position( sf::Vector2f const & position );
     void set_position( float const & positionX, float const & positionY );
+
+    void set_size( sf::Vector2f const & size );
+    void set_size( float const & sizeX, float const & sizeY );
+
     void set_string( std::string const & string );
 
     void set_selected( bool const & isSelected );
@@ -35,5 +39,6 @@ class Button final : public sf::Drawable
 
     void adjust_text_position();
 
-    void draw( sf::RenderTarget & target, sf::RenderStates states ) const override;
+    void draw( sf::RenderTarget & target,
+               sf::RenderStates states ) const override;
 };

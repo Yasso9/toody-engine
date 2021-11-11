@@ -10,24 +10,24 @@ namespace RessourcesInit
             switch ( textureKey )
             {
             case TextureKey::Tileset :
-                // Credit GragarLink10
-                return "./ressources/sprites/tileset/ground.png";
+                return "./ressources/sprites/tileset/ground.png"s;
                 break;
             case TextureKey::Player :
-                return "./ressources/sprites/players/gold.png";
+                return "./ressources/sprites/players/gold.png"s;
                 break;
             case TextureKey::HomeWallpaper :
-                return "./ressources/home_wallpaper.jpg";
+                return "./ressources/home_wallpaper.jpg"s;
                 break;
             default :
                 /* TYPO the best thing here is the possibility
                 to use the c++20 std::format, but as of now
                 g++ 11.2.0 doesn't support it */
-                throw std::runtime_error(
-                    "The texture n"s
-                    + std::to_string( static_cast<int>( textureKey ) )
-                    + "of the TextureKey class hasn't been loaded"s
-                      "or the key doesn't exist in this enum"s );
+                assert( ( "The texture n"s
+                          + std::to_string( static_cast<int>( textureKey ) )
+                          + "of the TextureKey class hasn't been loaded"s
+                            "or the key doesn't exist in this enum"s )
+                            .c_str() );
+                return "";
                 break;
             }
         }
@@ -37,24 +37,26 @@ namespace RessourcesInit
             switch ( fontKey )
             {
             case FontKey::Arial :
-                return "./ressources/arial.ttf";
+                return "./ressources/arial.ttf"s;
                 break;
             default :
                 /* TYPO the best thing here is the possibility
                 to use the c++20 std::format, but as of now
                 g++ 11.2.0 doesn't support it */
-                throw std::runtime_error(
-                    "The font n" + std::to_string( static_cast<int>( fontKey ) )
-                    + "of the FontKey class hasn't been loaded"
-                      "or the key doesn't exist in this enum" );
+                assert( ( "The texture n"s
+                          + std::to_string( static_cast<int>( fontKey ) )
+                          + "of the TextureKey class hasn't been loaded"s
+                            "or the key doesn't exist in this enum"s )
+                            .c_str() );
+                return "";
                 break;
             }
         }
     } // namespace
 
-    std::map<TextureKey, sf::Texture> init_textures()
+    t_texturesMap init_textures()
     {
-        std::map<TextureKey, sf::Texture> textures {};
+        t_texturesMap textures {};
 
         for ( Enum<TextureKey> textureKey { Enum<TextureKey>::get_min() };
               textureKey < Enum<TextureKey>::get_max();
@@ -65,8 +67,7 @@ namespace RessourcesInit
                 textureKey.get_value() ) };
             if ( ! texture.loadFromFile( textureLocalisation ) )
             {
-                throw std::runtime_error( "There isn't a file named \""
-                                          + textureLocalisation + "\"" );
+                throw FileNotFoundException { textureLocalisation };
             }
 
             textures.insert(
@@ -76,27 +77,23 @@ namespace RessourcesInit
         return textures;
     }
 
-    // TYPO change this function to make it look like init_textures
-    std::map<FontKey, sf::Font> init_fonts()
+    t_fontsMap init_fonts()
     {
-        std::map<FontKey, sf::Font> fonts {};
+        t_fontsMap fonts {};
 
-        for ( int fontKey { 0 };
-              fontKey < static_cast<int>( FontKey::EnumLast );
+        for ( Enum<FontKey> fontKey { Enum<FontKey>::get_min() };
+              fontKey < Enum<FontKey>::get_max();
               ++fontKey )
         {
             sf::Font font {};
             std::string const fontLocalisation { get_font_localisation(
-                static_cast<FontKey>( fontKey ) ) };
+                fontKey.get_value() ) };
             if ( ! font.loadFromFile( fontLocalisation ) )
             {
-                throw std::runtime_error(
-                    "The file \"" + fontLocalisation
-                    + "\" to load the font does not exist anymore" );
+                throw FileNotFoundException { fontLocalisation };
             }
 
-            fonts.insert(
-                std::make_pair( static_cast<FontKey>( fontKey ), font ) );
+            fonts.insert( std::make_pair( fontKey.get_value(), font ) );
         }
 
         return fonts;

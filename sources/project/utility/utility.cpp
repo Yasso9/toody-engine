@@ -12,11 +12,13 @@ void secure_entry( unsigned int & size )
         {
             std::cout << "Entrée invalide. Recommence." << std::endl;
             std::cin.clear();
-            std::cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
+            std::cin.ignore( std::numeric_limits<std::streamsize>::max(),
+                             '\n' );
         }
         else
         {
-            std::cout << "Size must be an integer between 1 and 500" << std::endl;
+            std::cout << "Size must be an integer between 1 and 500"
+                      << std::endl;
         }
     }
 }
@@ -37,27 +39,38 @@ sf::Vector2f get_movement( Direction const direction, float const value )
 
     switch ( direction )
     {
-    case Direction::Up : moving.y = -value; break;
-    case Direction::Down : moving.y = value; break;
-    case Direction::Right : moving.x = value; break;
-    case Direction::Left : moving.x = -value; break;
-    default : throw std::invalid_argument( "default use in get_movement" ); break;
+    case Direction::Up :
+        moving.y = -value;
+        break;
+    case Direction::Down :
+        moving.y = value;
+        break;
+    case Direction::Right :
+        moving.x = value;
+        break;
+    case Direction::Left :
+        moving.x = -value;
+        break;
+    default :
+        throw std::invalid_argument( "default use in get_movement" );
+        break;
     }
 
     return moving;
 }
 
 sf::Vector2f to_view( sf::Vector2f const & positionInLastView,
-                      sf::View const & lastView,
-                      sf::View const & newView )
+                      sf::View const & lastView, sf::View const & newView )
 {
     /* positionInLastView -> convertion dans la nouvelle vue -> positionInNewView
     -> rajout du départ de la nouvelle vue par rapport à l'ancienne ->
     positionFinish */
 
     return sf::Vector2f(
-        ( positionInLastView.x * ( newView.getSize().x / lastView.getSize().x ) )
+        ( positionInLastView.x
+          * ( newView.getSize().x / lastView.getSize().x ) )
             + ( lastView.getCenter().x - ( newView.getSize().x / 2.f ) ),
-        ( positionInLastView.y * ( newView.getSize().y / lastView.getSize().y ) )
+        ( positionInLastView.y
+          * ( newView.getSize().y / lastView.getSize().y ) )
             + ( lastView.getCenter().y - ( newView.getSize().y / 2.f ) ) );
 }
