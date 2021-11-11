@@ -1,7 +1,0 @@
--Waggregate-return
--Wpadded (très dur a faire et a maintenir askip)
--Wswitch-enum (doit avoir tout les enumerations dans le switch (default:break; ne suffit pas))
-
-
-Information commit :
-Add string litteral s at each end of string. Rename of some variables, functions, classes and filename. Integration of SQLITE. Text file for storage (of tilemap) have been change to sqlite database. Use of the library json::nlohmann to array in json format

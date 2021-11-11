@@ -1,5 +1,6 @@
 #include "game_state.hpp"
 
+// TYPO changer les arguments en une structure comprenant t_texturesMap et t_fontsMap
 GameState::GameState( t_texturesMap const & textures, t_fontsMap const & fonts )
   : State( textures, fonts, StateName::Game ),
     m_tilemap( textures.at( TextureKey::Tileset ) )
