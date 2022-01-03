@@ -10,6 +10,8 @@ TileMap::TileMap( sf::Texture const & texture ) : m_texture( texture )
         std::string { completeResult[0]["table_tilemap"] } ) };
 
     this->m_table = jsonaddon::decode_array( singleValue );
+
+    this->synchronize_vertices();
 }
 
 void TileMap::synchronize_vertices()
@@ -43,27 +45,30 @@ void TileMap::synchronize_vertices()
 
                 sf::Vector2u const tilePosition { to_tile_position(
                     this->m_table[row][line][tileDepth],
-                    this->m_table[row].size() ) };
+                    static_cast<unsigned int>( this->m_table[row].size() ) ) };
 
                 set_quad_texture_coordinate( quad, tilePosition );
             }
         }
     }
+
+    this->setPosition( 0.f, 0.f );
 }
 
 sf::Vector2f TileMap::get_size() const
 {
     // TYPO il faut verifier que toute les ligne de toutes les colonnes fasse la même taille
     return sf::Vector2f {
-        static_cast<float>( m_vertices[0][0].size() ) * g_squareSize,
-        static_cast<float>( m_vertices[0].size() ) * g_squareSize
+        static_cast<float>( m_vertices[0][0].size() ) * ::g_tileSize_f,
+        static_cast<float>( m_vertices[0].size() ) * ::g_tileSize_f
     };
 }
 
 void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
 {
-    states.transform *= getTransform();
+    states.transform *= this->getTransform();
 
+    // TYPO tester si c'est utile
     states.texture = &this->m_texture;
 
     for ( auto const & row : this->m_vertices )
@@ -78,10 +83,9 @@ void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
     }
 }
 
-EditorMap::EditorMap( sf::Texture const & texture ) : TileMap( texture )
+EditorMap::EditorMap( sf::Texture const & texture )
+  : TileMap( texture ), m_cursor(), m_actualDepth( 0u )
 {
-    this->m_isMouseOn = true;
-    this->m_actualDepth = 0u;
 }
 
 void EditorMap::set_actual_depth( unsigned int const & actualDepth )
@@ -162,13 +166,11 @@ void EditorMap::update( sf::Vector2f const /* cursorPosition */,
     // }
 }
 
-void EditorMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
-{
-    TileMap::draw( target, states );
+// void EditorMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
+// {
+//     states.transform *= this->getTransform();
 
-    // On et aussi les tileCursor de la tilemap si il le faut
-    if ( this->m_isMouseOn )
-    {
-        target.draw( this->m_tileCursor );
-    }
-}
+//     TileMap::draw( target, states );
+
+//     // target.draw( this->m_cursor );
+// }

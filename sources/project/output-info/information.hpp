@@ -3,26 +3,40 @@
 #include <project/utility/utility.hpp>
 
 // Faire un template de message en mode sdtvector
-class Message final
+class Message final : public sf::Drawable, public sf::Transformable
 {
   public:
-    Message();
+    Message( sf::Font const & font );
 
-    void create( sf::Font const & font, unsigned int const textNumber );
+    void initialize_text( std::size_t const & size );
+
     void update( sf::Vector2f const position,
                  std::vector<std::string> const & message = {} );
-    void render( sf::RenderWindow & target ) const;
+
+    virtual void draw( sf::RenderTarget & target,
+                       sf::RenderStates states ) const override;
 
   private:
-    // A transformer en array peut etre
+    /** @brief array of all the text to print to the screen */
     std::vector<sf::Text> m_textArray {};
+    sf::Font const m_font;
 };
 
-class TileCursor : public sf::RectangleShape
+class Cursor final : public sf::Drawable, public sf::Transformable
 {
   public:
-    TileCursor();
+    Cursor();
 
-    void update( sf::Vector2f const cursorPosition,
-                 sf::Vector2f const mapBeginPosition );
+    sf::Vector2f get_size() const noexcept;
+    void set_size( sf::Vector2f const & size ) noexcept;
+    void set_size( float const & sizeX, float const & sizeY ) noexcept;
+
+    void update( sf::FloatRect const & rectangle );
+    void update( sf::Vector2f const & position, sf::Vector2f const & size );
+
+    virtual void draw( sf::RenderTarget & target,
+                       sf::RenderStates states ) const override;
+
+  private:
+    sf::RectangleShape m_shape {};
 };

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <project/ressources-handling/ressources_init.hpp>
-#include <project/settings/settings.hpp>
 
 #include <project/states/editor_state.hpp>
 #include <project/states/game_state.hpp>

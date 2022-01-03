@@ -1,91 +1,60 @@
 #include "editor_state.hpp"
 
-EditorState::EditorState( t_texturesMap const & textures,
-                          t_fontsMap const & fonts )
-  : State( textures, fonts, StateName::Editor ),
-    m_tilemap( textures.at( TextureKey::Tileset ) )
+EditorState::EditorState( Ressources const & ressources,
+                          Settings const & settings )
+  : State( ressources, settings, StateName::Editor ),
+    m_tilemap( this->m_ressources.textures.at( TextureKey::Tileset ) ),
+    m_tileset( this->m_ressources.textures.at( TextureKey::Tileset ) ),
+    m_buttons( this->m_ressources.fonts.at( FontKey::Arial ),
+               { "Normal", "Selection" } ),
+    m_debugInformations( this->m_ressources.fonts.at( FontKey::Arial ) )
 {
     this->m_tile = 0;
     this->m_mode = Mode::Normal;
 
     this->init_map();
-    this->init_widget();
-
-    this->init_views();
     this->init_selection_rect();
 }
 
 void EditorState::init_map()
 {
     this->m_tilemap.setPosition(
-        ( sfaddon::window_size_f() - this->m_tilemap.get_size() ) / 2.f );
+        ( this->m_settings.get_window_size_f() - this->m_tilemap.get_size() )
+        / 2.f );
 
-    this->m_sheet.create( this->m_textures.at( TextureKey::Tileset ) );
-    this->m_sheet.setPosition( sf::Vector2f( 150.f, 150.f ) );
-}
+    this->m_view.setCenter( this->m_settings.get_window_size_f() / 2.f );
+    this->m_view.setSize( this->m_settings.get_window_size_f() );
 
-void EditorState::init_widget()
-{
-    this->m_buttons = ButtonArray { this->m_fonts.at( FontKey::Arial ),
-                                    { "Normal", "Selection" } };
-    this->m_debugInfo.create( this->m_fonts.at( FontKey::Arial ), 4 );
-}
-
-void EditorState::init_views()
-{
-    sf::Vector2f const windowSize { sfaddon::window_size_f() };
-
-    this->m_screenView.reset(
-        sf::FloatRect( 0.f, 0.f, windowSize.x, windowSize.y ) );
-    this->m_mapView.reset(
-        sf::FloatRect( 0.f, 0.f, windowSize.x, windowSize.y ) );
+    this->m_tileset.setPosition( this->m_settings.get_window_size_f() / 5.f );
+    // TYPO la taille ne doit pas être aberrante
+    this->m_tileset.set_size( this->m_settings.get_window_size_f() / 3.f );
 }
 
 // Apres
 void EditorState::init_selection_rect()
 {
-    this->m_selectionRect.setPosition( 0.f, 0.f );
-    this->m_selectionRect.setSize( sf::Vector2f( 0.f, 0.f ) );
-    this->m_selectionRect.setFillColor( sf::Color( 255, 230, 90, 128 ) );
+    // this->m_selectionRect.setPosition( 0.f, 0.f );
+    // this->m_selectionRect.setSize( sf::Vector2f( 0.f, 0.f ) );
+    // this->m_selectionRect.setFillColor( sf::Color( 255, 230, 90, 128 ) );
 }
 
 void EditorState::handle_mouse_wheel_up()
 {
-    if ( this->m_mapView.getSize().x >= 50.f
-         && this->m_mapView.getSize().y >= 20.f )
-    {
-        this->m_mapView.zoom( 0.8f );
-    }
-
-    sf::Vector2f const windowSize { sfaddon::window_size_f() };
-
-    if ( this->m_mapView.getSize().x < windowSize.x * 2.f
-         && this->m_mapView.getSize().y < windowSize.y * 2.f )
-    {
-        this->m_mapView.zoom( 1.2f );
-    }
+    this->m_tilemap.scale( 1.2f, 1.2f );
 }
 
 void EditorState::handle_mouse_wheel_down()
 {
-    if ( this->m_mapView.getSize().x >= 50.f
-         && this->m_mapView.getSize().y >= 20.f )
-    {
-        this->m_mapView.zoom( 0.8f );
-    }
-
-    sf::Vector2f const windowSize { sfaddon::window_size_f() };
-
-    if ( this->m_mapView.getSize().x < windowSize.x * 2.f
-         && this->m_mapView.getSize().y < windowSize.y * 2.f )
-    {
-        this->m_mapView.zoom( 1.2f );
-    }
+    this->m_tilemap.scale( 0.8f, 0.8f );
 }
 
 void EditorState::handle_keyboard_press( std::string const & input )
 {
-    if ( input == "Profondeur1" )
+    if ( input == "MainMenu" )
+    {
+        this->m_stateName = StateName::MainMenu;
+    }
+    else if ( input == "Profondeur1" )
     {
         this->m_tilemap.set_actual_depth( 0 );
     }
@@ -95,33 +64,21 @@ void EditorState::handle_keyboard_press( std::string const & input )
     }
     else if ( input == "Center" )
     {
-        this->init_views();
+        // TYPO mettre le centre de la vue et non pas la taille de la fenetre / 2
+        this->m_tilemap.setPosition( this->m_settings.get_window_size_f()
+                                     / 2.f );
     }
     else if ( input == "PrintOrRemoveSpriteSheet" )
     {
-        if ( this->m_sheet.isPrint == false )
-            this->m_sheet.isPrint = true;
-        else
-            this->m_sheet.isPrint = false;
+        this->m_tileset.switch_print();
     }
     else if ( input == "Save" )
     {
         this->m_tilemap.save();
     }
-    else if ( input == "MainMenu" )
-    {
-        this->m_stateName = StateName::MainMenu;
-    }
-
-    if ( this->m_mouseButton.at( "AcceptClick" ).second )
-    {
-        this->m_mode = static_cast<Mode>(
-            this->m_buttons.update_press( this->m_mousePosition.get_press(),
-                                          static_cast<int>( this->m_mode ) ) );
-    }
 }
 
-void EditorState::handle_global_input()
+void EditorState::handle_current_input()
 {
     // Movement de la mapView par raport a l'ecran,
     // deplacer la vue revient a deplacer la mapView
@@ -143,18 +100,24 @@ void EditorState::handle_global_input()
         this->m_tilemap.move( -5.f, 0.f );
     }
 
-    this->m_buttons.update_select( this->m_mousePosition.get_overall() );
+    // Always check if the buttons have been selected or pressed
+    int const buttonNumberPressed { this->m_buttons.update(
+        this->m_mousePosition.get_overall(),
+        this->m_mouseButton.at( "Action"s ).second ) };
+
+    if ( buttonNumberPressed != -1 )
+    {
+        this->m_mode = static_cast<Mode>( buttonNumberPressed );
+    }
 }
 
 void EditorState::update_normal_mode()
 {
-    this->m_sheet.update( this->m_mousePosition.get_overall(),
-                          this->m_tile,
-                          this->m_mouseButton.at( "Action" ).second );
+    this->m_tileset.update( this->m_mousePosition.get_overall(),
+                            this->m_tile,
+                            this->m_mouseButton.at( "Action" ).second );
 
-    this->m_tilemap.update( to_view( this->m_mousePosition.get_overall(),
-                                     this->m_screenView,
-                                     this->m_mapView ),
+    this->m_tilemap.update( this->m_mousePosition.get_overall(),
                             this->m_tile,
                             this->m_mouseButton.at( "Action" ).second );
 }
@@ -175,8 +138,6 @@ void EditorState::update_colision_mode() {}
 
 void EditorState::update()
 {
-    this->handle_global_input();
-
     // Mise a jour des actions en fonction du mode
     if ( this->m_mode == Mode::Normal )
     {
@@ -186,40 +147,34 @@ void EditorState::update()
     {
         this->update_selection_mode();
     }
-    // else if(this->m_mode == Mode::Colision)
-    // {
-    //     this->update_colision_mode();
-    // }
+    else if ( this->m_mode == Mode::Colision )
+    {
+        this->update_colision_mode();
+    }
 
-    sf::Vector2f const windowSize { sfaddon::window_size_f() };
+    sf::Vector2f const windowSize { this->m_settings.get_window_size_f() };
     // Mise a jour des informations
-    this->m_debugInfo.update(
+    this->m_debugInformations.update(
         sf::Vector2f( 0.8f * windowSize.x, 0.1f * windowSize.y ),
 
-        { "Depth : " + std::to_string( this->m_tilemap.get_actual_depth() ),
-          "Mode : " + std::to_string( static_cast<int>( this->m_mode ) ),
-          "Mouse : " + std::to_string( this->m_mousePosition.get_overall().x )
-              + ", " + std::to_string( this->m_mousePosition.get_overall().y ),
-          "Mouse Press : "
+        { "Depth : "s + std::to_string( this->m_tilemap.get_actual_depth() ),
+          "Mode : "s + std::to_string( static_cast<int>( this->m_mode ) ),
+          "Mouse : "s + std::to_string( this->m_mousePosition.get_overall().x )
+              + ", "s + std::to_string( this->m_mousePosition.get_overall().y ),
+          "Mouse Press : "s
               + std::to_string( this->m_mousePosition.get_press().x ) + ", "
               + std::to_string( this->m_mousePosition.get_press().y ) } );
 }
 
 void EditorState::render( sf::RenderWindow & target )
 {
-    /* ########################## MAP VIEW ############################# */
-    target.setView( this->m_mapView );
+    target.setView( this->m_view );
 
     target.draw( this->m_tilemap );
+    target.draw( this->m_tileset );
 
-    /* ########################## WINDOW VIEW ############################# */
-    target.setView( this->m_screenView );
-
-    // La fonction regarde si le sprite sheet doit etre afficher
-    this->m_sheet.render( target );
-
-    this->m_buttons.render( target );
-    this->m_debugInfo.render( target );
+    target.draw( this->m_buttons );
+    target.draw( this->m_debugInformations );
 }
 
 // Apres (selection copy paste)
@@ -256,8 +211,8 @@ void EditorState::render( sf::RenderWindow & target )
 // Mouvement de la texture rect par rapport a la texture (Après, a voir si on va
 // le garder) if(sheet.isPrint)
 // {
-//     sf::IntRect spriteSheetRect { this->m_sheet.get_rect() };
-//     sf::Vector2i spriteSheetSize { (sf::Vector2i)this->m_sheet.get_size() };
+//     sf::IntRect spriteSheetRect { this->m_tileset.get_rect() };
+//     sf::Vector2i spriteSheetSize { (sf::Vector2i)this->m_tileset.get_size() };
 //     if(this->m_keyboard["SpriteSheetUp"])
 //     {
 //         if(spriteSheetRect.top >= 32)
@@ -288,5 +243,5 @@ void EditorState::render( sf::RenderWindow & target )
 //             spriteSheetRect.left += 32;
 //         }
 //     }
-//     this->m_sheet.set_rect(spriteSheetRect);
+//     this->m_tileset.set_rect(spriteSheetRect);
 // }

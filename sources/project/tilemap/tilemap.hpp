@@ -24,12 +24,8 @@ class TileMap : public sf::Drawable, public sf::Transformable
     void synchronize_vertices();
     void get_depth( unsigned int const & depth ) const noexcept;
 
-    /* Génère les valeurs en fonction de la texture dans les vertex
-    de la variables "vertices". Doit être utilisé après load() */
-    void reset();
-
     virtual void draw( sf::RenderTarget & target,
-                       sf::RenderStates states ) const;
+                       sf::RenderStates states ) const override;
 };
 
 class EditorMap final : public TileMap
@@ -49,15 +45,13 @@ class EditorMap final : public TileMap
     ~EditorMap() = default;
 
   private:
-    TileCursor m_tileCursor {};
-
-    bool m_isMouseOn {};
+    Cursor m_cursor {};
 
     /// @brief the depth that the user in the editor is actually working
-    unsigned int m_actualDepth {};
+    unsigned int m_actualDepth { 0u };
 
     void change_tile( sf::Vector2u const tilePosition,
                       unsigned int const tile );
-    void draw( sf::RenderTarget & target,
-               sf::RenderStates states ) const override;
+    // void draw( sf::RenderTarget & target,
+    //            sf::RenderStates states ) const override;
 };

@@ -51,16 +51,21 @@ using namespace std::string_literals;
 
 constexpr float const g_framerate { 60.f };
 
-/// @brief size of the a tile sqare in pixel
-constexpr float const g_squareSize { 32.f };
+// TYPO il faut essayer au maximum d'utiliser les g_tileSize_u au lieu des g_tileSize_f
+/// @brief unsigned integer size of the a tile square in pixel
+constexpr unsigned int const g_tileSize_u { 32u };
+/// @brief float size of the a tile square in pixel
+constexpr float const g_tileSize_f { static_cast<float>( ::g_tileSize_u ) };
 
 // TYPO a enlever, peut se calculer automatiquement en comptant le nb d'instance
 // d'enfant de State
 constexpr unsigned int const g_numberOfState { 3 };
 
+#include <project/settings/settings.hpp>
 #include <project/tilemap/tile_utility.hpp>
 #include <project/tools/databases.hpp>
 #include <project/tools/enumeration.hpp>
+#include <project/tools/geometry.hpp>
 #include <project/tools/json_addon.hpp>
 #include <project/tools/sfml_addon.hpp>
 #include <project/utility/error_handling.hpp>
@@ -75,10 +80,6 @@ void secure_entry( unsigned int & size );
 std::ostream & operator<<( std::ostream & flux, sf::Vector2f const & vector );
 // Surchage pour facilité le debugage, à enlever peut être a la fin du programme
 std::ostream & operator<<( std::ostream & flux, sf::Vector2u const & vector );
-
-// Retourne le movemment que la player doit faire en fonction de la direction et
-// d'une vitesse donné (si il cours ou pas)
-sf::Vector2f get_movement( Direction const direction, float const value );
 
 /* Convertie une position lié à la lastView à une position lié à une newView
  * donnée

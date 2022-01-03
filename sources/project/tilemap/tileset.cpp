@@ -1,88 +1,95 @@
 #include "tileset.hpp"
 
-// TYPO trouver une meilleurs place à ce convertisseur
-inline sf::Vector2f to_Vector2f( sf::Rect<int> const & intRectangle )
+Tileset::Tileset( sf::Texture const & texture )
+  : // TYPO mettre une variable m_texture et set la texture dans le draw
+    m_image( texture )
 {
-    return sf::Vector2f { static_cast<float>( intRectangle.width ),
-                          static_cast<float>( intRectangle.height ) };
+    this->setOrigin( 0.f, 0.f );
+    this->setPosition( 0.f, 0.f );
 }
 
-Tileset::Tileset()
+sf::Vector2f Tileset::get_size() const noexcept
 {
-    this->isMouseOn = false;
-    this->isPrint   = false;
+    sf::Vector2f const textureSize {
+        static_cast<float>( this->m_image.getTextureRect().width ),
+        static_cast<float>( this->m_image.getTextureRect().height )
+    };
 
-    this->setOrigin( sf::Vector2f { 0.f, 0.f } );
-    this->setPosition( sf::Vector2f { 0.f, 0.f } );
-
-    this->setOutlineThickness( 1.f );
-    this->setOutlineColor( sf::Color { 20, 20, 20, 50 } );
-    this->setFillColor( sf::Color { 255, 255, 255, 200 } );
+    return textureSize * this->getScale();
 }
 
-void Tileset::create( sf::Texture const & texture )
+void Tileset::set_size( sf::Vector2f const & size ) noexcept
 {
-    // true sert a mettre automatiquement setTextureRect
-    // en fonction de la taille de la texture
-    this->setTexture( &texture, true );
-    this->setSize( to_Vector2f( this->getTextureRect() ) );
-
-    // A mettre après avoir changer la texture
-    // assert(
-    //     this->getTextureRect().width.x % g_squareSize == 0 &&
-    //     this->getTextureRect().height.y % g_squareSize == 0 &&
-    //     "La taille du tileset n'est pas un multiple de 32"
-    // );
+    this->setScale( size / this->get_size() );
 }
 
-void Tileset::update_tile_cursor( sf::Vector2f const cursorPosition )
+void Tileset::set_size( float const & sizeX, float const & sizeY ) noexcept
 {
-    this->m_tileCursor.update( cursorPosition, this->getPosition() );
+    this->set_size( sf::Vector2f { sizeX, sizeY } );
 }
 
-bool Tileset::include( sf::Vector2f const position ) const
+void Tileset::switch_print()
 {
-    return is_in_part(
-        position, this->getPosition(), to_Vector2f( this->getTextureRect() ) );
+    this->m_isPrint = ! this->m_isPrint;
 }
 
-void Tileset::update( sf::Vector2f const mousePosition,
-                      unsigned int & tile,
-                      bool const buttonIsPress )
+void Tileset::update_cursor( sf::Vector2f const & position )
 {
-    if ( this->isPrint && this->include( mousePosition ) )
+    sf::Vector2f const cursorPosition { ( position - this->getPosition() )
+                                        - ( position % ::g_tileSize_u )
+                                        + this->getPosition() };
+
+    this->m_cursor.update( cursorPosition,
+                           sfmladdon::make_vector( ::g_tileSize_u ) );
+}
+
+bool Tileset::include( sf::Vector2f const & position ) const
+{
+    return tools::is_in_part( position, this->getPosition(), this->get_size() );
+}
+
+sf::Vector2u Tileset::get_tile_position( sf::Vector2f const & position ) const
+{
+    // Position compared to the tilemap Orign
+    sf::Vector2f const positionComparedToTilemap { position
+                                                   - this->getPosition() };
+    sf::Vector2u const tilePosition { positionComparedToTilemap
+                                      % ::g_tileSize_u };
+    return tilePosition;
+}
+
+void Tileset::update( sf::Vector2f const & mousePosition,
+                      unsigned int & /* tile */, bool const & buttonIsPressed )
+{
+    if ( ! this->m_isPrint || ! this->include( mousePosition ) )
     {
-        this->isMouseOn = true;
-
-        this->update_tile_cursor( mousePosition );
-
-        if ( buttonIsPress )
-        {
-            sf::Vector2u const tilesetPosition { to_tile_position(
-                to_Vector2f( this->getTextureRect() ) + mousePosition
-                - this->getPosition() ) };
-
-            tile = tilesetPosition.x
-                   + tilesetPosition.y
-                         * static_cast<unsigned int>( this->getTextureRect().width )
-                         / static_cast<unsigned int>( g_squareSize );
-        }
+        return;
     }
-    else
+
+    this->update_cursor( mousePosition );
+
+    if ( buttonIsPressed )
     {
-        this->isMouseOn = false;
+        std::cout << this->get_tile_position( mousePosition ) << std::endl;
+
+        // tile = tilesetPosition.x
+        //        + tilesetPosition.y
+        //              * static_cast<unsigned int>(
+        //                  this->m_image.getTextureRect().width )
+        //              / static_cast<unsigned int>( ::g_tileSize_f );
     }
 }
 
-void Tileset::render( sf::RenderWindow & target ) const
+void Tileset::draw( sf::RenderTarget & target, sf::RenderStates states ) const
 {
-    if ( this->isPrint )
-    {
-        target.draw( *this );
+    states.transform *= this->getTransform();
 
-        if ( this->isMouseOn )
-        {
-            target.draw( this->m_tileCursor );
-        }
+    // TYPO tester si c'est utile
+    // states.texture = &this->m_texture;
+
+    if ( this->m_isPrint )
+    {
+        target.draw( this->m_image, states );
+        target.draw( this->m_cursor );
     }
 }

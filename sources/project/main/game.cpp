@@ -13,7 +13,7 @@ void Game::init_window()
 {
     std::string const gameTitle { "Toody Engine (In Developpement)"s };
     this->m_window.create(
-        sfaddon::to_video_mode( this->m_settings.get_window_size() ),
+        sfmladdon::to_video_mode( this->m_settings.get_window_size_u() ),
         gameTitle );
     this->m_window.setVerticalSyncEnabled(
         this->m_settings.get_vertical_sync() );
@@ -22,8 +22,9 @@ void Game::init_window()
 void Game::init_state()
 {
     // Game start with main menu
-    this->m_states =
-        std::make_shared<MainMenuState>( this->m_textures, this->m_fonts );
+    this->m_states = std::make_shared<MainMenuState>(
+        Ressources { this->m_textures, this->m_fonts },
+        this->m_settings );
 
     this->m_lastState = this->m_states->get_next();
 }
@@ -80,22 +81,25 @@ void Game::change_state( StateName const & newState )
     {
     case StateName::MainMenu :
         {
-            this->m_states = std::make_shared<MainMenuState>( this->m_textures,
-                                                              this->m_fonts );
+            this->m_states = std::make_shared<MainMenuState>(
+                Ressources { this->m_textures, this->m_fonts },
+                this->m_settings );
         }
         break;
 
     case StateName::Game :
         {
-            this->m_states =
-                std::make_shared<GameState>( this->m_textures, this->m_fonts );
+            this->m_states = std::make_shared<GameState>(
+                Ressources { this->m_textures, this->m_fonts },
+                this->m_settings );
         }
         break;
 
     case StateName::Editor :
         {
-            this->m_states = std::make_shared<EditorState>( this->m_textures,
-                                                            this->m_fonts );
+            this->m_states = std::make_shared<EditorState>(
+                Ressources { this->m_textures, this->m_fonts },
+                this->m_settings );
         }
         break;
 

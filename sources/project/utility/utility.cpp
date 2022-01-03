@@ -33,32 +33,6 @@ std::ostream & operator<<( std::ostream & flux, sf::Vector2u const & vector )
     return flux << "|x : " << vector.x << " and y : " << vector.y << "|";
 }
 
-sf::Vector2f get_movement( Direction const direction, float const value )
-{
-    sf::Vector2f moving { 0.f, 0.f };
-
-    switch ( direction )
-    {
-    case Direction::Up :
-        moving.y = -value;
-        break;
-    case Direction::Down :
-        moving.y = value;
-        break;
-    case Direction::Right :
-        moving.x = value;
-        break;
-    case Direction::Left :
-        moving.x = -value;
-        break;
-    default :
-        throw std::invalid_argument( "default use in get_movement" );
-        break;
-    }
-
-    return moving;
-}
-
 sf::Vector2f to_view( sf::Vector2f const & positionInLastView,
                       sf::View const & lastView, sf::View const & newView )
 {

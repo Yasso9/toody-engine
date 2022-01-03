@@ -12,10 +12,6 @@ sf::Vector2u to_tile_position( unsigned int const tileNumber,
  * en tile */
 sf::Vector2u to_tile_position( sf::Vector2f const position );
 
-// Verifie si un truc a une position donné est compris dans un carré
-bool is_in_part( sf::Vector2f const value, sf::Vector2f const position,
-                 sf::Vector2f const size );
-
 void set_quad_position( sf::VertexArray & quad,
                         sf::Vector2f const & basePosition,
                         sf::Vector2u const & tilePosition );

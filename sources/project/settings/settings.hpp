@@ -7,14 +7,15 @@ class Settings final
   public:
     Settings();
 
-    Settings( const Settings & ) = delete;
+    Settings( const Settings & ) noexcept = default;
     Settings( Settings && ) noexcept = delete;
     Settings & operator=( const Settings & ) = delete;
     Settings & operator=( Settings && ) noexcept = delete;
 
     virtual ~Settings() noexcept = default;
 
-    sf::Vector2u get_window_size() const noexcept;
+    sf::Vector2u get_window_size_u() const noexcept;
+    sf::Vector2f get_window_size_f() const noexcept;
     double get_refresh_rate() const noexcept;
     bool get_vertical_sync() const noexcept;
 

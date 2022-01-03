@@ -17,10 +17,15 @@ Settings::Settings()
     this->m_refreshRate = 1. / framerate;
 }
 
-sf::Vector2u Settings::get_window_size() const noexcept
+sf::Vector2u Settings::get_window_size_u() const noexcept
 {
     return this->m_windowSize;
 }
+sf::Vector2f Settings::get_window_size_f() const noexcept
+{
+    return static_cast<sf::Vector2f>( this->get_window_size_u() );
+}
+
 double Settings::get_refresh_rate() const noexcept
 {
     return this->m_refreshRate;

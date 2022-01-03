@@ -69,7 +69,7 @@ namespace InputInitialization
                 { "MoveUp", { sf::Keyboard::Z, false } },
                 { "MoveDown", { sf::Keyboard::S, false } },
                 { "MoveLeft", { sf::Keyboard::Q, false } },
-                { "MoveRight", { sf::Keyboard::R, false } },
+                { "MoveRight", { sf::Keyboard::D, false } },
 
                 { "Run", { sf::Keyboard::Space, false } },
             };

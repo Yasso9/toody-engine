@@ -1,9 +1,9 @@
 #include "state.hpp"
 
-State::State( t_texturesMap const & textures, t_fontsMap const & fonts,
+State::State( Ressources const & ressources, Settings const & settings,
               StateName const & stateName )
-  : m_textures( textures ),
-    m_fonts( fonts ),
+  : m_ressources( ressources ),
+    m_settings( settings ),
     m_keyboard( InputInitialization::keyboard( stateName ) ),
     m_mouseButton( InputInitialization::mouse_button( stateName ) ),
     m_stateName( stateName )
@@ -22,6 +22,8 @@ void State::update_input( sf::Event const & event )
     this->update_mouse_position( event );
 
     this->update_mouse_button( event );
+
+    this->handle_current_input();
 
     this->update_extra_input( event );
 }
@@ -75,6 +77,30 @@ void State::update_keyboard_released( sf::Event const & event )
     }
 }
 
+void State::update_mouse_position( sf::Event const & event )
+{
+    if ( event.type == sf::Event::MouseButtonPressed
+         && event.mouseButton.button == sf::Mouse::Left )
+    {
+        this->m_mousePosition.set_press(
+            sf::Vector2f( static_cast<float>( event.mouseButton.x ),
+                          static_cast<float>( event.mouseButton.y ) ) );
+    }
+    else if ( event.type == sf::Event::MouseButtonReleased
+              && event.mouseButton.button == sf::Mouse::Left )
+    {
+        this->m_mousePosition.set_release(
+            sf::Vector2f( static_cast<float>( event.mouseButton.x ),
+                          static_cast<float>( event.mouseButton.y ) ) );
+    }
+    else if ( event.type == sf::Event::MouseMoved )
+    {
+        this->m_mousePosition.set_overall(
+            sf::Vector2f( static_cast<float>( event.mouseMove.x ),
+                          static_cast<float>( event.mouseMove.y ) ) );
+    }
+}
+
 void State::update_mouse_button( sf::Event const & event )
 {
     if ( event.type == sf::Event::MouseButtonPressed )
@@ -100,7 +126,11 @@ void State::update_mouse_button( sf::Event const & event )
         {
             if ( event.mouseButton.button == element.second.first )
             {
-                this->handle_mouse_button_release( element.first );
+                if ( this->m_mouseButton.at( element.first ).second == true )
+                {
+                    this->handle_mouse_button_release( element.first );
+                }
+
                 this->m_mouseButton.at( element.first ).second = false;
                 break;
             }
@@ -122,32 +152,6 @@ void State::update_mouse_button( sf::Event const & event )
     }
 }
 
-void State::update_mouse_position( sf::Event const & event )
-{
-    if ( event.type == sf::Event::MouseButtonPressed
-         && event.mouseButton.button == sf::Mouse::Left )
-    {
-        this->m_mousePosition.set_press(
-            sf::Vector2f( static_cast<float>( event.mouseButton.x ),
-                          static_cast<float>( event.mouseButton.y ) ) );
-    }
-    else if ( event.type == sf::Event::MouseButtonReleased
-              && event.mouseButton.button == sf::Mouse::Left )
-    {
-        this->m_mousePosition.set_release(
-            sf::Vector2f( static_cast<float>( event.mouseButton.x ),
-                          static_cast<float>( event.mouseButton.y ) ) );
-    }
-    else if ( event.type == sf::Event::MouseMoved )
-    {
-        this->m_mousePosition.set_overall(
-            sf::Vector2f( static_cast<float>( event.mouseMove.x ),
-                          static_cast<float>( event.mouseMove.y ) ) );
-    }
-}
-
-// These functions needs to be overloaded on the childs classes
-
 void State::handle_keyboard_press( std::string const & /* input */ ) {}
 
 void State::handle_mouse_button_press( std::string const & /* input */ ) {}
@@ -156,5 +160,5 @@ void State::handle_mouse_button_release( std::string const & /* input */ ) {}
 void State::handle_mouse_wheel_up() {}
 void State::handle_mouse_wheel_down() {}
 
+void State::handle_current_input() {}
 void State::update_extra_input( sf::Event const & /* event */ ) {}
-void State::handle_global_input() {}

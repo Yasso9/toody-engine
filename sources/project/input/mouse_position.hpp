@@ -14,7 +14,7 @@ class MousePosition
     sf::Vector2f get_release() const;
 
   private:
-    sf::Vector2f m_overall {};
-    sf::Vector2f m_press {};
-    sf::Vector2f m_release {};
+    sf::Vector2f m_overall;
+    sf::Vector2f m_press;
+    sf::Vector2f m_release;
 };

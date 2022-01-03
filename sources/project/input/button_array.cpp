@@ -1,96 +1,101 @@
 #include "button_array.hpp"
 
-// Changer unsigned int => size_t ?
-
 ButtonArray::ButtonArray( sf::Font const & font,
                           std::vector<std::string> const & buttonsString )
-  : m_size( 100.f, 50.f ), m_position( 0.f, 0.f )
+  : m_font( font ), m_direction()
 {
     assert( ! buttonsString.empty()
             && "There must be at least one button on the "
                "ButtonArray constructor class" );
 
-    for ( unsigned int key { 0u }; key < buttonsString.size(); ++key )
+    for ( unsigned int i_buttonNummber { 0u };
+          i_buttonNummber < buttonsString.size();
+          ++i_buttonNummber )
     {
-        this->m_buttons.insert( { key, Button { font, buttonsString[key] } } );
+        this->m_buttons.insert(
+            std::make_pair( i_buttonNummber, Button { this->m_font } ) );
 
-        this->m_buttons.at( key ).set_size( this->m_size );
-
-        this->m_buttons.at( key ).set_position(
-            static_cast<float>( key ) * this->m_size.x + this->m_position.x,
-            this->m_position.y );
+        this->m_buttons.at( i_buttonNummber )
+            .set_string( buttonsString[i_buttonNummber] );
+        this->m_buttons.at( i_buttonNummber ).set_size( 100.f, 50.f );
+        this->m_buttons.at( i_buttonNummber )
+            .setPosition(
+                static_cast<float>( i_buttonNummber )
+                        * this->m_buttons.at( i_buttonNummber ).get_size().x
+                    + this->getPosition().x,
+                this->getPosition().y );
     }
 }
 
-// TYPO faire ces fonctions
-void set_size( sf::Vector2f const & /* size */ ) {}
-void set_position( sf::Vector2f const & /* position */ ) {}
-
-int ButtonArray::update_press( sf::Vector2f const & position )
+sf::Vector2f ButtonArray::get_size() const noexcept
 {
-    // There's a click, make of all the button to not pressed
-    this->reset_press();
-    // And search if any of the button is pressed
-    for ( auto & button : this->m_buttons )
-    {
-        if ( button.second.is_inside( position ) )
-        {
-            button.second.set_pressed( true );
+    sf::Vector2f buttonSize { 0.f, 0.f };
 
-            return static_cast<int>( button.first );
+    for ( auto const & button : this->m_buttons )
+    {
+        if ( this->m_direction == ButtonArray::Direction::Horizontal )
+        {
+            buttonSize.x += button.second.get_size().x;
+
+            if ( buttonSize.y < button.second.get_size().y )
+            {
+                buttonSize.y = button.second.get_size().y;
+            }
+        }
+        else if ( this->m_direction == ButtonArray::Direction::Vertical )
+        {
+            buttonSize.y += button.second.get_size().y;
+
+            if ( buttonSize.x < button.second.get_size().x )
+            {
+                buttonSize.x = button.second.get_size().x;
+            }
+        }
+        else
+        {
+            // TYPO lancer une exeption ici
         }
     }
 
-    // No button is pressed
+    return buttonSize * this->getScale();
+}
+
+void ButtonArray::set_size( sf::Vector2f const & size ) noexcept
+{
+    this->setScale( size / this->get_size() );
+}
+
+void ButtonArray::set_size( float const & sizeX, float const & sizeY ) noexcept
+{
+    this->set_size( sf::Vector2f { sizeX, sizeY } );
+}
+
+int ButtonArray::update( sf::Vector2f const & position, bool const & click )
+{
+    for ( unsigned int i_buttonNummber { 0u };
+          i_buttonNummber < this->m_buttons.size();
+          ++i_buttonNummber )
+    {
+        bool const isPressed {
+            this->m_buttons.at( i_buttonNummber ).update( position, click )
+        };
+
+        if ( isPressed == true )
+        {
+            return static_cast<int>( i_buttonNummber );
+        }
+    }
+
     return -1;
 }
 
-int ButtonArray::update_press( sf::Vector2f const & position,
-                               int const & buttonNumber )
+void ButtonArray::draw( sf::RenderTarget & target,
+                        sf::RenderStates states ) const
 {
-    int const buttonNumberPressed { this->update_press( position ) };
-
-    if ( buttonNumberPressed == -1 )
-    {
-        return buttonNumber;
-    }
-
-    return buttonNumberPressed;
-}
-
-void ButtonArray::update_select( sf::Vector2f const & position )
-{
-    this->reset_selection();
+    states.transform *= this->getTransform();
 
     for ( auto & button : this->m_buttons )
     {
-        if ( button.second.is_inside( position ) )
-        {
-            button.second.set_selected( true );
-        }
-    }
-}
-
-void ButtonArray::render( sf::RenderWindow & target )
-{
-    for ( auto & button : this->m_buttons )
-    {
-        target.draw( button.second );
-    }
-}
-
-void ButtonArray::reset_press()
-{
-    for ( auto & button : this->m_buttons )
-    {
-        button.second.set_pressed( false );
-    }
-}
-
-void ButtonArray::reset_selection()
-{
-    for ( auto & button : this->m_buttons )
-    {
-        button.second.set_selected( false );
+        target.draw( button.second, states );
     }
 }

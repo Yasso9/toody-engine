@@ -5,7 +5,7 @@
 class MainMenuState final : public State
 {
   public:
-    MainMenuState( t_texturesMap const & textures, t_fontsMap const & fonts );
+    MainMenuState( Ressources const & ressources, Settings const & settings );
 
     void update() override;
     void render( sf::RenderWindow & target ) override;
@@ -14,9 +14,8 @@ class MainMenuState final : public State
     sf::RectangleShape m_background {};
     sf::Text m_text {};
 
-    ButtonArray m_buttons {};
+    ButtonArray m_buttons;
 
     void init_background();
     void init_text();
-    void init_buttons();
 };

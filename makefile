@@ -2,11 +2,16 @@
 
 # TYPO regarder le makefile du projet de groupe automate pour voir les petits détatils qu'on a rajouté
 
-# CPP_COMMAND := g++
-CPP_COMMAND := clang++
-# CPP_COMMAND_STD20 := $(CPP_COMMAND) -std=c++2a # g++
-CPP_COMMAND_STD20 := $(CPP_COMMAND) -std=c++20 # clang++
-WARNING_FLAGS := -pedantic -Wpedantic -pedantic-errors \
+# g++
+# CXX_COMMAND := g++
+# CXX_FLAGS := $(CXX_COMMAND) -std=c++2a
+
+# clang
+CXX_COMMAND := clang++
+CXX_FLAGS := -std=c++20 -MD -O0 -g
+# -MD => Create .d files for dependencies
+
+WARNINGS := -pedantic -Wpedantic -pedantic-errors \
 -Wall -Wextra \
 -Wcast-align \
 -Wcast-qual \
@@ -51,10 +56,7 @@ WARNING_FLAGS := -pedantic -Wpedantic -pedantic-errors \
 -Werror \
 -Wunused-parameter \
 -Wlong-long \
--fno-common \
-
-# -Wpadded
-# -Wdouble-promotion
+-fno-common
 
 # Warnings that works only on clang :
 # adding 'no' after '-W' remove the warning
@@ -64,11 +66,6 @@ WARNING_FLAGS := -pedantic -Wpedantic -pedantic-errors \
 -Wnoexcept \
 -Wstrict-null-sentinel \
 -Wformat-truncation \
-
-
-
-COMPILER_FLAGS := -O0 -g $(WARNING_FLAGS) -c -o
-LINKER_FLAGS :=
 
 # .cpp and .hpp files
 FILES_DIRECTORY := ./sources/project
@@ -84,31 +81,45 @@ EXECUTABLE := $(BUILD_DIRECTORY)/application
 
 ############################## knowing files and object location ##############################
 
-# Porduce list in the form "./sources/project/sub_directory/filename.hpp"
+# Produce list in the form "./sources/project/sub_directory/filename.hpp"
 HEADERS_FILES := $(wildcard $(FILES_DIRECTORY)/*/*.hpp)
-# Erase files directory "sub_directory/filename.hpp"
+# Erase files directory => "sub_directory/filename.hpp"
 HEADERS_FILES := $(subst $(FILES_DIRECTORY)/,,$(HEADERS_FILES))
 # Same for cpp files
 SOURCES_FILES := $(wildcard $(FILES_DIRECTORY)/*/*.cpp)
 SOURCES_FILES := $(subst $(FILES_DIRECTORY)/,,$(SOURCES_FILES))
 
 # Object files of the all cpp hpp pair
-OBJECT_PAIR := $(basename $(HEADERS_FILES)) # sub_directory/filename.hpp :=> sub_directory/filename
-OBJECT_PAIR := $(addprefix $(OBJECT_DIRECTORY)/, $(OBJECT_PAIR)) # :=> ./object/sub_directory/filename
-OBJECT_PAIR := $(addsuffix .o,$(OBJECT_PAIR)) # :=> ./object/sub_directory/filename.o
+# sub_directory/filename.hpp => sub_directory/filename.o
+OBJECT_PAIR := $(patsubst %.hpp,%.o,$(HEADERS_FILES))
+# => ./object/sub_directory/filename.o
+OBJECT_PAIR := $(addprefix $(OBJECT_DIRECTORY)/, $(OBJECT_PAIR))
 
 # All the object (needed for all prerequesites)
-OBJECT_ALL := $(basename $(SOURCES_FILES))
+OBJECT_ALL := $(patsubst %.cpp,%.o,$(SOURCES_FILES))
 OBJECT_ALL := $(addprefix $(OBJECT_DIRECTORY)/, $(OBJECT_ALL))
-OBJECT_ALL := $(addsuffix .o, $(OBJECT_ALL))
 
 # Object files of cpp without hpp combinaison
 # Removes all OBJECT_PAIR of OBJECT_ALL
 OBJECT_SOLO := $(filter-out $(OBJECT_PAIR), $(OBJECT_ALL))
 
+# Dependencies (.d files) will be on the same directories than object files
+DEPENDENCIES := $(patsubst %.cpp,%.d,$(SOURCES_FILES))
+DEPENDENCIES := $(addprefix $(OBJECT_DIRECTORY)/, $(DEPENDENCIES))
 
+
+SYSTEM_NAME := Unkown
+ifdef OS
+	SYSTEM_NAME := Windows
+else
+	SYSTEM_NAME := Unix
+endif
 
 ############################## call action ##############################
+
+# These commands do not represent physical files
+.PHONY: all run clean debug remake
+
 
 all : $(OBJECT_ALL) $(EXECUTABLE)
 
@@ -116,53 +127,55 @@ run :
 #	./build/application.exe
 	$(EXECUTABLE).exe
 
+info:
+	echo $(SYSTEM_NAME)
+
 clean :
-	rm -rf -- $(OBJECT_DIRECTORY)/*.o
-	rm -rf -- $(OBJECT_DIRECTORY)/*
-	rm -rf -- $(OBJECT_DIRECTORY)
-	rm -rf -- $(EXECUTABLE)
+	rm -rf $(OBJECT_DIRECTORY)
+	rm -rf $(EXECUTABLE)
+
 
 debug :
 	gdb -quiet $(EXECUTABLE)
 
 remake: cleaner all
 
-info : # for debuging
-	echo $(HEADERS_FILES)
-
 
 
 ############################## project path ##############################
 
-# PS : If using vscode, you also have to define includes in c_cpp_properties.json project config
-PROJECT_DIRECTORY := C:/Users/Turki/GoogleDrive/Computing/Projects/ToodyEngine
-SFML_PATH := C:/Users/Turki/GoogleDrive/Programs/Windows/SFML-2.5.1
-SQLITE_PATH := C:/Users/Turki/GoogleDrive/Programs/Windows/Sqlite
-NLOHMANN_JSON_PATH := C:/Users/Turki/GoogleDrive/Programs/Windows/cpp-json-nlohmann
-INCLUDES := -I"$(SFML_PATH)/include" -I"$(SQLITE_PATH)/sources" -I"$(NLOHMANN_JSON_PATH)/include" -I"$(PROJECT_DIRECTORY)/sources"
+PROJECT_DIRECTORY_PATH := $(CURDIR)
+LIBRARIES_PATH := $(PROJECT_DIRECTORY_PATH)/libraries
+SFML_PATH := $(LIBRARIES_PATH)/SFML
+SQLITE_PATH :=  $(LIBRARIES_PATH)/Sqlite
+JSON_NLOHMANN_PATH :=  $(LIBRARIES_PATH)/cpp-json-nlohmann
+INCLUDES := -I"$(SFML_PATH)/include" -I"$(SQLITE_PATH)/sources" -I"$(JSON_NLOHMANN_PATH)/include" -I"$(PROJECT_DIRECTORY_PATH)/sources"
 LIBRARIES :=  "$(SQLITE_PATH)/object/sqlite3.o" -L"$(SFML_PATH)/lib" -lsfml-graphics -lsfml-system -lsfml-window
 
 
 
 ############################## making project compilation ##############################
 
+# Create the executable by Linking all the object files and the SFML together
+$(EXECUTABLE) : $(OBJECT_ALL)
+#	g++ object/sub_directory_A/filename_A.o object/sub_directory_B/filename_B.o etc... -o executable -L"C:/Informatique/SFML-2.5.1/lib" -lsfml-graphics -lsfml-system -lsfml-window
+	$(CXX_COMMAND) $^ -o $@ $(LIBRARIES)
+
+# set up the dependencies
+-include $(DEPENDENCIES)
+
 # Creating the object file of OBJECT_PAIR with gather the dependencies of a .cpp .hpp pair
 $(OBJECT_PAIR) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/%.cpp $(FILES_DIRECTORY)/%.hpp
 #	removes object folder if exist
-	rm -rf -- $@
+#	rm -rf -- $@
 #	create the object directory if not exist
 	mkdir -p $(dir $@)
 #	g++ -std=c++2a -Wall -Wextra -c -o object/sub_directory/filename.o sources/project/sub_directory/filename.cpp -I"C:/Users/Turki/GoogleDrive/Informatique/Projets/Moteur-2D/sources" -I"C:/Informatique/SFML-2.5.1/include"
-	$(CPP_COMMAND_STD20) $(COMPILER_FLAGS) $@ $< $(INCLUDES)
+	$(CXX_COMMAND) $(WARNINGS) $(CXX_FLAGS) -c $< -o $@ $(INCLUDES)
 
 # Creating the object file of OBJECT_SOLO with gather the dependencies of the .cpp's only
 # commands are the same than above
 $(OBJECT_SOLO) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/%.cpp
-	rm -rf -- $@
+#	rm -rf -- $@
 	mkdir -p $(dir $@)
-	$(CPP_COMMAND_STD20) $(COMPILER_FLAGS) $@ $< $(INCLUDES)
-
-# Create the executable by Linking all the object files and the SFML together
-$(EXECUTABLE) : $(OBJECT_ALL)
-#	g++ object/sub_directory_A/filename_A.o object/sub_directory_B/filename_B.o etc... -o executable -L"C:/Informatique/SFML-2.5.1/lib" -lsfml-graphics -lsfml-system -lsfml-window
-	$(CPP_COMMAND) $^ -o $@ $(LINKER_FLAGS) $(LIBRARIES)
+	$(CXX_COMMAND) $(WARNINGS) $(CXX_FLAGS) -c $< -o $@ $(INCLUDES)

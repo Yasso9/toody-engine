@@ -1,49 +1,36 @@
 #include <project/input/button.hpp>
 
-class ButtonArray final
+// TYPO le faire hérité de sf::Shape
+class ButtonArray final : public sf::Drawable, public sf::Transformable
 {
   public:
-    ButtonArray() = default;
+    enum class Direction
+    {
+        Horizontal = 0,
+        Vertical
+    };
+
     ButtonArray( sf::Font const & font,
                  std::vector<std::string> const & buttonsString = {
                      "Button" } );
 
-    /** @brief Set the size of each button of ButtonArray
-     * @param size size of each button of ButtonArray
-     */
-    void set_size( sf::Vector2f const & size );
-    /** @brief Set the position of the first button of ButtonArray,
-     * i.e where the array start
-     * @param position Position of the first button of ButtonArray
-     */
-    void set_position( sf::Vector2f const & position );
+    ButtonArray( const ButtonArray & ) noexcept = delete;
+    ButtonArray( ButtonArray && ) noexcept = delete;
+    ButtonArray & operator=( const ButtonArray & ) = delete;
+    ButtonArray & operator=( ButtonArray && ) noexcept = delete;
+    virtual ~ButtonArray() noexcept = default;
 
-    /** @brief Check if the mouse's click is inside the button.
-     * @param position position of the mouse's click
-     * @returns key of the button pressed, if none, return -1
-     */
-    int update_press( sf::Vector2f const & position );
+    sf::Vector2f get_size() const noexcept;
+    void set_size( sf::Vector2f const & size ) noexcept;
+    void set_size( float const & sizeX, float const & sizeY ) noexcept;
 
-    /** @brief Check if the mouse's click is inside the button.
-     * @param position position of the mouse's click
-     * @param buttonNumber number that you want to get if the click is outside
-     * all the buttons
-     * @returns key of the button pressed, if none, return buttonNumer
-     */
-    int update_press( sf::Vector2f const & position, int const & buttonNumber );
-
-    /** @brief Check if the mouse's actual position is inside the button.
-     * @param position Position of the mouse's position
-     */
-    void update_select( sf::Vector2f const & position );
-
-    void render( sf::RenderWindow & target );
+    int update( sf::Vector2f const & position, bool const & click );
 
   private:
-    std::map<unsigned int, Button> m_buttons {};
-    sf::Vector2f m_size {};
-    sf::Vector2f m_position {};
+    void draw( sf::RenderTarget & target,
+               sf::RenderStates states ) const override;
 
-    void reset_press();
-    void reset_selection();
+    std::map<unsigned int const, Button> m_buttons {};
+    sf::Font const m_font;
+    ButtonArray::Direction m_direction;
 };

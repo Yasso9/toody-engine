@@ -27,7 +27,7 @@ TextureSprite::TextureSprite()
     };
 
     this->m_actualState = 0;
-    this->m_lastState   = 2;
+    this->m_lastState = 2;
 }
 
 sf::Vector2f TextureSprite::get_size( PlayerState const & state,
@@ -35,53 +35,58 @@ sf::Vector2f TextureSprite::get_size( PlayerState const & state,
 {
     return sf::Vector2f(
         static_cast<float>(
-            this->m_rectSprite.at( state )[static_cast<std::size_t>( direction )]
+            this->m_rectSprite
+                .at( state )[static_cast<std::size_t>( direction )]
                 .width ),
         static_cast<float>(
-            this->m_rectSprite.at( state )[static_cast<std::size_t>( direction )]
+            this->m_rectSprite
+                .at( state )[static_cast<std::size_t>( direction )]
                 .height ) );
 }
 
-void TextureSprite::change( sf::Sprite & sprite,
-                            PlayerState const & state,
+void TextureSprite::change( sf::Sprite & sprite, PlayerState const & state,
                             Direction const & direction )
 {
     // Fonctionne que pour 3 image
     if ( this->m_actualState == 0 && this->m_lastState == 2 )
     {
-        this->m_lastState   = 0;
+        this->m_lastState = 0;
         this->m_actualState = 1;
     }
     else if ( this->m_actualState == 0 && this->m_lastState == 1 )
     {
-        this->m_lastState   = 0;
+        this->m_lastState = 0;
         this->m_actualState = 2;
     }
     else if ( this->m_actualState == 1 || this->m_actualState == 2 )
     {
-        this->m_lastState   = this->m_actualState;
+        this->m_lastState = this->m_actualState;
         this->m_actualState = 0;
     }
 
     if ( this->m_nbImage.at( state ) == 1 )
     {
-        this->m_lastState   = 2;
+        this->m_lastState = 2;
         this->m_actualState = 0;
     }
 
     this->m_rectSprite.at( state )[static_cast<std::size_t>( direction )].left =
-        ( this->m_rectSprite.at( state )[static_cast<std::size_t>( direction )].left
-          + this->m_rectSprite.at( state )[static_cast<std::size_t>( direction )]
+        ( this->m_rectSprite.at( state )[static_cast<std::size_t>( direction )]
+              .left
+          + this->m_rectSprite
+                    .at( state )[static_cast<std::size_t>( direction )]
                     .width
                 * this->m_actualState );
 
     sprite.setOrigin(
         static_cast<float>(
-            this->m_rectSprite.at( state )[static_cast<std::size_t>( direction )]
+            this->m_rectSprite
+                .at( state )[static_cast<std::size_t>( direction )]
                 .width )
             / 2,
         static_cast<float>(
-            this->m_rectSprite.at( state )[static_cast<std::size_t>( direction )]
+            this->m_rectSprite
+                .at( state )[static_cast<std::size_t>( direction )]
                 .height )
             / 2 );
 

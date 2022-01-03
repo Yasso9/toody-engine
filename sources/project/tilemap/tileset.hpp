@@ -3,34 +3,42 @@
 #include <project/output-info/information.hpp>
 #include <project/utility/utility.hpp>
 
-class Tileset : public sf::RectangleShape
+class Tileset final : public sf::Drawable, public sf::Transformable
 {
   public:
-    Tileset();
+    Tileset( sf::Texture const & texture );
 
-    // Mettre public et mettre m_ devant
-    bool isMouseOn { false };
-    bool isPrint { false };
+    Tileset( const Tileset & ) noexcept = delete;
+    Tileset( Tileset && ) noexcept = delete;
+    Tileset & operator=( const Tileset & ) = delete;
+    Tileset & operator=( Tileset && ) noexcept = delete;
 
-    /* Créer l'objet avec sa texture et sa police */
-    void create( sf::Texture const & texture );
+    sf::Vector2f get_size() const noexcept;
+    void set_size( sf::Vector2f const & size ) noexcept;
+    void set_size( float const & sizeX, float const & sizeY ) noexcept;
 
-    void update( sf::Vector2f const mousePosition,
-                 unsigned int & tile,
-                 bool const buttonIsPress );
+    /** @brief If the tilemap should be print, set it to false,
+     * otherwise set it to true */
+    void switch_print();
 
-    /* Affiche ou n'affiche pas la Tileset en fonction de isPrint
-    Affiche aussi le carré du curseur de la souris si elle
-    passe par dessue le tileset */
-    void render( sf::RenderWindow & target ) const;
+    void update( sf::Vector2f const & mousePosition, unsigned int & tile,
+                 bool const & buttonIsPressed );
 
-    ~Tileset() = default;
+    virtual void draw( sf::RenderTarget & target,
+                       sf::RenderStates states ) const override;
+
+    virtual ~Tileset() noexcept = default;
 
   private:
-    TileCursor m_tileCursor {};
+    sf::Sprite const m_image;
+    Cursor m_cursor {};
 
-    void update_tile_cursor( sf::Vector2f const cursorPosition );
+    bool m_isPrint { false };
 
-    /* Verifie si la position fait partie de l'objet */
-    bool include( sf::Vector2f const position ) const;
+    void update_cursor( sf::Vector2f const & cursorPosition );
+
+    /** @brief Check if the position is in the tileset */
+    bool include( sf::Vector2f const & position ) const;
+    /** @brief Convert a given position to the tilemap coordinate  */
+    sf::Vector2u get_tile_position( sf::Vector2f const & position ) const;
 };

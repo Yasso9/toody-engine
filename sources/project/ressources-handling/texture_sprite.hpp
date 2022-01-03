@@ -10,8 +10,7 @@ class TextureSprite
     sf::Vector2f get_size( PlayerState const & state,
                            Direction const & direction ) const;
 
-    void change( sf::Sprite & sprite,
-                 PlayerState const & state,
+    void change( sf::Sprite & sprite, PlayerState const & state,
                  Direction const & direction );
 
   private:

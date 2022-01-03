@@ -8,11 +8,7 @@
 class EditorState final : public State
 {
   public:
-    EditorState( t_texturesMap const & textures, t_fontsMap const & fonts );
-
-    // void copy_selection();
-    // void paste_selection(sf::Vector2f const tablePosition);
-    // void update_selection(sf::Vector2f beginPos, sf::Vector2f endPos);
+    EditorState( Ressources const & ressources, Settings const & settings );
 
     void update() override;
     void render( sf::RenderWindow & target ) override;
@@ -21,31 +17,28 @@ class EditorState final : public State
     enum Mode
     {
         Normal = 0,
-        Selection
+        Selection,
+        Colision
     };
 
     EditorMap m_tilemap;
-    Tileset m_sheet {};
+    Tileset m_tileset;
 
     // Widget
-    ButtonArray m_buttons {};
+    ButtonArray m_buttons;
+    Message m_debugInformations;
     Mode m_mode {};
-    Message m_debugInfo {};
 
-    // View
-    sf::View m_screenView {};
-    sf::View m_mapView {}; // a mettre dans la classe tilemap
+    sf::View m_view {}; // a mettre dans la classe tilemap
 
     // Selection
-    sf::RectangleShape m_selectionRect {};
-    std::vector<int> m_tableSelection {};
+    // sf::RectangleShape m_selectionRect {};
+    // std::vector<int> m_tableSelection {};
 
-    /* Valeur de la case actuel dans la tilemap */
+    /* Number of the tile selected */
     unsigned int m_tile {};
 
     void init_map();
-    void init_widget();
-    void init_views();
     void init_selection_rect();
 
     void handle_keyboard_press( std::string const & inputName ) override;
@@ -53,7 +46,7 @@ class EditorState final : public State
     // void handle_mouse_button_release( std::string const & inputName ) override;
     void handle_mouse_wheel_up() override;
     void handle_mouse_wheel_down() override;
-    void handle_global_input() override;
+    void handle_current_input() override;
 
     /* Fonction qui permet de séparer les actions de l'utilisateur */
     void update_normal_mode();
