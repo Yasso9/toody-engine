@@ -1,6 +1,6 @@
 #pragma once
 
-// To ignore some warning caused by include of Sqlite
+// To ignore some warning caused by the include of Sqlite
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wlong-long"
 
@@ -11,7 +11,9 @@ extern "C"
 
 #pragma GCC diagnostic pop
 
-#include <project/utility/utility.hpp>
+#include <project/tools/json.hpp>
+
+#include <memory>
 
 // To mix the use of unique pointer and sqlite3 database
 struct sqlite3_deleter

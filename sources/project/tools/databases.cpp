@@ -1,5 +1,8 @@
 #include "databases.hpp"
 
+#include <project/tools/exceptions.hpp>
+#include <project/tools/string.hpp>
+
 // TYPO mettre ce commentaire dans un autre fichier (readme peut être)
 // tips variable names : 'gf_' == global in this file
 

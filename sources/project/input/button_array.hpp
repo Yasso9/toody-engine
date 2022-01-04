@@ -1,3 +1,5 @@
+#pragma once
+
 #include <project/input/button.hpp>
 
 // TYPO le faire hérité de sf::Shape

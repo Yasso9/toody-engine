@@ -1,6 +1,8 @@
 #pragma once
 
 #include <project/entity/entity.hpp>
+#include <project/ressources-handling/texture_sprite.hpp>
+#include <project/tools/geometry.hpp>
 
 struct SpriteTextureRect
 {

@@ -1,5 +1,7 @@
 #include "main_menu_state.hpp"
 
+#include <project/tools/string.hpp>
+
 MainMenuState::MainMenuState( Ressources const & ressources,
                               Settings const & settings )
   : State( ressources, settings, StateName::MainMenu ),

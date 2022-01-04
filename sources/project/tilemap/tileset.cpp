@@ -1,5 +1,8 @@
 #include "tileset.hpp"
 
+#include <project/tools/geometry.hpp>
+#include <project/tools/global_variable.hpp>
+
 Tileset::Tileset( sf::Texture const & texture )
   : // TYPO mettre une variable m_texture et set la texture dans le draw
     m_image( texture )
@@ -40,7 +43,7 @@ void Tileset::update_cursor( sf::Vector2f const & position )
                                         + this->getPosition() };
 
     this->m_cursor.update( cursorPosition,
-                           sfmladdon::make_vector( ::g_tileSize_u ) );
+                           sfpp::make_vector( ::g_tileSize_u ) );
 }
 
 bool Tileset::include( sf::Vector2f const & position ) const
@@ -70,7 +73,7 @@ void Tileset::update( sf::Vector2f const & mousePosition,
 
     if ( buttonIsPressed )
     {
-        std::cout << this->get_tile_position( mousePosition ) << std::endl;
+        // std::cout << this->get_tile_position( mousePosition ) << std::endl;
 
         // tile = tilesetPosition.x
         //        + tilesetPosition.y

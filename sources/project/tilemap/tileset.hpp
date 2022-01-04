@@ -1,7 +1,6 @@
 #pragma once
 
 #include <project/output-info/information.hpp>
-#include <project/utility/utility.hpp>
 
 class Tileset final : public sf::Drawable, public sf::Transformable
 {

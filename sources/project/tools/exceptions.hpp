@@ -1,6 +1,7 @@
 #pragma once
 
-#include <project/utility/utility.hpp>
+#include <exception>
+#include <string>
 
 class DatabaseException final : public std::exception
 {

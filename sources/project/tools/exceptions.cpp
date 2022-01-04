@@ -1,4 +1,6 @@
-#include "error_handling.hpp"
+#include "exceptions.hpp"
+
+#include <project/tools/string.hpp>
 
 DatabaseException::DatabaseException( std::string const & databasePath,
                                       std::string const & errorMessage )

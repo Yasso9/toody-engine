@@ -1,6 +1,6 @@
 #pragma once
 
-#include <project/ressources-handling/texture_sprite.hpp>
+#include <project/tools/sfml.hpp>
 
 class Entity : public sf::Drawable, public sf::Transformable
 {

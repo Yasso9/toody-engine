@@ -1,11 +1,15 @@
 #include "input_initialization.hpp"
 
+#include <cassert>
+
+#include <project/states/state.hpp>
+#include <project/tools/string.hpp>
+
 namespace InputInitialization
 {
     namespace
     {
-        std::map<std::string const, std::pair<sf::Keyboard::Key const, bool>>
-            main_menu_keyboard()
+        KeyboardInputMap main_menu_keyboard()
         {
             return {
                 { "Previous", { sf::Keyboard::A, false } },
@@ -14,16 +18,14 @@ namespace InputInitialization
             };
         }
 
-        std::map<std::string const, std::pair<sf::Mouse::Button const, bool>>
-            main_menu_mouse_button()
+        MouseInputMap main_menu_mouse_button()
         {
             return {
                 { "AcceptClick", { sf::Mouse::Left, false } },
             };
         }
 
-        std::map<std::string const, std::pair<sf::Keyboard::Key const, bool>>
-            editor_keyboard()
+        KeyboardInputMap editor_keyboard()
         {
             return {
                 { "MainMenu", std::make_pair( sf::Keyboard::Escape, false ) },
@@ -52,16 +54,14 @@ namespace InputInitialization
             };
         }
 
-        std::map<std::string const, std::pair<sf::Mouse::Button const, bool>>
-            editor_mouse_button()
+        MouseInputMap editor_mouse_button()
         {
             return {
                 { "Action", { sf::Mouse::Left, false } },
             };
         }
 
-        std::map<std::string const, std::pair<sf::Keyboard::Key const, bool>>
-            game_keyboard()
+        KeyboardInputMap game_keyboard()
         {
             return {
                 { "MainMenu", { sf::Keyboard::Escape, false } },
@@ -75,8 +75,7 @@ namespace InputInitialization
             };
         }
 
-        std::map<std::string const, std::pair<sf::Mouse::Button const, bool>>
-            game_mouse_button()
+        MouseInputMap game_mouse_button()
         {
             return {
 
@@ -84,8 +83,7 @@ namespace InputInitialization
         }
     } // namespace
 
-    std::map<std::string const, std::pair<sf::Keyboard::Key const, bool>>
-        keyboard( StateName const & stateName )
+    KeyboardInputMap keyboard( StateName const & stateName )
     {
         switch ( stateName )
         {
@@ -110,8 +108,7 @@ namespace InputInitialization
         }
     }
 
-    std::map<std::string const, std::pair<sf::Mouse::Button const, bool>>
-        mouse_button( StateName const & stateName )
+    MouseInputMap mouse_button( StateName const & stateName )
     {
         switch ( stateName )
         {

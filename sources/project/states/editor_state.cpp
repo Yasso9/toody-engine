@@ -1,12 +1,14 @@
 #include "editor_state.hpp"
 
+#include <project/tools/string.hpp>
+
 EditorState::EditorState( Ressources const & ressources,
                           Settings const & settings )
   : State( ressources, settings, StateName::Editor ),
     m_tilemap( this->m_ressources.textures.at( TextureKey::Tileset ) ),
     m_tileset( this->m_ressources.textures.at( TextureKey::Tileset ) ),
     m_buttons( this->m_ressources.fonts.at( FontKey::Arial ),
-               { "Normal", "Selection" } ),
+               { "Normal"s, "Selection"s } ),
     m_debugInformations( this->m_ressources.fonts.at( FontKey::Arial ) )
 {
     this->m_tile = 0;
@@ -50,29 +52,29 @@ void EditorState::handle_mouse_wheel_down()
 
 void EditorState::handle_keyboard_press( std::string const & input )
 {
-    if ( input == "MainMenu" )
+    if ( input == "MainMenu"s )
     {
         this->m_stateName = StateName::MainMenu;
     }
-    else if ( input == "Profondeur1" )
+    else if ( input == "Profondeur1"s )
     {
         this->m_tilemap.set_actual_depth( 0 );
     }
-    else if ( input == "Profondeur2" )
+    else if ( input == "Profondeur2"s )
     {
         this->m_tilemap.set_actual_depth( 1 );
     }
-    else if ( input == "Center" )
+    else if ( input == "Center"s )
     {
         // TYPO mettre le centre de la vue et non pas la taille de la fenetre / 2
         this->m_tilemap.setPosition( this->m_settings.get_window_size_f()
                                      / 2.f );
     }
-    else if ( input == "PrintOrRemoveSpriteSheet" )
+    else if ( input == "PrintOrRemoveSpriteSheet"s )
     {
         this->m_tileset.switch_print();
     }
-    else if ( input == "Save" )
+    else if ( input == "Save"s )
     {
         this->m_tilemap.save();
     }
@@ -83,19 +85,19 @@ void EditorState::handle_current_input()
     // Movement de la mapView par raport a l'ecran,
     // deplacer la vue revient a deplacer la mapView
     // On ne met pas de else if pour pouvoir avoir un mouvement multiple
-    if ( this->m_keyboard.at( "TilemapUp" ).second )
+    if ( this->m_keyboard.at( "TilemapUp"s ).second )
     {
         this->m_tilemap.move( 0.f, 5.f );
     }
-    if ( this->m_keyboard.at( "TilemapDown" ).second )
+    if ( this->m_keyboard.at( "TilemapDown"s ).second )
     {
         this->m_tilemap.move( 0.f, -5.f );
     }
-    if ( this->m_keyboard.at( "TilemapLeft" ).second )
+    if ( this->m_keyboard.at( "TilemapLeft"s ).second )
     {
         this->m_tilemap.move( 5.f, 0.f );
     }
-    if ( this->m_keyboard.at( "TilemapRight" ).second )
+    if ( this->m_keyboard.at( "TilemapRight"s ).second )
     {
         this->m_tilemap.move( -5.f, 0.f );
     }
@@ -115,16 +117,16 @@ void EditorState::update_normal_mode()
 {
     this->m_tileset.update( this->m_mousePosition.get_overall(),
                             this->m_tile,
-                            this->m_mouseButton.at( "Action" ).second );
+                            this->m_mouseButton.at( "Action"s ).second );
 
     this->m_tilemap.update( this->m_mousePosition.get_overall(),
                             this->m_tile,
-                            this->m_mouseButton.at( "Action" ).second );
+                            this->m_mouseButton.at( "Action"s ).second );
 }
 
 void EditorState::update_selection_mode()
 {
-    if ( this->m_mouseButton.at( "Action" ).second )
+    if ( this->m_mouseButton.at( "Action"s ).second )
     {
         // this->update_selection(
         //     to_map_view( this->m_mousePosition.get_press()

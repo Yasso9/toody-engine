@@ -1,10 +1,10 @@
 #pragma once
 
-#include <project/ressources-handling/ressources_init.hpp>
+#include <memory>
 
-#include <project/states/editor_state.hpp>
-#include <project/states/game_state.hpp>
-#include <project/states/main_menu_state.hpp>
+#include <project/settings/settings.hpp>
+#include <project/states/state.hpp>
+#include <project/tools/types.hpp>
 
 class Game final
 {
@@ -28,8 +28,8 @@ class Game final
   private:
     std::shared_ptr<State> m_states { nullptr };
 
-    t_texturesMap const m_textures {};
-    t_fontsMap const m_fonts {};
+    TexturesMap const m_textures {};
+    FontsMap const m_fonts {};
 
     sf::RenderWindow m_window {};
     sf::Event m_event {};

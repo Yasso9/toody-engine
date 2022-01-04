@@ -1,4 +1,4 @@
-#include "json_addon.hpp"
+#include "json.hpp"
 
 namespace jsonaddon
 {

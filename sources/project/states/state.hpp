@@ -3,17 +3,17 @@
 #include <project/input/button_array.hpp>
 #include <project/input/input_initialization.hpp>
 #include <project/input/mouse_position.hpp>
-#include <project/utility/utility.hpp>
+#include <project/settings/settings.hpp>
 
 struct Ressources
 {
-    Ressources( t_texturesMap const & v_textures, t_fontsMap const & v_fonts )
+    Ressources( TexturesMap const & v_textures, FontsMap const & v_fonts )
       : textures( v_textures ), fonts( v_fonts )
     {
     }
 
-    t_texturesMap const textures;
-    t_fontsMap const fonts;
+    TexturesMap const textures;
+    FontsMap const fonts;
 };
 
 class State

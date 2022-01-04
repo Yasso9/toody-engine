@@ -30,34 +30,13 @@ class Enum
     Type m_currentValue;
 };
 
-enum class Direction
+/// @brief All States that the game can have
+enum class StateName
 {
-    Up = 0,
-    Down,
-    Right,
-    Left,
-    EnumLast,
-};
-
-/// @brief directions that the character can have
-// class Direction : public Enum
-// {
-//     Up = 0, Down, Right, Left, EnumLast,
-// };
-
-enum class PlayerState
-{
-    Normal = 0,
-    Walking,
-    Running,
-    Poketech,
-    Cycling,
-    PokemonCenter,
-    Watering,
-    Surfing,
-    UsingPokemon,
-    Fishing,
-    Saving,
+    MainMenu = 0,
+    Game,
+    Editor,
+    Quit,
     EnumLast,
 };
 
@@ -66,16 +45,6 @@ enum class TextureKey
     Tileset = 0,
     Player,
     HomeWallpaper,
-    EnumLast,
-};
-
-/// @brief All States that the game can have
-enum class StateName
-{
-    MainMenu = 0,
-    Game,
-    Editor,
-    Quit,
     EnumLast,
 };
 

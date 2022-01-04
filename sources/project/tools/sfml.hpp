@@ -1,10 +1,16 @@
 #pragma once
 
-#include <project/utility/utility.hpp>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsign-conversion"
 
-// Improve readability of the use of SFML Library
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
 
-namespace sfmladdon
+#pragma GCC diagnostic pop
+
+/// @brief Improve readability of the use of SFML Library
+namespace sfpp
 {
     /** @brief Convert a sf::Vector2u to a sf::VideoMode */
     sf::VideoMode to_video_mode( sf::Vector2u const & vector2u ) noexcept;
@@ -17,7 +23,7 @@ namespace sfmladdon
 
     sf::Vector2f make_vector( float const & value ) noexcept;
     sf::Vector2f make_vector( unsigned int const & value ) noexcept;
-} // namespace sfmladdon
+} // namespace sfpp
 
 /** @brief Allow to divide 2 vector */
 sf::Vector2f operator/( sf::Vector2f const & vectorA,

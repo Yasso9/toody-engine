@@ -1,5 +1,7 @@
 #include "button.hpp"
 
+#include <project/tools/string.hpp>
+
 Button::Button( sf::Font const & font ) : m_shape(), m_text()
 {
     this->setPosition( 0.f, 0.f );
@@ -15,7 +17,7 @@ Button::Button( sf::Font const & font ) : m_shape(), m_text()
     this->m_text.setCharacterSize( 20 );
     this->m_text.setFillColor( sf::Color::Black );
 
-    this->set_string( "Button" );
+    this->set_string( "Button"s );
 }
 
 sf::Vector2f Button::get_size() const noexcept

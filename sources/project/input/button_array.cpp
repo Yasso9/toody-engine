@@ -1,5 +1,7 @@
 #include "button_array.hpp"
 
+#include <cassert>
+
 ButtonArray::ButtonArray( sf::Font const & font,
                           std::vector<std::string> const & buttonsString )
   : m_font( font ), m_direction()

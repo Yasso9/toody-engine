@@ -1,5 +1,11 @@
 #include "tilemap.hpp"
 
+#include <project/tilemap/tile_utility.hpp>
+#include <project/tools/databases.hpp>
+#include <project/tools/global_variable.hpp>
+#include <project/tools/json.hpp>
+#include <project/tools/string.hpp>
+
 TileMap::TileMap( sf::Texture const & texture ) : m_texture( texture )
 {
     json const completeResult = database::request( R"(

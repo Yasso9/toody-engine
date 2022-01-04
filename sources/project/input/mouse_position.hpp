@@ -1,6 +1,6 @@
 #pragma once
 
-#include <project/utility/utility.hpp>
+#include <project/tools/sfml.hpp>
 
 class MousePosition
 {

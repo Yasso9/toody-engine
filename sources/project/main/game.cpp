@@ -1,5 +1,14 @@
 #include "game.hpp"
 
+#include <cassert>
+
+#include <project/ressources-handling/ressources_init.hpp>
+#include <project/tools/string.hpp>
+
+#include <project/states/editor_state.hpp>
+#include <project/states/game_state.hpp>
+#include <project/states/main_menu_state.hpp>
+
 Game::Game()
   : m_textures( RessourcesInit::init_textures() ),
     m_fonts( RessourcesInit::init_fonts() ),
@@ -13,7 +22,7 @@ void Game::init_window()
 {
     std::string const gameTitle { "Toody Engine (In Developpement)"s };
     this->m_window.create(
-        sfmladdon::to_video_mode( this->m_settings.get_window_size_u() ),
+        sfpp::to_video_mode( this->m_settings.get_window_size_u() ),
         gameTitle );
     this->m_window.setVerticalSyncEnabled(
         this->m_settings.get_vertical_sync() );

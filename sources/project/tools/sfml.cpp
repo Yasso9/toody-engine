@@ -1,6 +1,6 @@
-#include "sfml_addon.hpp"
+#include "sfml.hpp"
 
-namespace sfmladdon
+namespace sfpp
 {
     sf::VideoMode to_video_mode( sf::Vector2u const & vector2u ) noexcept
     {
@@ -15,7 +15,7 @@ namespace sfmladdon
 
     sf::Vector2f screen_resolution_f() noexcept
     {
-        return static_cast<sf::Vector2f>( sfmladdon::screen_resolution_u() );
+        return static_cast<sf::Vector2f>( sfpp::screen_resolution_u() );
     }
 
     sf::Vector2f make_vector( float const & value ) noexcept
@@ -25,9 +25,9 @@ namespace sfmladdon
 
     sf::Vector2f make_vector( unsigned int const & value ) noexcept
     {
-        return sfmladdon::make_vector( static_cast<float>( value ) );
+        return sfpp::make_vector( static_cast<float>( value ) );
     }
-} // namespace sfmladdon
+} // namespace sfpp
 
 sf::Vector2f operator/( sf::Vector2f const & vectorA,
                         sf::Vector2f const & vectorB ) noexcept

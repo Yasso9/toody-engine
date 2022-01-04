@@ -1,6 +1,6 @@
 #pragma once
 
-#include <project/utility/utility.hpp>
+#include <project/tools/sfml.hpp>
 
 // TYPO le faire hérité de sf::Shape
 class Button final : public sf::Drawable, public sf::Transformable

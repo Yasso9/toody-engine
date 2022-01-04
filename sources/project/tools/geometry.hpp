@@ -1,4 +1,6 @@
-#include <project/utility/utility.hpp>
+#pragma once
+
+#include <project/tools/sfml.hpp>
 
 namespace tools
 {
@@ -6,3 +8,13 @@ namespace tools
     bool is_in_part( sf::Vector2f const value, sf::Vector2f const position,
                      sf::Vector2f const size );
 } // namespace tools
+
+/// @brief Cardinal Directions
+enum class Direction
+{
+    Up = 0,
+    Down,
+    Right,
+    Left,
+    EnumLast,
+};

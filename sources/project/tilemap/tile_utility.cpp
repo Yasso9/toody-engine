@@ -1,5 +1,9 @@
 #include "tile_utility.hpp"
 
+#include <cmath>
+
+#include <project/tools/global_variable.hpp>
+
 sf::Vector2u to_tile_position( unsigned int const tileNumber,
                                unsigned int const numberOfTileInX )
 {

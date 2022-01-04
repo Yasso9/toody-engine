@@ -1,9 +1,9 @@
 #pragma once
 
-#include <project/utility/utility.hpp>
+#include <project/tools/types.hpp>
 
 namespace RessourcesInit
 {
-    t_texturesMap init_textures();
-    t_fontsMap init_fonts();
+    TexturesMap init_textures();
+    FontsMap init_fonts();
 } // namespace RessourcesInit

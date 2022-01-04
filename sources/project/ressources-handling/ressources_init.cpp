@@ -1,5 +1,10 @@
 #include "ressources_init.hpp"
 
+#include <cassert>
+
+#include <project/tools/exceptions.hpp>
+#include <project/tools/string.hpp>
+
 namespace RessourcesInit
 {
     namespace
@@ -54,9 +59,9 @@ namespace RessourcesInit
         }
     } // namespace
 
-    t_texturesMap init_textures()
+    TexturesMap init_textures()
     {
-        t_texturesMap textures {};
+        TexturesMap textures {};
 
         for ( Enum<TextureKey> textureKey { Enum<TextureKey>::get_min() };
               textureKey < Enum<TextureKey>::get_max();
@@ -77,9 +82,9 @@ namespace RessourcesInit
         return textures;
     }
 
-    t_fontsMap init_fonts()
+    FontsMap init_fonts()
     {
-        t_fontsMap fonts {};
+        FontsMap fonts {};
 
         for ( Enum<FontKey> fontKey { Enum<FontKey>::get_min() };
               fontKey < Enum<FontKey>::get_max();

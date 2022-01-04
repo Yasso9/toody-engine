@@ -1,6 +1,23 @@
 #pragma once
 
-#include <project/utility/utility.hpp>
+#include <project/tools/geometry.hpp>
+#include <project/tools/sfml.hpp>
+
+enum class PlayerState
+{
+    Normal = 0,
+    Walking,
+    Running,
+    Poketech,
+    Cycling,
+    PokemonCenter,
+    Watering,
+    Surfing,
+    UsingPokemon,
+    Fishing,
+    Saving,
+    EnumLast,
+};
 
 class TextureSprite
 {

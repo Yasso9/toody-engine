@@ -1,5 +1,7 @@
 #include "player.hpp"
 
+#include <cassert>
+
 namespace
 {
     sf::Vector2f get_movement( Direction const direction, float const distance )

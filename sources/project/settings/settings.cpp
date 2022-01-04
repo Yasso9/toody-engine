@@ -1,5 +1,10 @@
 #include "settings.hpp"
 
+#include <fstream>
+
+#include <project/tools/exceptions.hpp>
+#include <project/tools/string.hpp>
+
 Settings::Settings()
 {
     std::string const configLocation { "./ressources/window.txt"s };
