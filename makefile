@@ -10,6 +10,8 @@
 CXX_COMMAND := clang++
 CXX_FLAGS := -std=c++20 -MD -O0 -g
 # -MD => Create .d files for dependencies
+# -g => Generate debug information
+# -O0 => No optmization, faster compilation time, better for debugging builds
 
 WARNINGS := -pedantic -Wpedantic -pedantic-errors \
 -Wall -Wextra \
@@ -65,7 +67,7 @@ WARNINGS := -pedantic -Wpedantic -pedantic-errors \
 -Wlogical-op \
 -Wnoexcept \
 -Wstrict-null-sentinel \
--Wformat-truncation \
+-Wformat-truncation
 
 # .cpp and .hpp files
 FILES_DIRECTORY := ./sources/project
@@ -81,27 +83,16 @@ EXECUTABLE := $(BUILD_DIRECTORY)/application
 
 ############################## knowing files and object location ##############################
 
-# Produce list in the form "./sources/project/sub_directory/filename.hpp"
-HEADERS_FILES := $(wildcard $(FILES_DIRECTORY)/*/*.hpp)
-# Erase files directory => "sub_directory/filename.hpp"
-HEADERS_FILES := $(subst $(FILES_DIRECTORY)/,,$(HEADERS_FILES))
-# Same for cpp files
+# Produce list in the form "./sources/project/sub_directory/filename.cpp"
 SOURCES_FILES := $(wildcard $(FILES_DIRECTORY)/*/*.cpp)
+# Erase files directory => "sub_directory/filename.cpp"
 SOURCES_FILES := $(subst $(FILES_DIRECTORY)/,,$(SOURCES_FILES))
 
-# Object files of the all cpp hpp pair
+# Object files of the all cpp files
 # sub_directory/filename.hpp => sub_directory/filename.o
-OBJECT_PAIR := $(patsubst %.hpp,%.o,$(HEADERS_FILES))
-# => ./object/sub_directory/filename.o
-OBJECT_PAIR := $(addprefix $(OBJECT_DIRECTORY)/, $(OBJECT_PAIR))
-
-# All the object (needed for all prerequesites)
 OBJECT_ALL := $(patsubst %.cpp,%.o,$(SOURCES_FILES))
+# => ./object/sub_directory/filename.o
 OBJECT_ALL := $(addprefix $(OBJECT_DIRECTORY)/, $(OBJECT_ALL))
-
-# Object files of cpp without hpp combinaison
-# Removes all OBJECT_PAIR of OBJECT_ALL
-OBJECT_SOLO := $(filter-out $(OBJECT_PAIR), $(OBJECT_ALL))
 
 # Dependencies (.d files) will be on the same directories than object files
 DEPENDENCIES := $(patsubst %.cpp,%.d,$(SOURCES_FILES))
@@ -114,6 +105,8 @@ ifdef OS
 else
 	SYSTEM_NAME := Unix
 endif
+
+
 
 ############################## call action ##############################
 
@@ -158,24 +151,15 @@ LIBRARIES :=  "$(SQLITE_PATH)/object/sqlite3.o" -L"$(SFML_PATH)/lib" -lsfml-grap
 
 # Create the executable by Linking all the object files and the SFML together
 $(EXECUTABLE) : $(OBJECT_ALL)
-#	g++ object/sub_directory_A/filename_A.o object/sub_directory_B/filename_B.o etc... -o executable -L"C:/Informatique/SFML-2.5.1/lib" -lsfml-graphics -lsfml-system -lsfml-window
+#	g++ object/sub_directory_A/filename_A.o object/sub_directory_B/filename_B.o etc... -o executable -L"LIB/PATH" -libflags
 	$(CXX_COMMAND) $^ -o $@ $(LIBRARIES)
 
 # set up the dependencies
 -include $(DEPENDENCIES)
 
-# Creating the object file of OBJECT_PAIR with gather the dependencies of a .cpp .hpp pair
-$(OBJECT_PAIR) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/%.cpp $(FILES_DIRECTORY)/%.hpp
-#	removes object folder if exist
-#	rm -rf -- $@
+# Creating all the object files needed
+$(OBJECT_ALL) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/%.cpp
 #	create the object directory if not exist
 	mkdir -p $(dir $@)
 #	g++ -std=c++2a -Wall -Wextra -c -o object/sub_directory/filename.o sources/project/sub_directory/filename.cpp -I"C:/Users/Turki/GoogleDrive/Informatique/Projets/Moteur-2D/sources" -I"C:/Informatique/SFML-2.5.1/include"
-	$(CXX_COMMAND) $(WARNINGS) $(CXX_FLAGS) -c $< -o $@ $(INCLUDES)
-
-# Creating the object file of OBJECT_SOLO with gather the dependencies of the .cpp's only
-# commands are the same than above
-$(OBJECT_SOLO) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/%.cpp
-#	rm -rf -- $@
-	mkdir -p $(dir $@)
 	$(CXX_COMMAND) $(WARNINGS) $(CXX_FLAGS) -c $< -o $@ $(INCLUDES)
