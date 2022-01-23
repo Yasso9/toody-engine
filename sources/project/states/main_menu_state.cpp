@@ -29,6 +29,11 @@ void MainMenuState::init_text()
     this->m_text.setString( "Main Menu"s );
 }
 
+void MainMenuState::init_buttons()
+{
+    this->m_buttons.setPosition( sfpp::screen_resolution_f() / 2.f );
+}
+
 void MainMenuState::update()
 {
     // if ( this->m_mouseButton.at( "AcceptClick"s ).second )

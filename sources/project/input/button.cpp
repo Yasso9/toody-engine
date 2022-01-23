@@ -2,69 +2,92 @@
 
 #include <project/tools/string.hpp>
 
-Button::Button( sf::Font const & font ) : m_shape(), m_text()
+#include <iostream>
+
+Button::Button( sf::Font const & font,
+                std::string const & string /* = "Button" */ )
+  : m_shape(), m_text()
 {
+    // Button default property
     this->setPosition( 0.f, 0.f );
 
-    sf::Vector2f const basicSize { 50.f, 50.f };
-
-    this->m_shape.setSize( basicSize );
+    // Initalize Shape
     this->m_shape.setFillColor( sf::Color::White );
     this->m_shape.setOutlineColor( sf::Color::Black );
-    this->m_shape.setOutlineThickness( 2.f );
+    this->m_shape.setOutlineThickness( 1.f );
 
+    // Initalize text
     this->m_text.setFont( font );
-    this->m_text.setCharacterSize( 20 );
     this->m_text.setFillColor( sf::Color::Black );
 
-    this->set_string( "Button"s );
+    this->set_string( string );
 }
 
 sf::Vector2f Button::get_size() const noexcept
 {
-    return this->m_shape.getSize() * this->getScale();
+    return this->m_shape.getSize();
 }
 
-void Button::set_size( sf::Vector2f const & size ) noexcept
+void Button::set_size( unsigned int const & characterSize ) noexcept
 {
-    this->setScale( size / this->get_size() );
+    this->m_text.setCharacterSize( characterSize );
+    this->synchronize_string();
 }
 
-void Button::set_size( float const & sizeX, float const & sizeY ) noexcept
-{
-    this->set_size( sf::Vector2f { sizeX, sizeY } );
-}
+// void Button::set_size( sf::Vector2f const & size ) noexcept
+// {
+//     this->setScale( size / this->get_size() );
+//     // this->set_string( this->m_text.getString() );
+// }
+
+// void Button::set_size( float const & sizeX, float const & sizeY ) noexcept
+// {
+//     this->set_size( sf::Vector2f { sizeX, sizeY } );
+// }
 
 void Button::set_string( std::string const & string )
 {
     this->m_text.setString( string );
+    this->synchronize_string();
+}
 
-    // TYPO ? Global Local
-    this->m_text.setOrigin(
-        this->m_text.getLocalBounds().left
-            + ( this->m_text.getLocalBounds().width / 2 ),
-        this->m_text.getLocalBounds().top
-            + ( this->m_text.getGlobalBounds().height / 2 ) );
+void Button::synchronize_string() noexcept
+{
+    // The origin has an offset (value of the left and top local bounds)
+    this->m_text.setOrigin( this->m_text.getLocalBounds().left,
+                            this->m_text.getLocalBounds().top );
 
-    this->m_text.setPosition( this->getPosition() + this->get_size() / 2.f );
+    // Scale of the shape in relation of size of text
+    float const factorSize { 1.8f };
+    sf::Vector2f const textSize { this->m_text.getLocalBounds().width,
+                                  this->m_text.getLocalBounds().height };
+
+    // Adapt size of the shape according to the size of the text
+    this->m_shape.setSize( textSize * factorSize );
+
+    // The position of the text must be at the middle of the button shape
+    this->m_text.setPosition( this->getPosition()
+                              + ( ( this->get_size() - textSize ) / 2.f ) );
 }
 
 void Button::set_selected( bool const & isSelected ) noexcept
 {
-    sf::Color shapeColor { this->m_shape.getFillColor() };
+    sf::Color buttonColor { this->m_shape.getFillColor() };
 
-    shapeColor.a = ( isSelected ) ? 128 : 255;
+    // Increase or decrease transparency if it's selected or not
+    buttonColor.a = ( isSelected ) ? 128 : 255;
 
-    this->m_shape.setFillColor( shapeColor );
+    this->m_shape.setFillColor( buttonColor );
 }
 
 void Button::set_pressed( bool const & isPressed ) noexcept
 {
-    sf::Color shapeColor { this->m_shape.getFillColor() };
+    sf::Color buttonColor { this->m_shape.getFillColor() };
 
-    shapeColor.a = ( isPressed ) ? 192 : 255;
+    // Increase or decrease transparency if it's pressed or not
+    buttonColor.a = ( isPressed ) ? 192 : 255;
 
-    this->m_shape.setFillColor( shapeColor );
+    this->m_shape.setFillColor( buttonColor );
 }
 
 bool Button::is_inside( sf::Vector2f const & position ) const noexcept
@@ -77,7 +100,7 @@ bool Button::is_inside( sf::Vector2f const & position ) const noexcept
 
 bool Button::update( sf::Vector2f const & position, bool const & click )
 {
-    // Initialisation of the selection
+    // Renitialisation of the selection
     this->set_selected( false );
     this->set_pressed( false );
 

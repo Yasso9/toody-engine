@@ -21,6 +21,7 @@ Game::Game()
 void Game::init_window()
 {
     std::string const gameTitle { "Toody Engine (In Developpement)"s };
+
     this->m_window.create(
         sfpp::to_video_mode( this->m_settings.get_window_size_u() ),
         gameTitle );
@@ -35,7 +36,10 @@ void Game::init_state()
         Ressources { this->m_textures, this->m_fonts },
         this->m_settings );
 
-    this->m_lastState = this->m_states->get_next();
+    // The current state to print is the main menu (we've just set it)
+    // We get this state because m_lastState should always know what is
+    // the last state printed
+    this->m_lastState = this->m_states->get_state_to_print();
 }
 
 void Game::run()
@@ -74,9 +78,9 @@ void Game::update_state()
 {
     this->m_states->update();
 
-    if ( this->m_states->get_next() != this->m_lastState )
+    if ( this->m_states->get_state_to_print() != this->m_lastState )
     {
-        this->change_state( this->m_states->get_next() );
+        this->change_state( this->m_states->get_state_to_print() );
     }
 }
 

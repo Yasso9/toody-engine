@@ -27,7 +27,7 @@ class State
 
     /** @brief Know the next state to render after the input update.
      * @returns StateName value of the next state to print */
-    StateName get_next();
+    StateName get_state_to_print() const;
 
     /// @brief Update all change that can happen by an event.
     void update_input( sf::Event const & event );

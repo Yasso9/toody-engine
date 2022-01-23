@@ -10,7 +10,7 @@ State::State( Ressources const & ressources, Settings const & settings,
 {
 }
 
-StateName State::get_next()
+StateName State::get_state_to_print() const
 {
     return this->m_stateName;
 }

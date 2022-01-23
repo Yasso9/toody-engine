@@ -2,7 +2,6 @@
 
 #include <project/input/button.hpp>
 
-// TYPO le faire hérité de sf::Shape
 class ButtonArray final : public sf::Drawable, public sf::Transformable
 {
   public:
@@ -20,6 +19,7 @@ class ButtonArray final : public sf::Drawable, public sf::Transformable
     ButtonArray( ButtonArray && ) noexcept = delete;
     ButtonArray & operator=( const ButtonArray & ) = delete;
     ButtonArray & operator=( ButtonArray && ) noexcept = delete;
+
     virtual ~ButtonArray() noexcept = default;
 
     sf::Vector2f get_size() const noexcept;
@@ -32,7 +32,7 @@ class ButtonArray final : public sf::Drawable, public sf::Transformable
     void draw( sf::RenderTarget & target,
                sf::RenderStates states ) const override;
 
-    std::map<unsigned int const, Button> m_buttons {};
+    std::vector<Button> m_buttons {};
     sf::Font const m_font;
-    ButtonArray::Direction m_direction;
+    Direction m_direction;
 };

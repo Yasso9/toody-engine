@@ -51,3 +51,25 @@ sf::Vector2f operator%( sf::Vector2f const & vector,
 
     return static_cast<sf::Vector2f>( integerVectorResult );
 }
+
+template <typename T>
+std::ostream & operator<<( std::ostream & stream, sf::Rect<T> const & rect )
+{
+    return stream << "( " << rect.left << ", " << rect.top << ", " << rect.width
+                  << ", " << rect.height << " )";
+}
+template std::ostream & operator<<( std::ostream & stream,
+                                    sf::Rect<int> const & rect );
+template std::ostream & operator<<( std::ostream & stream,
+                                    sf::Rect<float> const & rect );
+
+template <typename T>
+std::ostream & operator<<( std::ostream & stream,
+                           sf::Vector2<T> const & vector )
+{
+    return stream << "( " << vector.x << ", " << vector.y << " )";
+}
+template std::ostream & operator<<( std::ostream & stream,
+                                    sf::Vector2<float> const & vector );
+template std::ostream & operator<<( std::ostream & stream,
+                                    sf::Vector2<unsigned int> const & vector );

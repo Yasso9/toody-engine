@@ -1,31 +1,42 @@
 #include "button_array.hpp"
 
+#include <algorithm>
 #include <cassert>
 
 ButtonArray::ButtonArray( sf::Font const & font,
                           std::vector<std::string> const & buttonsString )
-  : m_font( font ), m_direction()
+  : m_font( font ), m_direction( ButtonArray::Direction::Horizontal )
 {
     assert( ! buttonsString.empty()
             && "There must be at least one button on the "
                "ButtonArray constructor class" );
 
-    for ( unsigned int i_buttonNummber { 0u };
-          i_buttonNummber < buttonsString.size();
-          ++i_buttonNummber )
-    {
-        this->m_buttons.insert(
-            std::make_pair( i_buttonNummber, Button { this->m_font } ) );
+    sf::Vector2f localPosition { 0.f, 0.f };
 
-        this->m_buttons.at( i_buttonNummber )
-            .set_string( buttonsString[i_buttonNummber] );
-        this->m_buttons.at( i_buttonNummber ).set_size( 100.f, 50.f );
-        this->m_buttons.at( i_buttonNummber )
-            .setPosition(
-                static_cast<float>( i_buttonNummber )
-                        * this->m_buttons.at( i_buttonNummber ).get_size().x
-                    + this->getPosition().x,
-                this->getPosition().y );
+    for ( std::size_t i_buttonNumber { 0 };
+          i_buttonNumber < buttonsString.size();
+          ++i_buttonNumber )
+    {
+        this->m_buttons.push_back(
+            Button { this->m_font, buttonsString[i_buttonNumber] } );
+
+        Button & button { this->m_buttons[i_buttonNumber] };
+
+        button.set_size( 30.f );
+        button.setPosition( this->getPosition() + localPosition );
+
+        if ( this->m_direction == ButtonArray::Direction::Horizontal )
+        {
+            localPosition.x += button.get_size().x;
+        }
+        else if ( this->m_direction == ButtonArray::Direction::Vertical )
+        {
+            localPosition.y += button.get_size().y;
+        }
+        else
+        {
+            assert( false && "The direction must be vertical or horizontal" );
+        }
     }
 }
 
@@ -37,25 +48,19 @@ sf::Vector2f ButtonArray::get_size() const noexcept
     {
         if ( this->m_direction == ButtonArray::Direction::Horizontal )
         {
-            buttonSize.x += button.second.get_size().x;
+            buttonSize.x += button.get_size().x;
 
-            if ( buttonSize.y < button.second.get_size().y )
-            {
-                buttonSize.y = button.second.get_size().y;
-            }
+            buttonSize.y = std::max( buttonSize.y, button.get_size().y );
         }
         else if ( this->m_direction == ButtonArray::Direction::Vertical )
         {
-            buttonSize.y += button.second.get_size().y;
+            buttonSize.y += button.get_size().y;
 
-            if ( buttonSize.x < button.second.get_size().x )
-            {
-                buttonSize.x = button.second.get_size().x;
-            }
+            buttonSize.x = std::max( buttonSize.x, button.get_size().x );
         }
         else
         {
-            // TYPO lancer une exeption ici
+            assert( false && "The direction must be vertical or horizontal" );
         }
     }
 
@@ -74,7 +79,7 @@ void ButtonArray::set_size( float const & sizeX, float const & sizeY ) noexcept
 
 int ButtonArray::update( sf::Vector2f const & position, bool const & click )
 {
-    for ( unsigned int i_buttonNummber { 0u };
+    for ( std::size_t i_buttonNummber { 0 };
           i_buttonNummber < this->m_buttons.size();
           ++i_buttonNummber )
     {
@@ -96,8 +101,8 @@ void ButtonArray::draw( sf::RenderTarget & target,
 {
     states.transform *= this->getTransform();
 
-    for ( auto & button : this->m_buttons )
+    for ( auto const & button : this->m_buttons )
     {
-        target.draw( button.second, states );
+        target.draw( button, states );
     }
 }

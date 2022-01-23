@@ -34,3 +34,9 @@ sf::Vector2f operator*( sf::Vector2f const & vectorA,
 
 sf::Vector2f operator%( sf::Vector2f const & vector,
                         int const & modulo ) noexcept;
+
+template <typename T>
+std::ostream & operator<<( std::ostream & stream, sf::Rect<T> const & rect );
+template <typename T>
+std::ostream & operator<<( std::ostream & stream,
+                           sf::Vector2<T> const & vector );
