@@ -12,25 +12,30 @@ class Tileset final : public sf::Drawable, public sf::Transformable
     Tileset & operator=( const Tileset & ) = delete;
     Tileset & operator=( Tileset && ) noexcept = delete;
 
+    virtual ~Tileset() noexcept = default;
+
     sf::Vector2f get_size() const noexcept;
     void set_size( sf::Vector2f const & size ) noexcept;
     void set_size( float const & sizeX, float const & sizeY ) noexcept;
+
+    int get_selected_tile() const noexcept;
 
     /** @brief If the tilemap should be print, set it to false,
      * otherwise set it to true */
     void switch_print();
 
-    void update( sf::Vector2f const & mousePosition, unsigned int & tile,
+    void update( sf::Vector2f const & mousePosition,
                  bool const & buttonIsPressed );
 
     virtual void draw( sf::RenderTarget & target,
                        sf::RenderStates states ) const override;
 
-    virtual ~Tileset() noexcept = default;
-
   private:
     sf::Sprite const m_image;
-    Cursor m_cursor {};
+    Cursor m_cursor;
+
+    /// @brief Number of the tile selected
+    int m_tileSelected;
 
     bool m_isPrint { false };
 

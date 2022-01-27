@@ -2,6 +2,7 @@
 
 #include <project/tilemap/tile_utility.hpp>
 #include <project/tools/databases.hpp>
+#include <project/tools/geometry.hpp>
 #include <project/tools/global_variable.hpp>
 #include <project/tools/json.hpp>
 #include <project/tools/string.hpp>
@@ -45,15 +46,15 @@ void TileMap::synchronize_vertices()
                     this->m_vertices[row][line][tileDepth]
                 };
 
-                set_quad_position( quad,
-                                   this->getPosition(),
-                                   sf::Vector2u( line, row ) );
+                quad::set_position( quad,
+                                    this->getPosition(),
+                                    sf::Vector2u( line, row ) );
 
                 sf::Vector2u const tilePosition { to_tile_position(
                     this->m_table[row][line][tileDepth],
                     static_cast<unsigned int>( this->m_table[row].size() ) ) };
 
-                set_quad_texture_coordinate( quad, tilePosition );
+                quad::set_texture_coordinate( quad, tilePosition );
             }
         }
     }
@@ -90,23 +91,23 @@ void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
 }
 
 EditorMap::EditorMap( sf::Texture const & texture )
-  : TileMap( texture ), m_cursor(), m_actualDepth( 0u )
+  : TileMap( texture ), m_cursor(), m_depth( 0u )
 {
 }
 
-void EditorMap::set_actual_depth( unsigned int const & actualDepth )
+void EditorMap::set_depth( unsigned int const & actualDepth )
 {
     // TYPO à voir si on garde
     // assert(
     //     actualDepth < g_totalDepth
     //     && "EditorMap::actualDepth can only be between 0 and g_totalDepth" );
 
-    this->m_actualDepth = actualDepth;
+    this->m_depth = actualDepth;
 }
 
-unsigned int EditorMap::get_actual_depth() const
+unsigned int EditorMap::get_depth() const
 {
-    return this->m_actualDepth;
+    return this->m_depth;
 }
 
 void EditorMap::save() const
@@ -122,61 +123,49 @@ void EditorMap::save() const
     )"s );
 }
 
-void EditorMap::change_tile( sf::Vector2u const /* tilePosition */,
-                             unsigned int const /* newTile */ )
+void EditorMap::change_tile( sf::Vector2u const tilePosition,
+                             unsigned int const newTile )
 {
-    // unsigned int const tilePositionValue {
-    //     tilePosition.x + tilePosition.y * this->m_table[0][0].size()
-    // };
+    // On actualise les valeurs du tableau
+    this->m_table[this->m_depth][tilePosition.y][tilePosition.x] = newTile;
 
-    // // On actualise les valeurs du tableau
-    // this->m_table[this->m_actualDepth][tilePositionValue] =
-    //     static_cast<int>( newTile );
+    sf::VertexArray & quad =
+        this->m_vertices[this->m_depth][tilePosition.y][tilePosition.x];
 
-    // sf::Vertex * quad =
-    //     &this->m_vertices[this->m_actualDepth][tilePositionValue * 4];
+    // On enlève la transparence du quad
+    quad::set_visible( quad );
 
-    // // On enlève la transparence du quad
-    // set_quad_visible( quad );
-
-    // set_quad_texture_coordinate(
-    //     quad,
-    //     to_tile_position( newTile, this->m_table[0][0].size() ) );
+    // TYPO c'est foireux : faut mettre le tilePosition de newtile (la tileset et pas la tilemap)
+    quad::set_texture_coordinate( quad, tilePosition );
 }
 
-void EditorMap::update( sf::Vector2f const /* cursorPosition */,
-                        unsigned int const /* newTile */,
-                        bool const /* inputIsPress */ )
+void EditorMap::update( sf::Vector2f const cursorPosition,
+                        unsigned int const newTile, bool const inputIsPress )
 {
-    // // Si cursorPosition est dans la tilemap
-    // if ( is_in_part( cursorPosition, this->getPosition(), this->m_size ) )
-    // {
-    //     this->m_isMouseOn = true;
+    // Si cursorPosition est dans la tilemap
+    if ( tools::is_in_part( cursorPosition,
+                            this->getPosition(),
+                            this->get_size() ) )
+    {
+        // Coordonnée de la tilemap où est placé le curseur
+        sf::Vector2u const tilePosition { to_tile_position(
+            cursorPosition - this->getPosition() ) };
 
-    //     // Coordonnée de la tilemap où est placé le curseur
-    //     sf::Vector2u const tilePosition { to_tile_position(
-    //         cursorPosition - this->getPosition() ) };
+        // L'utilisateur clique sur le bouton pour réaliser l'action
+        if ( inputIsPress )
+        {
+            // On actualise l'ecran
+            this->change_tile( tilePosition, newTile );
+        }
 
-    //     // L'utilisateur clique sur le bouton pour réaliser l'action
-    //     if ( inputIsPress )
-    //     {
-    //         // On actualise l'ecran
-    //         this->change_tile( tilePosition, newTile );
-    //     }
-
-    //     this->m_tileCursor.update( cursorPosition, this->getPosition() );
-    // }
-    // else
-    // {
-    //     this->m_isMouseOn = false;
-    // }
+        this->m_cursor.update( cursorPosition, this->getPosition() );
+    }
 }
 
-// void EditorMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
-// {
-//     states.transform *= this->getTransform();
+void EditorMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
+{
+    states.transform *= this->getTransform();
 
-//     TileMap::draw( target, states );
-
-//     // target.draw( this->m_cursor );
-// }
+    TileMap::draw( target, states );
+    target.draw( this->m_cursor );
+}

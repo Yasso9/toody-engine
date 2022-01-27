@@ -2,18 +2,30 @@
 
 #include <project/output-info/information.hpp>
 
+enum class E_MapDepth
+{
+    One = 0,
+    Two
+};
+
 class TileMap : public sf::Drawable, public sf::Transformable
 {
   public:
     TileMap( sf::Texture const & texture );
 
-    /// @brief size of the tilemap in pixel
-    sf::Vector2f get_size() const;
+    TileMap( TileMap const & ) = delete;
+    TileMap( TileMap && ) = delete;
+    TileMap & operator=( TileMap const & ) = delete;
+    TileMap & operator=( TileMap && ) = delete;
 
     virtual ~TileMap() = default;
 
+    /// @brief size of the tilemap in pixel
+    sf::Vector2f get_size() const;
+
   protected:
     sf::Texture const m_texture {};
+    /// @brief table[depth][row][line]
     std::vector<std::vector<std::vector<sf::VertexArray>>> m_vertices {};
 
     /** @brief tri-dimensionnal vector containing the sprite number
@@ -21,7 +33,6 @@ class TileMap : public sf::Drawable, public sf::Transformable
     std::vector<std::vector<std::vector<unsigned int>>> m_table {};
 
     void synchronize_vertices();
-    void get_depth( unsigned int const & depth ) const noexcept;
 
     virtual void draw( sf::RenderTarget & target,
                        sf::RenderStates states ) const override;
@@ -32,8 +43,8 @@ class EditorMap final : public TileMap
   public:
     EditorMap( sf::Texture const & texture );
 
-    void set_actual_depth( unsigned int const & actualDepth );
-    unsigned int get_actual_depth() const;
+    void set_depth( unsigned int const & actualDepth );
+    unsigned int get_depth() const;
 
     void save() const;
     void resize();
@@ -41,16 +52,18 @@ class EditorMap final : public TileMap
     void update( sf::Vector2f const cursorPosition, unsigned int const tile,
                  bool const inputIsPress );
 
-    ~EditorMap() = default;
+    virtual ~EditorMap() = default;
 
   private:
     Cursor m_cursor {};
 
     /// @brief the depth that the user in the editor is actually working
-    unsigned int m_actualDepth { 0u };
+    unsigned int m_depth { 0u };
+
+    void get_depth( unsigned int const & depth ) const noexcept;
 
     void change_tile( sf::Vector2u const tilePosition,
                       unsigned int const tile );
-    // void draw( sf::RenderTarget & target,
-    //            sf::RenderStates states ) const override;
+    void draw( sf::RenderTarget & target,
+               sf::RenderStates states ) const override;
 };

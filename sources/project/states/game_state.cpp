@@ -34,24 +34,28 @@ void GameState::handle_current_input()
 {
     if ( this->m_keyboard.at( "MoveUp" ).second )
     {
-        this->m_player.walk( Direction::Up );
+        this->m_player.set_direction( E_Direction::Up );
     }
     if ( this->m_keyboard.at( "MoveDown" ).second )
     {
-        this->m_player.walk( Direction::Down );
+        this->m_player.set_direction( E_Direction::Down );
     }
     if ( this->m_keyboard.at( "MoveLeft" ).second )
     {
-        this->m_player.walk( Direction::Left );
+        this->m_player.set_direction( E_Direction::Left );
     }
     if ( this->m_keyboard.at( "MoveRight" ).second )
     {
-        this->m_player.walk( Direction::Right );
+        this->m_player.set_direction( E_Direction::Right );
     }
 
     if ( this->m_keyboard.at( "Run" ).second )
     {
-        this->m_player.run( Direction::Up );
+        this->m_player.set_state( Player::E_State::Running );
+    }
+    else
+    {
+        this->m_player.set_state( Player::E_State::Walking );
     }
 
     // if ( ! this->m_keyboard.at( "MoveUp" ).second

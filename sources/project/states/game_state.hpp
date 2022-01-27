@@ -16,7 +16,7 @@ class GameState final : public State
     TileMap m_tilemap;
     Player m_player;
 
-    sf::View m_view {};
+    sf::View m_view;
 
     void init_map();
 

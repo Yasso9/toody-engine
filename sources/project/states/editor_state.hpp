@@ -14,7 +14,7 @@ class EditorState final : public State
     void render( sf::RenderWindow & target ) override;
 
   private:
-    enum Mode
+    enum Type
     {
         Normal = 0,
         Selection,
@@ -24,19 +24,14 @@ class EditorState final : public State
     EditorMap m_tilemap;
     Tileset m_tileset;
 
-    // Widget
     ButtonArray m_buttons;
-    Message m_debugInformations;
-    Mode m_mode {};
+    Type m_type;
 
-    sf::View m_view {}; // a mettre dans la classe tilemap
+    sf::View m_view; // a mettre dans la classe tilemap
 
     // Selection
     // sf::RectangleShape m_selectionRect {};
     // std::vector<int> m_tableSelection {};
-
-    /* Number of the tile selected */
-    unsigned int m_tile {};
 
     void init_map();
     void init_selection_rect();

@@ -10,7 +10,7 @@ namespace tools
 } // namespace tools
 
 /// @brief Cardinal Directions
-enum class Direction
+enum class E_Direction
 {
     Up = 0,
     Down,

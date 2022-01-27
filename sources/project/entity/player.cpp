@@ -1,93 +1,108 @@
 #include "player.hpp"
 
 #include <cassert>
-
-namespace
-{
-    sf::Vector2f get_movement( Direction const direction, float const distance )
-    {
-        sf::Vector2f movementDistance { 0.f, 0.f };
-
-        switch ( direction )
-        {
-        case Direction::Up :
-            movementDistance.y = -distance;
-            break;
-        case Direction::Down :
-            movementDistance.y = distance;
-            break;
-        case Direction::Right :
-            movementDistance.x = distance;
-            break;
-        case Direction::Left :
-            movementDistance.x = -distance;
-            break;
-        default :
-            assert( false && "Unknown Direction" );
-            break;
-        }
-
-        return movementDistance;
-    }
-} // namespace
+#include <cmath>
+#include <exception>
+#include <stdexcept>
 
 Player::Player( sf::Texture const & texture ) : Entity( texture )
 {
-    this->m_direction = Direction::Down;
-    this->m_state = PlayerState::Normal;
+    // Initial state of the player
+    this->m_direction = E_Direction::Down;
+    this->m_state = Player::E_State::Normal;
 
-    this->m_spriteTextureRect = {
-        std::make_pair(
-            PlayerState::Normal,
-            SpriteTextureRect {
-                1,
-                std::map<Direction, sf::Rect<float>> {
-                    std::make_pair(
-                        Direction::Down,
-                        sf::Rect<float>( 156.f, 25.f, 21.f, 28.f ) ),
-                    std::make_pair( Direction::Down,
-                                    sf::Rect<float>( 8.f, 25.f, 21.f, 28.f ) ),
-                    std::make_pair( Direction::Down,
-                                    sf::Rect<float>( 81.f, 25.f, 22.f, 28.f ) ),
-                    std::make_pair(
-                        Direction::Down,
-                        sf::Rect<float>( 230.f, 25.f, 22.f, 38.f ) ) } } ),
-        // SpriteTextureRect { PlayerState::Walking,
-        //                     { sf::IntRect( 156, 25, 21, 28 ),
-        //                       sf::IntRect( 8, 25, 21, 28 ),
-        //                       sf::IntRect( 81, 25, 22, 28 ),
-        //                       sf::IntRect( 230, 25, 22, 38 ) } },
-        // SpriteTextureRect { PlayerState::Running,
-        //                     { sf::IntRect( 165, 71, 22, 28 ),
-        //                       sf::IntRect( 6, 74, 24, 26 ),
-        //                       sf::IntRect( 88, 73, 22, 26 ),
-        //                       sf::IntRect( 240, 74, 23, 25 ) } },
-    };
+    this->m_spritePixelSize = 30.f;
+
+    sf::Vector2u const textureSize { this->m_texture.getSize() };
+
+    float const numberOfRow { textureSize.x / this->m_spritePixelSize };
+    float const numberOfLine { textureSize.y / this->m_spritePixelSize };
+    if ( std::trunc( numberOfRow ) != numberOfRow
+         || std::trunc( numberOfLine ) != numberOfLine )
+    {
+        throw std::runtime_error {
+            "Size of the texture rect not correctly set"
+        };
+    }
+
+    this->m_stateNumber.insert( { Player::E_State::Normal,
+                                  { { E_Direction::Up, { 0u } },
+                                    { E_Direction::Down, { 0u } },
+                                    { E_Direction::Right, { 0u } },
+                                    { E_Direction::Left, { 0u } } } } );
+    this->m_stateNumber.insert( { Player::E_State::Walking,
+                                  { { E_Direction::Up, { 0u } },
+                                    { E_Direction::Down, { 0u } },
+                                    { E_Direction::Right, { 0u } },
+                                    { E_Direction::Left, { 0u } } } } );
+    this->m_stateNumber.insert( { Player::E_State::Running,
+                                  { { E_Direction::Up, { 0u } },
+                                    { E_Direction::Right, { 0u } },
+                                    { E_Direction::Down, { 0u } },
+                                    { E_Direction::Left, { 0u } } } } );
+
+    // float const maxSprite { numberOfRow * numberOfLine };
 }
 
-void Player::walk( Direction const & direction )
+void Player::set_direction( E_Direction const & direction )
 {
-    this->move( ::get_movement( direction, 1.f ) * this->m_speed );
+    this->m_direction = direction;
 }
 
-void Player::run( Direction const & direction )
+void Player::set_state( Player::E_State const & playerState )
 {
-    this->move( ::get_movement( direction, 2.f ) * this->m_speed );
+    this->m_state = playerState;
 }
 
 void Player::update()
 {
-    this->m_sprite.setOrigin(
-        this->m_spriteTextureRect.at( PlayerState::Normal )
-                .spritePositions.at( Direction::Down )
-                .width
-            / 2.f,
-        this->m_spriteTextureRect.at( PlayerState::Normal )
-                .spritePositions.at( Direction::Down )
-                .height
-            / 2.f );
+    float speedVariation { 0.f };
+    switch ( this->m_state )
+    {
+    case Player::E_State::Normal :
+        speedVariation = 1.f;
+        break;
+    case Player::E_State::Running :
+        speedVariation = 2.f;
+        break;
+    default :
+        speedVariation = 0.f;
+        break;
+    }
 
-    this->m_sprite.setTextureRect( static_cast<sf::IntRect>(
-        this->m_spriteTextureRect.at( PlayerState::Normal )
-            .spritePositions.at( Direction::Down ) ) );
+    this->move( this->get_movement( this->m_direction ) * this->m_speed
+                * speedVariation );
+
+    // The origin must be set to the center of the sprite
+    // this->m_sprite.setOrigin();
+
+    // // We choose the proper texture rect of the texture that we had loaded
+    // this->m_sprite.setTextureRect();
+}
+
+sf::Vector2f Player::get_movement( E_Direction const direction ) const
+{
+    sf::Vector2f movementDistance { 0.f, 0.f };
+    float const distance { 1.f };
+
+    switch ( direction )
+    {
+    case E_Direction::Up :
+        movementDistance.y = -distance;
+        break;
+    case E_Direction::Down :
+        movementDistance.y = distance;
+        break;
+    case E_Direction::Right :
+        movementDistance.x = distance;
+        break;
+    case E_Direction::Left :
+        movementDistance.x = -distance;
+        break;
+    default :
+        assert( false && "Unknown Direction" );
+        break;
+    }
+
+    return movementDistance;
 }

@@ -3,11 +3,8 @@
 #include <project/tools/geometry.hpp>
 #include <project/tools/global_variable.hpp>
 
-Tileset::Tileset( sf::Texture const & texture )
-  : // TYPO mettre une variable m_texture et set la texture dans le draw
-    m_image( texture )
+Tileset::Tileset( sf::Texture const & texture ) : m_image( texture ), m_cursor()
 {
-    this->setOrigin( 0.f, 0.f );
     this->setPosition( 0.f, 0.f );
 }
 
@@ -29,6 +26,11 @@ void Tileset::set_size( sf::Vector2f const & size ) noexcept
 void Tileset::set_size( float const & sizeX, float const & sizeY ) noexcept
 {
     this->set_size( sf::Vector2f { sizeX, sizeY } );
+}
+
+int Tileset::get_selected_tile() const noexcept
+{
+    return this->m_tileSelected;
 }
 
 void Tileset::switch_print()
@@ -62,7 +64,7 @@ sf::Vector2u Tileset::get_tile_position( sf::Vector2f const & position ) const
 }
 
 void Tileset::update( sf::Vector2f const & mousePosition,
-                      unsigned int & /* tile */, bool const & buttonIsPressed )
+                      bool const & buttonIsPressed )
 {
     if ( ! this->m_isPrint || ! this->include( mousePosition ) )
     {
@@ -87,9 +89,7 @@ void Tileset::draw( sf::RenderTarget & target, sf::RenderStates states ) const
 {
     states.transform *= this->getTransform();
 
-    // TYPO tester si c'est utile
-    // states.texture = &this->m_texture;
-
+    // We draw only if it's must be printed
     if ( this->m_isPrint )
     {
         target.draw( this->m_image, states );

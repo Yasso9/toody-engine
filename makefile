@@ -34,7 +34,6 @@ WARNINGS := -pedantic -Wpedantic -pedantic-errors \
 -Wundef \
 -Wno-unused \
 -Wconversion \
--Wfloat-equal \
 -Wformat-nonliteral \
 -Wundef \
 -Wformat=2 \
@@ -69,6 +68,9 @@ WARNINGS := -pedantic -Wpedantic -pedantic-errors \
 -Wstrict-null-sentinel \
 -Wformat-truncation
 
+# Warning that must not be used in clang \
+-Wfloat-equal # The equality between floats works, it's the addition that is wrong
+
 # .cpp and .hpp files
 FILES_DIRECTORY := ./sources/project
 # .o files
@@ -77,7 +79,7 @@ OBJECT_DIRECTORY := ./object
 BUILD_DIRECTORY := ./build
 
 # Name of the exe file
-EXECUTABLE := $(BUILD_DIRECTORY)/application
+EXECUTABLE := ./application
 
 
 
@@ -142,8 +144,13 @@ LIBRARIES_PATH := $(PROJECT_DIRECTORY_PATH)/libraries
 SFML_PATH := $(LIBRARIES_PATH)/SFML
 SQLITE_PATH :=  $(LIBRARIES_PATH)/Sqlite
 JSON_NLOHMANN_PATH :=  $(LIBRARIES_PATH)/cpp-json-nlohmann
-INCLUDES := -I"$(SFML_PATH)/include" -I"$(SQLITE_PATH)/sources" -I"$(JSON_NLOHMANN_PATH)/include" -I"$(PROJECT_DIRECTORY_PATH)/sources"
-LIBRARIES :=  "$(SQLITE_PATH)/object/sqlite3.o" -L"$(SFML_PATH)/lib" -lsfml-graphics -lsfml-system -lsfml-window
+
+INCLUDES := -I"$(SFML_PATH)/include" \
+			-I"$(SQLITE_PATH)/sources" \
+			-I"$(JSON_NLOHMANN_PATH)/include" \
+			-I"$(PROJECT_DIRECTORY_PATH)/sources"
+LIBRARIES :=  "$(SQLITE_PATH)/object/sqlite3.o" \
+			  -L"$(SFML_PATH)/lib" -lsfml-graphics -lsfml-system -lsfml-window
 
 
 
