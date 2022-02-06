@@ -79,7 +79,7 @@ OBJECT_DIRECTORY := ./object
 BUILD_DIRECTORY := ./build
 
 # Name of the exe file
-EXECUTABLE := ./application
+EXECUTABLE := $(BUILD_DIRECTORY)/application
 
 
 
@@ -87,15 +87,18 @@ EXECUTABLE := ./application
 ############################## knowing files and object location ##############################
 
 # Produce list in the form "./sources/project/sub_directory/filename.cpp"
-SOURCES_FILES := $(wildcard $(FILES_DIRECTORY)/*/*.cpp)
+SOURCES_FILES := $(wildcard $(FILES_DIRECTORY)/*.cpp)
+# Add also all the subfolders
+SOURCES_FILES := $(SOURCES_FILES) $(wildcard $(FILES_DIRECTORY)/*/*.cpp)
 # Erase files directory => "sub_directory/filename.cpp"
 SOURCES_FILES := $(subst $(FILES_DIRECTORY)/,,$(SOURCES_FILES))
 
 # Object files of the all cpp files of the project
-# sub_directory/filename.hpp => sub_directory/filename.o
+# sub_directory/filename.cpp => sub_directory/filename.o
 OBJECT_PROJECT := $(patsubst %.cpp,%.o,$(SOURCES_FILES))
 # => ./object/sub_directory/filename.o
-OBJECT_PROJECT := $(addprefix $(OBJECT_DIRECTORY)/, $(OBJECT_PROJECT))
+OBJECT_PROJECT := $(addprefix $(OBJECT_DIRECTORY)/,$(subst /,-,$(OBJECT_PROJECT)))
+
 
 # List of the library object that needs to be linked
 OBJECT_GLAD := $(OBJECT_DIRECTORY)/glad.o
@@ -103,9 +106,9 @@ OBJECT_SQLITE := $(OBJECT_DIRECTORY)/sqlite3.o
 # All object needed for the project to compile (the project files objects + the libraries objects)
 OBJECT_ALL := $(OBJECT_PROJECT) $(OBJECT_GLAD) $(OBJECT_SQLITE)
 
-# Dependencies (.d files) will be on the same directories than object files
-DEPENDENCIES := $(patsubst %.cpp,%.d,$(SOURCES_FILES))
-DEPENDENCIES := $(addprefix $(OBJECT_DIRECTORY)/, $(DEPENDENCIES))
+# Dependencies (.d files) will be on the same directories
+# and have the same name than object files
+DEPENDENCIES := $(patsubst %.o,%.d,$(OBJECT_PROJECT))
 
 
 SYSTEM_NAME := Unkown
@@ -120,18 +123,19 @@ endif
 
 ############################## project path ##############################
 
-PROJECT_DIRECTORY_PATH := $(CURDIR)
-LIBRARIES_PATH := $(PROJECT_DIRECTORY_PATH)/libraries
+PROJECT_ROOT_PATH := $(CURDIR)
+LIBRARIES_PATH := $(PROJECT_ROOT_PATH)/libraries
 SFML_PATH := $(LIBRARIES_PATH)/Sfml
 SQLITE_PATH :=  $(LIBRARIES_PATH)/Sqlite
-JSON_NLOHMANN_PATH :=  $(LIBRARIES_PATH)/Json
+JSON_NLOHMANN_PATH :=  $(LIBRARIES_PATH)/Json/include
 GLAD_PATH :=  $(LIBRARIES_PATH)/Glad# For OpenGL
+PROJECT_DIRECTORY_PATH := $(PROJECT_ROOT_PATH)/sources/project/
 
 INCLUDES := -I"$(SFML_PATH)/include" \
 			-I"$(SQLITE_PATH)" \
-			-I"$(JSON_NLOHMANN_PATH)/include" \
+			-I"$(JSON_NLOHMANN_PATH)" \
 			-I"$(GLAD_PATH)" \
-			-I"$(PROJECT_DIRECTORY_PATH)/sources"
+			-I"$(PROJECT_DIRECTORY_PATH)"
 LIBRARIES := -L"$(SFML_PATH)/lib" -lsfml-graphics -lsfml-system -lsfml-window
 
 
@@ -140,24 +144,25 @@ LIBRARIES := -L"$(SFML_PATH)/lib" -lsfml-graphics -lsfml-system -lsfml-window
 ############################## call action ##############################
 
 # These commands do not represent physical files
-.PHONY: all run libraries clean debug remake
+.PHONY: all run libraries create_object_directory clean_executable clean debug remake
 
+# info :
+# 	echo $(OBJECT_PROJECT)
 
-all : $(OBJECT_PROJECT) libraries $(EXECUTABLE)
+all : clean_executable create_object_directory $(OBJECT_ALL) $(EXECUTABLE)
 
 run :
 #	./build/application.exe
 	$(EXECUTABLE).exe
 
-# Linking libraries to project
-libraries:
-	gcc -c $(GLAD_PATH)/glad/glad.c -o $(OBJECT_GLAD) $(INCLUDES)
-	gcc -c $(SQLITE_PATH)/SQLITE/sqlite3.c -o $(OBJECT_SQLITE) $(INCLUDES)
+create_object_directory:
+	mkdir -p $(OBJECT_DIRECTORY)
 
-
-clean :
-	rm -rf $(OBJECT_DIRECTORY)
+clean_executable :
 	rm -rf $(EXECUTABLE)
+
+clean : clean_executable
+	rm -rf $(OBJECT_DIRECTORY)
 
 debug :
 	gdb -quiet $(EXECUTABLE)
@@ -173,16 +178,23 @@ remake: cleaner all
 -include $(DEPENDENCIES)
 
 # Creating all the object files needed
-$(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/%.cpp
-#	create the object directory if not exist
-	mkdir -p $(dir $@)
-#	compilator++ -WarningFlags -cpp_standard -c sources/project/sub_directory/filename.cpp -o object/sub_directory/filename.o -I"/Path/To/Includes"
+.SECONDEXPANSION:
+$(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%).cpp
+#	Print the current file that is compiled
+	$(info $<)
+#	compilator++ -WarningFlags -cpp_standard -compilerOptions -c sources/project/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no WinMain in the file
 #   -o => Create custom object
 	$(CXX_COMMAND) $(WARNINGS) $(CXX_FLAGS) -c $< -o $@ $(INCLUDES)
 
 # Create the executable by Linking all the object files and the SFML together
 $(EXECUTABLE) : $(OBJECT_ALL)
-#	compilator++ object/sub_directory_A/filename_A.o object/sub_directory_B/filename_B.o etc... -o executable -L"/Path/To/Library" -library_flags
+#	compilator++ sub_directory_A_filename_A.o sub_directory_B_filename_B.o etc... -o executable -L"/Path/To/Library" -library_flags
 #   -o => choose custom object
 	$(CXX_COMMAND) $^ -o $@ $(LIBRARIES)
+
+$(OBJECT_GLAD) :
+	gcc -c $(GLAD_PATH)/glad/glad.c -o $@ -I"$(GLAD_PATH)"
+
+$(OBJECT_SQLITE) :
+	gcc -c $(SQLITE_PATH)/SQLITE/sqlite3.c -o $@ -I"$(SQLITE_PATH)"

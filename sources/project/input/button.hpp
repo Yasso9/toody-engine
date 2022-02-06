@@ -1,35 +1,31 @@
 #pragma once
 
-#include <project/tools/sfml.hpp>
+#include "tools/sfml.hpp"
 
 class Button final : public sf::Drawable, public sf::Transformable
 {
   public:
     Button( sf::Font const & font, std::string const & string = "Button" );
+    virtual ~Button() = default;
 
-    Button( const Button & ) noexcept = default;
-    Button( Button && ) noexcept = default;
-    Button & operator=( const Button & ) = delete;
-    Button & operator=( Button && ) noexcept = delete;
-
-    virtual ~Button() noexcept = default;
-
-    sf::Vector2f get_size() const noexcept;
-    // void set_size( sf::Vector2f const & size ) noexcept;
-    // void set_size( float const & sizeX, float const & sizeY ) noexcept;
-    void set_size( unsigned int const & characterSize ) noexcept;
+    sf::Vector2f get_size() const;
+    // void set_size( sf::Vector2f const & size );
+    // void set_size( float const & sizeX, float const & sizeY );
+    void set_size( unsigned int const & characterSize );
 
     void set_string( std::string const & string );
 
     /**
      * @brief Update the button
+     * @param position Position of the mouse
+     * @param click true if there is a click from the mouse, false otherwise
      * @return true if there's a click in the button, false otherwise
      */
     bool update( sf::Vector2f const & position, bool const & click );
 
   private:
-    void set_selected( bool const & isSelected ) noexcept;
-    void set_pressed( bool const & isPressed ) noexcept;
+    void set_selected( bool const & isSelected );
+    void set_pressed( bool const & isPressed );
 
     // TYPO mettre ça autre part, dans un geometry.cpp peut être
     /**
@@ -37,9 +33,9 @@ class Button final : public sf::Drawable, public sf::Transformable
      * @param position Position to check
      * @return true of the position is inside the button, false otherwise
      */
-    bool is_inside( sf::Vector2f const & position ) const noexcept;
+    bool is_inside( sf::Vector2f const & position ) const;
 
-    void synchronize_string() noexcept;
+    void synchronize_string();
 
     // TYPO Changer tout les draw pour qu'ils ressemblent à ça
     void draw( sf::RenderTarget & target,

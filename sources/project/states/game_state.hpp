@@ -1,16 +1,17 @@
 #pragma once
 
-#include <project/entity/player.hpp>
-#include <project/states/state.hpp>
-#include <project/tilemap/tilemap.hpp>
+#include "entity/player.hpp"
+#include "states/state.hpp"
+#include "tilemap/tilemap.hpp"
 
 class GameState final : public State
 {
   public:
-    GameState( Ressources const & ressources, Settings const & settings );
+    GameState( std::shared_ptr<sf::RenderWindow> window,
+               Ressources const & ressources, Settings const & settings );
 
     void update() override;
-    void render( sf::RenderWindow & target ) override;
+    void render() override;
 
   private:
     TileMap m_tilemap;

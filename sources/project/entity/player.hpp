@@ -1,8 +1,8 @@
 #pragma once
 
-#include <project/entity/entity.hpp>
-// #include <project/ressources-handling/texture_sprite.hpp>
-#include <project/tools/geometry.hpp>
+#include "entity/entity.hpp"
+// #include "ressources_handling/texture_sprite.hpp"
+#include "tools/geometry.hpp"
 
 class Player final : public Entity
 {

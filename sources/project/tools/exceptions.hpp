@@ -1,15 +1,16 @@
 #pragma once
 
 #include <exception>
-#include <string>
+#include "tools/string.hpp"
 
 class DatabaseException final : public std::exception
 {
   public:
     DatabaseException( std::string const & databasePath,
-                       std::string const & errorMessage = "" );
+                       std::string const & errorMessage = ""s );
+    virtual ~DatabaseException() = default;
 
-    virtual const char * what() const noexcept;
+    virtual const char * what() const noexcept override;
 
   private:
     std::string const m_databasePath;
@@ -20,8 +21,9 @@ class FileNotFoundException final : public std::exception
 {
   public:
     FileNotFoundException( std::string const & fileName );
+    virtual ~FileNotFoundException() = default;
 
-    virtual const char * what() const noexcept;
+    virtual const char * what() const noexcept override;
 
   private:
     std::string const m_fileName;

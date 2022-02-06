@@ -1,10 +1,11 @@
 #include "game_state.hpp"
 
-// TYPO changer les arguments en une structure comprenant TexturesMap et FontsMap
-GameState::GameState( Ressources const & ressources, Settings const & settings )
-  : State( ressources, settings, StateName::Game ),
-    m_tilemap( ressources.textures.at( TextureKey::Tileset ) ),
-    m_player( ressources.textures.at( TextureKey::Player ) )
+// TYPO changer les arguments en une structure comprenant T_TexturesMap et T_FontsMap
+GameState::GameState( std::shared_ptr<sf::RenderWindow> window,
+                      Ressources const & ressources, Settings const & settings )
+  : State( window, ressources, settings, State::E_List::Game ),
+    m_tilemap( ressources.textures.at( E_TextureKey::Tileset ) ),
+    m_player( ressources.textures.at( E_TextureKey::Player ) )
 {
     this->init_map();
 }
@@ -26,7 +27,7 @@ void GameState::handle_keyboard_press( std::string const & input )
 {
     if ( input == "MainMenu" )
     {
-        this->m_stateName = StateName::MainMenu;
+        this->m_stateName = State::E_List::MainMenu;
     }
 }
 
@@ -79,11 +80,11 @@ void GameState::update()
     this->update_map();
 }
 
-void GameState::render( sf::RenderWindow & target )
+void GameState::render()
 {
-    target.setView( this->m_view );
+    m_window->setView( this->m_view );
 
-    target.draw( this->m_tilemap );
+    m_window->draw( this->m_tilemap );
 
-    target.draw( this->m_player );
+    m_window->draw( this->m_player );
 }

@@ -1,14 +1,14 @@
 #include "tileset.hpp"
 
-#include <project/tools/geometry.hpp>
-#include <project/tools/global_variable.hpp>
+#include "tools/geometry.hpp"
+#include "tools/global_variable.hpp"
 
 Tileset::Tileset( sf::Texture const & texture ) : m_image( texture ), m_cursor()
 {
     this->setPosition( 0.f, 0.f );
 }
 
-sf::Vector2f Tileset::get_size() const noexcept
+sf::Vector2f Tileset::get_size() const
 {
     sf::Vector2f const textureSize {
         static_cast<float>( this->m_image.getTextureRect().width ),
@@ -18,17 +18,17 @@ sf::Vector2f Tileset::get_size() const noexcept
     return textureSize * this->getScale();
 }
 
-void Tileset::set_size( sf::Vector2f const & size ) noexcept
+void Tileset::set_size( sf::Vector2f const & size )
 {
     this->setScale( size / this->get_size() );
 }
 
-void Tileset::set_size( float const & sizeX, float const & sizeY ) noexcept
+void Tileset::set_size( float const & sizeX, float const & sizeY )
 {
     this->set_size( sf::Vector2f { sizeX, sizeY } );
 }
 
-int Tileset::get_selected_tile() const noexcept
+int Tileset::get_selected_tile() const
 {
     return this->m_tileSelected;
 }

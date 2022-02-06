@@ -1,6 +1,6 @@
 #pragma once
 
-#include <project/tools/sfml.hpp>
+#include "tools/sfml.hpp"
 
 class Entity : public sf::Drawable, public sf::Transformable
 {

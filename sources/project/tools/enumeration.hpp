@@ -1,14 +1,14 @@
 #pragma once
 
-// Use when needed to do operation on enum
+#include <ostream>
+
+/// @brief When needed to do operation on enum
 template <typename Type>
 class Enum
 {
   public:
     Enum( Type const & enumValue );
-
-    Enum( Enum const & ) = default;
-    Enum & operator=( Enum const & ) = default;
+    virtual ~Enum() = default;
 
     // Increment and decrement operator
     Enum & operator++();
@@ -16,40 +16,20 @@ class Enum
     Enum & operator--();
     Enum operator--( int );
 
-    bool operator<( Type const & enumValue ) noexcept;
-    bool operator>( Type const & enumValue ) noexcept;
+    bool operator<( Type const & enumValue );
+    bool operator>( Type const & enumValue );
 
-    static Type get_min() noexcept;
-    static Type get_max() noexcept;
+    static Type get_min();
+    static Type get_max();
 
-    Type get_value() const noexcept;
-
-    virtual ~Enum() {};
+    Type get_value() const;
 
   protected:
     Type m_currentValue;
 };
 
-/// @brief All States that the game can have
-enum class StateName
-{
-    MainMenu = 0,
-    Game,
-    Editor,
-    Quit,
-    EnumLast,
-};
+template <typename EnumType>
+std::ostream & operator<<( std::ostream & output,
+                           Enum<EnumType> const & enumValue );
 
-enum class TextureKey
-{
-    Tileset = 0,
-    Player,
-    HomeWallpaper,
-    EnumLast,
-};
-
-enum class FontKey
-{
-    Arial = 0,
-    EnumLast,
-};
+#include "tools/enumeration.tpp"

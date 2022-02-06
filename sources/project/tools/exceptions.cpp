@@ -1,12 +1,10 @@
 #include "exceptions.hpp"
 
-#include <project/tools/string.hpp>
-
-DatabaseException::DatabaseException( std::string const & databasePath,
-                                      std::string const & errorMessage )
+DatabaseException::DatabaseException(
+    std::string const & databasePath,
+    std::string const & errorMessage /* = ""s */ )
   : m_databasePath( databasePath ), m_errorMessage( errorMessage )
-{
-}
+{}
 
 const char * DatabaseException::what() const noexcept
 {
@@ -20,8 +18,7 @@ const char * DatabaseException::what() const noexcept
 
 FileNotFoundException::FileNotFoundException( std::string const & fileName )
   : m_fileName( fileName )
-{
-}
+{}
 
 const char * FileNotFoundException::what() const noexcept
 {

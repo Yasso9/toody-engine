@@ -1,11 +1,11 @@
 #include "tilemap.hpp"
 
-#include <project/tilemap/tile_utility.hpp>
-#include <project/tools/databases.hpp>
-#include <project/tools/geometry.hpp>
-#include <project/tools/global_variable.hpp>
-#include <project/tools/json.hpp>
-#include <project/tools/string.hpp>
+#include "tilemap/tile_utility.hpp"
+#include "tools/databases.hpp"
+#include "tools/geometry.hpp"
+#include "tools/global_variable.hpp"
+#include "tools/json.hpp"
+#include "tools/string.hpp"
 
 TileMap::TileMap( sf::Texture const & texture ) : m_texture( texture )
 {

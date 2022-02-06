@@ -4,15 +4,27 @@
 #include <string>
 #include <utility>
 
-#include <project/tools/sfml.hpp>
+#include "tools/sfml.hpp"
 
-using KeyboardInputMap =
+using T_KeyboardInputMap =
     std::map<std::string const, std::pair<sf::Keyboard::Key const, bool>>;
 
-using MouseInputMap =
+using T_MouseInputMap =
     std::map<std::string const, std::pair<sf::Mouse::Button const, bool>>;
 
-#include <project/tools/enumeration.hpp>
+enum class E_TextureKey
+{
+    Tileset = 0,
+    Player,
+    HomeWallpaper,
+    EnumLast,
+};
 
-using TexturesMap = std::map<TextureKey, sf::Texture>;
-using FontsMap = std::map<FontKey, sf::Font>;
+enum class E_FontKey
+{
+    Arial = 0,
+    EnumLast,
+};
+
+using T_TexturesMap = std::map<E_TextureKey, sf::Texture>;
+using T_FontsMap = std::map<E_FontKey, sf::Font>;

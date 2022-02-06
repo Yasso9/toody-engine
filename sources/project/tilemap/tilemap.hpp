@@ -1,6 +1,6 @@
 #pragma once
 
-#include <project/output-info/information.hpp>
+#include "output_info/information.hpp"
 
 enum class E_MapDepth
 {
@@ -60,7 +60,7 @@ class EditorMap final : public TileMap
     /// @brief the depth that the user in the editor is actually working
     unsigned int m_depth { 0u };
 
-    void get_depth( unsigned int const & depth ) const noexcept;
+    void get_depth( unsigned int const & depth ) const;
 
     void change_tile( sf::Vector2u const tilePosition,
                       unsigned int const tile );

@@ -1,30 +1,26 @@
 #pragma once
 
-#include <project/input/button.hpp>
+#include "input/button.hpp"
 
 class ButtonArray final : public sf::Drawable, public sf::Transformable
 {
   public:
-    enum class Direction
+    enum class E_Direction
     {
         Horizontal = 0,
         Vertical
     };
 
-    ButtonArray( sf::Font const & font,
-                 std::vector<std::string> const & buttonsString = {
-                     "Button" } );
+    ButtonArray( sf::Font const & font = sf::Font {} );
+    virtual ~ButtonArray() = default;
 
-    ButtonArray( const ButtonArray & ) noexcept = delete;
-    ButtonArray( ButtonArray && ) noexcept = delete;
-    ButtonArray & operator=( const ButtonArray & ) = delete;
-    ButtonArray & operator=( ButtonArray && ) noexcept = delete;
+    sf::Vector2f get_size() const;
 
-    virtual ~ButtonArray() noexcept = default;
-
-    sf::Vector2f get_size() const noexcept;
-    void set_size( sf::Vector2f const & size ) noexcept;
-    void set_size( float const & sizeX, float const & sizeY ) noexcept;
+    void set_size( sf::Vector2f const & size );
+    void set_size( float const & sizeX, float const & sizeY );
+    void set_font( sf::Font const & font );
+    void set_strings( std::vector<std::string> const & buttonStrings );
+    void set_direction( ButtonArray::E_Direction const & buttonsDirection );
 
     int update( sf::Vector2f const & position, bool const & click );
 
@@ -32,7 +28,9 @@ class ButtonArray final : public sf::Drawable, public sf::Transformable
     void draw( sf::RenderTarget & target,
                sf::RenderStates states ) const override;
 
-    std::vector<Button> m_buttons {};
-    sf::Font const m_font;
-    Direction m_direction;
+    std::vector<Button> m_buttons;
+    std::vector<std::string> m_strings;
+    sf::Font m_font;
+    ButtonArray::E_Direction m_direction;
+    unsigned int m_characterSize;
 };

@@ -1,17 +1,19 @@
 #pragma once
 
-#include <project/output-info/information.hpp>
-#include <project/states/state.hpp>
-#include <project/tilemap/tilemap.hpp>
-#include <project/tilemap/tileset.hpp>
+#include "states/state.hpp"
+
+#include "output_info/information.hpp"
+#include "tilemap/tilemap.hpp"
+#include "tilemap/tileset.hpp"
 
 class EditorState final : public State
 {
   public:
-    EditorState( Ressources const & ressources, Settings const & settings );
+    EditorState( std::shared_ptr<sf::RenderWindow> window,
+                 Ressources const & ressources, Settings const & settings );
 
     void update() override;
-    void render( sf::RenderWindow & target ) override;
+    void render() override;
 
   private:
     enum Type

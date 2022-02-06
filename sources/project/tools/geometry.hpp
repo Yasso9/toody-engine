@@ -1,6 +1,6 @@
 #pragma once
 
-#include <project/tools/sfml.hpp>
+#include "tools/sfml.hpp"
 
 namespace tools
 {

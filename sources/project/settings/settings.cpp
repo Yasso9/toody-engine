@@ -2,12 +2,15 @@
 
 #include <fstream>
 
-#include <project/tools/exceptions.hpp>
-#include <project/tools/string.hpp>
+#include "tools/exceptions.hpp"
+#include "tools/resources.hpp"
+#include "tools/string.hpp"
 
 Settings::Settings()
 {
-    std::string const configLocation { "./ressources/window.txt"s };
+    // TYPO mettre le windows.txt dans un autre endroit que resources
+    std::string const configLocation { too::get_resources_path()
+                                       + "/window.txt"s };
 
     std::ifstream file { configLocation, std::ios::in };
     if ( ! file )
@@ -22,20 +25,20 @@ Settings::Settings()
     this->m_refreshRate = 1. / framerate;
 }
 
-sf::Vector2u Settings::get_window_size_u() const noexcept
+sf::Vector2u Settings::get_window_size_u() const
 {
     return this->m_windowSize;
 }
-sf::Vector2f Settings::get_window_size_f() const noexcept
+sf::Vector2f Settings::get_window_size_f() const
 {
     return static_cast<sf::Vector2f>( this->get_window_size_u() );
 }
 
-double Settings::get_refresh_rate() const noexcept
+double Settings::get_refresh_rate() const
 {
     return this->m_refreshRate;
 }
-bool Settings::get_vertical_sync() const noexcept
+bool Settings::get_vertical_sync() const
 {
     return this->m_verticalSync;
 }

@@ -1,59 +1,69 @@
 #pragma once
 
-#include <project/input/button_array.hpp>
-#include <project/input/input_initialization.hpp>
-#include <project/input/mouse_position.hpp>
-#include <project/settings/settings.hpp>
+#include <memory>
+
+#include "input/button_array.hpp"
+#include "input/mouse_position.hpp"
+#include "settings/settings.hpp"
+#include "tools/types.hpp"
 
 struct Ressources
 {
-    Ressources( TexturesMap const & v_textures, FontsMap const & v_fonts )
+    Ressources( T_TexturesMap const & v_textures, T_FontsMap const & v_fonts )
       : textures( v_textures ), fonts( v_fonts )
-    {
-    }
+    {}
 
-    TexturesMap const textures;
-    FontsMap const fonts;
+    T_TexturesMap const textures;
+    T_FontsMap const fonts;
 };
 
 class State
 {
   public:
+    // We use a protected constructor instead
     State() = delete;
-    State( const State & ) noexcept = delete;
-    State( State && ) noexcept = delete;
-    State & operator=( const State & ) = delete;
-    State & operator=( State && ) noexcept = delete;
+
+    /// @brief List of all States that the game can have (equal to the number of child to this class)
+    enum class E_List
+    {
+        MainMenu = 0,
+        Game,
+        Editor,
+        Graphics,
+        Quit,
+        EnumLast,
+    };
 
     /** @brief Know the next state to render after the input update.
-     * @returns StateName value of the next state to print */
-    StateName get_state_to_print() const;
+     * @returns State::E_List value of the next state to print */
+    State::E_List get_state_to_print() const;
 
     /// @brief Update all change that can happen by an event.
     void update_input( sf::Event const & event );
 
     /// @brief Update any change in the state.
     virtual void update() = 0;
-    virtual void render( sf::RenderWindow & target ) = 0;
+    virtual void render() = 0;
 
-    virtual ~State() noexcept = default;
+    virtual ~State() = default;
 
   protected:
-    State( Ressources const & ressources, Settings const & settings,
-           StateName const & stateName );
+    State( std::shared_ptr<sf::RenderWindow> window,
+           Ressources const & ressources, Settings const & settings,
+           State::E_List const & stateName );
+
+    std::shared_ptr<sf::RenderWindow> m_window;
 
     Ressources const m_ressources;
     Settings const m_settings;
 
-    std::map<std::string const, std::pair<sf::Keyboard::Key const, bool>>
-        m_keyboard {};
-    std::map<std::string const, std::pair<sf::Mouse::Button const, bool>>
-        m_mouseButton {};
+    T_KeyboardInputMap m_keyboard {};
+    T_MouseInputMap m_mouseButton {};
 
     MousePosition m_mousePosition {};
 
     /** @brief value corresponding of the state that the game should run */
-    StateName m_stateName {};
+    State::E_List m_stateName {};
 
     /** @brief Update keyboard and program exit */
     void update_overall_input( sf::Event const & event );

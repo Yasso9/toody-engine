@@ -1,21 +1,24 @@
 #include "editor_state.hpp"
 
-#include <project/tools/string.hpp>
+#include "tools/string.hpp"
 
 #include <cassert>
 
-EditorState::EditorState( Ressources const & ressources,
+EditorState::EditorState( std::shared_ptr<sf::RenderWindow> window,
+                          Ressources const & ressources,
                           Settings const & settings )
-  : State( ressources, settings, StateName::Editor ),
-    m_tilemap( this->m_ressources.textures.at( TextureKey::Tileset ) ),
-    m_tileset( this->m_ressources.textures.at( TextureKey::Tileset ) ),
-    m_buttons( this->m_ressources.fonts.at( FontKey::Arial ),
-               { "Normal"s, "Selection"s } )
+  : State( window, ressources, settings, State::E_List::Editor ),
+    m_tilemap( this->m_ressources.textures.at( E_TextureKey::Tileset ) ),
+    m_tileset( this->m_ressources.textures.at( E_TextureKey::Tileset ) ),
+    m_buttons( this->m_ressources.fonts.at( E_FontKey::Arial ) )
 {
     this->m_type = Type::Normal;
 
     this->init_map();
     this->init_selection_rect();
+
+    this->m_buttons.set_strings( { "Normal"s, "Selection"s } );
+    this->m_buttons.setPosition( 0.f, 0.f );
 }
 
 void EditorState::init_map()
@@ -55,7 +58,7 @@ void EditorState::handle_keyboard_press( std::string const & input )
 {
     if ( input == "MainMenu"s )
     {
-        this->m_stateName = StateName::MainMenu;
+        this->m_stateName = State::E_List::MainMenu;
     }
     else if ( input == "Profondeur1"s )
     {
@@ -149,12 +152,12 @@ void EditorState::update()
     }
 }
 
-void EditorState::render( sf::RenderWindow & target )
+void EditorState::render()
 {
-    target.setView( this->m_view );
+    m_window->setView( this->m_view );
 
-    target.draw( this->m_tilemap );
-    target.draw( this->m_tileset );
+    m_window->draw( this->m_tilemap );
+    m_window->draw( this->m_tileset );
 
-    target.draw( this->m_buttons );
+    m_window->draw( this->m_buttons );
 }

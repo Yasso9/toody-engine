@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include <project/tools/global_variable.hpp>
+#include "tools/global_variable.hpp"
 
 sf::Vector2u to_tile_position( unsigned int const tileNumber,
                                unsigned int const numberOfTileInX )

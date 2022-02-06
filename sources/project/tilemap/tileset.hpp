@@ -1,24 +1,24 @@
 #pragma once
 
-#include <project/output-info/information.hpp>
+#include "output_info/information.hpp"
 
 class Tileset final : public sf::Drawable, public sf::Transformable
 {
   public:
     Tileset( sf::Texture const & texture );
 
-    Tileset( const Tileset & ) noexcept = delete;
-    Tileset( Tileset && ) noexcept = delete;
+    Tileset( const Tileset & ) = delete;
+    Tileset( Tileset && ) = delete;
     Tileset & operator=( const Tileset & ) = delete;
-    Tileset & operator=( Tileset && ) noexcept = delete;
+    Tileset & operator=( Tileset && ) = delete;
 
-    virtual ~Tileset() noexcept = default;
+    virtual ~Tileset() = default;
 
-    sf::Vector2f get_size() const noexcept;
-    void set_size( sf::Vector2f const & size ) noexcept;
-    void set_size( float const & sizeX, float const & sizeY ) noexcept;
+    sf::Vector2f get_size() const;
+    void set_size( sf::Vector2f const & size );
+    void set_size( float const & sizeX, float const & sizeY );
 
-    int get_selected_tile() const noexcept;
+    int get_selected_tile() const;
 
     /** @brief If the tilemap should be print, set it to false,
      * otherwise set it to true */

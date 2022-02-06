@@ -1,10 +1,10 @@
 #pragma once
 
-#include <project/tools/types.hpp>
+#include "states/state.hpp"
 
 namespace InputInitialization
 {
-    KeyboardInputMap keyboard( StateName const & stateName );
+    T_KeyboardInputMap keyboard( State::E_List const & stateName );
 
-    MouseInputMap mouse_button( StateName const & stateName );
+    T_MouseInputMap mouse_button( State::E_List const & stateName );
 } // namespace InputInitialization

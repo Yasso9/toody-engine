@@ -1,6 +1,6 @@
 #pragma once
 
-#include <project/tools/sfml.hpp>
+#include "tools/sfml.hpp"
 
 /* Prend en parametre la position d'un nombre donné en pixel et retourne sa position
  * en tile */

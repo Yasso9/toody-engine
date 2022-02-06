@@ -1,16 +1,19 @@
 #include "state.hpp"
 
-State::State( Ressources const & ressources, Settings const & settings,
-              StateName const & stateName )
-  : m_ressources( ressources ),
+#include "input/input_initialization.hpp"
+
+State::State( std::shared_ptr<sf::RenderWindow> window,
+              Ressources const & ressources, Settings const & settings,
+              State::E_List const & stateName )
+  : m_window( window ),
+    m_ressources( ressources ),
     m_settings( settings ),
     m_keyboard( InputInitialization::keyboard( stateName ) ),
     m_mouseButton( InputInitialization::mouse_button( stateName ) ),
     m_stateName( stateName )
-{
-}
+{}
 
-StateName State::get_state_to_print() const
+State::E_List State::get_state_to_print() const
 {
     return this->m_stateName;
 }
@@ -33,7 +36,7 @@ void State::update_overall_input( sf::Event const & event )
     switch ( event.type )
     {
     case sf::Event::Closed :
-        this->m_stateName = StateName::Quit;
+        this->m_stateName = State::E_List::Quit;
         break;
     case sf::Event::KeyPressed :
         this->update_keyboard_pressed( event );
