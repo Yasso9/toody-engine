@@ -3,8 +3,10 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+// sin
+#include <cmath>
 
-#include "graphics/openGL.hpp"
+#include "graphics/graphics.hpp"
 #include "tools/resources.hpp"
 
 // TYPO remplacer les std::cerr par des exceptions
@@ -100,10 +102,11 @@ GraphicState::GraphicState( std::shared_ptr<sf::RenderWindow> window,
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // for a square
     float vertices[] {
-        0.5f,  0.5f,  0.0f, // top right
-        0.5f,  -0.5f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.0f, // bottom left
-        -0.5f, 0.5f,  0.0f // top left
+        // Position         // Colors
+        0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, // top right
+        0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
+        -0.5f, 0.5f,  0.0f, 0.5f, 0.5f, 0.5f // top left
     };
     // A square is two triangle. We can only use triangle so we must set them up
     unsigned int indices[] {
@@ -132,7 +135,7 @@ GraphicState::GraphicState( std::shared_ptr<sf::RenderWindow> window,
                   indices,
                   GL_STATIC_DRAW );
 
-    // Configure the vertex attributes(s).
+    // Configure the vertex position attributes(s).
     glVertexAttribPointer( 0,
                            3,
                            GL_FLOAT,
@@ -141,6 +144,19 @@ GraphicState::GraphicState( std::shared_ptr<sf::RenderWindow> window,
                            static_cast<void *>( 0 ) );
     // Disabled by default
     glEnableVertexAttribArray( 0 );
+
+    // Configure the vertex color attributes(s).
+    glVertexAttribPointer( 1,
+                           3,
+                           GL_FLOAT,
+                           GL_FALSE,
+                           6 * sizeof( float ),
+                           reinterpret_cast<void *>( static_cast<uintptr_t>(
+                               3 * sizeof( float ) ) ) );
+    glEnableVertexAttribArray( 1 );
+
+    // Disabled by default
+    glEnableVertexAttribArray( 1 );
 
     // note that this is allowed, the call to glVertexAttribPointer
     // registered vertexBufferObject as the vertex attribute's
@@ -162,26 +178,28 @@ GraphicState::GraphicState( std::shared_ptr<sf::RenderWindow> window,
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
-void GraphicState::update() {}
+void GraphicState::update( float const & /* deltaTime */ ) {}
 
 void GraphicState::render()
 {
-    this->m_window->setActive( true );
-
     // draw background
     glClearColor( 0.2f, 0.3f, 0.3f, 1.0f );
     glClear( GL_COLOR_BUFFER_BIT );
 
     // draw our first triangle
     glUseProgram( this->m_shaderProgram );
+
+    // update the uniform color
+    int vertexColorLocation =
+        glGetUniformLocation( this->m_shaderProgram, "ourColor" );
+    glUniform4f( vertexColorLocation, 0.0f, 0.2f, 0.8f, 1.0f );
+
     // seeing as we only have a single VAO there's no need to bind it every time
     // but we'll do so to keep things a bit more organized
     glBindVertexArray( this->m_vertexArrayObject );
     //glDrawArrays(GL_TRIANGLES, 0, 6);
     glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
     // glBindVertexArray(0); // no need to unbind it every time
-
-    this->m_window->setActive( false );
 }
 
 GraphicState::~GraphicState()

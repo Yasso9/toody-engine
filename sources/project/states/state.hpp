@@ -42,7 +42,7 @@ class State
     void update_input( sf::Event const & event );
 
     /// @brief Update any change in the state.
-    virtual void update() = 0;
+    virtual void update( float const & deltaTime ) = 0;
     virtual void render() = 0;
 
     virtual ~State() = default;

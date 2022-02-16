@@ -6,11 +6,6 @@ class Entity : public sf::Drawable, public sf::Transformable
 {
   public:
     Entity( sf::Texture const & texture );
-
-    Entity( Entity && ) = delete;
-    Entity & operator=( Entity const & ) = delete;
-    Entity & operator=( Entity && ) = delete;
-
     virtual ~Entity() = default;
 
   protected:

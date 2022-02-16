@@ -28,7 +28,7 @@ namespace InputInitialization
             std::string const debugString {
                 "State::E_List unsupported for input initialization"s
             };
-            Assertion( false, debugString );
+            ASSERTION( false, debugString );
             break;
         }
 
@@ -48,7 +48,7 @@ namespace InputInitialization
         case State::E_List::Graphics :
             break;
         default :
-            Assertion( false,
+            ASSERTION( false,
                        "State::E_List unsupported for input initialization" );
             break;
         }

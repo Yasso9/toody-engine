@@ -86,9 +86,9 @@ EXECUTABLE := $(BUILD_DIRECTORY)/application
 
 ############################## knowing files and object location ##############################
 
-# Produce list in the form "./sources/project/sub_directory/filename.cpp"
+# Produce list in the form "./sources/project/filename.cpp"
 SOURCES_FILES := $(wildcard $(FILES_DIRECTORY)/*.cpp)
-# Add also all the subfolders
+# Add also all the subfolders "./sources/project/sub_directory/filename.cpp"
 SOURCES_FILES := $(SOURCES_FILES) $(wildcard $(FILES_DIRECTORY)/*/*.cpp)
 # Erase files directory => "sub_directory/filename.cpp"
 SOURCES_FILES := $(subst $(FILES_DIRECTORY)/,,$(SOURCES_FILES))
@@ -125,11 +125,17 @@ endif
 
 PROJECT_ROOT_PATH := $(CURDIR)
 LIBRARIES_PATH := $(PROJECT_ROOT_PATH)/libraries
-SFML_PATH := $(LIBRARIES_PATH)/Sfml
 SQLITE_PATH :=  $(LIBRARIES_PATH)/Sqlite
 JSON_NLOHMANN_PATH :=  $(LIBRARIES_PATH)/Json/include
 GLAD_PATH :=  $(LIBRARIES_PATH)/Glad# For OpenGL
 PROJECT_DIRECTORY_PATH := $(PROJECT_ROOT_PATH)/sources/project/
+ifeq ($(SYSTEM_NAME),Windows)
+	SFML_PATH := $(LIBRARIES_PATH)/Sfml_Windows
+else
+	ifeq ($(SYSTEM_NAME),Unix)
+		SFML_PATH := $(LIBRARIES_PATH)/Sfml_Linux
+	endif
+endif
 
 INCLUDES := -I"$(SFML_PATH)/include" \
 			-I"$(SQLITE_PATH)" \
@@ -147,7 +153,7 @@ LIBRARIES := -L"$(SFML_PATH)/lib" -lsfml-graphics -lsfml-system -lsfml-window
 .PHONY: all run libraries create_object_directory clean_executable clean debug remake
 
 # info :
-# 	echo $(OBJECT_PROJECT)
+# 	echo $(SYSTEM_NAME)
 
 all : clean_executable create_object_directory $(OBJECT_ALL) $(EXECUTABLE)
 

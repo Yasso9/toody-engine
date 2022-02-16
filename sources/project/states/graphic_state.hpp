@@ -9,7 +9,7 @@ class GraphicState final : public State
                   Ressources const & ressources, Settings const & settings );
     virtual ~GraphicState();
 
-    void update() override;
+    void update( float const & deltaTime ) override;
     void render() override;
 
   private:

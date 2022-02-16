@@ -32,7 +32,8 @@ class Game final
     void init_state();
 
     void update_events();
-    void update_state();
+    /// @brief Update all the things that can happen in the state
+    void update_state( float const & deltaTime );
 
     void render();
 

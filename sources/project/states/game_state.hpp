@@ -10,7 +10,7 @@ class GameState final : public State
     GameState( std::shared_ptr<sf::RenderWindow> window,
                Ressources const & ressources, Settings const & settings );
 
-    void update() override;
+    void update( float const & deltaTime ) override;
     void render() override;
 
   private:

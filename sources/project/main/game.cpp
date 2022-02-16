@@ -33,9 +33,9 @@ void Game::init_window()
     std::string const gameTitle { "Toody Engine (In Developpement)"s };
 
     // Request a 24-bits depth buffer when creating the window
-    sf::ContextSettings contextSettings;
+    sf::ContextSettings contextSettings {};
     contextSettings.depthBits = 24;
-    contextSettings.sRgbCapable = true;
+    // contextSettings.sRgbCapable = true;
 
     this->m_window->create(
         sfpp::to_video_mode( this->m_settings.get_window_size_u() ),
@@ -75,7 +75,7 @@ void Game::run()
         if ( deltaTime > this->m_settings.get_refresh_rate() )
         {
             this->update_events();
-            this->update_state();
+            this->update_state( deltaTime );
             this->render();
 
             deltaTime = 0.f; // reset the counter
@@ -94,9 +94,9 @@ void Game::update_events()
     }
 }
 
-void Game::update_state()
+void Game::update_state( float const & deltaTime )
 {
-    this->m_states->update();
+    this->m_states->update( deltaTime );
 
     // TYPO essayer de trouver une meilleure technique pour changer d'état
     if ( this->m_states->get_state_to_print() != this->m_lastState )
@@ -116,7 +116,7 @@ void Game::render()
 
 void Game::change_state( State::E_List const & newState )
 {
-    Assertion( this->m_lastState != newState,
+    ASSERTION( this->m_lastState != newState,
                "When there is a change of state, the state must be new"s );
 
     this->m_lastState = newState;
@@ -154,7 +154,7 @@ void Game::change_state( State::E_List const & newState )
         std::stringstream debugMessage {};
         debugMessage << "State::E_List "s << Enum<State::E_List> { newState }
                      << " unsupported"s;
-        Assertion( false, debugMessage.str() );
+        ASSERTION( false, debugMessage.str() );
         break;
     }
 }

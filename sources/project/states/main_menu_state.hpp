@@ -9,7 +9,7 @@ class MainMenuState final : public State
                    Ressources const & ressources, Settings const & settings );
     virtual ~MainMenuState() = default;
 
-    void update() override;
+    void update( float const & deltaTime ) override;
     void render() override;
 
   private:

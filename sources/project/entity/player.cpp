@@ -1,47 +1,83 @@
 #include "player.hpp"
 
-#include <cassert>
 #include <cmath>
 #include <exception>
 #include <stdexcept>
 
+#include "tools/assertion.hpp"
+
+// TYPO : mettre ça autre part
+static bool is_integer( float const & number );
+
 Player::Player( sf::Texture const & texture ) : Entity( texture )
 {
-    // Initial state of the player
+    // Initial states of the player
     this->m_direction = E_Direction::Down;
     this->m_state = Player::E_State::Normal;
 
-    this->m_spritePixelSize = 30.f;
+    // Each cells measure 30 pixels of width and height
+    this->m_spritePixelSize = sf::Vector2f { 30.f, 30.f };
 
+    this->m_deltaTime = 0.f;
+    this->m_timeElapsed = 0.f;
+
+    this->reset_last_sprite_index();
+    this->init_sprite_number_of_cells();
+    this->init_sprite_value();
+    // To initialisez the first texture rect
+    this->update_texture_rect();
+
+    this->m_lastState = { this->m_state, this->m_direction };
+}
+
+void Player::reset_last_sprite_index()
+{
+    this->m_lastSpriteIndex = 0;
+}
+
+void Player::init_sprite_value()
+{
+    // For each direction of states, we set the corresponding sprite value
+    this->m_spriteValue.insert( { Player::E_State::Normal,
+                                  { { E_Direction::Up, { 6u } },
+                                    { E_Direction::Down, { 0u } },
+                                    { E_Direction::Right, { 3u } },
+                                    { E_Direction::Left, { 9u } } } } );
+    this->m_spriteValue.insert(
+        { Player::E_State::Walking,
+          { { E_Direction::Up, { 6u, 7u, 6u, 8u } },
+            { E_Direction::Down, { 0u, 1u, 0u, 2u } },
+            { E_Direction::Right, { 3u, 4u, 3u, 5u } },
+            { E_Direction::Left, { 9u, 10u, 9u, 11u } } } } );
+    this->m_spriteValue.insert( { Player::E_State::Running,
+                                  { { E_Direction::Up, { 0u } },
+                                    { E_Direction::Right, { 0u } },
+                                    { E_Direction::Down, { 0u } },
+                                    { E_Direction::Left, { 0u } } } } );
+}
+
+void Player::init_sprite_number_of_cells()
+{
+    // Get the size of the loaded texture
     sf::Vector2u const textureSize { this->m_texture.getSize() };
 
-    float const numberOfRow { textureSize.x / this->m_spritePixelSize };
-    float const numberOfLine { textureSize.y / this->m_spritePixelSize };
-    if ( std::trunc( numberOfRow ) != numberOfRow
-         || std::trunc( numberOfLine ) != numberOfLine )
+    // Get the number of sprite that the texture have
+    float const numberOfRow { static_cast<float>( textureSize.x )
+                              / this->m_spritePixelSize.x };
+    float const numberOfLine { static_cast<float>( textureSize.y )
+                               / this->m_spritePixelSize.y };
+
+    if ( is_integer( numberOfRow ) && is_integer( numberOfLine ) )
     {
         throw std::runtime_error {
-            "Size of the texture rect not correctly set"
+            "Player texture rect not correctly set. The number of pixel per "
+            "sprite does not correspond to the size that the texture have"
         };
     }
 
-    this->m_stateNumber.insert( { Player::E_State::Normal,
-                                  { { E_Direction::Up, { 0u } },
-                                    { E_Direction::Down, { 0u } },
-                                    { E_Direction::Right, { 0u } },
-                                    { E_Direction::Left, { 0u } } } } );
-    this->m_stateNumber.insert( { Player::E_State::Walking,
-                                  { { E_Direction::Up, { 0u } },
-                                    { E_Direction::Down, { 0u } },
-                                    { E_Direction::Right, { 0u } },
-                                    { E_Direction::Left, { 0u } } } } );
-    this->m_stateNumber.insert( { Player::E_State::Running,
-                                  { { E_Direction::Up, { 0u } },
-                                    { E_Direction::Right, { 0u } },
-                                    { E_Direction::Down, { 0u } },
-                                    { E_Direction::Left, { 0u } } } } );
-
-    // float const maxSprite { numberOfRow * numberOfLine };
+    this->m_spriteNumberOfCells =
+        sf::Vector2u { static_cast<unsigned int>( numberOfRow ),
+                       static_cast<unsigned int>( numberOfLine ) };
 }
 
 void Player::set_direction( E_Direction const & direction )
@@ -54,12 +90,26 @@ void Player::set_state( Player::E_State const & playerState )
     this->m_state = playerState;
 }
 
-void Player::update()
+void Player::update( float const & deltaTime )
+{
+    this->update_delta_time( deltaTime );
+    this->update_movement();
+    this->update_texture_rect();
+
+    this->m_lastState = { this->m_state, this->m_direction };
+}
+
+void Player::update_delta_time( float const & deltaTime )
+{
+    this->m_deltaTime = deltaTime;
+}
+
+void Player::update_movement()
 {
     float speedVariation { 0.f };
     switch ( this->m_state )
     {
-    case Player::E_State::Normal :
+    case Player::E_State::Walking :
         speedVariation = 1.f;
         break;
     case Player::E_State::Running :
@@ -70,22 +120,22 @@ void Player::update()
         break;
     }
 
-    this->move( this->get_movement( this->m_direction ) * this->m_speed
-                * speedVariation );
-
-    // The origin must be set to the center of the sprite
-    // this->m_sprite.setOrigin();
-
-    // // We choose the proper texture rect of the texture that we had loaded
-    // this->m_sprite.setTextureRect();
+    this->move( this->get_movement() * this->m_speed * speedVariation
+                * this->m_deltaTime );
 }
 
-sf::Vector2f Player::get_movement( E_Direction const direction ) const
+void Player::update_texture_rect()
+{
+    // We choose the proper texture rect of the texture that we had loaded
+    this->m_sprite.setTextureRect( this->get_current_texture_rect() );
+}
+
+sf::Vector2f Player::get_movement() const
 {
     sf::Vector2f movementDistance { 0.f, 0.f };
     float const distance { 1.f };
 
-    switch ( direction )
+    switch ( this->m_direction )
     {
     case E_Direction::Up :
         movementDistance.y = -distance;
@@ -100,9 +150,80 @@ sf::Vector2f Player::get_movement( E_Direction const direction ) const
         movementDistance.x = -distance;
         break;
     default :
-        assert( false && "Unknown Direction" );
+        ASSERTION( false, "Unknown Direction"s );
         break;
     }
 
     return movementDistance;
+}
+
+unsigned int Player::get_current_sprite_number()
+{
+    std::vector<unsigned int> const spriteNumbers {
+        this->m_spriteValue.at( this->m_state ).at( this->m_direction )
+    };
+
+    float const timesPerFrame { 0.2f };
+    this->m_timeElapsed += this->m_deltaTime;
+
+    if ( this->m_lastState.state != this->m_state
+         || this->m_lastState.direction != this->m_direction )
+    {
+        this->reset_last_sprite_index();
+        this->m_timeElapsed = 0.f;
+    }
+    // To make an animation we must have a turnover of sprites
+    else if ( this->m_timeElapsed > timesPerFrame )
+    {
+        if ( this->m_lastSpriteIndex == spriteNumbers.size() - 1 )
+        {
+            this->reset_last_sprite_index();
+        }
+        else
+        {
+            ++this->m_lastSpriteIndex;
+        }
+
+        this->m_timeElapsed = 0.f;
+    }
+
+    ASSERTION( ! spriteNumbers.empty(),
+               "No information about what sprite to print"s );
+    ASSERTION( this->m_lastSpriteIndex < spriteNumbers.size(),
+               "Issues with sprites numbers"s );
+
+    return spriteNumbers[this->m_lastSpriteIndex];
+}
+
+sf::IntRect Player::get_current_texture_rect()
+{
+    int const currentSpriteNumber { static_cast<int>(
+        this->get_current_sprite_number() ) };
+
+    // Cast to make things easier to read
+    sf::Vector2i const spriteSize {
+        static_cast<int>( this->m_spritePixelSize.x ),
+        static_cast<int>( this->m_spritePixelSize.y ),
+    };
+
+    // Transform the sprite value into the sprite position
+    sf::Vector2i spritePosition {};
+    spritePosition.x = currentSpriteNumber % spriteSize.x;
+    spritePosition.y =
+        ( currentSpriteNumber - spritePosition.x ) / spriteSize.x;
+
+    sf::IntRect textureRect {};
+    // Transform the sprite position into the rectangle of the sprite in the texture
+    textureRect.left = spritePosition.x * spriteSize.x;
+    textureRect.top = spritePosition.y * spriteSize.y;
+    // Assign the size of a sprite cell
+    textureRect.width = spriteSize.x;
+    textureRect.height = spriteSize.y;
+
+    return textureRect;
+}
+
+static bool is_integer( float const & number )
+{
+    return std::trunc( number ) != number;
 }

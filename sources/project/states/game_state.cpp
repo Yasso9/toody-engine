@@ -33,20 +33,26 @@ void GameState::handle_keyboard_press( std::string const & input )
 
 void GameState::handle_current_input()
 {
+    this->m_player.set_state( Player::E_State::Normal );
+
     if ( this->m_keyboard.at( "MoveUp" ).second )
     {
+        this->m_player.set_state( Player::E_State::Walking );
         this->m_player.set_direction( E_Direction::Up );
     }
     if ( this->m_keyboard.at( "MoveDown" ).second )
     {
+        this->m_player.set_state( Player::E_State::Walking );
         this->m_player.set_direction( E_Direction::Down );
     }
     if ( this->m_keyboard.at( "MoveLeft" ).second )
     {
+        this->m_player.set_state( Player::E_State::Walking );
         this->m_player.set_direction( E_Direction::Left );
     }
     if ( this->m_keyboard.at( "MoveRight" ).second )
     {
+        this->m_player.set_state( Player::E_State::Walking );
         this->m_player.set_direction( E_Direction::Right );
     }
 
@@ -54,18 +60,6 @@ void GameState::handle_current_input()
     {
         this->m_player.set_state( Player::E_State::Running );
     }
-    else
-    {
-        this->m_player.set_state( Player::E_State::Walking );
-    }
-
-    // if ( ! this->m_keyboard.at( "MoveUp" ).second
-    //      && ! this->m_keyboard.at( "MoveDown" ).second
-    //      && ! this->m_keyboard.at( "MoveLeft" ).second
-    //      && ! this->m_keyboard.at( "MoveRight" ).second )
-    // {
-    //     this->m_player.stay();
-    // }
 }
 
 void GameState::update_map()
@@ -74,9 +68,9 @@ void GameState::update_map()
     this->m_view.setCenter( this->m_player.getPosition() );
 }
 
-void GameState::update()
+void GameState::update( float const & deltaTime )
 {
-    this->m_player.update();
+    this->m_player.update( deltaTime );
     this->update_map();
 }
 

@@ -5,7 +5,7 @@
 #include <iostream>
 
 #ifndef NDEBUG
-    #define Assertion( expression, message ) \
+    #define ASSERTION( expression, message ) \
         too::assertion( expression, \
                         __FILE__, \
                         __LINE__, \
@@ -13,7 +13,7 @@
                         #expression, \
                         message )
 #else
-    #define Assertion( expression, message ) ;
+// #define ASSERTION( expression, message ) ;
 #endif
 
 namespace too

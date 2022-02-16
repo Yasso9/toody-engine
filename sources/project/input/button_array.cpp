@@ -30,7 +30,7 @@ sf::Vector2f ButtonArray::get_size() const
         }
         else
         {
-            Assertion( false, "The direction must be vertical or horizontal" );
+            ASSERTION( false, "The direction must be vertical or horizontal"s );
         }
     }
 
@@ -82,7 +82,7 @@ void ButtonArray::set_strings( std::vector<std::string> const & buttonStrings )
         }
         else
         {
-            Assertion( false, "The direction must be vertical or horizontal"s );
+            ASSERTION( false, "The direction must be vertical or horizontal"s );
         }
     }
 }

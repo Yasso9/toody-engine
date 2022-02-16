@@ -1,7 +1,5 @@
 #include "main/game.hpp"
 
-#include "graphics/openGL.hpp"
-
 int main()
 {
     // TYPO mettre tous les databases dans la bonne place

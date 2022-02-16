@@ -12,7 +12,7 @@ class EditorState final : public State
     EditorState( std::shared_ptr<sf::RenderWindow> window,
                  Ressources const & ressources, Settings const & settings );
 
-    void update() override;
+    void update( float const & deltaTime ) override;
     void render() override;
 
   private:

@@ -68,7 +68,7 @@ static std::string get_texture_localisation( E_TextureKey const & textureKey )
         imagePath += "/sprites/tileset/ground.png"s;
         break;
     case E_TextureKey::Player :
-        imagePath += "/sprites/players/gold.png"s;
+        imagePath += "/gold_sprite.png"s;
         break;
     case E_TextureKey::HomeWallpaper :
         imagePath += "/home_wallpaper.jpg"s;
@@ -77,7 +77,7 @@ static std::string get_texture_localisation( E_TextureKey const & textureKey )
         /* TYPO the best thing here is the possibility
                 to use the c++20 std::format, but as of now
                 g++ 11.2.0 doesn't support it */
-        Assertion( false,
+        ASSERTION( false,
                    "A texture of the E_TextureKey class hasn't been loaded"s
                    "or the key doesn't exist in this enum"s );
         break;
@@ -96,7 +96,7 @@ static std::string get_font_localisation( E_FontKey const & fontKey )
         fontPath += "/arial.ttf"s;
         break;
     default :
-        Assertion( false,
+        ASSERTION( false,
                    "A texture of the E_TextureKey class hasn't been loaded"s
                    "or the key doesn't exist in this enum"s );
         break;

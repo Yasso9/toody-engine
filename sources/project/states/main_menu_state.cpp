@@ -38,7 +38,7 @@ void MainMenuState::init_buttons()
     this->m_buttons.setPosition( 0.f, 0.f );
 }
 
-void MainMenuState::update()
+void MainMenuState::update( float const & /* deltaTime */ )
 {
     int const buttonNumberPressed { this->m_buttons.update(
         // TYPO essayer d'enlever le static cast, ça fait moche
@@ -53,8 +53,8 @@ void MainMenuState::update()
 
 void MainMenuState::render()
 {
-    // TYPO à voir si ça sert à quelque chose ?
-    // target.setView( target.getDefaultView() );
+    // Reset the view (if an other state had changed it)
+    this->m_window->setView( this->m_window->getDefaultView() );
 
     this->m_window->draw( this->m_background );
 

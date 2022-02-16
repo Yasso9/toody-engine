@@ -133,7 +133,7 @@ void EditorState::update_selection_mode() {}
 
 void EditorState::update_colision_mode() {}
 
-void EditorState::update()
+void EditorState::update( float const & /* deltaTime */ )
 {
     switch ( this->m_type )
     {
