@@ -1,17 +1,19 @@
 #include "state.hpp"
 
-#include "input/input_initialization.hpp"
-
 State::State( std::shared_ptr<sf::RenderWindow> window,
               Ressources const & ressources, Settings const & settings,
               State::E_List const & stateName )
   : m_window( window ),
     m_ressources( ressources ),
     m_settings( settings ),
-    m_keyboard( InputInitialization::keyboard( stateName ) ),
-    m_mouseButton( InputInitialization::mouse_button( stateName ) ),
     m_stateName( stateName )
 {}
+
+void State::initialize()
+{
+    this->m_keyboard = this->init_keyboard_action();
+    this->m_mouseButton = this->init_mouse_action();
+}
 
 State::E_List State::get_state_to_print() const
 {
@@ -29,6 +31,16 @@ void State::update_input( sf::Event const & event )
     this->handle_current_input();
 
     this->update_extra_input( event );
+}
+
+T_KeyboardInputMap State::init_keyboard_action() const
+{
+    return {};
+}
+
+T_MouseInputMap State::init_mouse_action() const
+{
+    return {};
 }
 
 void State::update_overall_input( sf::Event const & event )

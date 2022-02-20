@@ -20,9 +20,6 @@ struct Ressources
 class State
 {
   public:
-    // We use a protected constructor instead
-    State() = delete;
-
     /// @brief List of all States that the game can have (equal to the number of child to this class)
     enum class E_List
     {
@@ -34,6 +31,12 @@ class State
         EnumLast,
     };
 
+    // We use a protected constructor instead
+    State() = delete;
+    virtual ~State() = default;
+
+    void initialize();
+
     /** @brief Know the next state to render after the input update.
      * @returns State::E_List value of the next state to print */
     State::E_List get_state_to_print() const;
@@ -44,8 +47,6 @@ class State
     /// @brief Update any change in the state.
     virtual void update( float const & deltaTime ) = 0;
     virtual void render() = 0;
-
-    virtual ~State() = default;
 
   protected:
     State( std::shared_ptr<sf::RenderWindow> window,
@@ -64,6 +65,9 @@ class State
 
     /** @brief value corresponding of the state that the game should run */
     State::E_List m_stateName {};
+
+    virtual T_KeyboardInputMap init_keyboard_action() const;
+    virtual T_MouseInputMap init_mouse_action() const;
 
     /** @brief Update keyboard and program exit */
     void update_overall_input( sf::Event const & event );

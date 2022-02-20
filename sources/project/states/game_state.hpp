@@ -19,6 +19,9 @@ class GameState final : public State
 
     sf::View m_view;
 
+    T_KeyboardInputMap init_keyboard_action() const override;
+    T_MouseInputMap init_mouse_action() const override;
+
     void init_map();
 
     void handle_keyboard_press( std::string const & inputName ) override;

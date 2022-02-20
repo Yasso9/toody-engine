@@ -17,6 +17,9 @@ class MainMenuState final : public State
     sf::Text m_text;
     ButtonArray m_buttons;
 
+    T_KeyboardInputMap init_keyboard_action() const override;
+    T_MouseInputMap init_mouse_action() const override;
+
     void init_background();
     void init_text();
     void init_buttons();

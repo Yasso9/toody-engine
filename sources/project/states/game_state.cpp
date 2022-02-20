@@ -10,6 +10,25 @@ GameState::GameState( std::shared_ptr<sf::RenderWindow> window,
     this->init_map();
 }
 
+T_KeyboardInputMap GameState::init_keyboard_action() const
+{
+    return {
+        { "MainMenu", { sf::Keyboard::Escape, false } },
+
+        { "MoveUp", { sf::Keyboard::Z, false } },
+        { "MoveDown", { sf::Keyboard::S, false } },
+        { "MoveLeft", { sf::Keyboard::Q, false } },
+        { "MoveRight", { sf::Keyboard::D, false } },
+
+        { "Run", { sf::Keyboard::Space, false } },
+    };
+}
+
+T_MouseInputMap GameState::init_mouse_action() const
+{
+    return {};
+}
+
 void GameState::init_map()
 {
     this->m_tilemap.setPosition(

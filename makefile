@@ -127,7 +127,8 @@ PROJECT_ROOT_PATH := $(CURDIR)
 LIBRARIES_PATH := $(PROJECT_ROOT_PATH)/libraries
 SQLITE_PATH :=  $(LIBRARIES_PATH)/Sqlite
 JSON_NLOHMANN_PATH :=  $(LIBRARIES_PATH)/Json/include
-GLAD_PATH :=  $(LIBRARIES_PATH)/Glad# For OpenGL
+GLAD_PATH :=  $(LIBRARIES_PATH)/Glad
+GLM_PATH :=  $(LIBRARIES_PATH)/GLM
 PROJECT_DIRECTORY_PATH := $(PROJECT_ROOT_PATH)/sources/project/
 ifeq ($(SYSTEM_NAME),Windows)
 	SFML_PATH := $(LIBRARIES_PATH)/Sfml_Windows
@@ -141,6 +142,7 @@ INCLUDES := -I"$(SFML_PATH)/include" \
 			-I"$(SQLITE_PATH)" \
 			-I"$(JSON_NLOHMANN_PATH)" \
 			-I"$(GLAD_PATH)" \
+			-I"$(GLM_PATH)" \
 			-I"$(PROJECT_DIRECTORY_PATH)"
 LIBRARIES := -L"$(SFML_PATH)/lib" -lsfml-graphics -lsfml-system -lsfml-window
 
@@ -150,12 +152,11 @@ LIBRARIES := -L"$(SFML_PATH)/lib" -lsfml-graphics -lsfml-system -lsfml-window
 ############################## call action ##############################
 
 # These commands do not represent physical files
-.PHONY: all run libraries create_object_directory clean_executable clean debug remake
+.PHONY: buildrun build run libraries create_object_directory clean_executable clean debug remake
 
-# info :
-# 	echo $(SYSTEM_NAME)
+buildrun : build run
 
-all : clean_executable create_object_directory $(OBJECT_ALL) $(EXECUTABLE)
+build : clean_executable create_object_directory $(OBJECT_ALL) $(EXECUTABLE)
 
 run :
 #	./build/application.exe

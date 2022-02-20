@@ -42,4 +42,9 @@ class Game final
      * @param newState the new state to be printed
      */
     void change_state( State::E_List const & newState );
+
+    template <typename StateClass>
+    void set_new_state();
 };
+
+#include "game.tpp"

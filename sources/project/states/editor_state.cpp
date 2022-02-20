@@ -21,6 +21,39 @@ EditorState::EditorState( std::shared_ptr<sf::RenderWindow> window,
     this->m_buttons.setPosition( 0.f, 0.f );
 }
 
+T_KeyboardInputMap EditorState::init_keyboard_action() const
+{
+    return {
+        { "MainMenu", std::make_pair( sf::Keyboard::Escape, false ) },
+        { "PrintOrRemoveSpriteSheet",
+          std::make_pair( sf::Keyboard::Space, false ) },
+        { "Save", std::make_pair( sf::Keyboard::Enter, false ) },
+
+        { "Center", std::make_pair( sf::Keyboard::C, false ) },
+        { "Resize", std::make_pair( sf::Keyboard::P, false ) },
+
+        { "TilemapUp", std::make_pair( sf::Keyboard::Z, false ) },
+        { "TilemapDown", std::make_pair( sf::Keyboard::S, false ) },
+        { "TilemapLeft", std::make_pair( sf::Keyboard::Q, false ) },
+        { "TilemapRight", std::make_pair( sf::Keyboard::D, false ) },
+
+        { "SpriteSheetUp", std::make_pair( sf::Keyboard::Up, false ) },
+        { "SpriteSheetDown", std::make_pair( sf::Keyboard::Down, false ) },
+        { "SpriteSheetLeft", std::make_pair( sf::Keyboard::Left, false ) },
+        { "SpriteSheetRight", std::make_pair( sf::Keyboard::Right, false ) },
+
+        { "Profondeur1", std::make_pair( sf::Keyboard::Num1, false ) },
+        { "Profondeur2", std::make_pair( sf::Keyboard::Num2, false ) },
+    };
+}
+
+T_MouseInputMap EditorState::init_mouse_action() const
+{
+    return {
+        { "Action", { sf::Mouse::Left, false } },
+    };
+}
+
 void EditorState::init_map()
 {
     this->m_tilemap.setPosition(

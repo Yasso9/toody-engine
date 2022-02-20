@@ -35,6 +35,9 @@ class EditorState final : public State
     // sf::RectangleShape m_selectionRect {};
     // std::vector<int> m_tableSelection {};
 
+    T_KeyboardInputMap init_keyboard_action() const override;
+    T_MouseInputMap init_mouse_action() const override;
+
     void init_map();
     void init_selection_rect();
 

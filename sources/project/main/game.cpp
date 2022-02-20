@@ -50,9 +50,8 @@ void Game::init_window()
 void Game::init_state()
 {
     // Game start with main menu
-    this->m_states = std::make_shared<MainMenuState>( this->m_window,
-                                                      this->m_ressources,
-                                                      this->m_settings );
+    // this->set_new_state<MainMenuState>();
+    this->set_new_state<GraphicState>();
 
     // The current state to print is the main menu (we've just set it)
     // We get this state because m_lastState should always know what is
@@ -124,26 +123,16 @@ void Game::change_state( State::E_List const & newState )
     switch ( newState )
     {
     case State::E_List::MainMenu :
-        this->m_states = std::make_shared<MainMenuState>( this->m_window,
-                                                          this->m_ressources,
-                                                          this->m_settings );
+        this->set_new_state<MainMenuState>();
         break;
-
     case State::E_List::Game :
-        this->m_states = std::make_shared<GameState>( this->m_window,
-                                                      this->m_ressources,
-                                                      this->m_settings );
+        this->set_new_state<GameState>();
         break;
-
     case State::E_List::Editor :
-        this->m_states = std::make_shared<EditorState>( this->m_window,
-                                                        this->m_ressources,
-                                                        this->m_settings );
+        this->set_new_state<EditorState>();
         break;
     case State::E_List::Graphics :
-        this->m_states = std::make_shared<GraphicState>( this->m_window,
-                                                         this->m_ressources,
-                                                         this->m_settings );
+        this->set_new_state<GraphicState>();
         break;
 
     case State::E_List::Quit :

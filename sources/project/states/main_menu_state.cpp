@@ -12,6 +12,47 @@ MainMenuState::MainMenuState( std::shared_ptr<sf::RenderWindow> window,
     this->init_buttons();
 }
 
+void MainMenuState::update( float const & /* deltaTime */ )
+{
+    int const buttonNumberPressed { this->m_buttons.update(
+        // TYPO essayer d'enlever le static cast, ça fait moche
+        static_cast<sf::Vector2f>( sf::Mouse::getPosition( *this->m_window ) ),
+        this->m_mouseButton.at( "AcceptClick"s ).second ) };
+
+    if ( buttonNumberPressed != -1 )
+    {
+        this->m_stateName = static_cast<State::E_List>( buttonNumberPressed );
+    }
+}
+
+void MainMenuState::render()
+{
+    // Reset the view (if an other state had changed it)
+    this->m_window->setView( this->m_window->getDefaultView() );
+
+    this->m_window->draw( this->m_background );
+
+    this->m_window->draw( this->m_text );
+
+    this->m_window->draw( this->m_buttons );
+}
+
+T_KeyboardInputMap MainMenuState::init_keyboard_action() const
+{
+    return {
+        { "Previous", { sf::Keyboard::A, false } },
+        { "Next", { sf::Keyboard::Z, false } },
+        { "AcceptPress", { sf::Keyboard::Space, false } },
+    };
+}
+
+T_MouseInputMap MainMenuState::init_mouse_action() const
+{
+    return {
+        { "AcceptClick", { sf::Mouse::Left, false } },
+    };
+}
+
 void MainMenuState::init_background()
 {
     this->m_background.setFillColor( sf::Color( 225, 155, 155 ) );
@@ -36,29 +77,4 @@ void MainMenuState::init_buttons()
     this->m_buttons.set_strings(
         { "Main Menu"s, "Game"s, "Editor"s, "Graphics", "Exit"s } );
     this->m_buttons.setPosition( 0.f, 0.f );
-}
-
-void MainMenuState::update( float const & /* deltaTime */ )
-{
-    int const buttonNumberPressed { this->m_buttons.update(
-        // TYPO essayer d'enlever le static cast, ça fait moche
-        static_cast<sf::Vector2f>( sf::Mouse::getPosition( *this->m_window ) ),
-        this->m_mouseButton.at( "AcceptClick"s ).second ) };
-
-    if ( buttonNumberPressed != -1 )
-    {
-        this->m_stateName = static_cast<State::E_List>( buttonNumberPressed );
-    }
-}
-
-void MainMenuState::render()
-{
-    // Reset the view (if an other state had changed it)
-    this->m_window->setView( this->m_window->getDefaultView() );
-
-    this->m_window->draw( this->m_background );
-
-    this->m_window->draw( this->m_text );
-
-    this->m_window->draw( this->m_buttons );
 }
