@@ -8,9 +8,12 @@
 #include <glm/ext/scalar_constants.hpp> // glm::pi
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/rotate_vector.hpp> // vector rotation
 #include <glm/mat4x4.hpp> // glm::mat4
 #include <glm/vec3.hpp> // glm::vec3
 #include <glm/vec4.hpp> // glm::vec4
+
+#include <ostream>
 
 namespace gl
 {
@@ -26,3 +29,5 @@ namespace gl
     void set_wireframe();
     void remove_wireframe();
 } // namespace gl
+
+std::ostream & operator<<( std::ostream & stream, glm::vec3 const & vector3 );

@@ -15,35 +15,7 @@ GraphicState::GraphicState( std::shared_ptr<sf::RenderWindow> window,
 
 void GraphicState::update( float const & /* deltaTime */ )
 {
-    gl::SpaceMatrix spaceMatrix {};
-
-    float const screenRatio { static_cast<float>(
-        this->m_window.get()->getSize().x
-        / this->m_window.get()->getSize().y ) };
-    // pass projection matrix to shader (note that in this case it could change every frame)
-    spaceMatrix.projection =
-        glm::perspective( glm::radians( this->m_camera.get_zoom() ),
-                          screenRatio,
-                          0.1f,
-                          100.0f );
-
-    // camera/view transformation
-    spaceMatrix.view = this->m_camera.get_view_matrix();
-
-    spaceMatrix.model = glm::rotate( spaceMatrix.model,
-                                     glm::radians( 50.0f ),
-                                     glm::vec3( 0.5f, 1.0f, 0.0f ) );
-
-    // glm::mat4 view { 1.f };
-    // view = glm::translate( view, glm::vec3( 0.0f, 0.0f, -3.0f ) );
-
-    // float const screenRatio { static_cast<float>( windowSize.x
-    //                                               / windowSize.y ) };
-    // glm::mat4 projection { 1.f };
-    // projection =
-    //     glm::perspective( glm::radians( 45.0f ), screenRatio, 0.1f, 100.0f );
-
-    this->m_shape.update( spaceMatrix );
+    this->update_camera();
 }
 
 void GraphicState::render()
@@ -60,6 +32,14 @@ T_KeyboardInputMap GraphicState::init_keyboard_action() const
         { "Backward", { sf::Keyboard::S, false } },
         { "Left", { sf::Keyboard::Q, false } },
         { "Right", { sf::Keyboard::D, false } },
+
+        { "AngleUp", { sf::Keyboard::Up, false } },
+        { "AngleDown", { sf::Keyboard::Down, false } },
+        { "AngleLeft", { sf::Keyboard::Left, false } },
+        { "AngleRight", { sf::Keyboard::Right, false } },
+
+        { "ZoomIn", { sf::Keyboard::P, false } },
+        { "ZoomOut", { sf::Keyboard::M, false } },
     };
 }
 
@@ -108,22 +88,74 @@ void GraphicState::init_shape()
     this->m_shape.create( vertices, indices, numberOfDataPerAttribute );
 }
 
+void GraphicState::update_camera()
+{
+    gl::SpaceMatrix spaceMatrix {};
+
+    float const screenRatio { static_cast<float>(
+        this->m_window.get()->getSize().x
+        / this->m_window.get()->getSize().y ) };
+    // pass projection matrix to shader (note that in this case it could change every frame)
+    spaceMatrix.projection =
+        glm::perspective( glm::radians( this->m_camera.get_zoom() ),
+                          screenRatio,
+                          0.1f,
+                          100.0f );
+
+    // camera/view transformation
+    spaceMatrix.view = this->m_camera.get_view_matrix();
+
+    spaceMatrix.model = glm::rotate( glm::mat4 { 1.f },
+                                     glm::radians( 50.0f ),
+                                     glm::vec3 { 0.5f, 1.f, 0.f } );
+
+    this->m_shape.update( spaceMatrix );
+}
+
 void GraphicState::handle_current_input()
 {
+    float const deltaTime { 0.016f };
+
     if ( this->m_keyboard.at( "Forward" ).second )
     {
-        this->m_camera.process_keyboard( Camera::E_Movement::Forward, 0.016f );
+        this->m_camera.move( Camera::E_Movement::Forward, deltaTime );
     }
     if ( this->m_keyboard.at( "Backward" ).second )
     {
-        this->m_camera.process_keyboard( Camera::E_Movement::Backward, 0.016f );
+        this->m_camera.move( Camera::E_Movement::Backward, deltaTime );
     }
     if ( this->m_keyboard.at( "Left" ).second )
     {
-        this->m_camera.process_keyboard( Camera::E_Movement::Left, 0.016f );
+        this->m_camera.move( Camera::E_Movement::Left, deltaTime );
     }
     if ( this->m_keyboard.at( "Right" ).second )
     {
-        this->m_camera.process_keyboard( Camera::E_Movement::Right, 0.016f );
+        this->m_camera.move( Camera::E_Movement::Right, deltaTime );
+    }
+
+    if ( this->m_keyboard.at( "AngleUp" ).second )
+    {
+        this->m_camera.rotation( { 0.f, 1.f, 0.f }, deltaTime );
+    }
+    if ( this->m_keyboard.at( "AngleDown" ).second )
+    {
+        this->m_camera.rotation( { 0.f, -1.f, 0.f }, deltaTime );
+    }
+    if ( this->m_keyboard.at( "AngleLeft" ).second )
+    {
+        this->m_camera.rotation( { -1.f, 0.f, 0.f }, deltaTime );
+    }
+    if ( this->m_keyboard.at( "AngleRight" ).second )
+    {
+        this->m_camera.rotation( { 1.f, 0.f, 0.f }, deltaTime );
+    }
+
+    if ( this->m_keyboard.at( "ZoomIn" ).second )
+    {
+        this->m_camera.zoom( 1.f, deltaTime );
+    }
+    if ( this->m_keyboard.at( "ZoomOut" ).second )
+    {
+        this->m_camera.zoom( -1.f, deltaTime );
     }
 }

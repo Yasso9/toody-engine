@@ -23,5 +23,7 @@ class GraphicState final : public State
 
     void init_shape();
 
+    void update_camera();
+
     void handle_current_input() override;
 };

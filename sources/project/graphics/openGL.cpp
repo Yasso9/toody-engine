@@ -27,3 +27,9 @@ namespace gl
 
     void remove_wireframe() { glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ); }
 } // namespace gl
+
+std::ostream & operator<<( std::ostream & stream, glm::vec3 const & vector3 )
+{
+    return stream << "( " << vector3.x << ", " << vector3.y << ", " << vector3.z
+                  << " )";
+}
