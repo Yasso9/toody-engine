@@ -2,14 +2,14 @@
 
 #include "tilemap/tile_utility.hpp"
 #include "tools/databases.hpp"
-#include "tools/geometry.hpp"
 #include "tools/global_variable.hpp"
 #include "tools/json.hpp"
 #include "tools/string.hpp"
+#include "tools/tools.hpp"
 
 TileMap::TileMap( sf::Texture const & texture ) : m_texture( texture )
 {
-    json const completeResult = database::request( R"(
+    json const completeResult = db::request( R"(
     SELECT table_tilemap FROM tilemap;
     )"s );
 
@@ -92,8 +92,7 @@ void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
 
 EditorMap::EditorMap( sf::Texture const & texture )
   : TileMap( texture ), m_cursor(), m_depth( 0u )
-{
-}
+{}
 
 void EditorMap::set_depth( unsigned int const & actualDepth )
 {
@@ -115,11 +114,11 @@ void EditorMap::save() const
     json tilemapSave {};
     tilemapSave["array"] = this->m_table;
 
-    database::request( R"(
+    db::request( R"(
     INSERT INTO tilemap( table_tilemap )
     VALUES( ")"s + tilemapSave["array"].dump()
-                       +
-                       R"(" );
+                 +
+                 R"(" );
     )"s );
 }
 

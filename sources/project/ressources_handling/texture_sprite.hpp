@@ -1,8 +1,8 @@
 #pragma once
 
 #include "entity/player.hpp"
-#include "tools/geometry.hpp"
 #include "tools/sfml.hpp"
+#include "tools/tools.hpp"
 
 class TextureSprite
 {

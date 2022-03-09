@@ -1,13 +1,10 @@
 #include "player.hpp"
 
-#include <cmath>
 #include <exception>
 #include <stdexcept>
 
 #include "tools/assertion.hpp"
-
-// TYPO : mettre ça autre part
-static bool is_integer( float const & number );
+#include "tools/tools.hpp"
 
 Player::Player( sf::Texture const & texture ) : Entity( texture )
 {
@@ -67,7 +64,7 @@ void Player::init_sprite_number_of_cells()
     float const numberOfLine { static_cast<float>( textureSize.y )
                                / this->m_spritePixelSize.y };
 
-    if ( is_integer( numberOfRow ) && is_integer( numberOfLine ) )
+    if ( tools::is_integer( numberOfRow ) && tools::is_integer( numberOfLine ) )
     {
         throw std::runtime_error {
             "Player texture rect not correctly set. The number of pixel per "
@@ -221,9 +218,4 @@ sf::IntRect Player::get_current_texture_rect()
     textureRect.height = spriteSize.y;
 
     return textureRect;
-}
-
-static bool is_integer( float const & number )
-{
-    return std::trunc( number ) != number;
 }

@@ -14,6 +14,7 @@ namespace too
 
     std::string get_resources_path();
     std::string get_shaders_path();
+    std::string get_databases_path();
 } // namespace too
 
 #include "resources.tpp"

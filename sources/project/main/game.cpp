@@ -50,8 +50,8 @@ void Game::init_window()
 void Game::init_state()
 {
     // Game start with main menu
-    // this->set_new_state<MainMenuState>();
-    this->set_new_state<GraphicState>();
+    this->set_new_state<MainMenuState>();
+    // this->set_new_state<GraphicState>();
 
     // The current state to print is the main menu (we've just set it)
     // We get this state because m_lastState should always know what is

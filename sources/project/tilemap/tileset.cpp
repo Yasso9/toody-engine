@@ -1,7 +1,7 @@
 #include "tileset.hpp"
 
-#include "tools/geometry.hpp"
 #include "tools/global_variable.hpp"
+#include "tools/tools.hpp"
 
 Tileset::Tileset( sf::Texture const & texture ) : m_image( texture ), m_cursor()
 {

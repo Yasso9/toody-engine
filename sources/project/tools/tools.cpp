@@ -1,4 +1,6 @@
-#include "geometry.hpp"
+#include "tools.hpp"
+
+#include <cmath>
 
 namespace tools
 {
@@ -7,5 +9,10 @@ namespace tools
     {
         return ( value.x >= position.x && value.x < position.x + size.x
                  && value.y >= position.y && value.y < position.y + size.y );
+    }
+
+    bool is_integer( float const & number )
+    {
+        return std::trunc( number ) != number;
     }
 }
