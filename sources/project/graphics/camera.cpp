@@ -3,42 +3,12 @@
 #include <cmath>
 #include <iostream>
 
-// TYPO à garder
-// static float get_relativ_length( glm::vec3 const & vector3 )
-// {
-//     glm::vec3 factor { 1.f, 1.f, 1.f };
-//     if ( vector3.x < 0.f )
-//     {
-//         factor.x = -factor.x;
-//     }
-//     else if ( vector3.y < 0.f )
-//     {
-//         factor.y = -factor.y;
-//     }
-//     else if ( vector3.z < 0.f )
-//     {
-//         factor.z = -factor.z;
-//     }
-
-//     float squareLength { factor.x * std::pow( vector3.x, 2.f )
-//                          + factor.y * std::pow( vector3.y, 2.f )
-//                          + factor.z * std::pow( vector3.z, 2.f ) };
-
-//     bool isLengthNegative { false };
-//     if ( squareLength < 0.f )
-//     {
-//         isLengthNegative = true;
-//         squareLength = -squareLength;
-//     }
-
-//     float length { std::sqrt( squareLength ) };
-//     if ( isLengthNegative )
-//     {
-//         length = -length;
-//     }
-
-//     return length;
-// }
+// Default camera values
+// const float YAW = -90.0f;
+// const float PITCH =  2.5f;
+// const float SPEED = 2.5f;
+// const float SENSITIVITY = 0.1f;
+// const float ZOOM = 45.0f;
 
 Camera::Camera() : m_pureYAxis( 0.0f, 1.0f, 0.0f )
 {
@@ -46,12 +16,11 @@ Camera::Camera() : m_pureYAxis( 0.0f, 1.0f, 0.0f )
     this->m_position = glm::vec3 { 0.0f, 0.0f, 3.0f };
     // Initialize the direction to look at the center
     this->m_direction = glm::vec3 { 0.f } - this->m_position;
-    this->m_direction = glm::normalize( this->m_direction );
 
     this->m_zoom = 45.f;
     this->m_movementSpeed = 2.5f;
 
-    this->m_pitch = 0.f;
+    this->m_pitch = 2.5f;
     this->m_yaw = -90.f;
 
     this->update_camera_vectors();
@@ -62,16 +31,21 @@ float Camera::get_zoom() const
     return this->m_zoom;
 }
 
-glm::vec3 Camera::get_target() const
+glm::vec3 Camera::get_normalized_direction() const
 {
-    return glm::normalize( this->m_position + this->m_direction );
+    return glm::normalize( this->m_direction );
+}
+
+glm::vec3 Camera::get_target_position() const
+{
+    return this->m_position + this->m_direction;
 }
 
 // returns the view matrix calculated using Euler Angles and the LookAt Matrix
 glm::mat4 Camera::get_view_matrix() const
 {
     return glm::lookAt( this->m_position,
-                        this->m_position + this->m_direction,
+                        this->get_target_position(),
                         this->m_upAxis );
 }
 
@@ -105,7 +79,7 @@ void Camera::move( Camera::E_Movement const & direction,
     this->update_camera_vectors();
 }
 
-void Camera::rotation( glm::vec3 const & angle, float const & deltaTime )
+void Camera::rotate( glm::vec3 const & angle, float const & deltaTime )
 {
     // std::cout << "\n" << std::endl;
 
@@ -152,17 +126,6 @@ void Camera::zoom( float const & factor, float const & deltaTime )
 
 void Camera::update_camera_vectors()
 {
-    // calculate the new m_front vector
-    // glm::vec3 front {};
-
-    // front.x =
-    //     std::cos( glm::radians( m_yaw ) ) * std::cos( glm::radians( m_pitch ) );
-    // front.y = std::sin( glm::radians( m_pitch ) );
-    // front.z =
-    //     std::sin( glm::radians( m_yaw ) ) * std::cos( glm::radians( m_pitch ) );
-
-    // m_front = glm::normalize( front );
-
     // std::cout << "Direction Before : " << this->m_direction << std::endl;
 
     this->m_direction.x = std::cos( glm::radians( this->m_pitch ) )
@@ -184,3 +147,40 @@ void Camera::update_camera_vectors()
     // std::cout << "Right Axis : " << this->m_rightAxis << std::endl;
     // std::cout << "Up Axis : " << this->m_upAxis << std::endl;
 }
+
+// TYPO à garder
+// static float get_relativ_length( glm::vec3 const & vector3 )
+// {
+//     glm::vec3 factor { 1.f, 1.f, 1.f };
+//     if ( vector3.x < 0.f )
+//     {
+//         factor.x = -factor.x;
+//     }
+//     else if ( vector3.y < 0.f )
+//     {
+//         factor.y = -factor.y;
+//     }
+//     else if ( vector3.z < 0.f )
+//     {
+//         factor.z = -factor.z;
+//     }
+
+//     float squareLength { factor.x * std::pow( vector3.x, 2.f )
+//                          + factor.y * std::pow( vector3.y, 2.f )
+//                          + factor.z * std::pow( vector3.z, 2.f ) };
+
+//     bool isLengthNegative { false };
+//     if ( squareLength < 0.f )
+//     {
+//         isLengthNegative = true;
+//         squareLength = -squareLength;
+//     }
+
+//     float length { std::sqrt( squareLength ) };
+//     if ( isLengthNegative )
+//     {
+//         length = -length;
+//     }
+
+//     return length;
+// }

@@ -74,7 +74,8 @@ void MainMenuState::init_buttons()
 {
     this->m_buttons.set_font( this->m_ressources.fonts.at( E_FontKey::Arial ) );
     this->m_buttons.set_direction( ButtonArray::E_Direction::Horizontal );
+    // TYPO ne plus hardcodé ça mais trouvé un autre moyen avec la State::E_List
     this->m_buttons.set_strings(
-        { "Main Menu"s, "Game"s, "Editor"s, "Graphics", "Exit"s } );
+        { "Main Menu"s, "Game"s, "Editor"s, "Graphics", "Test", "Exit"s } );
     this->m_buttons.setPosition( 0.f, 0.f );
 }

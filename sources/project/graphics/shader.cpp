@@ -1,28 +1,11 @@
 #include "shader.hpp"
 
 #include <cstdlib>
-#include <fstream>
-#include <iostream>
-#include <sstream>
 
-#include "tools/resources.hpp"
+#include "graphics/openGL.hpp"
 #include "tools/sfml.hpp"
+#include "tools/tools.hpp"
 
-// TYPO mettre ça autre part
-static std::string read_file( std::string const & fileName )
-{
-    std::ifstream file { fileName, std::ios::in };
-    if ( ! file )
-    {
-        std::cerr << "File not found" << fileName << std::endl;
-    }
-
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    return buffer.str();
-}
-
-Shaders::Shaders() {}
 Shaders::~Shaders()
 {
     glDeleteProgram( this->m_id );
@@ -64,8 +47,8 @@ bool Shaders::check_error( unsigned int const & shaderValue,
     {
         char infoLog[512];
         glGetProgramInfoLog( shaderValue, 512, NULL, infoLog );
-        std::cerr << "Error - Shader extraction failed - " << infoLog
-                  << std::endl;
+        throw std::runtime_error { "Error - Shader extraction failed - "s
+                                   + infoLog };
     }
     return success;
 }
@@ -75,8 +58,7 @@ unsigned int Shaders::compile( unsigned int const & shaderType,
 {
     unsigned int shader { glCreateShader( shaderType ) };
 
-    // TYPO : trouver un meilleurs moyen pour convertir un std::string en const char *
-    std::string const fileContent { read_file( fileName ) };
+    std::string const fileContent { tools::read_file( fileName ) };
     char const * shaderSource { fileContent.c_str() };
 
     glShaderSource( shader, 1, &shaderSource, NULL );

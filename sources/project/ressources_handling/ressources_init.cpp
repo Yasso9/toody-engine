@@ -3,8 +3,8 @@
 #include "tools/assertion.hpp"
 #include "tools/enumeration.hpp"
 #include "tools/exceptions.hpp"
-#include "tools/resources.hpp"
 #include "tools/string.hpp"
+#include "tools/tools.hpp"
 
 static std::string get_texture_localisation( E_TextureKey const & textureKey );
 static std::string get_font_localisation( E_FontKey const & fontKey );
@@ -60,7 +60,7 @@ namespace RessourcesInit
 
 static std::string get_texture_localisation( E_TextureKey const & textureKey )
 {
-    std::string imagePath { too::get_resources_path() };
+    std::string imagePath { tools::get_path::resources() };
 
     switch ( textureKey )
     {
@@ -88,7 +88,7 @@ static std::string get_texture_localisation( E_TextureKey const & textureKey )
 
 static std::string get_font_localisation( E_FontKey const & fontKey )
 {
-    std::string fontPath { too::get_resources_path() };
+    std::string fontPath { tools::get_path::resources() };
 
     switch ( fontKey )
     {

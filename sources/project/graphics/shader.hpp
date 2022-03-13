@@ -1,13 +1,11 @@
 #pragma once
 
-#include "graphics/openGL.hpp"
-
 #include "tools/string.hpp"
 
 class Shaders final
 {
   public:
-    Shaders();
+    Shaders() = default;
     virtual ~Shaders();
 
     unsigned int get_id() const;

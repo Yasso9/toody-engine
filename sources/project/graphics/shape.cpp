@@ -1,12 +1,12 @@
 #include "shape.hpp"
 
-#include "tools/resources.hpp"
+#include "tools/tools.hpp"
 
-#include "iostream"
+#include <iostream>
 
 Shape::~Shape()
 {
-    // We delete all the buffers and object generated
+    // We delete all the buffers and the objects generated
     glDeleteVertexArrays( 1, &this->m_vertexArrayObject );
     glDeleteBuffers( 1, &this->m_vertexBufferObject );
 
@@ -22,8 +22,21 @@ void Shape::create( std::vector<float> const & vertices,
 {
     this->m_numberOfDataPerAttribute = numberOfDataPerAttribute;
 
-    this->m_shaders.load( too::get_shaders_path() + "/shader.vert"s,
-                          too::get_shaders_path() + "/shader.frag"s );
+    this->m_shader.loadFromFile( tools::get_path::shaders() + "/shader.vert"s,
+                                 tools::get_path::shaders() + "/shader.frag"s );
+
+    bool textureLoad { true };
+    // TYPO vérifié que cette operateur marche bien
+    textureLoad &= this->m_texture.loadFromFile( tools::get_path::resources()
+                                                 + "/wall.jpg"s );
+    textureLoad &= this->m_texture.generateMipmap();
+    if ( ! textureLoad )
+    {
+        throw std::runtime_error { "Cannot load texture"s };
+    }
+
+    // Bind the texture
+    sf::Texture::bind( &this->m_texture );
 
     this->set_vertices( vertices );
     this->set_indices( indices );
@@ -41,27 +54,33 @@ void Shape::update( gl::SpaceMatrix const & space )
 
 void Shape::draw() const
 {
-    this->m_shaders.use();
+    sf::Texture::bind( &this->m_texture );
+    sf::Shader::bind( &this->m_shader );
 
     glBindVertexArray( this->m_vertexArrayObject );
 
     this->transform();
 
     int const primitiveType { GL_TRIANGLES };
-    int const vectorSize { static_cast<int>(
-        this->m_vertices.size() / this->m_numberOfDataPerAttribute ) };
     if ( this->is_element_buffer_set() )
     {
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, this->m_elementBufferObject );
         int const dataType { GL_UNSIGNED_INT };
-        glDrawElements( primitiveType, vectorSize, dataType, 0 );
+        glDrawElements( primitiveType,
+                        static_cast<int>( this->m_vertices.size() ),
+                        dataType,
+                        0 );
     }
     else
     {
         int const verticesBeginPosition { 0 };
+        int const vectorSize { static_cast<int>(
+            this->m_vertices.size() / this->m_numberOfDataPerAttribute ) };
         glDrawArrays( primitiveType, verticesBeginPosition, vectorSize );
     }
 
+    sf::Shader::bind( NULL );
+    sf::Texture::bind( NULL );
     // Unbind VAO
     glBindVertexArray( 0 );
 }
@@ -119,20 +138,55 @@ void Shape::bind_objects()
 
 void Shape::vertex_shader_attribution()
 {
-    unsigned int const location { 0u };
-    unsigned int const vectorSize { 3u };
     int const valueType { GL_FLOAT };
     int const hasDataToBeNormalised { GL_FALSE };
-    void * offsetStart { 0 };
+    int const dataPerAttributeSize { static_cast<int>(
+        this->m_numberOfDataPerAttribute * sizeof( float ) ) };
 
-    glVertexAttribPointer(
-        location,
-        vectorSize,
-        valueType,
-        hasDataToBeNormalised,
-        static_cast<int>( this->m_numberOfDataPerAttribute * sizeof( float ) ),
-        offsetStart );
-    glEnableVertexAttribArray( location );
+    {
+        unsigned int const positionLocation { 0u };
+        unsigned int const positionVectorSize { 3u };
+        void * positionOffsetStart { reinterpret_cast<void *>(
+            static_cast<intptr_t>( 0 * sizeof( float ) ) ) };
+
+        glVertexAttribPointer( positionLocation,
+                               positionVectorSize,
+                               valueType,
+                               hasDataToBeNormalised,
+                               dataPerAttributeSize,
+                               positionOffsetStart );
+        glEnableVertexAttribArray( positionLocation );
+    }
+
+    // {
+    //     unsigned int const colorLocation { 1u };
+    //     unsigned int const colorVectorSize { 3u };
+    //     void * colorOffsetStart { reinterpret_cast<void *>(
+    //         static_cast<intptr_t>( 3 * sizeof( float ) ) ) };
+
+    //     glVertexAttribPointer( colorLocation,
+    //                            colorVectorSize,
+    //                            valueType,
+    //                            hasDataToBeNormalised,
+    //                            dataPerAttributeSize,
+    //                            colorOffsetStart );
+    //     glEnableVertexAttribArray( colorLocation );
+    // }
+
+    {
+        unsigned int const textureCoordinateLocation { 1u };
+        unsigned int const textureCoordinateVectorSize { 2u };
+        void * textureCoordinateOffsetStart { reinterpret_cast<void *>(
+            static_cast<intptr_t>( 3 * sizeof( float ) ) ) };
+
+        glVertexAttribPointer( textureCoordinateLocation,
+                               textureCoordinateVectorSize,
+                               valueType,
+                               hasDataToBeNormalised,
+                               dataPerAttributeSize,
+                               textureCoordinateOffsetStart );
+        glEnableVertexAttribArray( textureCoordinateLocation );
+    }
 }
 
 void Shape::unbind()
@@ -145,6 +199,10 @@ void Shape::unbind()
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 }
 
+// TYPO mettre ça autre part
+static int get_shader_uniform_location( sf::Shader const & shader,
+                                        std::string const & uniformName );
+
 void Shape::transform() const
 {
     static float count { 0.5f };
@@ -152,10 +210,14 @@ void Shape::transform() const
     int const numberOfMatrix { 1 };
     int const transposeMatrix { GL_FALSE };
 
-    int modelLoc = this->m_shaders.get_uniform_location( "model"s );
-    int viewLoc = this->m_shaders.get_uniform_location( "view"s );
-    int projectionLoc = this->m_shaders.get_uniform_location( "projection"s );
+    int modelLoc = get_shader_uniform_location( this->m_shader, "model"s );
+    int viewLoc = get_shader_uniform_location( this->m_shader, "view"s );
+    int projectionLoc =
+        get_shader_uniform_location( this->m_shader, "projection"s );
 
+    // TYPO utilisé cette fonctions
+    // this->m_shader.setUniform( "model"s,
+    //                            sf::Glsl::Mat4( this->m_space.model ) );
     glUniformMatrix4fv( modelLoc,
                         numberOfMatrix,
                         transposeMatrix,
@@ -170,4 +232,12 @@ void Shape::transform() const
                         glm::value_ptr( this->m_space.projection ) );
 
     count += 0.05f;
+}
+
+static int get_shader_uniform_location( sf::Shader const & shader,
+                                        std::string const & uniformName )
+{
+    // TYPO check if the returned value is ok
+    return glGetUniformLocation( shader.getNativeHandle(),
+                                 uniformName.c_str() );
 }

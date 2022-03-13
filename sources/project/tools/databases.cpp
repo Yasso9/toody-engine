@@ -2,7 +2,6 @@
 
 #include <memory>
 
-// To ignore some warning caused by the include of Sqlite
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wlong-long"
 
@@ -16,7 +15,7 @@ extern "C"
 #include "tools/exceptions.hpp"
 #include "tools/string.hpp"
 
-#include "tools/resources.hpp"
+#include "tools/tools.hpp"
 
 // To mix the use of unique pointer and sqlite3 database
 struct sqlite3_deleter
@@ -77,7 +76,7 @@ namespace db
         if ( requestResultState != SQLITE_OK )
         {
             sqlite3_free( requestErrorMessage );
-            throw DatabaseException { too::get_databases_path(),
+            throw DatabaseException { tools::get_path::databases(),
                                       requestErrorMessage };
         }
 
@@ -89,10 +88,10 @@ static T_UniqueSqlitePtr make_sqlite()
 {
     sqlite3 * database { nullptr };
 
-    if ( sqlite3_open( too::get_databases_path().c_str(), &database ) )
+    if ( sqlite3_open( tools::get_path::databases().c_str(), &database ) )
     {
         // Something bad is happenning
-        throw DatabaseException { too::get_databases_path(),
+        throw DatabaseException { tools::get_path::databases(),
                                   "Can't open database - "s
                                       + sqlite3_errmsg( database ) };
     }

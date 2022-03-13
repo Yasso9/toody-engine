@@ -103,7 +103,8 @@ OBJECT_PROJECT := $(addprefix $(OBJECT_DIRECTORY)/,$(subst /,-,$(OBJECT_PROJECT)
 # List of the library object that needs to be linked
 OBJECT_GLAD := $(OBJECT_DIRECTORY)/glad.o
 OBJECT_SQLITE := $(OBJECT_DIRECTORY)/sqlite3.o
-# All object needed for the project to compile (the project files objects + the libraries objects)
+# All object needed for the project to compile
+# (the project files objects + the libraries objects)
 OBJECT_ALL := $(OBJECT_PROJECT) $(OBJECT_GLAD) $(OBJECT_SQLITE)
 
 # Dependencies (.d files) will be on the same directories
@@ -125,26 +126,35 @@ endif
 
 PROJECT_ROOT_PATH := $(CURDIR)
 LIBRARIES_PATH := $(PROJECT_ROOT_PATH)/libraries
-SQLITE_PATH :=  $(LIBRARIES_PATH)/Sqlite
-JSON_NLOHMANN_PATH :=  $(LIBRARIES_PATH)/Json/include
-GLAD_PATH :=  $(LIBRARIES_PATH)/Glad
-GLM_PATH :=  $(LIBRARIES_PATH)/GLM
-PROJECT_DIRECTORY_PATH := $(PROJECT_ROOT_PATH)/sources/project/
+SQLITE_PATH := $(LIBRARIES_PATH)/Sqlite
+JSON_NLOHMANN_PATH := $(LIBRARIES_PATH)/Json/include
+GLAD_PATH := $(LIBRARIES_PATH)/Glad
+GLM_PATH := $(LIBRARIES_PATH)/GLM
+SIMPLE_LIBRARIES := $(LIBRARIES_PATH)/SimpleLibraries
+PROJECT_DIRECTORY_PATH := $(PROJECT_ROOT_PATH)/sources/project
+
+# SFML
 ifeq ($(SYSTEM_NAME),Windows)
 	SFML_PATH := $(LIBRARIES_PATH)/Sfml_Windows
 else
 	ifeq ($(SYSTEM_NAME),Unix)
 		SFML_PATH := $(LIBRARIES_PATH)/Sfml_Linux
+	else
+		echo "OS is not identified"
+		exit 1
 	endif
 endif
+SFML_INCLUDE_PATH := $(SFML_PATH)/include
+SFML_LIB_PATH := $(SFML_PATH)/lib
 
-INCLUDES := -I"$(SFML_PATH)/include" \
+INCLUDES := -I"$(SFML_INCLUDE_PATH)" \
 			-I"$(SQLITE_PATH)" \
 			-I"$(JSON_NLOHMANN_PATH)" \
 			-I"$(GLAD_PATH)" \
 			-I"$(GLM_PATH)" \
+			-I"$(SIMPLE_LIBRARIES)" \
 			-I"$(PROJECT_DIRECTORY_PATH)"
-LIBRARIES := -L"$(SFML_PATH)/lib" -lsfml-graphics -lsfml-system -lsfml-window
+LIBRARIES := -L"$(SFML_LIB_PATH)" -lsfml-graphics -lsfml-system -lsfml-window
 
 
 
@@ -174,7 +184,7 @@ clean : clean_executable
 debug :
 	gdb -quiet $(EXECUTABLE)
 
-remake: cleaner all
+remake: clean buildrun
 
 
 
@@ -190,7 +200,7 @@ $(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%)
 #	Print the current file that is compiled
 	$(info $<)
 #	compilator++ -WarningFlags -cpp_standard -compilerOptions -c sources/project/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
-#   -c => Doesn't create WinMain error if there is no WinMain in the file
+#   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
 	$(CXX_COMMAND) $(WARNINGS) $(CXX_FLAGS) -c $< -o $@ $(INCLUDES)
 

@@ -12,9 +12,13 @@ namespace gl
             throw std::runtime_error { "Failed to initialize GLAD" };
         }
 
-        // configure global opengl state
-        // -----------------------------
+        // enable openGL Z buffer
         glEnable( GL_DEPTH_TEST );
+
+        // Je ne sais pas ce que c'est ?
+        glDepthMask( GL_TRUE );
+        glClearDepth( 1.f );
+        glDisable( GL_LIGHTING );
     }
 
     void clear_window()

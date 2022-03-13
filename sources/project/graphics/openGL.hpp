@@ -24,6 +24,7 @@ namespace gl
         glm::mat4 model { 1.f };
     };
 
+    /// @brief Initialize the OpenGL context and functions
     void initialize();
     void clear_window();
     void set_wireframe();

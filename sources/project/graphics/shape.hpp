@@ -1,6 +1,8 @@
 #pragma once
 
+#include "graphics/openGL.hpp"
 #include "graphics/shader.hpp"
+#include "graphics/texture.hpp"
 #include "tools/sfml.hpp"
 #include "vector"
 
@@ -19,7 +21,9 @@ class Shape final
     void draw() const;
 
   private:
-    Shaders m_shaders;
+    sf::Texture m_texture;
+    sf::Shader m_shader;
+    // Shaders m_shaders;
 
     gl::SpaceMatrix m_space;
 

@@ -1,6 +1,3 @@
 .DS_Store
-.vscode
-.editorconfig
-warning.txt
 object/
 build/application.exe

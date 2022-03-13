@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${default}",
+                "${workspaceRoot}/sources/project/",
+                "${workspaceRoot}/libraries/Sfml_Windows/include",
+                "${workspaceRoot}/libraries/Sqlite",
+                "${workspaceRoot}/libraries/Json/include",
+                "${workspaceRoot}/libraries/Glad",
+                "${workspaceRoot}/libraries/GLM",
+                "${workspaceRoot}/libraries/SimpleLibraries"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "10.0.19041.0",
+            "configurationProvider": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}

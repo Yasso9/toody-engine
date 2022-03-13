@@ -3,13 +3,13 @@
 #include <fstream>
 
 #include "tools/exceptions.hpp"
-#include "tools/resources.hpp"
 #include "tools/string.hpp"
+#include "tools/tools.hpp"
 
 Settings::Settings()
 {
     // TYPO mettre le windows.txt dans un autre endroit que resources
-    std::string const configLocation { too::get_resources_path()
+    std::string const configLocation { tools::get_path::resources()
                                        + "/window.txt"s };
 
     std::ifstream file { configLocation, std::ios::in };

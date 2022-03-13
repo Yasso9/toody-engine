@@ -2,13 +2,6 @@
 
 #include "graphics/openGL.hpp"
 
-// Default camera values
-// const float YAW = -90.0f;
-// const float PITCH =  2.5f;
-// const float SPEED = 2.5f;
-// const float SENSITIVITY = 0.1f;
-// const float ZOOM = 45.0f;
-
 /// @brief An abstract camera class that processes input and calculates
 ///        the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 class Camera
@@ -29,9 +22,9 @@ class Camera
 
     float get_zoom() const;
 
-    // TYPO elle est fausse
-    /// @brief Return the position in space of the target of the camera
-    glm::vec3 get_target() const;
+    glm::vec3 get_normalized_direction() const;
+    /// @brief Return the target's position in space
+    glm::vec3 get_target_position() const;
     /// @brief Returns the view matrix calculated using Euler Angles and the LookAt Matrix
     glm::mat4 get_view_matrix() const;
 
@@ -40,7 +33,7 @@ class Camera
     ///        (to abstract it from windowing systems)
     void move( Camera::E_Movement const & direction, float const & deltaTime );
 
-    void rotation( glm::vec3 const & angle, float const & deltaTime );
+    void rotate( glm::vec3 const & angle, float const & deltaTime );
 
     void zoom( float const & factor, float const & deltaTime );
 

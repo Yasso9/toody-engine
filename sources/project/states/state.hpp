@@ -27,6 +27,7 @@ class State
         Game,
         Editor,
         Graphics,
+        Test,
         Quit,
         EnumLast,
     };

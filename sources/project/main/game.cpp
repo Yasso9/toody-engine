@@ -10,6 +10,7 @@
 #include "states/game_state.hpp"
 #include "states/graphic_state.hpp"
 #include "states/main_menu_state.hpp"
+#include "states/test.hpp"
 
 #include <sstream>
 
@@ -26,6 +27,7 @@ Game::Game()
 
 void Game::init_window()
 {
+    // TYPO faire de RenderWindow un singleton
     // We must use a pointer to copy this RenderWindow into another class
     // (RenderWindow doesn't have a copy contructor)
     this->m_window = std::make_shared<sf::RenderWindow>();
@@ -35,7 +37,11 @@ void Game::init_window()
     // Request a 24-bits depth buffer when creating the window
     sf::ContextSettings contextSettings {};
     contextSettings.depthBits = 24;
-    // contextSettings.sRgbCapable = true;
+    contextSettings.sRgbCapable = false;
+    contextSettings.stencilBits = 8;
+    contextSettings.antialiasingLevel = 4;
+    contextSettings.majorVersion = 4;
+    contextSettings.minorVersion = 6;
 
     this->m_window->create(
         sfpp::to_video_mode( this->m_settings.get_window_size_u() ),
@@ -43,14 +49,37 @@ void Game::init_window()
         sf::Style::Default,
         contextSettings );
 
-    this->m_window->setVerticalSyncEnabled(
-        this->m_settings.get_vertical_sync() );
+    // this->m_window->setVerticalSyncEnabled(
+    //     this->m_settings.get_vertical_sync() );
+    this->m_window->setVerticalSyncEnabled( false );
+
+    // activation of the window's context
+    if ( ! this->m_window->setActive( true ) )
+    {
+        throw std::runtime_error { "Cannot set the windows active"s };
+    }
+
+    if ( ! sf::Shader::isAvailable() )
+    {
+        throw std::runtime_error { "Shader's not available"s };
+    }
+
+    // TYPO faire une fonction qui montre ça
+    // sf::ContextSettings settings = this->m_window->getSettings();
+    // std::cout << "depth bits:" << settings.depthBits << std::endl;
+    // std::cout << "stencil bits:" << settings.stencilBits << std::endl;
+    // std::cout << "sRgbCapable:" << settings.sRgbCapable << std::endl;
+    // std::cout << "antialiasing level:" << settings.antialiasingLevel
+    //           << std::endl;
+    // std::cout << "version:" << settings.majorVersion << "."
+    //           << settings.minorVersion << std::endl;
 }
 
 void Game::init_state()
 {
     // Game start with main menu
     this->set_new_state<MainMenuState>();
+    // this->set_new_state<TestState>();
     // this->set_new_state<GraphicState>();
 
     // The current state to print is the main menu (we've just set it)
@@ -133,6 +162,9 @@ void Game::change_state( State::E_List const & newState )
         break;
     case State::E_List::Graphics :
         this->set_new_state<GraphicState>();
+        break;
+    case State::E_List::Test :
+        this->set_new_state<TestState>();
         break;
 
     case State::E_List::Quit :
