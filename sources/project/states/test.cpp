@@ -1,8 +1,8 @@
 #include "test.hpp"
 
 TestState::TestState( std::shared_ptr<sf::RenderWindow> window,
-                      Ressources const & ressources, Settings const & settings )
-  : State( window, ressources, settings, State::E_List::Test )
+                      Ressources const & ressources )
+  : State( window, ressources, State::E_List::Test )
 {
     gl::initialize();
 
@@ -81,7 +81,7 @@ TestState::TestState( std::shared_ptr<sf::RenderWindow> window,
     }
 }
 
-void TestState::update( float const & /* deltaTime */ ) {}
+void TestState::update() {}
 
 void TestState::render()
 {

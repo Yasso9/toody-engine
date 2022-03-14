@@ -27,14 +27,12 @@ Game::Game()
 
 void Game::init_window()
 {
-    // TYPO faire de RenderWindow un singleton
     // We must use a pointer to copy this RenderWindow into another class
     // (RenderWindow doesn't have a copy contructor)
     this->m_window = std::make_shared<sf::RenderWindow>();
 
+    // Additionnal settings that the window should have
     std::string const gameTitle { "Toody Engine (In Developpement)"s };
-
-    // Request a 24-bits depth buffer when creating the window
     sf::ContextSettings contextSettings {};
     contextSettings.depthBits = 24;
     contextSettings.sRgbCapable = false;
@@ -49,30 +47,20 @@ void Game::init_window()
         sf::Style::Default,
         contextSettings );
 
-    // this->m_window->setVerticalSyncEnabled(
-    //     this->m_settings.get_vertical_sync() );
-    this->m_window->setVerticalSyncEnabled( false );
+    this->m_window->setVerticalSyncEnabled(
+        this->m_settings.get_vertical_sync() );
 
-    // activation of the window's context
     if ( ! this->m_window->setActive( true ) )
     {
-        throw std::runtime_error { "Cannot set the windows active"s };
+        throw std::runtime_error {
+            "Cannot set the windows as active state for OpenGL"s
+        };
     }
 
     if ( ! sf::Shader::isAvailable() )
     {
         throw std::runtime_error { "Shader's not available"s };
     }
-
-    // TYPO faire une fonction qui montre ça
-    // sf::ContextSettings settings = this->m_window->getSettings();
-    // std::cout << "depth bits:" << settings.depthBits << std::endl;
-    // std::cout << "stencil bits:" << settings.stencilBits << std::endl;
-    // std::cout << "sRgbCapable:" << settings.sRgbCapable << std::endl;
-    // std::cout << "antialiasing level:" << settings.antialiasingLevel
-    //           << std::endl;
-    // std::cout << "version:" << settings.majorVersion << "."
-    //           << settings.minorVersion << std::endl;
 }
 
 void Game::init_state()
@@ -81,11 +69,6 @@ void Game::init_state()
     this->set_new_state<MainMenuState>();
     // this->set_new_state<TestState>();
     // this->set_new_state<GraphicState>();
-
-    // The current state to print is the main menu (we've just set it)
-    // We get this state because m_lastState should always know what is
-    // the last state printed
-    this->m_lastState = this->m_states->get_state_to_print();
 }
 
 void Game::run()
@@ -117,19 +100,22 @@ void Game::update_events()
     {
         if ( this->m_window->hasFocus() )
         {
-            this->m_states->update_input( this->m_event );
+            this->m_states->update_inputs( this->m_event );
         }
     }
 }
 
 void Game::update_state( float const & deltaTime )
 {
-    this->m_states->update( deltaTime );
+    static State::E_List lastState { this->m_states->get_state_to_print() };
 
-    // TYPO essayer de trouver une meilleure technique pour changer d'état
-    if ( this->m_states->get_state_to_print() != this->m_lastState )
+    this->m_states->update_data( deltaTime );
+
+    State::E_List const newState { this->m_states->get_state_to_print() };
+    if ( lastState != newState )
     {
-        this->change_state( this->m_states->get_state_to_print() );
+        this->change_state( newState );
+        lastState = newState;
     }
 }
 
@@ -144,10 +130,7 @@ void Game::render()
 
 void Game::change_state( State::E_List const & newState )
 {
-    ASSERTION( this->m_lastState != newState,
-               "When there is a change of state, the state must be new"s );
-
-    this->m_lastState = newState;
+    std::cout << "State changed" << std::endl;
 
     switch ( newState )
     {

@@ -5,9 +5,8 @@
 #include <cassert>
 
 EditorState::EditorState( std::shared_ptr<sf::RenderWindow> window,
-                          Ressources const & ressources,
-                          Settings const & settings )
-  : State( window, ressources, settings, State::E_List::Editor ),
+                          Ressources const & ressources )
+  : State( window, ressources, State::E_List::Editor ),
     m_tilemap( this->m_ressources.textures.at( E_TextureKey::Tileset ) ),
     m_tileset( this->m_ressources.textures.at( E_TextureKey::Tileset ) ),
     m_buttons( this->m_ressources.fonts.at( E_FontKey::Arial ) )
@@ -19,39 +18,6 @@ EditorState::EditorState( std::shared_ptr<sf::RenderWindow> window,
 
     this->m_buttons.set_strings( { "Normal"s, "Selection"s } );
     this->m_buttons.setPosition( 0.f, 0.f );
-}
-
-T_KeyboardInputMap EditorState::init_keyboard_action() const
-{
-    return {
-        { "MainMenu", std::make_pair( sf::Keyboard::Escape, false ) },
-        { "PrintOrRemoveSpriteSheet",
-          std::make_pair( sf::Keyboard::Space, false ) },
-        { "Save", std::make_pair( sf::Keyboard::Enter, false ) },
-
-        { "Center", std::make_pair( sf::Keyboard::C, false ) },
-        { "Resize", std::make_pair( sf::Keyboard::P, false ) },
-
-        { "TilemapUp", std::make_pair( sf::Keyboard::Z, false ) },
-        { "TilemapDown", std::make_pair( sf::Keyboard::S, false ) },
-        { "TilemapLeft", std::make_pair( sf::Keyboard::Q, false ) },
-        { "TilemapRight", std::make_pair( sf::Keyboard::D, false ) },
-
-        { "SpriteSheetUp", std::make_pair( sf::Keyboard::Up, false ) },
-        { "SpriteSheetDown", std::make_pair( sf::Keyboard::Down, false ) },
-        { "SpriteSheetLeft", std::make_pair( sf::Keyboard::Left, false ) },
-        { "SpriteSheetRight", std::make_pair( sf::Keyboard::Right, false ) },
-
-        { "Profondeur1", std::make_pair( sf::Keyboard::Num1, false ) },
-        { "Profondeur2", std::make_pair( sf::Keyboard::Num2, false ) },
-    };
-}
-
-T_MouseInputMap EditorState::init_mouse_action() const
-{
-    return {
-        { "Action", { sf::Mouse::Left, false } },
-    };
 }
 
 void EditorState::init_map()
@@ -77,97 +43,90 @@ void EditorState::init_selection_rect()
     // this->m_selectionRect.setFillColor( sf::Color( 255, 230, 90, 128 ) );
 }
 
-void EditorState::handle_mouse_wheel_up()
+void EditorState::mouse_scroll( float const & deltaScroll )
 {
-    this->m_tilemap.scale( 1.2f, 1.2f );
+    float const scaleValue { 1.f + ( deltaScroll / 4.f ) };
+    this->m_tilemap.scale( scaleValue, scaleValue );
 }
 
-void EditorState::handle_mouse_wheel_down()
+void EditorState::keyboard_pressed( sf::Event event )
 {
-    this->m_tilemap.scale( 0.8f, 0.8f );
-}
-
-void EditorState::handle_keyboard_press( std::string const & input )
-{
-    if ( input == "MainMenu"s )
+    if ( event.key.code == sf::Keyboard::Escape )
     {
         this->m_stateName = State::E_List::MainMenu;
     }
-    else if ( input == "Profondeur1"s )
+    else if ( event.key.code == sf::Keyboard::Num1 )
     {
         this->m_tilemap.set_depth( 0 );
     }
-    else if ( input == "Profondeur2"s )
+    else if ( event.key.code == sf::Keyboard::Num2 )
     {
         this->m_tilemap.set_depth( 1 );
     }
-    else if ( input == "Center"s )
+    else if ( event.key.code == sf::Keyboard::C )
     {
         // TYPO mettre le centre de la vue et non pas la taille de la fenetre / 2
         this->m_tilemap.setPosition( this->m_settings.get_window_size_f()
                                      / 2.f );
     }
-    else if ( input == "PrintOrRemoveSpriteSheet"s )
+    else if ( event.key.code == sf::Keyboard::Space )
     {
         this->m_tileset.switch_print();
     }
-    else if ( input == "Save"s )
+    else if ( event.key.code == sf::Keyboard::Enter )
     {
         this->m_tilemap.save();
     }
 }
 
-void EditorState::handle_current_input()
-{
-    // Movement de la mapView par raport a l'ecran,
-    // deplacer la vue revient a deplacer la mapView
-    // On ne met pas de else if pour pouvoir avoir un mouvement multiple
-    if ( this->m_keyboard.at( "TilemapUp"s ).second )
-    {
-        this->m_tilemap.move( 0.f, 5.f );
-    }
-    if ( this->m_keyboard.at( "TilemapDown"s ).second )
-    {
-        this->m_tilemap.move( 0.f, -5.f );
-    }
-    if ( this->m_keyboard.at( "TilemapLeft"s ).second )
-    {
-        this->m_tilemap.move( 5.f, 0.f );
-    }
-    if ( this->m_keyboard.at( "TilemapRight"s ).second )
-    {
-        this->m_tilemap.move( -5.f, 0.f );
-    }
-
-    // Always check if the buttons have been selected or pressed
-    int const buttonNumberPressed { this->m_buttons.update(
-        this->m_mousePosition.get_overall(),
-        this->m_mouseButton.at( "Action"s ).second ) };
-
-    if ( buttonNumberPressed != -1 )
-    {
-        this->m_type = static_cast<Type>( buttonNumberPressed );
-    }
-}
-
 void EditorState::update_normal_mode()
 {
-    this->m_tileset.update( this->m_mousePosition.get_overall(),
-                            this->m_mouseButton.at( "Action"s ).second );
+    this->m_tileset.update(
+        static_cast<sf::Vector2f>( sf::Mouse::getPosition() ),
+        sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) );
 
     this->m_tilemap.update(
-        this->m_mousePosition.get_overall(),
-        // TYPO voir pour enlever ce static cast
+        static_cast<sf::Vector2f>( sf::Mouse::getPosition() ),
         static_cast<unsigned int>( this->m_tileset.get_selected_tile() ),
-        this->m_mouseButton.at( "Action"s ).second );
+        sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) );
 }
 
 void EditorState::update_selection_mode() {}
 
 void EditorState::update_colision_mode() {}
 
-void EditorState::update( float const & /* deltaTime */ )
+void EditorState::update()
 {
+    // Movement de la mapView par raport a l'ecran,
+    // deplacer la vue revient a deplacer la mapView
+    // On ne met pas de else if pour pouvoir avoir un mouvement multiple
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
+    {
+        this->m_tilemap.move( 0.f, 5.f );
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
+    {
+        this->m_tilemap.move( 0.f, -5.f );
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Q ) )
+    {
+        this->m_tilemap.move( 5.f, 0.f );
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
+    {
+        this->m_tilemap.move( -5.f, 0.f );
+    }
+
+    // Always check if the buttons have been selected or pressed
+    int const buttonNumberPressed { this->m_buttons.update(
+        static_cast<sf::Vector2f>( sf::Mouse::getPosition() ),
+        sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) ) };
+
+    if ( buttonNumberPressed != -1 )
+    {
+        this->m_type = static_cast<Type>( buttonNumberPressed );
+    }
+
     switch ( this->m_type )
     {
     case Type::Normal :

@@ -4,6 +4,7 @@
 #pragma GCC diagnostic ignored "-Wsign-conversion"
 
 #include <SFML/Graphics.hpp>
+// #include <SFML/Mouse.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 
@@ -33,6 +34,9 @@ sf::Vector2f operator*( sf::Vector2f const & vectorA,
                         sf::Vector2f const & vectorB );
 
 sf::Vector2f operator%( sf::Vector2f const & vector, int const & modulo );
+
+std::ostream & operator<<( std::ostream & stream,
+                           sf::ContextSettings const & settings );
 
 template <typename T>
 std::ostream & operator<<( std::ostream & stream, sf::Rect<T> const & rect );

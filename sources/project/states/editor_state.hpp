@@ -10,9 +10,9 @@ class EditorState final : public State
 {
   public:
     EditorState( std::shared_ptr<sf::RenderWindow> window,
-                 Ressources const & ressources, Settings const & settings );
+                 Ressources const & ressources );
 
-    void update( float const & deltaTime ) override;
+    void update() override;
     void render() override;
 
   private:
@@ -29,24 +29,17 @@ class EditorState final : public State
     ButtonArray m_buttons;
     Type m_type;
 
-    sf::View m_view; // a mettre dans la classe tilemap
+    sf::View m_view; // à mettre dans la classe tilemap
 
     // Selection
     // sf::RectangleShape m_selectionRect {};
     // std::vector<int> m_tableSelection {};
 
-    T_KeyboardInputMap init_keyboard_action() const override;
-    T_MouseInputMap init_mouse_action() const override;
+    void keyboard_pressed( sf::Event event ) override;
+    void mouse_scroll( float const & deltaScroll ) override;
 
     void init_map();
     void init_selection_rect();
-
-    void handle_keyboard_press( std::string const & inputName ) override;
-    // void handle_mouse_button_press( std::string const & inputName ) override;
-    // void handle_mouse_button_release( std::string const & inputName ) override;
-    void handle_mouse_wheel_up() override;
-    void handle_mouse_wheel_down() override;
-    void handle_current_input() override;
 
     /* Fonction qui permet de séparer les actions de l'utilisateur */
     void update_normal_mode();

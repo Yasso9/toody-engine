@@ -1,6 +1,7 @@
 #pragma once
 
 #include "graphics/openGL.hpp"
+#include "tools/sfml.hpp"
 
 /// @brief An abstract camera class that processes input and calculates
 ///        the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
@@ -33,7 +34,7 @@ class Camera
     ///        (to abstract it from windowing systems)
     void move( Camera::E_Movement const & direction, float const & deltaTime );
 
-    void rotate( glm::vec3 const & angle, float const & deltaTime );
+    void rotate( sf::Vector2f const & angle, float const & deltaTime );
 
     void zoom( float const & factor, float const & deltaTime );
 

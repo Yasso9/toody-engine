@@ -25,9 +25,6 @@ class Game final
 
     Settings const m_settings;
 
-    /// @brief State that was print before the update of the state
-    State::E_List m_lastState;
-
     void init_window();
     void init_state();
 
@@ -44,7 +41,9 @@ class Game final
     void change_state( State::E_List const & newState );
 
     template <typename StateClass>
-    void set_new_state();
+    void set_new_state()
+    {
+        this->m_states =
+            std::make_shared<StateClass>( this->m_window, this->m_ressources );
+    }
 };
-
-#include "game.tpp"

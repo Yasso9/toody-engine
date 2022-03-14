@@ -15,9 +15,9 @@ class TestState final : public State
     sf::Shader ourShader;
 
     TestState( std::shared_ptr<sf::RenderWindow> window,
-               Ressources const & ressources, Settings const & settings );
+               Ressources const & ressources );
     virtual ~TestState() = default;
 
-    void update( float const & /* deltaTime */ ) override;
+    void update() override;
     void render() override;
 };

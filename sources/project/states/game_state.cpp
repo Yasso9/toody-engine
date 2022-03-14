@@ -2,31 +2,12 @@
 
 // TYPO changer les arguments en une structure comprenant T_TexturesMap et T_FontsMap
 GameState::GameState( std::shared_ptr<sf::RenderWindow> window,
-                      Ressources const & ressources, Settings const & settings )
-  : State( window, ressources, settings, State::E_List::Game ),
+                      Ressources const & ressources )
+  : State( window, ressources, State::E_List::Game ),
     m_tilemap( ressources.textures.at( E_TextureKey::Tileset ) ),
     m_player( ressources.textures.at( E_TextureKey::Player ) )
 {
     this->init_map();
-}
-
-T_KeyboardInputMap GameState::init_keyboard_action() const
-{
-    return {
-        { "MainMenu", { sf::Keyboard::Escape, false } },
-
-        { "MoveUp", { sf::Keyboard::Z, false } },
-        { "MoveDown", { sf::Keyboard::S, false } },
-        { "MoveLeft", { sf::Keyboard::Q, false } },
-        { "MoveRight", { sf::Keyboard::D, false } },
-
-        { "Run", { sf::Keyboard::Space, false } },
-    };
-}
-
-T_MouseInputMap GameState::init_mouse_action() const
-{
-    return {};
 }
 
 void GameState::init_map()
@@ -42,42 +23,11 @@ void GameState::init_map()
     this->m_view.setSize( this->m_settings.get_window_size_f() / 2.f );
 }
 
-void GameState::handle_keyboard_press( std::string const & input )
+void GameState::keyboard_pressed( sf::Event event )
 {
-    if ( input == "MainMenu" )
+    if ( event.key.code == sf::Keyboard::Escape )
     {
         this->m_stateName = State::E_List::MainMenu;
-    }
-}
-
-void GameState::handle_current_input()
-{
-    this->m_player.set_state( Player::E_State::Normal );
-
-    if ( this->m_keyboard.at( "MoveUp" ).second )
-    {
-        this->m_player.set_state( Player::E_State::Walking );
-        this->m_player.set_direction( E_Direction::Up );
-    }
-    if ( this->m_keyboard.at( "MoveDown" ).second )
-    {
-        this->m_player.set_state( Player::E_State::Walking );
-        this->m_player.set_direction( E_Direction::Down );
-    }
-    if ( this->m_keyboard.at( "MoveLeft" ).second )
-    {
-        this->m_player.set_state( Player::E_State::Walking );
-        this->m_player.set_direction( E_Direction::Left );
-    }
-    if ( this->m_keyboard.at( "MoveRight" ).second )
-    {
-        this->m_player.set_state( Player::E_State::Walking );
-        this->m_player.set_direction( E_Direction::Right );
-    }
-
-    if ( this->m_keyboard.at( "Run" ).second )
-    {
-        this->m_player.set_state( Player::E_State::Running );
     }
 }
 
@@ -87,9 +37,37 @@ void GameState::update_map()
     this->m_view.setCenter( this->m_player.getPosition() );
 }
 
-void GameState::update( float const & deltaTime )
+void GameState::update()
 {
-    this->m_player.update( deltaTime );
+    this->m_player.set_state( Player::E_State::Normal );
+
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
+    {
+        this->m_player.set_state( Player::E_State::Walking );
+        this->m_player.set_direction( E_Direction::Up );
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
+    {
+        this->m_player.set_state( Player::E_State::Walking );
+        this->m_player.set_direction( E_Direction::Down );
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Q ) )
+    {
+        this->m_player.set_state( Player::E_State::Walking );
+        this->m_player.set_direction( E_Direction::Left );
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
+    {
+        this->m_player.set_state( Player::E_State::Walking );
+        this->m_player.set_direction( E_Direction::Right );
+    }
+
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
+    {
+        this->m_player.set_state( Player::E_State::Running );
+    }
+
+    this->m_player.update( this->m_deltaTime );
     this->update_map();
 }
 

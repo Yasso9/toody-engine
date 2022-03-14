@@ -79,12 +79,17 @@ void Camera::move( Camera::E_Movement const & direction,
     this->update_camera_vectors();
 }
 
-void Camera::rotate( glm::vec3 const & angle, float const & deltaTime )
+void Camera::rotate( sf::Vector2f const & angle, float const & deltaTime )
 {
     // std::cout << "\n" << std::endl;
 
-    this->m_yaw += angle.x * deltaTime * 200.f;
-    this->m_pitch += angle.y * deltaTime * 200.f;
+    this->m_yaw += angle.x * deltaTime;
+    this->m_pitch += angle.y * deltaTime;
+
+    // if ( pitch > 89.0f )
+    //     pitch = 89.0f;
+    // if ( pitch < -89.0f )
+    //     pitch = -89.0f;
 
     // std::cout << "Yaw : " << this->m_yaw << std::endl;
     // std::cout << "Pitch : " << this->m_pitch << std::endl;

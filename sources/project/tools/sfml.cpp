@@ -51,6 +51,19 @@ sf::Vector2f operator%( sf::Vector2f const & vector, int const & modulo )
     return static_cast<sf::Vector2f>( integerVectorResult );
 }
 
+std::ostream & operator<<( std::ostream & stream,
+                           sf::ContextSettings const & settings )
+{
+    stream << "{  depth bits : " << settings.depthBits << " , ";
+    stream << "stencil bits : " << settings.stencilBits << " , ";
+    stream << "sRgbCapable : " << settings.sRgbCapable << " , ";
+    stream << "antialiasing level : " << settings.antialiasingLevel << " , ";
+    stream << "version : " << settings.majorVersion << "."
+           << settings.minorVersion << "  }";
+
+    return stream;
+}
+
 template <typename T>
 std::ostream & operator<<( std::ostream & stream, sf::Rect<T> const & rect )
 {

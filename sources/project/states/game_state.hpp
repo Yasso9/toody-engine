@@ -8,9 +8,9 @@ class GameState final : public State
 {
   public:
     GameState( std::shared_ptr<sf::RenderWindow> window,
-               Ressources const & ressources, Settings const & settings );
+               Ressources const & ressources );
 
-    void update( float const & deltaTime ) override;
+    void update() override;
     void render() override;
 
   private:
@@ -19,13 +19,8 @@ class GameState final : public State
 
     sf::View m_view;
 
-    T_KeyboardInputMap init_keyboard_action() const override;
-    T_MouseInputMap init_mouse_action() const override;
+    void keyboard_pressed( sf::Event event ) override;
 
     void init_map();
-
-    void handle_keyboard_press( std::string const & inputName ) override;
-    void handle_current_input() override;
-
     void update_map();
 };

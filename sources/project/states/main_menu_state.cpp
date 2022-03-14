@@ -3,21 +3,20 @@
 #include "tools/string.hpp"
 
 MainMenuState::MainMenuState( std::shared_ptr<sf::RenderWindow> window,
-                              Ressources const & ressources,
-                              Settings const & settings )
-  : State( window, ressources, settings, State::E_List::MainMenu )
+                              Ressources const & ressources )
+  : State( window, ressources, State::E_List::MainMenu )
 {
     this->init_background();
     this->init_text();
     this->init_buttons();
 }
 
-void MainMenuState::update( float const & /* deltaTime */ )
+void MainMenuState::update()
 {
     int const buttonNumberPressed { this->m_buttons.update(
         // TYPO essayer d'enlever le static cast, ça fait moche
         static_cast<sf::Vector2f>( sf::Mouse::getPosition( *this->m_window ) ),
-        this->m_mouseButton.at( "AcceptClick"s ).second ) };
+        sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) ) };
 
     if ( buttonNumberPressed != -1 )
     {
@@ -35,22 +34,6 @@ void MainMenuState::render()
     this->m_window->draw( this->m_text );
 
     this->m_window->draw( this->m_buttons );
-}
-
-T_KeyboardInputMap MainMenuState::init_keyboard_action() const
-{
-    return {
-        { "Previous", { sf::Keyboard::A, false } },
-        { "Next", { sf::Keyboard::Z, false } },
-        { "AcceptPress", { sf::Keyboard::Space, false } },
-    };
-}
-
-T_MouseInputMap MainMenuState::init_mouse_action() const
-{
-    return {
-        { "AcceptClick", { sf::Mouse::Left, false } },
-    };
 }
 
 void MainMenuState::init_background()

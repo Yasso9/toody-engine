@@ -26,7 +26,6 @@ void Shape::create( std::vector<float> const & vertices,
                                  tools::get_path::shaders() + "/shader.frag"s );
 
     bool textureLoad { true };
-    // TYPO vérifié que cette operateur marche bien
     textureLoad &= this->m_texture.loadFromFile( tools::get_path::resources()
                                                  + "/wall.jpg"s );
     textureLoad &= this->m_texture.generateMipmap();

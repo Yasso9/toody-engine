@@ -4,9 +4,8 @@
 #include <iostream>
 
 GraphicState::GraphicState( std::shared_ptr<sf::RenderWindow> window,
-                            Ressources const & ressources,
-                            Settings const & settings )
-  : State( window, ressources, settings, State::E_List::Graphics )
+                            Ressources const & ressources )
+  : State( window, ressources, State::E_List::Graphics )
 {
     // TYPO mettre ça au début de l'exection du program après l'initialisation du window
     gl::initialize();
@@ -14,8 +13,10 @@ GraphicState::GraphicState( std::shared_ptr<sf::RenderWindow> window,
     this->init_shape();
 }
 
-void GraphicState::update( float const & /* deltaTime */ )
+void GraphicState::update()
 {
+    this->update_keyboard();
+    this->update_mouse();
     this->update_camera();
 }
 
@@ -28,19 +29,6 @@ void GraphicState::render()
 
 void GraphicState::init_shape()
 {
-    // std::vector<float> vertices {
-    //     // positions          // colors           // texture coords
-    //     0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-    //     0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-    //     -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-    //     -0.5f, 0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f // top left
-    // };
-    // unsigned int const numberOfDataPerAttribute { 8u };
-    // std::vector<unsigned int> indices {
-    //     0, 1, 3, // first triangle
-    //     1, 2, 3 // second triangle
-    // };
-
     std::vector<float> vertices {
         -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f,  -0.5f, -0.5f, 1.0f, 0.0f,
         0.5f,  0.5f,  -0.5f, 1.0f, 1.0f, 0.5f,  0.5f,  -0.5f, 1.0f, 1.0f,
@@ -67,8 +55,8 @@ void GraphicState::init_shape()
         -0.5f, 0.5f,  0.5f,  0.0f, 0.0f, -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f
     };
     unsigned int const numberOfDataPerAttribute { 5u };
-
     std::vector<unsigned int> indices {};
+
     this->m_shape.create( vertices, indices, numberOfDataPerAttribute );
 }
 
@@ -110,73 +98,73 @@ void GraphicState::update_camera()
     this->m_shape.update( spaceMatrix );
 }
 
-void GraphicState::handle_current_input()
+void GraphicState::update_mouse()
+{
+    sf::Vector2f const currentMousePosition { sf::Mouse::getPosition() };
+
+    sf::Vector2f offset {};
+    // offset.x = currentMousePosition.x - m_lastMousePosition.x;
+    // offset.y = m_lastMousePosition.y - currentMousePosition.y;
+
+    // this->m_mousePosition.set_overall( sfpp::screen_resolution_f() / 2.f );
+    // Reset Mouse Position
+    // sf::Mouse::setPosition(
+    //     this->m_window.get()->getPosition()
+    //     + static_cast<sf::Vector2i>( sfpp::screen_resolution_u() / 2u ) );
+
+    float const sensitivity = 1.f;
+    offset *= sensitivity;
+
+    // std::cout << offset << std::endl;
+    // std::cout << offset * 1.5f << std::endl;
+
+    this->m_camera.rotate( offset, this->m_deltaTime );
+}
+
+void GraphicState::update_keyboard()
 {
     float const deltaTime { 0.016f };
 
-    if ( this->m_keyboard.at( "Forward" ).second )
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
     {
         this->m_camera.move( Camera::E_Movement::Forward, deltaTime );
     }
-    if ( this->m_keyboard.at( "Backward" ).second )
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
     {
         this->m_camera.move( Camera::E_Movement::Backward, deltaTime );
     }
-    if ( this->m_keyboard.at( "Left" ).second )
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Q ) )
     {
         this->m_camera.move( Camera::E_Movement::Left, deltaTime );
     }
-    if ( this->m_keyboard.at( "Right" ).second )
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
     {
         this->m_camera.move( Camera::E_Movement::Right, deltaTime );
     }
 
-    if ( this->m_keyboard.at( "AngleUp" ).second )
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Up ) )
     {
-        this->m_camera.rotate( { 0.f, 1.f, 0.f }, deltaTime );
+        this->m_camera.rotate( { 0.f, 1.f }, deltaTime );
     }
-    if ( this->m_keyboard.at( "AngleDown" ).second )
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) )
     {
-        this->m_camera.rotate( { 0.f, -1.f, 0.f }, deltaTime );
+        this->m_camera.rotate( { 0.f, -1.f }, deltaTime );
     }
-    if ( this->m_keyboard.at( "AngleLeft" ).second )
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) )
     {
-        this->m_camera.rotate( { -1.f, 0.f, 0.f }, deltaTime );
+        this->m_camera.rotate( { -1.f, 0.f }, deltaTime );
     }
-    if ( this->m_keyboard.at( "AngleRight" ).second )
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Right ) )
     {
-        this->m_camera.rotate( { 1.f, 0.f, 0.f }, deltaTime );
+        this->m_camera.rotate( { 1.f, 0.f }, deltaTime );
     }
 
-    if ( this->m_keyboard.at( "ZoomIn" ).second )
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::P ) )
     {
         this->m_camera.zoom( 1.f, deltaTime );
     }
-    if ( this->m_keyboard.at( "ZoomOut" ).second )
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::M ) )
     {
         this->m_camera.zoom( -1.f, deltaTime );
     }
-}
-
-T_KeyboardInputMap GraphicState::init_keyboard_action() const
-{
-    return {
-        { "Forward", { sf::Keyboard::Z, false } },
-        { "Backward", { sf::Keyboard::S, false } },
-        { "Left", { sf::Keyboard::Q, false } },
-        { "Right", { sf::Keyboard::D, false } },
-
-        { "AngleUp", { sf::Keyboard::Up, false } },
-        { "AngleDown", { sf::Keyboard::Down, false } },
-        { "AngleLeft", { sf::Keyboard::Left, false } },
-        { "AngleRight", { sf::Keyboard::Right, false } },
-
-        { "ZoomIn", { sf::Keyboard::P, false } },
-        { "ZoomOut", { sf::Keyboard::M, false } },
-    };
-}
-
-T_MouseInputMap GraphicState::init_mouse_action() const
-{
-    return {};
 }

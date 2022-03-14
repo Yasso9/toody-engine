@@ -30,6 +30,8 @@ static T_UniqueSqlitePtr make_sqlite();
 
 // Json Array of all the result requested
 static json gf_resultRequested {};
+static std::string const g_databasePath { tools::get_path::databases()
+                                          + "/tilemap.db" };
 
 namespace db
 {
@@ -76,8 +78,7 @@ namespace db
         if ( requestResultState != SQLITE_OK )
         {
             sqlite3_free( requestErrorMessage );
-            throw DatabaseException { tools::get_path::databases(),
-                                      requestErrorMessage };
+            throw DatabaseException { g_databasePath, requestErrorMessage };
         }
 
         return gf_resultRequested;
@@ -88,10 +89,10 @@ static T_UniqueSqlitePtr make_sqlite()
 {
     sqlite3 * database { nullptr };
 
-    if ( sqlite3_open( tools::get_path::databases().c_str(), &database ) )
+    if ( sqlite3_open( g_databasePath.c_str(), &database ) )
     {
         // Something bad is happenning
-        throw DatabaseException { tools::get_path::databases(),
+        throw DatabaseException { g_databasePath,
                                   "Can't open database - "s
                                       + sqlite3_errmsg( database ) };
     }

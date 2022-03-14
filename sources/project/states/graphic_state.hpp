@@ -8,22 +8,19 @@ class GraphicState final : public State
 {
   public:
     GraphicState( std::shared_ptr<sf::RenderWindow> window,
-                  Ressources const & ressources, Settings const & settings );
+                  Ressources const & ressources );
     virtual ~GraphicState() = default;
 
-    void update( float const & deltaTime ) override;
+    void update() override;
     void render() override;
 
   private:
     Camera m_camera;
     Shape m_shape;
 
-    T_KeyboardInputMap init_keyboard_action() const override;
-    T_MouseInputMap init_mouse_action() const override;
-
     void init_shape();
 
+    void update_keyboard();
+    void update_mouse();
     void update_camera();
-
-    void handle_current_input() override;
 };

@@ -6,12 +6,6 @@
 
 #include "tools/sfml.hpp"
 
-using T_KeyboardInputMap =
-    std::map<std::string const, std::pair<sf::Keyboard::Key const, bool>>;
-
-using T_MouseInputMap =
-    std::map<std::string const, std::pair<sf::Mouse::Button const, bool>>;
-
 enum class E_TextureKey
 {
     Tileset = 0,
