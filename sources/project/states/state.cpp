@@ -26,6 +26,17 @@ void State::update_inputs( sf::Event const & event )
         this->keyboard_pressed( event );
         break;
     case sf::Event::KeyReleased :
+        if ( event.key.code == sf::Keyboard::Escape )
+        {
+            if ( this->m_stateName == State::E_List::MainMenu )
+            {
+                this->m_stateName = State::E_List::Quit;
+                break;
+            }
+
+            this->m_stateName = State::E_List::MainMenu;
+            break;
+        }
         this->keyboard_released( event );
         break;
     case sf::Event::MouseButtonPressed :

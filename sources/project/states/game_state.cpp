@@ -23,14 +23,6 @@ void GameState::init_map()
     this->m_view.setSize( this->m_settings.get_window_size_f() / 2.f );
 }
 
-void GameState::keyboard_pressed( sf::Event event )
-{
-    if ( event.key.code == sf::Keyboard::Escape )
-    {
-        this->m_stateName = State::E_List::MainMenu;
-    }
-}
-
 void GameState::update_map()
 {
     // The view follow the player

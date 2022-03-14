@@ -51,11 +51,7 @@ void EditorState::mouse_scroll( float const & deltaScroll )
 
 void EditorState::keyboard_pressed( sf::Event event )
 {
-    if ( event.key.code == sf::Keyboard::Escape )
-    {
-        this->m_stateName = State::E_List::MainMenu;
-    }
-    else if ( event.key.code == sf::Keyboard::Num1 )
+    if ( event.key.code == sf::Keyboard::Num1 )
     {
         this->m_tilemap.set_depth( 0 );
     }

@@ -19,8 +19,6 @@ class GameState final : public State
 
     sf::View m_view;
 
-    void keyboard_pressed( sf::Event event ) override;
-
     void init_map();
     void update_map();
 };
