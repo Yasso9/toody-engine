@@ -98,21 +98,27 @@ void GraphicState::update_keyboard()
         this->m_camera.move( Camera::E_Movement::Right, this->m_deltaTime );
     }
 
+    float const & rotationSensivity { 20.f };
+
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Up ) )
     {
-        this->m_camera.rotate( { 0.f, 1.f }, this->m_deltaTime );
+        this->m_camera.rotate( sf::Vector2f { 0.f, 1.f } * rotationSensivity,
+                               this->m_deltaTime );
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) )
     {
-        this->m_camera.rotate( { 0.f, -1.f }, this->m_deltaTime );
+        this->m_camera.rotate( sf::Vector2f { 0.f, -1.f } * rotationSensivity,
+                               this->m_deltaTime );
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) )
     {
-        this->m_camera.rotate( { -1.f, 0.f }, this->m_deltaTime );
+        this->m_camera.rotate( sf::Vector2f { -1.f, 0.f } * rotationSensivity,
+                               this->m_deltaTime );
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Right ) )
     {
-        this->m_camera.rotate( { 1.f, 0.f }, this->m_deltaTime );
+        this->m_camera.rotate( sf::Vector2f { 1.f, 0.f } * rotationSensivity,
+                               this->m_deltaTime );
     }
 }
 
