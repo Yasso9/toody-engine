@@ -20,6 +20,8 @@ class GraphicState final : public State
 
     void init_shape();
 
+    void mouse_scroll( float const & deltaScroll ) override;
+
     void update_keyboard();
     void update_mouse();
     void update_camera();

@@ -41,7 +41,6 @@ glm::vec3 Camera::get_target_position() const
     return this->m_position + this->m_direction;
 }
 
-// returns the view matrix calculated using Euler Angles and the LookAt Matrix
 glm::mat4 Camera::get_view_matrix() const
 {
     return glm::lookAt( this->m_position,

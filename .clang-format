@@ -4,7 +4,7 @@ AlignAfterOpenBracket: Align
 # AlignConsecutiveAssignments: AcrossEmptyLines # clang 13 (work but still buggy)
 AlignConsecutiveDeclarations: None
 AlignConsecutiveMacros: AcrossEmptyLines
-AlignEscapedNewlines: DontAlign
+AlignEscapedNewlines: Left
 AlignOperands: Align
 AlignTrailingComments: false
 AllowAllArgumentsOnNextLine: false
