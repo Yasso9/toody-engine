@@ -27,7 +27,7 @@ Game::Game()
     // TYPO à mettre autre part
     this->m_window.get()->setVisible( true );
     this->m_window.get()->requestFocus();
-    // this->m_window.get()->setKeyRepeatEnabled( false );
+    this->m_window.get()->setKeyRepeatEnabled( false );
 }
 
 void Game::init_window()
@@ -152,8 +152,11 @@ void Game::change_state( State::E_List const & newState )
         this->set_new_state<EditorState>();
         break;
     case State::E_List::Graphics :
-        this->m_window.get()->setMouseCursorVisible( false );
-        this->m_window.get()->setMouseCursorGrabbed( true );
+        // TYPO n'activer le grab de la souris que si la window est focus
+        // this->m_window.get()->setMouseCursorVisible( false );
+        // this->m_window.get()->setMouseCursorGrabbed( true );
+        this->m_window.get()->setMouseCursorVisible( true );
+        this->m_window.get()->setMouseCursorGrabbed( false );
         this->set_new_state<GraphicState>();
         break;
     case State::E_List::Test :

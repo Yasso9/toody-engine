@@ -9,14 +9,29 @@
 class Shape final
 {
   public:
+    struct Data
+    {
+        /// @brief Array of all the attributes of the shape
+        std::vector<float> vertices;
+        /// @brief Array of all the indices of the shape
+        ///        If empty, we don't create an element buffer object
+        std::vector<unsigned int> indices;
+
+        /// @brief Array of the vector's size contained in each point
+        std::vector<unsigned int> dataPerPoint;
+
+        /// @brief Size of number of each point
+        unsigned int get_data_per_point_sum() const;
+    };
+
     Shape() = default;
     virtual ~Shape();
 
-    /// @brief Create the shape. If the indices is empty,
-    ///        we don't create an element buffer object
-    void create( std::vector<float> const & vertices,
-                 std::vector<unsigned int> const & indices,
-                 unsigned int const & numberOfDataPerAttribute );
+    /**
+     * @brief Create the shape. If the indices is empty,
+     *        we don't create an element buffer object
+     */
+    void create( Data const & data );
     void update( gl::SpaceMatrix const & space );
     void draw() const;
 
@@ -32,24 +47,16 @@ class Shape final
     /// @brief Needed to simplify the point for the vertices
     unsigned int m_elementBufferObject;
 
-    /// @brief Array of all the attributes of the shape
-    std::vector<float> m_vertices;
-    /// @brief Array of all the indices of the shape
-    ///        If empty, we don't create an element buffer object
-    std::vector<unsigned int> m_indices;
+    Shape::Data m_data;
 
-    /// @brief number of value per point of each triangle of the shapes
-    unsigned int m_numberOfDataPerAttribute;
+    void load_textures_and_shaders();
 
     /// @brief Return true if we need an element buffer object for the actual shape,
     ///        false otherwise
     bool is_element_buffer_set() const;
 
-    void set_vertices( std::vector<float> const & vertices );
-    void set_indices( std::vector<unsigned int> const & indices );
-
     void objects_generation();
-    void bind_objects();
+    void objects_binding();
     void vertex_shader_attribution();
     void unbind();
 

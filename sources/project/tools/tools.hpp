@@ -32,7 +32,7 @@ namespace tools
     std::size_t size_of( std::vector<Type> const & array );
 
     template <typename Type>
-    Type * to_c_style_array( std::vector<Type> & array );
+    Type const * to_c_style_array( std::vector<Type> const & array );
 } // namespace tools
 
 /// @brief Cardinal Directions

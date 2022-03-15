@@ -1,8 +1,22 @@
 #include "shape.hpp"
 
+#include <iostream>
+#include <numeric>
+
+#include "tools/assertion.hpp"
 #include "tools/tools.hpp"
 
-#include <iostream>
+template <typename ArrayType>
+static void bind_buffer_object( unsigned int const & bufferObjectID,
+                                GLenum const & target,
+                                std::vector<ArrayType> const & dataArray );
+
+unsigned int Shape::Data::get_data_per_point_sum() const
+{
+    return std::accumulate( this->dataPerPoint.begin(),
+                            this->dataPerPoint.end(),
+                            0u );
+}
 
 Shape::~Shape()
 {
@@ -16,12 +30,20 @@ Shape::~Shape()
     }
 }
 
-void Shape::create( std::vector<float> const & vertices,
-                    std::vector<unsigned int> const & indices,
-                    unsigned int const & numberOfDataPerAttribute )
+void Shape::create( Data const & data )
 {
-    this->m_numberOfDataPerAttribute = numberOfDataPerAttribute;
+    this->m_data = data;
 
+    this->load_textures_and_shaders();
+
+    this->objects_generation();
+    this->objects_binding();
+    this->vertex_shader_attribution();
+    this->unbind();
+}
+
+void Shape::load_textures_and_shaders()
+{
     this->m_shader.loadFromFile( tools::get_path::shaders() + "/shader.vert"s,
                                  tools::get_path::shaders() + "/shader.frag"s );
 
@@ -33,17 +55,6 @@ void Shape::create( std::vector<float> const & vertices,
     {
         throw std::runtime_error { "Cannot load texture"s };
     }
-
-    // Bind the texture
-    sf::Texture::bind( &this->m_texture );
-
-    this->set_vertices( vertices );
-    this->set_indices( indices );
-
-    this->objects_generation();
-    this->bind_objects();
-    this->vertex_shader_attribution();
-    this->unbind();
 }
 
 void Shape::update( gl::SpaceMatrix const & space )
@@ -66,7 +77,7 @@ void Shape::draw() const
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, this->m_elementBufferObject );
         int const dataType { GL_UNSIGNED_INT };
         glDrawElements( primitiveType,
-                        static_cast<int>( this->m_vertices.size() ),
+                        static_cast<int>( this->m_data.vertices.size() ),
                         dataType,
                         0 );
     }
@@ -74,28 +85,21 @@ void Shape::draw() const
     {
         int const verticesBeginPosition { 0 };
         int const vectorSize { static_cast<int>(
-            this->m_vertices.size() / this->m_numberOfDataPerAttribute ) };
+            this->m_data.vertices.size()
+            / this->m_data.get_data_per_point_sum() ) };
         glDrawArrays( primitiveType, verticesBeginPosition, vectorSize );
     }
 
-    sf::Shader::bind( NULL );
-    sf::Texture::bind( NULL );
     // Unbind VAO
     glBindVertexArray( 0 );
+
+    sf::Shader::bind( NULL );
+    sf::Texture::bind( NULL );
 }
 
 bool Shape::is_element_buffer_set() const
 {
-    return ! this->m_indices.empty();
-}
-
-void Shape::set_vertices( std::vector<float> const & vertices )
-{
-    this->m_vertices = vertices;
-}
-void Shape::set_indices( std::vector<unsigned int> const & indices )
-{
-    this->m_indices = indices;
+    return ! this->m_data.indices.empty();
 }
 
 void Shape::objects_generation()
@@ -108,30 +112,21 @@ void Shape::objects_generation()
     }
 }
 
-void Shape::bind_objects()
+void Shape::objects_binding()
 {
-    // Binding
     glBindVertexArray( this->m_vertexArrayObject );
 
-    int const bufferTarget { GL_ARRAY_BUFFER };
-    int const dataExpectedUsage { GL_STATIC_DRAW };
-
-    // VBO
-    glBindBuffer( bufferTarget, this->m_vertexBufferObject );
-    glBufferData( bufferTarget,
-                  static_cast<int>( too::size_of( this->m_vertices ) ),
-                  too::to_c_style_array( this->m_vertices ),
-                  dataExpectedUsage );
+    GLenum const bufferTarget { GL_ARRAY_BUFFER };
+    bind_buffer_object( this->m_vertexBufferObject,
+                        bufferTarget,
+                        this->m_data.vertices );
 
     if ( this->is_element_buffer_set() )
     {
-        int const elementTarget { GL_ELEMENT_ARRAY_BUFFER };
-        // EBO
-        glBindBuffer( elementTarget, this->m_elementBufferObject );
-        glBufferData( elementTarget,
-                      static_cast<int>( too::size_of( this->m_indices ) ),
-                      too::to_c_style_array( this->m_indices ),
-                      dataExpectedUsage );
+        GLenum const elementTarget { GL_ELEMENT_ARRAY_BUFFER };
+        bind_buffer_object( this->m_elementBufferObject,
+                            elementTarget,
+                            this->m_data.indices );
     }
 }
 
@@ -139,52 +134,27 @@ void Shape::vertex_shader_attribution()
 {
     int const valueType { GL_FLOAT };
     int const hasDataToBeNormalised { GL_FALSE };
-    int const dataPerAttributeSize { static_cast<int>(
-        this->m_numberOfDataPerAttribute * sizeof( float ) ) };
+    int const dataAttributeRealSize { static_cast<int>(
+        this->m_data.get_data_per_point_sum() * sizeof( float ) ) };
 
+    unsigned int vectorSizeCounter { 0u };
+
+    for ( unsigned int location {}; location < this->m_data.dataPerPoint.size();
+          ++location )
     {
-        unsigned int const positionLocation { 0u };
-        unsigned int const positionVectorSize { 3u };
-        void * positionOffsetStart { reinterpret_cast<void *>(
-            static_cast<intptr_t>( 0 * sizeof( float ) ) ) };
+        void * offsetStart { reinterpret_cast<void *>(
+            static_cast<intptr_t>( vectorSizeCounter * sizeof( float ) ) ) };
 
-        glVertexAttribPointer( positionLocation,
-                               positionVectorSize,
-                               valueType,
-                               hasDataToBeNormalised,
-                               dataPerAttributeSize,
-                               positionOffsetStart );
-        glEnableVertexAttribArray( positionLocation );
-    }
+        glVertexAttribPointer(
+            location,
+            static_cast<int>( this->m_data.dataPerPoint[location] ),
+            valueType,
+            hasDataToBeNormalised,
+            dataAttributeRealSize,
+            offsetStart );
+        glEnableVertexAttribArray( location );
 
-    // {
-    //     unsigned int const colorLocation { 1u };
-    //     unsigned int const colorVectorSize { 3u };
-    //     void * colorOffsetStart { reinterpret_cast<void *>(
-    //         static_cast<intptr_t>( 3 * sizeof( float ) ) ) };
-
-    //     glVertexAttribPointer( colorLocation,
-    //                            colorVectorSize,
-    //                            valueType,
-    //                            hasDataToBeNormalised,
-    //                            dataPerAttributeSize,
-    //                            colorOffsetStart );
-    //     glEnableVertexAttribArray( colorLocation );
-    // }
-
-    {
-        unsigned int const textureCoordinateLocation { 1u };
-        unsigned int const textureCoordinateVectorSize { 2u };
-        void * textureCoordinateOffsetStart { reinterpret_cast<void *>(
-            static_cast<intptr_t>( 3 * sizeof( float ) ) ) };
-
-        glVertexAttribPointer( textureCoordinateLocation,
-                               textureCoordinateVectorSize,
-                               valueType,
-                               hasDataToBeNormalised,
-                               dataPerAttributeSize,
-                               textureCoordinateOffsetStart );
-        glEnableVertexAttribArray( textureCoordinateLocation );
+        vectorSizeCounter += this->m_data.dataPerPoint[location];
     }
 }
 
@@ -239,4 +209,21 @@ static int get_shader_uniform_location( sf::Shader const & shader,
     // TYPO check if the returned value is ok
     return glGetUniformLocation( shader.getNativeHandle(),
                                  uniformName.c_str() );
+}
+
+template <typename ArrayType>
+static void bind_buffer_object( unsigned int const & bufferObjectID,
+                                GLenum const & target,
+                                std::vector<ArrayType> const & dataArray )
+{
+    ASSERTION( target == GL_ARRAY_BUFFER || target == GL_ELEMENT_ARRAY_BUFFER,
+               "Invalid target argument passed" );
+
+    int const dataExpectedUsage { GL_STATIC_DRAW };
+
+    glBindBuffer( target, bufferObjectID );
+    glBufferData( target,
+                  static_cast<int>( too::size_of( dataArray ) ),
+                  too::to_c_style_array( dataArray ),
+                  dataExpectedUsage );
 }

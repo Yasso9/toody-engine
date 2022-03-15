@@ -11,7 +11,7 @@ namespace too
     }
 
     template <typename Type>
-    Type * to_c_style_array( std::vector<Type> & array )
+    Type const * to_c_style_array( std::vector<Type> const & array )
     {
         return &array[0];
     }

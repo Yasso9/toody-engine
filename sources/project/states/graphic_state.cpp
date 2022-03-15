@@ -14,9 +14,6 @@ GraphicState::GraphicState( std::shared_ptr<sf::RenderWindow> window,
 
 void GraphicState::update()
 {
-    this->update_keyboard();
-    this->update_mouse();
-
     this->update_camera();
 }
 
@@ -27,9 +24,29 @@ void GraphicState::render()
     this->m_shape.draw();
 }
 
+void GraphicState::mouse_scroll( float const & deltaScroll )
+{
+    float scrollSpeed { 5.f };
+
+    if ( deltaScroll < 0.1f )
+    {
+        scrollSpeed = -scrollSpeed;
+    }
+    else // positiv scroll
+    {}
+
+    this->m_camera.zoom( scrollSpeed, this->m_deltaTime );
+}
+
+void GraphicState::extra_events()
+{
+    this->update_keyboard();
+    this->update_mouse();
+}
+
 void GraphicState::init_shape()
 {
-    std::vector<float> vertices {
+    std::vector<float> const vertices {
         -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f,  -0.5f, -0.5f, 1.0f, 0.0f,
         0.5f,  0.5f,  -0.5f, 1.0f, 1.0f, 0.5f,  0.5f,  -0.5f, 1.0f, 1.0f,
         -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f, -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
@@ -54,24 +71,12 @@ void GraphicState::init_shape()
         0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
         -0.5f, 0.5f,  0.5f,  0.0f, 0.0f, -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f
     };
-    unsigned int const numberOfDataPerAttribute { 5u };
-    std::vector<unsigned int> indices {};
+    std::vector<unsigned int> const numberOfDataPerAttribute { 3u, 2u };
+    std::vector<unsigned int> const indices {};
 
-    this->m_shape.create( vertices, indices, numberOfDataPerAttribute );
-}
+    Shape::Data shapeData { vertices, indices, numberOfDataPerAttribute };
 
-void GraphicState::mouse_scroll( float const & deltaScroll )
-{
-    float scrollSpeed { 5.f };
-
-    if ( deltaScroll < 0.1f )
-    {
-        scrollSpeed = -scrollSpeed;
-    }
-    else // positiv scroll
-    {}
-
-    this->m_camera.zoom( scrollSpeed, this->m_deltaTime );
+    this->m_shape.create( shapeData );
 }
 
 void GraphicState::update_keyboard()
@@ -113,6 +118,7 @@ void GraphicState::update_keyboard()
 
 void GraphicState::update_mouse()
 {
+    // TYPO faire une fonction "get_mouse_relativ_position"
     sf::Vector2i const i_middlePosition {
         this->m_window.get()->getPosition()
         + static_cast<sf::Vector2i>( this->m_window.get()->getSize() / 2u )
@@ -120,17 +126,12 @@ void GraphicState::update_mouse()
     sf::Vector2f const f_middlePosition { static_cast<sf::Vector2f>(
         i_middlePosition ) };
 
-    std::cout << "screen resolution" << this->m_window.get()->getSize()
-              << std::endl;
-    std::cout << "middlePosition" << f_middlePosition << std::endl;
-
     sf::Vector2f const currentMousePosition { sf::Mouse::getPosition() };
 
     sf::Vector2f offset {};
     offset.x = currentMousePosition.x - f_middlePosition.x;
     offset.y = f_middlePosition.y - currentMousePosition.y;
 
-    // TYPO faire une fonction "set_mouse_relativ_position"
     // Reset Mouse Position
     sf::Mouse::setPosition( static_cast<sf::Vector2i>( i_middlePosition ) );
 

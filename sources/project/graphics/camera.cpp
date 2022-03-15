@@ -83,10 +83,10 @@ void Camera::rotate( sf::Vector2f const & angle, float const & deltaTime )
     this->m_yaw += angle.x * deltaTime;
     this->m_pitch += angle.y * deltaTime;
 
-    // if ( pitch > 89.0f )
-    //     pitch = 89.0f;
-    // if ( pitch < -89.0f )
-    //     pitch = -89.0f;
+    if ( this->m_pitch > 89.0f )
+        this->m_pitch = 89.0f;
+    if ( this->m_pitch < -89.0f )
+        this->m_pitch = -89.0f;
 
     this->update_camera_vectors();
 }

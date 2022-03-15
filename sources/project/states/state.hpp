@@ -77,6 +77,9 @@ class State
 
     virtual void mouse_scroll( float const & deltaScroll );
 
+    /// @brief update general events
+    virtual void extra_events();
+
     /// @brief Update any change that can happen in the current state.
     virtual void update() = 0;
 };

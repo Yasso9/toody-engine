@@ -18,11 +18,13 @@ class GraphicState final : public State
     Camera m_camera;
     Shape m_shape;
 
-    void init_shape();
-
     void mouse_scroll( float const & deltaScroll ) override;
+    void extra_events() override;
+
+    void init_shape();
 
     void update_keyboard();
     void update_mouse();
+
     void update_camera();
 };

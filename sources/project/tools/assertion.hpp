@@ -6,11 +6,11 @@
 
 #ifndef NDEBUG
     #define ASSERTION( expression, message ) \
-        too::assertion( expression, \
-                        __FILE__, \
-                        __LINE__, \
-                        __func__, \
-                        #expression, \
+        too::assertion( expression,          \
+                        __FILE__,            \
+                        __LINE__,            \
+                        __func__,            \
+                        #expression,         \
                         message )
 #else
     #define ASSERTION( expression, message ) ;
