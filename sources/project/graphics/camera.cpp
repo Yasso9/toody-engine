@@ -81,8 +81,6 @@ void Camera::move( Camera::E_Movement const & direction,
 
 void Camera::rotate( sf::Vector2f const & angle, float const & deltaTime )
 {
-    // std::cout << "\n" << std::endl;
-
     this->m_yaw += angle.x * deltaTime;
     this->m_pitch += angle.y * deltaTime;
 
@@ -90,9 +88,6 @@ void Camera::rotate( sf::Vector2f const & angle, float const & deltaTime )
     //     pitch = 89.0f;
     // if ( pitch < -89.0f )
     //     pitch = -89.0f;
-
-    // std::cout << "Yaw : " << this->m_yaw << std::endl;
-    // std::cout << "Pitch : " << this->m_pitch << std::endl;
 
     this->update_camera_vectors();
 }
@@ -106,33 +101,8 @@ void Camera::zoom( float const & factor, float const & deltaTime )
     this->update_camera_vectors();
 }
 
-// void Camera::process_mouse_movement( float & /* xoffset */,
-//                                      float & /* yoffset */,
-//                                      GLboolean const & /* constrainPitch */ )
-// {
-// xoffset *= m_mouseSensitivity;
-// yoffset *= m_mouseSensitivity;
-
-// m_yaw += xoffset;
-// m_pitch += yoffset;
-
-// // make sure that when pitch is out of bounds, screen doesn't get flipped
-// if ( constrainPitch )
-// {
-//     if ( m_pitch > 89.0f )
-//         m_pitch = 89.0f;
-//     if ( m_pitch < -89.0f )
-//         m_pitch = -89.0f;
-// }
-
-// // update m_front, m_rightAxis and m_upAxis Vectors using the updated Euler angles
-// update_camera_vectors();
-// }
-
 void Camera::update_camera_vectors()
 {
-    // std::cout << "Direction Before : " << this->m_direction << std::endl;
-
     this->m_direction.x = std::cos( glm::radians( this->m_pitch ) )
                           * std::cos( glm::radians( this->m_yaw ) );
     this->m_direction.y = std::sin( glm::radians( this->m_pitch ) );
@@ -140,8 +110,6 @@ void Camera::update_camera_vectors()
                           * std::sin( glm::radians( this->m_yaw ) );
 
     this->m_direction = glm::normalize( this->m_direction );
-
-    // std::cout << "Direction After : " << this->m_direction << std::endl;
 
     // Update the up and right axis
     this->m_rightAxis =

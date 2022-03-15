@@ -23,6 +23,11 @@ Game::Game()
 {
     this->init_window();
     this->init_state();
+
+    // TYPO à mettre autre part
+    this->m_window.get()->setVisible( true );
+    this->m_window.get()->requestFocus();
+    this->m_window.get()->setKeyRepeatEnabled( false );
 }
 
 void Game::init_window()
@@ -65,10 +70,9 @@ void Game::init_window()
 
 void Game::init_state()
 {
-    // Game start with main menu
-    this->set_new_state<MainMenuState>();
-    // this->set_new_state<TestState>();
-    // this->set_new_state<GraphicState>();
+    // this->change_state( State::E_List::MainMenu );
+    // this->change_state( State::E_List::Test );
+    this->change_state( State::E_List::Graphics );
 }
 
 void Game::run()
@@ -130,23 +134,26 @@ void Game::render()
 
 void Game::change_state( State::E_List const & newState )
 {
-    std::cout << "State changed" << std::endl;
-
     switch ( newState )
     {
     case State::E_List::MainMenu :
+        this->m_window.get()->setMouseCursorGrabbed( false );
         this->set_new_state<MainMenuState>();
         break;
     case State::E_List::Game :
+        this->m_window.get()->setMouseCursorGrabbed( false );
         this->set_new_state<GameState>();
         break;
     case State::E_List::Editor :
+        this->m_window.get()->setMouseCursorGrabbed( false );
         this->set_new_state<EditorState>();
         break;
     case State::E_List::Graphics :
+        this->m_window.get()->setMouseCursorGrabbed( true );
         this->set_new_state<GraphicState>();
         break;
     case State::E_List::Test :
+        this->m_window.get()->setMouseCursorGrabbed( false );
         this->set_new_state<TestState>();
         break;
 
