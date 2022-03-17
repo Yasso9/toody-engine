@@ -5,12 +5,7 @@
             "includePath": [
                 "${default}",
                 "${workspaceRoot}/sources/project/",
-                "${workspaceRoot}/libraries/Sfml_Windows/include",
-                "${workspaceRoot}/libraries/Sqlite",
-                "${workspaceRoot}/libraries/Json/include",
-                "${workspaceRoot}/libraries/Glad",
-                "${workspaceRoot}/libraries/GLM",
-                "${workspaceRoot}/libraries/SimpleLibraries"
+                "${workspaceRoot}/includes/"
             ],
             "defines": [
                 "_DEBUG",

@@ -52,6 +52,12 @@ void Game::init_window()
         sf::Style::Default,
         contextSettings );
 
+    // TYPO ajouté ça au projet, dans gl::initialize et mettre window dans un singleton
+    // glViewport( 0,
+    //             0,
+    //             this->m_settings.get_window_size_u().x,
+    //             this->m_settings.get_window_size_u().y );
+
     this->m_window->setVerticalSyncEnabled(
         this->m_settings.get_vertical_sync() );
 

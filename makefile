@@ -75,6 +75,8 @@ WARNINGS := -pedantic -Wpedantic -pedantic-errors \
 FILES_DIRECTORY := ./sources/project
 # .o files
 OBJECT_DIRECTORY := ./object
+# .o files of libraries
+LIBRARY_OBJECT_DIRECTORY := ./object_libraries
 # .exe and dll's
 BUILD_DIRECTORY := ./build
 
@@ -101,11 +103,12 @@ OBJECT_PROJECT := $(addprefix $(OBJECT_DIRECTORY)/,$(subst /,-,$(OBJECT_PROJECT)
 
 
 # List of the library object that needs to be linked
-OBJECT_GLAD := $(OBJECT_DIRECTORY)/glad.o
-OBJECT_SQLITE := $(OBJECT_DIRECTORY)/sqlite3.o
+# In the form "./object_library/objectA.o" "./object_library/objectB.o"
+OBJECT_LIBRARIES := $(wildcard $(LIBRARY_OBJECT_DIRECTORY)/*.o)
+
 # All object needed for the project to compile
 # (the project files objects + the libraries objects)
-OBJECT_ALL := $(OBJECT_PROJECT) $(OBJECT_GLAD) $(OBJECT_SQLITE)
+OBJECT_ALL := $(OBJECT_PROJECT) $(OBJECT_LIBRARIES)
 
 # Dependencies (.d files) will be on the same directories
 # and have the same name than object files
@@ -125,36 +128,16 @@ endif
 ############################## project path ##############################
 
 PROJECT_ROOT_PATH := $(CURDIR)
-LIBRARIES_PATH := $(PROJECT_ROOT_PATH)/libraries
-SQLITE_PATH := $(LIBRARIES_PATH)/Sqlite
-JSON_NLOHMANN_PATH := $(LIBRARIES_PATH)/Json/include
-GLAD_PATH := $(LIBRARIES_PATH)/Glad
-GLM_PATH := $(LIBRARIES_PATH)/GLM
-SIMPLE_LIBRARIES := $(LIBRARIES_PATH)/SimpleLibraries
 PROJECT_DIRECTORY_PATH := $(PROJECT_ROOT_PATH)/sources/project
+LIBRARIES_INCLUDE_PATH := $(PROJECT_ROOT_PATH)/includes
+LIBRARIES_PATH := $(PROJECT_ROOT_PATH)/libraries
 
-# SFML
-ifeq ($(SYSTEM_NAME),Windows)
-	SFML_PATH := $(LIBRARIES_PATH)/Sfml_Windows
-else
-	ifeq ($(SYSTEM_NAME),Unix)
-		SFML_PATH := $(LIBRARIES_PATH)/Sfml_Linux
-	else
-		echo "OS is not identified"
-		exit 1
-	endif
-endif
-SFML_INCLUDE_PATH := $(SFML_PATH)/include
-SFML_LIB_PATH := $(SFML_PATH)/lib
+LIB_FLAG_SFML := -lsfml-graphics -lsfml-system -lsfml-window
+LIB_FLAG_ASSIMP := -lassimp
+LIBRARIES_FLAG := $(LIB_FLAG_SFML) $(LIB_FLAG_ASSIMP)
 
-INCLUDES := -I"$(SFML_INCLUDE_PATH)" \
-			-I"$(SQLITE_PATH)" \
-			-I"$(JSON_NLOHMANN_PATH)" \
-			-I"$(GLAD_PATH)" \
-			-I"$(GLM_PATH)" \
-			-I"$(SIMPLE_LIBRARIES)" \
-			-I"$(PROJECT_DIRECTORY_PATH)"
-LIBRARIES := -L"$(SFML_LIB_PATH)" -lsfml-graphics -lsfml-system -lsfml-window
+INCLUDES := -I"$(PROJECT_DIRECTORY_PATH)" -I"$(LIBRARIES_INCLUDE_PATH)"
+LIBRARIES := -L"$(LIBRARIES_PATH)" $(LIBRARIES_FLAG)
 
 
 
@@ -162,20 +145,21 @@ LIBRARIES := -L"$(SFML_LIB_PATH)" -lsfml-graphics -lsfml-system -lsfml-window
 ############################## call action ##############################
 
 # These commands do not represent physical files
-.PHONY: buildrun build run libraries create_object_directory clean_executable clean debug remake
+.PHONY: buildrun build run create_object_directory \
+		clean_executable clean debug remake
 
 buildrun : build run
 
 build : clean_executable create_object_directory $(OBJECT_ALL) $(EXECUTABLE)
 
 run :
-#	./build/application.exe
-	$(EXECUTABLE).exe
+#	./build/application
+	$(EXECUTABLE)
 
 create_object_directory:
 	mkdir -p $(OBJECT_DIRECTORY)
 
-clean_executable :
+clean_executable:
 	rm -rf $(EXECUTABLE)
 
 clean : clean_executable
@@ -209,9 +193,3 @@ $(EXECUTABLE) : $(OBJECT_ALL)
 #	compilator++ sub_directory_A_filename_A.o sub_directory_B_filename_B.o etc... -o executable -L"/Path/To/Library" -library_flags
 #   -o => choose custom object
 	$(CXX_COMMAND) $^ -o $@ $(LIBRARIES)
-
-$(OBJECT_GLAD) :
-	gcc -c $(GLAD_PATH)/glad/glad.c -o $@ -I"$(GLAD_PATH)"
-
-$(OBJECT_SQLITE) :
-	gcc -c $(SQLITE_PATH)/SQLITE/sqlite3.c -o $@ -I"$(SQLITE_PATH)"

@@ -5,6 +5,7 @@
         // "**/node_modules": true, // this excludes all folders
         // alternative version
         "libraries": true, // this excludes the folder
+        "includes": true, // this excludes the folder
         "**/GoogleDrive/Programs": true
     },
     "files.associations": {

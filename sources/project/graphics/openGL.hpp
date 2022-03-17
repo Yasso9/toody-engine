@@ -1,17 +1,17 @@
 #pragma once
 
-#include <glad/glad.h>
+#include <GLAD/glad.h>
 #include <SFML/OpenGL.hpp>
 
-#include <glm/ext/matrix_clip_space.hpp> // glm::perspective
-#include <glm/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale
-#include <glm/ext/scalar_constants.hpp> // glm::pi
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/rotate_vector.hpp> // vector rotation
-#include <glm/mat4x4.hpp> // glm::mat4
-#include <glm/vec3.hpp> // glm::vec3
-#include <glm/vec4.hpp> // glm::vec4
+#include <GLM/ext/matrix_clip_space.hpp> // glm::perspective
+#include <GLM/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale
+#include <GLM/ext/scalar_constants.hpp> // glm::pi
+#include <GLM/glm.hpp>
+#include <GLM/gtc/type_ptr.hpp>
+#include <GLM/gtx/rotate_vector.hpp> // vector rotation
+#include <GLM/mat4x4.hpp> // glm::mat4
+#include <GLM/vec3.hpp> // glm::vec3
+#include <GLM/vec4.hpp> // glm::vec4
 
 #include <ostream>
 
