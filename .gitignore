@@ -1,4 +1,5 @@
 .DS_Store
-object/
-object_libraries/
-build/application.exe
+
+build/
+
+.vscode/project.code-snippets

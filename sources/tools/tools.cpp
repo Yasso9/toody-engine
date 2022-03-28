@@ -11,7 +11,7 @@ namespace tools
     {
         std::string resources( std::string const & fileName /* = ""s */ )
         {
-            return "./resources/"s + fileName;
+            return "./data/resources/"s + fileName;
         }
         std::string shaders( std::string const & fileName /* = ""s */ )
         {

@@ -4,8 +4,8 @@
             "name": "Win32",
             "includePath": [
                 "${default}",
-                "${workspaceRoot}/sources/project/",
-                "${workspaceRoot}/includes/"
+                "${workspaceRoot}/sources/",
+                "${workspaceRoot}/external/includes/"
             ],
             "cppStandard": "c++20",
             "cStandard": "c17"

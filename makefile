@@ -74,25 +74,34 @@ WARNINGS := -pedantic -Wpedantic -pedantic-errors \
 -Wfloat-equal # The equality between floats works, it's the addition that is wrong
 
 # .cpp and .hpp files
-FILES_DIRECTORY := ./sources/project
-# .o files
-OBJECT_DIRECTORY := ./object
-# .o files of libraries
-LIBRARY_OBJECT_DIRECTORY := ./object_libraries
+FILES_DIRECTORY := ./sources
 # .exe and dll's
 BUILD_DIRECTORY := ./build
+# .o files
+OBJECT_DIRECTORY := $(BUILD_DIRECTORY)/object
 
-# Name of the exe file
-EXECUTABLE := $(BUILD_DIRECTORY)/application
+EXTERNAL_DIRECTORY := ./external
+# Libraries Header
+LIBRARIES_INCLUDE_PATH := $(EXTERNAL_DIRECTORY)/includes
+# .o files of libraries
+LIBRARIES_OBJECT_DIRECTORY := $(EXTERNAL_DIRECTORY)/object
+# .a files of librairies
+LIBRARIES_PATH := $(EXTERNAL_DIRECTORY)/libraries
+# .dll files needed for executable to work on windows
+DLLS_PATH := $(EXTERNAL_DIRECTORY)/DLLs
+
+# Path of the exe file
+EXECUTABLE_DIRECTORY := $(BUILD_DIRECTORY)/application
+EXECUTABLE := $(EXECUTABLE_DIRECTORY)/application
 
 
 
 
-############################## knowing files and object location ##############################
+############################## files and object location ##############################
 
-# Produce list in the form "./sources/project/filename.cpp"
+# Produce list in the form "./sources/filename.cpp"
 SOURCES_FILES := $(wildcard $(FILES_DIRECTORY)/*.cpp)
-# Add also all the subfolders "./sources/project/sub_directory/filename.cpp"
+# Add also all the subfolders "./sources/sub_directory/filename.cpp"
 SOURCES_FILES := $(SOURCES_FILES) $(wildcard $(FILES_DIRECTORY)/*/*.cpp)
 # Erase files directory => "sub_directory/filename.cpp"
 SOURCES_FILES := $(subst $(FILES_DIRECTORY)/,,$(SOURCES_FILES))
@@ -100,13 +109,13 @@ SOURCES_FILES := $(subst $(FILES_DIRECTORY)/,,$(SOURCES_FILES))
 # Object files of the all cpp files of the project
 # sub_directory/filename.cpp => sub_directory/filename.o
 OBJECT_PROJECT := $(patsubst %.cpp,%.o,$(SOURCES_FILES))
-# => ./object/sub_directory/filename.o
+# => ./object/sub_directory-filename.o
 OBJECT_PROJECT := $(addprefix $(OBJECT_DIRECTORY)/,$(subst /,-,$(OBJECT_PROJECT)))
 
 
 # List of the library object that needs to be linked
 # In the form "./object_library/objectA.o" "./object_library/objectB.o"
-OBJECT_LIBRARIES := $(wildcard $(LIBRARY_OBJECT_DIRECTORY)/*.o)
+OBJECT_LIBRARIES := $(wildcard $(LIBRARIES_OBJECT_DIRECTORY)/*.o)
 
 # All object needed for the project to compile
 # (the project files objects + the libraries objects)
@@ -117,46 +126,25 @@ OBJECT_ALL := $(OBJECT_PROJECT) $(OBJECT_LIBRARIES)
 DEPENDENCIES := $(patsubst %.o,%.d,$(OBJECT_PROJECT))
 
 
-SYSTEM_NAME := Unkown
-ifdef OS
-	SYSTEM_NAME := Windows
-else
-	SYSTEM_NAME := Unix
-endif
-
-
-
-
-############################## project path ##############################
-
-PROJECT_DIRECTORY_PATH := ./sources/project
-LIBRARIES_INCLUDE_PATH := ./includes
-INCLUDES := -I"$(PROJECT_DIRECTORY_PATH)" -I"$(LIBRARIES_INCLUDE_PATH)"
-
-LIBRARIES_PATH := ./libraries
-LIB_FLAG_SFML := -lsfml-graphics -lsfml-system -lsfml-window
-LIB_FLAG_ASSIMP := -lassimp
-LIBRARIES_FLAG := $(LIB_FLAG_SFML) $(LIB_FLAG_ASSIMP)
-LIBRARIES := -L"$(LIBRARIES_PATH)" $(LIBRARIES_FLAG)
-
-
 
 
 ############################## call action ##############################
 
 # These commands do not represent physical files
-.PHONY: buildrun build run create_object_directory \
+.PHONY: buildrun build run initialize_build \
 		clean_executable clean debug remake
 
 buildrun : build run
 
-build : clean_executable create_object_directory $(OBJECT_ALL) $(EXECUTABLE)
+build : clean_executable initialize_build $(OBJECT_ALL) $(EXECUTABLE)
 
 run :
-#	./build/application
 	$(EXECUTABLE)
 
-create_object_directory:
+initialize_build:
+	mkdir -p $(BUILD_DIRECTORY)
+	mkdir -p $(EXECUTABLE_DIRECTORY)
+	cp $(DLLS_PATH)/* $(EXECUTABLE_DIRECTORY)
 	mkdir -p $(OBJECT_DIRECTORY)
 
 clean_executable:
@@ -164,11 +152,26 @@ clean_executable:
 
 clean : clean_executable
 	rm -rf $(OBJECT_DIRECTORY)
+	rm -rf $(EXECUTABLE_DIRECTORY)
+	rm -rf $(BUILD_DIRECTORY)
 
 debug :
 	gdb -quiet $(EXECUTABLE)
 
 remake: clean buildrun
+
+
+
+
+############################## include and libraries ##############################
+
+INCLUDES := -I"$(FILES_DIRECTORY)" -I"$(LIBRARIES_INCLUDE_PATH)"
+
+LIB_FLAG_SFML := -lsfml-graphics -lsfml-system -lsfml-window
+LIB_FLAG_ASSIMP := -lassimp
+LIBRARIES_FLAG := $(LIB_FLAG_SFML) $(LIB_FLAG_ASSIMP)
+LIBRARIES := -L"$(LIBRARIES_PATH)" $(LIBRARIES_FLAG)
+
 
 
 
@@ -182,13 +185,13 @@ remake: clean buildrun
 $(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%).cpp
 #	Print the current file that is compiled
 	$(info $<)
-#	compilator++ -WarningFlags -cpp_standard -compilerOptions -c sources/project/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
+#	compilatorCommand -WarningFlags -compilerOptions -c sources/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
 	$(CXX_COMMAND) $(WARNINGS) $(CXX_FLAGS) -c $< -o $@ $(INCLUDES)
 
 # Create the executable by Linking all the object files and the SFML together
 $(EXECUTABLE) : $(OBJECT_ALL)
-#	compilator++ sub_directory_A_filename_A.o sub_directory_B_filename_B.o etc... -o executable -L"/Path/To/Library" -library_flags
+#	compilator++ sub_directory_A_filename_A.o sub_directory_B_filename_B.o etc... -o executable -L"/Path/To/Library" -libraries_flags
 #   -o => choose custom object
 	$(CXX_COMMAND) $^ -o $@ $(LIBRARIES)
