@@ -28,6 +28,9 @@ Game::Game()
     this->m_window.get()->setVisible( true );
     this->m_window.get()->requestFocus();
     this->m_window.get()->setKeyRepeatEnabled( false );
+    this->m_window.get()->setVerticalSyncEnabled( true );
+
+    gl::initialize();
 }
 
 void Game::init_window()
@@ -57,9 +60,6 @@ void Game::init_window()
     //             0,
     //             this->m_settings.get_window_size_u().x,
     //             this->m_settings.get_window_size_u().y );
-
-    this->m_window->setVerticalSyncEnabled(
-        this->m_settings.get_vertical_sync() );
 
     if ( ! this->m_window->setActive( true ) )
     {

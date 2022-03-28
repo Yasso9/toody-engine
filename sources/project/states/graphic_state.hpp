@@ -1,5 +1,6 @@
 #pragma once
 
+#include "3D_model/model.hpp"
 #include "graphics/camera.hpp"
 #include "graphics/shape.hpp"
 #include "states/state.hpp"
@@ -17,6 +18,9 @@ class GraphicState final : public State
   private:
     Camera m_camera;
     Shape m_shape;
+
+    // sf::Shader m_shader;
+    // Model m_model;
 
     void mouse_scroll( float const & deltaScroll ) override;
     void extra_events() override;

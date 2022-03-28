@@ -3,11 +3,15 @@
 #include <cmath>
 #include <iostream>
 
+#include "tools/tools.hpp"
+
 GraphicState::GraphicState( std::shared_ptr<sf::RenderWindow> window,
                             Ressources const & ressources )
   : State( window, ressources, State::E_List::Graphics )
+// ,m_model( tools::get_path::resources( "backpack/backpack.obj"s ) )
 {
-    gl::initialize();
+    // this->m_shader.loadFromFile( tools::get_path::shaders( "shader.vert"s ),
+    //                              tools::get_path::shaders( "shader.frag"s ) );
 
     this->init_shape();
 }
@@ -20,6 +24,10 @@ void GraphicState::update()
 void GraphicState::render()
 {
     gl::clear_window();
+
+    // sf::Shader::bind( &this->m_shader );
+    // this->m_model.draw( this->m_shader );
+    // sf::Shader::bind( NULL );
 
     this->m_shape.draw();
 }
