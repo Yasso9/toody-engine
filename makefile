@@ -1,6 +1,8 @@
 ############################## Global Variable ##############################
 
 # TYPO regarder le makefile du projet de groupe automate pour voir les petits détatils qu'on a rajouté
+# TYPO supprimer le project path : "C:/Users/Turki/GoogleDrive/Computing/Projects/ToodyEngine/"
+# et le remplacer par ./
 
 # g++
 # CXX_COMMAND := g++
@@ -127,16 +129,14 @@ endif
 
 ############################## project path ##############################
 
-PROJECT_ROOT_PATH := $(CURDIR)
-PROJECT_DIRECTORY_PATH := $(PROJECT_ROOT_PATH)/sources/project
-LIBRARIES_INCLUDE_PATH := $(PROJECT_ROOT_PATH)/includes
-LIBRARIES_PATH := $(PROJECT_ROOT_PATH)/libraries
+PROJECT_DIRECTORY_PATH := ./sources/project
+LIBRARIES_INCLUDE_PATH := ./includes
+INCLUDES := -I"$(PROJECT_DIRECTORY_PATH)" -I"$(LIBRARIES_INCLUDE_PATH)"
 
+LIBRARIES_PATH := ./libraries
 LIB_FLAG_SFML := -lsfml-graphics -lsfml-system -lsfml-window
 LIB_FLAG_ASSIMP := -lassimp
 LIBRARIES_FLAG := $(LIB_FLAG_SFML) $(LIB_FLAG_ASSIMP)
-
-INCLUDES := -I"$(PROJECT_DIRECTORY_PATH)" -I"$(LIBRARIES_INCLUDE_PATH)"
 LIBRARIES := -L"$(LIBRARIES_PATH)" $(LIBRARIES_FLAG)
 
 
@@ -169,7 +169,6 @@ debug :
 	gdb -quiet $(EXECUTABLE)
 
 remake: clean buildrun
-
 
 
 

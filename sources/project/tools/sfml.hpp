@@ -2,6 +2,7 @@
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-conversion"
+#pragma GCC diagnostic ignored "-Wlanguage-extension-token"
 
 #include <SFML/Graphics.hpp>
 // #include <SFML/Mouse.hpp>

@@ -4,6 +4,7 @@
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wlong-long"
+#pragma GCC diagnostic ignored "-Wlanguage-extension-token"
 
 extern "C"
 {

@@ -20,7 +20,7 @@ class Shape final
         /// @brief Array of the vector's size contained in each point
         std::vector<unsigned int> dataPerPoint;
 
-        /// @brief Size of number of each point
+        /// @brief Array size of each point
         unsigned int get_data_per_point_sum() const;
     };
 

@@ -10,9 +10,9 @@ namespace tools
     /// @brief Get path of folders relatives to root
     namespace get_path
     {
-        std::string resources();
-        std::string shaders();
-        std::string databases();
+        std::string resources( std::string const & fileName = ""s );
+        std::string shaders( std::string const & fileName = ""s );
+        std::string databases( std::string const & fileName = ""s );
     } // namespace get_path
 
     /**

@@ -2,8 +2,8 @@
 
 // position of each point of the model
 layout (location = 0) in vec3 a_position;
-// // Color added
-// layout (location = 1) in vec3 a_color;
+// Normal
+// layout (location = 1) in vec3 a_normal;
 // position of each texture coordinate of the model
 layout (location = 1) in vec2 a_textureCoodinate;
 
@@ -20,11 +20,11 @@ out vec2 textureCoodinate;
 
 void main()
 {
+    textureCoodinate = a_textureCoodinate;
+
     gl_Position =
         projection
         * view
         * model
-        * vec4(a_position.x, a_position.y, a_position.z, 1.0);
-    // color = a_color;
-    textureCoodinate = a_textureCoodinate;
+        * vec4(a_position, 1.0);
 }

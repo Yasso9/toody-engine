@@ -6,6 +6,10 @@
 #include "tools/assertion.hpp"
 #include "tools/tools.hpp"
 
+// TYPO mettre ça autre part
+static int get_shader_uniform_location( sf::Shader const & shader,
+                                        std::string const & uniformName );
+
 template <typename ArrayType>
 static void bind_buffer_object( unsigned int const & bufferObjectID,
                                 GLenum const & target,
@@ -44,12 +48,12 @@ void Shape::create( Data const & data )
 
 void Shape::load_textures_and_shaders()
 {
-    this->m_shader.loadFromFile( tools::get_path::shaders() + "/shader.vert"s,
-                                 tools::get_path::shaders() + "/shader.frag"s );
+    this->m_shader.loadFromFile( tools::get_path::shaders( "shader.vert"s ),
+                                 tools::get_path::shaders( "shader.frag"s ) );
 
     bool textureLoad { true };
-    textureLoad &= this->m_texture.loadFromFile( tools::get_path::resources()
-                                                 + "/wall.jpg"s );
+    textureLoad &= this->m_texture.loadFromFile(
+        tools::get_path::resources( "wall.jpg"s ) );
     textureLoad &= this->m_texture.generateMipmap();
     if ( ! textureLoad )
     {
@@ -168,14 +172,8 @@ void Shape::unbind()
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 }
 
-// TYPO mettre ça autre part
-static int get_shader_uniform_location( sf::Shader const & shader,
-                                        std::string const & uniformName );
-
 void Shape::transform() const
 {
-    static float count { 0.5f };
-
     int const numberOfMatrix { 1 };
     int const transposeMatrix { GL_FALSE };
 
@@ -199,8 +197,6 @@ void Shape::transform() const
                         numberOfMatrix,
                         transposeMatrix,
                         glm::value_ptr( this->m_space.projection ) );
-
-    count += 0.05f;
 }
 
 static int get_shader_uniform_location( sf::Shader const & shader,
