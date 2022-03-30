@@ -2,13 +2,12 @@
     "configurations": [
         {
             "name": "Win32",
+            "cppStandard": "c++20",
             "includePath": [
                 "${default}",
                 "${workspaceRoot}/sources/",
                 "${workspaceRoot}/external/includes/"
-            ],
-            "cppStandard": "c++20",
-            "cStandard": "c17"
+            ]
         }
     ],
     "version": 4

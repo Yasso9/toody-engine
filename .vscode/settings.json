@@ -2,8 +2,7 @@
     "files.exclude": {
         "**/.git": true,
         "**/.DS_Store": true,
-        "libraries": true,
-        "includes": true,
+        "external/": true
     },
     "files.associations": {
         "algorithm": "cpp",
