@@ -1,8 +1,7 @@
 #include "editor_state.hpp"
 
 #include "tools/string.hpp"
-
-#include <cassert>
+#include "tools/assertion.hpp"
 
 EditorState::EditorState( std::shared_ptr<sf::RenderWindow> window,
                           Ressources const & ressources )
@@ -135,7 +134,7 @@ void EditorState::update()
         this->update_colision_mode();
         break;
     default :
-        assert( false && "Editor Type does not exist" );
+        ( false && "Editor Type does not exist" );
         break;
     }
 }
