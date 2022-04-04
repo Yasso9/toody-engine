@@ -1,4 +1,4 @@
-############################## Global Variable ##############################
+############################## Informations ##############################
 
 # Prérequis pour compilation :
 # Windows : installer MinGW 11.2 ou LLVM 13 et avoir clang en tant que commande utilisable
@@ -7,7 +7,8 @@
 
 # SFML (2.5.1) - Precompiled Windows MinGW, Linux GCC 64 bits and MacOS Clang + Source code (can be build with cmake and make)
 # 		 https://www.sfml-dev.org/download/sfml/2.5.1/index-fr.php
-# Assimp (5.2.3) - Source code (All OS) : cmake and make
+# 		 On Linux : install from distribution's package repository - sudo apt-get install libsfml-dev
+# Assimp (5.1.5) - Source code (All OS) : cmake and make
 # GLAD sources (All OS) : https://glad.dav1d.de/#language=c&specification=gl&api=gl%3D4.6&api=gles1%3Dnone&api=gles2%3Dnone&api=glsc2%3Dnone&profile=compatibility&loader=on
 # SQLITE sources and precompiled binaries (All OS) : https://www.sqlite.org/download.html
 
@@ -15,63 +16,75 @@
 # TYPO supprimer le project path : "C:/Users/Turki/GoogleDrive/Computing/Projects/ToodyEngine/"
 # et le remplacer par ./
 
-# g++
-# CXX_COMMAND := g++
-# CXX_FLAGS := $(CXX_COMMAND) -std=c++2a
 
-# clang
-CXX_COMMAND := clang++
-CXX_FLAGS := -std=c++20 -MD -O0 -g
-# -MD => Create .d files for dependencies
-# -g => Generate debug information
-# -O0 => No optmization, faster compilation time, better for debugging builds
 
-WARNINGS := -pedantic -pedantic-errors -Wpedantic -Wall -Wextra -Werror -Wunused
-# -pedantic -Wpedantic -pedantic-errors \
-# -Wall -Wextra \
-# -Wcast-align \
-# -Wcast-qual \
-# -Wctor-dtor-privacy \
-# -Wdisabled-optimization \
-# -Wformat=2 \
-# -Winit-self \
-# -Wmissing-declarations \
-# -Wmissing-include-dirs \
-# -Wold-style-cast \
-# -Woverloaded-virtual \
-# -Wredundant-decls \
-# -Wshadow \
-# -Wsign-conversion \
-# -Wsign-promo \
-# -Wstrict-overflow=5 \
-# -Wswitch-default \
-# -Wundef \
-# -Wno-unused \
-# -Wconversion \
-# -Wformat-nonliteral \
-# -Wundef \
-# -Wformat=2 \
-# -Wformat-security  \
-# -Wformat-y2k \
-# -Wimport \
-# -Winline \
-# -Winvalid-pch \
-# -Wmissing-field-initializers \
-# -Wmissing-format-attribute   \
-# -Wmissing-noreturn \
-# -Wpacked \
-# -Wpointer-arith \
-# -Wstack-protector \
-# -Wstrict-aliasing=2  \
-# -Wunreachable-code \
-# -Wunused \
-# -Wvariadic-macros \
-# -Wwrite-strings \
-# -Weffc++ \
-# -Werror \
-# -Wunused-parameter \
-# -Wlong-long \
-# -fno-common
+
+############################## OS detection ##############################
+
+# Get the OS information
+ifeq ($(OS),Windows_NT)
+    DETECTED_OS := Windows
+else
+	DETECTED_OS := $(shell uname)
+endif
+
+ifneq ($(DETECTED_OS),Windows)
+	ifneq ($(DETECTED_OS),Linux)
+		$(error ERROR : OS UNDETECTED)
+	endif
+endif
+
+
+
+
+############################## Warnings ##############################
+
+WARNINGS := \
+-pedantic -Wpedantic -pedantic-errors \
+-Wall -Wextra \
+-Wcast-align \
+-Wcast-qual \
+-Wctor-dtor-privacy \
+-Wdisabled-optimization \
+-Wformat=2 \
+-Winit-self \
+-Wmissing-declarations \
+-Wmissing-include-dirs \
+-Wold-style-cast \
+-Woverloaded-virtual \
+-Wredundant-decls \
+-Wshadow \
+-Wsign-conversion \
+-Wsign-promo \
+-Wstrict-overflow=5 \
+-Wswitch-default \
+-Wundef \
+-Wno-unused \
+-Wconversion \
+-Wformat-nonliteral \
+-Wundef \
+-Wformat=2 \
+-Wformat-security  \
+-Wformat-y2k \
+-Wimport \
+-Winline \
+-Winvalid-pch \
+-Wmissing-field-initializers \
+-Wmissing-format-attribute   \
+-Wmissing-noreturn \
+-Wpacked \
+-Wpointer-arith \
+-Wstack-protector \
+-Wstrict-aliasing=2  \
+-Wunreachable-code \
+-Wunused \
+-Wvariadic-macros \
+-Wwrite-strings \
+-Weffc++ \
+-Werror \
+-Wunused-parameter \
+-Wlong-long \
+-fno-common
 
 # Warnings that works only on clang :
 # adding 'no' after '-W' remove the warning
@@ -84,6 +97,22 @@ WARNINGS := -pedantic -pedantic-errors -Wpedantic -Wall -Wextra -Werror -Wunused
 
 # Warning that must not be used in clang \
 -Wfloat-equal # The equality between floats works, it's the addition that is wrong
+
+
+
+
+############################## Global Informations ##############################
+
+# g++
+# CXX_COMMAND := g++
+# CXX_FLAGS := $(CXX_COMMAND) -std=c++2a
+
+# clang
+CXX_COMMAND := clang++
+CXX_FLAGS := -std=c++20 -MD -O0 -g
+# -MD => Create .d files for dependencies
+# -g => Generate debug information
+# -O0 => No optmization, faster compilation time, better for debugging builds
 
 # .cpp and .hpp files
 FILES_DIRECTORY := ./sources
@@ -98,7 +127,11 @@ LIBRARIES_INCLUDE_PATH := $(EXTERNAL_DIRECTORY)/includes
 # .o files of libraries
 LIBRARIES_OBJECT_DIRECTORY := $(EXTERNAL_DIRECTORY)/object
 # .a files of librairies
-LIBRARIES_PATH := $(EXTERNAL_DIRECTORY)/libraries
+ifeq ($(DETECTED_OS),Windows)
+	LIBRARIES_PATH := $(EXTERNAL_DIRECTORY)/libraries/Windows
+else
+	LIBRARIES_PATH := $(EXTERNAL_DIRECTORY)/libraries/Linux
+endif
 # .dll files needed for executable to work on windows
 DLLS_PATH := $(EXTERNAL_DIRECTORY)/DLLs
 
@@ -156,7 +189,10 @@ run :
 initialize_build:
 	mkdir -p $(BUILD_DIRECTORY)
 	mkdir -p $(EXECUTABLE_DIRECTORY)
+# Use the DLL's only on windows
+ifeq ($(DETECTED_OS),Windows)
 	cp $(DLLS_PATH)/* $(EXECUTABLE_DIRECTORY)
+endif
 	mkdir -p $(OBJECT_DIRECTORY)
 
 clean_executable:
@@ -181,8 +217,12 @@ INCLUDES := -I"$(FILES_DIRECTORY)" -I"$(LIBRARIES_INCLUDE_PATH)"
 
 LIB_FLAG_SFML := -lsfml-graphics -lsfml-system -lsfml-window
 LIB_FLAG_ASSIMP := -lassimp
-LIBRARIES_FLAG := $(LIB_FLAG_SFML) $(LIB_FLAG_ASSIMP)
-LIBRARIES := -L"$(LIBRARIES_PATH)" $(LIBRARIES_FLAG)
+LIB_FLAG_SQLITE := -lpthread -ldl
+LIBRARIES_FLAG := $(LIB_FLAG_SFML) $(LIB_FLAG_ASSIMP) $(LIB_FLAG_SQLITE)
+ifeq ($(DETECTED_OS),Windows)
+	LIBRARIES := -L"$(LIBRARIES_PATH)"
+endif
+LIBRARIES := $(LIBRARIES) $(LIBRARIES_FLAG)
 
 
 
@@ -195,15 +235,16 @@ LIBRARIES := -L"$(LIBRARIES_PATH)" $(LIBRARIES_FLAG)
 # Creating all the object files needed
 .SECONDEXPANSION:
 $(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%).cpp
-#	Print the current file that is compiled
-	$(info $<)
 #	compilatorCommand -WarningFlags -compilerOptions -c sources/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
-	$(CXX_COMMAND) $(WARNINGS) $(CXX_FLAGS) -c $< -o $@ $(INCLUDES)
+	@$(CXX_COMMAND) $(WARNINGS) $(CXX_FLAGS) -c $< -o $@ $(INCLUDES)
+#	Nicer way to print the current file compiled
+	@echo "Compiling $(subst sources/,,$<)"
 
 # Create the executable by Linking all the object files and the SFML together
 $(EXECUTABLE) : $(OBJECT_ALL)
 #	compilator++ sub_directory_A_filename_A.o sub_directory_B_filename_B.o etc... -o executable -L"/Path/To/Library" -libraries_flags
 #   -o => choose custom object
-	$(CXX_COMMAND) $^ -o $@ $(LIBRARIES)
+	@$(CXX_COMMAND) $^ -o $@ $(LIBRARIES)
+	@echo "Building $@"

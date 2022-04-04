@@ -134,7 +134,7 @@ void EditorState::update()
         this->update_colision_mode();
         break;
     default :
-        ( false && "Editor Type does not exist" );
+        ASSERTION( false, "Editor Type does not exist" );
         break;
     }
 }
