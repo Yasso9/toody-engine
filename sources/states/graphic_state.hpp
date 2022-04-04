@@ -8,7 +8,7 @@
 class GraphicState final : public State
 {
   public:
-    GraphicState( std::shared_ptr<sf::RenderWindow> window,
+    GraphicState( std::shared_ptr< sf::RenderWindow > window,
                   Ressources const & ressources );
     virtual ~GraphicState() = default;
 

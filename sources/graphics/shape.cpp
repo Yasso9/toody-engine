@@ -10,10 +10,10 @@
 static int get_shader_uniform_location( sf::Shader const & shader,
                                         std::string const & uniformName );
 
-template <typename ArrayType>
+template < typename ArrayType >
 static void bind_buffer_object( unsigned int const & bufferObjectID,
                                 GLenum const & target,
-                                std::vector<ArrayType> const & dataArray );
+                                std::vector< ArrayType > const & dataArray );
 
 unsigned int Shape::Data::get_data_per_point_sum() const
 {
@@ -81,14 +81,14 @@ void Shape::draw() const
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, this->m_elementBufferObject );
         int const dataType { GL_UNSIGNED_INT };
         glDrawElements( primitiveType,
-                        static_cast<int>( this->m_data.vertices.size() ),
+                        static_cast< int >( this->m_data.vertices.size() ),
                         dataType,
                         0 );
     }
     else
     {
         int const verticesBeginPosition { 0 };
-        int const vectorSize { static_cast<int>(
+        int const vectorSize { static_cast< int >(
             this->m_data.vertices.size()
             / this->m_data.get_data_per_point_sum() ) };
         glDrawArrays( primitiveType, verticesBeginPosition, vectorSize );
@@ -138,7 +138,7 @@ void Shape::vertex_shader_attribution()
 {
     int const valueType { GL_FLOAT };
     int const hasDataToBeNormalised { GL_FALSE };
-    int const dataAttributeRealSize { static_cast<int>(
+    int const dataAttributeRealSize { static_cast< int >(
         this->m_data.get_data_per_point_sum() * sizeof( float ) ) };
 
     unsigned int vectorSizeCounter { 0u };
@@ -146,12 +146,12 @@ void Shape::vertex_shader_attribution()
     for ( unsigned int location {}; location < this->m_data.dataPerPoint.size();
           ++location )
     {
-        void * offsetStart { reinterpret_cast<void *>(
-            static_cast<intptr_t>( vectorSizeCounter * sizeof( float ) ) ) };
+        void * offsetStart { reinterpret_cast< void * >(
+            static_cast< intptr_t >( vectorSizeCounter * sizeof( float ) ) ) };
 
         glVertexAttribPointer(
             location,
-            static_cast<int>( this->m_data.dataPerPoint[location] ),
+            static_cast< int >( this->m_data.dataPerPoint[location] ),
             valueType,
             hasDataToBeNormalised,
             dataAttributeRealSize,
@@ -178,7 +178,7 @@ void Shape::transform() const
     int const transposeMatrix { GL_FALSE };
 
     int modelLoc = get_shader_uniform_location( this->m_shader, "model"s );
-    int viewLoc = get_shader_uniform_location( this->m_shader, "view"s );
+    int viewLoc  = get_shader_uniform_location( this->m_shader, "view"s );
     int projectionLoc =
         get_shader_uniform_location( this->m_shader, "projection"s );
 
@@ -207,10 +207,10 @@ static int get_shader_uniform_location( sf::Shader const & shader,
                                  uniformName.c_str() );
 }
 
-template <typename ArrayType>
+template < typename ArrayType >
 static void bind_buffer_object( unsigned int const & bufferObjectID,
                                 GLenum const & target,
-                                std::vector<ArrayType> const & dataArray )
+                                std::vector< ArrayType > const & dataArray )
 {
     ASSERTION( target == GL_ARRAY_BUFFER || target == GL_ELEMENT_ARRAY_BUFFER,
                "Invalid target argument passed" );
@@ -219,7 +219,7 @@ static void bind_buffer_object( unsigned int const & bufferObjectID,
 
     glBindBuffer( target, bufferObjectID );
     glBufferData( target,
-                  static_cast<int>( too::size_of( dataArray ) ),
+                  static_cast< int >( too::size_of( dataArray ) ),
                   too::to_c_style_array( dataArray ),
                   dataExpectedUsage );
 }

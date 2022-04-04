@@ -16,8 +16,9 @@ namespace RessourcesInit
     {
         T_TexturesMap textures {};
 
-        for ( Enum<E_TextureKey> textureKey { Enum<E_TextureKey>::get_min() };
-              textureKey < Enum<E_TextureKey>::get_max();
+        for ( Enum< E_TextureKey > textureKey {
+                  Enum< E_TextureKey >::get_min() };
+              textureKey < Enum< E_TextureKey >::get_max();
               ++textureKey )
         {
             sf::Texture texture {};
@@ -39,8 +40,8 @@ namespace RessourcesInit
     {
         T_FontsMap fonts {};
 
-        for ( Enum<E_FontKey> fontKey { Enum<E_FontKey>::get_min() };
-              fontKey < Enum<E_FontKey>::get_max();
+        for ( Enum< E_FontKey > fontKey { Enum< E_FontKey >::get_min() };
+              fontKey < Enum< E_FontKey >::get_max();
               ++fontKey )
         {
             sf::Font font {};

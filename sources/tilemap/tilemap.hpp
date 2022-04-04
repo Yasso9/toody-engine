@@ -8,15 +8,16 @@ enum class E_MapDepth
     Two
 };
 
-class TileMap : public sf::Drawable, public sf::Transformable
+class TileMap : public sf::Drawable,
+                public sf::Transformable
 {
   public:
     TileMap( sf::Texture const & texture );
 
-    TileMap( TileMap const & ) = delete;
-    TileMap( TileMap && ) = delete;
+    TileMap( TileMap const & )             = delete;
+    TileMap( TileMap && )                  = delete;
     TileMap & operator=( TileMap const & ) = delete;
-    TileMap & operator=( TileMap && ) = delete;
+    TileMap & operator=( TileMap && )      = delete;
 
     virtual ~TileMap() = default;
 
@@ -26,11 +27,11 @@ class TileMap : public sf::Drawable, public sf::Transformable
   protected:
     sf::Texture const m_texture {};
     /// @brief table[depth][row][line]
-    std::vector<std::vector<std::vector<sf::VertexArray>>> m_vertices {};
+    std::vector< std::vector< std::vector< sf::VertexArray > > > m_vertices {};
 
     /** @brief tri-dimensionnal vector containing the sprite number
      * of each tile of the tilemap */
-    std::vector<std::vector<std::vector<unsigned int>>> m_table {};
+    std::vector< std::vector< std::vector< unsigned int > > > m_table {};
 
     void synchronize_vertices();
 

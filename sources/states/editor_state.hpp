@@ -9,7 +9,7 @@
 class EditorState final : public State
 {
   public:
-    EditorState( std::shared_ptr<sf::RenderWindow> window,
+    EditorState( std::shared_ptr< sf::RenderWindow > window,
                  Ressources const & ressources );
 
     void update() override;

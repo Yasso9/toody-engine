@@ -1,6 +1,6 @@
 #include "test.hpp"
 
-TestState::TestState( std::shared_ptr<sf::RenderWindow> window,
+TestState::TestState( std::shared_ptr< sf::RenderWindow > window,
                       Ressources const & ressources )
   : State( window, ressources, State::E_List::Test )
 {

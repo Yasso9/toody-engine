@@ -37,7 +37,7 @@ class State
 
     // We use a constructor that is only used by childs instead
     // This is an abstract class
-    State() = delete;
+    State()          = delete;
     virtual ~State() = default;
 
     /**
@@ -55,10 +55,10 @@ class State
     virtual void render() = 0;
 
   protected:
-    State( std::shared_ptr<sf::RenderWindow> window,
+    State( std::shared_ptr< sf::RenderWindow > window,
            Ressources const & ressources, State::E_List const & stateName );
 
-    std::shared_ptr<sf::RenderWindow> m_window;
+    std::shared_ptr< sf::RenderWindow > m_window;
 
     Ressources const m_ressources;
     // TYPO faire rentré les settings dans ressources

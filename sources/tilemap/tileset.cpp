@@ -11,8 +11,8 @@ Tileset::Tileset( sf::Texture const & texture ) : m_image( texture ), m_cursor()
 sf::Vector2f Tileset::get_size() const
 {
     sf::Vector2f const textureSize {
-        static_cast<float>( this->m_image.getTextureRect().width ),
-        static_cast<float>( this->m_image.getTextureRect().height )
+        static_cast< float >( this->m_image.getTextureRect().width ),
+        static_cast< float >( this->m_image.getTextureRect().height )
     };
 
     return textureSize * this->getScale();

@@ -7,7 +7,7 @@
 class GameState final : public State
 {
   public:
-    GameState( std::shared_ptr<sf::RenderWindow> window,
+    GameState( std::shared_ptr< sf::RenderWindow > window,
                Ressources const & ressources );
 
     void update() override;

@@ -5,7 +5,7 @@
 
 #include "tools/tools.hpp"
 
-GraphicState::GraphicState( std::shared_ptr<sf::RenderWindow> window,
+GraphicState::GraphicState( std::shared_ptr< sf::RenderWindow > window,
                             Ressources const & ressources )
   : State( window, ressources, State::E_List::Graphics )
 // ,m_model( tools::get_path::resources( "backpack/backpack.obj"s ) )
@@ -54,7 +54,7 @@ void GraphicState::extra_events()
 
 void GraphicState::init_shape()
 {
-    std::vector<float> const vertices {
+    std::vector< float > const vertices {
         -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f,  -0.5f, -0.5f, 1.0f, 0.0f,
         0.5f,  0.5f,  -0.5f, 1.0f, 1.0f, 0.5f,  0.5f,  -0.5f, 1.0f, 1.0f,
         -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f, -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
@@ -79,8 +79,8 @@ void GraphicState::init_shape()
         0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
         -0.5f, 0.5f,  0.5f,  0.0f, 0.0f, -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f
     };
-    std::vector<unsigned int> const numberOfDataPerAttribute { 3u, 2u };
-    std::vector<unsigned int> const indices {};
+    std::vector< unsigned int > const numberOfDataPerAttribute { 3u, 2u };
+    std::vector< unsigned int > const indices {};
 
     Shape::Data shapeData { vertices, indices, numberOfDataPerAttribute };
 
@@ -135,9 +135,9 @@ void GraphicState::update_mouse()
     // TYPO faire une fonction "get_mouse_relativ_position"
     sf::Vector2i const i_middlePosition {
         this->m_window.get()->getPosition()
-        + static_cast<sf::Vector2i>( this->m_window.get()->getSize() / 2u )
+        + static_cast< sf::Vector2i >( this->m_window.get()->getSize() / 2u )
     };
-    sf::Vector2f const f_middlePosition { static_cast<sf::Vector2f>(
+    sf::Vector2f const f_middlePosition { static_cast< sf::Vector2f >(
         i_middlePosition ) };
 
     sf::Vector2f const currentMousePosition { sf::Mouse::getPosition() };
@@ -147,7 +147,7 @@ void GraphicState::update_mouse()
     offset.y = f_middlePosition.y - currentMousePosition.y;
 
     // Reset Mouse Position
-    sf::Mouse::setPosition( static_cast<sf::Vector2i>( i_middlePosition ) );
+    sf::Mouse::setPosition( static_cast< sf::Vector2i >( i_middlePosition ) );
 
     float const sensitivity = 1.f;
     offset *= sensitivity;
@@ -162,7 +162,7 @@ void GraphicState::update_camera()
     // space transformation
     {
         float const fieldOfView { glm::radians( this->m_camera.get_zoom() ) };
-        float const screenRatio { static_cast<float>(
+        float const screenRatio { static_cast< float >(
             this->m_window.get()->getSize().x
             / this->m_window.get()->getSize().y ) };
         float const nearDistanceFromCamera { 0.1f };

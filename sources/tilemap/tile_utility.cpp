@@ -8,16 +8,16 @@ sf::Vector2u to_tile_position( unsigned int const tileNumber,
                                unsigned int const numberOfTileInX )
 {
     return sf::Vector2u( ( tileNumber % numberOfTileInX ),
-                         static_cast<unsigned int>(
+                         static_cast< unsigned int >(
                              std::floor( tileNumber / numberOfTileInX ) ) );
 }
 
 sf::Vector2u to_tile_position( sf::Vector2f const position )
 {
-    return sf::Vector2u(
-        static_cast<unsigned int>( std::floor( position.x / ::g_tileSize_f ) ),
-        static_cast<unsigned int>(
-            std::floor( position.y / ::g_tileSize_f ) ) );
+    return sf::Vector2u( static_cast< unsigned int >(
+                             std::floor( position.x / ::g_tileSize_f ) ),
+                         static_cast< unsigned int >(
+                             std::floor( position.y / ::g_tileSize_f ) ) );
 }
 
 namespace quad
@@ -27,7 +27,7 @@ namespace quad
                        sf::Vector2u const & tilePosition )
     {
         // TYPO avoir directement un sf::Vector2f
-        sf::Vector2f const tilePositionFloat { static_cast<sf::Vector2f>(
+        sf::Vector2f const tilePositionFloat { static_cast< sf::Vector2f >(
             tilePosition ) };
 
         quad[0].position = sf::Vector2f(
@@ -48,7 +48,7 @@ namespace quad
                                  sf::Vector2u const & tilePosition )
     {
         // TYPO avoir directement un sf::Vector2f
-        sf::Vector2f const tilePositionFloat { static_cast<sf::Vector2f>(
+        sf::Vector2f const tilePositionFloat { static_cast< sf::Vector2f >(
             tilePosition ) };
 
         quad[0].texCoords =

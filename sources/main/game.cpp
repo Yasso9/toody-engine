@@ -37,17 +37,17 @@ void Game::init_window()
 {
     // We must use a pointer to copy this RenderWindow into another class
     // (RenderWindow doesn't have a copy contructor)
-    this->m_window = std::make_shared<sf::RenderWindow>();
+    this->m_window = std::make_shared< sf::RenderWindow >();
 
     // Additionnal settings that the window should have
     std::string const gameTitle { "Toody Engine (In Developpement)"s };
     sf::ContextSettings contextSettings {};
-    contextSettings.depthBits = 24;
-    contextSettings.sRgbCapable = false;
-    contextSettings.stencilBits = 8;
+    contextSettings.depthBits         = 24;
+    contextSettings.sRgbCapable       = false;
+    contextSettings.stencilBits       = 8;
     contextSettings.antialiasingLevel = 4;
-    contextSettings.majorVersion = 4;
-    contextSettings.minorVersion = 6;
+    contextSettings.majorVersion      = 4;
+    contextSettings.minorVersion      = 6;
 
     this->m_window->create(
         sfpp::to_video_mode( this->m_settings.get_window_size_u() ),
@@ -145,17 +145,17 @@ void Game::change_state( State::E_List const & newState )
     case State::E_List::MainMenu :
         this->m_window.get()->setMouseCursorVisible( true );
         this->m_window.get()->setMouseCursorGrabbed( false );
-        this->set_new_state<MainMenuState>();
+        this->set_new_state< MainMenuState >();
         break;
     case State::E_List::Game :
         this->m_window.get()->setMouseCursorVisible( true );
         this->m_window.get()->setMouseCursorGrabbed( false );
-        this->set_new_state<GameState>();
+        this->set_new_state< GameState >();
         break;
     case State::E_List::Editor :
         this->m_window.get()->setMouseCursorVisible( true );
         this->m_window.get()->setMouseCursorGrabbed( false );
-        this->set_new_state<EditorState>();
+        this->set_new_state< EditorState >();
         break;
     case State::E_List::Graphics :
         // TYPO n'activer le grab de la souris que si la window est focus
@@ -163,12 +163,12 @@ void Game::change_state( State::E_List const & newState )
         // this->m_window.get()->setMouseCursorGrabbed( true );
         this->m_window.get()->setMouseCursorVisible( true );
         this->m_window.get()->setMouseCursorGrabbed( false );
-        this->set_new_state<GraphicState>();
+        this->set_new_state< GraphicState >();
         break;
     case State::E_List::Test :
         this->m_window.get()->setMouseCursorVisible( true );
         this->m_window.get()->setMouseCursorGrabbed( false );
-        this->set_new_state<TestState>();
+        this->set_new_state< TestState >();
         break;
 
     case State::E_List::Quit :
@@ -177,7 +177,7 @@ void Game::change_state( State::E_List const & newState )
 
     default :
         std::stringstream debugMessage {};
-        debugMessage << "State::E_List "s << Enum<State::E_List> { newState }
+        debugMessage << "State::E_List "s << Enum< State::E_List > { newState }
                      << " unsupported"s;
         ASSERTION( false, debugMessage.str() );
         break;

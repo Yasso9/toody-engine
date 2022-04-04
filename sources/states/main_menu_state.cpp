@@ -2,7 +2,7 @@
 
 #include "tools/string.hpp"
 
-MainMenuState::MainMenuState( std::shared_ptr<sf::RenderWindow> window,
+MainMenuState::MainMenuState( std::shared_ptr< sf::RenderWindow > window,
                               Ressources const & ressources )
   : State( window, ressources, State::E_List::MainMenu )
 {
@@ -15,12 +15,13 @@ void MainMenuState::update()
 {
     int const buttonNumberPressed { this->m_buttons.update(
         // TYPO essayer d'enlever le static cast, ça fait moche
-        static_cast<sf::Vector2f>( sf::Mouse::getPosition( *this->m_window ) ),
+        static_cast< sf::Vector2f >(
+            sf::Mouse::getPosition( *this->m_window ) ),
         sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) ) };
 
     if ( buttonNumberPressed != -1 )
     {
-        this->m_stateName = static_cast<State::E_List>( buttonNumberPressed );
+        this->m_stateName = static_cast< State::E_List >( buttonNumberPressed );
     }
 }
 

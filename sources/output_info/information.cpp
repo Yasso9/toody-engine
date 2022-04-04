@@ -19,7 +19,7 @@ void Message::initialize_text( std::size_t const & size )
 }
 
 void Message::update( sf::Vector2f const position,
-                      std::vector<std::string> const & message )
+                      std::vector< std::string > const & message )
 {
     // TYPO ne pas tous reinitialiser mais ajouter ou supprimer si il y'a en plus
     // ou en moins. Et changer les chaines
@@ -32,7 +32,7 @@ void Message::update( sf::Vector2f const position,
             position
             + sf::Vector2f {
                 0.f,
-                static_cast<float>( textIndex * text.getCharacterSize() )
+                static_cast< float >( textIndex * text.getCharacterSize() )
                     * 1.5f } );
         text.setString( message[textIndex] );
 

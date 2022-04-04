@@ -13,15 +13,15 @@
 Camera::Camera() : m_pureYAxis( 0.0f, 1.0f, 0.0f )
 {
     // Initialize the position of the camera
-    this->m_position = glm::vec3 { 0.0f, 0.0f, 3.0f };
+    this->m_position  = glm::vec3 { 0.0f, 0.0f, 3.0f };
     // Initialize the direction to look at the center
     this->m_direction = glm::vec3 { 0.f } - this->m_position;
 
-    this->m_zoom = 45.f;
+    this->m_zoom          = 45.f;
     this->m_movementSpeed = 2.5f;
 
     this->m_pitch = 2.5f;
-    this->m_yaw = -90.f;
+    this->m_yaw   = -90.f;
 
     this->update_camera_vectors();
 }

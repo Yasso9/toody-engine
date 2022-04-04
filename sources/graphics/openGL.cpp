@@ -6,8 +6,8 @@ namespace gl
 {
     void initialize()
     {
-        if ( ! gladLoadGLLoader(
-                 reinterpret_cast<GLADloadproc>( sf::Context::getFunction ) ) )
+        if ( ! gladLoadGLLoader( reinterpret_cast< GLADloadproc >(
+                 sf::Context::getFunction ) ) )
         {
             throw std::runtime_error { "Failed to initialize GLAD" };
         }
@@ -27,9 +27,15 @@ namespace gl
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     }
 
-    void set_wireframe() { glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); }
+    void set_wireframe()
+    {
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    }
 
-    void remove_wireframe() { glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ); }
+    void remove_wireframe()
+    {
+        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    }
 } // namespace gl
 
 std::ostream & operator<<( std::ostream & stream, glm::vec3 const & vector3 )

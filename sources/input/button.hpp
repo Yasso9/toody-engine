@@ -2,7 +2,8 @@
 
 #include "tools/sfml.hpp"
 
-class Button final : public sf::Drawable, public sf::Transformable
+class Button final : public sf::Drawable,
+                     public sf::Transformable
 {
   public:
     Button( sf::Font const & font, std::string const & string = "Button" );

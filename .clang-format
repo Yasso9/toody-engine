@@ -1,7 +1,7 @@
 AccessModifierOffset: -2
 AlignAfterOpenBracket: Align
-# AlignArrayOfStructures: None # clang 13
-# AlignConsecutiveAssignments: AcrossEmptyLines # clang 13 (work but still buggy)
+AlignArrayOfStructures: Right # clang 13
+AlignConsecutiveAssignments: AcrossComments # cannot put custom fields
 AlignConsecutiveDeclarations: None
 AlignConsecutiveMacros: AcrossEmptyLines
 AlignEscapedNewlines: Left
@@ -46,21 +46,21 @@ BraceWrapping:
 BreakBeforeBraces: Custom
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
-BreakInheritanceList: AfterColon # AfterComma NMP ?
+BreakInheritanceList: AfterComma
 BreakStringLiterals: true
 ColumnLimit: 80
 CompactNamespaces: false
 ConstructorInitializerIndentWidth: 2
 ContinuationIndentWidth: 4
 Cpp11BracedListStyle: false
-# DeriveLineEnding: false
+DeriveLineEnding: false
 DerivePointerAlignment: false
 DisableFormat: false
-# EmptyLineAfterAccessModifier: Never # clang 13
+EmptyLineAfterAccessModifier: Never # clang 13
 EmptyLineBeforeAccessModifier: Always
 FixNamespaceComments: true
 IncludeBlocks: Preserve
-# IndentAccessModifiers: true # clang 13
+IndentAccessModifiers: false # clang 13
 IndentCaseBlocks: true
 IndentCaseLabels: false
 IndentGotoLabels: false
@@ -73,8 +73,8 @@ KeepEmptyLinesAtTheStartOfBlocks: false
 Language: Cpp
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All
-# PPIndentWidth: 2 # clang 13
-# PackConstructorInitializers: CurrentLine # clang 13
+PPIndentWidth: 4 # clang 13
+# PackConstructorInitializers: CurrentLine # clang 14
 # PenaltyBreakAssignment: 90
 # PenaltyBreakBeforeFirstCallParameter: 90
 # PenaltyBreakComment: 40
@@ -84,12 +84,12 @@ NamespaceIndentation: All
 # PenaltyIndentedWhitespace: 150
 # PenaltyReturnTypeOnItsOwnLine: 150
 PointerAlignment: Middle
-# QualifierAlignment: Right # clang 13
-# QualifierOrder: ['const'] # clang 13
-# ReferenceAlignment: Middle # clang 13
+# QualifierAlignment: Custom # clang 14
+# QualifierOrder: ['constexpr', 'type', 'const' ] # clang 14
+ReferenceAlignment: Middle # clang 13
 ReflowComments: false
-# ShortNamespaceLines: 0 # clang 13
-# SortIncludes: CaseInsensitive # clang 13
+ShortNamespaceLines: 0 # clang 13
+SortIncludes: CaseInsensitive # clang 13
 SortUsingDeclarations: true
 SpaceAfterCStyleCast: false
 SpaceAfterLogicalNot: true
@@ -106,7 +106,7 @@ SpaceBeforeSquareBrackets: false
 SpaceInEmptyBlock: false
 SpaceInEmptyParentheses: false
 SpacesBeforeTrailingComments: 1
-# SpacesInAngles: Always # clang 13
+SpacesInAngles: Always # clang 13
 SpacesInConditionalStatement: true
 SpacesInCStyleCastParentheses: true
 SpacesInParentheses: true

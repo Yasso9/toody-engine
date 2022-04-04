@@ -24,7 +24,7 @@ struct sqlite3_deleter
     void operator()( sqlite3 * sql ) const { sqlite3_close( sql ); }
 };
 
-using T_UniqueSqlitePtr = std::unique_ptr<sqlite3, sqlite3_deleter>;
+using T_UniqueSqlitePtr = std::unique_ptr< sqlite3, sqlite3_deleter >;
 
 /// @brief Initialize the database
 static T_UniqueSqlitePtr make_sqlite();
@@ -40,7 +40,7 @@ namespace db
     {
         T_UniqueSqlitePtr database { ::make_sqlite() };
 
-        char * requestErrorMessage { const_cast<char *>( "" ) };
+        char * requestErrorMessage { const_cast< char * >( "" ) };
 
         // Reset at every request
         gf_resultRequested = json {};
@@ -53,7 +53,7 @@ namespace db
                 // std::cout << "Data : " << data << std::endl;
 
                 // Map containing pair of table property and its json value
-                std::map<std::string, json> singleResultMap {};
+                std::map< std::string, json > singleResultMap {};
 
                 // TYPO
                 // for(auto i : argc)

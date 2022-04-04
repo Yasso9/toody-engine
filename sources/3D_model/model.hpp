@@ -17,9 +17,9 @@ class Model
      * Stores all the textures loaded so far,
      * optimization to make sure textures aren't loaded more than once.
      */
-    std::vector<S_Texture> m_texturesLoaded;
+    std::vector< S_Texture > m_texturesLoaded;
     /// @brief All the meshes that the model contains
-    std::vector<Mesh> m_meshes;
+    std::vector< Mesh > m_meshes;
 
     Model( std::string const & filePath3DModel )
       : m_texturesLoaded(), m_meshes()
@@ -87,9 +87,9 @@ class Model
 
     Mesh process_mesh( aiMesh * mesh, const aiScene * scene )
     {
-        std::vector<S_Vertex> vertices;
-        std::vector<unsigned int> indices;
-        std::vector<S_Texture> textures;
+        std::vector< S_Vertex > vertices;
+        std::vector< unsigned int > indices;
+        std::vector< S_Texture > textures;
 
         // walk through each of the mesh's vertices
         for ( unsigned int i_vertices { 0u }; i_vertices < mesh->mNumVertices;
@@ -101,16 +101,16 @@ class Model
             // to this placeholder glm::vec3 first.
             glm::vec3 vector;
             // positions
-            vector.x = mesh->mVertices[i_vertices].x;
-            vector.y = mesh->mVertices[i_vertices].y;
-            vector.z = mesh->mVertices[i_vertices].z;
+            vector.x        = mesh->mVertices[i_vertices].x;
+            vector.y        = mesh->mVertices[i_vertices].y;
+            vector.z        = mesh->mVertices[i_vertices].z;
             vertex.position = vector;
             // normals
             if ( mesh->HasNormals() )
             {
-                vector.x = mesh->mNormals[i_vertices].x;
-                vector.y = mesh->mNormals[i_vertices].y;
-                vector.z = mesh->mNormals[i_vertices].z;
+                vector.x      = mesh->mNormals[i_vertices].x;
+                vector.y      = mesh->mNormals[i_vertices].y;
+                vector.z      = mesh->mNormals[i_vertices].z;
                 vertex.normal = vector;
             }
             // texture coordinates
@@ -124,15 +124,15 @@ class Model
                 vec.y = mesh->mTextureCoords[0][i_vertices].y;
                 vertex.textureCoordinates = vec;
                 // tangent
-                vector.x = mesh->mTangents[i_vertices].x;
-                vector.y = mesh->mTangents[i_vertices].y;
-                vector.z = mesh->mTangents[i_vertices].z;
-                vertex.tangent = vector;
+                vector.x                  = mesh->mTangents[i_vertices].x;
+                vector.y                  = mesh->mTangents[i_vertices].y;
+                vector.z                  = mesh->mTangents[i_vertices].z;
+                vertex.tangent            = vector;
                 // bitangent
-                vector.x = mesh->mBitangents[i_vertices].x;
-                vector.y = mesh->mBitangents[i_vertices].y;
-                vector.z = mesh->mBitangents[i_vertices].z;
-                vertex.bitangent = vector;
+                vector.x                  = mesh->mBitangents[i_vertices].x;
+                vector.y                  = mesh->mBitangents[i_vertices].y;
+                vector.z                  = mesh->mBitangents[i_vertices].z;
+                vertex.bitangent          = vector;
             }
             else
             {
@@ -161,7 +161,7 @@ class Model
         // normal: texture_normalN
 
         // 1. diffuse maps
-        std::vector<S_Texture> diffuseMaps { this->load_material_textures(
+        std::vector< S_Texture > diffuseMaps { this->load_material_textures(
             material,
             aiTextureType_DIFFUSE,
             "texture_diffuse" ) };
@@ -169,7 +169,7 @@ class Model
                          diffuseMaps.begin(),
                          diffuseMaps.end() );
         // 2. specular maps
-        std::vector<S_Texture> specularMaps { this->load_material_textures(
+        std::vector< S_Texture > specularMaps { this->load_material_textures(
             material,
             aiTextureType_SPECULAR,
             "texture_specular" ) };
@@ -177,13 +177,13 @@ class Model
                          specularMaps.begin(),
                          specularMaps.end() );
         // 3. normal maps
-        std::vector<S_Texture> normalMaps { this->load_material_textures(
+        std::vector< S_Texture > normalMaps { this->load_material_textures(
             material,
             aiTextureType_HEIGHT,
             "texture_normal" ) };
         textures.insert( textures.end(), normalMaps.begin(), normalMaps.end() );
         // 4. height maps
-        std::vector<S_Texture> heightMaps { this->load_material_textures(
+        std::vector< S_Texture > heightMaps { this->load_material_textures(
             material,
             aiTextureType_AMBIENT,
             "texture_height" ) };
@@ -195,11 +195,11 @@ class Model
 
     // checks all material textures of a given type and loads the textures if they're not loaded yet.
     // the required info is returned as a Texture struct.
-    std::vector<S_Texture> load_material_textures( aiMaterial * material,
-                                                   aiTextureType type,
-                                                   std::string typeName )
+    std::vector< S_Texture > load_material_textures( aiMaterial * material,
+                                                     aiTextureType type,
+                                                     std::string typeName )
     {
-        std::vector<S_Texture> textures;
+        std::vector< S_Texture > textures;
 
         for ( unsigned int i { 0u }; i < material->GetTextureCount( type );
               i++ )

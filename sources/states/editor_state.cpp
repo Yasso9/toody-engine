@@ -1,9 +1,9 @@
 #include "editor_state.hpp"
 
-#include "tools/string.hpp"
 #include "tools/assertion.hpp"
+#include "tools/string.hpp"
 
-EditorState::EditorState( std::shared_ptr<sf::RenderWindow> window,
+EditorState::EditorState( std::shared_ptr< sf::RenderWindow > window,
                           Ressources const & ressources )
   : State( window, ressources, State::E_List::Editor ),
     m_tilemap( this->m_ressources.textures.at( E_TextureKey::Tileset ) ),
@@ -77,12 +77,12 @@ void EditorState::keyboard_pressed( sf::Event event )
 void EditorState::update_normal_mode()
 {
     this->m_tileset.update(
-        static_cast<sf::Vector2f>( sf::Mouse::getPosition() ),
+        static_cast< sf::Vector2f >( sf::Mouse::getPosition() ),
         sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) );
 
     this->m_tilemap.update(
-        static_cast<sf::Vector2f>( sf::Mouse::getPosition() ),
-        static_cast<unsigned int>( this->m_tileset.get_selected_tile() ),
+        static_cast< sf::Vector2f >( sf::Mouse::getPosition() ),
+        static_cast< unsigned int >( this->m_tileset.get_selected_tile() ),
         sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) );
 }
 
@@ -114,12 +114,12 @@ void EditorState::update()
 
     // Always check if the buttons have been selected or pressed
     int const buttonNumberPressed { this->m_buttons.update(
-        static_cast<sf::Vector2f>( sf::Mouse::getPosition() ),
+        static_cast< sf::Vector2f >( sf::Mouse::getPosition() ),
         sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) ) };
 
     if ( buttonNumberPressed != -1 )
     {
-        this->m_type = static_cast<Type>( buttonNumberPressed );
+        this->m_type = static_cast< Type >( buttonNumberPressed );
     }
 
     switch ( this->m_type )

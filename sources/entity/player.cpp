@@ -10,12 +10,12 @@ Player::Player( sf::Texture const & texture ) : Entity( texture )
 {
     // Initial states of the player
     this->m_direction = E_Direction::Down;
-    this->m_state = Player::E_State::Normal;
+    this->m_state     = Player::E_State::Normal;
 
     // Each cells measure 30 pixels of width and height
     this->m_spritePixelSize = sf::Vector2f { 30.f, 30.f };
 
-    this->m_deltaTime = 0.f;
+    this->m_deltaTime   = 0.f;
     this->m_timeElapsed = 0.f;
 
     this->reset_last_sprite_index();
@@ -35,22 +35,27 @@ void Player::reset_last_sprite_index()
 void Player::init_sprite_value()
 {
     // For each direction of states, we set the corresponding sprite value
-    this->m_spriteValue.insert( { Player::E_State::Normal,
-                                  { { E_Direction::Up, { 6u } },
-                                    { E_Direction::Down, { 0u } },
-                                    { E_Direction::Right, { 3u } },
-                                    { E_Direction::Left, { 9u } } } } );
-    this->m_spriteValue.insert(
-        { Player::E_State::Walking,
-          { { E_Direction::Up, { 6u, 7u, 6u, 8u } },
-            { E_Direction::Down, { 0u, 1u, 0u, 2u } },
-            { E_Direction::Right, { 3u, 4u, 3u, 5u } },
-            { E_Direction::Left, { 9u, 10u, 9u, 11u } } } } );
-    this->m_spriteValue.insert( { Player::E_State::Running,
-                                  { { E_Direction::Up, { 0u } },
-                                    { E_Direction::Right, { 0u } },
-                                    { E_Direction::Down, { 0u } },
-                                    { E_Direction::Left, { 0u } } } } );
+    this->m_spriteValue.insert( {
+        Player::E_State::Normal,
+        {{ E_Direction::Up, { 6u } },
+                           { E_Direction::Down, { 0u } },
+                           { E_Direction::Right, { 3u } },
+                           { E_Direction::Left, { 9u } }}
+    } );
+    this->m_spriteValue.insert( {
+        Player::E_State::Walking,
+        {{ E_Direction::Up, { 6u, 7u, 6u, 8u } },
+                            { E_Direction::Down, { 0u, 1u, 0u, 2u } },
+                            { E_Direction::Right, { 3u, 4u, 3u, 5u } },
+                            { E_Direction::Left, { 9u, 10u, 9u, 11u } }}
+    } );
+    this->m_spriteValue.insert( {
+        Player::E_State::Running,
+        {{ E_Direction::Up, { 0u } },
+                            { E_Direction::Right, { 0u } },
+                            { E_Direction::Down, { 0u } },
+                            { E_Direction::Left, { 0u } }}
+    } );
 }
 
 void Player::init_sprite_number_of_cells()
@@ -59,9 +64,9 @@ void Player::init_sprite_number_of_cells()
     sf::Vector2u const textureSize { this->m_texture.getSize() };
 
     // Get the number of sprite that the texture have
-    float const numberOfRow { static_cast<float>( textureSize.x )
+    float const numberOfRow { static_cast< float >( textureSize.x )
                               / this->m_spritePixelSize.x };
-    float const numberOfLine { static_cast<float>( textureSize.y )
+    float const numberOfLine { static_cast< float >( textureSize.y )
                                / this->m_spritePixelSize.y };
 
     if ( tools::is_integer( numberOfRow ) && tools::is_integer( numberOfLine ) )
@@ -73,8 +78,8 @@ void Player::init_sprite_number_of_cells()
     }
 
     this->m_spriteNumberOfCells =
-        sf::Vector2u { static_cast<unsigned int>( numberOfRow ),
-                       static_cast<unsigned int>( numberOfLine ) };
+        sf::Vector2u { static_cast< unsigned int >( numberOfRow ),
+                       static_cast< unsigned int >( numberOfLine ) };
 }
 
 void Player::set_direction( E_Direction const & direction )
@@ -156,7 +161,7 @@ sf::Vector2f Player::get_movement() const
 
 unsigned int Player::get_current_sprite_number()
 {
-    std::vector<unsigned int> const spriteNumbers {
+    std::vector< unsigned int > const spriteNumbers {
         this->m_spriteValue.at( this->m_state ).at( this->m_direction )
     };
 
@@ -194,13 +199,13 @@ unsigned int Player::get_current_sprite_number()
 
 sf::IntRect Player::get_current_texture_rect()
 {
-    int const currentSpriteNumber { static_cast<int>(
+    int const currentSpriteNumber { static_cast< int >(
         this->get_current_sprite_number() ) };
 
     // Cast to make things easier to read
     sf::Vector2i const spriteSize {
-        static_cast<int>( this->m_spritePixelSize.x ),
-        static_cast<int>( this->m_spritePixelSize.y ),
+        static_cast< int >( this->m_spritePixelSize.x ),
+        static_cast< int >( this->m_spritePixelSize.y ),
     };
 
     // Transform the sprite value into the sprite position
@@ -211,10 +216,10 @@ sf::IntRect Player::get_current_texture_rect()
 
     sf::IntRect textureRect {};
     // Transform the sprite position into the rectangle of the sprite in the texture
-    textureRect.left = spritePosition.x * spriteSize.x;
-    textureRect.top = spritePosition.y * spriteSize.y;
+    textureRect.left   = spritePosition.x * spriteSize.x;
+    textureRect.top    = spritePosition.y * spriteSize.y;
     // Assign the size of a sprite cell
-    textureRect.width = spriteSize.x;
+    textureRect.width  = spriteSize.x;
     textureRect.height = spriteSize.y;
 
     return textureRect;

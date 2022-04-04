@@ -31,7 +31,7 @@ sf::Vector2u Settings::get_window_size_u() const
 }
 sf::Vector2f Settings::get_window_size_f() const
 {
-    return static_cast<sf::Vector2f>( this->get_window_size_u() );
+    return static_cast< sf::Vector2f >( this->get_window_size_u() );
 }
 
 double Settings::get_refresh_rate() const

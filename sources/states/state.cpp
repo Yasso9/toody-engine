@@ -1,6 +1,6 @@
 #include "state.hpp"
 
-State::State( std::shared_ptr<sf::RenderWindow> window,
+State::State( std::shared_ptr< sf::RenderWindow > window,
               Ressources const & ressources, State::E_List const & stateName )
   : m_window( window ),
     m_ressources( ressources ),

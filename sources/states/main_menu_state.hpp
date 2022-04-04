@@ -5,7 +5,7 @@
 class MainMenuState final : public State
 {
   public:
-    MainMenuState( std::shared_ptr<sf::RenderWindow> window,
+    MainMenuState( std::shared_ptr< sf::RenderWindow > window,
                    Ressources const & ressources );
     virtual ~MainMenuState() = default;
 

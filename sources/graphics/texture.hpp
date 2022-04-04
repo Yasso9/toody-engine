@@ -15,7 +15,7 @@
 class Texture final
 {
   public:
-    Texture() = default;
+    Texture()          = default;
     virtual ~Texture() = default;
 
     void load();

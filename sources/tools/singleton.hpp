@@ -3,7 +3,7 @@
 class Singleton
 {
   public:
-    Singleton( Singleton const & ) = delete;
+    Singleton( Singleton const & )      = delete;
     void operator=( Singleton const & ) = delete;
 
     static Singleton & get_instance();
