@@ -26,6 +26,7 @@ class Game final
     Settings const m_settings;
 
     void init_window();
+    /// @brief To know where do we start the game
     void init_state();
 
     void update_events();

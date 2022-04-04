@@ -1,5 +1,7 @@
 #include "game.hpp"
 
+#include <sstream>
+
 #include "tools/assertion.hpp"
 #include "tools/enumeration.hpp"
 #include "tools/string.hpp"
@@ -12,7 +14,16 @@
 #include "states/main_menu_state.hpp"
 #include "states/test.hpp"
 
-#include <sstream>
+/**
+ * @brief Throw an exception if something is not available
+ */
+static void check_configuration()
+{
+    if ( ! sf::Shader::isAvailable() )
+    {
+        throw std::runtime_error { "Shader's not available"s };
+    }
+}
 
 Game::Game()
   : m_window( nullptr ),
@@ -21,6 +32,8 @@ Game::Game()
                   RessourcesInit::init_fonts() ),
     m_settings()
 {
+    check_configuration();
+
     this->init_window();
     this->init_state();
 
@@ -55,12 +68,6 @@ void Game::init_window()
         sf::Style::Default,
         contextSettings );
 
-    // TYPO ajouté ça au projet, dans gl::initialize et mettre window dans un singleton
-    // glViewport( 0,
-    //             0,
-    //             this->m_settings.get_window_size_u().x,
-    //             this->m_settings.get_window_size_u().y );
-
     if ( ! this->m_window->setActive( true ) )
     {
         throw std::runtime_error {
@@ -68,17 +75,18 @@ void Game::init_window()
         };
     }
 
-    if ( ! sf::Shader::isAvailable() )
-    {
-        throw std::runtime_error { "Shader's not available"s };
-    }
+    // TYPO ajouté ça au projet, dans gl::initialize et mettre window dans un singleton
+    // glViewport( 0,
+    //             0,
+    //             this->m_settings.get_window_size_u().x,
+    //             this->m_settings.get_window_size_u().y );
 }
 
 void Game::init_state()
 {
-    // this->change_state( State::E_List::MainMenu );
+    this->change_state( State::E_List::MainMenu );
     // this->change_state( State::E_List::Test );
-    this->change_state( State::E_List::Graphics );
+    // this->change_state( State::E_List::Graphics );
 }
 
 void Game::run()

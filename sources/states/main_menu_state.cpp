@@ -39,7 +39,7 @@ void MainMenuState::render()
 
 void MainMenuState::init_background()
 {
-    this->m_background.setFillColor( sf::Color( 225, 155, 155 ) );
+    this->m_background.setFillColor( sf::Color( 82, 88, 92 ) );
 
     this->m_background.setSize( this->m_settings.get_window_size_f() );
     this->m_background.setPosition( 0.f, 0.f );
