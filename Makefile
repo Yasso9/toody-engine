@@ -1,24 +1,3 @@
-############################## Informations ##############################
-
-# Prérequis pour compilation :
-# Windows : installer MinGW 11.2 ou LLVM 13 et avoir clang en tant que commande utilisable
-# Linux : Installer clang (minimum version 13)
-# MacOs : Non pris en considération
-
-# SFML (2.5.1) - Precompiled Windows MinGW, Linux GCC 64 bits and MacOS Clang + Source code (can be build with cmake and make)
-# 		 https://www.sfml-dev.org/download/sfml/2.5.1/index-fr.php
-# 		 On Linux : install from distribution's package repository - sudo apt-get install libsfml-dev
-# Assimp (5.1.5) - Source code (All OS) : cmake and make
-# GLAD sources (All OS) : https://glad.dav1d.de/#language=c&specification=gl&api=gl%3D4.6&api=gles1%3Dnone&api=gles2%3Dnone&api=glsc2%3Dnone&profile=compatibility&loader=on
-# SQLITE sources and precompiled binaries (All OS) : https://www.sqlite.org/download.html
-
-# TYPO regarder le makefile du projet de groupe automate pour voir les petits détatils qu'on a rajouté
-# TYPO supprimer le project path : "C:/Users/Turki/GoogleDrive/Computing/Projects/ToodyEngine/"
-# et le remplacer par ./
-
-
-
-
 ############################## OS detection ##############################
 
 # Get the OS information
