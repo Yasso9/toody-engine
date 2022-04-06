@@ -15,52 +15,52 @@ CXX_FLAGS := -std=c++20 -MD -O0 -g
 # -g => Generate debug information
 # -O0 => No optmization, faster compilation time, better for debugging builds
 
-WARNINGS := -pedantic -pedantic-errors -Wpedantic -Wall -Wextra -Werror -Wunused
-# -pedantic -Wpedantic -pedantic-errors \
-# -Wall -Wextra \
-# -Wcast-align \
-# -Wcast-qual \
-# -Wctor-dtor-privacy \
-# -Wdisabled-optimization \
-# -Wformat=2 \
-# -Winit-self \
-# -Wmissing-declarations \
-# -Wmissing-include-dirs \
-# -Wold-style-cast \
-# -Woverloaded-virtual \
-# -Wredundant-decls \
-# -Wshadow \
-# -Wsign-conversion \
-# -Wsign-promo \
-# -Wstrict-overflow=5 \
-# -Wswitch-default \
-# -Wundef \
-# -Wno-unused \
-# -Wconversion \
-# -Wformat-nonliteral \
-# -Wundef \
-# -Wformat=2 \
-# -Wformat-security  \
-# -Wformat-y2k \
-# -Wimport \
-# -Winline \
-# -Winvalid-pch \
-# -Wmissing-field-initializers \
-# -Wmissing-format-attribute   \
-# -Wmissing-noreturn \
-# -Wpacked \
-# -Wpointer-arith \
-# -Wstack-protector \
-# -Wstrict-aliasing=2  \
-# -Wunreachable-code \
-# -Wunused \
-# -Wvariadic-macros \
-# -Wwrite-strings \
-# -Weffc++ \
-# -Werror \
-# -Wunused-parameter \
-# -Wlong-long \
-# -fno-common
+WARNINGS := \
+-pedantic -Wpedantic -pedantic-errors \
+-Wall -Wextra \
+-Wcast-align \
+-Wcast-qual \
+-Wctor-dtor-privacy \
+-Wdisabled-optimization \
+-Wformat=2 \
+-Winit-self \
+-Wmissing-declarations \
+-Wmissing-include-dirs \
+-Wold-style-cast \
+-Woverloaded-virtual \
+-Wredundant-decls \
+-Wshadow \
+-Wsign-conversion \
+-Wsign-promo \
+-Wstrict-overflow=5 \
+-Wswitch-default \
+-Wundef \
+-Wno-unused \
+-Wconversion \
+-Wformat-nonliteral \
+-Wundef \
+-Wformat=2 \
+-Wformat-security  \
+-Wformat-y2k \
+-Wimport \
+-Winline \
+-Winvalid-pch \
+-Wmissing-field-initializers \
+-Wmissing-format-attribute   \
+-Wmissing-noreturn \
+-Wpacked \
+-Wpointer-arith \
+-Wstack-protector \
+-Wstrict-aliasing=2  \
+-Wunreachable-code \
+-Wunused \
+-Wvariadic-macros \
+-Wwrite-strings \
+-Weffc++ \
+-Werror \
+-Wunused-parameter \
+-Wlong-long \
+-fno-common
 
 # Warnings that works only on clang :
 # adding 'no' after '-W' remove the warning
