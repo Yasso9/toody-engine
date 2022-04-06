@@ -62,7 +62,8 @@ class Player final : public Entity
     sf::Vector2u m_spriteNumberOfCells;
     /// @brief Number of the different sprites
     ///        of this playerState according to the state
-    std::map<Player::E_State, std::map<E_Direction, std::vector<unsigned int>>>
+    std::map< Player::E_State,
+              std::map< E_Direction, std::vector< unsigned int > > >
         m_spriteValue;
     /// @brief Last state and direction of the player
     CompleteState m_lastState;

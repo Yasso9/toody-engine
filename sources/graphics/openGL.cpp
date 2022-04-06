@@ -6,8 +6,8 @@ namespace gl
 {
     void initialize()
     {
-        if ( ! gladLoadGLLoader(
-                 reinterpret_cast<GLADloadproc>( sf::Context::getFunction ) ) )
+        if ( ! gladLoadGLLoader( reinterpret_cast< GLADloadproc >(
+                 sf::Context::getFunction ) ) )
         {
             throw std::runtime_error { "Failed to initialize GLAD" };
         }
@@ -19,6 +19,12 @@ namespace gl
         glDepthMask( GL_TRUE );
         glClearDepth( 1.f );
         glDisable( GL_LIGHTING );
+
+        // TYPO ajouté ça au projet, dans gl::initialize et mettre window dans un singleton
+        // glViewport( 0,
+        //             0,
+        //             this->m_settings.get_window_size_u().x,
+        //             this->m_settings.get_window_size_u().y );
     }
 
     void clear_window()

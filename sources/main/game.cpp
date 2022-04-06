@@ -1,10 +1,14 @@
 #include "game.hpp"
 
+#include <sstream>
+
 #include "tools/assertion.hpp"
 #include "tools/enumeration.hpp"
 #include "tools/string.hpp"
 
 #include "ressources_handling/ressources_init.hpp"
+
+#include "main/window.hpp"
 
 #include "states/editor_state.hpp"
 #include "states/game_state.hpp"
@@ -12,73 +16,38 @@
 #include "states/main_menu_state.hpp"
 #include "states/test.hpp"
 
-#include <sstream>
-
-Game::Game()
-  : m_window( nullptr ),
-    m_states( nullptr ),
-    m_ressources( RessourcesInit::init_textures(),
-                  RessourcesInit::init_fonts() ),
-    m_settings()
+/**
+ * @brief Throw an exception if something is not available
+ */
+static void check_configuration()
 {
-    this->init_window();
-    this->init_state();
-
-    // TYPO à mettre autre part
-    this->m_window.get()->setVisible( true );
-    this->m_window.get()->requestFocus();
-    this->m_window.get()->setKeyRepeatEnabled( false );
-    this->m_window.get()->setVerticalSyncEnabled( true );
-
-    gl::initialize();
-}
-
-void Game::init_window()
-{
-    // We must use a pointer to copy this RenderWindow into another class
-    // (RenderWindow doesn't have a copy contructor)
-    this->m_window = std::make_shared<sf::RenderWindow>();
-
-    // Additionnal settings that the window should have
-    std::string const gameTitle { "Toody Engine (In Developpement)"s };
-    sf::ContextSettings contextSettings {};
-    contextSettings.depthBits = 24;
-    contextSettings.sRgbCapable = false;
-    contextSettings.stencilBits = 8;
-    contextSettings.antialiasingLevel = 4;
-    contextSettings.majorVersion = 4;
-    contextSettings.minorVersion = 6;
-
-    this->m_window->create(
-        sfpp::to_video_mode( this->m_settings.get_window_size_u() ),
-        gameTitle,
-        sf::Style::Default,
-        contextSettings );
-
-    // TYPO ajouté ça au projet, dans gl::initialize et mettre window dans un singleton
-    // glViewport( 0,
-    //             0,
-    //             this->m_settings.get_window_size_u().x,
-    //             this->m_settings.get_window_size_u().y );
-
-    if ( ! this->m_window->setActive( true ) )
-    {
-        throw std::runtime_error {
-            "Cannot set the windows as active state for OpenGL"s
-        };
-    }
-
     if ( ! sf::Shader::isAvailable() )
     {
         throw std::runtime_error { "Shader's not available"s };
     }
 }
 
+Game::Game()
+  : m_states( nullptr ),
+    m_settings(),
+    m_ressources( RessourcesInit::init_textures(),
+                  RessourcesInit::init_fonts() )
+{
+    check_configuration();
+
+    // Assurance that the window will be created here
+    Window::get_instance();
+
+    this->init_state();
+
+    gl::initialize();
+}
+
 void Game::init_state()
 {
-    // this->change_state( State::E_List::MainMenu );
+    this->change_state( State::E_List::MainMenu );
     // this->change_state( State::E_List::Test );
-    this->change_state( State::E_List::Graphics );
+    // this->change_state( State::E_List::Graphics );
 }
 
 void Game::run()
@@ -88,7 +57,7 @@ void Game::run()
     // Reset the clock juste before the game run
     this->m_clock.restart();
 
-    while ( this->m_window->isOpen() )
+    while ( Window::get_instance().isOpen() )
     {
         sf::Time const timeElaspsed { this->m_clock.restart() };
         deltaTime += timeElaspsed.asSeconds();
@@ -106,9 +75,9 @@ void Game::run()
 
 void Game::update_events()
 {
-    while ( this->m_window->pollEvent( this->m_event ) )
+    while ( Window::get_instance().pollEvent( this->m_event ) )
     {
-        if ( this->m_window->hasFocus() )
+        if ( Window::get_instance().hasFocus() )
         {
             this->m_states->update_inputs( this->m_event );
         }
@@ -131,11 +100,11 @@ void Game::update_state( float const & deltaTime )
 
 void Game::render()
 {
-    this->m_window->clear( sf::Color::White );
+    Window::get_instance().clear( sf::Color::White );
 
     this->m_states->render();
 
-    this->m_window->display();
+    Window::get_instance().display();
 }
 
 void Game::change_state( State::E_List const & newState )
@@ -143,41 +112,41 @@ void Game::change_state( State::E_List const & newState )
     switch ( newState )
     {
     case State::E_List::MainMenu :
-        this->m_window.get()->setMouseCursorVisible( true );
-        this->m_window.get()->setMouseCursorGrabbed( false );
-        this->set_new_state<MainMenuState>();
+        Window::get_instance().setMouseCursorVisible( true );
+        Window::get_instance().setMouseCursorGrabbed( false );
+        this->set_new_state< MainMenuState >();
         break;
     case State::E_List::Game :
-        this->m_window.get()->setMouseCursorVisible( true );
-        this->m_window.get()->setMouseCursorGrabbed( false );
-        this->set_new_state<GameState>();
+        Window::get_instance().setMouseCursorVisible( true );
+        Window::get_instance().setMouseCursorGrabbed( false );
+        this->set_new_state< GameState >();
         break;
     case State::E_List::Editor :
-        this->m_window.get()->setMouseCursorVisible( true );
-        this->m_window.get()->setMouseCursorGrabbed( false );
-        this->set_new_state<EditorState>();
+        Window::get_instance().setMouseCursorVisible( true );
+        Window::get_instance().setMouseCursorGrabbed( false );
+        this->set_new_state< EditorState >();
         break;
     case State::E_List::Graphics :
         // TYPO n'activer le grab de la souris que si la window est focus
-        // this->m_window.get()->setMouseCursorVisible( false );
-        // this->m_window.get()->setMouseCursorGrabbed( true );
-        this->m_window.get()->setMouseCursorVisible( true );
-        this->m_window.get()->setMouseCursorGrabbed( false );
-        this->set_new_state<GraphicState>();
+        // Window::get_instance().setMouseCursorVisible( false );
+        // Window::get_instance().setMouseCursorGrabbed( true );
+        Window::get_instance().setMouseCursorVisible( true );
+        Window::get_instance().setMouseCursorGrabbed( false );
+        this->set_new_state< GraphicState >();
         break;
     case State::E_List::Test :
-        this->m_window.get()->setMouseCursorVisible( true );
-        this->m_window.get()->setMouseCursorGrabbed( false );
-        this->set_new_state<TestState>();
+        Window::get_instance().setMouseCursorVisible( true );
+        Window::get_instance().setMouseCursorGrabbed( false );
+        this->set_new_state< TestState >();
         break;
 
     case State::E_List::Quit :
-        this->m_window->close();
+        Window::get_instance().close();
         break;
 
     default :
         std::stringstream debugMessage {};
-        debugMessage << "State::E_List "s << Enum<State::E_List> { newState }
+        debugMessage << "State::E_List "s << Enum< State::E_List > { newState }
                      << " unsupported"s;
         ASSERTION( false, debugMessage.str() );
         break;

@@ -3,7 +3,8 @@
 #include "tools/sfml.hpp"
 
 // Faire un template de message en mode sdtvector
-class Message final : public sf::Drawable, public sf::Transformable
+class Message final : public sf::Drawable,
+                      public sf::Transformable
 {
   public:
     Message( sf::Font const & font );
@@ -11,18 +12,19 @@ class Message final : public sf::Drawable, public sf::Transformable
     void initialize_text( std::size_t const & size );
 
     void update( sf::Vector2f const position,
-                 std::vector<std::string> const & message = {} );
+                 std::vector< std::string > const & message = {} );
 
     virtual void draw( sf::RenderTarget & target,
                        sf::RenderStates states ) const override;
 
   private:
     /** @brief array of all the text to print to the screen */
-    std::vector<sf::Text> m_textArray {};
+    std::vector< sf::Text > m_textArray {};
     sf::Font const m_font;
 };
 
-class Cursor final : public sf::Drawable, public sf::Transformable
+class Cursor final : public sf::Drawable,
+                     public sf::Transformable
 {
   public:
     Cursor();

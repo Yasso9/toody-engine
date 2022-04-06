@@ -2,9 +2,8 @@
 
 #include "tools/string.hpp"
 
-MainMenuState::MainMenuState( std::shared_ptr<sf::RenderWindow> window,
-                              Ressources const & ressources )
-  : State( window, ressources, State::E_List::MainMenu )
+MainMenuState::MainMenuState( Ressources const & ressources )
+  : State( ressources, State::E_List::MainMenu )
 {
     this->init_background();
     this->init_text();
@@ -15,30 +14,31 @@ void MainMenuState::update()
 {
     int const buttonNumberPressed { this->m_buttons.update(
         // TYPO essayer d'enlever le static cast, ça fait moche
-        static_cast<sf::Vector2f>( sf::Mouse::getPosition( *this->m_window ) ),
+        static_cast< sf::Vector2f >(
+            sf::Mouse::getPosition( Window::get_instance() ) ),
         sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) ) };
 
     if ( buttonNumberPressed != -1 )
     {
-        this->m_stateName = static_cast<State::E_List>( buttonNumberPressed );
+        this->m_stateName = static_cast< State::E_List >( buttonNumberPressed );
     }
 }
 
-void MainMenuState::render()
+void MainMenuState::render() const
 {
     // Reset the view (if an other state had changed it)
-    this->m_window->setView( this->m_window->getDefaultView() );
+    Window::get_instance().setView( Window::get_instance().getDefaultView() );
 
-    this->m_window->draw( this->m_background );
+    Window::get_instance().draw( this->m_background );
 
-    this->m_window->draw( this->m_text );
+    Window::get_instance().draw( this->m_text );
 
-    this->m_window->draw( this->m_buttons );
+    Window::get_instance().draw( this->m_buttons );
 }
 
 void MainMenuState::init_background()
 {
-    this->m_background.setFillColor( sf::Color( 225, 155, 155 ) );
+    this->m_background.setFillColor( sf::Color( 82, 88, 92 ) );
 
     this->m_background.setSize( this->m_settings.get_window_size_f() );
     this->m_background.setPosition( 0.f, 0.f );

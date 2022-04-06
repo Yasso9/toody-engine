@@ -1,9 +1,8 @@
 #include "game_state.hpp"
 
 // TYPO changer les arguments en une structure comprenant T_TexturesMap et T_FontsMap
-GameState::GameState( std::shared_ptr<sf::RenderWindow> window,
-                      Ressources const & ressources )
-  : State( window, ressources, State::E_List::Game ),
+GameState::GameState( Ressources const & ressources )
+  : State( ressources, State::E_List::Game ),
     m_tilemap( ressources.textures.at( E_TextureKey::Tileset ) ),
     m_player( ressources.textures.at( E_TextureKey::Player ) )
 {
@@ -63,11 +62,11 @@ void GameState::update()
     this->update_map();
 }
 
-void GameState::render()
+void GameState::render() const
 {
-    m_window->setView( this->m_view );
+    Window::get_instance().setView( this->m_view );
 
-    m_window->draw( this->m_tilemap );
+    Window::get_instance().draw( this->m_tilemap );
 
-    m_window->draw( this->m_player );
+    Window::get_instance().draw( this->m_player );
 }

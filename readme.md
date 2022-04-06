@@ -1,18 +1,37 @@
-Toody Engine
+# Toody Engine
 
-Game engine for 2D games made with C++ and SFML
+Game engine for 2D games made with C++ and SFML. <br>
+Projet d'un moteur 2D ecrit en C++ en utlisant la SFML. <br>
 
-Projet d'un moteur 2D ecrit en C++ en utlisant la SFML
+cmake -D ASSIMP_BUILD_ASSIMP_TOOLS=OFF ./assimp-5.2.3 ./assimp-build
 
-powershell
+- Have the script available for compilation in Linux/MaxOs
+chmod u+x ./tools/compile_libraries.sh
 
-cd "C:/Users/Turki/GoogleDrive/Programs/Windows/Programming/C and C++/Tools/cppclean"
+- Faire un format de tout les fichiers
+clang-format -i -style=file sources/*/*.cpp sources/*/*.hpp sources/*.cpp
 
-py cppclean --include-path=entity --include-path=graphics --include-path=input --include-path=main --include-path=output_info --include-path=ressources_handling--include-path=settings --include-path=states --include-path=tilemap --include-path=tools C:/Users/Turki/GoogleDrive/Computing/Projects/ToodyEngine/sources/project
+## Compilation
 
-cd "C:/Developpement/CPP_LIBRAIRIES/GLAD"
-clang -c glad/glad.c -o glad.o -I"./"
-cp glad.o "C:/Users/Turki/GoogleDrive/Computing/Projects/ToodyEngine/object_libraries"
-cd "C:/Developpement/CPP_LIBRAIRIES/SQLITE/sources/SQLITE"
-clang -c sqlite3.c -o sqlite3.o
-cp sqlite3.o "C:/Users/Turki/GoogleDrive/Computing/Projects/ToodyEngine/object_libraries"
+### Prerequisite for building:
+Windows : install MinGW 11.2 or LLVM 13 and have clang in PATH. <br>
+Linux : Have clang++ and clang available (14 verified). <br>
+MacOs : Not taken in charge.
+
+### Libraries
+
+1. SFML (2.5.1)
+    1. Windows
+        Déjà compris dans le package
+    2. Linux
+        > sudo apt-get install libsfml-dev
+
+2. Assimp (5.1.5)
+Source code (All OS) : cmake and make
+
+3. Glad
+
+4. Sqlite
+GLAD sources (All OS) : https://glad.dav1d.de/#language=c&specification=gl&api=gl%3D4.6&api=gles1%3Dnone&api=gles2%3Dnone&api=glsc2%3Dnone&profile=compatibility&loader=on
+SQLITE sources and precompiled binaries (All OS) : https://www.sqlite.org/download.html
+

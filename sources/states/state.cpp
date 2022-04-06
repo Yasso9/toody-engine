@@ -1,11 +1,7 @@
 #include "state.hpp"
 
-State::State( std::shared_ptr<sf::RenderWindow> window,
-              Ressources const & ressources, State::E_List const & stateName )
-  : m_window( window ),
-    m_ressources( ressources ),
-    m_stateName( stateName ),
-    m_deltaTime( 0.f )
+State::State( Ressources const & ressources, State::E_List const & stateName )
+  : m_ressources( ressources ), m_stateName( stateName ), m_deltaTime( 0.f )
 {}
 
 State::E_List State::get_state_to_print() const

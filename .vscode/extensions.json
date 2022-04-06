@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "jeff-hykin.better-cpp-syntax",
+        "editorconfig.editorconfig",
+        "dtoplak.vscode-glsllint",
+        "ms-python.python",
+        "slevesque.shader",
+        "alexcvzz.vscode-sqlite"
+    ]
+}

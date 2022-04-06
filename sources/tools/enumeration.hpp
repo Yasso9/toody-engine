@@ -3,7 +3,7 @@
 #include <ostream>
 
 /// @brief When needed to do operation on enum
-template <typename Type>
+template < typename Type >
 class Enum
 {
   public:
@@ -28,8 +28,8 @@ class Enum
     Type m_currentValue;
 };
 
-template <typename EnumType>
+template < typename EnumType >
 std::ostream & operator<<( std::ostream & output,
-                           Enum<EnumType> const & enumValue );
+                           Enum< EnumType > const & enumValue );
 
 #include "tools/enumeration.tpp"

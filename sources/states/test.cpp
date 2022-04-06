@@ -1,8 +1,7 @@
 #include "test.hpp"
 
-TestState::TestState( std::shared_ptr<sf::RenderWindow> window,
-                      Ressources const & ressources )
-  : State( window, ressources, State::E_List::Test )
+TestState::TestState( Ressources const & ressources )
+  : State( ressources, State::E_List::Test )
 {
     gl::initialize();
 
@@ -83,7 +82,7 @@ TestState::TestState( std::shared_ptr<sf::RenderWindow> window,
 
 void TestState::update() {}
 
-void TestState::render()
+void TestState::render() const
 {
     // render
     // ------

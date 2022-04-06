@@ -15,17 +15,16 @@ class Game final
     void run();
 
   private:
-    std::shared_ptr<sf::RenderWindow> m_window;
-    std::shared_ptr<State> m_states;
+    std::shared_ptr< State > m_states;
 
+    Settings const m_settings;
     Ressources const m_ressources;
 
     sf::Event m_event;
     sf::Clock m_clock;
 
-    Settings const m_settings;
-
     void init_window();
+    /// @brief To know where do we start the game
     void init_state();
 
     void update_events();
@@ -40,10 +39,9 @@ class Game final
      */
     void change_state( State::E_List const & newState );
 
-    template <typename StateClass>
+    template < typename StateClass >
     void set_new_state()
     {
-        this->m_states =
-            std::make_shared<StateClass>( this->m_window, this->m_ressources );
+        this->m_states = std::make_shared< StateClass >( this->m_ressources );
     }
 };

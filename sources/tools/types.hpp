@@ -20,5 +20,5 @@ enum class E_FontKey
     EnumLast,
 };
 
-using T_TexturesMap = std::map<E_TextureKey, sf::Texture>;
-using T_FontsMap = std::map<E_FontKey, sf::Font>;
+using T_TexturesMap = std::map< E_TextureKey, sf::Texture >;
+using T_FontsMap    = std::map< E_FontKey, sf::Font >;

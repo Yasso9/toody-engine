@@ -15,7 +15,7 @@ namespace sfpp
 
     sf::Vector2f screen_resolution_f()
     {
-        return static_cast<sf::Vector2f>( sfpp::screen_resolution_u() );
+        return static_cast< sf::Vector2f >( sfpp::screen_resolution_u() );
     }
 
     sf::Vector2f make_vector( float const & value )
@@ -25,7 +25,7 @@ namespace sfpp
 
     sf::Vector2f make_vector( unsigned int const & value )
     {
-        return sfpp::make_vector( static_cast<float>( value ) );
+        return sfpp::make_vector( static_cast< float >( value ) );
     }
 } // namespace sfpp
 
@@ -43,12 +43,12 @@ sf::Vector2f operator*( sf::Vector2f const & vectorA,
 
 sf::Vector2f operator%( sf::Vector2f const & vector, int const & modulo )
 {
-    sf::Vector2i const integerVector { static_cast<sf::Vector2i>( vector ) };
+    sf::Vector2i const integerVector { static_cast< sf::Vector2i >( vector ) };
 
     sf::Vector2i const integerVectorResult { integerVector.x % modulo,
                                              integerVector.y % modulo };
 
-    return static_cast<sf::Vector2f>( integerVectorResult );
+    return static_cast< sf::Vector2f >( integerVectorResult );
 }
 
 std::ostream & operator<<( std::ostream & stream,
@@ -64,24 +64,24 @@ std::ostream & operator<<( std::ostream & stream,
     return stream;
 }
 
-template <typename T>
-std::ostream & operator<<( std::ostream & stream, sf::Rect<T> const & rect )
+template < typename T >
+std::ostream & operator<<( std::ostream & stream, sf::Rect< T > const & rect )
 {
     return stream << "( " << rect.left << ", " << rect.top << ", " << rect.width
                   << ", " << rect.height << " )";
 }
 template std::ostream & operator<<( std::ostream & stream,
-                                    sf::Rect<int> const & rect );
+                                    sf::Rect< int > const & rect );
 template std::ostream & operator<<( std::ostream & stream,
-                                    sf::Rect<float> const & rect );
+                                    sf::Rect< float > const & rect );
 
-template <typename T>
+template < typename T >
 std::ostream & operator<<( std::ostream & stream,
-                           sf::Vector2<T> const & vector )
+                           sf::Vector2< T > const & vector )
 {
     return stream << "( " << vector.x << ", " << vector.y << " )";
 }
 template std::ostream & operator<<( std::ostream & stream,
-                                    sf::Vector2<float> const & vector );
-template std::ostream & operator<<( std::ostream & stream,
-                                    sf::Vector2<unsigned int> const & vector );
+                                    sf::Vector2< float > const & vector );
+template std::ostream & operator<<(
+    std::ostream & stream, sf::Vector2< unsigned int > const & vector );

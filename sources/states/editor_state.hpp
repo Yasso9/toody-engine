@@ -9,11 +9,10 @@
 class EditorState final : public State
 {
   public:
-    EditorState( std::shared_ptr<sf::RenderWindow> window,
-                 Ressources const & ressources );
+    EditorState( Ressources const & ressources );
 
     void update() override;
-    void render() override;
+    void render() const override;
 
   private:
     enum Type

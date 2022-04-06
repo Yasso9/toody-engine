@@ -52,7 +52,8 @@ void ButtonArray::set_font( sf::Font const & font )
     this->m_font = font;
 }
 
-void ButtonArray::set_strings( std::vector<std::string> const & buttonStrings )
+void ButtonArray::set_strings(
+    std::vector< std::string > const & buttonStrings )
 {
     this->m_strings = buttonStrings;
 
@@ -109,7 +110,7 @@ int ButtonArray::update( sf::Vector2f const & position, bool const & click )
 
         if ( isPressed )
         {
-            return static_cast<int>( i_buttonNummber );
+            return static_cast< int >( i_buttonNummber );
         }
     }
 

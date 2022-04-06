@@ -52,7 +52,8 @@ void TileMap::synchronize_vertices()
 
                 sf::Vector2u const tilePosition { to_tile_position(
                     this->m_table[row][line][tileDepth],
-                    static_cast<unsigned int>( this->m_table[row].size() ) ) };
+                    static_cast< unsigned int >(
+                        this->m_table[row].size() ) ) };
 
                 quad::set_texture_coordinate( quad, tilePosition );
             }
@@ -66,8 +67,8 @@ sf::Vector2f TileMap::get_size() const
 {
     // TYPO il faut verifier que toute les ligne de toutes les colonnes fasse la même taille
     return sf::Vector2f {
-        static_cast<float>( m_vertices[0][0].size() ) * ::g_tileSize_f,
-        static_cast<float>( m_vertices[0].size() ) * ::g_tileSize_f
+        static_cast< float >( m_vertices[0][0].size() ) * ::g_tileSize_f,
+        static_cast< float >( m_vertices[0].size() ) * ::g_tileSize_f
     };
 }
 

@@ -2,7 +2,8 @@
 
 #include "tools/sfml.hpp"
 
-class Entity : public sf::Drawable, public sf::Transformable
+class Entity : public sf::Drawable,
+               public sf::Transformable
 {
   public:
     Entity( sf::Texture const & texture );

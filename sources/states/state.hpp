@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "main/window.hpp"
+
 #include "input/button_array.hpp"
 #include "input/mouse_position.hpp"
 #include "settings/settings.hpp"
@@ -37,7 +39,7 @@ class State
 
     // We use a constructor that is only used by childs instead
     // This is an abstract class
-    State() = delete;
+    State()          = delete;
     virtual ~State() = default;
 
     /**
@@ -51,14 +53,13 @@ class State
     /// @brief Update deltaTime and call the update method
     void update_data( float const & deltaTime );
 
+    /// @brief Update any change that can happen in the current state.
+    virtual void update()       = 0;
     /// @brief Draw all the things that we have to draw in our window
-    virtual void render() = 0;
+    virtual void render() const = 0;
 
   protected:
-    State( std::shared_ptr<sf::RenderWindow> window,
-           Ressources const & ressources, State::E_List const & stateName );
-
-    std::shared_ptr<sf::RenderWindow> m_window;
+    State( Ressources const & ressources, State::E_List const & stateName );
 
     Ressources const m_ressources;
     // TYPO faire rentré les settings dans ressources
@@ -79,7 +80,4 @@ class State
 
     /// @brief update general events
     virtual void extra_events();
-
-    /// @brief Update any change that can happen in the current state.
-    virtual void update() = 0;
 };

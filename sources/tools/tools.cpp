@@ -50,12 +50,12 @@ namespace tools
 
     void * cast_int_to_void_pointer( int const & integer )
     {
-        return reinterpret_cast<void *>( static_cast<intptr_t>( integer ) );
+        return reinterpret_cast< void * >( static_cast< intptr_t >( integer ) );
     }
     void * cast_unsigned_int_to_void_pointer( int const & unsignedInteger )
     {
-        return reinterpret_cast<void *>(
-            static_cast<uintptr_t>( unsignedInteger ) );
+        return reinterpret_cast< void * >(
+            static_cast< uintptr_t >( unsignedInteger ) );
     }
 
 } // namespace tools

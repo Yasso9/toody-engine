@@ -39,17 +39,17 @@ class Mesh
 {
   public:
     // mesh Data
-    std::vector<S_Vertex> vertices;
-    std::vector<unsigned int> indices;
-    std::vector<S_Texture> textures;
+    std::vector< S_Vertex > vertices;
+    std::vector< unsigned int > indices;
+    std::vector< S_Texture > textures;
     unsigned int VAO;
 
     // constructor
-    Mesh( std::vector<S_Vertex> vertices, std::vector<unsigned int> indices,
-          std::vector<S_Texture> textures )
+    Mesh( std::vector< S_Vertex > vertices, std::vector< unsigned int > indices,
+          std::vector< S_Texture > textures )
     {
         this->vertices = vertices;
-        this->indices = indices;
+        this->indices  = indices;
         this->textures = textures;
 
         // now that we have all the required data, set the vertex buffers and its attribute pointers.
@@ -96,7 +96,7 @@ class Mesh
             // now set the sampler to the correct texture unit
             glUniform1i( glGetUniformLocation( shader.getNativeHandle(),
                                                ( name + number ).c_str() ),
-                         static_cast<int>( i_textureUnit ) );
+                         static_cast< int >( i_textureUnit ) );
             // and finally bind the texture
             glBindTexture( GL_TEXTURE_2D, textures[i_textureUnit].id );
         }
@@ -104,7 +104,7 @@ class Mesh
         // draw mesh
         glBindVertexArray( VAO );
         glDrawElements( GL_TRIANGLES,
-                        static_cast<int>( indices.size() ),
+                        static_cast< int >( indices.size() ),
                         GL_UNSIGNED_INT,
                         0 );
         glBindVertexArray( 0 );
@@ -131,15 +131,16 @@ class Mesh
         // A great thing about structs is that their memory layout is sequential for all its items.
         // The effect is that we can simply pass a pointer to the struct and it translates perfectly to a glm::vec3/2 array which
         // again translates to 3/2 floats which translates to a byte array.
-        glBufferData( GL_ARRAY_BUFFER,
-                      static_cast<long>( vertices.size() * sizeof( S_Vertex ) ),
-                      &vertices[0],
-                      GL_STATIC_DRAW );
+        glBufferData(
+            GL_ARRAY_BUFFER,
+            static_cast< long >( vertices.size() * sizeof( S_Vertex ) ),
+            &vertices[0],
+            GL_STATIC_DRAW );
 
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, EBO );
         glBufferData(
             GL_ELEMENT_ARRAY_BUFFER,
-            static_cast<long>( indices.size() * sizeof( unsigned int ) ),
+            static_cast< long >( indices.size() * sizeof( unsigned int ) ),
             &indices[0],
             GL_STATIC_DRAW );
 

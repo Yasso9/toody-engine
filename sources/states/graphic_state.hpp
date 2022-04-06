@@ -8,12 +8,11 @@
 class GraphicState final : public State
 {
   public:
-    GraphicState( std::shared_ptr<sf::RenderWindow> window,
-                  Ressources const & ressources );
+    GraphicState( Ressources const & ressources );
     virtual ~GraphicState() = default;
 
     void update() override;
-    void render() override;
+    void render() const override;
 
   private:
     Camera m_camera;

@@ -2,15 +2,16 @@
 
 #include "output_info/information.hpp"
 
-class Tileset final : public sf::Drawable, public sf::Transformable
+class Tileset final : public sf::Drawable,
+                      public sf::Transformable
 {
   public:
     Tileset( sf::Texture const & texture );
 
-    Tileset( const Tileset & ) = delete;
-    Tileset( Tileset && ) = delete;
+    Tileset( const Tileset & )             = delete;
+    Tileset( Tileset && )                  = delete;
     Tileset & operator=( const Tileset & ) = delete;
-    Tileset & operator=( Tileset && ) = delete;
+    Tileset & operator=( Tileset && )      = delete;
 
     virtual ~Tileset() = default;
 

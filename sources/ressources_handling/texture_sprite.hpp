@@ -16,9 +16,9 @@ class TextureSprite
                  E_Direction const & direction );
 
   private:
-    std::map<Player::E_State, std::vector<sf::IntRect>> m_rectSprite {};
+    std::map< Player::E_State, std::vector< sf::IntRect > > m_rectSprite {};
 
-    std::map<Player::E_State, unsigned int> m_nbImage {};
+    std::map< Player::E_State, unsigned int > m_nbImage {};
 
     int m_actualState {};
     int m_lastState {};
