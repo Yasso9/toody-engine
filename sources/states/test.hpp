@@ -14,10 +14,9 @@ class TestState final : public State
     unsigned int VAO;
     sf::Shader ourShader;
 
-    TestState( std::shared_ptr< sf::RenderWindow > window,
-               Ressources const & ressources );
+    TestState( Ressources const & ressources );
     virtual ~TestState() = default;
 
     void update() override;
-    void render() override;
+    void render() const override;
 };

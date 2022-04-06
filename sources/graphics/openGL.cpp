@@ -19,6 +19,12 @@ namespace gl
         glDepthMask( GL_TRUE );
         glClearDepth( 1.f );
         glDisable( GL_LIGHTING );
+
+        // TYPO ajouté ça au projet, dans gl::initialize et mettre window dans un singleton
+        // glViewport( 0,
+        //             0,
+        //             this->m_settings.get_window_size_u().x,
+        //             this->m_settings.get_window_size_u().y );
     }
 
     void clear_window()
@@ -27,15 +33,9 @@ namespace gl
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     }
 
-    void set_wireframe()
-    {
-        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-    }
+    void set_wireframe() { glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); }
 
-    void remove_wireframe()
-    {
-        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-    }
+    void remove_wireframe() { glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ); }
 } // namespace gl
 
 std::ostream & operator<<( std::ostream & stream, glm::vec3 const & vector3 )

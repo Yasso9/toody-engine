@@ -15,7 +15,6 @@ class Game final
     void run();
 
   private:
-    std::shared_ptr< sf::RenderWindow > m_window;
     std::shared_ptr< State > m_states;
 
     Ressources const m_ressources;
@@ -44,7 +43,6 @@ class Game final
     template < typename StateClass >
     void set_new_state()
     {
-        this->m_states = std::make_shared< StateClass >( this->m_window,
-                                                         this->m_ressources );
+        this->m_states = std::make_shared< StateClass >( this->m_ressources );
     }
 };

@@ -7,11 +7,10 @@
 class GameState final : public State
 {
   public:
-    GameState( std::shared_ptr< sf::RenderWindow > window,
-               Ressources const & ressources );
+    GameState( Ressources const & ressources );
 
     void update() override;
-    void render() override;
+    void render() const override;
 
   private:
     TileMap m_tilemap;

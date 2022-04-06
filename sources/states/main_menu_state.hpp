@@ -5,12 +5,11 @@
 class MainMenuState final : public State
 {
   public:
-    MainMenuState( std::shared_ptr< sf::RenderWindow > window,
-                   Ressources const & ressources );
+    MainMenuState( Ressources const & ressources );
     virtual ~MainMenuState() = default;
 
     void update() override;
-    void render() override;
+    void render() const override;
 
   private:
     sf::RectangleShape m_background;

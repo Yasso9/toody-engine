@@ -3,9 +3,8 @@
 #include "tools/assertion.hpp"
 #include "tools/string.hpp"
 
-EditorState::EditorState( std::shared_ptr< sf::RenderWindow > window,
-                          Ressources const & ressources )
-  : State( window, ressources, State::E_List::Editor ),
+EditorState::EditorState( Ressources const & ressources )
+  : State( ressources, State::E_List::Editor ),
     m_tilemap( this->m_ressources.textures.at( E_TextureKey::Tileset ) ),
     m_tileset( this->m_ressources.textures.at( E_TextureKey::Tileset ) ),
     m_buttons( this->m_ressources.fonts.at( E_FontKey::Arial ) )
@@ -139,12 +138,12 @@ void EditorState::update()
     }
 }
 
-void EditorState::render()
+void EditorState::render() const
 {
-    m_window->setView( this->m_view );
+    Window::get_instance().setView( this->m_view );
 
-    m_window->draw( this->m_tilemap );
-    m_window->draw( this->m_tileset );
+    Window::get_instance().draw( this->m_tilemap );
+    Window::get_instance().draw( this->m_tileset );
 
-    m_window->draw( this->m_buttons );
+    Window::get_instance().draw( this->m_buttons );
 }

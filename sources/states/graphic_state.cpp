@@ -5,9 +5,8 @@
 
 #include "tools/tools.hpp"
 
-GraphicState::GraphicState( std::shared_ptr< sf::RenderWindow > window,
-                            Ressources const & ressources )
-  : State( window, ressources, State::E_List::Graphics )
+GraphicState::GraphicState( Ressources const & ressources )
+  : State( ressources, State::E_List::Graphics )
 // ,m_model( tools::get_path::resources( "backpack/backpack.obj"s ) )
 {
     // this->m_shader.loadFromFile( tools::get_path::shaders( "shader.vert"s ),
@@ -21,7 +20,7 @@ void GraphicState::update()
     this->update_camera();
 }
 
-void GraphicState::render()
+void GraphicState::render() const
 {
     gl::clear_window();
 
@@ -134,8 +133,8 @@ void GraphicState::update_mouse()
 {
     // TYPO faire une fonction "get_mouse_relativ_position"
     sf::Vector2i const i_middlePosition {
-        this->m_window.get()->getPosition()
-        + static_cast< sf::Vector2i >( this->m_window.get()->getSize() / 2u )
+        Window::get_instance().getPosition()
+        + static_cast< sf::Vector2i >( Window::get_instance().getSize() / 2u )
     };
     sf::Vector2f const f_middlePosition { static_cast< sf::Vector2f >(
         i_middlePosition ) };
@@ -163,8 +162,8 @@ void GraphicState::update_camera()
     {
         float const fieldOfView { glm::radians( this->m_camera.get_zoom() ) };
         float const screenRatio { static_cast< float >(
-            this->m_window.get()->getSize().x
-            / this->m_window.get()->getSize().y ) };
+            Window::get_instance().getSize().x
+            / Window::get_instance().getSize().y ) };
         float const nearDistanceFromCamera { 0.1f };
         float const farDistanceFromCamera { 100.f };
 
