@@ -17,12 +17,11 @@ class Game final
   private:
     std::shared_ptr< State > m_states;
 
+    Settings const m_settings;
     Ressources const m_ressources;
 
     sf::Event m_event;
     sf::Clock m_clock;
-
-    Settings const m_settings;
 
     void init_window();
     /// @brief To know where do we start the game

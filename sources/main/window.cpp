@@ -4,6 +4,12 @@
 
 Window::Window()
 {
+    this->create();
+    this->initialize();
+}
+
+void Window::create()
+{
     sf::Vector2u const windowSize { 900u, 900u };
 
     std::string const gameTitle { "Toody Engine (In Developpement)"s };
@@ -18,10 +24,10 @@ Window::Window()
     contextSettings.majorVersion      = 4;
     contextSettings.minorVersion      = 6;
 
-    this->create( sfpp::to_video_mode( windowSize ),
-                  gameTitle,
-                  windowStyle,
-                  contextSettings );
+    this->sf::RenderWindow::create( sfpp::to_video_mode( windowSize ),
+                                    gameTitle,
+                                    windowStyle,
+                                    contextSettings );
 
     if ( ! this->setActive( true ) )
     {
@@ -29,4 +35,12 @@ Window::Window()
             "Cannot set the windows as active state for OpenGL"s
         };
     }
+}
+void Window::initialize()
+{
+    // TYPO à mettre autre part
+    this->setVisible( true );
+    this->requestFocus();
+    this->setKeyRepeatEnabled( false );
+    this->setVerticalSyncEnabled( true );
 }

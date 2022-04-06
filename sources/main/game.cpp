@@ -29,19 +29,16 @@ static void check_configuration()
 
 Game::Game()
   : m_states( nullptr ),
+    m_settings(),
     m_ressources( RessourcesInit::init_textures(),
-                  RessourcesInit::init_fonts() ),
-    m_settings()
+                  RessourcesInit::init_fonts() )
 {
     check_configuration();
 
-    this->init_state();
+    // Assurance that the window will be created here
+    Window::get_instance();
 
-    // TYPO à mettre autre part
-    Window::get_instance().setVisible( true );
-    Window::get_instance().requestFocus();
-    Window::get_instance().setKeyRepeatEnabled( false );
-    Window::get_instance().setVerticalSyncEnabled( true );
+    this->init_state();
 
     gl::initialize();
 }
