@@ -1,9 +1,9 @@
 #pragma once
 
 #include "graphics/openGL.hpp"
+#include "graphics/sfml.hpp"
 #include "graphics/shader.hpp"
 #include "graphics/texture.hpp"
-#include "tools/sfml.hpp"
 #include "vector"
 
 class Shape final
@@ -24,7 +24,7 @@ class Shape final
         unsigned int get_data_per_point_sum() const;
     };
 
-    Shape() = default;
+    Shape();
     virtual ~Shape();
 
     /**
@@ -32,7 +32,12 @@ class Shape final
      *        we don't create an element buffer object
      */
     void create( Data const & data );
-    void update( gl::SpaceMatrix const & space );
+
+    void translate( glm::vec3 const & tranlationVector );
+    void rotate( glm::vec3 const & rotationVector, float const & angle );
+    void scale( glm::vec3 const & scaleVector );
+
+    void update( glm::mat4 const & projection, glm::mat4 const & view );
     void draw() const;
 
   private:
@@ -40,7 +45,9 @@ class Shape final
     sf::Shader m_shader;
     // Shaders m_shaders;
 
+    /// @brief space where the object is and where we can move it
     gl::SpaceMatrix m_space;
+    glm::mat4 m_spaceModel;
 
     unsigned int m_vertexArrayObject;
     unsigned int m_vertexBufferObject;
@@ -61,4 +68,7 @@ class Shape final
     void unbind();
 
     void transform() const;
+
+    // Assign the space model to the identity matrix
+    void reset_space_model();
 };

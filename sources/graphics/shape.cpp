@@ -22,6 +22,11 @@ unsigned int Shape::Data::get_data_per_point_sum() const
                             0u );
 }
 
+Shape::Shape()
+{
+    this->reset_space_model();
+}
+
 Shape::~Shape()
 {
     // We delete all the buffers and the objects generated
@@ -46,24 +51,37 @@ void Shape::create( Data const & data )
     this->unbind();
 }
 
-void Shape::load_textures_and_shaders()
+void Shape::translate( glm::vec3 const & tranlationVector )
 {
-    this->m_shader.loadFromFile( tools::get_path::shaders( "shader.vert"s ),
-                                 tools::get_path::shaders( "shader.frag"s ) );
+    glm::mat4 const translationMatrix { glm::translate( glm::mat4 { 1.f },
+                                                        tranlationVector ) };
 
-    bool textureLoad { true };
-    textureLoad &= this->m_texture.loadFromFile(
-        tools::get_path::resources( "wall.jpg"s ) );
-    textureLoad &= this->m_texture.generateMipmap();
-    if ( ! textureLoad )
-    {
-        throw std::runtime_error { "Cannot load texture"s };
-    }
+    this->m_spaceModel *= translationMatrix;
+}
+void Shape::rotate( glm::vec3 const & rotationVector, float const & angle )
+{
+    glm::mat4 const rotationMatrix { glm::rotate(
+        glm::mat4 { 1.f },
+        glm::radians( angle ),
+        glm::vec3 { rotationVector } ) };
+
+    this->m_spaceModel *= rotationMatrix;
+}
+void Shape::scale( glm::vec3 const & scaleVector )
+{
+    glm::mat4 const scaleMatrix { glm::scale( glm::mat4 { 1.f },
+                                              glm::vec3 { scaleVector } ) };
+    this->m_spaceModel *= scaleMatrix;
 }
 
-void Shape::update( gl::SpaceMatrix const & space )
+void Shape::update( glm::mat4 const & projection, glm::mat4 const & view )
 {
-    this->m_space = space;
+    this->m_space.projection = projection;
+    this->m_space.view       = view;
+    this->m_space.model      = this->m_spaceModel;
+
+    // All the object transformation have been made, so we reset the matrix to identity
+    this->reset_space_model();
 }
 
 void Shape::draw() const
@@ -99,6 +117,21 @@ void Shape::draw() const
 
     sf::Shader::bind( NULL );
     sf::Texture::bind( NULL );
+}
+
+void Shape::load_textures_and_shaders()
+{
+    this->m_shader.loadFromFile( tools::get_path::shaders( "shader.vert"s ),
+                                 tools::get_path::shaders( "shader.frag"s ) );
+
+    bool textureLoad { true };
+    textureLoad &= this->m_texture.loadFromFile(
+        tools::get_path::resources( "wall.jpg"s ) );
+    textureLoad &= this->m_texture.generateMipmap();
+    if ( ! textureLoad )
+    {
+        throw std::runtime_error { "Cannot load texture"s };
+    }
 }
 
 bool Shape::is_element_buffer_set() const
@@ -197,6 +230,11 @@ void Shape::transform() const
                         numberOfMatrix,
                         transposeMatrix,
                         glm::value_ptr( this->m_space.projection ) );
+}
+
+void Shape::reset_space_model()
+{
+    this->m_spaceModel = glm::mat4 { 1.f };
 }
 
 static int get_shader_uniform_location( sf::Shader const & shader,

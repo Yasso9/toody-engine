@@ -1,14 +1,35 @@
 #pragma once
 
-#include "3D_model/assimp.hpp"
-#include "3D_model/mesh.hpp"
-
 #include <fstream>
 #include <iostream>
 #include <map>
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include "3D_model/assimp.hpp"
+#include "3D_model/mesh.hpp"
+
+inline glm::vec3 to_vector3( aiVector3D const & assimpVector3D )
+{
+    glm::vec3 glmVec3 {};
+
+    glmVec3.x = assimpVector3D.x;
+    glmVec3.y = assimpVector3D.y;
+    glmVec3.z = assimpVector3D.z;
+
+    return glmVec3;
+}
+
+inline glm::vec2 to_vector2( aiVector3D const & assimpVector3D )
+{
+    glm::vec2 glmVec2 {};
+
+    glmVec2.x = assimpVector3D.x;
+    glmVec2.y = assimpVector3D.y;
+
+    return glmVec2;
+}
 
 class Model
 {
@@ -62,22 +83,24 @@ class Model
     }
 
     /**
-     * @brief processes a node in a recursive fashion.
-     * Processes each individual mesh located at the node and repeats
+     * @brief Processes a node in a recursive way.
+     * Processes each individual mesh located at the current node and repeats
      * this process on its children nodes (if any).
      */
-    void process_node( aiNode * node, const aiScene * scene )
+    void process_node( aiNode const * node, aiScene const * scene )
     {
-        // parse each mesh located at the current node
+        // Parse each mesh located at the current node
         for ( unsigned int i_mesh { 0u }; i_mesh < node->mNumMeshes; ++i_mesh )
         {
-            unsigned int meshKey { node->mMeshes[i_mesh] };
-            aiMesh * mesh = scene->mMeshes[meshKey];
-            this->m_meshes.push_back( this->process_mesh( mesh, scene ) );
+            unsigned int const meshKey { node->mMeshes[i_mesh] };
+            aiMesh const * currentMesh { scene->mMeshes[meshKey] };
+            Mesh const & processedMesh { this->process_mesh( currentMesh,
+                                                             scene ) };
+            this->m_meshes.push_back( processedMesh );
         }
 
-        // after we've processed all of the meshes (if any),
-        // we then recursively process each of the meshes of children nodes
+        // After we've processed all of the meshes (if any),
+        // We then recursively process each of the meshes of children nodes
         for ( unsigned int i_nodeChild { 0u }; i_nodeChild < node->mNumChildren;
               ++i_nodeChild )
         {
@@ -85,108 +108,97 @@ class Model
         }
     }
 
-    Mesh process_mesh( aiMesh * mesh, const aiScene * scene )
+    Mesh process_mesh( aiMesh const * mesh, aiScene const * scene )
     {
-        std::vector< S_Vertex > vertices;
-        std::vector< unsigned int > indices;
-        std::vector< S_Texture > textures;
+        std::vector< S_Vertex > vertices {};
+        std::vector< unsigned int > indices {};
+        std::vector< S_Texture > textures {};
 
         // walk through each of the mesh's vertices
         for ( unsigned int i_vertices { 0u }; i_vertices < mesh->mNumVertices;
-              i_vertices++ )
+              ++i_vertices )
         {
             S_Vertex vertex;
             // we declare a placeholder vector since assimp uses its own vector class
             // that doesn't directly convert to glm's vec3 class so we transfer the data
             // to this placeholder glm::vec3 first.
-            glm::vec3 vector;
-            // positions
-            vector.x        = mesh->mVertices[i_vertices].x;
-            vector.y        = mesh->mVertices[i_vertices].y;
-            vector.z        = mesh->mVertices[i_vertices].z;
-            vertex.position = vector;
-            // normals
+            vertex.position = to_vector3( mesh->mVertices[i_vertices] );
+
             if ( mesh->HasNormals() )
             {
-                vector.x      = mesh->mNormals[i_vertices].x;
-                vector.y      = mesh->mNormals[i_vertices].y;
-                vector.z      = mesh->mNormals[i_vertices].z;
-                vertex.normal = vector;
+                vertex.normal = to_vector3( mesh->mNormals[i_vertices] );
             }
-            // texture coordinates
-            // does the mesh contain texture coordinates?
+            // Does the mesh contain texture coordinates?
             if ( mesh->mTextureCoords[0] )
             {
-                glm::vec2 vec;
-                // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't
-                // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
-                vec.x = mesh->mTextureCoords[0][i_vertices].x;
-                vec.y = mesh->mTextureCoords[0][i_vertices].y;
-                vertex.textureCoordinates = vec;
+                // TYPO a vertex can contain up to 8 different texture coordinates.
+                // We thus make the assumption that we won't
+                // use models where a vertex can have multiple texture coordinates
+                // so we always take the first set (0).
+                vertex.textureCoordinates =
+                    to_vector2( mesh->mTextureCoords[0][i_vertices] );
                 // tangent
-                vector.x                  = mesh->mTangents[i_vertices].x;
-                vector.y                  = mesh->mTangents[i_vertices].y;
-                vector.z                  = mesh->mTangents[i_vertices].z;
-                vertex.tangent            = vector;
+                vertex.tangent = to_vector3( mesh->mTangents[i_vertices] );
                 // bitangent
-                vector.x                  = mesh->mBitangents[i_vertices].x;
-                vector.y                  = mesh->mBitangents[i_vertices].y;
-                vector.z                  = mesh->mBitangents[i_vertices].z;
-                vertex.bitangent          = vector;
+                vertex.bitangent =
+                    to_vector3( mesh->mBitangents[i_vertices] );
             }
             else
             {
-                vertex.textureCoordinates = glm::vec2( 0.0f, 0.0f );
+                vertex.textureCoordinates = glm::vec2 { 0.0f, 0.0f };
             }
 
             vertices.push_back( vertex );
         }
-        // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
-        for ( unsigned int i = 0; i < mesh->mNumFaces; i++ )
+        // now wak through each of the mesh's faces
+        // (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
+        for ( unsigned int i_face { 0u }; i_face < mesh->mNumFaces; ++i_face )
         {
-            aiFace face = mesh->mFaces[i];
+            aiFace const face = mesh->mFaces[i_face];
             // retrieve all indices of the face and store them in the indices vector
-            for ( unsigned int j = 0; j < face.mNumIndices; j++ )
+            for ( unsigned int i_indice { 0u }; i_indice < face.mNumIndices;
+                  ++i_indice )
             {
-                indices.push_back( face.mIndices[j] );
+                indices.push_back( face.mIndices[i_indice] );
             }
         }
         // process materials
         aiMaterial * material = scene->mMaterials[mesh->mMaterialIndex];
-        // we assume a convention for sampler names in the shaders. Each diffuse texture should be named
+        // we assume a convention for sampler names in the shaders.
+        // Each diffuse texture should be named
         // as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER.
         // Same applies to other texture as the following list summarizes:
         // diffuse: texture_diffuseN
         // specular: texture_specularN
         // normal: texture_normalN
+        std::vector< S_Texture > const diffuseMaps {
+            this->load_material_textures( material,
+                                          aiTextureType::aiTextureType_DIFFUSE,
+                                          "texture_diffuse" )
+        };
+        std::vector< S_Texture > const specularMaps {
+            this->load_material_textures( material,
+                                          aiTextureType::aiTextureType_SPECULAR,
+                                          "texture_specular" )
+        };
+        std::vector< S_Texture > const normalMaps {
+            this->load_material_textures( material,
+                                          aiTextureType::aiTextureType_HEIGHT,
+                                          "texture_normal" )
+        };
+        std::vector< S_Texture > const heightMaps {
+            this->load_material_textures( material,
+                                          aiTextureType::aiTextureType_AMBIENT,
+                                          "texture_height" )
+        };
 
-        // 1. diffuse maps
-        std::vector< S_Texture > diffuseMaps { this->load_material_textures(
-            material,
-            aiTextureType_DIFFUSE,
-            "texture_diffuse" ) };
         textures.insert( textures.end(),
                          diffuseMaps.begin(),
                          diffuseMaps.end() );
-        // 2. specular maps
-        std::vector< S_Texture > specularMaps { this->load_material_textures(
-            material,
-            aiTextureType_SPECULAR,
-            "texture_specular" ) };
         textures.insert( textures.end(),
                          specularMaps.begin(),
                          specularMaps.end() );
-        // 3. normal maps
-        std::vector< S_Texture > normalMaps { this->load_material_textures(
-            material,
-            aiTextureType_HEIGHT,
-            "texture_normal" ) };
         textures.insert( textures.end(), normalMaps.begin(), normalMaps.end() );
-        // 4. height maps
-        std::vector< S_Texture > heightMaps { this->load_material_textures(
-            material,
-            aiTextureType_AMBIENT,
-            "texture_height" ) };
         textures.insert( textures.end(), heightMaps.begin(), heightMaps.end() );
 
         // return a mesh object created from the extracted mesh data
@@ -201,17 +213,19 @@ class Model
     {
         std::vector< S_Texture > textures;
 
-        for ( unsigned int i { 0u }; i < material->GetTextureCount( type );
-              i++ )
+        for ( unsigned int i_texture { 0u };
+              i_texture < material->GetTextureCount( type );
+              ++i_texture )
         {
-            aiString str;
-            material->GetTexture( type, i, &str );
+            aiString string;
+            material->GetTexture( type, i_texture, &string );
             // check if texture was loaded before and if so,
             // continue to next iteration: skip loading a new texture
             bool skip { false };
             for ( unsigned int j { 0u }; j < m_texturesLoaded.size(); j++ )
             {
-                if ( std::strcmp( m_texturesLoaded[j].path.data(), str.C_Str() )
+                if ( std::strcmp( m_texturesLoaded[j].path.data(),
+                                  string.C_Str() )
                      == 0 )
                 {
                     textures.push_back( m_texturesLoaded[j] );
@@ -226,15 +240,15 @@ class Model
             {
                 continue;
             }
-            // if texture hasn't been loaded already, load it
             S_Texture texture {};
 
+            // if texture hasn't been loaded already, load it
             sf::Texture sfmlTexture {};
-            sfmlTexture.loadFromFile( str.C_Str() );
+            sfmlTexture.loadFromFile( string.C_Str() );
             texture.id = sfmlTexture.getNativeHandle();
 
             texture.type = typeName;
-            texture.path = str.C_Str();
+            texture.path = string.C_Str();
             textures.push_back( texture );
             // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
             m_texturesLoaded.push_back( texture );

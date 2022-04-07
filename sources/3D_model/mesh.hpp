@@ -3,10 +3,8 @@
 #include <vector>
 
 #include "graphics/openGL.hpp"
-#include "tools/sfml.hpp"
+#include "graphics/sfml.hpp"
 #include "tools/string.hpp"
-
-#include <iostream>
 
 #define MAX_BONE_INFLUENCE 4
 
@@ -60,13 +58,14 @@ class Mesh
     void draw( sf::Shader const & shader ) const
     {
         // bind appropriate textures
-        unsigned int diffuseNr { 1 };
-        unsigned int specularNr { 1 };
-        unsigned int normalNr { 1 };
-        unsigned int heightNr { 1 };
+        unsigned int diffuseNr { 1u };
+        unsigned int specularNr { 1u };
+        unsigned int normalNr { 1u };
+        unsigned int heightNr { 1u };
+
         for ( unsigned int i_textureUnit { 0u };
               i_textureUnit < textures.size();
-              i_textureUnit++ )
+              ++i_textureUnit )
         {
             // active proper texture unit before binding
             glActiveTexture( GL_TEXTURE0 + i_textureUnit );
@@ -80,17 +79,17 @@ class Mesh
             else if ( name == "texture_specular" )
             {
                 // transfer unsigned int to string
-                number = std::to_string( specularNr++ );
+                number = std::to_string( ++specularNr );
             }
             else if ( name == "texture_normal" )
             {
                 // transfer unsigned int to string
-                number = std::to_string( normalNr++ );
+                number = std::to_string( ++normalNr );
             }
             else if ( name == "texture_height" )
             {
                 // transfer unsigned int to string
-                number = std::to_string( heightNr++ );
+                number = std::to_string( ++heightNr );
             }
 
             // now set the sampler to the correct texture unit

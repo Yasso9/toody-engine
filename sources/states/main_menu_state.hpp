@@ -20,4 +20,6 @@ class MainMenuState final : public State
     void init_background();
     void init_text();
     void init_buttons();
+
+    void extra_events() override;
 };

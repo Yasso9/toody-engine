@@ -2,6 +2,8 @@
 
 #include "tools/string.hpp"
 
+#include <iostream>
+
 MainMenuState::MainMenuState( Ressources const & ressources )
   : State( ressources, State::E_List::MainMenu )
 {
@@ -10,7 +12,7 @@ MainMenuState::MainMenuState( Ressources const & ressources )
     this->init_buttons();
 }
 
-void MainMenuState::update()
+void MainMenuState::extra_events()
 {
     int const buttonNumberPressed { this->m_buttons.update(
         // TYPO essayer d'enlever le static cast, ça fait moche
@@ -23,6 +25,8 @@ void MainMenuState::update()
         this->m_stateName = static_cast< State::E_List >( buttonNumberPressed );
     }
 }
+
+void MainMenuState::update() {}
 
 void MainMenuState::render() const
 {

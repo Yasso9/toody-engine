@@ -1,6 +1,6 @@
 #pragma once
 
-#include "tools/sfml.hpp"
+#include "graphics/sfml.hpp"
 
 class Button final : public sf::Drawable,
                      public sf::Transformable

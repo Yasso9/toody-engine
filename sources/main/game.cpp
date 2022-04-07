@@ -28,7 +28,8 @@ static void check_configuration()
 }
 
 Game::Game()
-  : m_states( nullptr ),
+  : m_shouldRun( true ),
+    m_states( nullptr ),
     m_settings(),
     m_ressources( RessourcesInit::init_textures(),
                   RessourcesInit::init_fonts() )
@@ -57,7 +58,7 @@ void Game::run()
     // Reset the clock juste before the game run
     this->m_clock.restart();
 
-    while ( Window::get_instance().isOpen() )
+    while ( this->m_shouldRun )
     {
         sf::Time const timeElaspsed { this->m_clock.restart() };
         deltaTime += timeElaspsed.asSeconds();
@@ -77,7 +78,12 @@ void Game::update_events()
 {
     while ( Window::get_instance().pollEvent( this->m_event ) )
     {
-        if ( Window::get_instance().hasFocus() )
+        if ( this->m_event.type == sf::Event::Closed )
+        {
+            this->quit();
+            break;
+        }
+        else if ( Window::get_instance().has_absolute_focus() )
         {
             this->m_states->update_inputs( this->m_event );
         }
@@ -141,7 +147,7 @@ void Game::change_state( State::E_List const & newState )
         break;
 
     case State::E_List::Quit :
-        Window::get_instance().close();
+        this->quit();
         break;
 
     default :
@@ -151,4 +157,10 @@ void Game::change_state( State::E_List const & newState )
         ASSERTION( false, debugMessage.str() );
         break;
     }
+}
+
+void Game::quit()
+{
+    this->m_shouldRun = false;
+    Window::get_instance().close();
 }

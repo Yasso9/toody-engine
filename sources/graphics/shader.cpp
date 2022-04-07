@@ -3,7 +3,7 @@
 #include <cstdlib>
 
 #include "graphics/openGL.hpp"
-#include "tools/sfml.hpp"
+#include "graphics/sfml.hpp"
 #include "tools/tools.hpp"
 
 Shaders::~Shaders()

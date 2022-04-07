@@ -1,11 +1,13 @@
 #include "openGL.hpp"
 
-#include "tools/sfml.hpp"
+#include "graphics/sfml.hpp"
+#include "main/window.hpp"
 
 namespace gl
 {
     void initialize()
     {
+        // Load glad so we can use openGL function
         if ( ! gladLoadGLLoader( reinterpret_cast< GLADloadproc >(
                  sf::Context::getFunction ) ) )
         {
@@ -20,11 +22,11 @@ namespace gl
         glClearDepth( 1.f );
         glDisable( GL_LIGHTING );
 
-        // TYPO ajouté ça au projet, dans gl::initialize et mettre window dans un singleton
-        // glViewport( 0,
-        //             0,
-        //             this->m_settings.get_window_size_u().x,
-        //             this->m_settings.get_window_size_u().y );
+        // Je ne sais pas ce que c'est ?
+        glViewport( 0,
+                    0,
+                    Window::get_instance().get_size_i().x,
+                    Window::get_instance().get_size_i().y );
     }
 
     void clear_window()
@@ -36,6 +38,14 @@ namespace gl
     void set_wireframe() { glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); }
 
     void remove_wireframe() { glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ); }
+
+    void check_error()
+    {
+        if ( glGetError() != GL_NO_ERROR )
+        {
+            throw std::runtime_error { "OpenGL Error" };
+        }
+    }
 } // namespace gl
 
 std::ostream & operator<<( std::ostream & stream, glm::vec3 const & vector3 )

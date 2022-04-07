@@ -1,7 +1,7 @@
 AccessModifierOffset: -2
 AlignAfterOpenBracket: Align
 AlignArrayOfStructures: Right # clang 13
-AlignConsecutiveAssignments: AcrossComments # cannot put custom fields
+AlignConsecutiveAssignments: Consecutive # cannot put custom fields ?
 AlignConsecutiveDeclarations: None
 AlignConsecutiveMacros: AcrossEmptyLines
 AlignEscapedNewlines: Left

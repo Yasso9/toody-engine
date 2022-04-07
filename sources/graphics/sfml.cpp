@@ -85,3 +85,5 @@ template std::ostream & operator<<( std::ostream & stream,
                                     sf::Vector2< float > const & vector );
 template std::ostream & operator<<(
     std::ostream & stream, sf::Vector2< unsigned int > const & vector );
+template std::ostream & operator<<( std::ostream & stream,
+                                    sf::Vector2< int > const & vector );

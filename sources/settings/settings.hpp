@@ -1,6 +1,6 @@
 #pragma once
 
-#include "tools/sfml.hpp"
+#include "graphics/sfml.hpp"
 
 // TYPO rajouter le niveau d'antialiasing
 class Settings final

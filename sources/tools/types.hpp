@@ -4,7 +4,7 @@
 #include <string>
 #include <utility>
 
-#include "tools/sfml.hpp"
+#include "graphics/sfml.hpp"
 
 enum class E_TextureKey
 {

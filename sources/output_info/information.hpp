@@ -1,6 +1,6 @@
 #pragma once
 
-#include "tools/sfml.hpp"
+#include "graphics/sfml.hpp"
 
 // Faire un template de message en mode sdtvector
 class Message final : public sf::Drawable,

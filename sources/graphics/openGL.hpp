@@ -41,6 +41,7 @@ namespace gl
     void clear_window();
     void set_wireframe();
     void remove_wireframe();
+    void check_error();
 } // namespace gl
 
 std::ostream & operator<<( std::ostream & stream, glm::vec3 const & vector3 );
