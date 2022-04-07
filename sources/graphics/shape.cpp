@@ -230,6 +230,10 @@ void Shape::transform() const
                         numberOfMatrix,
                         transposeMatrix,
                         glm::value_ptr( this->m_space.projection ) );
+
+    this->m_shader.setUniformArray( "model"s,
+                                    sf::Glsl::Mat4( this->m_space.model ),
+                                    1u );
 }
 
 void Shape::reset_space_model()

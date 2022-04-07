@@ -19,9 +19,9 @@ GraphicState::GraphicState( Ressources const & ressources )
 
 void GraphicState::update()
 {
-    this->m_shape.translate( glm::vec3 { 0.f, 0.f, 0.f } );
-    this->m_shape.rotate( glm::vec3 { 1.f, 1.f, 1.f }, 0.f );
-    this->m_shape.scale( glm::vec3 { 1.f, 1.f, 1.f } );
+    // this->m_shape.translate( glm::vec3 { 0.f, 0.f, 0.f } );
+    // this->m_shape.rotate( glm::vec3 { 1.f, 1.f, 1.f }, 0.f );
+    // this->m_shape.scale( glm::vec3 { 1.f, 1.f, 1.f } );
 
     this->m_shape.update( this->m_camera.get_projection(),
                           this->m_camera.get_view() );

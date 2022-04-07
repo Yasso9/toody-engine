@@ -127,7 +127,7 @@ void Camera::zoom( float const & factor, float const & deltaTime )
 void Camera::update_inputs( float const & deltaTime )
 {
     this->update_keyboard_inputs( deltaTime );
-    this->update_mouse_inputs( deltaTime );
+    // this->update_mouse_inputs( deltaTime );
 }
 
 void Camera::update_camera_vectors()
@@ -208,8 +208,8 @@ void Camera::update_mouse_inputs( float const & deltaTime )
     offset.y = windowCenter.y - currentMousePosition.y;
 
     // Reset Mouse Position
-    // sf::Mouse::setPosition( static_cast< sf::Vector2i >( windowCenter ),
-    //                         Window::get_instance() );
+    sf::Mouse::setPosition( static_cast< sf::Vector2i >( windowCenter ),
+                            Window::get_instance() );
 
     float const sensitivity = 1.f;
     offset *= sensitivity;
