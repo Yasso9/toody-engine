@@ -127,7 +127,7 @@ void Camera::zoom( float const & factor, float const & deltaTime )
 void Camera::update_inputs( float const & deltaTime )
 {
     this->update_keyboard_inputs( deltaTime );
-    // this->update_mouse_inputs( deltaTime );
+    this->update_mouse_inputs( deltaTime );
 }
 
 void Camera::update_camera_vectors()
