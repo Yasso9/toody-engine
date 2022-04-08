@@ -1,5 +1,7 @@
 #include "state.hpp"
 
+#include "main/resources.hpp"
+
 State::State( State::E_List const & stateName )
   : m_stateName( stateName ), m_deltaTime( 0.f )
 {}
@@ -61,6 +63,14 @@ void State::update_data( float const & deltaTime )
 void State::render_all() const
 {
     this->render();
+
+    sf::Text framerateText { std::to_string( 1.f / this->m_deltaTime ),
+                             Resources::get_instance().get_font(
+                                 Resources::E_FontKey::Arial ) };
+    framerateText.setPosition( 50.f, 50.f );
+    framerateText.setCharacterSize( 50u );
+
+    Window::get_instance().draw( framerateText );
 }
 
 void State::keyboard_pressed( sf::Event /* event */ ) {}

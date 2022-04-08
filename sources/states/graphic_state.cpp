@@ -18,9 +18,9 @@ GraphicState::GraphicState() : State( State::E_List::Graphics )
 
 void GraphicState::update()
 {
-    // this->m_shape.translate( glm::vec3 { 0.f, 0.f, 0.f } );
-    // this->m_shape.rotate( glm::vec3 { 1.f, 1.f, 1.f }, 0.f );
-    // this->m_shape.scale( glm::vec3 { 1.f, 1.f, 1.f } );
+    this->m_shape.translate( glm::vec3 { 0.f, 0.f, 0.f } );
+    this->m_shape.rotate( glm::vec3 { 1.f, 1.f, 1.f }, 0.f );
+    this->m_shape.scale( glm::vec3 { 1.f, 1.f, 1.f } );
 
     this->m_shape.update( this->m_camera.get_projection(),
                           this->m_camera.get_view() );
@@ -86,7 +86,6 @@ static Shape::Data get_sample_shape_data_A()
         -0.5f, 0.5f,  0.5f,  0.0f, 0.0f, -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f
     };
     std::vector< unsigned int > const numberOfDataPerAttribute { 3u, 2u };
-    std::vector< unsigned int > const indices {};
 
-    return Shape::Data { vertices, indices, numberOfDataPerAttribute };
+    return Shape::Data { vertices, {}, numberOfDataPerAttribute };
 }

@@ -69,15 +69,17 @@ void Game::run()
 
 void Game::update_events()
 {
-    if ( this->m_event.type == sf::Event::Closed )
+    // The event loop must always be part of the main loop,
+    // otherwise bug and crash could happen
+    while ( Window::get_instance().pollEvent( this->m_event ) )
     {
-        this->quit();
-        return;
-    }
+        if ( this->m_event.type == sf::Event::Closed )
+        {
+            this->quit();
+            return;
+        }
 
-    if ( Window::get_instance().has_absolute_focus() )
-    {
-        while ( Window::get_instance().pollEvent( this->m_event ) )
+        if ( Window::get_instance().has_absolute_focus() )
         {
             this->m_states->update_inputs( this->m_event );
         }

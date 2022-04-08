@@ -17,7 +17,7 @@ namespace gl
         // enable openGL Z buffer
         glEnable( GL_DEPTH_TEST );
 
-        // Je ne sais pas ce que c'est ?
+        // Je ne sais pas ce que c'est mais c'est important ?
         glDepthMask( GL_TRUE );
         glClearDepth( 1.f );
         glDisable( GL_LIGHTING );
