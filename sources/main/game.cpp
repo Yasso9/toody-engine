@@ -78,14 +78,13 @@ void Game::update_events()
             this->quit();
             return;
         }
-
         if ( Window::get_instance().has_absolute_focus() )
         {
             this->m_states->update_inputs( this->m_event );
         }
-
-        this->m_states->extra_events();
     }
+
+    this->m_states->extra_events();
 }
 
 void Game::update_state( float const & deltaTime )
