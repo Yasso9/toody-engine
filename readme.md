@@ -35,7 +35,7 @@ Source code (All OS) : cmake and make
     For exemple in Ubuntu : <br>
     > python3 ./tools/compile_libraries.py ./external/object /home/ineo/Developpement/CPP_LIBRAIRIES/GLAD /home/ineo/Developpement/CPP_LIBRAIRIES/SQLITE <br>
     Or in windows : <br>
-    > python3 ./tools/compile_libraries.py ./external/object C:/Users/Turki/GoogleDrive/Programs/Programming/CPP_LIBRAIRIES/GLAD C:/Users/Turki/GoogleDrive/Programs/Programming/CPP_LIBRAIRIES/SQLITE <br>
+    > python ./tools/compile_libraries.py ./external/object C:/Users/Turki/GoogleDrive/Programs/Programming/CPP_LIBRAIRIES/GLAD C:/Users/Turki/GoogleDrive/Programs/Programming/CPP_LIBRAIRIES/SQLITE <br>
 
 4. Sqlite
 GLAD sources (All OS) : https://glad.dav1d.de/#language=c&specification=gl&api=gl%3D4.6&api=gles1%3Dnone&api=gles2%3Dnone&api=glsc2%3Dnone&profile=compatibility&loader=on

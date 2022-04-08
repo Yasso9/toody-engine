@@ -8,7 +8,7 @@
 class GraphicState final : public State
 {
   public:
-    GraphicState( Ressources const & ressources );
+    GraphicState();
     virtual ~GraphicState() = default;
 
     void update() override;

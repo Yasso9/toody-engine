@@ -1,7 +1,6 @@
 #include "test.hpp"
 
-TestState::TestState( Ressources const & ressources )
-  : State( ressources, State::E_List::Test )
+TestState::TestState() : State( State::E_List::Test )
 {
     gl::initialize();
 

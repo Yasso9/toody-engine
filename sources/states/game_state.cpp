@@ -1,10 +1,14 @@
 #include "game_state.hpp"
 
+#include "main/resources.hpp"
+
 // TYPO changer les arguments en une structure comprenant T_TexturesMap et T_FontsMap
-GameState::GameState( Ressources const & ressources )
-  : State( ressources, State::E_List::Game ),
-    m_tilemap( ressources.textures.at( E_TextureKey::Tileset ) ),
-    m_player( ressources.textures.at( E_TextureKey::Player ) )
+GameState::GameState()
+  : State( State::E_List::Game ),
+    m_tilemap( Resources::get_instance().get_texture(
+        Resources::E_TextureKey::Tileset ) ),
+    m_player( Resources::get_instance().get_texture(
+        Resources::E_TextureKey::Player ) )
 {
     this->init_map();
 }

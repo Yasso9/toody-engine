@@ -1,7 +1,7 @@
 #include "state.hpp"
 
-State::State( Ressources const & ressources, State::E_List const & stateName )
-  : m_ressources( ressources ), m_stateName( stateName ), m_deltaTime( 0.f )
+State::State( State::E_List const & stateName )
+  : m_stateName( stateName ), m_deltaTime( 0.f )
 {}
 
 State::E_List State::get_state_to_print() const
@@ -50,14 +50,17 @@ void State::update_inputs( sf::Event const & event )
     default :
         break;
     }
-
-    this->extra_events();
 }
 
 void State::update_data( float const & deltaTime )
 {
     this->m_deltaTime = deltaTime;
     this->update();
+}
+
+void State::render_all() const
+{
+    this->render();
 }
 
 void State::keyboard_pressed( sf::Event /* event */ ) {}

@@ -6,8 +6,6 @@
 #include "tools/enumeration.hpp"
 #include "tools/string.hpp"
 
-#include "ressources_handling/ressources_init.hpp"
-
 #include "main/window.hpp"
 
 #include "states/editor_state.hpp"
@@ -27,12 +25,7 @@ static void check_configuration()
     }
 }
 
-Game::Game()
-  : m_shouldRun( true ),
-    m_states( nullptr ),
-    m_settings(),
-    m_ressources( RessourcesInit::init_textures(),
-                  RessourcesInit::init_fonts() )
+Game::Game() : m_shouldRun( true ), m_states( nullptr ), m_settings()
 {
     check_configuration();
 
@@ -76,17 +69,20 @@ void Game::run()
 
 void Game::update_events()
 {
-    while ( Window::get_instance().pollEvent( this->m_event ) )
+    if ( this->m_event.type == sf::Event::Closed )
     {
-        if ( this->m_event.type == sf::Event::Closed )
-        {
-            this->quit();
-            break;
-        }
-        else if ( Window::get_instance().has_absolute_focus() )
+        this->quit();
+        return;
+    }
+
+    if ( Window::get_instance().has_absolute_focus() )
+    {
+        while ( Window::get_instance().pollEvent( this->m_event ) )
         {
             this->m_states->update_inputs( this->m_event );
         }
+
+        this->m_states->extra_events();
     }
 }
 
@@ -106,9 +102,9 @@ void Game::update_state( float const & deltaTime )
 
 void Game::render()
 {
-    Window::get_instance().clear( sf::Color::White );
+    Window::get_instance().clear( sf::Color::Black );
 
-    this->m_states->render();
+    this->m_states->render_all();
 
     Window::get_instance().display();
 }

@@ -5,7 +5,7 @@
 class MainMenuState final : public State
 {
   public:
-    MainMenuState( Ressources const & ressources );
+    MainMenuState();
     virtual ~MainMenuState() = default;
 
     void update() override;

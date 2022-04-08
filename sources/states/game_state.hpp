@@ -7,7 +7,7 @@
 class GameState final : public State
 {
   public:
-    GameState( Ressources const & ressources );
+    GameState();
 
     void update() override;
     void render() const override;

@@ -1,13 +1,17 @@
 #include "editor_state.hpp"
 
+#include "main/resources.hpp"
 #include "tools/assertion.hpp"
 #include "tools/string.hpp"
 
-EditorState::EditorState( Ressources const & ressources )
-  : State( ressources, State::E_List::Editor ),
-    m_tilemap( this->m_ressources.textures.at( E_TextureKey::Tileset ) ),
-    m_tileset( this->m_ressources.textures.at( E_TextureKey::Tileset ) ),
-    m_buttons( this->m_ressources.fonts.at( E_FontKey::Arial ) )
+EditorState::EditorState()
+  : State( State::E_List::Editor ),
+    m_tilemap( Resources::get_instance().get_texture(
+        Resources::E_TextureKey::Tileset ) ),
+    m_tileset( Resources::get_instance().get_texture(
+        Resources::E_TextureKey::Tileset ) ),
+    m_buttons(
+        Resources::get_instance().get_font( Resources::E_FontKey::Arial ) )
 {
     this->m_type = Type::Normal;
 

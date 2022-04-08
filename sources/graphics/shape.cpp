@@ -7,8 +7,8 @@
 #include "tools/tools.hpp"
 
 // TYPO mettre ça autre part
-static int get_shader_uniform_location( sf::Shader const & shader,
-                                        std::string const & uniformName );
+// static int get_shader_uniform_location( sf::Shader const & shader,
+//                                         std::string const & uniformName );
 
 template < typename ArrayType >
 static void bind_buffer_object( unsigned int const & bufferObjectID,
@@ -82,6 +82,8 @@ void Shape::update( glm::mat4 const & projection, glm::mat4 const & view )
 
     // All the object transformation have been made, so we reset the matrix to identity
     this->reset_space_model();
+
+    this->transform();
 }
 
 void Shape::draw() const
@@ -90,8 +92,6 @@ void Shape::draw() const
     sf::Shader::bind( &this->m_shader );
 
     glBindVertexArray( this->m_vertexArrayObject );
-
-    this->transform();
 
     int const primitiveType { GL_TRIANGLES };
     if ( this->is_element_buffer_set() )
@@ -205,35 +205,41 @@ void Shape::unbind()
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 }
 
-void Shape::transform() const
+void Shape::transform()
 {
-    int const numberOfMatrix { 1 };
-    int const transposeMatrix { GL_FALSE };
+    // int const numberOfMatrix { 1 };
+    // int const transposeMatrix { GL_FALSE };
 
-    int modelLoc = get_shader_uniform_location( this->m_shader, "model"s );
-    int viewLoc  = get_shader_uniform_location( this->m_shader, "view"s );
-    int projectionLoc =
-        get_shader_uniform_location( this->m_shader, "projection"s );
+    // int modelLoc = get_shader_uniform_location( this->m_shader, "model"s );
+    // int viewLoc  = get_shader_uniform_location( this->m_shader, "view"s );
+    // int projectionLoc =
+    //     get_shader_uniform_location( this->m_shader, "projection"s );
 
     // TYPO utilisé cette fonctions
     // this->m_shader.setUniform( "model"s,
     //                            sf::Glsl::Mat4( this->m_space.model ) );
-    glUniformMatrix4fv( modelLoc,
-                        numberOfMatrix,
-                        transposeMatrix,
-                        glm::value_ptr( this->m_space.model ) );
-    glUniformMatrix4fv( viewLoc,
-                        numberOfMatrix,
-                        transposeMatrix,
-                        glm::value_ptr( this->m_space.view ) );
-    glUniformMatrix4fv( projectionLoc,
-                        numberOfMatrix,
-                        transposeMatrix,
-                        glm::value_ptr( this->m_space.projection ) );
+    // glUniformMatrix4fv( modelLoc,
+    //                     numberOfMatrix,
+    //                     transposeMatrix,
+    //                     glm::value_ptr( this->m_space.model ) );
+    // glUniformMatrix4fv( viewLoc,
+    //                     numberOfMatrix,
+    //                     transposeMatrix,
+    //                     glm::value_ptr( this->m_space.view ) );
+    // glUniformMatrix4fv( projectionLoc,
+    //                     numberOfMatrix,
+    //                     transposeMatrix,
+    //                     glm::value_ptr( this->m_space.projection ) );
 
-    this->m_shader.setUniformArray( "model"s,
-                                    sf::Glsl::Mat4( this->m_space.model ),
-                                    1u );
+    this->m_shader.setUniform(
+        "model"s,
+        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.model ) } );
+    this->m_shader.setUniform(
+        "view"s,
+        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.view ) } );
+    this->m_shader.setUniform(
+        "projection"s,
+        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.projection ) } );
 }
 
 void Shape::reset_space_model()
@@ -241,13 +247,13 @@ void Shape::reset_space_model()
     this->m_spaceModel = glm::mat4 { 1.f };
 }
 
-static int get_shader_uniform_location( sf::Shader const & shader,
-                                        std::string const & uniformName )
-{
-    // TYPO check if the returned value is ok
-    return glGetUniformLocation( shader.getNativeHandle(),
-                                 uniformName.c_str() );
-}
+// static int get_shader_uniform_location( sf::Shader const & shader,
+//                                         std::string const & uniformName )
+// {
+//     // TYPO check if the returned value is ok
+//     return glGetUniformLocation( shader.getNativeHandle(),
+//                                  uniformName.c_str() );
+// }
 
 template < typename ArrayType >
 static void bind_buffer_object( unsigned int const & bufferObjectID,

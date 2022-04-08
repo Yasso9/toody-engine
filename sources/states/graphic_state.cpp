@@ -7,8 +7,7 @@
 
 static Shape::Data get_sample_shape_data_A();
 
-GraphicState::GraphicState( Ressources const & ressources )
-  : State( ressources, State::E_List::Graphics )
+GraphicState::GraphicState() : State( State::E_List::Graphics )
 // ,m_model( tools::get_path::resources( "backpack/backpack.obj"s ) )
 {
     // this->m_shader.loadFromFile( tools::get_path::shaders( "shader.vert"s ),

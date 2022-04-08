@@ -14,7 +14,7 @@ class TestState final : public State
     unsigned int VAO;
     sf::Shader ourShader;
 
-    TestState( Ressources const & ressources );
+    TestState();
     virtual ~TestState() = default;
 
     void update() override;

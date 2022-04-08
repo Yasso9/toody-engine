@@ -4,7 +4,6 @@
 
 #include "settings/settings.hpp"
 #include "states/state.hpp"
-#include "tools/types.hpp"
 
 class Game final
 {
@@ -22,7 +21,6 @@ class Game final
     std::shared_ptr< State > m_states;
 
     Settings const m_settings;
-    Ressources const m_ressources;
 
     sf::Event m_event;
     sf::Clock m_clock;
@@ -45,9 +43,10 @@ class Game final
 
     void quit();
 
+    // TYPO à voir si on la supprime car cette fonction ne esimplifie pas grand chose
     template < typename StateClass >
     void set_new_state()
     {
-        this->m_states = std::make_shared< StateClass >( this->m_ressources );
+        this->m_states = std::make_shared< StateClass >();
     }
 };

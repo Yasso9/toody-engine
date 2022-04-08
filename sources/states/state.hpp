@@ -7,17 +7,6 @@
 #include "input/button_array.hpp"
 #include "input/mouse_position.hpp"
 #include "settings/settings.hpp"
-#include "tools/types.hpp"
-
-struct Ressources
-{
-    Ressources( T_TexturesMap const & v_textures, T_FontsMap const & v_fonts )
-      : textures( v_textures ), fonts( v_fonts )
-    {}
-
-    T_TexturesMap const textures;
-    T_FontsMap const fonts;
-};
 
 class State
 {
@@ -50,18 +39,20 @@ class State
 
     /// @brief Update all change that can happen by an event.
     void update_inputs( sf::Event const & event );
+    /// @brief update general events (should be outside the pollevent function)
+    virtual void extra_events();
     /// @brief Update deltaTime and call the update method
     void update_data( float const & deltaTime );
 
     /// @brief Update any change that can happen in the current state.
-    virtual void update()       = 0;
+    virtual void update() = 0;
     /// @brief Draw all the things that we have to draw in our window
     virtual void render() const = 0;
+    void render_all() const;
 
   protected:
-    State( Ressources const & ressources, State::E_List const & stateName );
+    State( State::E_List const & stateName );
 
-    Ressources const m_ressources;
     // TYPO faire rentré les settings dans ressources
     Settings const m_settings;
 
@@ -77,7 +68,4 @@ class State
     virtual void mouse_released( sf::Event event );
 
     virtual void mouse_scroll( float const & deltaScroll );
-
-    /// @brief update general events
-    virtual void extra_events();
 };

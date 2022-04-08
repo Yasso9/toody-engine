@@ -1,11 +1,9 @@
 #include "main_menu_state.hpp"
 
+#include "main/resources.hpp"
 #include "tools/string.hpp"
 
-#include <iostream>
-
-MainMenuState::MainMenuState( Ressources const & ressources )
-  : State( ressources, State::E_List::MainMenu )
+MainMenuState::MainMenuState() : State( State::E_List::MainMenu )
 {
     this->init_background();
     this->init_text();
@@ -50,7 +48,8 @@ void MainMenuState::init_background()
 
 void MainMenuState::init_text()
 {
-    this->m_text.setFont( this->m_ressources.fonts.at( E_FontKey::Arial ) );
+    this->m_text.setFont(
+        Resources::get_instance().get_font( Resources::E_FontKey::Arial ) );
     this->m_text.setCharacterSize( 30u );
     this->m_text.setFillColor( sf::Color::Black );
     this->m_text.setPosition( 100.f, 500.f );
@@ -59,10 +58,11 @@ void MainMenuState::init_text()
 
 void MainMenuState::init_buttons()
 {
-    this->m_buttons.set_font( this->m_ressources.fonts.at( E_FontKey::Arial ) );
+    this->m_buttons.set_font(
+        Resources::get_instance().get_font( Resources::E_FontKey::Arial ) );
     this->m_buttons.set_direction( ButtonArray::E_Direction::Horizontal );
     // TYPO ne plus hardcodé ça mais trouvé un autre moyen avec la State::E_List
     this->m_buttons.set_strings(
-        { "Main Menu"s, "Game"s, "Editor"s, "Graphics", "Test", "Exit"s } );
+        { "Main Menu"s, "Game"s, "Editor"s, "Graphics"s, "Test"s, "Exit"s } );
     this->m_buttons.setPosition( 0.f, 0.f );
 }

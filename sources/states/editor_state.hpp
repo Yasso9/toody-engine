@@ -9,7 +9,7 @@
 class EditorState final : public State
 {
   public:
-    EditorState( Ressources const & ressources );
+    EditorState();
 
     void update() override;
     void render() const override;

@@ -1,3 +1,4 @@
 .DS_Store
 build/
-external/object/
+/external/object/sqlite.o
+/external/object/glad.o
