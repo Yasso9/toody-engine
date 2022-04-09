@@ -79,6 +79,8 @@ void Shape::update( glm::mat4 const & projection, glm::mat4 const & view )
 
     // All the object transformation have been made, so we reset the matrix to identity
     this->reset_space_model();
+
+    this->transform();
 }
 
 void Shape::draw() const
@@ -87,8 +89,6 @@ void Shape::draw() const
     sf::Shader::bind( &this->m_shader );
 
     glBindVertexArray( this->m_vertexArrayObject );
-
-    this->transform();
 
     GLenum const primitiveType { GL_TRIANGLES };
     if ( this->is_element_buffer_set() )
@@ -200,46 +200,17 @@ void Shape::unbind()
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 }
 
-static int get_shader_uniform_location( sf::Shader const & shader,
-                                        std::string const & uniformName )
+void Shape::transform()
 {
-    // TYPO check if the returned value is ok
-    return glGetUniformLocation( shader.getNativeHandle(),
-                                 uniformName.c_str() );
-}
-
-void Shape::transform() const
-{
-    int const numberOfMatrix { 1 };
-    int const transposeMatrix { GL_FALSE };
-
-    int modelLoc = get_shader_uniform_location( this->m_shader, "model"s );
-    int viewLoc  = get_shader_uniform_location( this->m_shader, "view"s );
-    int projectionLoc =
-        get_shader_uniform_location( this->m_shader, "projection"s );
-
-    glUniformMatrix4fv( modelLoc,
-                        numberOfMatrix,
-                        transposeMatrix,
-                        glm::value_ptr( this->m_space.model ) );
-    glUniformMatrix4fv( viewLoc,
-                        numberOfMatrix,
-                        transposeMatrix,
-                        glm::value_ptr( this->m_space.view ) );
-    glUniformMatrix4fv( projectionLoc,
-                        numberOfMatrix,
-                        transposeMatrix,
-                        glm::value_ptr( this->m_space.projection ) );
-
-    // this->m_shader.setUniform(
-    //     "model"s,
-    //     sf::Glsl::Mat4 { glm::value_ptr( this->m_space.model ) } );
-    // this->m_shader.setUniform(
-    //     "view"s,
-    //     sf::Glsl::Mat4 { glm::value_ptr( this->m_space.view ) } );
-    // this->m_shader.setUniform(
-    //     "projection"s,
-    //     sf::Glsl::Mat4 { glm::value_ptr( this->m_space.projection ) } );
+    this->m_shader.setUniform(
+        "model"s,
+        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.model ) } );
+    this->m_shader.setUniform(
+        "view"s,
+        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.view ) } );
+    this->m_shader.setUniform(
+        "projection"s,
+        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.projection ) } );
 }
 
 void Shape::reset_space_model()
