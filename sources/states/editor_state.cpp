@@ -146,8 +146,8 @@ void EditorState::render() const
 {
     Window::get_instance().setView( this->m_view );
 
-    Window::get_instance().draw( this->m_tilemap );
-    Window::get_instance().draw( this->m_tileset );
+    Window::get_instance().sf_draw( this->m_tilemap );
+    Window::get_instance().sf_draw( this->m_tileset );
 
-    Window::get_instance().draw( this->m_buttons );
+    Window::get_instance().sf_draw( this->m_buttons );
 }

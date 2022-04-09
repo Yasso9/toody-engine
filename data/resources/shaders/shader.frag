@@ -7,10 +7,12 @@ in vec2 textureCoodinate;
 out vec4 fragmentColor;
 
 // used to specify the type of our texture
-uniform sampler2D texture_diffuse;
+// uniform sampler2D texture_diffuse;
+// texture sampler
+uniform sampler2D textureBrick;
 
 void main()
 {
-    fragmentColor = texture(texture_diffuse, textureCoodinate);
+    fragmentColor = texture(textureBrick, textureCoodinate);
     // fragmentColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
 }

@@ -28,9 +28,6 @@ void MainMenuState::update() {}
 
 void MainMenuState::render() const
 {
-    // Reset the view (if an other state had changed it)
-    Window::get_instance().setView( Window::get_instance().getDefaultView() );
-
     Window::get_instance().draw( this->m_background );
 
     Window::get_instance().draw( this->m_text );

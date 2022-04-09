@@ -1,30 +1,38 @@
 #include "exceptions.hpp"
 
-DatabaseException::DatabaseException(
-    std::string const & databasePath,
-    std::string const & errorMessage /* = ""s */ )
-  : m_databasePath( databasePath ), m_errorMessage( errorMessage )
-{}
-
-const char * DatabaseException::what() const noexcept
+namespace Exception
 {
-    // Static is used to not return the adress of a local variable
-    static std::string const errorInfo { "\nIssue with file : "s
-                                         + this->m_databasePath + "\nError : "s
-                                         + this->m_errorMessage + "\n\n"s };
+    Database::Database( std::string const & databasePath,
+                        std::string const & errorMessage /* = ""s */ )
+      : m_databasePath( databasePath ), m_errorMessage( errorMessage )
+    {}
+    const char * Database::what() const noexcept
+    {
+        // Static is used to not return the adress of a local variable
+        static std::string const errorInfo { "\nIssue with file : "s
+                                             + this->m_databasePath
+                                             + "\nError : "s
+                                             + this->m_errorMessage + "\n\n"s };
 
-    return errorInfo.c_str();
-}
+        return errorInfo.c_str();
+    }
 
-FileNotFoundException::FileNotFoundException( std::string const & fileName )
-  : m_fileName( fileName )
-{}
+    FileNotFound::FileNotFound( std::string const & fileName )
+      : m_fileName( fileName )
+    {}
 
-const char * FileNotFoundException::what() const noexcept
-{
-    // Static is used to not return the adress of a local variable
-    static std::string const errorInfo { "\nFile not found : "s
-                                         + this->m_fileName + "\n\n"s };
+    const char * FileNotFound::what() const noexcept
+    {
+        // Static is used to not return the adress of a local variable
+        static std::string const errorInfo { "\nFile not found : "s
+                                             + this->m_fileName + "\n\n"s };
 
-    return errorInfo.c_str();
-}
+        return errorInfo.c_str();
+    }
+
+    const char * QuitApplication::what() const noexcept
+    {
+        return "Application haven't exited in a good way";
+    }
+
+} // namespace Exception

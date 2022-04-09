@@ -4,6 +4,7 @@
 
 #include "tools/assertion.hpp"
 #include "tools/enumeration.hpp"
+#include "tools/exceptions.hpp"
 #include "tools/string.hpp"
 
 #include "main/window.hpp"
@@ -15,7 +16,7 @@
 #include "states/test.hpp"
 
 /**
- * @brief Throw an exception if something is not available
+ * @brief Throw an exception if something is not available for the game to run well
  */
 static void check_configuration()
 {
@@ -25,23 +26,19 @@ static void check_configuration()
     }
 }
 
-Game::Game() : m_shouldRun( true ), m_states( nullptr ), m_settings()
+Game::Game() : m_shouldRun( true ), m_state( nullptr ), m_settings()
 {
     check_configuration();
 
-    // Assurance that the window will be created here
     Window::get_instance();
 
     this->init_state();
-
-    gl::initialize();
 }
 
-void Game::init_state()
+Game::~Game()
 {
-    this->change_state( State::E_List::MainMenu );
-    // this->change_state( State::E_List::Test );
-    // this->change_state( State::E_List::Graphics );
+    // Must be made before closing the window
+    gl::check_error();
 }
 
 void Game::run()
@@ -58,13 +55,27 @@ void Game::run()
 
         if ( deltaTime > this->m_settings.get_refresh_rate() )
         {
-            this->update_events();
-            this->update_state( deltaTime );
-            this->render();
+            try
+            {
+                this->update_events();
+                this->update_state( deltaTime );
+                this->render();
+            }
+            catch ( Exception::QuitApplication const & )
+            {
+                this->m_shouldRun = false;
+            }
 
             deltaTime = 0.f; // reset the counter
         }
     }
+}
+
+void Game::init_state()
+{
+    // this->change_state( State::E_List::MainMenu );
+    // this->change_state( State::E_List::Test );
+    this->change_state( State::E_List::Graphics );
 }
 
 void Game::update_events()
@@ -75,25 +86,28 @@ void Game::update_events()
     {
         if ( this->m_event.type == sf::Event::Closed )
         {
-            this->quit();
+            throw Exception::QuitApplication {};
             return;
         }
         if ( Window::get_instance().has_absolute_focus() )
         {
-            this->m_states->update_inputs( this->m_event );
+            this->m_state->update_inputs( this->m_event );
         }
     }
 
-    this->m_states->extra_events();
+    if ( Window::get_instance().has_absolute_focus() )
+    {
+        this->m_state->extra_events();
+    }
 }
 
 void Game::update_state( float const & deltaTime )
 {
-    static State::E_List lastState { this->m_states->get_state_to_print() };
+    static State::E_List lastState { this->m_state->get_state_to_print() };
 
-    this->m_states->update_data( deltaTime );
+    this->m_state->update_data( deltaTime );
 
-    State::E_List const newState { this->m_states->get_state_to_print() };
+    State::E_List const newState { this->m_state->get_state_to_print() };
     if ( lastState != newState )
     {
         this->change_state( newState );
@@ -103,9 +117,10 @@ void Game::update_state( float const & deltaTime )
 
 void Game::render()
 {
-    Window::get_instance().clear( sf::Color::Black );
+    Window::get_instance().clear_all( sf::Color::Black );
 
-    this->m_states->render_all();
+    this->m_state->render_all();
+    gl::check_error();
 
     Window::get_instance().display();
 }
@@ -144,7 +159,7 @@ void Game::change_state( State::E_List const & newState )
         break;
 
     case State::E_List::Quit :
-        this->quit();
+        throw Exception::QuitApplication {};
         break;
 
     default :
@@ -154,10 +169,4 @@ void Game::change_state( State::E_List const & newState )
         ASSERTION( false, debugMessage.str() );
         break;
     }
-}
-
-void Game::quit()
-{
-    this->m_shouldRun = false;
-    Window::get_instance().close();
 }

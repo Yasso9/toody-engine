@@ -64,11 +64,12 @@ void State::render_all() const
 {
     this->render();
 
-    sf::Text framerateText { std::to_string( 1.f / this->m_deltaTime ),
-                             Resources::get_instance().get_font(
-                                 Resources::E_FontKey::Arial ) };
+    sf::Text framerateText {
+        std::to_string( static_cast< int >( 1.f / this->m_deltaTime ) ),
+        Resources::get_instance().get_font( Resources::E_FontKey::Arial )
+    };
     framerateText.setPosition( 50.f, 50.f );
-    framerateText.setCharacterSize( 50u );
+    framerateText.setCharacterSize( 20u );
 
     Window::get_instance().draw( framerateText );
 }

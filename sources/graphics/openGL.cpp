@@ -1,11 +1,12 @@
 #include "openGL.hpp"
 
-#include "graphics/sfml.hpp"
 #include "main/window.hpp"
+#include "tools/assertion.hpp"
+#include "tools/string.hpp"
 
 namespace gl
 {
-    void initialize()
+    void initialize( unsigned int const & width, unsigned int const & height )
     {
         // Load glad so we can use openGL function
         if ( ! gladLoadGLLoader( reinterpret_cast< GLADloadproc >(
@@ -14,24 +15,24 @@ namespace gl
             throw std::runtime_error { "Failed to initialize GLAD" };
         }
 
-        // enable openGL Z buffer
-        glEnable( GL_DEPTH_TEST );
-
         // Je ne sais pas ce que c'est mais c'est important ?
-        glDepthMask( GL_TRUE );
-        glClearDepth( 1.f );
-        glDisable( GL_LIGHTING );
+        // glDepthMask( GL_TRUE );
+        // glClearDepth( 1.f );
+        // glDisable( GL_LIGHTING );
 
         // Je ne sais pas ce que c'est ?
         glViewport( 0,
                     0,
-                    Window::get_instance().get_size_i().x,
-                    Window::get_instance().get_size_i().y );
+                    static_cast< int >( width ),
+                    static_cast< int >( height ) );
     }
 
-    void clear_window()
+    void clear_window( sf::Color const & backgroundColor )
     {
-        glClearColor( 0.2f, 0.3f, 0.3f, 1.0f );
+        glClearColor( backgroundColor.r,
+                      backgroundColor.g,
+                      backgroundColor.b,
+                      backgroundColor.a );
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     }
 
@@ -41,10 +42,46 @@ namespace gl
 
     void check_error()
     {
-        if ( glGetError() != GL_NO_ERROR )
+        GLenum errorCode;
+        std::string errorMessage { ""s };
+        unsigned int numberOfError { 0u };
+
+        if ( ( errorCode = glGetError() ) != GL_NO_ERROR )
         {
-            throw std::runtime_error { "OpenGL Error" };
+            errorMessage +=
+                "OpenGL Error "s + std::to_string( ++numberOfError ) + " : "s;
+
+            switch ( errorCode )
+            {
+            case GL_INVALID_ENUM :
+                errorMessage += "Invalid Enum"s;
+                break;
+            case GL_INVALID_VALUE :
+                errorMessage += "Invalid Value"s;
+                break;
+            case GL_INVALID_OPERATION :
+                errorMessage += "Invalid Operation"s;
+                break;
+            case GL_STACK_OVERFLOW :
+                errorMessage += "Stack Overflow"s;
+                break;
+            case GL_STACK_UNDERFLOW :
+                errorMessage += "Stack Underflow"s;
+                break;
+            case GL_OUT_OF_MEMORY :
+                errorMessage += "Out Of Memory"s;
+                break;
+            case GL_INVALID_FRAMEBUFFER_OPERATION :
+                errorMessage += "Invalid Framebuffer Operation"s;
+                break;
+            default :
+                errorMessage += "Unkown GL Error"s;
+                break;
+            }
+            errorMessage += " | ";
         }
+
+        ASSERTION( numberOfError == 0u, errorMessage );
     }
 } // namespace gl
 

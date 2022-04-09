@@ -67,7 +67,7 @@ class Shape final
     void vertex_shader_attribution();
     void unbind();
 
-    void transform();
+    void transform() const;
 
     // Assign the space model to the identity matrix
     void reset_space_model();

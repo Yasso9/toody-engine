@@ -13,12 +13,6 @@ class TileMap : public sf::Drawable,
 {
   public:
     TileMap( sf::Texture const & texture );
-
-    TileMap( TileMap const & )             = delete;
-    TileMap( TileMap && )                  = delete;
-    TileMap & operator=( TileMap const & ) = delete;
-    TileMap & operator=( TileMap && )      = delete;
-
     virtual ~TileMap() = default;
 
     /// @brief size of the tilemap in pixel

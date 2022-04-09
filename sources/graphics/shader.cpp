@@ -29,7 +29,7 @@ void Shaders::load( std::string const & vertexShaderPath,
     unsigned int const fragmentShader { this->compile( GL_FRAGMENT_SHADER,
                                                        fragmentShaderPath ) };
 
-    this->m_id = link( vertexShader, fragmentShader );
+    this->m_id = this->link( vertexShader, fragmentShader );
 }
 
 void Shaders::use() const
@@ -64,7 +64,7 @@ unsigned int Shaders::compile( unsigned int const & shaderType,
     glShaderSource( shader, 1, &shaderSource, NULL );
     glCompileShader( shader );
 
-    check_error( shader, GL_COMPILE_STATUS );
+    this->check_error( shader, GL_COMPILE_STATUS );
 
     return shader;
 }
@@ -77,7 +77,7 @@ unsigned int Shaders::link( unsigned int const & vertexShader,
     glAttachShader( shaderProgram, fragmentShader );
 
     glLinkProgram( shaderProgram );
-    check_error( shaderProgram, GL_LINK_STATUS );
+    this->check_error( shaderProgram, GL_LINK_STATUS );
 
     glDeleteShader( vertexShader );
     glDeleteShader( fragmentShader );

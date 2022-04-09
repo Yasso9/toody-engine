@@ -12,7 +12,7 @@ GraphicState::GraphicState() : State( State::E_List::Graphics )
 {
     // this->m_shader.loadFromFile( tools::get_path::shaders( "shader.vert"s ),
     //                              tools::get_path::shaders( "shader.frag"s ) );
-
+    // glEnable( GL_DEPTH_TEST );
     this->m_shape.create( get_sample_shape_data_A() );
 }
 
@@ -28,15 +28,11 @@ void GraphicState::update()
 
 void GraphicState::render() const
 {
-    gl::clear_window();
-
     // sf::Shader::bind( &this->m_shader );
     // this->m_model.draw( this->m_shader );
     // sf::Shader::bind( NULL );
 
     this->m_shape.draw();
-
-    gl::check_error();
 }
 
 void GraphicState::mouse_scroll( float const & deltaScroll )

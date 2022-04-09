@@ -15,7 +15,7 @@ Settings::Settings()
     std::ifstream file { configLocation, std::ios::in };
     if ( ! file )
     {
-        throw FileNotFoundException { configLocation };
+        throw Exception::FileNotFound { configLocation };
     }
 
     unsigned int framerate;

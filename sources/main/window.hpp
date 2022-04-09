@@ -1,5 +1,6 @@
 #pragma once
 
+#include "graphics/openGL.hpp"
 #include "graphics/sfml.hpp"
 #include "tools/singleton.hpp"
 
@@ -22,6 +23,20 @@ class Window final : public sf::RenderWindow,
 
     /// @brief Check if the window have focus and if the mouse is inside the windows
     bool has_absolute_focus() const;
+
+    void clear_all( sf::Color const & backgroundColor );
+
+    void gl_draw_elements( GLenum const & primitiveType,
+                           GLenum const & dataType,
+                           unsigned int const & elementsSize ) const;
+    void gl_draw_arrays( GLenum const & primitiveType,
+                         unsigned int const & arraySize ) const;
+
+    template < class DrawableClass >
+    void sf_draw( DrawableClass const & target )
+    {
+        this->draw( target );
+    }
 
   private:
     Window();

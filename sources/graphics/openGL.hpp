@@ -27,6 +27,8 @@
 
 #include <ostream>
 
+#include "graphics/sfml.hpp"
+
 namespace gl
 {
     struct SpaceMatrix
@@ -37,8 +39,8 @@ namespace gl
     };
 
     /// @brief Initialize the OpenGL context and functions
-    void initialize();
-    void clear_window();
+    void initialize( unsigned int const & width, unsigned int const & height );
+    void clear_window( sf::Color const & backgroundColor );
     void set_wireframe();
     void remove_wireframe();
     void check_error();

@@ -3,28 +3,40 @@
 #include <exception>
 #include "tools/string.hpp"
 
-class DatabaseException final : public std::exception
+namespace Exception
 {
-  public:
-    DatabaseException( std::string const & databasePath,
-                       std::string const & errorMessage = ""s );
-    virtual ~DatabaseException() = default;
+    class Database final : public std::exception
+    {
+      public:
+        Database( std::string const & databasePath,
+                  std::string const & errorMessage = ""s );
+        virtual ~Database() = default;
 
-    virtual const char * what() const noexcept override;
+        virtual const char * what() const noexcept override;
 
-  private:
-    std::string const m_databasePath;
-    std::string const m_errorMessage;
-};
+      private:
+        std::string const m_databasePath;
+        std::string const m_errorMessage;
+    };
 
-class FileNotFoundException final : public std::exception
-{
-  public:
-    FileNotFoundException( std::string const & fileName );
-    virtual ~FileNotFoundException() = default;
+    class FileNotFound final : public std::exception
+    {
+      public:
+        FileNotFound( std::string const & fileName );
+        virtual ~FileNotFound() = default;
 
-    virtual const char * what() const noexcept override;
+        virtual const char * what() const noexcept override;
 
-  private:
-    std::string const m_fileName;
-};
+      private:
+        std::string const m_fileName;
+    };
+
+    class QuitApplication final : public std::exception
+    {
+      public:
+        QuitApplication()          = default;
+        virtual ~QuitApplication() = default;
+
+        virtual const char * what() const noexcept override;
+    };
+} // namespace Exception

@@ -79,7 +79,7 @@ namespace db
         if ( requestResultState != SQLITE_OK )
         {
             sqlite3_free( requestErrorMessage );
-            throw DatabaseException { g_databasePath, requestErrorMessage };
+            throw Exception::Database { g_databasePath, requestErrorMessage };
         }
 
         return gf_resultRequested;
@@ -93,9 +93,9 @@ static T_UniqueSqlitePtr make_sqlite()
     if ( sqlite3_open( g_databasePath.c_str(), &database ) )
     {
         // Something bad is happenning
-        throw DatabaseException { g_databasePath,
-                                  "Can't open database - "s
-                                      + sqlite3_errmsg( database ) };
+        throw Exception::Database { g_databasePath,
+                                    "Can't open database - "s
+                                        + sqlite3_errmsg( database ) };
     }
 
     return T_UniqueSqlitePtr( database );

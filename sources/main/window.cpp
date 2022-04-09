@@ -1,5 +1,6 @@
 #include "window.hpp"
 
+#include "graphics/openGL.hpp"
 #include "tools/string.hpp"
 
 class Position : public sf::Vector2i
@@ -74,6 +75,42 @@ bool Window::has_absolute_focus() const
                                        this->getSize() );
 }
 
+void Window::clear_all( sf::Color const & backgroundColor )
+{
+    gl::clear_window( backgroundColor );
+    this->clear( backgroundColor );
+
+    // Reset the view
+    Window::get_instance().setView( Window::get_instance().getDefaultView() );
+}
+
+void Window::gl_draw_elements( GLenum const & primitiveType,
+                               GLenum const & dataType,
+                               unsigned int const & elementsSize ) const
+{
+    // enable openGL Z buffer
+    glEnable( GL_DEPTH_TEST );
+
+    glDrawElements( primitiveType,
+                    static_cast< int >( elementsSize ),
+                    dataType,
+                    0 );
+
+    glDisable( GL_DEPTH_TEST );
+}
+void Window::gl_draw_arrays( GLenum const & primitiveType,
+                             unsigned int const & arraySize ) const
+{
+    glEnable( GL_DEPTH_TEST );
+
+    int const verticesBeginPosition { 0 };
+    glDrawArrays( primitiveType,
+                  verticesBeginPosition,
+                  static_cast< int >( arraySize ) );
+
+    glDisable( GL_DEPTH_TEST );
+}
+
 void Window::create()
 {
     sf::Vector2u const windowSize { 900u, 900u };
@@ -94,13 +131,6 @@ void Window::create()
                                     gameTitle,
                                     windowStyle,
                                     contextSettings );
-
-    if ( ! this->setActive( true ) )
-    {
-        throw std::runtime_error {
-            "Cannot set the windows as active state for OpenGL"s
-        };
-    }
 }
 void Window::initialize()
 {
@@ -109,4 +139,13 @@ void Window::initialize()
     this->requestFocus();
     this->setKeyRepeatEnabled( false );
     this->setVerticalSyncEnabled( true );
+
+    if ( ! this->setActive( true ) )
+    {
+        throw std::runtime_error {
+            "Cannot set the windows as active state for OpenGL"s
+        };
+    }
+
+    gl::initialize( this->getSize().x, this->getSize().y );
 }

@@ -15,7 +15,7 @@ uniform mat4 view;
 uniform mat4 model;
 
 // to send to the fragment shader
-out vec3 color;
+// out vec3 color;
 out vec2 textureCoodinate;
 
 void main()

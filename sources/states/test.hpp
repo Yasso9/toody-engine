@@ -11,7 +11,7 @@ class TestState final : public State
 {
   public:
     sf::Texture texture;
-    unsigned int VAO;
+    unsigned int VAO, VBO;
     sf::Shader ourShader;
 
     TestState();

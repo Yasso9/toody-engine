@@ -7,12 +7,6 @@ class Tileset final : public sf::Drawable,
 {
   public:
     Tileset( sf::Texture const & texture );
-
-    Tileset( const Tileset & )             = delete;
-    Tileset( Tileset && )                  = delete;
-    Tileset & operator=( const Tileset & ) = delete;
-    Tileset & operator=( Tileset && )      = delete;
-
     virtual ~Tileset() = default;
 
     sf::Vector2f get_size() const;
