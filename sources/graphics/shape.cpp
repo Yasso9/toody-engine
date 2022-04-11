@@ -171,7 +171,8 @@ void Shape::vertex_shader_attribution()
 
     unsigned int vectorSizeCounter { 0u };
 
-    for ( unsigned int location {}; location < this->m_data.dataPerPoint.size();
+    for ( unsigned int location { 0u };
+          location < this->m_data.dataPerPoint.size();
           ++location )
     {
         void * offsetStart { reinterpret_cast< void * >(

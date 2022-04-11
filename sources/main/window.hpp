@@ -32,6 +32,7 @@ class Window final : public sf::RenderWindow,
     void gl_draw_arrays( GLenum const & primitiveType,
                          unsigned int const & arraySize ) const;
 
+    // TYPO use concept to verify that is drawable
     template < class DrawableClass >
     void sf_draw( DrawableClass const & target )
     {

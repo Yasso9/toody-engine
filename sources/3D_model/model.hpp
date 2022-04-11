@@ -9,6 +9,8 @@
 
 #include "3D_model/assimp.hpp"
 #include "3D_model/mesh.hpp"
+#include "graphics/texture.hpp"
+#include "tools/tools.hpp"
 
 inline glm::vec3 to_vector3( aiVector3D const & assimpVector3D )
 {
@@ -41,20 +43,69 @@ class Model
     std::vector< S_Texture > m_texturesLoaded;
     /// @brief All the meshes that the model contains
     std::vector< Mesh > m_meshes;
+    /// @brief space where the object is and where we can move it
+    gl::SpaceMatrix m_space;
+    glm::mat4 m_spaceModel;
+    sf::Shader m_shader;
+    std::vector< sf::Texture > sfmlTextures {};
+    std::string m_filePathModel {};
 
-    Model( std::string const & filePath3DModel )
-      : m_texturesLoaded(), m_meshes()
+    Model( std::string const & filePathModel ) : m_texturesLoaded(), m_meshes()
     {
-        this->load_model( filePath3DModel );
+        this->m_filePathModel = filePathModel;
+        this->load_model();
+        this->m_shader.loadFromFile(
+            tools::get_path::shaders( "shader.vert"s ),
+            tools::get_path::shaders( "shader.frag"s ) );
+    }
+
+    void translate( glm::vec3 const & tranlationVector )
+    {
+        glm::mat4 const translationMatrix {
+            glm::translate( glm::mat4 { 1.f }, tranlationVector )
+        };
+
+        this->m_spaceModel *= translationMatrix;
+    }
+    void rotate( glm::vec3 const & rotationVector, float const & angle )
+    {
+        glm::mat4 const rotationMatrix { glm::rotate(
+            glm::mat4 { 1.f },
+            glm::radians( angle ),
+            glm::vec3 { rotationVector } ) };
+
+        this->m_spaceModel *= rotationMatrix;
+    }
+    void scale( glm::vec3 const & scaleVector )
+    {
+        glm::mat4 const scaleMatrix { glm::scale( glm::mat4 { 1.f },
+                                                  glm::vec3 { scaleVector } ) };
+        this->m_spaceModel *= scaleMatrix;
+    }
+
+    void update( glm::mat4 const & projection, glm::mat4 const & view )
+    {
+        this->m_space.projection = projection;
+        this->m_space.view       = view;
+        this->m_space.model      = this->m_spaceModel;
+
+        // All the object transformation have been made, so we reset the matrix to identity
+        this->reset_space_model();
+
+        this->transform();
     }
 
     // draws the model, and thus all its meshes
-    void draw( sf::Shader const & shader ) const
+    void draw() const
     {
-        for ( auto const & mesh : this->m_meshes )
+        sf::Shader::bind( &this->m_shader );
+
+        for ( Mesh const & mesh : this->m_meshes )
         {
-            mesh.draw( shader );
+            mesh.draw( this->m_shader );
         }
+
+        sf::Shader::bind( NULL );
     }
 
   private:
@@ -62,7 +113,7 @@ class Model
      * @brief Loads a model with supported ASSIMP extensions from file
      * and stores the resulting meshes in the meshes vector.
      */
-    void load_model( std::string const & path )
+    void load_model()
     {
         // read file via ASSIMP
         Assimp::Importer importer;
@@ -70,7 +121,8 @@ class Model
                                            | aiProcess_GenSmoothNormals
                                            | aiProcess_FlipUVs
                                            | aiProcess_CalcTangentSpace };
-        aiScene const * scene = importer.ReadFile( path, importerFlags );
+        aiScene const * scene =
+            importer.ReadFile( this->m_filePathModel, importerFlags );
         // check for errors
         if ( ! scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE
              || ! scene->mRootNode )
@@ -118,7 +170,7 @@ class Model
         for ( unsigned int i_vertices { 0u }; i_vertices < mesh->mNumVertices;
               ++i_vertices )
         {
-            S_Vertex vertex;
+            S_Vertex vertex {};
             // we declare a placeholder vector since assimp uses its own vector class
             // that doesn't directly convert to glm's vec3 class so we transfer the data
             // to this placeholder glm::vec3 first.
@@ -140,8 +192,7 @@ class Model
                 // tangent
                 vertex.tangent = to_vector3( mesh->mTangents[i_vertices] );
                 // bitangent
-                vertex.bitangent =
-                    to_vector3( mesh->mBitangents[i_vertices] );
+                vertex.bitangent = to_vector3( mesh->mBitangents[i_vertices] );
             }
             else
             {
@@ -212,48 +263,68 @@ class Model
                                                      std::string typeName )
     {
         std::vector< S_Texture > textures;
-
-        for ( unsigned int i_texture { 0u };
-              i_texture < material->GetTextureCount( type );
-              ++i_texture )
+        for ( unsigned int i = 0; i < material->GetTextureCount( type ); i++ )
         {
-            aiString string;
-            material->GetTexture( type, i_texture, &string );
-            // check if texture was loaded before and if so,
-            // continue to next iteration: skip loading a new texture
-            bool skip { false };
-            for ( unsigned int j { 0u }; j < m_texturesLoaded.size(); j++ )
+            aiString str;
+            material->GetTexture( type, i, &str );
+            // check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
+            bool skip = false;
+            for ( unsigned int j = 0; j < m_texturesLoaded.size(); j++ )
             {
-                if ( std::strcmp( m_texturesLoaded[j].path.data(),
-                                  string.C_Str() )
+                if ( std::strcmp( m_texturesLoaded[j].path.data(), str.C_Str() )
                      == 0 )
                 {
                     textures.push_back( m_texturesLoaded[j] );
-                    // a texture with the same filepath has already been loaded,
-                    // continue to next one. (optimization)
-                    skip = true;
+                    skip =
+                        true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
                     break;
                 }
             }
-
             if ( ! skip )
-            {
-                continue;
+            { // if texture hasn't been loaded already, load it
+                S_Texture texture;
+                // if texture hasn't been loaded already, load it
+                std::string directory { this->m_filePathModel.substr(
+                    0,
+                    this->m_filePathModel.find_last_of( '/' ) + 1 ) };
+                // std::string texturePath { directory + str.C_Str() };
+                // std::cout << "texture path : " << texturePath.c_str()
+                //           << std::endl;
+                // sfmlTextures.push_back( sf::Texture {} );
+                // bool loaded =
+                //     sfmlTextures.back().loadFromFile( texturePath.c_str() );
+                // loaded &= sfmlTextures.back().generateMipmap();
+                // if ( ! loaded )
+                // {
+                //     throw std::runtime_error {
+                //         "texture not loaded correctly"s
+                //     };
+                // }
+                texture.id = TextureFromFile( str.C_Str(), directory );
+                // texture.id = sfmlTextures.back().getNativeHandle();
+                // texture.texture = sfmlTextures.back();
+                texture.type = typeName;
+                texture.path = str.C_Str();
+                textures.push_back( texture );
+                this->m_texturesLoaded.push_back(
+                    texture ); // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
             }
-            S_Texture texture {};
-
-            // if texture hasn't been loaded already, load it
-            sf::Texture sfmlTexture {};
-            sfmlTexture.loadFromFile( string.C_Str() );
-            texture.id = sfmlTexture.getNativeHandle();
-
-            texture.type = typeName;
-            texture.path = string.C_Str();
-            textures.push_back( texture );
-            // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
-            m_texturesLoaded.push_back( texture );
         }
-
         return textures;
     }
+
+    void transform()
+    {
+        this->m_shader.setUniform(
+            "model"s,
+            sf::Glsl::Mat4 { glm::value_ptr( this->m_space.model ) } );
+        this->m_shader.setUniform(
+            "view"s,
+            sf::Glsl::Mat4 { glm::value_ptr( this->m_space.view ) } );
+        this->m_shader.setUniform(
+            "projection"s,
+            sf::Glsl::Mat4 { glm::value_ptr( this->m_space.projection ) } );
+    }
+
+    void reset_space_model() { this->m_spaceModel = glm::mat4 { 1.f }; }
 };

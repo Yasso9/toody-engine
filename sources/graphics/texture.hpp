@@ -1,5 +1,10 @@
 #pragma once
 
+#include "graphics/openGL.hpp"
+
+unsigned int TextureFromFile( const char * path,
+                              const std::string & directory );
+
 // #pragma GCC diagnostic push
 // #pragma GCC diagnostic ignored "-Wcast-qual"
 // #pragma GCC diagnostic ignored "-Wsign-conversion"
@@ -10,17 +15,17 @@
 // #include <LIBS/stb_image.h>
 // #pragma GCC diagnostic pop
 
-#include "graphics/openGL.hpp"
+// #include "graphics/openGL.hpp"
 
-class Texture final
-{
-  public:
-    Texture()          = default;
-    virtual ~Texture() = default;
+// class Texture final
+// {
+//   public:
+//     Texture()          = default;
+//     virtual ~Texture() = default;
 
-    void load();
-    void bind() const;
+//     void load();
+//     void bind() const;
 
-  private:
-    // unsigned int m_id;
-};
+//   private:
+//     // unsigned int m_id;
+// };

@@ -16,10 +16,9 @@ class GraphicState final : public State
 
   private:
     Camera m_camera;
-    Shape m_shape;
 
-    // sf::Shader m_modelShader;
-    // Model m_model;
+    // Shape m_shape;
+    Model m_model;
 
     void mouse_scroll( float const & deltaScroll ) override;
     void extra_events() override;

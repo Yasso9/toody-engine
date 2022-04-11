@@ -5,34 +5,35 @@
 
 #include "tools/tools.hpp"
 
-static Shape::Data get_sample_shape_data_A();
+[[maybe_unused]] static Shape::Data get_sample_shape_data_A();
 
-GraphicState::GraphicState() : State( State::E_List::Graphics )
-// ,m_model( tools::get_path::resources( "backpack/backpack.obj"s ) )
+GraphicState::GraphicState()
+  : State( State::E_List::Graphics ),
+    m_model( tools::get_path::resources( "backpack/backpack.obj"s ) )
 {
-    // this->m_shader.loadFromFile( tools::get_path::shaders( "shader.vert"s ),
-    //                              tools::get_path::shaders( "shader.frag"s ) );
-    // glEnable( GL_DEPTH_TEST );
-    this->m_shape.create( get_sample_shape_data_A() );
+    // this->m_shape.create( get_sample_shape_data_A() );
 }
 
 void GraphicState::update()
 {
-    this->m_shape.translate( glm::vec3 { 0.f, 0.f, 0.f } );
-    this->m_shape.rotate( glm::vec3 { 1.f, 1.f, 1.f }, 0.f );
-    this->m_shape.scale( glm::vec3 { 1.f, 1.f, 1.f } );
-
-    this->m_shape.update( this->m_camera.get_projection(),
+    this->m_model.translate( glm::vec3 { 0.f, 0.f, 0.f } );
+    this->m_model.rotate( glm::vec3 { 1.f, 1.f, 1.f }, 0.f );
+    this->m_model.scale( glm::vec3 { 1.f, 1.f, 1.f } );
+    this->m_model.update( this->m_camera.get_projection(),
                           this->m_camera.get_view() );
+
+    // this->m_shape.translate( glm::vec3 { 0.f, 0.f, 0.f } );
+    // this->m_shape.rotate( glm::vec3 { 1.f, 1.f, 1.f }, 0.f );
+    // this->m_shape.scale( glm::vec3 { 1.f, 1.f, 1.f } );
+    // this->m_shape.update( this->m_camera.get_projection(),
+    //                       this->m_camera.get_view() );
 }
 
 void GraphicState::render() const
 {
-    // sf::Shader::bind( &this->m_shader );
-    // this->m_model.draw( this->m_shader );
-    // sf::Shader::bind( NULL );
+    this->m_model.draw();
 
-    this->m_shape.draw();
+    // this->m_shape.draw();
 }
 
 void GraphicState::mouse_scroll( float const & deltaScroll )

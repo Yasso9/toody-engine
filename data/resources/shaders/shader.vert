@@ -3,9 +3,9 @@
 // position of each point of the model
 layout (location = 0) in vec3 a_position;
 // Normal
-// layout (location = 1) in vec3 a_normal;
+layout (location = 1) in vec3 a_normal;
 // position of each texture coordinate of the model
-layout (location = 1) in vec2 a_textureCoodinate;
+layout (location = 2) in vec2 a_textureCoodinate;
 
 // space matrix
 uniform mat4 projection;

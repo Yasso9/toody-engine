@@ -146,10 +146,10 @@ void Game::change_state( State::E_List const & newState )
         break;
     case State::E_List::Graphics :
         // TYPO n'activer le grab de la souris que si la window est focus
-        Window::get_instance().setMouseCursorVisible( false );
-        Window::get_instance().setMouseCursorGrabbed( true );
-        // Window::get_instance().setMouseCursorVisible( true );
-        // Window::get_instance().setMouseCursorGrabbed( false );
+        // Window::get_instance().setMouseCursorVisible( false );
+        // Window::get_instance().setMouseCursorGrabbed( true );
+        Window::get_instance().setMouseCursorVisible( true );
+        Window::get_instance().setMouseCursorGrabbed( false );
         this->set_new_state< GraphicState >();
         break;
     case State::E_List::Test :
