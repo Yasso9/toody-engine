@@ -16,33 +16,46 @@
 
 #pragma GCC diagnostic pop
 
-#include "tools/string.hpp"
+#include "graphics/openGL.hpp"
 
-unsigned int TextureFromFile( const char * path, const std::string & directory )
+namespace Texture
 {
-    std::string filename = std::string { path };
-    filename             = directory + filename;
-
-    unsigned int textureID;
-    glGenTextures( 1, &textureID );
-
-    int width, height, nrComponents;
-    std::cout << "filename : " << filename << std::endl;
-    stbi_set_flip_vertically_on_load( true );
-    unsigned char * data =
-        stbi_load( filename.c_str(), &width, &height, &nrComponents, 3 );
-    if ( data != NULL )
+    unsigned int load( std::string const & filePath )
     {
-        GLenum format;
-        if ( nrComponents == 1 )
-            format = GL_RED;
-        else if ( nrComponents == 3 )
-            format = GL_RGB;
-        else if ( nrComponents == 4 )
-            format = GL_RGBA;
-        else
+        unsigned int textureID;
+        glGenTextures( 1, &textureID );
+
+        std::cout << "Texture loaded : " << filePath << std::endl;
+
+        stbi_set_flip_vertically_on_load( true );
+
+        int width, height, nrComponents;
+        unsigned char * data {
+            stbi_load( filePath.c_str(), &width, &height, &nrComponents, 3 )
+        };
+        if ( data == NULL )
         {
-            throw std::runtime_error { ""s };
+            stbi_image_free( data );
+            throw std::runtime_error {
+                "ERROR : Texture failed to load at path: "
+            };
+        }
+
+        GLenum format;
+        switch ( nrComponents )
+        {
+        case 1 :
+            format = GL_RED;
+            break;
+        case 3 :
+            format = GL_RGB;
+            break;
+        case 4 :
+            format = GL_RGBA;
+            break;
+        default :
+            throw std::runtime_error { "Error while loading the texture"s };
+            break;
         }
 
         glBindTexture( GL_TEXTURE_2D, textureID );
@@ -65,16 +78,10 @@ unsigned int TextureFromFile( const char * path, const std::string & directory )
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
         stbi_image_free( data );
-    }
-    else
-    {
-        stbi_image_free( data );
-        throw std::runtime_error { "ERROR : Texture failed to load at path: " };
-    }
 
-    return textureID;
-}
-
+        return textureID;
+    }
+} // namespace Texture
 // #include "tools/string.hpp"
 // #include "tools/tools.hpp"
 

@@ -117,7 +117,7 @@ void Game::update_state( float const & deltaTime )
 
 void Game::render()
 {
-    Window::get_instance().clear_all( sf::Color::Black );
+    Window::get_instance().clear_all( sf::Color { 40, 40, 40 } );
 
     this->m_state->render_all();
     gl::check_error();

@@ -11,3 +11,7 @@
 #include <assimp/Importer.hpp>
 
 #pragma GCC diagnostic pop
+
+// namespace {
+
+// }

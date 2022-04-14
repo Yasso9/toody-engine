@@ -9,6 +9,9 @@
 
 GraphicState::GraphicState()
   : State( State::E_List::Graphics ),
+    // m_model( "C:/Users/Turki/Downloads/CAR/AMGGT.obj" )
+    // m_model( "C:/Users/Turki/Downloads/GUN/acp smith.obj" )
+    // m_model( "C:/Users/Turki/Downloads/BED/black_bed.obj" )
     m_model( tools::get_path::resources( "backpack/backpack.obj"s ) )
 {
     // this->m_shape.create( get_sample_shape_data_A() );
