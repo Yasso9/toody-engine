@@ -185,7 +185,7 @@ static void bind_buffer_object( unsigned int const & bufferObjectID,
 
     glBindBuffer( target, bufferObjectID );
     glBufferData( target,
-                  static_cast< int >( too::size_of( dataArray ) ),
-                  too::to_c_style_array( dataArray ),
+                  static_cast< int >( tools::size_of( dataArray ) ),
+                  tools::to_c_style_array( dataArray ),
                   dataExpectedUsage );
 }

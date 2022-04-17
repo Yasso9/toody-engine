@@ -1,7 +1,11 @@
 #include "main_menu_state.hpp"
 
+#include <iostream>
+
+#include "main/imgui.hpp"
 #include "main/resources.hpp"
 #include "tools/string.hpp"
+#include "tools/tools.hpp"
 
 MainMenuState::MainMenuState() : State( State::E_List::MainMenu )
 {

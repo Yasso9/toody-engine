@@ -19,18 +19,14 @@ class Game final
     bool m_shouldRun;
 
     std::shared_ptr< State > m_state;
-
     Settings const m_settings;
-
-    sf::Event m_event;
-    sf::Clock m_clock;
 
     /// @brief To know where do we start the game
     void init_state();
 
     void update_events();
     /// @brief Update all the things that can happen in the state
-    void update_state( float const & deltaTime );
+    void update_state( sf::Time const & deltaTime );
 
     void render();
 

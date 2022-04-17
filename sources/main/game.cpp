@@ -15,8 +15,10 @@
 #include "states/main_menu_state.hpp"
 #include "states/test.hpp"
 
+#include "main/imgui.hpp"
+
 /**
- * @brief Throw an exception if something is not available for the game to run well
+ * @brief Throw an exception if something is not available
  */
 static void check_configuration()
 {
@@ -31,29 +33,32 @@ Game::Game() : m_shouldRun( true ), m_state( nullptr ), m_settings()
     check_configuration();
 
     Window::get_instance();
+    if ( ! ImGui::SFML::Init( Window::get_instance() ) )
+    {
+        throw std::runtime_error { "Cannot init ImGui"s };
+    }
 
     this->init_state();
 }
 
 Game::~Game()
 {
+    ImGui::SFML::Shutdown();
     // Must be made before closing the window
     gl::check_error();
 }
 
 void Game::run()
 {
-    float deltaTime { 0.f };
-
+    sf::Clock clock {};
     // Reset the clock juste before the game run
-    this->m_clock.restart();
+    clock.restart();
 
     while ( this->m_shouldRun )
     {
-        sf::Time const timeElaspsed { this->m_clock.restart() };
-        deltaTime += timeElaspsed.asSeconds();
+        sf::Time const deltaTime { clock.getElapsedTime() };
 
-        if ( deltaTime > this->m_settings.get_refresh_rate() )
+        if ( deltaTime.asSeconds() > this->m_settings.get_refresh_rate() )
         {
             try
             {
@@ -61,37 +66,40 @@ void Game::run()
                 this->update_state( deltaTime );
                 this->render();
             }
-            catch ( Exception::QuitApplication const & )
+            catch ( Exception::QuitApplication )
             {
                 this->m_shouldRun = false;
             }
 
-            deltaTime = 0.f; // reset the counter
+            // reset the counter
+            clock.restart();
         }
     }
 }
 
 void Game::init_state()
 {
-    // this->change_state( State::E_List::MainMenu );
+    this->change_state( State::E_List::MainMenu );
     // this->change_state( State::E_List::Test );
-    this->change_state( State::E_List::Graphics );
+    // this->change_state( State::E_List::Graphics );
 }
 
 void Game::update_events()
 {
+    sf::Event event {};
     // The event loop must always be part of the main loop,
     // otherwise bug and crash could happen
-    while ( Window::get_instance().pollEvent( this->m_event ) )
+    while ( Window::get_instance().pollEvent( event ) )
     {
-        if ( this->m_event.type == sf::Event::Closed )
+        if ( event.type == sf::Event::Closed )
         {
             throw Exception::QuitApplication {};
             return;
         }
-        if ( Window::get_instance().has_absolute_focus() )
+        else if ( Window::get_instance().has_absolute_focus() )
         {
-            this->m_state->update_inputs( this->m_event );
+            ImGui::SFML::ProcessEvent( Window::get_instance(), event );
+            this->m_state->update_inputs( event );
         }
     }
 
@@ -101,11 +109,13 @@ void Game::update_events()
     }
 }
 
-void Game::update_state( float const & deltaTime )
+void Game::update_state( sf::Time const & deltaTime )
 {
+    ImGui::SFML::Update( Window::get_instance(), deltaTime );
+
     static State::E_List lastState { this->m_state->get_state_to_print() };
 
-    this->m_state->update_data( deltaTime );
+    this->m_state->update_data( deltaTime.asSeconds() );
 
     State::E_List const newState { this->m_state->get_state_to_print() };
     if ( lastState != newState )
@@ -120,6 +130,7 @@ void Game::render()
     Window::get_instance().clear_all( sf::Color { 40, 40, 40 } );
 
     this->m_state->render_all();
+    ImGui::SFML::Render( Window::get_instance() );
     gl::check_error();
 
     Window::get_instance().display();
