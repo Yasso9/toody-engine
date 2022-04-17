@@ -5,36 +5,27 @@
 #include "3D_model/assimp.hpp"
 #include "3D_model/mesh.hpp"
 #include "graphics/texture.hpp"
+#include "graphics/transformable.hpp"
 #include "tools/tools.hpp"
 
-class Model
+class Model final : public Transformable
 {
   public:
     Model( std::string const & filePathModel );
 
-    void translate( glm::vec3 const & tranlationVector );
-    void rotate( glm::vec3 const & rotationVector, float const & angle );
-    void scale( glm::vec3 const & scaleVector );
-
-    void update( glm::mat4 const & projection, glm::mat4 const & view );
-
-    void draw() const;
-
   private:
-    /// @brief shader to activate when the object is loaded
-    sf::Shader m_shader;
     /** @brief Model data.
      * Stores all the textures loaded so far,
      * optimization to make sure textures aren't loaded more than once.
      */
-    std::vector< S_Texture > m_texturesLoaded;
+    std::map< std::string, Texture > m_texturesLoaded;
     /// @brief All the meshes that the model contains
     std::vector< Mesh > m_meshes;
-    /// @brief Space where the object is and where we can move it
-    gl::SpaceMatrix m_space;
-    glm::mat4 m_spaceModel;
-    std::vector< sf::Texture > sfmlTextures {};
-    std::string const m_filePathModel;
+    /// @brief Path of the model object file
+    std::string const m_filePath;
+
+    void update_intra() override;
+    void draw_intra() const override;
 
     /**
      * @brief Loads a model with supported ASSIMP extensions from file
@@ -51,19 +42,22 @@ class Model
 
     Mesh process_mesh( aiMesh const & mesh, aiScene const & scene );
 
-    // checks all material textures of a given type and loads the textures if they're not loaded yet.
-    // the required info is returned as a Texture struct.
-    std::vector< S_Texture > load_material_textures(
-        aiMaterial const & material, aiTextureType const & type,
-        std::string const & typeName );
+    /**
+     * @brief checks all material textures of a given type and loads
+     *        the textures if they're not loaded yet.
+     *        the required info is returned as a Texture struct.
+    */
+    std::vector< std::string > load_material_textures(
+        aiMaterial const & material, Texture::E_Type const & textureType );
 
     /**
      * @brief Return the texture from the texture path.
      *        If the texture doesn't exist, return nothing
      */
-    std::optional< S_Texture > get_texture_loaded(
+    std::optional< Texture > get_texture_loaded(
         std::string const & texturePath ) const;
 
-    void transform();
-    void reset_space_model();
+    std::vector< S_Vertex > load_vertices( aiMesh const & mesh );
+    std::vector< unsigned int > load_indices( aiMesh const & mesh );
+    std::vector< std::string > load_textures( aiMaterial const & material );
 };

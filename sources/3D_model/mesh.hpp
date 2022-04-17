@@ -1,13 +1,16 @@
 #pragma once
 
+#include <iostream>
 #include <vector>
 
+#include "3D_model/assimp.hpp"
 #include "graphics/openGL.hpp"
 #include "graphics/sfml.hpp"
+#include "graphics/texture.hpp"
 #include "main/window.hpp"
 #include "tools/string.hpp"
 
-#define MAX_BONE_INFLUENCE 4
+constexpr unsigned int const maxBoneInfluence { 4u };
 
 struct S_Vertex
 {
@@ -22,34 +25,31 @@ struct S_Vertex
     /// @brief bitangent
     glm::vec3 bitangent;
     /// @brief bone indexes which will influence this vertex
-    int boneIDs[MAX_BONE_INFLUENCE];
+    int boneIDs[maxBoneInfluence];
     /// @brief weights from each bone
-    float weights[MAX_BONE_INFLUENCE];
-};
-
-struct S_Texture
-{
-    unsigned int id;
-    // sf::Texture texture {};
-    std::string type;
-    std::string path;
+    float weights[maxBoneInfluence];
 };
 
 class Mesh
 {
   public:
-    std::vector< S_Vertex > vertices;
-    std::vector< unsigned int > indices;
-    std::vector< S_Texture > textures;
-    unsigned int VAO;
+    Mesh( std::vector< S_Vertex > const & vertices,
+          std::vector< unsigned int > const & indices,
+          std::vector< std::string > const & textures );
 
-    Mesh( std::vector< S_Vertex > vertices, std::vector< unsigned int > indices,
-          std::vector< S_Texture > textures );
+    void update( sf::Shader & shader,
+                 std::map< std::string, Texture > const & textureLoaded );
 
-    void draw( sf::Shader const & shader ) const;
+    void draw() const;
 
   private:
-    unsigned int VBO, EBO;
+    std::vector< S_Vertex > const m_vertices;
+    std::vector< unsigned int > const m_indices;
+    std::vector< std::string > const m_textures;
 
-    void setupMesh();
+    unsigned int VAO;
+    unsigned int VBO;
+    unsigned int EBO;
+
+    void generate();
 };

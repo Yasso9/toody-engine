@@ -82,16 +82,13 @@ WARNINGS := \
 
 ############################## Global Informations ##############################
 
-# g++
-# CXX_COMMAND := g++
-# CXX_FLAGS := $(CXX_COMMAND) -std=c++2a
-
 # clang
 CXX_COMMAND := clang++
-CXX_FLAGS := -std=c++20 -MD -O0 -g
+COMPILING_FLAGS := -std=c++20 -MD -O0 -g
 # -MD => Create .d files for dependencies
 # -g => Generate debug information
 # -O0 => No optmization, faster compilation time, better for debugging builds
+LINKING_FLAGS :=
 
 # .cpp and .hpp files
 FILES_DIRECTORY := ./sources
@@ -217,7 +214,7 @@ $(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%)
 #	compilatorCommand -WarningFlags -compilerOptions -c sources/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
-	@$(CXX_COMMAND) $(WARNINGS) $(CXX_FLAGS) -c $< -o $@ $(INCLUDES)
+	@$(CXX_COMMAND) $(WARNINGS) $(COMPILING_FLAGS) -c $< -o $@ $(INCLUDES)
 #	Nicer way to print the current file compiled
 	@echo "Compiling $(subst sources/,,$<)"
 
@@ -225,5 +222,5 @@ $(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%)
 $(EXECUTABLE) : $(OBJECT_ALL)
 #	compilator++ sub_directory_A_filename_A.o sub_directory_B_filename_B.o etc... -o executable -L"/Path/To/Library" -libraries_flags
 #   -o => choose custom object
-	@$(CXX_COMMAND) $^ -o $@ $(LIBRARIES)
+	@$(CXX_COMMAND) $(LINKING_FLAGS) $^ -o $@ $(LIBRARIES)
 	@echo "Building $@"

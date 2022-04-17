@@ -18,8 +18,14 @@ unsigned int Shape::Data::get_data_per_point_sum() const
                             this->dataPerPoint.end(),
                             0u );
 }
+unsigned int Shape::Data::get_number_of_element() const
+{
+    return this->vertices.size() / this->get_data_per_point_sum();
+}
 
 Shape::Shape()
+  : Transformable( tools::get_path::shaders( "shape_shader.vert"s ),
+                   tools::get_path::shaders( "shape_shader.frag"s ) )
 {
     this->reset_space_model();
 }
@@ -48,81 +54,47 @@ void Shape::create( Data const & data )
     this->unbind();
 }
 
-void Shape::translate( glm::vec3 const & tranlationVector )
+void Shape::update_intra()
 {
-    glm::mat4 const translationMatrix { glm::translate( glm::mat4 { 1.f },
-                                                        tranlationVector ) };
-
-    this->m_spaceModel *= translationMatrix;
-}
-void Shape::rotate( glm::vec3 const & rotationVector, float const & angle )
-{
-    glm::mat4 const rotationMatrix { glm::rotate(
-        glm::mat4 { 1.f },
-        glm::radians( angle ),
-        glm::vec3 { rotationVector } ) };
-
-    this->m_spaceModel *= rotationMatrix;
-}
-void Shape::scale( glm::vec3 const & scaleVector )
-{
-    glm::mat4 const scaleMatrix { glm::scale( glm::mat4 { 1.f },
-                                              glm::vec3 { scaleVector } ) };
-    this->m_spaceModel *= scaleMatrix;
+    this->m_shader.setUniform( "my_textureA", this->m_textureA );
+    this->m_shader.setUniform( "my_textureB", this->m_textureB );
 }
 
-void Shape::update( glm::mat4 const & projection, glm::mat4 const & view )
+void Shape::draw_intra() const
 {
-    this->m_space.projection = projection;
-    this->m_space.view       = view;
-    this->m_space.model      = this->m_spaceModel;
-
-    // All the object transformation have been made, so we reset the matrix to identity
-    this->reset_space_model();
-
-    this->transform();
-}
-
-void Shape::draw() const
-{
-    sf::Texture::bind( &this->m_texture );
-    sf::Shader::bind( &this->m_shader );
-
-    glBindVertexArray( this->m_vertexArrayObject );
-
     GLenum const primitiveType { GL_TRIANGLES };
     if ( this->is_element_buffer_set() )
     {
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, this->m_elementBufferObject );
         GLenum const dataType { GL_UNSIGNED_INT };
-        Window::get_instance().gl_draw_elements( primitiveType,
+        Window::get_instance().gl_draw_elements( this->m_vertexArrayObject,
+                                                 primitiveType,
                                                  dataType,
                                                  this->m_data.vertices.size() );
     }
     else
     {
-        unsigned int const vectorSize {
-            this->m_data.vertices.size() / this->m_data.get_data_per_point_sum()
-        };
-        Window::get_instance().gl_draw_arrays( primitiveType, vectorSize );
+        Window::get_instance().gl_draw_arrays(
+            this->m_vertexArrayObject,
+            primitiveType,
+            this->m_data.get_number_of_element() );
     }
-
-    // Unbind VAO
-    glBindVertexArray( 0 );
-
-    sf::Shader::bind( NULL );
-    sf::Texture::bind( NULL );
 }
 
 void Shape::load_textures_and_shaders()
 {
-    this->m_shader.loadFromFile( tools::get_path::shaders( "shader.vert"s ),
-                                 tools::get_path::shaders( "shader.frag"s ) );
-
     bool textureLoad { true };
-    textureLoad &= this->m_texture.loadFromFile(
+    textureLoad &= this->m_textureA.loadFromFile(
         tools::get_path::resources( "wall.jpg"s ) );
-    textureLoad &= this->m_texture.generateMipmap();
+    textureLoad &= this->m_textureA.generateMipmap();
+    if ( ! textureLoad )
+    {
+        throw std::runtime_error { "Cannot load texture"s };
+    }
+
+    textureLoad &= this->m_textureB.loadFromFile(
+        tools::get_path::resources( "town_hall.png"s ) );
+    textureLoad &= this->m_textureB.generateMipmap();
     if ( ! textureLoad )
     {
         throw std::runtime_error { "Cannot load texture"s };
@@ -199,24 +171,6 @@ void Shape::unbind()
     glBindVertexArray( 0 );
     // Unbind EBO
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
-}
-
-void Shape::transform()
-{
-    this->m_shader.setUniform(
-        "model"s,
-        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.model ) } );
-    this->m_shader.setUniform(
-        "view"s,
-        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.view ) } );
-    this->m_shader.setUniform(
-        "projection"s,
-        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.projection ) } );
-}
-
-void Shape::reset_space_model()
-{
-    this->m_spaceModel = glm::mat4 { 1.f };
 }
 
 template < typename ArrayType >

@@ -26,10 +26,12 @@ class Window final : public sf::RenderWindow,
 
     void clear_all( sf::Color const & backgroundColor );
 
-    void gl_draw_elements( GLenum const & primitiveType,
+    void gl_draw_elements( unsigned int const & vertexArrayObject,
+                           GLenum const & primitiveType,
                            GLenum const & dataType,
                            unsigned int const & elementsSize ) const;
-    void gl_draw_arrays( GLenum const & primitiveType,
+    void gl_draw_arrays( unsigned int const & vertexArrayObject,
+                         GLenum const & primitiveType,
                          unsigned int const & arraySize ) const;
 
     // TYPO use concept to verify that is drawable

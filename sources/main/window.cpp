@@ -84,10 +84,12 @@ void Window::clear_all( sf::Color const & backgroundColor )
     Window::get_instance().setView( Window::get_instance().getDefaultView() );
 }
 
-void Window::gl_draw_elements( GLenum const & primitiveType,
+void Window::gl_draw_elements( unsigned int const & vertexArrayObject,
+                               GLenum const & primitiveType,
                                GLenum const & dataType,
                                unsigned int const & elementsSize ) const
 {
+    glBindVertexArray( vertexArrayObject );
     // enable openGL Z buffer
     glEnable( GL_DEPTH_TEST );
 
@@ -97,10 +99,13 @@ void Window::gl_draw_elements( GLenum const & primitiveType,
                     0 );
 
     glDisable( GL_DEPTH_TEST );
+    glBindVertexArray( 0 );
 }
-void Window::gl_draw_arrays( GLenum const & primitiveType,
+void Window::gl_draw_arrays( unsigned int const & vertexArrayObject,
+                             GLenum const & primitiveType,
                              unsigned int const & arraySize ) const
 {
+    glBindVertexArray( vertexArrayObject );
     glEnable( GL_DEPTH_TEST );
 
     int const verticesBeginPosition { 0 };
@@ -109,6 +114,7 @@ void Window::gl_draw_arrays( GLenum const & primitiveType,
                   static_cast< int >( arraySize ) );
 
     glDisable( GL_DEPTH_TEST );
+    glBindVertexArray( 0 );
 }
 
 void Window::create()

@@ -1,12 +1,14 @@
 #pragma once
 
+#include <vector>
+
 #include "graphics/openGL.hpp"
 #include "graphics/sfml.hpp"
 #include "graphics/shader.hpp"
 #include "graphics/texture.hpp"
-#include "vector"
+#include "graphics/transformable.hpp"
 
-class Shape final
+class Shape final : public Transformable
 {
   public:
     struct Data
@@ -22,6 +24,8 @@ class Shape final
 
         /// @brief Array size of each point
         unsigned int get_data_per_point_sum() const;
+
+        unsigned int get_number_of_element() const;
     };
 
     Shape();
@@ -33,28 +37,19 @@ class Shape final
      */
     void create( Data const & data );
 
-    void translate( glm::vec3 const & tranlationVector );
-    void rotate( glm::vec3 const & rotationVector, float const & angle );
-    void scale( glm::vec3 const & scaleVector );
-
-    void update( glm::mat4 const & projection, glm::mat4 const & view );
-    void draw() const;
-
   private:
-    sf::Texture m_texture;
-    sf::Shader m_shader;
-    // Shaders m_shaders;
-
-    /// @brief space where the object is and where we can move it
-    gl::SpaceMatrix m_space;
-    glm::mat4 m_spaceModel;
+    sf::Texture m_textureA;
+    sf::Texture m_textureB;
 
     unsigned int m_vertexArrayObject;
     unsigned int m_vertexBufferObject;
-    /// @brief Needed to simplify the point for the vertices
+    /// @brief To simplify the point for the vertices
     unsigned int m_elementBufferObject;
 
     Shape::Data m_data;
+
+    void update_intra() override;
+    void draw_intra() const override;
 
     void load_textures_and_shaders();
 
@@ -66,9 +61,4 @@ class Shape final
     void objects_binding();
     void vertex_shader_attribution();
     void unbind();
-
-    void transform();
-
-    // Assign the space model to the identity matrix
-    void reset_space_model();
 };

@@ -20,6 +20,9 @@ namespace gl
         // glClearDepth( 1.f );
         // glDisable( GL_LIGHTING );
 
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
         // Je ne sais pas ce que c'est ?
         glViewport( 0,
                     0,

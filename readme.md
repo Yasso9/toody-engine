@@ -41,3 +41,5 @@ Source code (All OS) : cmake and make
 GLAD sources (All OS) : https://glad.dav1d.de/#language=c&specification=gl&api=gl%3D4.6&api=gles1%3Dnone&api=gles2%3Dnone&api=glsc2%3Dnone&profile=compatibility&loader=on
 SQLITE sources and precompiled binaries (All OS) : https://www.sqlite.org/download.html
 
+
+gprof -b -A -p -q build/application/application.exe gmon.out > profiling_output.txt

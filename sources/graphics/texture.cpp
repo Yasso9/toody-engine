@@ -2,6 +2,69 @@
 
 #include <iostream>
 
+Texture::Texture( std::string const & filePath, Texture::E_Type const & type )
+  : m_type( type ), m_path( filePath )
+{
+    if ( ! this->loadFromFile( filePath ) )
+    {
+        throw std::runtime_error { "Loading Texture '"s + filePath
+                                   + "' not successfull"s };
+    }
+    if ( ! this->generateMipmap() )
+    {
+        throw std::runtime_error { "Cannot generate MipMap for texture '"s
+                                   + filePath + '\'' };
+    }
+
+    std::cout << "Texture Loaded : " << filePath << std::endl;
+}
+
+Texture::E_Type Texture::get_type() const
+{
+    return this->m_type;
+}
+
+std::string Texture::get_path() const
+{
+    return this->m_path;
+}
+
+std::string Texture::get_type_name() const
+{
+    switch ( this->m_type )
+    {
+    case Texture::E_Type::Diffuse :
+        return "texture_diffuse"s;
+    case Texture::E_Type::Specular :
+        return "texture_diffuse"s;
+    case Texture::E_Type::Normal :
+        return "texture_diffuse"s;
+    case Texture::E_Type::Height :
+        return "texture_diffuse"s;
+    default :
+        throw std::runtime_error { "Type not supported"s };
+        break;
+    }
+}
+
+aiTextureType Texture::to_assimp_type( Texture::E_Type const & type )
+{
+    switch ( type )
+    {
+    case Texture::E_Type::Diffuse :
+        return aiTextureType::aiTextureType_DIFFUSE;
+    case Texture::E_Type::Specular :
+        return aiTextureType::aiTextureType_SPECULAR;
+    case Texture::E_Type::Normal :
+        return aiTextureType::aiTextureType_NORMALS;
+    case Texture::E_Type::Height :
+        return aiTextureType::aiTextureType_HEIGHT;
+    default :
+        throw std::runtime_error { "Type not supported"s };
+        break;
+    }
+}
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #pragma GCC diagnostic ignored "-Wsign-conversion"
@@ -18,7 +81,7 @@
 
 #include "graphics/openGL.hpp"
 
-namespace Texture
+namespace GLTexture
 {
     unsigned int load( std::string const & filePath )
     {
@@ -37,7 +100,7 @@ namespace Texture
         {
             stbi_image_free( data );
             throw std::runtime_error {
-                "ERROR : Texture failed to load at path: "
+                "ERROR : Texture failed to load at path: '"s + filePath + "'"s
             };
         }
 
@@ -58,6 +121,13 @@ namespace Texture
             break;
         }
 
+        // So we can have image with width and height that are not the same
+        glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+        glPixelStorei( GL_UNPACK_ROW_LENGTH, 0 );
+        glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0 );
+        glPixelStorei( GL_UNPACK_SKIP_ROWS, 0 );
+
+        // std::cout << "Texture ID : " << textureID << std::endl;
         glBindTexture( GL_TEXTURE_2D, textureID );
         glTexImage2D( GL_TEXTURE_2D,
                       0,
@@ -81,55 +151,4 @@ namespace Texture
 
         return textureID;
     }
-} // namespace Texture
-// #include "tools/string.hpp"
-// #include "tools/tools.hpp"
-
-// #include <iostream>
-
-// void Texture::load()
-// {
-//     // // load and create a texture
-//     // glGenTextures( 1, &this->m_id );
-
-//     // // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
-//     // glBindTexture( GL_TEXTURE_2D, this->m_id );
-
-//     // // set the texture wrapping parameters
-//     // glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-//     // glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-//     // // set texture filtering parameters
-//     // glTexParameteri( GL_TEXTURE_2D,
-//     //                  GL_TEXTURE_MIN_FILTER,
-//     //                  GL_LINEAR_MIPMAP_LINEAR );
-//     // glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
-//     // // load image, create texture and generate mipmaps
-//     // std::string const imagePath { tools::get_path::resources() + "/wall.jpg"s };
-//     // int width, height, nrChannels;
-//     // unsigned char * data {
-//     //     stbi_load( imagePath.c_str(), &width, &height, &nrChannels, 0 )
-//     // };
-//     // if ( ! data )
-//     // {
-//     //     throw std::runtime_error { "Failed to load texture"s };
-//     // }
-
-//     // glTexImage2D( GL_TEXTURE_2D,
-//     //               0,
-//     //               GL_RGB,
-//     //               width,
-//     //               height,
-//     //               0,
-//     //               GL_RGB,
-//     //               GL_UNSIGNED_BYTE,
-//     //               data );
-//     // glGenerateMipmap( GL_TEXTURE_2D );
-
-//     // stbi_image_free( data );
-// }
-
-// void Texture::bind() const
-// {
-//     // glBindTexture( GL_TEXTURE_2D, this->m_id );
-// }
+} // namespace GLTexture

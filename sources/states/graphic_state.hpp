@@ -17,8 +17,11 @@ class GraphicState final : public State
   private:
     Camera m_camera;
 
-    // Shape m_shape;
-    Model m_model;
+    Shape m_shape;
+
+    Model m_modelA;
+    Model m_modelB;
+    Model m_modelC;
 
     void mouse_scroll( float const & deltaScroll ) override;
     void extra_events() override;

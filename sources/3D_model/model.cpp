@@ -1,84 +1,40 @@
 #include "model.hpp"
 
-static glm::vec3 to_vector3( aiVector3D const & assimpVector3D )
-{
-    glm::vec3 glmVec3 {};
+#include <iostream>
 
-    glmVec3.x = assimpVector3D.x;
-    glmVec3.y = assimpVector3D.y;
-    glmVec3.z = assimpVector3D.z;
+#include "tools/timer.hpp"
 
-    return glmVec3;
-}
-
-static glm::vec2 to_vector2( aiVector3D const & assimpVector3D )
-{
-    glm::vec2 glmVec2 {};
-
-    glmVec2.x = assimpVector3D.x;
-    glmVec2.y = assimpVector3D.y;
-
-    return glmVec2;
-}
+static glm::vec3 to_vector3( aiVector3D const & assimpVector3D );
+static glm::vec2 to_vector2( aiVector3D const & assimpVector3D );
 
 Model::Model( std::string const & filePathModel )
-  : m_texturesLoaded(), m_meshes(), m_filePathModel( filePathModel )
+  : Transformable( tools::get_path::shaders( "shader.vert"s ),
+                   tools::get_path::shaders( "shader.frag"s ) ),
+    m_texturesLoaded(),
+    m_meshes(),
+    m_filePath( filePathModel )
 {
-    if ( ! this->m_shader.loadFromFile(
-             tools::get_path::shaders( "shader.vert"s ),
-             tools::get_path::shaders( "shader.frag"s ) ) )
-    {
-        throw std::runtime_error { "Error with loading shaders"s };
-    }
+    Timer timer { "Model creation ("s + filePathModel + ')' };
+    std::cout << "Loading Model : " << filePathModel << std::endl;
+
     this->load_model();
 }
 
-void Model::translate( glm::vec3 const & tranlationVector )
+void Model::update_intra()
 {
-    glm::mat4 const translationMatrix { glm::translate( glm::mat4 { 1.f },
-                                                        tranlationVector ) };
-
-    this->m_spaceModel *= translationMatrix;
-}
-void Model::rotate( glm::vec3 const & rotationVector, float const & angle )
-{
-    glm::mat4 const rotationMatrix { glm::rotate(
-        glm::mat4 { 1.f },
-        glm::radians( angle ),
-        glm::vec3 { rotationVector } ) };
-
-    this->m_spaceModel *= rotationMatrix;
-}
-void Model::scale( glm::vec3 const & scaleVector )
-{
-    glm::mat4 const scaleMatrix { glm::scale( glm::mat4 { 1.f },
-                                              glm::vec3 { scaleVector } ) };
-    this->m_spaceModel *= scaleMatrix;
-}
-
-void Model::update( glm::mat4 const & projection, glm::mat4 const & view )
-{
-    this->m_space.projection = projection;
-    this->m_space.view       = view;
-    this->m_space.model      = this->m_spaceModel;
-
-    // All the object transformation have been made, so we reset the matrix to identity
-    this->reset_space_model();
-
-    this->transform();
+    for ( Mesh & mesh : this->m_meshes )
+    {
+        mesh.update( this->m_shader, this->m_texturesLoaded );
+    }
 }
 
 // draws the model, and thus all its meshes
-void Model::draw() const
+void Model::draw_intra() const
 {
-    sf::Shader::bind( &this->m_shader );
-
     for ( Mesh const & mesh : this->m_meshes )
     {
-        mesh.draw( this->m_shader );
+        mesh.draw();
     }
-
-    sf::Shader::bind( NULL );
 }
 
 void Model::load_model()
@@ -88,7 +44,7 @@ void Model::load_model()
                                        | aiProcess_GenSmoothNormals
                                        | aiProcess_FlipUVs
                                        | aiProcess_CalcTangentSpace };
-    aiScene const * scene { importer.ReadFile( this->m_filePathModel,
+    aiScene const * scene { importer.ReadFile( this->m_filePath,
                                                importerFlags ) };
     // check for when reading file
     if ( ! scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE
@@ -96,6 +52,7 @@ void Model::load_model()
     {
         throw std::runtime_error { importer.GetErrorString() };
     }
+
     // process ASSIMP's root node recursively
     this->process_node( *( scene->mRootNode ), *scene );
 }
@@ -122,9 +79,87 @@ void Model::process_node( aiNode const & node, aiScene const & scene )
 
 Mesh Model::process_mesh( aiMesh const & mesh, aiScene const & scene )
 {
+    std::vector< S_Vertex > const & vertices { this->load_vertices( mesh ) };
+
+    std::vector< unsigned int > const & indices { this->load_indices( mesh ) };
+
+    // process materials
+    aiMaterial const & material { *scene.mMaterials[mesh.mMaterialIndex] };
+    std::vector< std::string > const & textures { this->load_textures(
+        material ) };
+
+    // return a mesh object created from the extracted mesh data
+    return Mesh { vertices, indices, textures };
+}
+
+std::optional< Texture > Model::get_texture_loaded(
+    std::string const & /* texturePath */ ) const
+{
+    // for ( Texture const & existingTexture : this->m_texturesLoaded )
+    // {
+    //     if ( existingTexture.get_path() == texturePath )
+    //     {
+    //         return std::make_optional< Texture >( existingTexture );
+    //     }
+    // }
+
+    // No texture has been found
+    return std::nullopt;
+}
+
+// checks all material textures of a given type and loads the textures if they're not loaded yet.
+// the required info is returned as a Texture struct.
+std::vector< std::string > Model::load_material_textures(
+    aiMaterial const & material, Texture::E_Type const & textureType )
+{
+    std::vector< std::string > textures {};
+    std::string const directory {
+        this->m_filePath.substr( 0, this->m_filePath.find_last_of( '/' ) + 1 )
+    };
+
+    for ( unsigned int i_textureToLoad { 0u };
+          i_textureToLoad
+          < material.GetTextureCount( Texture::to_assimp_type( textureType ) );
+          ++i_textureToLoad )
+    {
+        // Getting the texture name
+        aiString textureFileName;
+        material.GetTexture( Texture::to_assimp_type( textureType ),
+                             i_textureToLoad,
+                             &textureFileName );
+        // std::cout << "Loading texture : "s << textureFileName.C_Str()
+        //           << std::endl;
+        std::string const texturePath { directory + textureFileName.C_Str() };
+
+        // auto const textureLoaded { this->get_texture_loaded( texturePath ) };
+        // The texture has already been loaded
+        // if ( textureLoaded.has_value() )
+        // {
+        //     textures.push_back( textureLoaded.value().get_path() );
+        //     continue;
+        // }
+
+        // The texture hasn't already been loaded, we load it
+        // Texture const newTexture { texturePath, textureType };
+        // Texture const newTexture { texturePath, textureType };
+        textures.push_back( texturePath );
+
+        if ( ! this->m_texturesLoaded.contains( texturePath ) )
+        {
+            // We save it in the loaded texture
+            this->m_texturesLoaded.insert( {
+                texturePath,
+                Texture {texturePath, textureType}
+            } );
+        }
+    }
+
+    return textures;
+}
+
+std::vector< S_Vertex > Model::load_vertices( aiMesh const & mesh )
+{
     std::vector< S_Vertex > vertices {};
-    std::vector< unsigned int > indices {};
-    std::vector< S_Texture > textures {};
 
     // Walk through each of the mesh's vertices
     for ( unsigned int i_vertice { 0u }; i_vertice < mesh.mNumVertices;
@@ -161,7 +196,15 @@ Mesh Model::process_mesh( aiMesh const & mesh, aiScene const & scene )
 
         vertices.push_back( vertex );
     }
-    // now wak through each of the mesh's faces
+
+    return vertices;
+}
+
+std::vector< unsigned int > Model::load_indices( aiMesh const & mesh )
+{
+    std::vector< unsigned int > indices {};
+
+    // now walk through each of the mesh's faces
     // (a face is a mesh is its triangle)
     // and retrieve the corresponding vertex indices.
     for ( unsigned int i_face { 0u }; i_face < mesh.mNumFaces; ++i_face )
@@ -174,113 +217,66 @@ Mesh Model::process_mesh( aiMesh const & mesh, aiScene const & scene )
             indices.push_back( face.mIndices[i_indice] );
         }
     }
-    // process materials
-    aiMaterial const & material { *scene.mMaterials[mesh.mMaterialIndex] };
-    // we assume a convention for sampler names in the shaders.
-    // Each diffuse texture should be named
-    // as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER.
-    // Same applies to other texture as the following list summarizes:
-    // diffuse: texture_diffuseN
-    // specular: texture_specularN
-    // normal: texture_normalN
-    std::vector< S_Texture > const diffuseMaps { this->load_material_textures(
-        material,
-        aiTextureType::aiTextureType_DIFFUSE,
-        "texture_diffuse" ) };
-    std::vector< S_Texture > const specularMaps { this->load_material_textures(
-        material,
-        aiTextureType::aiTextureType_SPECULAR,
-        "texture_specular" ) };
-    std::vector< S_Texture > const normalMaps { this->load_material_textures(
-        material,
-        aiTextureType::aiTextureType_HEIGHT,
-        "texture_normal" ) };
-    std::vector< S_Texture > const heightMaps { this->load_material_textures(
-        material,
-        aiTextureType::aiTextureType_AMBIENT,
-        "texture_height" ) };
 
-    textures.insert( textures.end(), diffuseMaps.begin(), diffuseMaps.end() );
-    textures.insert( textures.end(), specularMaps.begin(), specularMaps.end() );
-    textures.insert( textures.end(), normalMaps.begin(), normalMaps.end() );
-    textures.insert( textures.end(), heightMaps.begin(), heightMaps.end() );
-
-    // return a mesh object created from the extracted mesh data
-    return Mesh { vertices, indices, textures };
+    return indices;
 }
 
-std::optional< S_Texture > Model::get_texture_loaded(
-    std::string const & texturePath ) const
+std::vector< std::string > Model::load_textures( aiMaterial const & material )
 {
-    for ( unsigned int i_existingTexture { 0u };
-          i_existingTexture < this->m_texturesLoaded.size();
-          ++i_existingTexture )
-    {
-        if ( this->m_texturesLoaded[i_existingTexture].path == texturePath )
-        {
-            return std::make_optional< S_Texture >(
-                this->m_texturesLoaded[i_existingTexture] );
-        }
-    }
+    // std::vector< std::string > textures {};
 
-    return {};
-    // return std::nullopt;
+    std::vector< std::string > const & diffuseMaps {
+        this->load_material_textures( material, Texture::E_Type::Diffuse )
+    };
+    // std::vector< std::string > const & specularMaps {
+    //     this->load_material_textures( material, Texture::E_Type::Specular )
+    // };
+    // std::vector< std::string > const & normalMaps {
+    //     this->load_material_textures( material, Texture::E_Type::Normal )
+    // };
+    // std::vector< std::string > const & heightMaps {
+    //     this->load_material_textures( material, Texture::E_Type::Height )
+    // };
+
+    // {
+    //     Timer timer { "texture insert" };
+
+    //     textures.insert( textures.end(),
+    //                      std::make_move_iterator( diffuseMaps.begin() ),
+    //                      std::make_move_iterator( diffuseMaps.end() ) );
+    //     textures.insert( textures.end(),
+    //                      std::make_move_iterator( specularMaps.begin() ),
+    //                      std::make_move_iterator( specularMaps.end() ) );
+    //     textures.insert( textures.end(),
+    //                      std::make_move_iterator( normalMaps.begin() ),
+    //                      std::make_move_iterator( normalMaps.end() ) );
+    //     textures.insert( textures.end(),
+    //                      std::make_move_iterator( heightMaps.begin() ),
+    //                      std::make_move_iterator( heightMaps.end() ) );
+    // }
+
+    // std::cout << "number of texture : " << textures.size() << std::endl;
+
+    return diffuseMaps;
 }
 
-// checks all material textures of a given type and loads the textures if they're not loaded yet.
-// the required info is returned as a Texture struct.
-std::vector< S_Texture > Model::load_material_textures(
-    aiMaterial const & material, aiTextureType const & type,
-    std::string const & typeName )
+static glm::vec3 to_vector3( aiVector3D const & assimpVector3D )
 {
-    std::vector< S_Texture > textures {};
-    std::string const directory { this->m_filePathModel.substr(
-        0,
-        this->m_filePathModel.find_last_of( '/' ) + 1 ) };
+    glm::vec3 glmVec3 {};
 
-    for ( unsigned int i_textureToLoad { 0u };
-          i_textureToLoad < material.GetTextureCount( type );
-          ++i_textureToLoad )
-    {
-        // Getting the texture name
-        aiString string;
-        material.GetTexture( type, i_textureToLoad, &string );
+    glmVec3.x = assimpVector3D.x;
+    glmVec3.y = assimpVector3D.y;
+    glmVec3.z = assimpVector3D.z;
 
-        auto const textureLoaded { this->get_texture_loaded(
-            std::string { string.C_Str() } ) };
-        if ( textureLoaded.has_value() )
-        {
-            textures.push_back( textureLoaded.value() );
-            continue;
-        }
-
-        // if texture hasn't been loaded already, load it
-        S_Texture texture {};
-        texture.id   = Texture::load( directory + string.C_Str() );
-        texture.type = typeName;
-        texture.path = std::string { string.C_Str() };
-        textures.push_back( texture );
-        // We have loaded the texture one time, no need to load it another time
-        this->m_texturesLoaded.push_back( texture );
-    }
-
-    return textures;
+    return glmVec3;
 }
 
-void Model::transform()
+static glm::vec2 to_vector2( aiVector3D const & assimpVector3D )
 {
-    this->m_shader.setUniform(
-        "model"s,
-        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.model ) } );
-    this->m_shader.setUniform(
-        "view"s,
-        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.view ) } );
-    this->m_shader.setUniform(
-        "projection"s,
-        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.projection ) } );
-}
+    glm::vec2 glmVec2 {};
 
-void Model::reset_space_model()
-{
-    this->m_spaceModel = glm::mat4 { 1.f };
+    glmVec2.x = assimpVector3D.x;
+    glmVec2.y = assimpVector3D.y;
+
+    return glmVec2;
 }
