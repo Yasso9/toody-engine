@@ -5,7 +5,6 @@
 #pragma GCC diagnostic ignored "-Wlanguage-extension-token"
 
 #include <SFML/Graphics.hpp>
-// #include <SFML/Mouse.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 

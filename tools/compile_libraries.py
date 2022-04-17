@@ -62,9 +62,16 @@ def compile_sqlite(objectCreatedDirectory, sqliteDirectory):
     # # Copy object file to oppropriate directory
     os.system(f"mv {sqliteObjectFileName} {objectCreatedDirectory}")
 
+def compile_imgui():
+    imGuiPath = "./external/includes/IMGUI"
+    objectPath = "./external/object"
+    os.system(f"make -C {imGuiPath}")
+    os.system(f"mv {imGuiPath}/*.o {objectPath}")
 
 if __name__ == "__main__":
-    paths = extract_arguments()
+    # paths = extract_arguments()
 
-    compile_glad(paths.objectCreated, paths.gladLibrary)
-    compile_sqlite(paths.objectCreated, paths.sqliteLibrary)
+    # compile_glad(paths.objectCreated, paths.gladLibrary)
+    # compile_sqlite(paths.objectCreated, paths.sqliteLibrary)
+
+    compile_imgui()

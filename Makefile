@@ -41,7 +41,6 @@ WARNINGS := \
 -Wno-unused \
 -Wconversion \
 -Wformat-nonliteral \
--Wundef \
 -Wformat=2 \
 -Wformat-security  \
 -Wformat-y2k \
@@ -83,6 +82,7 @@ WARNINGS := \
 ############################## Global Informations ##############################
 
 # clang
+C_COMMAND := clang
 CXX_COMMAND := clang++
 COMPILING_FLAGS := -std=c++20 -MD -O0 -g
 # -MD => Create .d files for dependencies
@@ -101,7 +101,7 @@ EXTERNAL_DIRECTORY := ./external
 # Libraries Header
 LIBRARIES_INCLUDE_PATH := $(EXTERNAL_DIRECTORY)/includes
 # .o files of libraries
-LIBRARIES_OBJECT_DIRECTORY := $(EXTERNAL_DIRECTORY)/object
+LIBRARIES_OBJECT_DIRECTORY := $(BUILD_DIRECTORY)/object_libraries
 # .a files of librairies
 ifeq ($(DETECTED_OS),Windows)
 	LIBRARIES_PATH := $(EXTERNAL_DIRECTORY)/libraries/Windows
@@ -135,12 +135,20 @@ OBJECT_PROJECT := $(addprefix $(OBJECT_DIRECTORY)/,$(subst /,-,$(OBJECT_PROJECT)
 
 
 # List of the library object that needs to be linked
-# In the form "./object_library/objectA.o" "./object_library/objectB.o"
-OBJECT_LIBRARIES := $(wildcard $(LIBRARIES_OBJECT_DIRECTORY)/*.o)
+CPP_SOURCES_LIBRARIES := $(wildcard $(LIBRARIES_INCLUDE_PATH)/*/*.cpp)
+CPP_SOURCES_LIBRARIES := $(subst $(LIBRARIES_INCLUDE_PATH)/,,$(CPP_SOURCES_LIBRARIES))
+CPP_OBJECT_LIBRARIES := $(patsubst %.cpp,%.o,$(CPP_SOURCES_LIBRARIES))
+CPP_OBJECT_LIBRARIES := $(addprefix $(LIBRARIES_OBJECT_DIRECTORY)/,$(subst /,~,$(CPP_OBJECT_LIBRARIES)))
+
+C_SOURCES_LIBRARIES := $(wildcard $(LIBRARIES_INCLUDE_PATH)/*/*.c)
+C_SOURCES_LIBRARIES := $(subst $(LIBRARIES_INCLUDE_PATH)/,,$(C_SOURCES_LIBRARIES))
+C_OBJECT_LIBRARIES := $(patsubst %.c,%.o,$(C_SOURCES_LIBRARIES))
+C_OBJECT_LIBRARIES := $(addprefix $(LIBRARIES_OBJECT_DIRECTORY)/,$(subst /,~,$(C_OBJECT_LIBRARIES)))
+
 
 # All object needed for the project to compile
 # (the project files objects + the libraries objects)
-OBJECT_ALL := $(OBJECT_PROJECT) $(OBJECT_LIBRARIES)
+OBJECT_ALL := $(OBJECT_PROJECT) $(CPP_OBJECT_LIBRARIES) $(C_OBJECT_LIBRARIES)
 
 # Dependencies (.d files) will be on the same directories
 # and have the same name than object files
@@ -153,7 +161,7 @@ DEPENDENCIES := $(patsubst %.o,%.d,$(OBJECT_PROJECT))
 
 # These commands do not represent physical files
 .PHONY: buildrun build run initialize_build \
-		clean_executable clean debug remake
+		clean_executable clean_project clean_libraries clean debug remake
 
 buildrun : build run
 
@@ -170,13 +178,18 @@ ifeq ($(DETECTED_OS),Windows)
 	cp $(DLLS_PATH)/* $(EXECUTABLE_DIRECTORY)
 endif
 	mkdir -p $(OBJECT_DIRECTORY)
+	mkdir -p $(LIBRARIES_OBJECT_DIRECTORY)
 
 clean_executable:
 	rm -rf $(EXECUTABLE)
 
-clean : clean_executable
+clean_project: clean_executable
 	rm -rf $(OBJECT_DIRECTORY)
-	rm -rf $(EXECUTABLE_DIRECTORY)
+
+clean_libraries:
+	rm -rf $(LIBRARIES_OBJECT_DIRECTORY)
+
+clean : clean_project clean_libraries
 	rm -rf $(BUILD_DIRECTORY)
 
 debug :
@@ -192,9 +205,11 @@ remake: clean buildrun
 INCLUDES := -I"$(FILES_DIRECTORY)" -I"$(LIBRARIES_INCLUDE_PATH)"
 
 LIB_FLAG_SFML := -lsfml-graphics -lsfml-system -lsfml-window
+LIB_FLAG_IMGUI := -lopengl32
 LIB_FLAG_ASSIMP := -lassimp
 LIB_FLAG_SQLITE := -lpthread -ldl
-LIBRARIES_FLAG := $(LIB_FLAG_SFML) $(LIB_FLAG_ASSIMP) $(LIB_FLAG_SQLITE)
+LIBRARIES_FLAG := $(LIB_FLAG_SFML) $(LIB_FLAG_IMGUI) \
+				  $(LIB_FLAG_ASSIMP) $(LIB_FLAG_SQLITE)
 ifeq ($(DETECTED_OS),Windows)
 	LIBRARIES := -L"$(LIBRARIES_PATH)"
 endif
@@ -208,19 +223,37 @@ LIBRARIES := $(LIBRARIES) $(LIBRARIES_FLAG)
 # set up the dependencies
 -include $(DEPENDENCIES)
 
-# Creating all the object files needed
+# Creating the object files of the project
 .SECONDEXPANSION:
 $(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%).cpp
+#	Nicer way to print the current file compiled
+	@echo "Project Compile $(subst sources/,,$<)"
 #	compilatorCommand -WarningFlags -compilerOptions -c sources/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
 	@$(CXX_COMMAND) $(WARNINGS) $(COMPILING_FLAGS) -c $< -o $@ $(INCLUDES)
-#	Nicer way to print the current file compiled
-	@echo "Compiling $(subst sources/,,$<)"
+
+# Creating object files of the cpp libraries
+.SECONDEXPANSION:
+$(CPP_OBJECT_LIBRARIES) : $(LIBRARIES_OBJECT_DIRECTORY)/%.o : $(LIBRARIES_INCLUDE_PATH)/$$(subst ~,/,%).cpp
+	@echo "C++ Library Compile $(subst external/includes/,,$<)"
+#	compilatorCommand -c filename.cpp -o filename.o -I"/Path/To/Includes"
+#   -c => Doesn't create WinMain error if there is no main in the file
+#   -o => Create custom object
+	@$(CXX_COMMAND) -c $< -o $@ $(INCLUDES)
+
+# Creating object files of the c libraries
+.SECONDEXPANSION:
+$(C_OBJECT_LIBRARIES) : $(LIBRARIES_OBJECT_DIRECTORY)/%.o : $(LIBRARIES_INCLUDE_PATH)/$$(subst ~,/,%).c
+	@echo "C Library Compile $(subst external/includes/,,$<)"
+#	compilatorCommand -c filename.cpp -o filename.o -I"/Path/To/Includes"
+#   -c => Doesn't create WinMain error if there is no main in the file
+#   -o => Create custom object
+	@$(C_COMMAND) -c $< -o $@ $(INCLUDES)
 
 # Create the executable by Linking all the object files and the SFML together
 $(EXECUTABLE) : $(OBJECT_ALL)
-#	compilator++ sub_directory_A_filename_A.o sub_directory_B_filename_B.o etc... -o executable -L"/Path/To/Library" -libraries_flags
+	@echo "Building $@"
+#	compilator++ -linkingOptions sub_directory_A_filename_A.o sub_directory_B_filename_B.o etc... -o executable -L"/Path/To/Library" -libraries_flags
 #   -o => choose custom object
 	@$(CXX_COMMAND) $(LINKING_FLAGS) $^ -o $@ $(LIBRARIES)
-	@echo "Building $@"
