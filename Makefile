@@ -84,8 +84,8 @@ WARNINGS := \
 # clang
 C_COMMAND := clang
 CXX_COMMAND := clang++
-COMPILING_FLAGS := -std=c++20 -MD -O0 -g
-# -MD => Create .d files for dependencies
+COMPILING_FLAGS := -std=c++20 -MMD -O0 -g
+# -MMD => Create .d files for dependencies of users files only
 # -g => Generate debug information
 # -O0 => No optmization, faster compilation time, better for debugging builds
 LINKING_FLAGS :=
