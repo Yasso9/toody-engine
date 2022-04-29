@@ -20,7 +20,8 @@ unsigned int Shape::Data::get_data_per_point_sum() const
 }
 unsigned int Shape::Data::get_number_of_element() const
 {
-    return this->vertices.size() / this->get_data_per_point_sum();
+    return static_cast< unsigned int >( this->vertices.size() )
+           / this->get_data_per_point_sum();
 }
 
 Shape::Shape()
