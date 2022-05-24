@@ -9,6 +9,7 @@
 
 GraphicState::GraphicState()
   : State( State::E_List::Graphics ),
+    m_camera( Camera::E_Type::Game ),
     // m_model( "C:/Users/Turki/Downloads/CAR/AMGGT.obj" )
     // m_model( "C:/Users/Turki/Downloads/GUN/acp smith.obj" )
     // m_model( "C:/Users/Turki/Downloads/BED/black_bed.obj" )

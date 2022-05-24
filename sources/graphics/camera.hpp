@@ -6,18 +6,25 @@
 class Camera
 {
   public:
+    /// @brief Change the possibilities that the camera can have
+    enum class E_Type
+    {
+        Game = 0,
+        Editor,
+    };
+
     /// @brief Defines several possible options for camera movement.
     enum class E_Movement
     {
-        Forward = 0,
-        Backward,
+        Up = 0,
+        Down,
         Left,
         Right
     };
 
-    Camera();
+    Camera( E_Type const & type );
 
-    float get_zoom() const;
+    float get_field_of_view() const;
 
     glm::vec3 get_normalized_direction() const;
     /// @brief Return the target's position (to where the camera is) in space
@@ -32,9 +39,10 @@ class Camera
     void set_target_position( glm::vec3 const & targetPosition );
 
     void move( Camera::E_Movement const & direction, float const & deltaTime );
-
-    void rotate( sf::Vector2f const & angle, float const & deltaTime );
-
+    void rotate( glm::vec3 const & angle, float const & deltaTime );
+    void rotate_from_target( glm::vec3 const & target,
+                             sf::Vector2f const & angle,
+                             float const & deltaTime );
     void zoom( float const & factor, float const & deltaTime );
 
     void update_inputs( float const & deltaTime );
@@ -45,22 +53,18 @@ class Camera
     /// @brief Direction to what the camera should aim
     glm::vec3 m_direction;
 
-    /// @brief Y Axis of the camera
-    glm::vec3 m_upAxis;
-    /// @brief X Axis of the camera
-    glm::vec3 m_rightAxis;
+    /// @brief Type of the camera. If it should be used in a game or in a editor
+    E_Type m_type;
 
     float m_movementSpeed;
-    float m_zoom;
+    float m_fieldOfView;
 
-    /// @brief Movement value for X axis rotation
-    float m_pitch;
-    /// @brief Movement value for Y axis rotation
-    float m_yaw;
+    glm::vec3 get_x_axis() const;
+    glm::vec3 get_y_axis() const;
 
-    /// @brief calculates the front vector from the Camera's (updated) Euler Angles
-    void update_camera_vectors();
+    void update_keyboard_inputs_game( float const & deltaTime );
+    void update_mouse_inputs_game( float const & deltaTime );
 
-    void update_keyboard_inputs( float const & deltaTime );
-    void update_mouse_inputs( float const & deltaTime );
+    void update_keyboard_inputs_editor( float const & deltaTime );
+    void update_mouse_inputs_editor( float const & deltaTime );
 };

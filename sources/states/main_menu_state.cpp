@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "main/imgui.hpp"
 #include "main/resources.hpp"
+#include "tools/imgui.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 
@@ -28,7 +28,11 @@ void MainMenuState::extra_events()
     }
 }
 
-void MainMenuState::update() {}
+void MainMenuState::update()
+{
+    bool showDemo { true };
+    ImGui::ShowDemoWindow( &showDemo );
+}
 
 void MainMenuState::render() const
 {

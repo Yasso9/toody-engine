@@ -92,6 +92,8 @@
         "cinttypes": "cpp",
         "typeindex": "cpp",
         "variant": "cpp",
-        "*.tpp": "cpp"
+        "*.tpp": "cpp",
+        "eulerangles": "cpp",
+        "numbers": "cpp"
     }
 }

@@ -4,6 +4,10 @@
 
 #include "tools/string.hpp"
 
+/**
+ * @brief Create an instance of this class at the begginning
+ *        of a function to benchmark it
+ */
 class Timer final
 {
   public:

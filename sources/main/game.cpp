@@ -15,7 +15,7 @@
 #include "states/main_menu_state.hpp"
 #include "states/test.hpp"
 
-#include "main/imgui.hpp"
+#include "tools/imgui.hpp"
 
 /**
  * @brief Throw an exception if something is not available
@@ -130,7 +130,12 @@ void Game::render()
     Window::get_instance().clear_all( sf::Color { 40, 40, 40 } );
 
     this->m_state->render_all();
+
+    // We render after our state render, so the imGui's windows
+    // will be drawn if we have a background
     ImGui::SFML::Render( Window::get_instance() );
+
+    // Each draw is a chance that we have an error with OpenGL
     gl::check_error();
 
     Window::get_instance().display();

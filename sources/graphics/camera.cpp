@@ -4,6 +4,8 @@
 #include <iostream>
 
 #include "main/window.hpp"
+#include "tools/assertion.hpp"
+#include "tools/maths.hpp"
 
 // Default camera values
 // const float YAW = -90.0f;
@@ -12,25 +14,21 @@
 // const float SENSITIVITY = 0.1f;
 // const float ZOOM = 45.0f;
 
-Camera::Camera()
+Camera::Camera( E_Type const & type )
+  : m_position( glm::vec3 { 0.0f, 0.0f, 3.0f } ),
+    m_type( type ),
+    m_fieldOfView( 45.f )
 {
-    // Initialize the position of the camera
-    this->m_position = glm::vec3 { 0.0f, 0.0f, 3.0f };
     // We start by looking at the center
     this->set_target_position( glm::vec3 { 0.f, 0.f, 0.f } );
 
     // Variable initialization
-    this->m_zoom          = 45.f;
     this->m_movementSpeed = 2.5f;
-    this->m_pitch         = 2.5f;
-    this->m_yaw           = -90.f;
-
-    this->update_camera_vectors();
 }
 
-float Camera::get_zoom() const
+float Camera::get_field_of_view() const
 {
-    return this->m_zoom;
+    return this->m_fieldOfView;
 }
 
 glm::vec3 Camera::get_normalized_direction() const
@@ -45,7 +43,7 @@ glm::vec3 Camera::get_target_position() const
 
 glm::mat4 Camera::get_projection() const
 {
-    float const fieldOfView { glm::radians( this->get_zoom() ) };
+    float const fieldOfView { glm::radians( this->get_field_of_view() ) };
     float const screenRatio { Window::get_instance().get_aspect_ratio() };
     float const nearDistanceFromCamera { 0.1f };
     float const farDistanceFromCamera { 100.f };
@@ -58,14 +56,21 @@ glm::mat4 Camera::get_projection() const
 
 glm::mat4 Camera::get_view() const
 {
+    // auto view = glm::lookAt( this->m_position,
+    //                          this->get_target_position(),
+    //                          this->m_upAxis );
+    // std::cout << "View : " << view << std::endl;
+
+    constexpr glm::vec3 const pureYAxis { 0.0f, 1.0f, 0.0f };
+
     return glm::lookAt( this->m_position,
                         this->get_target_position(),
-                        this->m_upAxis );
+                        pureYAxis );
 }
 
 void Camera::set_target_position( glm::vec3 const & targetPosition )
 {
-    this->m_direction = targetPosition - this->m_position;
+    this->m_direction = glm::normalize( targetPosition - this->m_position );
 }
 
 void Camera::move( Camera::E_Movement const & direction,
@@ -75,44 +80,50 @@ void Camera::move( Camera::E_Movement const & direction,
 
     switch ( direction )
     {
-    case Camera::E_Movement::Forward :
-        this->m_position += this->m_upAxis * velocity;
-        // this->m_target += this->m_upAxis * velocity;
+    case Camera::E_Movement::Up :
+        this->m_position += this->get_y_axis() * velocity;
         break;
-    case Camera::E_Movement::Backward :
-        this->m_position -= this->m_upAxis * velocity;
-        // this->m_target -= this->m_upAxis * velocity;
+    case Camera::E_Movement::Down :
+        this->m_position -= this->get_y_axis() * velocity;
         break;
     case Camera::E_Movement::Left :
-        this->m_position -= this->m_rightAxis * velocity;
-        // this->m_target -= this->m_rightAxis * velocity;
+        this->m_position -= this->get_x_axis() * velocity;
         break;
     case Camera::E_Movement::Right :
-        this->m_position += this->m_rightAxis * velocity;
-        // this->m_target += this->m_rightAxis * velocity;
+        this->m_position += this->get_x_axis() * velocity;
         break;
     default :
         break;
     }
-
-    this->update_camera_vectors();
 }
 
-void Camera::rotate( sf::Vector2f const & angle, float const & deltaTime )
+void Camera::rotate( glm::vec3 const & angle, float const & deltaTime )
 {
-    this->m_yaw += angle.x * deltaTime;
-    this->m_pitch += angle.y * deltaTime;
+    glm::vec3 const trueAngle { angle * deltaTime * 0.05f };
+    std::cout << "angle : " << angle << std::endl;
+    std::cout << "trueAngle : " << trueAngle << std::endl;
 
-    if ( this->m_pitch > 89.0f )
-    {
-        this->m_pitch = 89.0f;
-    }
-    if ( this->m_pitch < -89.0f )
-    {
-        this->m_pitch = -89.0f;
-    }
+    std::cout << "direction before" << this->m_direction << std::endl;
 
-    this->update_camera_vectors();
+    math::Vector3D direction { this->m_direction.x,
+                               this->m_direction.y,
+                               this->m_direction.z };
+
+    direction.rotate( trueAngle.x, math::Vector3D { 1.f, 0.f, 0.f } );
+    direction.rotate( trueAngle.y, math::Vector3D { 0.f, 1.f, 0.f } );
+    direction.rotate( trueAngle.z, math::Vector3D { 0.f, 0.f, 1.f } );
+
+    this->m_direction = glm::vec3 { direction.x, direction.y, direction.z };
+
+    std::cout << "direction after" << this->m_direction << std::endl;
+}
+
+void rotate_from_target( glm::vec3 const & target, sf::Vector2f const & angle,
+                         float const & deltaTime )
+{
+    ( void )target;
+    ( void )angle;
+    ( void )deltaTime;
 }
 
 void Camera::zoom( float const & factor, float const & deltaTime )
@@ -120,47 +131,47 @@ void Camera::zoom( float const & factor, float const & deltaTime )
     float const velocity { this->m_movementSpeed * deltaTime };
 
     this->m_position += factor * ( this->m_direction * velocity );
-
-    this->update_camera_vectors();
 }
 
 void Camera::update_inputs( float const & deltaTime )
 {
-    this->update_keyboard_inputs( deltaTime );
-    this->update_mouse_inputs( deltaTime );
+    switch ( this->m_type )
+    {
+    case E_Type::Game :
+        this->update_keyboard_inputs_game( deltaTime );
+        this->update_mouse_inputs_game( deltaTime );
+        break;
+    case E_Type::Editor :
+        this->update_keyboard_inputs_editor( deltaTime );
+        this->update_mouse_inputs_editor( deltaTime );
+        break;
+    default :
+        ASSERTION( false, "Enum value unknown"s );
+        break;
+    }
 }
 
-void Camera::update_camera_vectors()
+glm::vec3 Camera::get_x_axis() const
 {
-    this->m_direction.x = std::cos( glm::radians( this->m_pitch ) )
-                          * std::cos( glm::radians( this->m_yaw ) );
-    this->m_direction.y = std::sin( glm::radians( this->m_pitch ) );
-    this->m_direction.z = std::cos( glm::radians( this->m_pitch ) )
-                          * std::sin( glm::radians( this->m_yaw ) );
-
-    this->m_direction = glm::normalize( this->m_direction );
-
     constexpr glm::vec3 const pureYAxis { 0.0f, 1.0f, 0.0f };
-
-    // Update the up and right axis
-    this->m_rightAxis =
-        glm::normalize( glm::cross( this->m_direction, pureYAxis ) );
-    this->m_upAxis =
-        glm::normalize( glm::cross( this->m_rightAxis, this->m_direction ) );
-
-    // std::cout << "Right Axis : " << this->m_rightAxis << std::endl;
-    // std::cout << "Up Axis : " << this->m_upAxis << std::endl;
+    return glm::normalize( glm::cross( this->m_direction, pureYAxis ) );
 }
 
-void Camera::update_keyboard_inputs( float const & deltaTime )
+glm::vec3 Camera::get_y_axis() const
+{
+    return glm::normalize(
+        glm::cross( this->get_x_axis(), this->m_direction ) );
+}
+
+void Camera::update_keyboard_inputs_game( float const & deltaTime )
 {
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
     {
-        this->move( Camera::E_Movement::Forward, deltaTime );
+        this->move( Camera::E_Movement::Up, deltaTime );
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
     {
-        this->move( Camera::E_Movement::Backward, deltaTime );
+        this->move( Camera::E_Movement::Down, deltaTime );
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Q ) )
     {
@@ -175,27 +186,37 @@ void Camera::update_keyboard_inputs( float const & deltaTime )
 
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Up ) )
     {
-        this->rotate( sf::Vector2f { 0.f, 1.f } * rotationSensivity,
+        this->rotate( glm::vec3 { 1.f, 0.f, 0.f } * rotationSensivity,
                       deltaTime );
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) )
     {
-        this->rotate( sf::Vector2f { 0.f, -1.f } * rotationSensivity,
+        this->rotate( glm::vec3 { -1.f, 0.f, 0.f } * rotationSensivity,
                       deltaTime );
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) )
     {
-        this->rotate( sf::Vector2f { -1.f, 0.f } * rotationSensivity,
+        this->rotate( glm::vec3 { -1.f, 0.f, 0.f } * rotationSensivity,
                       deltaTime );
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Right ) )
     {
-        this->rotate( sf::Vector2f { 1.f, 0.f } * rotationSensivity,
+        this->rotate( glm::vec3 { 1.f, 0.f, 0.f } * rotationSensivity,
+                      deltaTime );
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::B ) )
+    {
+        this->rotate( glm::vec3 { 0.f, 0.f, -1.f } * rotationSensivity,
+                      deltaTime );
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::N ) )
+    {
+        this->rotate( glm::vec3 { 1.f, 0.f, 1.f } * rotationSensivity,
                       deltaTime );
     }
 }
 
-void Camera::update_mouse_inputs( float const & deltaTime )
+void Camera::update_mouse_inputs_game( float const & deltaTime )
 {
     sf::Vector2f const windowCenter {
         Window::get_instance().get_center_position_f()
@@ -203,9 +224,47 @@ void Camera::update_mouse_inputs( float const & deltaTime )
     sf::Vector2f const currentMousePosition { sf::Mouse::getPosition(
         Window::get_instance() ) };
 
-    sf::Vector2f offset {};
+    if ( windowCenter == currentMousePosition )
+    {
+        return;
+    }
+
+    glm::vec3 offset {};
     offset.x = currentMousePosition.x - windowCenter.x;
     offset.y = windowCenter.y - currentMousePosition.y;
+    offset.z = 0.f;
+
+    // Reset Mouse Position
+    sf::Mouse::setPosition( static_cast< sf::Vector2i >( windowCenter ),
+                            Window::get_instance() );
+
+    float const sensitivity = 1.f;
+    offset *= sensitivity;
+
+    this->rotate( offset, deltaTime );
+}
+
+void Camera::update_keyboard_inputs_editor( float const & deltaTime )
+{
+    ( void )deltaTime;
+}
+void Camera::update_mouse_inputs_editor( float const & deltaTime )
+{
+    sf::Vector2f const windowCenter {
+        Window::get_instance().get_center_position_f()
+    };
+    sf::Vector2f const currentMousePosition { sf::Mouse::getPosition(
+        Window::get_instance() ) };
+
+    if ( windowCenter == currentMousePosition )
+    {
+        return;
+    }
+
+    glm::vec3 offset {};
+    offset.x = currentMousePosition.x - windowCenter.x;
+    offset.y = windowCenter.y - currentMousePosition.y;
+    offset.z = 0.f;
 
     // Reset Mouse Position
     sf::Mouse::setPosition( static_cast< sf::Vector2i >( windowCenter ),
