@@ -84,8 +84,8 @@ WARNINGS := \
 # clang
 C_COMMAND := clang
 CXX_COMMAND := clang++
-COMPILING_FLAGS := -std=c++20 -MD -O0 -g
-# -MD => Create .d files for dependencies
+COMPILING_FLAGS := -std=c++20 -MMD -O0 -g
+# -MMD => Create .d files for dependencies of users files only
 # -g => Generate debug information
 # -O0 => No optmization, faster compilation time, better for debugging builds
 LINKING_FLAGS :=
@@ -127,6 +127,22 @@ SOURCES_FILES := $(SOURCES_FILES) $(wildcard $(FILES_DIRECTORY)/*/*.cpp)
 # Erase files directory => "sub_directory/filename.cpp"
 SOURCES_FILES := $(subst $(FILES_DIRECTORY)/,,$(SOURCES_FILES))
 
+# List of all the object files
+OBJECT_REAL_LIST := $(wildcard $(OBJECT_DIRECTORY)/*.o)
+# Remove the directory to keep only the name
+OBJECT_REAL_LIST := $(subst $(OBJECT_DIRECTORY)/,,$(OBJECT_REAL_LIST))
+# Remove extension
+OBJECT_REAL_LIST := $(basename $(OBJECT_REAL_LIST))
+# Transform sources files name to object files name
+SOURCES_REAL_LIST := $(subst /,-,$(SOURCES_FILES))
+# Remove extension
+SOURCES_REAL_LIST := $(basename $(SOURCES_REAL_LIST))
+# Get All the object files name that are not in the sources file, they must be deleted
+OUTDATED_OBJECT_FILES := $(filter-out $(SOURCES_REAL_LIST),$(OBJECT_REAL_LIST))
+OUTDATED_OBJECT_FILES := $(addprefix $(OBJECT_DIRECTORY)/,$(OUTDATED_OBJECT_FILES))
+OUTDATED_OBJECT_FILES := $(addsuffix .o,$(OUTDATED_OBJECT_FILES))
+OUTDATED_DEPS_FILES := $(patsubst %.o,%.d,$(OUTDATED_OBJECT_FILES))
+
 # Object files of the all cpp files of the project
 # sub_directory/filename.cpp => sub_directory/filename.o
 OBJECT_PROJECT := $(patsubst %.cpp,%.o,$(SOURCES_FILES))
@@ -161,16 +177,16 @@ DEPENDENCIES := $(patsubst %.o,%.d,$(OBJECT_PROJECT))
 
 # These commands do not represent physical files
 .PHONY: buildrun build run initialize_build \
-		clean_executable clean_project clean_libraries clean debug remake
+		clean_executable clean_project clean_libraries clean debug remake nothing
 
 buildrun : build run
 
-build : clean_executable initialize_build $(OBJECT_ALL) $(EXECUTABLE)
+build : initialize_build $(OBJECT_ALL) $(EXECUTABLE)
 
 run :
 	$(EXECUTABLE)
 
-initialize_build:
+initialize_build: clean_executable
 	mkdir -p $(BUILD_DIRECTORY)
 	mkdir -p $(EXECUTABLE_DIRECTORY)
 # Use the DLL's only on windows
@@ -179,6 +195,9 @@ ifeq ($(DETECTED_OS),Windows)
 endif
 	mkdir -p $(OBJECT_DIRECTORY)
 	mkdir -p $(LIBRARIES_OBJECT_DIRECTORY)
+
+	rm -f $(OUTDATED_OBJECT_FILES)
+	rm -f $(OUTDATED_DEPS_FILES)
 
 clean_executable:
 	rm -rf $(EXECUTABLE)
@@ -197,6 +216,8 @@ debug :
 
 remake: clean buildrun
 
+nothing:
+
 
 
 
@@ -205,7 +226,11 @@ remake: clean buildrun
 INCLUDES := -I"$(FILES_DIRECTORY)" -I"$(LIBRARIES_INCLUDE_PATH)"
 
 LIB_FLAG_SFML := -lsfml-graphics -lsfml-system -lsfml-window
-LIB_FLAG_IMGUI := -lopengl32
+ifeq ($(DETECTED_OS),Windows)
+	LIB_FLAG_IMGUI := -lopengl32
+else # Linux
+	LIB_FLAG_IMGUI := -lGL -ldl
+endif
 LIB_FLAG_ASSIMP := -lassimp
 LIB_FLAG_SQLITE := -lpthread -ldl
 LIBRARIES_FLAG := $(LIB_FLAG_SFML) $(LIB_FLAG_IMGUI) \

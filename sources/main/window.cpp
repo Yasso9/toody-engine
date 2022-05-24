@@ -87,7 +87,7 @@ void Window::clear_all( sf::Color const & backgroundColor )
 void Window::gl_draw_elements( unsigned int const & vertexArrayObject,
                                GLenum const & primitiveType,
                                GLenum const & dataType,
-                               unsigned int const & elementsSize ) const
+                               std::size_t const & elementsSize ) const
 {
     glBindVertexArray( vertexArrayObject );
     // enable openGL Z buffer

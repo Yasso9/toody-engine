@@ -29,7 +29,7 @@ class Window final : public sf::RenderWindow,
     void gl_draw_elements( unsigned int const & vertexArrayObject,
                            GLenum const & primitiveType,
                            GLenum const & dataType,
-                           unsigned int const & elementsSize ) const;
+                           std::size_t const & elementsSize ) const;
     void gl_draw_arrays( unsigned int const & vertexArrayObject,
                          GLenum const & primitiveType,
                          unsigned int const & arraySize ) const;
