@@ -15,6 +15,7 @@ namespace tools
         std::string databases( std::string const & fileName = ""s );
     } // namespace get_path
 
+    // TYPO : remove this function, it's already in maths.hpp
     /**
      * @brief Check if a vector is between the position and position + size
      */

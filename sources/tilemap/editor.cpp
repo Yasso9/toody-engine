@@ -7,6 +7,10 @@
 
 #include "main/resources.hpp"
 #include "tools/imgui.hpp"
+#include "tools/maths.hpp"
+
+static constexpr unsigned int COLOR_RANGE { 255u };
+static constexpr float GRID_STEP { 32.0f };
 
 uint32_t to_integer_imgui_color( sf::Color const & color )
 {
@@ -15,8 +19,6 @@ uint32_t to_integer_imgui_color( sf::Color const & color )
            | ( static_cast< ImU32 >( color.g ) << 8 )
            | ( static_cast< ImU32 >( color.r ) << 0 );
 }
-
-static constexpr unsigned int COLOR_RANGE { 255u };
 
 void sfml_to_table_color( sf::Color const & sfmlColor, float tableColor[4] )
 {
@@ -57,9 +59,9 @@ void TileMapEditor::update()
 
         ImGui::ColorEdit4( "Color Edit", this->m_gridColorTable );
 
-        sf::Vector2f tilemapPosition { ImGui::GetCursorScreenPos() };
-        sf::Vector2f tilemapSize { tilemapTexture.getSize() };
-        sf::Vector2f tilemapEndPosition { tilemapPosition + tilemapSize };
+        sf::Vector2f const tilemapPosition { ImGui::GetCursorScreenPos() };
+        sf::Vector2f const tilemapSize { tilemapTexture.getSize() };
+        sf::Vector2f const tilemapEndPosition { tilemapPosition + tilemapSize };
 
         ImDrawList * drawList { ImGui::GetWindowDrawList() };
 
@@ -76,7 +78,6 @@ void TileMapEditor::update()
                                to_integer_imgui_color( table_to_sfml_color(
                                    this->m_gridColorTable ) ) );
 
-            constexpr float GRID_STEP = 32.0f;
             // Horizontal lines of the grid
             for ( float x = fmodf( scrolling.x, GRID_STEP ); x < tilemapSize.x;
                   x += GRID_STEP )
@@ -99,6 +100,66 @@ void TileMapEditor::update()
             }
         }
         // drawList->PopClipRect();
+
+        // Selection square
+        bool isInSelection { false };
+        sf::Vector2f const mousePosition { ImGui::GetMousePos() };
+        if ( ImGui::IsWindowFocused() && ImGui::IsWindowHovered()
+             && math::Vector2D { ImGui::GetMousePos() }.is_contained(
+                 tilemapPosition,
+                 tilemapSize ) )
+        {
+            isInSelection = true;
+
+            // Calculate the position of the selection rectangle
+
+            sf::Vector2f selectionTilePosition {};
+            selectionTilePosition.x = std::floor(
+                ( mousePosition.x - tilemapPosition.x ) / GRID_STEP );
+            selectionTilePosition.y = std::floor(
+                ( mousePosition.y - tilemapPosition.y ) / GRID_STEP );
+
+            sf::Vector2f maxNumberOfTile {};
+            maxNumberOfTile.x = std::floor(
+                ( tilemapEndPosition.x - tilemapPosition.x ) / GRID_STEP );
+            maxNumberOfTile.y = std::floor(
+                ( tilemapEndPosition.y - tilemapPosition.y ) / GRID_STEP );
+
+            int tileSelected { static_cast< int >(
+                selectionTilePosition.x
+                + selectionTilePosition.y * maxNumberOfTile.x ) };
+
+            // TYPO ASSERT that tileSelected is >0 and <(maxNumberOfTile.x * maxNumberOfTile.y)
+
+            // Calculate the position of the selection rectangle
+            sf::Vector2f selectionRectPosition {
+                selectionTilePosition * sf::Vector2f {GRID_STEP, GRID_STEP}
+                + tilemapPosition
+            };
+
+            // Selection Rectangle
+            drawList->AddRectFilled(
+                selectionRectPosition,
+                selectionRectPosition + sf::Vector2f { GRID_STEP, GRID_STEP },
+                to_integer_imgui_color(
+                    table_to_sfml_color( this->m_gridColorTable ) ) );
+
+            std::stringstream outputSelection {};
+            outputSelection << "Selection Rect : " << selectionRectPosition
+                            << "\n";
+            outputSelection << "Selection Tile : " << selectionTilePosition
+                            << "\n";
+            outputSelection << "Max Tile : " << maxNumberOfTile << "\n";
+            outputSelection << "Tile Selected : " << tileSelected << "\n";
+            ImGui::Text( "%s", outputSelection.str().c_str() );
+        }
+        std::stringstream output {};
+        output << "Mouse Position : " << mousePosition << "\n";
+        output << "Tilemap Position : " << tilemapPosition << "\n";
+        output << "Tilemap Size : " << tilemapSize << "\n";
+        output << "Is In Selection ? : " << std::boolalpha << isInSelection
+               << "\n";
+        ImGui::Text( "%s", output.str().c_str() );
 
         ImGui::End();
     }

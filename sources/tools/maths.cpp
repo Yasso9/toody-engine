@@ -27,11 +27,27 @@ namespace math
     }
 
     /* ************************************************************************************** */
+    /* ***********************************  Rectangle  ***************************************** */
+    /* ************************************************************************************** */
+
+    Rectangle::Rectangle( Vector2D const & aPosition, Vector2D const & aSize )
+      : position( aPosition ), size( aSize )
+    {}
+    Rectangle::Rectangle( float const & x, float const & y, float const & width,
+                          float const & height )
+      : position( x, y ), size( width, height )
+    {}
+
+    /* ************************************************************************************** */
     /* ***********************************  VECTOR  ***************************************** */
     /* ************************************************************************************** */
 
     Vector2D::Vector2D( float const & xAxisValue, float const & yAxisValue )
       : x( xAxisValue ), y( yAxisValue )
+    {}
+
+    Vector2D::Vector2D( sf::Vector2f const & sfmlVector )
+      : x( sfmlVector.x ), y( sfmlVector.y )
     {}
 
     float Vector2D::operator[]( std::size_t index ) const
@@ -51,6 +67,23 @@ namespace math
 
         // TYPO must return a falsy variable
         return this->x;
+    }
+
+    bool Vector2D::is_contained( Rectangle const & rectangle )
+    {
+        return math::is_contained( *this, rectangle.position, rectangle.size );
+    }
+    bool Vector2D::is_contained( Vector2D const & position,
+                                 Vector2D const & size )
+    {
+        return math::is_contained( *this, position, size );
+    }
+
+    bool is_contained( Vector2D const & value, Vector2D const & position,
+                       Vector2D const & size )
+    {
+        return ( value.x >= position.x && value.x < position.x + size.x
+                 && value.y >= position.y && value.y < position.y + size.y );
     }
 
     /* ************************************************************************************** */
