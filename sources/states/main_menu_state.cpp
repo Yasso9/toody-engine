@@ -28,11 +28,7 @@ void MainMenuState::extra_events()
     }
 }
 
-void MainMenuState::update()
-{
-    bool showDemo { true };
-    ImGui::ShowDemoWindow( &showDemo );
-}
+void MainMenuState::update() {}
 
 void MainMenuState::render() const
 {

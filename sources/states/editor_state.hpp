@@ -3,6 +3,7 @@
 #include "states/state.hpp"
 
 #include "output_info/information.hpp"
+#include "tilemap/editor.hpp"
 #include "tilemap/tilemap.hpp"
 #include "tilemap/tileset.hpp"
 
@@ -10,40 +11,22 @@ class EditorState final : public State
 {
   public:
     EditorState();
+    ~EditorState() = default;
+
+    void extra_events() override;
 
     void update() override;
     void render() const override;
 
   private:
-    enum Type
-    {
-        Normal = 0,
-        Selection,
-        Colision
-    };
+    // EditorMap m_tilemap;
+    // Tileset m_tileset;
+    TileMapEditor m_tilemapEditor;
 
-    EditorMap m_tilemap;
-    Tileset m_tileset;
+    sf::View m_view;
 
-    ButtonArray m_buttons;
-    Type m_type;
-
-    sf::View m_view; // à mettre dans la classe tilemap
-
-    // Selection
-    // sf::RectangleShape m_selectionRect {};
-    // std::vector<int> m_tableSelection {};
+    void init_map();
 
     void keyboard_pressed( sf::Event event ) override;
     void mouse_scroll( float const & deltaScroll ) override;
-
-    void init_map();
-    void init_selection_rect();
-
-    /* Fonction qui permet de séparer les actions de l'utilisateur */
-    void update_normal_mode();
-    /* Fonction qui permet de séparer les actions de l'utilisateur */
-    void update_selection_mode();
-    /* Fonction qui permet de séparer les actions de l'utilisateur */
-    void update_colision_mode();
 };

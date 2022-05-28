@@ -9,9 +9,8 @@
 
 TileMap::TileMap( sf::Texture const & texture ) : m_texture( texture )
 {
-    json const completeResult = db::request( R"(
-    SELECT table_tilemap FROM tilemap;
-    )"s );
+    json const completeResult { db::request(
+        "SELECT table_tilemap FROM tilemap;"s ) };
 
     json const singleValue { json::parse(
         std::string { completeResult[0]["table_tilemap"] } ) };

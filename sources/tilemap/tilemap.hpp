@@ -19,6 +19,7 @@ class TileMap : public sf::Drawable,
     sf::Vector2f get_size() const;
 
   protected:
+    /// @brief texture used to draw the tilemap
     sf::Texture const m_texture {};
     /// @brief table[depth][row][line]
     std::vector< std::vector< std::vector< sf::VertexArray > > > m_vertices {};
