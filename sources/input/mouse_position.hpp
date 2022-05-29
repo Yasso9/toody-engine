@@ -1,6 +1,6 @@
 #pragma once
 
-#include "graphics/sfml.hpp"
+#include "graphics2D/sfml.hpp"
 
 class MousePosition
 {

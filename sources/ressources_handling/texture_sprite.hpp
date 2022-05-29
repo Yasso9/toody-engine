@@ -1,7 +1,7 @@
 #pragma once
 
 #include "entity/player.hpp"
-#include "graphics/sfml.hpp"
+#include "graphics2D/sfml.hpp"
 #include "tools/tools.hpp"
 
 class TextureSprite

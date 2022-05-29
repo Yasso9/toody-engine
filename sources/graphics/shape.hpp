@@ -3,10 +3,10 @@
 #include <vector>
 
 #include "graphics/openGL.hpp"
-#include "graphics/sfml.hpp"
 #include "graphics/shader.hpp"
 #include "graphics/texture.hpp"
 #include "graphics/transformable.hpp"
+#include "graphics2D/sfml.hpp"
 
 class Shape final : public Transformable
 {

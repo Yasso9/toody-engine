@@ -3,12 +3,13 @@
 #include "tools/global_variable.hpp"
 #include "tools/tools.hpp"
 
-Tileset::Tileset( sf::Texture const & texture ) : m_image( texture ), m_cursor()
+TilesetTYPO::TilesetTYPO( sf::Texture const & texture )
+  : m_image( texture ), m_cursor()
 {
     this->setPosition( 0.f, 0.f );
 }
 
-sf::Vector2f Tileset::get_size() const
+sf::Vector2f TilesetTYPO::get_size() const
 {
     sf::Vector2f const textureSize {
         static_cast< float >( this->m_image.getTextureRect().width ),
@@ -18,27 +19,27 @@ sf::Vector2f Tileset::get_size() const
     return textureSize * this->getScale();
 }
 
-void Tileset::set_size( sf::Vector2f const & size )
+void TilesetTYPO::set_size( sf::Vector2f const & size )
 {
     this->setScale( size / this->get_size() );
 }
 
-void Tileset::set_size( float const & sizeX, float const & sizeY )
+void TilesetTYPO::set_size( float const & sizeX, float const & sizeY )
 {
     this->set_size( sf::Vector2f { sizeX, sizeY } );
 }
 
-int Tileset::get_selected_tile() const
+int TilesetTYPO::get_selected_tile() const
 {
     return this->m_tileSelected;
 }
 
-void Tileset::switch_print()
+void TilesetTYPO::switch_print()
 {
     this->m_isPrint = ! this->m_isPrint;
 }
 
-void Tileset::update_cursor( sf::Vector2f const & position )
+void TilesetTYPO::update_cursor( sf::Vector2f const & position )
 {
     sf::Vector2f const cursorPosition { ( position - this->getPosition() )
                                         - ( position % ::g_tileSize_u )
@@ -48,12 +49,13 @@ void Tileset::update_cursor( sf::Vector2f const & position )
                            sfpp::make_vector( ::g_tileSize_u ) );
 }
 
-bool Tileset::include( sf::Vector2f const & position ) const
+bool TilesetTYPO::include( sf::Vector2f const & position ) const
 {
     return tools::is_in_part( position, this->getPosition(), this->get_size() );
 }
 
-sf::Vector2u Tileset::get_tile_position( sf::Vector2f const & position ) const
+sf::Vector2u TilesetTYPO::get_tile_position(
+    sf::Vector2f const & position ) const
 {
     // Position compared to the tilemap Orign
     sf::Vector2f const positionComparedToTilemap { position
@@ -63,8 +65,8 @@ sf::Vector2u Tileset::get_tile_position( sf::Vector2f const & position ) const
     return tilePosition;
 }
 
-void Tileset::update( sf::Vector2f const & mousePosition,
-                      bool const & buttonIsPressed )
+void TilesetTYPO::update( sf::Vector2f const & mousePosition,
+                          bool const & buttonIsPressed )
 {
     if ( ! this->m_isPrint || ! this->include( mousePosition ) )
     {
@@ -85,7 +87,8 @@ void Tileset::update( sf::Vector2f const & mousePosition,
     }
 }
 
-void Tileset::draw( sf::RenderTarget & target, sf::RenderStates states ) const
+void TilesetTYPO::draw( sf::RenderTarget & target,
+                        sf::RenderStates states ) const
 {
     states.transform *= this->getTransform();
 

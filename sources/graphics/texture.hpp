@@ -1,7 +1,7 @@
 #pragma once
 
 #include "3D_model/assimp.hpp"
-#include "graphics/sfml.hpp"
+#include "graphics2D/sfml.hpp"
 #include "tools/string.hpp"
 
 // struct Texture

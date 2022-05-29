@@ -2,12 +2,12 @@
 
 #include "output_info/information.hpp"
 
-class Tileset final : public sf::Drawable,
-                      public sf::Transformable
+class TilesetTYPO final : public sf::Drawable,
+                          public sf::Transformable
 {
   public:
-    Tileset( sf::Texture const & texture );
-    virtual ~Tileset() = default;
+    TilesetTYPO( sf::Texture const & texture );
+    virtual ~TilesetTYPO() = default;
 
     sf::Vector2f get_size() const;
     void set_size( sf::Vector2f const & size );

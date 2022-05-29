@@ -3,9 +3,9 @@
 #include <array>
 #include <cmath>
 
-#include <graphics/sfml.hpp>
-
+#include "graphics2D/sfml.hpp"
 #include "tools/assertion.hpp"
+#include "tools/imgui.hpp"
 
 namespace math
 {
@@ -24,16 +24,38 @@ namespace math
         float x { 0.f };
         float y { 0.f };
 
-        Vector2D() = default;
-        Vector2D( float const & xAxisValue, float const & yAxisValue );
+        constexpr Vector2D() = default;
+        constexpr Vector2D( float const & xAxisValue, float const & yAxisValue )
+          : x( xAxisValue ), y( yAxisValue )
+        {}
         Vector2D( sf::Vector2f const & sfmlVector );
-        virtual ~Vector2D() = default;
+        Vector2D( sf::Vector2u const & sfmlVector );
+        Vector2D( ImVec2 const & imGuiVector );
+        constexpr virtual ~Vector2D() = default;
 
         virtual float operator[]( std::size_t index ) const;
 
-        bool is_contained( Rectangle const & rectangle );
-        bool is_contained( Vector2D const & position, Vector2D const & size );
+        sf::Vector2f to_sfml_vector2f() const;
+
+        bool is_contained( Rectangle const & rectangle ) const;
+        bool is_contained( Vector2D const & position,
+                           Vector2D const & size ) const;
     };
+
+    std::ostream & operator<<( std::ostream & stream,
+                               Vector2D const & vector2D );
+
+    Vector2D operator*( Vector2D const & vector2DLeft,
+                        Vector2D const & vector2DRight );
+    Vector2D operator+( Vector2D const & vector2DLeft,
+                        Vector2D const & vector2DRight );
+    Vector2D operator-( Vector2D const & vector2DLeft,
+                        Vector2D const & vector2DRight );
+
+    Vector2D operator-( Vector2D const & vector2D );
+
+    Vector2D operator-=( Vector2D & vector2DLeft,
+                         Vector2D const & vector2DRight );
 
     /**
      * @brief Check if a vector is between the position and position + size

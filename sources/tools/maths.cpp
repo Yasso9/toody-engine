@@ -42,12 +42,15 @@ namespace math
     /* ***********************************  VECTOR  ***************************************** */
     /* ************************************************************************************** */
 
-    Vector2D::Vector2D( float const & xAxisValue, float const & yAxisValue )
-      : x( xAxisValue ), y( yAxisValue )
-    {}
-
     Vector2D::Vector2D( sf::Vector2f const & sfmlVector )
       : x( sfmlVector.x ), y( sfmlVector.y )
+    {}
+    Vector2D::Vector2D( sf::Vector2u const & sfmlVector )
+      : x( static_cast< float >( sfmlVector.x ) ),
+        y( static_cast< float >( sfmlVector.y ) )
+    {}
+    Vector2D::Vector2D( ImVec2 const & imGuiVector )
+      : Vector2D( static_cast< sf::Vector2f >( imGuiVector ) )
     {}
 
     float Vector2D::operator[]( std::size_t index ) const
@@ -64,19 +67,56 @@ namespace math
             ASSERTION( false, "Vector index out of range" );
             break;
         }
-
-        // TYPO must return a falsy variable
-        return this->x;
+        return 0.f;
     }
 
-    bool Vector2D::is_contained( Rectangle const & rectangle )
+    sf::Vector2f Vector2D::to_sfml_vector2f() const
+    {
+        return sf::Vector2f { this->x, this->y };
+    }
+
+    bool Vector2D::is_contained( Rectangle const & rectangle ) const
     {
         return math::is_contained( *this, rectangle.position, rectangle.size );
     }
     bool Vector2D::is_contained( Vector2D const & position,
-                                 Vector2D const & size )
+                                 Vector2D const & size ) const
     {
         return math::is_contained( *this, position, size );
+    }
+
+    std::ostream & operator<<( std::ostream & stream,
+                               Vector2D const & vector2D )
+    {
+        return stream << "( " << vector2D.x << ", " << vector2D.y << " )";
+    }
+
+    Vector2D operator*( Vector2D const & vector2DLeft,
+                        Vector2D const & vector2DRight )
+    {
+        return { vector2DLeft.x * vector2DRight.x,
+                 vector2DLeft.y * vector2DRight.y };
+    }
+    Vector2D operator+( Vector2D const & vector2DLeft,
+                        Vector2D const & vector2DRight )
+    {
+        return { vector2DLeft.x + vector2DRight.x,
+                 vector2DLeft.y + vector2DRight.y };
+    }
+    Vector2D operator-( Vector2D const & vector2DLeft,
+                        Vector2D const & vector2DRight )
+    {
+        return vector2DLeft + ( -vector2DRight );
+    }
+    Vector2D operator-( Vector2D const & vector2D )
+    {
+        return { -vector2D.x, -vector2D.y };
+    }
+    Vector2D operator-=( Vector2D & vector2DLeft,
+                         Vector2D const & vector2DRight )
+    {
+        vector2DLeft = vector2DLeft - vector2DRight;
+        return vector2DLeft;
     }
 
     bool is_contained( Vector2D const & value, Vector2D const & position,

@@ -8,11 +8,13 @@
 #include "tools/string.hpp"
 
 EditorState::EditorState()
-  : State( State::E_List::Editor ), m_tilemapEditor() /* ,
+  : State( State::E_List::Editor ),
     m_tilemap( Resources::get_instance().get_texture(
         Resources::E_TextureKey::Tileset ) ),
-    m_tileset( Resources::get_instance().get_texture(
-        Resources::E_TextureKey::Tileset ) )*/
+    m_tileSelector(),
+    m_showDemoWindow( false ),
+    m_showTilemapEditor( true ),
+    m_showDebugOptions( false )
 {
     this->init_map();
 }
@@ -22,31 +24,55 @@ void EditorState::extra_events()
     // Movement de la mapView par raport a l'ecran,
     // deplacer la vue revient a deplacer la mapView
     // On ne met pas de else if pour pouvoir avoir un mouvement multiple
-    // if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
-    // {
-    //     this->m_tilemap.move( 0.f, 5.f );
-    // }
-    // if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
-    // {
-    //     this->m_tilemap.move( 0.f, -5.f );
-    // }
-    // if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Q ) )
-    // {
-    //     this->m_tilemap.move( 5.f, 0.f );
-    // }
-    // if ( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
-    // {
-    //     this->m_tilemap.move( -5.f, 0.f );
-    // }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
+    {
+        this->m_view.move( 0.f, -5.f );
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
+    {
+        this->m_view.move( 0.f, 5.f );
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Q ) )
+    {
+        this->m_view.move( -5.f, 0.f );
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
+    {
+        this->m_view.move( 5.f, 0.f );
+    }
 }
 
 void EditorState::update()
 {
-    ImGui::ShowDemoWindow();
+    if ( ImGui::BeginMainMenuBar() )
+    {
+        if ( ImGui::BeginMenu( "Main" ) )
+        {
+            ImGui::MenuItem( "Show ImGui Demo Window",
+                             NULL,
+                             &this->m_showDemoWindow );
+            ImGui::MenuItem( "Show Tilemap Editor",
+                             NULL,
+                             &this->m_showTilemapEditor );
+            ImGui::MenuItem( "Show Debug Options",
+                             NULL,
+                             &this->m_showDebugOptions );
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
 
-    this->m_tilemapEditor.update();
+    if ( this->m_showDemoWindow )
+    {
+        ImGui::ShowDemoWindow();
+    }
 
-    if ( ImGui::Begin( "Debug Options" ) )
+    if ( this->m_showTilemapEditor )
+    {
+        this->m_tileSelector.update();
+    }
+
+    if ( this->m_showDebugOptions && ImGui::Begin( "Debug Options" ) )
     {
         std::stringstream windowTextOutput {};
         windowTextOutput << "MousePos : "
@@ -72,67 +98,40 @@ void EditorState::update()
         ImGui::End();
     }
 
-    // this->m_tileset.update(
-    //     static_cast< sf::Vector2f >( sf::Mouse::getPosition() ),
-    //     sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) );
-
-    // this->m_tilemap.update(
-    //     static_cast< sf::Vector2f >( sf::Mouse::getPosition() ),
-    //     static_cast< unsigned int >( this->m_tileset.get_selected_tile() ),
-    //     sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) );
+    this->m_tilemap.update();
 }
 
 void EditorState::render() const
 {
-    // Window::get_instance().setView( this->m_view );
+    Window::get_instance().setView( this->m_view );
 
-    // Window::get_instance().sf_draw( this->m_tilemap );
-    // Window::get_instance().sf_draw( this->m_tileset );
+    Window::get_instance().sf_draw( this->m_tilemap );
 }
 
 void EditorState::init_map()
 {
-    // this->m_tilemap.setPosition(
-    //     ( this->m_settings.get_window_size_f() - this->m_tilemap.get_size() )
-    //     / 2.f );
+    this->m_tilemap.setPosition( 0.f, 0.f );
 
-    // // Init view
-    // this->m_view.setCenter( this->m_settings.get_window_size_f() / 2.f );
-    // this->m_view.setSize( this->m_settings.get_window_size_f() );
-
-    // this->m_tileset.setPosition( this->m_settings.get_window_size_f() / 5.f );
-    // // TYPO la taille ne doit pas être aberrante
-    // this->m_tileset.set_size( this->m_settings.get_window_size_f() / 3.f );
+    // Set view position at center of the tilemap
+    this->m_view.setCenter( this->m_tilemap.getPosition()
+                            + ( this->m_tilemap.get_size() / 2.f ) );
+    this->m_view.setSize( this->m_settings.get_window_size_f() );
 }
 
-void EditorState::mouse_scroll( float const & /* deltaScroll */ )
+void EditorState::mouse_scroll( float const & deltaScroll )
 {
-    // float const scaleValue { 1.f + ( deltaScroll / 4.f ) };
-    // this->m_tilemap.scale( scaleValue, scaleValue );
+    float const scaleValue { 1.f + ( deltaScroll / 4.f ) };
+    this->m_view.zoom( scaleValue );
 }
 
-void EditorState::keyboard_pressed( sf::Event /* event */ )
+void EditorState::keyboard_pressed( sf::Event event )
 {
-    // if ( event.key.code == sf::Keyboard::Num1 )
-    // {
-    //     this->m_tilemap.set_depth( 0 );
-    // }
-    // else if ( event.key.code == sf::Keyboard::Num2 )
-    // {
-    //     this->m_tilemap.set_depth( 1 );
-    // }
-    // else if ( event.key.code == sf::Keyboard::C )
-    // {
-    //     // TYPO mettre le centre de la vue et non pas la taille de la fenetre / 2
-    //     this->m_tilemap.setPosition( this->m_settings.get_window_size_f()
-    //                                  / 2.f );
-    // }
-    // else if ( event.key.code == sf::Keyboard::Space )
-    // {
-    //     this->m_tileset.switch_print();
-    // }
-    // else if ( event.key.code == sf::Keyboard::Enter )
-    // {
-    //     this->m_tilemap.save();
-    // }
+    if ( event.key.code == sf::Keyboard::C )
+    {
+        this->init_map();
+    }
+    else if ( event.key.code == sf::Keyboard::Enter )
+    {
+        this->m_tilemap.save();
+    }
 }

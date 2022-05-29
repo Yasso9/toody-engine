@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "graphics/sfml.hpp"
+#include "graphics2D/sfml.hpp"
 #include "tools/singleton.hpp"
 
 class Resources final : public Singleton< Resources >

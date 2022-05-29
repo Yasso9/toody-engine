@@ -27,7 +27,7 @@
 
 #include <ostream>
 
-#include "graphics/sfml.hpp"
+#include "graphics2D/sfml.hpp"
 
 namespace gl
 {

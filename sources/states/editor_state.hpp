@@ -2,10 +2,10 @@
 
 #include "states/state.hpp"
 
+#include "graphics2D/tile_selector.hpp"
+#include "graphics2D/tilemap.hpp"
+#include "graphics2D/tileset.hpp"
 #include "output_info/information.hpp"
-#include "tilemap/editor.hpp"
-#include "tilemap/tilemap.hpp"
-#include "tilemap/tileset.hpp"
 
 class EditorState final : public State
 {
@@ -19,11 +19,14 @@ class EditorState final : public State
     void render() const override;
 
   private:
-    // EditorMap m_tilemap;
-    // Tileset m_tileset;
-    TileMapEditor m_tilemapEditor;
+    TileMapEditor m_tilemap;
+    TileSelector m_tileSelector;
 
     sf::View m_view;
+
+    bool m_showDemoWindow;
+    bool m_showTilemapEditor;
+    bool m_showDebugOptions;
 
     void init_map();
 

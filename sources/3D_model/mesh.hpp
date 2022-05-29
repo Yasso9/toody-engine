@@ -5,8 +5,8 @@
 
 #include "3D_model/assimp.hpp"
 #include "graphics/openGL.hpp"
-#include "graphics/sfml.hpp"
 #include "graphics/texture.hpp"
+#include "graphics2D/sfml.hpp"
 #include "main/window.hpp"
 #include "tools/string.hpp"
 

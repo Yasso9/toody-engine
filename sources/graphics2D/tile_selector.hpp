@@ -1,10 +1,10 @@
 #pragma once
 
-class TileMapEditor
+class TileSelector
 {
   public:
-    TileMapEditor();
-    ~TileMapEditor() = default;
+    TileSelector();
+    virtual ~TileSelector() = default;
 
     void update();
 

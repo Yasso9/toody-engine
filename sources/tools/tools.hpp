@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "graphics/sfml.hpp"
+#include "graphics2D/sfml.hpp"
 #include "tools/string.hpp"
 
 namespace tools

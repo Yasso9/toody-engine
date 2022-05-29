@@ -2,19 +2,18 @@
 
 namespace jsonaddon
 {
-    std::vector< std::vector< std::vector< unsigned int > > > decode_array(
+    std::vector< std::vector< std::vector< int > > > decode_array(
         json const & json3dArray )
     {
-        std::vector< std::vector< std::vector< unsigned int > > >
-            real3dArray {};
+        std::vector< std::vector< std::vector< int > > > real3dArray {};
 
         for ( auto const & json2dArray : json3dArray )
         {
-            std::vector< std::vector< unsigned int > > real2dArray {};
+            std::vector< std::vector< int > > real2dArray {};
 
             for ( auto const & json1dArray : json2dArray )
             {
-                std::vector< unsigned int > real1dArray {};
+                std::vector< int > real1dArray {};
 
                 for ( auto const & element : json1dArray )
                 {
