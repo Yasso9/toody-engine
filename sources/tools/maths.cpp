@@ -70,25 +70,31 @@ namespace math
         return 0.f;
     }
 
-    sf::Vector2f Vector2D::to_sfml_vector2f() const
+    Vector2D::operator sf::Vector2f() const
     {
         return sf::Vector2f { this->x, this->y };
     }
+    Vector2D::operator ImVec2() const { return ImVec2 { this->x, this->y }; }
 
-    bool Vector2D::is_contained( Rectangle const & rectangle ) const
+    bool Vector2D::is_inside( Rectangle const & rectangle ) const
     {
-        return math::is_contained( *this, rectangle.position, rectangle.size );
+        return math::is_inside( *this, rectangle.position, rectangle.size );
     }
-    bool Vector2D::is_contained( Vector2D const & position,
-                                 Vector2D const & size ) const
+    bool Vector2D::is_inside( Vector2D const & position,
+                              Vector2D const & size ) const
     {
-        return math::is_contained( *this, position, size );
+        return math::is_inside( *this, position, size );
     }
 
     std::ostream & operator<<( std::ostream & stream,
                                Vector2D const & vector2D )
     {
         return stream << "( " << vector2D.x << ", " << vector2D.y << " )";
+    }
+
+    Vector2D operator*( Vector2D const & vector2D, float const & factor )
+    {
+        return vector2D * Vector2D { factor, factor };
     }
 
     Vector2D operator*( Vector2D const & vector2DLeft,
@@ -119,8 +125,8 @@ namespace math
         return vector2DLeft;
     }
 
-    bool is_contained( Vector2D const & value, Vector2D const & position,
-                       Vector2D const & size )
+    bool is_inside( Vector2D const & value, Vector2D const & position,
+                    Vector2D const & size )
     {
         return ( value.x >= position.x && value.x < position.x + size.x
                  && value.y >= position.y && value.y < position.y + size.y );

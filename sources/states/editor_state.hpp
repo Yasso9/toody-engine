@@ -19,8 +19,8 @@ class EditorState final : public State
     void render() const override;
 
   private:
-    TileMapEditor m_tilemap;
     TileSelector m_tileSelector;
+    TileMap m_tilemap;
 
     sf::View m_view;
 

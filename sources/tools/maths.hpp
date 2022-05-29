@@ -28,6 +28,15 @@ namespace math
         constexpr Vector2D( float const & xAxisValue, float const & yAxisValue )
           : x( xAxisValue ), y( yAxisValue )
         {}
+        constexpr Vector2D( int const & xAxisValue, int const & yAxisValue )
+          : Vector2D( static_cast< float >( xAxisValue ),
+                      static_cast< float >( yAxisValue ) )
+        {}
+        constexpr Vector2D( unsigned int const & xAxisValue,
+                            unsigned int const & yAxisValue )
+          : Vector2D( static_cast< float >( xAxisValue ),
+                      static_cast< float >( yAxisValue ) )
+        {}
         Vector2D( sf::Vector2f const & sfmlVector );
         Vector2D( sf::Vector2u const & sfmlVector );
         Vector2D( ImVec2 const & imGuiVector );
@@ -35,11 +44,12 @@ namespace math
 
         virtual float operator[]( std::size_t index ) const;
 
-        sf::Vector2f to_sfml_vector2f() const;
+        operator sf::Vector2f() const;
+        operator ImVec2() const;
 
-        bool is_contained( Rectangle const & rectangle ) const;
-        bool is_contained( Vector2D const & position,
-                           Vector2D const & size ) const;
+        bool is_inside( Rectangle const & rectangle ) const;
+        bool is_inside( Vector2D const & position,
+                        Vector2D const & size ) const;
     };
 
     std::ostream & operator<<( std::ostream & stream,
@@ -52,6 +62,8 @@ namespace math
     Vector2D operator-( Vector2D const & vector2DLeft,
                         Vector2D const & vector2DRight );
 
+    Vector2D operator*( Vector2D const & vector2D, float const & factor );
+
     Vector2D operator-( Vector2D const & vector2D );
 
     Vector2D operator-=( Vector2D & vector2DLeft,
@@ -60,8 +72,8 @@ namespace math
     /**
      * @brief Check if a vector is between the position and position + size
      */
-    bool is_contained( Vector2D const & value, Vector2D const & position,
-                       Vector2D const & size );
+    bool is_inside( Vector2D const & value, Vector2D const & position,
+                    Vector2D const & size );
 
     struct Vector3D : public Vector2D
     {

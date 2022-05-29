@@ -5,8 +5,8 @@
 // TYPO changer les arguments en une structure comprenant T_TexturesMap et T_FontsMap
 GameState::GameState()
   : State( State::E_List::Game ),
-    m_tilemap( Resources::get_instance().get_texture(
-        Resources::E_TextureKey::Tileset ) ),
+    m_tilemap( Tileset( Resources::get_instance().get_texture(
+        Resources::E_TextureKey::Tileset ) ) ),
     m_player( Resources::get_instance().get_texture(
         Resources::E_TextureKey::Player ) )
 {

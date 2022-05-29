@@ -8,16 +8,24 @@
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 
-TileMap::TileMap( sf::Texture const & texture ) : m_texture( texture )
+TileMap::TileMap( Tileset const & tileset )
+  : m_tileset( tileset ), m_currentDepth( 0u )
 {
-    json const tilemapRequest { db::request(
-        "SELECT table_tilemap FROM tilemap;"s ) };
+    // json const tilemapRequest { db::request(
+    //     "SELECT table_tilemap FROM tilemap;"s ) };
 
-    // TYPO pourquoi on doit acceder à [0]["table_tilemap"] pour avoir la valeur
-    json const jsonTilemap { json::parse(
-        std::string { tilemapRequest[0]["table_tilemap"] } ) };
+    // // TYPO pourquoi on doit acceder à [0]["table_tilemap"] pour avoir la valeur
+    // json const jsonTilemap { json::parse(
+    //     std::string { tilemapRequest[0]["table_tilemap"] } ) };
 
-    this->set_tile_table( jsonaddon::decode_array( jsonTilemap ) );
+    // this->set_tile_table( jsonaddon::decode_array( jsonTilemap ) );
+
+    this->set_tile_table( {
+        {{ 0 }, { 2 }},
+        {{ 2 }, { 0 }}
+    } );
+
+    this->setPosition( 0.f, 0.f );
 }
 
 sf::Vector2f TileMap::get_size() const
@@ -29,96 +37,125 @@ sf::Vector2f TileMap::get_size() const
                               * TILE_PIXEL_SIZE };
 }
 
+void TileMap::update() {}
+
+math::Rectangle get_tile_rectangle_in_tilemap(
+    math::Vector2D const & tilemapPosition,
+    math::Vector2D const & tileCoordinate )
+{
+    math::Rectangle rectangle {};
+
+    rectangle.position = tilemapPosition + ( tileCoordinate * TILE_PIXEL_SIZE );
+    rectangle.size     = TILE_PIXEL_SIZE_VECTOR;
+
+    return rectangle;
+}
+
+math::Rectangle get_tile_rectangle_in_texture( int const & tileValue,
+                                               unsigned int numberOfTile )
+{
+    std::div_t divisionValue { std::div( tileValue,
+                                         static_cast< int >( numberOfTile ) ) };
+
+    return {
+        math::Vector2D {divisionValue.quot, divisionValue.rem}
+            * TILE_PIXEL_SIZE,
+        TILE_PIXEL_SIZE_VECTOR
+    };
+}
+
+void set_vertex_array( sf::VertexArray & vertexArray,
+                       math::Vector2D const & tilemapPosition,
+                       math::Vector2D const & tileCoordinate )
+{
+    math::Rectangle const rectangle {
+        get_tile_rectangle_in_tilemap( tilemapPosition, tileCoordinate )
+    };
+
+    vertexArray[0].position = rectangle.position;
+    vertexArray[1].position =
+        rectangle.position + math::Vector2D { rectangle.size.x, 0.f };
+    vertexArray[2].position =
+        rectangle.position + math::Vector2D { 0.f, rectangle.size.y };
+    vertexArray[3].position = rectangle.position + rectangle.size;
+
+    std::cout << "rectangle.position : " << rectangle.position << std::endl;
+    std::cout << "rectangle.size : " << rectangle.size << std::endl;
+}
+
+void set_texture_coordinate( sf::VertexArray & vertexArray,
+                             int const & tileValue,
+                             unsigned int numberOfXAxisTile )
+{
+    math::Rectangle textureTileRectangle {
+        get_tile_rectangle_in_texture( tileValue, numberOfXAxisTile )
+    };
+
+    vertexArray[0].texCoords = textureTileRectangle.position;
+    vertexArray[1].texCoords =
+        textureTileRectangle.position
+        + math::Vector2D { textureTileRectangle.size.x, 0.f };
+    vertexArray[2].texCoords =
+        textureTileRectangle.position
+        + math::Vector2D { 0.f, textureTileRectangle.size.y };
+    vertexArray[3].texCoords =
+        textureTileRectangle.position + textureTileRectangle.size;
+
+    std::cout << "textureTileRectangle.position : "
+              << textureTileRectangle.position << std::endl;
+    std::cout << "textureTileRectangle.size : " << textureTileRectangle.size
+              << std::endl;
+}
+
 void TileMap::set_tile_table(
     std::vector< std::vector< std::vector< int > > > const & table )
 {
     // Parse all the column of the tilemap
-    for ( unsigned int row { 0u }; row < table.size(); ++row )
+    for ( unsigned int line { 0u }; line < table.size(); ++line )
     {
         this->m_tileTable.push_back( {} );
 
         // Parse all the tile of the tilemap
-        for ( unsigned int line { 0u }; line < table[row].size(); ++line )
+        for ( unsigned int row { 0u }; row < table[line].size(); ++row )
         {
-            this->m_tileTable[row].push_back( {} );
+            this->m_tileTable[line].push_back( {} );
 
             // Parse each cell of each tile of the tilemap
-            for ( unsigned int depth { 0u }; depth < table[row][line].size();
+            for ( unsigned int depth { 0u }; depth < table[line][row].size();
                   ++depth )
             {
                 // We add the element to the tile table
-                this->m_tileTable[row][line].push_back( S_TileData {
-                    table[row][line][depth],
+                this->m_tileTable[line][row].push_back( S_TileData {
+                    table[line][row][depth],
                     sf::VertexArray {sf::Quads, 4}
                 } );
 
-                sf::Vector2f const tilePositionInTile {
-                    static_cast< float >( line ),
-                    static_cast< float >( row )
-                };
-                // sf::Vector2f const tilePositionInPixel { tilePositionInTile
-                //                                          * TILE_PIXEL_SIZE };
+                S_TileData & tile { this->m_tileTable[line][row][depth] };
 
-                this->m_tileTable[row][line][depth].vertice[0].position =
-                    this->getPosition()
-                    + ( tilePositionInTile * TILE_PIXEL_SIZE );
-                this->m_tileTable[row][line][depth].vertice[1].position =
-                    sf::Vector2f(
-                        this->getPosition().x
-                            + ( tilePositionInTile.x + 1.f ) * TILE_PIXEL_SIZE,
-                        this->getPosition().y
-                            + tilePositionInTile.y * TILE_PIXEL_SIZE );
-                this->m_tileTable[row][line][depth].vertice[2].position =
-                    sf::Vector2f(
-                        this->getPosition().x
-                            + ( tilePositionInTile.x + 1.f ) * TILE_PIXEL_SIZE,
-                        this->getPosition().y
-                            + ( tilePositionInTile.y + 1.f )
-                                  * TILE_PIXEL_SIZE );
-                this->m_tileTable[row][line][depth].vertice[3].position =
-                    sf::Vector2f( this->getPosition().x
-                                      + tilePositionInTile.x * TILE_PIXEL_SIZE,
-                                  this->getPosition().y
-                                      + ( tilePositionInTile.y + 1.f )
-                                            * TILE_PIXEL_SIZE );
+                math::Vector2D const currentTilePosition { row, line };
 
-                int tileSelected { this->m_tileTable[row][line][depth].value };
+                std::cout << "currentTilePosition : " << currentTilePosition
+                          << std::endl;
 
-                std::div_t divisionValue { std::div(
-                    tileSelected,
-                    static_cast< int >( this->m_texture.getSize().x ) ) };
+                set_vertex_array( tile.vertice,
+                                  this->getPosition(),
+                                  currentTilePosition );
 
-                sf::Vector2f texturePositionInTile {
-                    static_cast< float >( divisionValue.quot ),
-                    static_cast< float >( divisionValue.rem )
-                };
-
-                this->m_tileTable[row][line][depth].vertice[0].texCoords =
-                    tilePositionInTile * TILE_PIXEL_SIZE;
-                this->m_tileTable[row][line][depth].vertice[1].texCoords =
-                    sf::Vector2f(
-                        ( tilePositionInTile.x + 1.f ) * TILE_PIXEL_SIZE,
-                        tilePositionInTile.y * TILE_PIXEL_SIZE );
-                this->m_tileTable[row][line][depth].vertice[2].texCoords =
-                    sf::Vector2f(
-                        ( tilePositionInTile.x + 1.f ) * TILE_PIXEL_SIZE,
-                        ( tilePositionInTile.y + 1.f ) * TILE_PIXEL_SIZE );
-                this->m_tileTable[row][line][depth].vertice[3].texCoords =
-                    sf::Vector2f(
-                        tilePositionInTile.x * TILE_PIXEL_SIZE,
-                        ( tilePositionInTile.y + 1.f ) * TILE_PIXEL_SIZE );
+                set_texture_coordinate(
+                    tile.vertice,
+                    tile.value,
+                    this->m_tileset.get_texture().getSize().x
+                        / TILE_PIXEL_SIZE_U );
             }
         }
     }
-
-    this->setPosition( 0.f, 0.f );
 }
 
 void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
 {
     states.transform *= this->getTransform();
 
-    states.texture = &this->m_texture;
+    states.texture = &this->m_tileset.get_texture();
 
     for ( auto const & row : this->m_tileTable )
     {
@@ -132,43 +169,39 @@ void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
     }
 }
 
-TileMapEditor::TileMapEditor( sf::Texture const & texture )
-  : TileMap( texture ), m_currentDepth( 0u )
-{}
+// TileMapEditor::TileMapEditor( sf::Texture const & texture )
+//   : TileMap( texture ), m_currentDepth( 0u )
+// {}
 
-void TileMapEditor::change_tile( sf::Vector2u const /* tilePositionInTile */,
-                                 unsigned int const /* newTile */ )
-{
-    // // On actualise les valeurs du tableau
-    // this->m_table[this->m_currentDepth][tilePositionInTile.y][tilePositionInTile.x] =
-    //     newTile;
+// void TileMapEditor::change_tile( sf::Vector2u const /* tilePositionInTile */,
+//                                  unsigned int const /* newTile */ )
+// {
+// // On actualise les valeurs du tableau
+// this->m_table[this->m_currentDepth][tilePositionInTile.y][tilePositionInTile.x] =
+//     newTile;
 
-    // sf::VertexArray & quad {
-    //     this->m_vertices[this->m_currentDepth][tilePositionInTile.y][tilePositionInTile.x]
-    // };
+// sf::VertexArray & quad {
+//     this->m_vertices[this->m_currentDepth][tilePositionInTile.y][tilePositionInTile.x]
+// };
 
-    // // On enlève la transparence du quad
-    // quad::set_visible( quad );
+// // On enlève la transparence du quad
+// quad::set_visible( quad );
 
-    // // TYPO c'est foireux : faut mettre le tilePositionInTile de newtile (la tileset et pas la tilemap)
-    // quad::set_texture_coordinate( quad, tilePositionInTile );
-}
+// // TYPO c'est foireux : faut mettre le tilePositionInTile de newtile (la tileset et pas la tilemap)
+// quad::set_texture_coordinate( quad, tilePositionInTile );
+// }
 
-void TileMapEditor::save() const
-{
-    // json tilemapSave {};
-    // tilemapSave["array"] = this->m_table;
+// void TileMapEditor::save() const
+// {
+// json tilemapSave {};
+// tilemapSave["array"] = this->m_table;
 
-    // db::request( R"(
-    // INSERT INTO tilemap( table_tilemap )
-    // VALUES( ")"s + tilemapSave["array"].dump()
-    //              +
-    //              R"(" );
-    // )"s );
-}
+// db::request( R"(
+// INSERT INTO tilemap( table_tilemap )
+// VALUES( ")"s + tilemapSave["array"].dump()
+//              +
+//              R"(" );
+// )"s );
+// }
 
-void TileMapEditor::update()
-{
-    if ( ImGui::Begin( "Tilemap Editor" ) ) {}
-    ImGui::End();
-}
+// void TileMapEditor::update() {}

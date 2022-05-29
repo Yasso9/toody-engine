@@ -38,10 +38,19 @@ sf::Color table_to_sfml_color( float const tableColor[4] )
              static_cast< sf::Uint8 >( tableColor[3] * COLOR_RANGE ) };
 }
 
-TileSelector::TileSelector() : m_isGridEnabled( true ), m_gridColorTable()
+TileSelector::TileSelector()
+  : m_tileset( Resources::get_instance().get_texture(
+      Resources::E_TextureKey::Tileset ) ),
+    m_isGridEnabled( true ),
+    m_gridColorTable()
 {
     sf::Color gridColor { 118, 118, 118, 255 };
     sfml_to_table_color( gridColor, this->m_gridColorTable );
+}
+
+Tileset const & TileSelector::get_tileset() const
+{
+    return this->m_tileset;
 }
 
 void TileSelector::update()
@@ -49,117 +58,100 @@ void TileSelector::update()
     if ( ImGui::Begin( "Tile Selector" ) )
     {
         ImGui::Checkbox( "Enable grid", &this->m_isGridEnabled );
-
-        sf::Texture const & tilemapTexture {
-            Resources::get_instance().get_texture(
-                Resources::E_TextureKey::Tileset )
-        };
-
         ImGui::ColorEdit4( "Color Edit", this->m_gridColorTable );
 
-        sf::Vector2f const tilemapPosition { ImGui::GetCursorScreenPos() };
-        sf::Vector2f const tilemapSize { tilemapTexture.getSize() };
-        sf::Vector2f const tilemapEndPosition { tilemapPosition + tilemapSize };
-
-        ImDrawList * drawList { ImGui::GetWindowDrawList() };
-
-        ImGui::Image( tilemapTexture );
-        sf::Vector2f scrolling { 0.f, 0.f };
+        this->m_tileset.set_position( ImGui::GetCursorScreenPos() );
+        ImGui::Image( this->m_tileset.get_texture() );
 
         if ( this->m_isGridEnabled )
         {
-            // Tilemap Border
-            drawList->AddRect( tilemapPosition,
-                               tilemapEndPosition,
-                               to_integer_imgui_color( table_to_sfml_color(
-                                   this->m_gridColorTable ) ) );
-
-            // Horizontal lines of the grid
-            for ( float x = fmodf( scrolling.x, TILE_PIXEL_SIZE );
-                  x < tilemapSize.x;
-                  x += TILE_PIXEL_SIZE )
-            {
-                drawList->AddLine(
-                    ImVec2( tilemapPosition.x + x, tilemapPosition.y ),
-                    ImVec2( tilemapPosition.x + x, tilemapEndPosition.y ),
-                    to_integer_imgui_color(
-                        table_to_sfml_color( this->m_gridColorTable ) ) );
-            }
-            // Vertical lines of the grid
-            for ( float y = fmodf( scrolling.y, TILE_PIXEL_SIZE );
-                  y < tilemapSize.y;
-                  y += TILE_PIXEL_SIZE )
-            {
-                drawList->AddLine(
-                    ImVec2( tilemapPosition.x, tilemapPosition.y + y ),
-                    ImVec2( tilemapEndPosition.x, tilemapPosition.y + y ),
-                    to_integer_imgui_color(
-                        table_to_sfml_color( this->m_gridColorTable ) ) );
-            }
+            this->update_grid( *ImGui::GetWindowDrawList() );
         }
-
-        bool isInSelection { false };
-
-        math::Vector2D const mousePosition { ImGui::GetMousePos() };
-
-        if ( ImGui::IsWindowHovered()
-             && mousePosition.is_contained( tilemapPosition, tilemapSize ) )
-        {
-            isInSelection = true;
-
-            // Tile const tile( tilemapPosition, mousePosition );
-
-            math::Vector2D selectionTilePosition {};
-            selectionTilePosition.x = std::floor(
-                ( mousePosition.x - tilemapPosition.x ) / TILE_PIXEL_SIZE );
-            selectionTilePosition.y = std::floor(
-                ( mousePosition.y - tilemapPosition.y ) / TILE_PIXEL_SIZE );
-
-            sf::Vector2f maxNumberOfTile {};
-            maxNumberOfTile.x =
-                std::floor( ( tilemapEndPosition.x - tilemapPosition.x )
-                            / TILE_PIXEL_SIZE );
-            maxNumberOfTile.y =
-                std::floor( ( tilemapEndPosition.y - tilemapPosition.y )
-                            / TILE_PIXEL_SIZE );
-
-            int tileSelected { static_cast< int >(
-                selectionTilePosition.x
-                + selectionTilePosition.y * maxNumberOfTile.x ) };
-
-            // TYPO ASSERT that tileSelected is >0 and <(maxNumberOfTile.x * maxNumberOfTile.y)
-
-            // Calculate the position of the selection rectangle
-            math::Vector2D selectionRectPosition {
-                selectionTilePosition
-                    * sf::Vector2f {TILE_PIXEL_SIZE, TILE_PIXEL_SIZE}
-                + tilemapPosition
-            };
-
-            // Selection Rectangle
-            drawList->AddRectFilled(
-                selectionRectPosition.to_sfml_vector2f(),
-                selectionRectPosition.to_sfml_vector2f()
-                    + sf::Vector2f { TILE_PIXEL_SIZE, TILE_PIXEL_SIZE },
-                to_integer_imgui_color(
-                    table_to_sfml_color( this->m_gridColorTable ) ) );
-
-            std::stringstream outputSelection {};
-            outputSelection << "Mouse Position : " << mousePosition << "\n";
-            outputSelection << "Selection Rect : " << selectionRectPosition
-                            << "\n";
-            outputSelection << "Selection Tile : " << selectionTilePosition
-                            << "\n";
-            outputSelection << "Max Tile : " << maxNumberOfTile << "\n";
-            outputSelection << "Tile Selected : " << tileSelected << "\n";
-            ImGui::Text( "%s", outputSelection.str().c_str() );
-        }
-        std::stringstream output {};
-        output << "Tilemap Position : " << tilemapPosition << "\n";
-        output << "Tilemap Size : " << tilemapSize << "\n";
-        output << "Is In Selection ? : " << std::boolalpha << isInSelection
-               << "\n";
-        ImGui::Text( "%s", output.str().c_str() );
+        this->update_selection( *ImGui::GetWindowDrawList() );
     }
     ImGui::End();
+}
+
+void TileSelector::update_grid( ImDrawList & drawList )
+{
+    math::Vector2D const scrolling { 0.f, 0.f };
+
+    // Tilemap Border
+    drawList.AddRect( this->m_tileset.get_position(),
+                      this->m_tileset.get_end_position(),
+                      to_integer_imgui_color(
+                          table_to_sfml_color( this->m_gridColorTable ) ) );
+
+    // Horizontal lines of the grid
+    for ( float x = fmodf( scrolling.x, TILE_PIXEL_SIZE );
+          x < this->m_tileset.get_size_in_pixel().x;
+          x += TILE_PIXEL_SIZE )
+    {
+        math::Vector2D const pointA {
+            this->m_tileset.get_position() + math::Vector2D {x, 0.f}
+        };
+        math::Vector2D const pointB { this->m_tileset.get_position().x + x,
+                                      this->m_tileset.get_end_position().y };
+
+        drawList.AddLine( pointA,
+                          pointB,
+                          to_integer_imgui_color(
+                              table_to_sfml_color( this->m_gridColorTable ) ) );
+    }
+    // Vertical lines of the grid
+    for ( float y = fmodf( scrolling.y, TILE_PIXEL_SIZE );
+          y < this->m_tileset.get_size_in_pixel().y;
+          y += TILE_PIXEL_SIZE )
+    {
+        math::Vector2D const pointA { this->m_tileset.get_position().x,
+                                      this->m_tileset.get_position().y + y };
+        math::Vector2D const pointB { this->m_tileset.get_end_position().x,
+                                      this->m_tileset.get_position().y + y };
+
+        drawList.AddLine( pointA,
+                          pointB,
+                          to_integer_imgui_color(
+                              table_to_sfml_color( this->m_gridColorTable ) ) );
+    }
+}
+void TileSelector::update_selection( ImDrawList & drawList )
+{
+    math::Vector2D const mousePosition { ImGui::GetMousePos() };
+    bool isInSelection { ImGui::IsWindowHovered()
+                         && this->m_tileset.contain( mousePosition ) };
+    if ( isInSelection )
+    {
+        // Calculate the position of the selection rectangle
+        math::Vector2D const selectionPosition {
+            this->m_tileset.get_tile_position_in_pixel( mousePosition, false )
+        };
+
+        // Selection Rectangle
+        drawList.AddRectFilled( selectionPosition,
+                                selectionPosition + TILE_PIXEL_SIZE_VECTOR,
+                                to_integer_imgui_color( table_to_sfml_color(
+                                    this->m_gridColorTable ) ) );
+
+        std::stringstream outputSelection {};
+        outputSelection << "Selection Rect : " << selectionPosition << "\n";
+        outputSelection << "Selection Tile : "
+                        << this->m_tileset.get_tile_position_in_tile(
+                               mousePosition,
+                               false )
+                        << "\n";
+        outputSelection << "Tileset Size : "
+                        << this->m_tileset.get_size_in_tile() << "\n";
+        outputSelection << "Tile Selected : "
+                        << this->m_tileset.get_tile_value_from_pixel_position(
+                               mousePosition,
+                               false )
+                        << "\n";
+        ImGui::Text( "%s", outputSelection.str().c_str() );
+    }
+    std::stringstream output {};
+    output << "Mouse Position : " << mousePosition << "\n";
+    output << "Tilemap Position : " << this->m_tileset.get_position() << "\n";
+    output << "Tilemap Size : " << this->m_tileset.get_size_in_pixel() << "\n";
+    output << "Is In Selection ? : " << std::boolalpha << isInSelection << "\n";
+    ImGui::Text( "%s", output.str().c_str() );
 }

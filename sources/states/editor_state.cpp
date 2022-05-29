@@ -9,9 +9,8 @@
 
 EditorState::EditorState()
   : State( State::E_List::Editor ),
-    m_tilemap( Resources::get_instance().get_texture(
-        Resources::E_TextureKey::Tileset ) ),
     m_tileSelector(),
+    m_tilemap( m_tileSelector.get_tileset() ),
     m_showDemoWindow( false ),
     m_showTilemapEditor( true ),
     m_showDebugOptions( false )
@@ -46,7 +45,7 @@ void EditorState::update()
 {
     if ( ImGui::BeginMainMenuBar() )
     {
-        if ( ImGui::BeginMenu( "Main" ) )
+        if ( ImGui::BeginMenu( "Options" ) )
         {
             ImGui::MenuItem( "Show ImGui Demo Window",
                              NULL,
@@ -72,29 +71,35 @@ void EditorState::update()
         this->m_tileSelector.update();
     }
 
-    if ( this->m_showDebugOptions && ImGui::Begin( "Debug Options" ) )
+    if ( this->m_showDebugOptions )
     {
-        std::stringstream windowTextOutput {};
-        windowTextOutput << "MousePos : "
-                         << sf::Vector2f { ImGui::GetMousePos() } << "\n";
-        windowTextOutput << "CursorPos : "
-                         << sf::Vector2f { ImGui::GetCursorPos() } << "\n";
-        windowTextOutput << "CursorStartPos : "
-                         << sf::Vector2f { ImGui::GetCursorStartPos() } << "\n";
-        windowTextOutput << "CursorScreenPos : "
-                         << sf::Vector2f { ImGui::GetCursorScreenPos() }
-                         << "\n";
-        windowTextOutput << "ContentRegionAvail : "
-                         << sf::Vector2f { ImGui::GetContentRegionAvail() }
-                         << "\n";
+        if ( ImGui::Begin( "Debug Options" ) )
+        {
+            std::stringstream windowTextOutput {};
+            windowTextOutput
+                << "MousePos : " << sf::Vector2f { ImGui::GetMousePos() }
+                << "\n";
+            windowTextOutput
+                << "CursorPos : " << sf::Vector2f { ImGui::GetCursorPos() }
+                << "\n";
+            windowTextOutput << "CursorStartPos : "
+                             << sf::Vector2f { ImGui::GetCursorStartPos() }
+                             << "\n";
+            windowTextOutput << "CursorScreenPos : "
+                             << sf::Vector2f { ImGui::GetCursorScreenPos() }
+                             << "\n";
+            windowTextOutput << "ContentRegionAvail : "
+                             << sf::Vector2f { ImGui::GetContentRegionAvail() }
+                             << "\n";
 
-        windowTextOutput << "\n";
+            windowTextOutput << "\n";
 
-        windowTextOutput << "IsWindowFocused : " << std::boolalpha
-                         << ImGui::IsWindowFocused() << "\n";
-        windowTextOutput << "IsWindowHovered : " << ImGui::IsWindowHovered()
-                         << "\n";
-        ImGui::Text( "%s", windowTextOutput.str().c_str() );
+            windowTextOutput << "IsWindowFocused : " << std::boolalpha
+                             << ImGui::IsWindowFocused() << "\n";
+            windowTextOutput << "IsWindowHovered : " << ImGui::IsWindowHovered()
+                             << "\n";
+            ImGui::Text( "%s", windowTextOutput.str().c_str() );
+        }
         ImGui::End();
     }
 
@@ -132,6 +137,6 @@ void EditorState::keyboard_pressed( sf::Event event )
     }
     else if ( event.key.code == sf::Keyboard::Enter )
     {
-        this->m_tilemap.save();
+        // this->m_tilemap.save();
     }
 }
