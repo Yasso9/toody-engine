@@ -146,6 +146,9 @@ void TileSelector::update_selection( ImDrawList & drawList )
                                mousePosition,
                                false )
                         << "\n";
+        outputSelection << "Tile Position : "
+                        << selectionPosition - this->m_tileset.get_position()
+                        << "\n";
         ImGui::Text( "%s", outputSelection.str().c_str() );
     }
     std::stringstream output {};

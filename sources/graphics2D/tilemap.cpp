@@ -28,16 +28,77 @@ TileMap::TileMap( Tileset const & tileset )
     this->setPosition( 0.f, 0.f );
 }
 
-sf::Vector2f TileMap::get_size() const
+math::Vector2D TileMap::get_size() const
 {
     // TYPO il faut verifier que toute les ligne de toutes les colonnes fasse la même taille
-    return sf::Vector2f { static_cast< float >( this->m_tileTable[0][0].size() )
-                              * TILE_PIXEL_SIZE,
-                          static_cast< float >( this->m_tileTable[0].size() )
-                              * TILE_PIXEL_SIZE };
+    return this->get_tile_size() * TILE_PIXEL_SIZE_VECTOR;
 }
 
-void TileMap::update() {}
+math::Vector2D TileMap::get_tile_size() const
+{
+    // TYPO normalement le static cast ne sert à rien
+    return math::Vector2D {
+        static_cast< unsigned int >( this->m_tileTable[0].size() ),
+        static_cast< unsigned int >( this->m_tileTable.size() )
+    };
+}
+
+void TileMap::update()
+{
+    if ( ImGui::Begin( "Tilemap Information" ) )
+    {
+        unsigned int tileSizeX { static_cast< unsigned int >(
+            this->get_tile_size().x ) };
+        unsigned int tileSizeY { static_cast< unsigned int >(
+            this->get_tile_size().y ) };
+
+        static std::vector< S_TileData > tileValueArray {};
+
+        if ( ImGui::BeginTable( "table_padding",
+                                static_cast< int >( tileSizeX ) ) )
+        {
+            for ( unsigned int line { 0u }; line < tileSizeY; ++line )
+            {
+                ImGui::TableNextRow();
+                for ( unsigned int column { 0u }; column < tileSizeX; ++column )
+                {
+                    ImGui::TableSetColumnIndex( static_cast< int >( column ) );
+                    std::stringstream buttonStream {};
+                    buttonStream << math::Vector2D { column, line } << " = "
+                                 << this->m_tileTable[line][column][0].value;
+                    if ( ImGui::Button( buttonStream.str().c_str() ) )
+                    {
+                        tileValueArray = this->m_tileTable[line][column];
+                    }
+                }
+            }
+            ImGui::EndTable();
+        }
+
+        if ( ! tileValueArray.empty() )
+        {
+            std::stringstream tileValueStream {};
+            for ( auto const & element : tileValueArray )
+            {
+                tileValueStream << "Tile " << element.value << "\n";
+                tileValueStream << "Position [ " << element.vertice[0].position
+                                << ", " << element.vertice[1].position << ", "
+                                << element.vertice[2].position << ", "
+                                << element.vertice[3].position << " ]"
+                                << "\n";
+                tileValueStream << "TextCoord [ "
+                                << element.vertice[0].texCoords << ", "
+                                << element.vertice[1].texCoords << ", "
+                                << element.vertice[2].texCoords << ", "
+                                << element.vertice[3].texCoords << " ]"
+                                << "\n";
+                tileValueStream << "\n";
+            }
+            ImGui::Text( "%s", tileValueStream.str().c_str() );
+        }
+    }
+    ImGui::End();
+}
 
 math::Rectangle get_tile_rectangle_in_tilemap(
     math::Vector2D const & tilemapPosition,
@@ -78,9 +139,6 @@ void set_vertex_array( sf::VertexArray & vertexArray,
     vertexArray[2].position =
         rectangle.position + math::Vector2D { 0.f, rectangle.size.y };
     vertexArray[3].position = rectangle.position + rectangle.size;
-
-    std::cout << "rectangle.position : " << rectangle.position << std::endl;
-    std::cout << "rectangle.size : " << rectangle.size << std::endl;
 }
 
 void set_texture_coordinate( sf::VertexArray & vertexArray,
@@ -100,11 +158,6 @@ void set_texture_coordinate( sf::VertexArray & vertexArray,
         + math::Vector2D { 0.f, textureTileRectangle.size.y };
     vertexArray[3].texCoords =
         textureTileRectangle.position + textureTileRectangle.size;
-
-    std::cout << "textureTileRectangle.position : "
-              << textureTileRectangle.position << std::endl;
-    std::cout << "textureTileRectangle.size : " << textureTileRectangle.size
-              << std::endl;
 }
 
 void TileMap::set_tile_table(
@@ -116,26 +169,24 @@ void TileMap::set_tile_table(
         this->m_tileTable.push_back( {} );
 
         // Parse all the tile of the tilemap
-        for ( unsigned int row { 0u }; row < table[line].size(); ++row )
+        for ( unsigned int column { 0u }; column < table[line].size();
+              ++column )
         {
             this->m_tileTable[line].push_back( {} );
 
             // Parse each cell of each tile of the tilemap
-            for ( unsigned int depth { 0u }; depth < table[line][row].size();
+            for ( unsigned int depth { 0u }; depth < table[line][column].size();
                   ++depth )
             {
                 // We add the element to the tile table
-                this->m_tileTable[line][row].push_back( S_TileData {
-                    table[line][row][depth],
+                this->m_tileTable[line][column].push_back( S_TileData {
+                    table[line][column][depth],
                     sf::VertexArray {sf::Quads, 4}
                 } );
 
-                S_TileData & tile { this->m_tileTable[line][row][depth] };
+                S_TileData & tile { this->m_tileTable[line][column][depth] };
 
-                math::Vector2D const currentTilePosition { row, line };
-
-                std::cout << "currentTilePosition : " << currentTilePosition
-                          << std::endl;
+                math::Vector2D const currentTilePosition { column, line };
 
                 set_vertex_array( tile.vertice,
                                   this->getPosition(),
@@ -157,9 +208,9 @@ void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
 
     states.texture = &this->m_tileset.get_texture();
 
-    for ( auto const & row : this->m_tileTable )
+    for ( auto const & column : this->m_tileTable )
     {
-        for ( auto const & tile : row )
+        for ( auto const & tile : column )
         {
             for ( S_TileData const & cell : tile )
             {

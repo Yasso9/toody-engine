@@ -96,12 +96,22 @@ namespace math
     {
         return vector2D * Vector2D { factor, factor };
     }
+    Vector2D operator/( Vector2D const & vector2D, float const & factor )
+    {
+        return vector2D / Vector2D { factor, factor };
+    }
 
     Vector2D operator*( Vector2D const & vector2DLeft,
                         Vector2D const & vector2DRight )
     {
         return { vector2DLeft.x * vector2DRight.x,
                  vector2DLeft.y * vector2DRight.y };
+    }
+    Vector2D operator/( Vector2D const & vector2DLeft,
+                        Vector2D const & vector2DRight )
+    {
+        return { vector2DLeft.x / vector2DRight.x,
+                 vector2DLeft.y / vector2DRight.y };
     }
     Vector2D operator+( Vector2D const & vector2DLeft,
                         Vector2D const & vector2DRight )

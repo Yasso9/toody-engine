@@ -23,7 +23,9 @@ class TileMap : public sf::Drawable,
     virtual ~TileMap() = default;
 
     /// @brief size of the tilemap in pixel
-    sf::Vector2f get_size() const;
+    math::Vector2D get_size() const;
+    /// @brief number of tile that the tilemap contain
+    math::Vector2D get_tile_size() const;
 
     void update();
 
