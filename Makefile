@@ -81,21 +81,15 @@ WARNINGS := \
 
 ############################## Global Informations ##############################
 
-# clang
-C_COMMAND := clang
-CXX_COMMAND := clang++
-COMPILING_FLAGS := -std=c++20 -MMD -O0 -g
-# -MMD => Create .d files for dependencies of users files only
-# -g => Generate debug information
-# -O0 => No optmization, faster compilation time, better for debugging builds
-LINKING_FLAGS :=
-
 # .cpp and .hpp files
-FILES_DIRECTORY := ./sources
+PURE_FILES_DIRECTORY := sources
+FILES_DIRECTORY := ./$(PURE_FILES_DIRECTORY)
 # .exe and dll's
 BUILD_DIRECTORY := ./build
 # .o files
 OBJECT_DIRECTORY := $(BUILD_DIRECTORY)/object
+# .d files
+DEPS_DIRECTORY := $(OBJECT_DIRECTORY)
 
 EXTERNAL_DIRECTORY := ./external
 # Libraries Header
@@ -115,60 +109,66 @@ DLLS_PATH := $(EXTERNAL_DIRECTORY)/DLLs
 EXECUTABLE_DIRECTORY := $(BUILD_DIRECTORY)/application
 EXECUTABLE := $(EXECUTABLE_DIRECTORY)/application
 
+# clang
+C_COMMAND := clang
+CXX_COMMAND := clang++
+DEPFLAGS = -MMD -MP
+# -MMD => Create .d files for dependencies of users files only (not system files)
+COMPILING_FLAGS := -std=c++20 $(DEPFLAGS) -O0 -g
+# -g => Generate debug information
+# -O0 => No optmization, faster compilation time, better for debugging builds
+LINKING_FLAGS :=
+
 
 
 
 ############################## files and object location ##############################
 
-# Produce list in the form "./sources/filename.cpp"
+# Produce list of the current cpp files in the form "./sources/filename.cpp"
 SOURCES_FILES := $(wildcard $(FILES_DIRECTORY)/*.cpp)
 # Add also all the subfolders "./sources/sub_directory/filename.cpp"
 SOURCES_FILES := $(SOURCES_FILES) $(wildcard $(FILES_DIRECTORY)/*/*.cpp)
 # Erase files directory => "sub_directory/filename.cpp"
 SOURCES_FILES := $(subst $(FILES_DIRECTORY)/,,$(SOURCES_FILES))
 
-# List of all the object files
-OBJECT_REAL_LIST := $(wildcard $(OBJECT_DIRECTORY)/*.o)
-# Remove the directory to keep only the name
-OBJECT_REAL_LIST := $(subst $(OBJECT_DIRECTORY)/,,$(OBJECT_REAL_LIST))
-# Remove extension
-OBJECT_REAL_LIST := $(basename $(OBJECT_REAL_LIST))
-# Transform sources files name to object files name
-SOURCES_REAL_LIST := $(subst /,-,$(SOURCES_FILES))
-# Remove extension
-SOURCES_REAL_LIST := $(basename $(SOURCES_REAL_LIST))
-# Get All the object files name that are not in the sources file, they must be deleted
-OUTDATED_OBJECT_FILES := $(filter-out $(SOURCES_REAL_LIST),$(OBJECT_REAL_LIST))
-OUTDATED_OBJECT_FILES := $(addprefix $(OBJECT_DIRECTORY)/,$(OUTDATED_OBJECT_FILES))
-OUTDATED_OBJECT_FILES := $(addsuffix .o,$(OUTDATED_OBJECT_FILES))
-OUTDATED_DEPS_FILES := $(patsubst %.o,%.d,$(OUTDATED_OBJECT_FILES))
 
-# Object files of the all cpp files of the project
+# List of all the current object files (before doing anything)
+CURRENT_OBJECTS := $(wildcard $(OBJECT_DIRECTORY)/*.o)
+# Remove the directory to keep only the name
+# "build/object/directory-file.o" => "directory-file.o"
+CURRENT_OBJECTS := $(subst $(OBJECT_DIRECTORY)/,,$(CURRENT_OBJECTS))
+# Remove extension => "directory-file"
+CURRENT_OBJECTS := $(basename $(CURRENT_OBJECTS))
+
+
+
+# Object files of the all cpp files of the project that we need to generate (or are already generated)
 # sub_directory/filename.cpp => sub_directory/filename.o
 OBJECT_PROJECT := $(patsubst %.cpp,%.o,$(SOURCES_FILES))
 # => ./object/sub_directory-filename.o
 OBJECT_PROJECT := $(addprefix $(OBJECT_DIRECTORY)/,$(subst /,-,$(OBJECT_PROJECT)))
 
-
-# List of the library object that needs to be linked
+# List of the c++ library object that needs to be linked
 CPP_SOURCES_LIBRARIES := $(wildcard $(LIBRARIES_INCLUDE_PATH)/*/*.cpp)
 CPP_SOURCES_LIBRARIES := $(subst $(LIBRARIES_INCLUDE_PATH)/,,$(CPP_SOURCES_LIBRARIES))
 CPP_OBJECT_LIBRARIES := $(patsubst %.cpp,%.o,$(CPP_SOURCES_LIBRARIES))
 CPP_OBJECT_LIBRARIES := $(addprefix $(LIBRARIES_OBJECT_DIRECTORY)/,$(subst /,~,$(CPP_OBJECT_LIBRARIES)))
-
+# List of the c library object that needs to be linked
 C_SOURCES_LIBRARIES := $(wildcard $(LIBRARIES_INCLUDE_PATH)/*/*.c)
 C_SOURCES_LIBRARIES := $(subst $(LIBRARIES_INCLUDE_PATH)/,,$(C_SOURCES_LIBRARIES))
 C_OBJECT_LIBRARIES := $(patsubst %.c,%.o,$(C_SOURCES_LIBRARIES))
 C_OBJECT_LIBRARIES := $(addprefix $(LIBRARIES_OBJECT_DIRECTORY)/,$(subst /,~,$(C_OBJECT_LIBRARIES)))
 
-
 # All object needed for the project to compile
 # (the project files objects + the libraries objects)
 OBJECT_ALL := $(OBJECT_PROJECT) $(CPP_OBJECT_LIBRARIES) $(C_OBJECT_LIBRARIES)
 
+
+
 # Dependencies (.d files) will be on the same directories
 # and have the same name than object files
 DEPENDENCIES := $(patsubst %.o,%.d,$(OBJECT_PROJECT))
+# DEPENDENCIES := $(wildcard $(DEPS_DIRECTORY)/*.d)
 
 
 
@@ -187,23 +187,25 @@ run :
 	$(EXECUTABLE)
 
 initialize_build: clean_executable
-	mkdir -p $(BUILD_DIRECTORY)
-	mkdir -p $(EXECUTABLE_DIRECTORY)
+	@echo "Create Build Directories"
+	@mkdir -p $(BUILD_DIRECTORY)
+	@mkdir -p $(EXECUTABLE_DIRECTORY)
+	@mkdir -p $(OBJECT_DIRECTORY)
+	@mkdir -p $(DEPS_DIRECTORY)
+	@mkdir -p $(LIBRARIES_OBJECT_DIRECTORY)
 # Use the DLL's only on windows
 ifeq ($(DETECTED_OS),Windows)
-	cp $(DLLS_PATH)/* $(EXECUTABLE_DIRECTORY)
+	@echo "Copy Dll's for Executable"
+	@cp $(DLLS_PATH)/* $(EXECUTABLE_DIRECTORY)
 endif
-	mkdir -p $(OBJECT_DIRECTORY)
-	mkdir -p $(LIBRARIES_OBJECT_DIRECTORY)
-
-	rm -f $(OUTDATED_OBJECT_FILES)
-	rm -f $(OUTDATED_DEPS_FILES)
 
 clean_executable:
-	rm -rf $(EXECUTABLE)
+	@echo "Clean Executable"
+	@rm -rf $(EXECUTABLE)
 
 clean_project: clean_executable
 	rm -rf $(OBJECT_DIRECTORY)
+	rm -rf $(DEPS_DIRECTORY)
 
 clean_libraries:
 	rm -rf $(LIBRARIES_OBJECT_DIRECTORY)
@@ -250,13 +252,15 @@ LIBRARIES := $(LIBRARIES) $(LIBRARIES_FLAG)
 
 # Creating the object files of the project
 .SECONDEXPANSION:
-$(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%).cpp
+$(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%).cpp $(DEPS_DIRECTORY)/%.d
 #	Nicer way to print the current file compiled
 	@echo "Project Compile $(subst sources/,,$<)"
 #	compilatorCommand -WarningFlags -compilerOptions -c sources/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
-	@$(CXX_COMMAND) $(WARNINGS) $(COMPILING_FLAGS) -c $< -o $@ $(INCLUDES)
+	@$(CXX_COMMAND) $(WARNINGS) $(COMPILING_FLAGS) -c $< -o $@ -MT $@ $(INCLUDES)
+
+$(OBJECT_DIRECTORY)/%.d : ;
 
 # Creating object files of the cpp libraries
 .SECONDEXPANSION:
