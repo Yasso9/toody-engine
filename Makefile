@@ -111,7 +111,7 @@ EXECUTABLE := $(EXECUTABLE_DIRECTORY)/application
 
 # clang
 C_COMMAND := clang
-CXX_COMMAND := clang++-14
+CXX_COMMAND := clang++
 # DEPENDENCY_FLAGS := -MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
 DEPENDENCY_FLAGS := -MMD -MP
 # -MMD => Create .d files for dependencies of users files only (not system files)
