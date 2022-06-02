@@ -111,10 +111,12 @@ EXECUTABLE := $(EXECUTABLE_DIRECTORY)/application
 
 # clang
 C_COMMAND := clang
-CXX_COMMAND := clang++
-DEPFLAGS = -MMD -MP
+CXX_COMMAND := clang++-14
+# DEPENDENCY_FLAGS := -MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
+DEPENDENCY_FLAGS := -MMD -MP
 # -MMD => Create .d files for dependencies of users files only (not system files)
-COMPILING_FLAGS := -std=c++20 $(DEPFLAGS) -O0 -g
+# -MP => Handle renamed or missing files for dependency
+COMPILING_FLAGS := -std=c++20 -O0 -g
 # -g => Generate debug information
 # -O0 => No optmization, faster compilation time, better for debugging builds
 LINKING_FLAGS :=
@@ -130,16 +132,6 @@ SOURCES_FILES := $(wildcard $(FILES_DIRECTORY)/*.cpp)
 SOURCES_FILES := $(SOURCES_FILES) $(wildcard $(FILES_DIRECTORY)/*/*.cpp)
 # Erase files directory => "sub_directory/filename.cpp"
 SOURCES_FILES := $(subst $(FILES_DIRECTORY)/,,$(SOURCES_FILES))
-
-
-# List of all the current object files (before doing anything)
-CURRENT_OBJECTS := $(wildcard $(OBJECT_DIRECTORY)/*.o)
-# Remove the directory to keep only the name
-# "build/object/directory-file.o" => "directory-file.o"
-CURRENT_OBJECTS := $(subst $(OBJECT_DIRECTORY)/,,$(CURRENT_OBJECTS))
-# Remove extension => "directory-file"
-CURRENT_OBJECTS := $(basename $(CURRENT_OBJECTS))
-
 
 
 # Object files of the all cpp files of the project that we need to generate (or are already generated)
@@ -167,6 +159,7 @@ OBJECT_ALL := $(OBJECT_PROJECT) $(CPP_OBJECT_LIBRARIES) $(C_OBJECT_LIBRARIES)
 
 # Dependencies (.d files) will be on the same directories
 # and have the same name than object files
+# Je ne sais toujours pas quoi est le mieux entre ces deux lignes ?
 DEPENDENCIES := $(patsubst %.o,%.d,$(OBJECT_PROJECT))
 # DEPENDENCIES := $(wildcard $(DEPS_DIRECTORY)/*.d)
 
@@ -247,21 +240,6 @@ LIBRARIES := $(LIBRARIES) $(LIBRARIES_FLAG)
 
 ############################## making project compilation ##############################
 
-# set up the dependencies
--include $(DEPENDENCIES)
-
-# Creating the object files of the project
-.SECONDEXPANSION:
-$(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%).cpp $(DEPS_DIRECTORY)/%.d
-#	Nicer way to print the current file compiled
-	@echo "Project Compile $(subst sources/,,$<)"
-#	compilatorCommand -WarningFlags -compilerOptions -c sources/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
-#   -c => Doesn't create WinMain error if there is no main in the file
-#   -o => Create custom object
-	@$(CXX_COMMAND) $(WARNINGS) $(COMPILING_FLAGS) -c $< -o $@ -MT $@ $(INCLUDES)
-
-$(OBJECT_DIRECTORY)/%.d : ;
-
 # Creating object files of the cpp libraries
 .SECONDEXPANSION:
 $(CPP_OBJECT_LIBRARIES) : $(LIBRARIES_OBJECT_DIRECTORY)/%.o : $(LIBRARIES_INCLUDE_PATH)/$$(subst ~,/,%).cpp
@@ -279,6 +257,21 @@ $(C_OBJECT_LIBRARIES) : $(LIBRARIES_OBJECT_DIRECTORY)/%.o : $(LIBRARIES_INCLUDE_
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
 	@$(C_COMMAND) -c $< -o $@ $(INCLUDES)
+
+# set up the dependencies
+-include $(DEPENDENCIES)
+
+# Creating the object files of the project
+.SECONDEXPANSION:
+$(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%).cpp # $(DEPS_DIRECTORY)/%.d
+#	Nicer way to print the current file compiled
+	@echo "Project Compile $(subst sources/,,$<)"
+#	compilatorCommand -WarningFlags -compilerOptions -c sources/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
+#   -c => Doesn't create WinMain error if there is no main in the file
+#   -o => Create custom object
+	@$(CXX_COMMAND) $(WARNINGS) $(COMPILING_FLAGS) $(DEPENDENCY_FLAGS) -c $< -o $@ $(INCLUDES)
+
+# $(DEPS_DIRECTORY)/%.d : ;
 
 # Create the executable by Linking all the object files and the SFML together
 $(EXECUTABLE) : $(OBJECT_ALL)
