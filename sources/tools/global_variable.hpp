@@ -15,6 +15,7 @@ constexpr float const g_tileSize_f { static_cast< float >( ::g_tileSize_u ) };
 constexpr unsigned int const g_numberOfState { 3u };
 
 constexpr unsigned int const COLOR_RANGE { 255u };
+
 constexpr unsigned int const TILE_PIXEL_SIZE_U { 32u };
 constexpr float const TILE_PIXEL_SIZE { static_cast< float >(
     TILE_PIXEL_SIZE_U ) };

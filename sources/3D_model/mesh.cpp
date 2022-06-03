@@ -7,7 +7,12 @@
 Mesh::Mesh( std::vector< S_Vertex > const & vertices,
             std::vector< unsigned int > const & indices,
             std::vector< std::string > const & textures )
-  : m_vertices( vertices ), m_indices( indices ), m_textures( textures )
+  : m_vertices( vertices ),
+    m_indices( indices ),
+    m_textures( textures ),
+    VAO(),
+    VBO(),
+    EBO()
 {
     // now that we have all the required data,
     // set the vertex buffers and its attribute pointers.

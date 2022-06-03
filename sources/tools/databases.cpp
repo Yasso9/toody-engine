@@ -4,7 +4,9 @@
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wlong-long"
-#pragma GCC diagnostic ignored "-Wlanguage-extension-token"
+#if defined( __clang__ )
+    #pragma GCC diagnostic ignored "-Wlanguage-extension-token"
+#endif
 extern "C"
 {
 #include <SQLITE/sqlite3.h>
@@ -74,7 +76,7 @@ namespace db
                                                      0,
                                                      &requestErrorMessage ) };
 
-        if ( requestResultState != SQLITE_OK )
+        if ( requestResultState != 0 )
         {
             sqlite3_free( requestErrorMessage );
             throw Exception::Database { g_databasePath, requestErrorMessage };

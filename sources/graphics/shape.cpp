@@ -26,7 +26,13 @@ unsigned int Shape::Data::get_number_of_element() const
 
 Shape::Shape()
   : Transformable( tools::get_path::shaders( "shape_shader.vert"s ),
-                   tools::get_path::shaders( "shape_shader.frag"s ) )
+                   tools::get_path::shaders( "shape_shader.frag"s ) ),
+    m_textureA(),
+    m_textureB(),
+    m_vertexArrayObject(),
+    m_vertexBufferObject(),
+    m_elementBufferObject(),
+    m_data()
 {
     this->reset_space_model();
 }

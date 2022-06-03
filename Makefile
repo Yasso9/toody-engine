@@ -18,7 +18,7 @@ endif
 
 ############################## Warnings ##############################
 
-WARNINGS := \
+GENERAL_WARNINGS := \
 -pedantic -Wpedantic -pedantic-errors \
 -Wall -Wextra \
 -Wcast-align \
@@ -67,12 +67,18 @@ WARNINGS := \
 # Warnings that works only on clang :
 # adding 'no' after '-W' remove the warning
 
-# Warnings that works only on gcc : \
--Wlogical-op \
--Wnoexcept \
--Wstrict-null-sentinel \
--Wformat-truncation
+# Warnings that works only on gcc
+GCC_WARNINGS_ENABLE := \
+	-Wlogical-op \
+	-Wnoexcept \
+	-Wstrict-null-sentinel \
+	-Wformat-truncation
 
+GCC_WARNINGS_REMOVE := \
+	-Wno-long-long \
+	-Wno-undef \
+
+GCC_WARNINGS := $(GENERAL_WARNINGS) $(GCC_WARNINGS_ENABLE) $(GCC_WARNINGS_REMOVE)
 # Warning that must not be used in clang \
 -Wfloat-equal # The equality between floats works, it's the addition that is wrong
 
@@ -110,8 +116,8 @@ EXECUTABLE_DIRECTORY := $(BUILD_DIRECTORY)/application
 EXECUTABLE := $(EXECUTABLE_DIRECTORY)/application
 
 # clang
-C_COMMAND := clang
-CXX_COMMAND := clang++
+C_COMMAND := gcc
+CXX_COMMAND := g++
 # DEPENDENCY_FLAGS := -MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
 DEPENDENCY_FLAGS := -MMD -MP
 # -MMD => Create .d files for dependencies of users files only (not system files)
@@ -269,7 +275,7 @@ $(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%)
 #	compilatorCommand -WarningFlags -compilerOptions -c sources/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
-	@$(CXX_COMMAND) $(WARNINGS) $(COMPILING_FLAGS) $(DEPENDENCY_FLAGS) -c $< -o $@ $(INCLUDES)
+	@$(CXX_COMMAND) $(GCC_WARNINGS) $(COMPILING_FLAGS) $(DEPENDENCY_FLAGS) -c $< -o $@ $(INCLUDES)
 
 # $(DEPS_DIRECTORY)/%.d : ;
 

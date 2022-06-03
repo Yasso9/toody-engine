@@ -3,7 +3,7 @@
 #include "tools/string.hpp"
 
 Entity::Entity( sf::Texture const & texture )
-  : m_texture( texture ), m_name( "Unkown"s ), m_speed( 30.f )
+  : m_sprite(), m_texture( texture ), m_name( "Unkown"s ), m_speed( 30.f )
 {
     this->m_sprite.setTexture( this->m_texture );
 }

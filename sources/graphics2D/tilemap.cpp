@@ -9,7 +9,7 @@
 #include "tools/tools.hpp"
 
 TileMap::TileMap( Tileset const & tileset )
-  : m_tileset( tileset ), m_currentDepth( 0u )
+  : m_tileset( tileset ), m_tileTable(), m_currentDepth( 0u )
 {
     // json const tilemapRequest { db::request(
     //     "SELECT table_tilemap FROM tilemap;"s ) };
@@ -100,7 +100,7 @@ void TileMap::update()
     ImGui::End();
 }
 
-math::Rectangle get_tile_rectangle_in_tilemap(
+static math::Rectangle get_tile_rectangle_in_tilemap(
     math::Vector2D const & tilemapPosition,
     math::Vector2D const & tileCoordinate )
 {
@@ -112,8 +112,8 @@ math::Rectangle get_tile_rectangle_in_tilemap(
     return rectangle;
 }
 
-math::Rectangle get_tile_rectangle_in_texture( int const & tileValue,
-                                               unsigned int numberOfTile )
+static math::Rectangle get_tile_rectangle_in_texture(
+    int const & tileValue, unsigned int numberOfTile )
 {
     std::div_t divisionValue { std::div( tileValue,
                                          static_cast< int >( numberOfTile ) ) };
@@ -125,9 +125,9 @@ math::Rectangle get_tile_rectangle_in_texture( int const & tileValue,
     };
 }
 
-void set_vertex_array( sf::VertexArray & vertexArray,
-                       math::Vector2D const & tilemapPosition,
-                       math::Vector2D const & tileCoordinate )
+static void set_vertex_array( sf::VertexArray & vertexArray,
+                              math::Vector2D const & tilemapPosition,
+                              math::Vector2D const & tileCoordinate )
 {
     math::Rectangle const rectangle {
         get_tile_rectangle_in_tilemap( tilemapPosition, tileCoordinate )
@@ -141,9 +141,9 @@ void set_vertex_array( sf::VertexArray & vertexArray,
     vertexArray[3].position = rectangle.position + rectangle.size;
 }
 
-void set_texture_coordinate( sf::VertexArray & vertexArray,
-                             int const & tileValue,
-                             unsigned int numberOfXAxisTile )
+static void set_texture_coordinate( sf::VertexArray & vertexArray,
+                                    int const & tileValue,
+                                    unsigned int numberOfXAxisTile )
 {
     math::Rectangle textureTileRectangle {
         get_tile_rectangle_in_texture( tileValue, numberOfXAxisTile )

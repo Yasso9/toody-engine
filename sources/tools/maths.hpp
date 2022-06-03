@@ -37,15 +37,10 @@ namespace math
           : Vector2D( static_cast< float >( xAxisValue ),
                       static_cast< float >( yAxisValue ) )
         {}
-        // constexpr Vector2D( uns const & xAxisValue,
-        //                     size_t const & yAxisValue )
-        //   : Vector2D( static_cast< float >( xAxisValue ),
-        //               static_cast< float >( yAxisValue ) )
-        // {}
         Vector2D( sf::Vector2f const & sfmlVector );
         Vector2D( sf::Vector2u const & sfmlVector );
         Vector2D( ImVec2 const & imGuiVector );
-        constexpr virtual ~Vector2D() = default;
+        constexpr virtual ~Vector2D() {};
 
         virtual float operator[]( std::size_t index ) const;
 

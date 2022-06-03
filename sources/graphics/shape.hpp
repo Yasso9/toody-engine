@@ -14,13 +14,13 @@ class Shape final : public Transformable
     struct Data
     {
         /// @brief Array of all the attributes of the shape
-        std::vector< float > vertices;
+        std::vector< float > vertices {};
         /// @brief Array of all the indices of the shape
         ///        If empty, we don't create an element buffer object
-        std::vector< unsigned int > indices;
+        std::vector< unsigned int > indices {};
 
         /// @brief Array of the vector's size contained in each point
-        std::vector< unsigned int > dataPerPoint;
+        std::vector< unsigned int > dataPerPoint {};
 
         /// @brief Array size of each point
         unsigned int get_data_per_point_sum() const;

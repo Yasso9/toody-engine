@@ -15,7 +15,7 @@ static std::string get_texture_localisation(
 static std::string get_font_localisation(
     Resources::E_FontKey const & fontKey );
 
-Resources::Resources()
+Resources::Resources() : m_textures(), m_fonts()
 {
     init_textures( this->m_textures );
     init_fonts( this->m_fonts );
@@ -92,13 +92,7 @@ static std::string get_texture_localisation(
         imagePath += "/home_wallpaper.jpg"s;
         break;
     default :
-        /* TYPO the best thing here is the possibility
-                to use the c++20 std::format, but as of now
-                g++ 11.2.0 doesn't support it */
-        ASSERTION(
-            false,
-            "A texture of the Resources::E_TextureKey class hasn't been loaded"s
-            "or the key doesn't exist in this enum"s );
+        ASSERTION( false, "A texture hasn't been loaded"s );
         break;
     }
 
@@ -115,10 +109,7 @@ static std::string get_font_localisation( Resources::E_FontKey const & fontKey )
         fontPath += "/arial.ttf"s;
         break;
     default :
-        ASSERTION(
-            false,
-            "A texture of the Resources::E_TextureKey class hasn't been loaded"s
-            "or the key doesn't exist in this enum"s );
+        ASSERTION( false, "A font hasn't been loaded"s );
         break;
     }
 

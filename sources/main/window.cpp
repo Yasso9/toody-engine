@@ -1,37 +1,10 @@
 #include "window.hpp"
 
+#include <iostream>
+
 #include "graphics/openGL.hpp"
+#include "tools/maths.hpp"
 #include "tools/string.hpp"
-
-class Position : public sf::Vector2i
-{
-  public:
-    Position( sf::Vector2i const & vector2i ) : sf::Vector2i( vector2i ) {}
-    virtual ~Position() = default;
-
-    template < typename PrimitivType >
-    bool is_inside( sf::Rect< PrimitivType > const & rectangle ) const
-    {
-        sf::Rect< int > integerRectangle { static_cast< sf::Rect< int > >(
-            rectangle ) };
-
-        return ( this->x >= integerRectangle.left
-                 && this->x < integerRectangle.left + integerRectangle.width
-                 && this->y >= integerRectangle.top
-                 && this->y < integerRectangle.top + integerRectangle.height );
-    }
-
-    template < typename PrimitivType >
-    bool is_inside( sf::Vector2< PrimitivType > const & rectanglePosition,
-                    sf::Vector2< PrimitivType > const & rectangleSize ) const
-    {
-        return (
-            this->is_inside( sf::Rect< PrimitivType > { rectanglePosition.x,
-                                                        rectanglePosition.y,
-                                                        rectangleSize.x,
-                                                        rectangleSize.y } ) );
-    }
-};
 
 Window::Window()
 {
@@ -67,7 +40,7 @@ sf::Vector2f Window::get_center_position_f() const
 
 bool Window::has_absolute_focus() const
 {
-    Position const mousePosition { sf::Mouse::getPosition(
+    math::Vector2D const mousePosition { sf::Mouse::getPosition(
         Window::get_instance() ) };
 
     return this->hasFocus()
@@ -140,7 +113,6 @@ void Window::create()
 }
 void Window::initialize()
 {
-    // TYPO à mettre autre part
     this->setVisible( true );
     this->requestFocus();
     this->setKeyRepeatEnabled( false );
@@ -148,9 +120,8 @@ void Window::initialize()
 
     if ( ! this->setActive( true ) )
     {
-        throw std::runtime_error {
-            "Cannot set the windows as active state for OpenGL"s
-        };
+        std::cerr << "Cannot put the window active state for OpenGL calls"
+                  << std::endl;
     }
 
     gl::initialize( this->getSize().x, this->getSize().y );

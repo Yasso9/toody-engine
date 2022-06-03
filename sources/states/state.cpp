@@ -3,7 +3,7 @@
 #include "main/resources.hpp"
 
 State::State( State::E_List const & stateName )
-  : m_stateName( stateName ), m_deltaTime( 0.f )
+  : m_settings(), m_stateName( stateName ), m_deltaTime( 0.f )
 {}
 
 State::E_List State::get_state_to_print() const

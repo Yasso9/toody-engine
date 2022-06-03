@@ -4,6 +4,7 @@
 
 Transformable::Transformable( std::string const & vertexShaderPath,
                               std::string const & fragmentShaderPath )
+  : m_shader(), m_space(), m_spaceModel()
 {
     if ( ! this->m_shader.loadFromFile( vertexShaderPath, fragmentShaderPath ) )
     {

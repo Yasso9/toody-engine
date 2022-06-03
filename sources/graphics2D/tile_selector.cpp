@@ -10,7 +10,7 @@
 #include "tools/imgui.hpp"
 #include "tools/maths.hpp"
 
-uint32_t to_integer_imgui_color( sf::Color const & color )
+static uint32_t to_integer_imgui_color( sf::Color const & color )
 {
     return ( static_cast< ImU32 >( color.a ) << 24 )
            | ( static_cast< ImU32 >( color.b ) << 16 )
@@ -18,9 +18,14 @@ uint32_t to_integer_imgui_color( sf::Color const & color )
            | ( static_cast< ImU32 >( color.r ) << 0 );
 }
 
-void sfml_to_table_color( sf::Color const & sfmlColor, float tableColor[4] )
+static void sfml_to_table_color( sf::Color const & sfmlColor,
+                                 float tableColor[4] )
 {
-    // TYPO : assert that sfmlColor values are under 255
+    ASSERTION( ( sfmlColor.r >= 0 && sfmlColor.r <= 255 )
+                   && ( sfmlColor.g >= 0 && sfmlColor.g <= 255 )
+                   && ( sfmlColor.b >= 0 && sfmlColor.b <= 255 )
+                   && ( sfmlColor.a >= 0 && sfmlColor.a <= 255 ),
+               "SFML colors value must be between 0 and 255" );
 
     tableColor[0] = static_cast< float >( sfmlColor.r ) / COLOR_RANGE;
     tableColor[1] = static_cast< float >( sfmlColor.g ) / COLOR_RANGE;
@@ -28,9 +33,13 @@ void sfml_to_table_color( sf::Color const & sfmlColor, float tableColor[4] )
     tableColor[3] = static_cast< float >( sfmlColor.a ) / COLOR_RANGE;
 }
 
-sf::Color table_to_sfml_color( float const tableColor[4] )
+static sf::Color table_to_sfml_color( float const tableColor[4] )
 {
-    // TYPO : assert that sfmlColor values are under 1 and over 0
+    ASSERTION( ( tableColor[0] >= 0.f && tableColor[0] <= 1.f )
+                   && ( tableColor[1] >= 0.f && tableColor[1] <= 1.f )
+                   && ( tableColor[2] >= 0.f && tableColor[2] <= 1.f )
+                   && ( tableColor[3] >= 0.f && tableColor[3] <= 1.f ),
+               "Table colors value must be between 0 and 1" );
 
     return { static_cast< sf::Uint8 >( tableColor[0] * COLOR_RANGE ),
              static_cast< sf::Uint8 >( tableColor[1] * COLOR_RANGE ),

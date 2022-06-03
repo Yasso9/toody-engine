@@ -6,7 +6,7 @@
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 
-Settings::Settings()
+Settings::Settings() : m_windowSize(), m_refreshRate(), m_verticalSync()
 {
     // TYPO mettre le windows.txt dans un autre endroit que resources
     std::string const configLocation { tools::get_path::resources()

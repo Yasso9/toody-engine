@@ -7,7 +7,8 @@
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 
-MainMenuState::MainMenuState() : State( State::E_List::MainMenu )
+MainMenuState::MainMenuState()
+  : State( State::E_List::MainMenu ), m_background(), m_text(), m_buttons()
 {
     this->init_background();
     this->init_text();

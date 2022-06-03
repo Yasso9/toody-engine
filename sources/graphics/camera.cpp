@@ -16,7 +16,9 @@
 
 Camera::Camera( E_Type const & type )
   : m_position( glm::vec3 { 0.0f, 0.0f, 3.0f } ),
+    m_direction(),
     m_type( type ),
+    m_movementSpeed(),
     m_fieldOfView( 45.f )
 {
     // We start by looking at the center
@@ -116,14 +118,6 @@ void Camera::rotate( glm::vec3 const & angle, float const & deltaTime )
     this->m_direction = glm::vec3 { direction.x, direction.y, direction.z };
 
     std::cout << "direction after" << this->m_direction << std::endl;
-}
-
-void rotate_from_target( glm::vec3 const & target, sf::Vector2f const & angle,
-                         float const & deltaTime )
-{
-    ( void )target;
-    ( void )angle;
-    ( void )deltaTime;
 }
 
 void Camera::zoom( float const & factor, float const & deltaTime )

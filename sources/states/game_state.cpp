@@ -8,7 +8,8 @@ GameState::GameState()
     m_tilemap( Tileset( Resources::get_instance().get_texture(
         Resources::E_TextureKey::Tileset ) ) ),
     m_player( Resources::get_instance().get_texture(
-        Resources::E_TextureKey::Player ) )
+        Resources::E_TextureKey::Player ) ),
+    m_view()
 {
     this->init_map();
 }

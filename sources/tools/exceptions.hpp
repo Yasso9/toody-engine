@@ -31,6 +31,7 @@ namespace Exception
         std::string const m_fileName;
     };
 
+    /// @brief Excpetion to launch when we want to exit of the application
     class QuitApplication final : public std::exception
     {
       public:

@@ -28,7 +28,7 @@ static void check_configuration()
     }
 }
 
-Game::Game() : m_shouldRun( true ), m_state( nullptr ), m_settings()
+Game::Game() : m_state( nullptr ), m_settings()
 {
     check_configuration();
 
@@ -54,7 +54,9 @@ void Game::run()
     // Reset the clock juste before the game run
     clock.restart();
 
-    while ( this->m_shouldRun )
+    bool gameShouldRun { true };
+
+    while ( gameShouldRun )
     {
         sf::Time const deltaTime { clock.getElapsedTime() };
 
@@ -66,9 +68,9 @@ void Game::run()
                 this->update_state( deltaTime );
                 this->render();
             }
-            catch ( Exception::QuitApplication )
+            catch ( Exception::QuitApplication const & )
             {
-                this->m_shouldRun = false;
+                gameShouldRun = false;
             }
 
             // reset the counter
@@ -144,35 +146,29 @@ void Game::render()
 
 void Game::change_state( State::E_List const & newState )
 {
+    // Base configuration for cursor
+    // Can be changed for a specific state
+    Window::get_instance().setMouseCursorVisible( true );
+    Window::get_instance().setMouseCursorGrabbed( false );
+
     switch ( newState )
     {
     case State::E_List::MainMenu :
-        Window::get_instance().setMouseCursorVisible( true );
-        Window::get_instance().setMouseCursorGrabbed( false );
-        this->set_new_state< MainMenuState >();
+        this->m_state = std::make_shared< MainMenuState >();
         break;
     case State::E_List::Game :
-        Window::get_instance().setMouseCursorVisible( true );
-        Window::get_instance().setMouseCursorGrabbed( false );
-        this->set_new_state< GameState >();
+        this->m_state = std::make_shared< GameState >();
         break;
     case State::E_List::Editor :
-        Window::get_instance().setMouseCursorVisible( true );
-        Window::get_instance().setMouseCursorGrabbed( false );
-        this->set_new_state< EditorState >();
+        this->m_state = std::make_shared< EditorState >();
         break;
     case State::E_List::Graphics :
-        // TYPO n'activer le grab de la souris que si la window est focus
         // Window::get_instance().setMouseCursorVisible( false );
         // Window::get_instance().setMouseCursorGrabbed( true );
-        Window::get_instance().setMouseCursorVisible( true );
-        Window::get_instance().setMouseCursorGrabbed( false );
-        this->set_new_state< GraphicState >();
+        this->m_state = std::make_shared< GraphicState >();
         break;
     case State::E_List::Test :
-        Window::get_instance().setMouseCursorVisible( true );
-        Window::get_instance().setMouseCursorGrabbed( false );
-        this->set_new_state< TestState >();
+        this->m_state = std::make_shared< TestState >();
         break;
 
     case State::E_List::Quit :

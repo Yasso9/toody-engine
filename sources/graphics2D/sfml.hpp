@@ -2,7 +2,12 @@
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-conversion"
-#pragma GCC diagnostic ignored "-Wlanguage-extension-token"
+#if defined( __clang__ )
+    #pragma GCC diagnostic ignored "-Wlanguage-extension-token"
+#endif
+#if defined( __GNUC__ )
+    #pragma GCC diagnostic ignored "-Weffc++"
+#endif
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>

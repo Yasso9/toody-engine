@@ -5,7 +5,9 @@
 #include "tools/assertion.hpp"
 
 ButtonArray::ButtonArray( sf::Font const & font /* = sf::Font {} */ )
-  : m_font( font ),
+  : m_buttons(),
+    m_strings(),
+    m_font( font ),
     m_direction( ButtonArray::E_Direction::Horizontal ),
     m_characterSize( 30.f )
 {}

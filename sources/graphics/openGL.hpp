@@ -2,7 +2,9 @@
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-conversion"
-#pragma GCC diagnostic ignored "-Wlanguage-extension-token"
+#if defined( __clang__ )
+    #pragma GCC diagnostic ignored "-Wlanguage-extension-token"
+#endif
 
 #include <GLAD/glad.h>
 #include <SFML/OpenGL.hpp>
@@ -10,8 +12,14 @@
 #pragma GCC diagnostic pop
 
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wgnu-anonymous-struct"
-#pragma GCC diagnostic ignored "-Wnested-anon-types"
+#if defined( __clang__ )
+    #pragma GCC diagnostic ignored "-Wnested-anon-types"
+    #pragma GCC diagnostic ignored "-Wgnu-anonymous-struct"
+#endif
+#if defined( __GNUC__ )
+    #pragma GCC diagnostic ignored "-Weffc++"
+    #pragma GCC diagnostic ignored "-Wsign-conversion"
+#endif
 
 #include <GLM/ext/matrix_clip_space.hpp> // glm::perspective
 #include <GLM/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale

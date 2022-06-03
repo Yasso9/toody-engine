@@ -6,7 +6,17 @@
 #include "tools/assertion.hpp"
 #include "tools/tools.hpp"
 
-Player::Player( sf::Texture const & texture ) : Entity( texture )
+Player::Player( sf::Texture const & texture )
+  : Entity( texture ),
+    m_state(),
+    m_direction(),
+    m_deltaTime(),
+    m_spritePixelSize(),
+    m_spriteNumberOfCells(),
+    m_spriteValue(),
+    m_lastState(),
+    m_lastSpriteIndex(),
+    m_timeElapsed()
 {
     // Initial states of the player
     this->m_direction = E_Direction::Down;
@@ -216,8 +226,8 @@ sf::IntRect Player::get_current_texture_rect()
 
     sf::IntRect textureRect {};
     // Transform the sprite position into the rectangle of the sprite in the texture
-    textureRect.left   = spritePosition.x * spriteSize.x;
-    textureRect.top    = spritePosition.y * spriteSize.y;
+    textureRect.left = spritePosition.x * spriteSize.x;
+    textureRect.top  = spritePosition.y * spriteSize.y;
     // Assign the size of a sprite cell
     textureRect.width  = spriteSize.x;
     textureRect.height = spriteSize.y;
