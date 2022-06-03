@@ -55,7 +55,6 @@ namespace db
                 // Map containing pair of table property and its json value
                 std::map< std::string, json > singleResultMap {};
 
-                // TYPO
                 // for(auto i : argc)
                 for ( int i { 0 }; i < argc; ++i )
                 {

@@ -18,7 +18,6 @@ MainMenuState::MainMenuState()
 void MainMenuState::extra_events()
 {
     int const buttonNumberPressed { this->m_buttons.update(
-        // TYPO essayer d'enlever le static cast, ça fait moche
         static_cast< sf::Vector2f >(
             sf::Mouse::getPosition( Window::get_instance() ) ),
         sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) ) };
@@ -63,7 +62,6 @@ void MainMenuState::init_buttons()
     this->m_buttons.set_font(
         Resources::get_instance().get_font( Resources::E_FontKey::Arial ) );
     this->m_buttons.set_direction( ButtonArray::E_Direction::Horizontal );
-    // TYPO ne plus hardcodé ça mais trouvé un autre moyen avec la State::E_List
     this->m_buttons.set_strings(
         { "Main Menu"s, "Game"s, "Editor"s, "Graphics"s, "Test"s, "Exit"s } );
     this->m_buttons.setPosition( 0.f, 0.f );

@@ -1,8 +1,14 @@
 #pragma once
 
+#include <type_traits>
+
 #include "graphics/openGL.hpp"
 #include "graphics2D/sfml.hpp"
 #include "tools/singleton.hpp"
+
+/// @brief check if the class can be drawn
+template < typename Type >
+concept Drawable = std::is_base_of< sf::Drawable, Type >::value;
 
 class Window final : public sf::RenderWindow,
                      public Singleton< Window >
@@ -34,8 +40,7 @@ class Window final : public sf::RenderWindow,
                          GLenum const & primitiveType,
                          unsigned int const & arraySize ) const;
 
-    // TYPO use concept to verify that is drawable
-    template < class DrawableClass >
+    template < Drawable DrawableClass >
     void sf_draw( DrawableClass const & target )
     {
         this->draw( target );

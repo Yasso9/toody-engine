@@ -26,7 +26,6 @@ namespace quad
                        sf::Vector2f const & basePosition,
                        sf::Vector2u const & tilePosition )
     {
-        // TYPO avoir directement un sf::Vector2f
         sf::Vector2f const tilePositionFloat { static_cast< sf::Vector2f >(
             tilePosition ) };
 
@@ -47,7 +46,6 @@ namespace quad
     void set_texture_coordinate( sf::VertexArray & quad,
                                  sf::Vector2u const & tilePosition )
     {
-        // TYPO avoir directement un sf::Vector2f
         sf::Vector2f const tilePositionFloat { static_cast< sf::Vector2f >(
             tilePosition ) };
 

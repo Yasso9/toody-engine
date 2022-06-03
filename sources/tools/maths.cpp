@@ -185,12 +185,10 @@ namespace math
             return this->z;
             break;
         default :
-            ASSERTION( false, "Vector index out of range" );
+            ASSERTION( false, "Vector3D index out of range" );
+            return 0.f;
             break;
         }
-
-        // TYPO must return a falsy variable
-        return this->x;
     }
 
     void Vector3D::normalize()

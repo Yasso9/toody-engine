@@ -5,7 +5,6 @@
 #include "graphics2D/tile_selector.hpp"
 #include "graphics2D/tilemap.hpp"
 #include "graphics2D/tileset.hpp"
-#include "output_info/information.hpp"
 
 class EditorState final : public State
 {
