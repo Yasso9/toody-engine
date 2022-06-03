@@ -135,7 +135,7 @@ void Game::render()
 {
     Window::get_instance().clear_all( sf::Color { 40, 40, 40 } );
 
-    this->m_state->render_all();
+    this->m_state->render();
 
     // We render after our state render, so the imGui's windows
     // will be drawn if we have a background

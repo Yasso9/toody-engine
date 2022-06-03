@@ -5,13 +5,34 @@
 #include "graphics2D/sfml.hpp"
 #include "graphics2D/tileset.hpp"
 
+// TYPO améliorer cette class et la rendre plus éprouvé en delete toute les choses lié à vertex array
+struct TileQuad
+{
+  public:
+    TileQuad();
+    virtual ~TileQuad() = default;
+
+    sf::VertexArray const & get_vertex_array() const;
+
+    void set_position( math::Vector2D const & tilemapPosition,
+                       math::Vector2D const & tileCoordinate );
+
+    void set_texture_coordinate( int const & tileValue,
+                                 unsigned int numberOfXAxisTile );
+
+    sf::Vertex operator[]( size_t index ) const;
+
+  private:
+    sf::VertexArray m_vextexArray;
+};
+
 struct S_TileData
 {
-    int value;
-    sf::VertexArray vertice;
+    int value {};
+    TileQuad quad {};
 
-    S_TileData( int const & aValue, sf::VertexArray const & aVertice )
-      : value( aValue ), vertice( aVertice )
+    S_TileData( int const & aValue, TileQuad const & aVertice )
+      : value( aValue ), quad( aVertice )
     {}
 };
 

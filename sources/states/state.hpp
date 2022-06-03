@@ -47,7 +47,6 @@ class State
     virtual void update() = 0;
     /// @brief Draw all the things that we have to draw in our window
     virtual void render() const = 0;
-    void render_all() const;
 
   protected:
     State( State::E_List const & stateName );

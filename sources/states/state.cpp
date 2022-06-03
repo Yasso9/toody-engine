@@ -60,20 +60,6 @@ void State::update_data( float const & deltaTime )
     this->update();
 }
 
-void State::render_all() const
-{
-    this->render();
-
-    sf::Text framerateText {
-        std::to_string( static_cast< int >( 1.f / this->m_deltaTime ) ),
-        Resources::get_instance().get_font( Resources::E_FontKey::Arial )
-    };
-    framerateText.setPosition( 50.f, 50.f );
-    framerateText.setCharacterSize( 20u );
-
-    Window::get_instance().draw( framerateText );
-}
-
 void State::keyboard_pressed( sf::Event /* event */ ) {}
 void State::keyboard_released( sf::Event /* event */ ) {}
 
