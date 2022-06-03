@@ -6,7 +6,6 @@
 
 #include "input/button_array.hpp"
 #include "input/mouse_position.hpp"
-#include "settings/settings.hpp"
 
 class State
 {
@@ -52,9 +51,6 @@ class State
 
   protected:
     State( State::E_List const & stateName );
-
-    // TYPO faire rentré les settings dans ressources
-    Settings const m_settings;
 
     /** @brief value corresponding of the state that the game should run */
     State::E_List m_stateName;

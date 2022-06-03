@@ -108,7 +108,6 @@ void Mesh::generate()
             static_cast< intptr_t >( vectorSizeCounter * sizeof( float ) ) ) };
 
         glEnableVertexAttribArray( location );
-        // TYPO value type for bones change (and function name too)
         glVertexAttribPointer( location,
                                static_cast< int >( dataPerPoint[location] ),
                                valueType,

@@ -121,7 +121,7 @@ void EditorState::init_map()
     // Set view position at center of the tilemap
     this->m_view.setCenter( this->m_tilemap.getPosition()
                             + ( this->m_tilemap.get_size() / 2.f ) );
-    this->m_view.setSize( this->m_settings.get_window_size_f() );
+    this->m_view.setSize( Window::get_instance().get_size_f() );
 }
 
 void EditorState::mouse_scroll( float const & deltaScroll )

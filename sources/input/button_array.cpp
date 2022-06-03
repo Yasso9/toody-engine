@@ -95,7 +95,6 @@ void ButtonArray::set_direction(
 {
     this->m_direction = buttonsDirection;
 
-    // TYPO faire un update plus clair (pourquoi pas en faire une fonction)
     // Update of the button array
     this->set_strings( this->m_strings );
 }

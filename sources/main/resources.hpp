@@ -26,13 +26,12 @@ class Resources final : public Singleton< Resources >
 
     virtual ~Resources() = default;
 
-    sf::Texture const & get_texture(
-        Resources::E_TextureKey const & textureKey );
-    sf::Font const & get_font( Resources::E_FontKey const & fontKey );
+    sf::Texture const & get_texture( E_TextureKey const & textureKey );
+    sf::Font const & get_font( E_FontKey const & fontKey );
 
   private:
     Resources();
 
-    std::map< Resources::E_TextureKey, sf::Texture > m_textures;
-    std::map< Resources::E_FontKey, sf::Font > m_fonts;
+    std::map< E_TextureKey, sf::Texture > m_textures;
+    std::map< E_FontKey, sf::Font > m_fonts;
 };

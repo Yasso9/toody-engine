@@ -8,30 +8,27 @@
 
 Settings::Settings() : m_windowSize(), m_refreshRate(), m_verticalSync()
 {
-    // TYPO mettre le windows.txt dans un autre endroit que resources
+    // TYPO Récupéré les settings à partir de la base de données
     std::string const configLocation { tools::get_path::resources()
                                        + "/window.txt"s };
 
     std::ifstream file { configLocation, std::ios::in };
+    // TYPO if we don't find the file, we must create it and load default ressources
     if ( ! file )
     {
         throw Exception::FileNotFound { configLocation };
     }
 
-    unsigned int framerate;
+    unsigned int framePerSecond;
     file >> this->m_windowSize.x >> this->m_windowSize.y >> this->m_verticalSync
-        >> framerate;
+        >> framePerSecond;
 
-    this->m_refreshRate = 1. / framerate;
+    this->m_refreshRate = 1. / framePerSecond;
 }
 
-sf::Vector2u Settings::get_window_size_u() const
+math::Vector2D Settings::get_video_mode() const
 {
     return this->m_windowSize;
-}
-sf::Vector2f Settings::get_window_size_f() const
-{
-    return static_cast< sf::Vector2f >( this->get_window_size_u() );
 }
 
 double Settings::get_refresh_rate() const

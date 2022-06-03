@@ -16,14 +16,14 @@ GameState::GameState()
 void GameState::init_map()
 {
     this->m_tilemap.setPosition(
-        ( this->m_settings.get_window_size_f() - this->m_tilemap.get_size() )
+        ( Window::get_instance().get_size_f() - this->m_tilemap.get_size() )
         / 2.f );
     this->m_player.setPosition(
-        ( this->m_settings.get_window_size_f() - this->m_tilemap.get_size() )
+        ( Window::get_instance().get_size_f() - this->m_tilemap.get_size() )
         / 2.f );
 
     this->m_view.setCenter( this->m_player.getPosition() );
-    this->m_view.setSize( this->m_settings.get_window_size_f() / 2.f );
+    this->m_view.setSize( Window::get_instance().get_size_f() / 2.f );
 }
 
 void GameState::update_map()

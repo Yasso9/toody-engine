@@ -2,7 +2,6 @@
 
 #include <memory>
 
-#include "settings/settings.hpp"
 #include "states/state.hpp"
 
 class Game final
@@ -15,7 +14,6 @@ class Game final
 
   private:
     std::shared_ptr< State > m_state;
-    Settings const m_settings;
 
     /// @brief To know where do we start the game
     void init_state();

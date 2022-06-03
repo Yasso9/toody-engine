@@ -7,6 +7,7 @@
 #include "tools/exceptions.hpp"
 #include "tools/string.hpp"
 
+#include "main/settings.hpp"
 #include "main/window.hpp"
 
 #include "states/editor_state.hpp"
@@ -28,7 +29,7 @@ static void check_configuration()
     }
 }
 
-Game::Game() : m_state( nullptr ), m_settings()
+Game::Game() : m_state( nullptr )
 {
     check_configuration();
 
@@ -56,11 +57,13 @@ void Game::run()
 
     bool gameShouldRun { true };
 
+    double const refreshRate { Settings::get_instance().get_refresh_rate() };
+
     while ( gameShouldRun )
     {
         sf::Time const deltaTime { clock.getElapsedTime() };
 
-        if ( deltaTime.asSeconds() > this->m_settings.get_refresh_rate() )
+        if ( deltaTime.asSeconds() > refreshRate )
         {
             try
             {

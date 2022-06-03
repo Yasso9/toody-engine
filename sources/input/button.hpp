@@ -28,7 +28,6 @@ class Button final : public sf::Drawable,
     void set_selected( bool const & isSelected );
     void set_pressed( bool const & isPressed );
 
-    // TYPO mettre ça autre part, dans un geometry.cpp peut être
     /**
      * @brief Check if the position is inside the button or outside
      * @param position Position to check
@@ -38,7 +37,6 @@ class Button final : public sf::Drawable,
 
     void synchronize_string();
 
-    // TYPO Changer tout les draw pour qu'ils ressemblent à ça
     void draw( sf::RenderTarget & target,
                sf::RenderStates states ) const override;
 
