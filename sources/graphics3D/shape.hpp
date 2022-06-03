@@ -2,11 +2,11 @@
 
 #include <vector>
 
-#include "graphics/openGL.hpp"
-#include "graphics/shader.hpp"
-#include "graphics/texture.hpp"
-#include "graphics/transformable.hpp"
 #include "graphics2D/sfml.hpp"
+#include "graphics3D/openGL.hpp"
+#include "graphics3D/shader.hpp"
+#include "graphics3D/texture.hpp"
+#include "graphics3D/transformable.hpp"
 
 class Shape final : public Transformable
 {

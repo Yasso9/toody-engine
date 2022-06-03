@@ -4,8 +4,8 @@
 
 #include "3D_model/assimp.hpp"
 #include "3D_model/mesh.hpp"
-#include "graphics/texture.hpp"
-#include "graphics/transformable.hpp"
+#include "graphics3D/texture.hpp"
+#include "graphics3D/transformable.hpp"
 #include "tools/tools.hpp"
 
 class Model final : public Transformable

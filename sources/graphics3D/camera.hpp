@@ -1,7 +1,7 @@
 #pragma once
 
-#include "graphics/openGL.hpp"
 #include "graphics2D/sfml.hpp"
+#include "graphics3D/openGL.hpp"
 
 class Camera
 {

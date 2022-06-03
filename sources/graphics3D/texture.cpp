@@ -86,7 +86,7 @@ aiTextureType Texture::to_assimp_type( Texture::E_Type const & type )
 
 #pragma GCC diagnostic pop
 
-#include "graphics/openGL.hpp"
+#include "graphics3D/openGL.hpp"
 
 namespace GLTexture
 {

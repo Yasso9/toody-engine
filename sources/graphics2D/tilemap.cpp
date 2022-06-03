@@ -125,9 +125,9 @@ static math::Rectangle get_tile_rectangle_in_texture(
     };
 }
 
-static void set_vertex_array( sf::VertexArray & vertexArray,
-                              math::Vector2D const & tilemapPosition,
-                              math::Vector2D const & tileCoordinate )
+static void set_position( sf::VertexArray & vertexArray,
+                          math::Vector2D const & tilemapPosition,
+                          math::Vector2D const & tileCoordinate )
 {
     math::Rectangle const rectangle {
         get_tile_rectangle_in_tilemap( tilemapPosition, tileCoordinate )
@@ -188,9 +188,9 @@ void TileMap::set_tile_table(
 
                 math::Vector2D const currentTilePosition { column, line };
 
-                set_vertex_array( tile.vertice,
-                                  this->getPosition(),
-                                  currentTilePosition );
+                set_position( tile.vertice,
+                              this->getPosition(),
+                              currentTilePosition );
 
                 set_texture_coordinate(
                     tile.vertice,
@@ -219,10 +219,6 @@ void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
         }
     }
 }
-
-// TileMapEditor::TileMapEditor( sf::Texture const & texture )
-//   : TileMap( texture ), m_currentDepth( 0u )
-// {}
 
 // void TileMapEditor::change_tile( sf::Vector2u const /* tilePositionInTile */,
 //                                  unsigned int const /* newTile */ )
@@ -254,5 +250,3 @@ void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
 //              R"(" );
 // )"s );
 // }
-
-// void TileMapEditor::update() {}

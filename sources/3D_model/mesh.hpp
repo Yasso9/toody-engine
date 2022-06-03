@@ -4,9 +4,9 @@
 #include <vector>
 
 #include "3D_model/assimp.hpp"
-#include "graphics/openGL.hpp"
-#include "graphics/texture.hpp"
 #include "graphics2D/sfml.hpp"
+#include "graphics3D/openGL.hpp"
+#include "graphics3D/texture.hpp"
 #include "main/window.hpp"
 #include "tools/string.hpp"
 

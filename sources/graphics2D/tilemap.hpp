@@ -43,19 +43,3 @@ class TileMap : public sf::Drawable,
     void draw( sf::RenderTarget & target,
                sf::RenderStates states ) const override;
 };
-
-// class TileMapEditor final : public TileMap
-// {
-//   public:
-//     TileMapEditor( sf::Texture const & texture );
-//     virtual ~TileMapEditor() = default;
-
-//     void change_tile( sf::Vector2u const tilePosition,
-//                       unsigned int const tile );
-//     void save() const;
-
-//     void update();
-
-//   private:
-//     unsigned int m_currentDepth;
-// };

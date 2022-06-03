@@ -1,8 +1,8 @@
 #pragma once
 
 #include "3D_model/model.hpp"
-#include "graphics/camera.hpp"
-#include "graphics/shape.hpp"
+#include "graphics3D/camera.hpp"
+#include "graphics3D/shape.hpp"
 #include "states/state.hpp"
 
 class GraphicState final : public State

@@ -2,6 +2,8 @@
 
 #include "graphics2D/sfml.hpp"
 
+// TYPO remove this file
+
 /* Prend en parametre la position d'un nombre donné en pixel et retourne sa position
  * en tile */
 sf::Vector2u to_tile_position( unsigned int const tileNumber,

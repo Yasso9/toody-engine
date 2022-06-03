@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-#include "graphics/openGL.hpp"
+#include "graphics3D/openGL.hpp"
+#include "main/settings.hpp"
 #include "tools/maths.hpp"
 #include "tools/string.hpp"
 
@@ -92,8 +93,6 @@ void Window::gl_draw_arrays( unsigned int const & vertexArrayObject,
 
 void Window::create()
 {
-    sf::Vector2u const windowSize { 900u, 900u };
-
     std::string const gameTitle { "Toody Engine (In Developpement)"s };
 
     unsigned int const windowStyle { sf::Style::Default };
@@ -106,7 +105,7 @@ void Window::create()
     contextSettings.majorVersion      = 4;
     contextSettings.minorVersion      = 6;
 
-    this->sf::RenderWindow::create( sfpp::to_video_mode( windowSize ),
+    this->sf::RenderWindow::create( Settings::get_instance().get_video_mode(),
                                     gameTitle,
                                     windowStyle,
                                     contextSettings );
@@ -116,7 +115,8 @@ void Window::initialize()
     this->setVisible( true );
     this->requestFocus();
     this->setKeyRepeatEnabled( false );
-    this->setVerticalSyncEnabled( true );
+    this->setVerticalSyncEnabled(
+        Settings::get_instance().get_vertical_sync() );
 
     if ( ! this->setActive( true ) )
     {

@@ -11,7 +11,7 @@ class Settings final : public Singleton< Settings >
   public:
     virtual ~Settings() = default;
 
-    math::Vector2D get_video_mode() const;
+    sf::VideoMode get_video_mode() const;
     double get_refresh_rate() const;
     bool get_vertical_sync() const;
 

@@ -16,14 +16,7 @@ extern "C"
 
 #include "tools/exceptions.hpp"
 #include "tools/string.hpp"
-
 #include "tools/tools.hpp"
-
-// To mix the use of unique pointer and sqlite3 database
-struct sqlite3_deleter
-{
-    void operator()( sqlite3 * sql ) const { sqlite3_close( sql ); }
-};
 
 // Json Array of all the result requested
 static json s_requestResult {};
@@ -33,13 +26,11 @@ static std::string const g_databasePath { tools::get_path::databases()
 static int callback( void * /* data */, int argc, char ** argv,
                      char ** azColName )
 {
-    std::cout << "test C" << std::endl;
-
     for ( unsigned int i { 0u }; i < static_cast< unsigned int >( argc ); ++i )
     {
-        std::cout << "i : " << i << std::endl;
-        std::cout << "azColName[i] : " << azColName[i] << std::endl;
-        std::cout << "argv[i] : " << argv[i] << std::endl;
+        // std::cout << "i : " << i << std::endl;
+        // std::cout << "azColName[i] : " << azColName[i] << std::endl;
+        // std::cout << "argv[i] : " << argv[i] << std::endl;
 
         std::string const name { azColName[i] };
         std::string const value { argv[i] ? argv[i] : "NULL" };
@@ -50,6 +41,7 @@ static int callback( void * /* data */, int argc, char ** argv,
     return 0;
 }
 
+// TYPO create a singleton and initialize sqlite3_open
 namespace db
 {
     json request( std::string const & request )
@@ -85,7 +77,8 @@ namespace db
 } // namespace db
 
 [[maybe_unused]] static void test()
-{ // Initialisation de la database
+{
+    // Initialisation de la database
 
     // TYPO mettre tous les databases dans la bonne place
     db::request( "DROP TABLE IF EXISTS tilemap;"
@@ -110,8 +103,4 @@ namespace db
         "SELECT tile_table FROM tilemap;" )[0] };
 
     std::cout << requestValue << std::endl;
-
-    // TYPO pourquoi on doit acceder à [0]["table_tilemap"] pour avoir la valeur
-    // json const jsonTilemap { json::parse(
-    //     std::string { requestValue[0]["table"] } ) };
 }

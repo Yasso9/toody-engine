@@ -4,7 +4,7 @@
 
 #include "states/state.hpp"
 
-#include "graphics/openGL.hpp"
+#include "graphics3D/openGL.hpp"
 #include "tools/tools.hpp"
 
 class TestState final : public State

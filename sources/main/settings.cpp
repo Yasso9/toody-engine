@@ -9,7 +9,7 @@
 Settings::Settings() : m_windowSize(), m_refreshRate(), m_verticalSync()
 {
     // TYPO Récupéré les settings à partir de la base de données
-    std::string const configLocation { tools::get_path::resources()
+    std::string const configLocation { tools::get_path::data()
                                        + "/window.txt"s };
 
     std::ifstream file { configLocation, std::ios::in };
@@ -26,9 +26,11 @@ Settings::Settings() : m_windowSize(), m_refreshRate(), m_verticalSync()
     this->m_refreshRate = 1. / framePerSecond;
 }
 
-math::Vector2D Settings::get_video_mode() const
+sf::VideoMode Settings::get_video_mode() const
 {
-    return this->m_windowSize;
+    return sf::VideoMode { static_cast< unsigned int >( this->m_windowSize.x ),
+                           static_cast< unsigned int >(
+                               this->m_windowSize.y ) };
 }
 
 double Settings::get_refresh_rate() const
