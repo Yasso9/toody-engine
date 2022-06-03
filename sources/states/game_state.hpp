@@ -13,10 +13,10 @@ class GameState final : public State
     void render() const override;
 
   private:
-    TileMap m_tilemap;
-    Player m_player;
-
     sf::View m_view;
+    TileMap m_tilemap;
+
+    Player m_player;
 
     void init_map();
     void update_map();

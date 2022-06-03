@@ -86,6 +86,17 @@ namespace math
         return math::is_inside( *this, position, size );
     }
 
+    void Vector2D::floor()
+    {
+        this->x = std::floor( this->x );
+        this->y = std::floor( this->y );
+    }
+    void Vector2D::round()
+    {
+        this->x = std::round( this->x );
+        this->y = std::round( this->y );
+    }
+
     std::ostream & operator<<( std::ostream & stream,
                                Vector2D const & vector2D )
     {

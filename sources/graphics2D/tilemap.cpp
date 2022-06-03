@@ -1,5 +1,6 @@
 #include "tilemap.hpp"
 
+#include "main/window.hpp"
 #include "tilemap/tile_utility.hpp"
 #include "tools/databases.hpp"
 #include "tools/global_variable.hpp"
@@ -80,8 +81,12 @@ sf::Vertex TileQuad::operator[]( std::size_t index ) const
     return this->m_vextexArray[index];
 }
 
-TileMap::TileMap( Tileset const & tileset )
-  : m_tileset( tileset ), m_tileTable(), m_currentDepth( 0u )
+TileMap::TileMap( Tileset const & tileset, sf::View & view )
+  : m_tileset( tileset ),
+    m_cursor(),
+    m_view( view ),
+    m_tileTable(),
+    m_currentDepth( 0u )
 {
     // json const tilemapRequest { db::request(
     //     "SELECT table_tilemap FROM tilemap;"s ) };
@@ -96,6 +101,12 @@ TileMap::TileMap( Tileset const & tileset )
         {{ 0 }, { 2 }},
         {{ 2 }, { 0 }}
     } );
+
+    m_cursor.setSize( TILE_PIXEL_SIZE_VECTOR );
+    m_cursor.setOutlineThickness( -3.f );
+    m_cursor.setOutlineColor( sf::Color::Transparent );
+    m_cursor.setFillColor( sf::Color::Transparent );
+    m_cursor.setPosition( 0.f, 0.f );
 
     this->setPosition( 0.f, 0.f );
 }
@@ -119,6 +130,57 @@ void TileMap::update()
 {
     if ( ImGui::Begin( "Tilemap Information" ) )
     {
+        math::Vector2D const mousePosition { ImGui::GetMousePos() };
+        math::Vector2D const viewZoom { Window::get_instance().get_size_f()
+                                        / this->m_view.getSize() };
+        math::Vector2D mouseViewPosition { ( mousePosition / viewZoom )
+                                           - ( this->m_view.getSize() / 2.f )
+                                           + this->m_view.getCenter() };
+        mouseViewPosition.floor();
+
+        std::stringstream infoOutput {};
+        infoOutput << "mouse general position : " << mousePosition << "\n";
+        infoOutput << "mouse view position : " << mouseViewPosition << "\n";
+        // mouseViewPosition.floor();
+        // infoOutput << "mouse view position around : " << mouseViewPosition
+        //            << "\n";
+        infoOutput << "tilemap position : " << this->getPosition() << "\n";
+        infoOutput << "tilemap size : " << this->get_size() << "\n";
+        infoOutput << "tilemap - number of tile : "
+                   << this->get_size() / TILE_PIXEL_SIZE_U << "\n";
+        infoOutput << "view center : " << this->m_view.getCenter() << "\n";
+        infoOutput << "view size : " << this->m_view.getSize() << "\n";
+        infoOutput << "view zoom : " << viewZoom << "\n";
+        ImGui::Text( "%s", infoOutput.str().c_str() );
+
+        if ( mouseViewPosition.is_inside( this->getPosition(),
+                                          this->get_size() ) )
+        {
+            math::Vector2D const mouseRelativPosition { mouseViewPosition
+                                                        - this->getPosition() };
+            math::Vector2D const tileSelectedPosition {
+                mouseRelativPosition
+                - ( mouseRelativPosition % TILE_PIXEL_SIZE_U )
+            };
+
+            std::stringstream selectionOutput {};
+            selectionOutput
+                << "mouse relativ position : " << mouseRelativPosition << "\n";
+            selectionOutput
+                << "middle : " << ( mouseRelativPosition % TILE_PIXEL_SIZE_U )
+                << "\n";
+            selectionOutput
+                << "tile selected position : " << tileSelectedPosition << "\n";
+            ImGui::Text( "%s", selectionOutput.str().c_str() );
+
+            this->m_cursor.setOutlineColor( sf::Color::Black );
+            this->m_cursor.setPosition( tileSelectedPosition );
+        }
+        else
+        {
+            this->m_cursor.setOutlineColor( sf::Color::Transparent );
+        }
+
         unsigned int tileSizeX { static_cast< unsigned int >(
             this->get_tile_size().x ) };
         unsigned int tileSizeY { static_cast< unsigned int >(
@@ -225,6 +287,8 @@ void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
             }
         }
     }
+
+    target.draw( this->m_cursor, states );
 }
 
 // void TileMapEditor::change_tile( sf::Vector2u const /* tilePositionInTile */,

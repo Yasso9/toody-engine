@@ -40,7 +40,7 @@ class TileMap : public sf::Drawable,
                 public sf::Transformable
 {
   public:
-    explicit TileMap( Tileset const & tileset );
+    TileMap( Tileset const & tileset, sf::View & view );
     virtual ~TileMap() = default;
 
     /// @brief size of the tilemap in pixel
@@ -52,6 +52,8 @@ class TileMap : public sf::Drawable,
 
   protected:
     Tileset const m_tileset;
+    sf::RectangleShape m_cursor;
+    sf::View & m_view;
     /** @brief tri-dimensionnal vector containing the sprite number
      * of each tile of the tilemap */
     /// @brief m_tileTable[row][line][depth]

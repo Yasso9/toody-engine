@@ -4,11 +4,12 @@
 
 GameState::GameState()
   : State( State::E_List::Game ),
+    m_view(),
     m_tilemap( Tileset( Resources::get_instance().get_texture(
-        Resources::E_TextureKey::Tileset ) ) ),
+                   Resources::E_TextureKey::Tileset ) ),
+               m_view ),
     m_player( Resources::get_instance().get_texture(
-        Resources::E_TextureKey::Player ) ),
-    m_view()
+        Resources::E_TextureKey::Player ) )
 {
     this->init_map();
 }

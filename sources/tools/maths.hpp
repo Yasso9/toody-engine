@@ -50,6 +50,9 @@ namespace math
         bool is_inside( Rectangle const & rectangle ) const;
         bool is_inside( Vector2D const & position,
                         Vector2D const & size ) const;
+
+        void floor();
+        void round();
     };
 
     std::ostream & operator<<( std::ostream & stream,

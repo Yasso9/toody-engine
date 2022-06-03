@@ -19,9 +19,9 @@ class EditorState final : public State
 
   private:
     TileSelector m_tileSelector;
-    TileMap m_tilemap;
 
     sf::View m_view;
+    TileMap m_tilemap;
 
     bool m_showDemoWindow;
     bool m_showTilemapEditor;

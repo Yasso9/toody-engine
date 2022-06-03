@@ -10,8 +10,8 @@
 EditorState::EditorState()
   : State( State::E_List::Editor ),
     m_tileSelector(),
-    m_tilemap( m_tileSelector.get_tileset() ),
     m_view(),
+    m_tilemap( m_tileSelector.get_tileset(), m_view ),
     m_showDemoWindow( false ),
     m_showTilemapEditor( true ),
     m_showDebugOptions( false )
