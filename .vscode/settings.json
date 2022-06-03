@@ -5,6 +5,7 @@
         "external/": true
     },
     "files.associations": {
+        "*.txt": "plaintext",
         "algorithm": "cpp",
         "array": "cpp",
         "atomic": "cpp",
@@ -94,6 +95,8 @@
         "variant": "cpp",
         "*.tpp": "cpp",
         "eulerangles": "cpp",
-        "numbers": "cpp"
+        "numbers": "cpp",
+        "*.ipp": "cpp",
+        "stop_token": "cpp"
     }
 }

@@ -9,17 +9,21 @@ namespace tools
 {
     namespace get_path
     {
-        std::string resources( std::string const & fileName /* = ""s */ )
+        std::string data( std::string const & fileName )
         {
-            return "./data/resources/"s + fileName;
+            return "./data/"s + fileName;
         }
-        std::string shaders( std::string const & fileName /* = ""s */ )
+        std::string resources( std::string const & fileName )
+        {
+            return tools::get_path::data() + "resources/"s + fileName;
+        }
+        std::string shaders( std::string const & fileName )
         {
             return tools::get_path::resources() + "shaders/"s + fileName;
         }
-        std::string databases( std::string const & fileName /* = ""s */ )
+        std::string databases( std::string const & fileName )
         {
-            return tools::get_path::resources() + "databases/"s + fileName;
+            return tools::get_path::data() + "databases/"s + fileName;
         }
     } // namespace get_path
 

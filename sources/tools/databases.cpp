@@ -1,5 +1,6 @@
 #include "databases.hpp"
 
+#include <iostream>
 #include <memory>
 
 #pragma GCC diagnostic push
@@ -24,119 +25,93 @@ struct sqlite3_deleter
     void operator()( sqlite3 * sql ) const { sqlite3_close( sql ); }
 };
 
-using T_UniqueSqlitePtr = std::unique_ptr< sqlite3, sqlite3_deleter >;
-
-/// @brief Initialize the database
-static T_UniqueSqlitePtr make_sqlite();
-
 // Json Array of all the result requested
-static json gf_resultRequested {};
+static json s_requestResult {};
 static std::string const g_databasePath { tools::get_path::databases()
-                                          + "/tilemap.db" };
+                                          + "game.db" };
+
+static int callback( void * /* data */, int argc, char ** argv,
+                     char ** azColName )
+{
+    std::cout << "test C" << std::endl;
+
+    for ( unsigned int i { 0u }; i < static_cast< unsigned int >( argc ); ++i )
+    {
+        std::cout << "i : " << i << std::endl;
+        std::cout << "azColName[i] : " << azColName[i] << std::endl;
+        std::cout << "argv[i] : " << argv[i] << std::endl;
+
+        std::string const name { azColName[i] };
+        std::string const value { argv[i] ? argv[i] : "NULL" };
+
+        s_requestResult[name] = value;
+    }
+
+    return 0;
+}
 
 namespace db
 {
     json request( std::string const & request )
     {
-        T_UniqueSqlitePtr database { ::make_sqlite() };
-
-        char * requestErrorMessage { const_cast< char * >( "" ) };
-
-        // Reset at every request
-        gf_resultRequested = json {};
-
-        // To get back the result of the request
-        auto cb_result_request {
-            []( void * /* data */, int argc, char ** argv, char ** azColName )
-            {
-                // TYPO data inutile ? Voir à quoi ça sert
-                // std::cout << "Data : " << data << std::endl;
-
-                // Map containing pair of table property and its json value
-                std::map< std::string, json > singleResultMap {};
-
-                // for(auto i : argc)
-                for ( int i { 0 }; i < argc; ++i )
-                {
-                    singleResultMap.insert(
-                        std::make_pair( azColName[i],
-                                        argv[i] ? argv[i] : "NULL" ) );
-                }
-
-                gf_resultRequested.push_back( singleResultMap );
-
-                return 0;
-            }
-        };
-
-        int const requestResultState { sqlite3_exec( database.get(),
-                                                     request.c_str(),
-                                                     cb_result_request,
-                                                     0,
-                                                     &requestErrorMessage ) };
-
-        if ( requestResultState != 0 )
+        sqlite3 * database { nullptr };
+        if ( sqlite3_open( g_databasePath.c_str(), &database ) )
         {
-            sqlite3_free( requestErrorMessage );
-            throw Exception::Database { g_databasePath, requestErrorMessage };
+            throw Exception::Database { g_databasePath,
+                                        "Can't open database - "s
+                                            + sqlite3_errmsg( database ) };
         }
 
-        return gf_resultRequested;
+        // Reset at every request
+        s_requestResult = json {};
+
+        char * requestErrorMessage { const_cast< char * >( "" ) };
+        int result = sqlite3_exec( database,
+                                   request.c_str(),
+                                   callback,
+                                   0,
+                                   &requestErrorMessage );
+
+        if ( result != 0 )
+        {
+            throw Exception::Database { g_databasePath, requestErrorMessage };
+            sqlite3_free( requestErrorMessage );
+        }
+
+        sqlite3_close( database );
+
+        return s_requestResult;
     }
 } // namespace db
 
-static T_UniqueSqlitePtr make_sqlite()
-{
-    sqlite3 * database { nullptr };
+[[maybe_unused]] static void test()
+{ // Initialisation de la database
 
-    if ( sqlite3_open( g_databasePath.c_str(), &database ) )
-    {
-        // Something bad is happenning
-        throw Exception::Database { g_databasePath,
-                                    "Can't open database - "s
-                                        + sqlite3_errmsg( database ) };
-    }
+    // TYPO mettre tous les databases dans la bonne place
+    db::request( "DROP TABLE IF EXISTS tilemap;"
+                 "CREATE TABLE tilemap ("
+                 "tile_table TEXT NOT NULL"
+                 ");" );
+    std::vector< std::vector< std::vector< unsigned int > > > tripleArray {
+        {{ 0 }, { 2 }},
+        {{ 2 }, { 0 }}
+    };
 
-    return T_UniqueSqlitePtr( database );
+    json jsonArray {};
+    jsonArray["table"] = tripleArray;
+
+    std::cout << "dump : '" << jsonArray["table"].dump() << "'" << std::endl;
+
+    db::request( "INSERT INTO tilemap (tile_table)"
+                 "VALUES('"
+                 + jsonArray["table"].dump() + "');" );
+
+    json const requestValue { db::request(
+        "SELECT tile_table FROM tilemap;" )[0] };
+
+    std::cout << requestValue << std::endl;
+
+    // TYPO pourquoi on doit acceder à [0]["table_tilemap"] pour avoir la valeur
+    // json const jsonTilemap { json::parse(
+    //     std::string { requestValue[0]["table"] } ) };
 }
-
-// Initialisation de la database
-
-// TYPO mettre tous les databases dans la bonne place
-// database::request( R"(
-// DROP TABLE IF EXISTS tilemap;
-// CREATE TABLE tilemap(
-//     table_tilemap TEXT NOT NULL
-// );
-// )"s );
-
-// std::vector<std::vector<std::vector<unsigned int>>> tripleArray {
-//     {
-//         { 5, 3, 4, 4, 2, 5 },
-//         { 5, 3, 4, 4, 2, 5 },
-//         { 5, 3, 4, 4, 2, 5 },
-//     },
-//     {
-//         { 5, 3, 4, 4, 2, 5 },
-//         { 5, 3, 4, 4, 2, 5 },
-//         { 5, 3, 4, 4, 2, 5 },
-//     }
-// };
-
-// json jsonTest {};
-// jsonTest["array"] = tripleArray;
-
-// database::request( R"(
-// INSERT INTO tilemap( table_tilemap )
-// VALUES( ")"s + jsonTest["array"].dump()
-//                    +
-//                    R"(" );
-// INSERT INTO tilemap( table_tilemap )
-// VALUES( ")"s + jsonTest["array"].dump()
-//                    +
-//                    R"(" );
-// INSERT INTO tilemap( table_tilemap )
-// VALUES( ")"s + jsonTest["array"].dump()
-//                    +
-//                    R"(" );
-// )"s );

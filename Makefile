@@ -176,7 +176,8 @@ DEPENDENCIES := $(patsubst %.o,%.d,$(OBJECT_PROJECT))
 
 # These commands do not represent physical files
 .PHONY: buildrun build run initialize_build \
-		clean_executable clean_project clean_libraries clean debug remake nothing
+		clean_executable clean_project clean_libraries \
+		clean debug remake nothing valgrind
 
 buildrun : build run
 
@@ -214,6 +215,14 @@ clean : clean_project clean_libraries
 
 debug :
 	gdb -quiet $(EXECUTABLE)
+
+valgrind :
+	valgrind --leak-check=full \
+		--show-leak-kinds=all \
+		--track-origins=yes \
+		--verbose \
+		--log-file=valgrind-out.txt \
+		$(EXECUTABLE)
 
 remake: clean buildrun
 

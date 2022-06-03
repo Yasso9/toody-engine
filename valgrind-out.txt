@@ -1,0 +1,1382 @@
+==79112== Memcheck, a memory error detector
+==79112== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==79112== Using Valgrind-3.15.0-608cb11914-20190413 and LibVEX; rerun with -h for copyright info
+==79112== Command: ./build/application/application
+==79112== Parent PID: 79110
+==79112== 
+--79112-- 
+--79112-- Valgrind options:
+--79112--    --leak-check=full
+--79112--    --show-leak-kinds=all
+--79112--    --track-origins=yes
+--79112--    --verbose
+--79112--    --log-file=valgrind-out.txt
+--79112-- Contents of /proc/version:
+--79112--   Linux version 5.13.0-44-generic (buildd@lcy02-amd64-107) (gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #49~20.04.1-Ubuntu SMP Wed May 18 18:44:28 UTC 2022
+--79112-- 
+--79112-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand
+--79112-- Page sizes: currently 4096, max supported 4096
+--79112-- Valgrind library directory: /usr/lib/x86_64-linux-gnu/valgrind
+--79112-- Reading syms from /home/ineo/Projects/ToodyEngine/build/application/application
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/ld-2.31.so
+--79112--   Considering /usr/lib/debug/.build-id/45/87364908de169dec62ffa538170118c1c3a078.debug ..
+--79112--   .. build-id is valid
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/valgrind/memcheck-amd64-linux
+--79112--    object doesn't have a symbol table
+--79112--    object doesn't have a dynamic symbol table
+--79112-- Scheduler: using generic scheduler lock implementation.
+--79112-- Reading suppressions file: /usr/lib/x86_64-linux-gnu/valgrind/default.supp
+==79112== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-79112-by-ineo-on-???
+==79112== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-79112-by-ineo-on-???
+==79112== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-79112-by-ineo-on-???
+==79112== 
+==79112== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==79112== don't want to do, unless you know exactly what you're doing,
+==79112== or are doing some strange experiment):
+==79112==   /usr/lib/x86_64-linux-gnu/valgrind/../../bin/vgdb --pid=79112 ...command...
+==79112== 
+==79112== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==79112==   /path/to/gdb ./build/application/application
+==79112== and then give GDB the following command
+==79112==   target remote | /usr/lib/x86_64-linux-gnu/valgrind/../../bin/vgdb --pid=79112
+==79112== --pid is optional if only one valgrind process is running
+==79112== 
+--79112-- REDIR: 0x4022e20 (ld-linux-x86-64.so.2:strlen) redirected to 0x580c9ce2 (???)
+--79112-- REDIR: 0x4022bf0 (ld-linux-x86-64.so.2:index) redirected to 0x580c9cfc (???)
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_core-amd64-linux.so
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so
+--79112--    object doesn't have a symbol table
+==79112== WARNING: new redirection conflicts with existing -- ignoring it
+--79112--     old: 0x04022e20 (strlen              ) R-> (0000.0) 0x580c9ce2 ???
+--79112--     new: 0x04022e20 (strlen              ) R-> (2007.0) 0x0483f060 strlen
+--79112-- REDIR: 0x401f600 (ld-linux-x86-64.so.2:strcmp) redirected to 0x483ffd0 (strcmp)
+--79112-- REDIR: 0x4023380 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4843a20 (mempcpy)
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libGL.so.1.7.0
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libdl-2.31.so
+--79112--   Considering /usr/lib/debug/.build-id/c0/f40155b3f8bf8c494fa800f9ab197ebe20ed6e.debug ..
+--79112--   .. build-id is valid
+--79112-- Reading syms from /usr/local/lib/libassimp.so.5
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libpthread-2.31.so
+--79112--   Considering /usr/lib/debug/.build-id/7b/4536f41cdaa5888408e82d0836e33dcf436466.debug ..
+--79112--   .. build-id is valid
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.29
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libm-2.31.so
+--79112--   Considering /usr/lib/debug/.build-id/fe/91b4090ea04c1559ff71dd9290062776618891.debug ..
+--79112--   .. build-id is valid
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libc-2.31.so
+--79112--   Considering /usr/lib/debug/.build-id/18/78e6b475720c7c51969e69ab2d276fae6d1dee.debug ..
+--79112--   .. build-id is valid
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libfreetype.so.6.17.1
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libXrandr.so.2.2.0
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libudev.so.1.6.17
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libGLdispatch.so.0.0.0
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libminizip.so.1.0.0
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libpng16.so.16.37.0
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+--79112--   Considering /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0 ..
+--79112--   .. CRC mismatch (computed 7e27e1ef wanted 4ab025b2)
+--79112--   Considering /lib/x86_64-linux-gnu/libXext.so.6.4.0 ..
+--79112--   .. CRC mismatch (computed 7e27e1ef wanted 4ab025b2)
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libXrender.so.1.3.0
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+--79112--   Considering /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0 ..
+--79112--   .. CRC mismatch (computed 7de9b6ad wanted e8a17129)
+--79112--   Considering /lib/x86_64-linux-gnu/libXau.so.6.0.0 ..
+--79112--   .. CRC mismatch (computed 7de9b6ad wanted e8a17129)
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+--79112--    object doesn't have a symbol table
+--79112-- Reading syms from /usr/lib/x86_64-linux-gnu/libbsd.so.0.10.0
+--79112--    object doesn't have a symbol table
+--79112-- REDIR: 0x5f13480 (libc.so.6:memmove) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f12780 (libc.so.6:strncpy) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f137b0 (libc.so.6:strcasecmp) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f120a0 (libc.so.6:strcat) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f127e0 (libc.so.6:rindex) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f14c50 (libc.so.6:rawmemchr) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f2fce0 (libc.so.6:wmemchr) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f2f820 (libc.so.6:wcscmp) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f135e0 (libc.so.6:mempcpy) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f13410 (libc.so.6:bcmp) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f12710 (libc.so.6:strncmp) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f12150 (libc.so.6:strcmp) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f13540 (libc.so.6:memset) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f2f7e0 (libc.so.6:wcschr) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f12670 (libc.so.6:strnlen) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f12230 (libc.so.6:strcspn) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f13800 (libc.so.6:strncasecmp) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f121d0 (libc.so.6:strcpy) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f13950 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f30f50 (libc.so.6:wcsnlen) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f2f860 (libc.so.6:wcscpy) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f12820 (libc.so.6:strpbrk) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f12100 (libc.so.6:index) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f12630 (libc.so.6:strlen) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f1bbb0 (libc.so.6:memrchr) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f13850 (libc.so.6:strcasecmp_l) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f133d0 (libc.so.6:memchr) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f2f930 (libc.so.6:wcslen) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f12ae0 (libc.so.6:strspn) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f13750 (libc.so.6:stpncpy) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f136f0 (libc.so.6:stpcpy) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f14c90 (libc.so.6:strchrnul) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f138a0 (libc.so.6:strncasecmp_l) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5fa0850 (libc.so.6:__memcpy_chk) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5f132f0 (libc.so.6:strstr) redirected to 0x48311d0 (_vgnU_ifunc_wrapper)
+--79112-- REDIR: 0x5ffb500 (libc.so.6:__strrchr_avx2) redirected to 0x483ea10 (rindex)
+--79112-- REDIR: 0x5ffb6d0 (libc.so.6:__strlen_avx2) redirected to 0x483ef40 (strlen)
+--79112-- REDIR: 0x5f0eb10 (libc.so.6:calloc) redirected to 0x483dce0 (calloc)
+--79112-- REDIR: 0x5f0d0e0 (libc.so.6:malloc) redirected to 0x483b780 (malloc)
+--79112-- REDIR: 0x5f0de80 (libc.so.6:realloc) redirected to 0x483df30 (realloc)
+--79112-- REDIR: 0x5ffe6e0 (libc.so.6:__memcpy_avx_unaligned_erms) redirected to 0x48429f0 (memmove)
+--79112-- REDIR: 0x5ff6bd0 (libc.so.6:__strcmp_avx2) redirected to 0x483fed0 (strcmp)
+--79112-- REDIR: 0x5ff7cc0 (libc.so.6:__memcmp_avx2_movbe) redirected to 0x48421e0 (bcmp)
+--79112-- REDIR: 0x5b9cd90 (libstdc++.so.6:operator new(unsigned long)) redirected to 0x483bdf0 (operator new(unsigned long))
+--79112-- REDIR: 0x5b9af90 (libstdc++.so.6:operator delete(void*, unsigned long)) redirected to 0x483d160 (operator delete(void*, unsigned long))
+--79112-- REDIR: 0x5ffeb60 (libc.so.6:__memset_avx2_unaligned_erms) redirected to 0x48428e0 (memset)
+--79112-- REDIR: 0x5f0d6d0 (libc.so.6:free) redirected to 0x483c9d0 (free)
+==79112== Invalid read of size 1
+==79112==    at 0x483EF46: strlen (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x131373: std::char_traits<char>::length(char const*) (char_traits.h:371)
+==79112==    by 0x133C94: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:527)
+==79112==    by 0x162D13: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:81)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Address 0x689f378 is 8 bytes inside a block of size 40 free'd
+==79112==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CE03: sqlite3MemFree (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DB6F: sqlite3_free (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CE3: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:80)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Block was alloc'd at
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E030: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E439: sqlite3DbStrDup (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2FEAE9: sqlite3_exec (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CCA: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:72)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== Invalid read of size 1
+==79112==    at 0x483EF54: strlen (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x131373: std::char_traits<char>::length(char const*) (char_traits.h:371)
+==79112==    by 0x133C94: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:527)
+==79112==    by 0x162D13: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:81)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Address 0x689f379 is 9 bytes inside a block of size 40 free'd
+==79112==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CE03: sqlite3MemFree (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DB6F: sqlite3_free (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CE3: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:80)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Block was alloc'd at
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E030: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E439: sqlite3DbStrDup (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2FEAE9: sqlite3_exec (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CCA: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:72)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== Invalid read of size 8
+==79112==    at 0x4842AD6: memmove (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x1314A2: std::char_traits<char>::copy(char*, char const*, unsigned long) (char_traits.h:409)
+==79112==    by 0x135C70: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy(char*, char const*, unsigned long) (basic_string.h:351)
+==79112==    by 0x140EDE: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy_chars(char*, char const*, char const*) (basic_string.h:398)
+==79112==    by 0x13DB75: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (basic_string.tcc:225)
+==79112==    by 0x1393CB: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct_aux<char const*>(char const*, char const*, std::__false_type) (basic_string.h:247)
+==79112==    by 0x13564C: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*) (basic_string.h:266)
+==79112==    by 0x133CB8: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:527)
+==79112==    by 0x162D13: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:81)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Address 0x689f378 is 8 bytes inside a block of size 40 free'd
+==79112==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CE03: sqlite3MemFree (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DB6F: sqlite3_free (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CE3: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:80)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Block was alloc'd at
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E030: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E439: sqlite3DbStrDup (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2FEAE9: sqlite3_exec (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CCA: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:72)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== Invalid read of size 8
+==79112==    at 0x4842AE4: memmove (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x1314A2: std::char_traits<char>::copy(char*, char const*, unsigned long) (char_traits.h:409)
+==79112==    by 0x135C70: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy(char*, char const*, unsigned long) (basic_string.h:351)
+==79112==    by 0x140EDE: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy_chars(char*, char const*, char const*) (basic_string.h:398)
+==79112==    by 0x13DB75: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (basic_string.tcc:225)
+==79112==    by 0x1393CB: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct_aux<char const*>(char const*, char const*, std::__false_type) (basic_string.h:247)
+==79112==    by 0x13564C: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*) (basic_string.h:266)
+==79112==    by 0x133CB8: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:527)
+==79112==    by 0x162D13: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:81)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Address 0x689f388 is 24 bytes inside a block of size 40 free'd
+==79112==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CE03: sqlite3MemFree (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DB6F: sqlite3_free (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CE3: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:80)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Block was alloc'd at
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E030: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E439: sqlite3DbStrDup (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2FEAE9: sqlite3_exec (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CCA: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:72)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== Invalid read of size 2
+==79112==    at 0x4842B30: memmove (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x1314A2: std::char_traits<char>::copy(char*, char const*, unsigned long) (char_traits.h:409)
+==79112==    by 0x135C70: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy(char*, char const*, unsigned long) (basic_string.h:351)
+==79112==    by 0x140EDE: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy_chars(char*, char const*, char const*) (basic_string.h:398)
+==79112==    by 0x13DB75: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (basic_string.tcc:225)
+==79112==    by 0x1393CB: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct_aux<char const*>(char const*, char const*, std::__false_type) (basic_string.h:247)
+==79112==    by 0x13564C: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*) (basic_string.h:266)
+==79112==    by 0x133CB8: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:527)
+==79112==    by 0x162D13: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:81)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Address 0x689f390 is 32 bytes inside a block of size 40 free'd
+==79112==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CE03: sqlite3MemFree (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DB6F: sqlite3_free (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CE3: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:80)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Block was alloc'd at
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E030: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E439: sqlite3DbStrDup (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2FEAE9: sqlite3_exec (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CCA: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:72)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+--79112-- REDIR: 0x5ff7010 (libc.so.6:__strncmp_avx2) redirected to 0x483f670 (strncmp)
+==79112== 
+==79112== Process terminating with default action of signal 6 (SIGABRT)
+==79112==    at 0x5EB600B: raise (raise.c:51)
+==79112==    by 0x5E95858: abort (abort.c:79)
+==79112==    by 0x5B90A30: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.29)
+==79112==    by 0x5B9C5DB: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.29)
+==79112==    by 0x5B9C646: std::terminate() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.29)
+==79112==    by 0x5B9C8E8: __cxa_throw (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.29)
+==79112==    by 0x162D60: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:81)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== HEAP SUMMARY:
+==79112==     in use at exit: 157,442 bytes in 159 blocks
+==79112==   total heap usage: 199 allocs, 40 frees, 233,519 bytes allocated
+==79112== 
+==79112== Searching for pointers to 159 not-freed blocks
+==79112== Checked 597,832 bytes
+==79112== 
+==79112== 4 bytes in 1 blocks are still reachable in loss record 1 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DF2B8: sf::ThreadLocal::ThreadLocal(void*) (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x48EF565: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 4 bytes in 1 blocks are still reachable in loss record 2 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DF2B8: sf::ThreadLocal::ThreadLocal(void*) (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x48EF5CB: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 4 bytes in 1 blocks are still reachable in loss record 3 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DF2B8: sf::ThreadLocal::ThreadLocal(void*) (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x48EF63F: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 16 bytes in 1 blocks are still reachable in loss record 4 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E030: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2813F1: strAccumFinishRealloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2814B5: sqlite3StrAccumFinish (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x281911: sqlite3_vmprintf (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2819F4: sqlite3_mprintf (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x342EC4: sqlite3_overload_function (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F5992: sqlite3RegisterPerConnectionBuiltinFunctions (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3448DC: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 17 bytes in 1 blocks are still reachable in loss record 5 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x13DFA0: __gnu_cxx::new_allocator<char>::allocate(unsigned long, void const*) (new_allocator.h:121)
+==79112==    by 0x135CC6: allocate (allocator.h:173)
+==79112==    by 0x135CC6: std::allocator_traits<std::allocator<char> >::allocate(std::allocator<char>&, unsigned long) (alloc_traits.h:460)
+==79112==    by 0x139313: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long) (basic_string.tcc:153)
+==79112==    by 0x13DB2E: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (basic_string.tcc:219)
+==79112==    by 0x5500DF4: __static_initialization_and_destruction_0(int, int) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x550190C: _GLOBAL__sub_I_FBXExporter.cpp (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 17 bytes in 1 blocks are still reachable in loss record 6 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x13DFA0: __gnu_cxx::new_allocator<char>::allocate(unsigned long, void const*) (new_allocator.h:121)
+==79112==    by 0x135CC6: allocate (allocator.h:173)
+==79112==    by 0x135CC6: std::allocator_traits<std::allocator<char> >::allocate(std::allocator<char>&, unsigned long) (alloc_traits.h:460)
+==79112==    by 0x139313: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long) (basic_string.tcc:153)
+==79112==    by 0x13DB2E: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (basic_string.tcc:219)
+==79112==    by 0x5500E4C: __static_initialization_and_destruction_0(int, int) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x550190C: _GLOBAL__sub_I_FBXExporter.cpp (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 17 bytes in 1 blocks are still reachable in loss record 7 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x13DFA0: __gnu_cxx::new_allocator<char>::allocate(unsigned long, void const*) (new_allocator.h:121)
+==79112==    by 0x135CC6: allocate (allocator.h:173)
+==79112==    by 0x135CC6: std::allocator_traits<std::allocator<char> >::allocate(std::allocator<char>&, unsigned long) (alloc_traits.h:460)
+==79112==    by 0x139313: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long) (basic_string.tcc:153)
+==79112==    by 0x13DB2E: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (basic_string.tcc:219)
+==79112==    by 0x5500EA4: __static_initialization_and_destruction_0(int, int) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x550190C: _GLOBAL__sub_I_FBXExporter.cpp (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 24 bytes in 1 blocks are still reachable in loss record 8 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x13DFA0: __gnu_cxx::new_allocator<char>::allocate(unsigned long, void const*) (new_allocator.h:121)
+==79112==    by 0x135CC6: allocate (allocator.h:173)
+==79112==    by 0x135CC6: std::allocator_traits<std::allocator<char> >::allocate(std::allocator<char>&, unsigned long) (alloc_traits.h:460)
+==79112==    by 0x139313: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long) (basic_string.tcc:153)
+==79112==    by 0x13DB2E: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (basic_string.tcc:219)
+==79112==    by 0x5500D9C: __static_initialization_and_destruction_0(int, int) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x550190C: _GLOBAL__sub_I_FBXExporter.cpp (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 24 bytes in 1 blocks are still reachable in loss record 9 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D9A5: sqlite3_malloc64 (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28A6BD: unixOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27C6A4: sqlite3OsOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x294D1A: sqlite3PagerOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x29FE58: sqlite3BtreeOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344794: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162E45: make_sqlite() (databases.cpp:92)
+==79112== 
+==79112== 25 bytes in 1 blocks are possibly lost in loss record 10 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x13DFA0: __gnu_cxx::new_allocator<char>::allocate(unsigned long, void const*) (new_allocator.h:121)
+==79112==    by 0x135CC6: allocate (allocator.h:173)
+==79112==    by 0x135CC6: std::allocator_traits<std::allocator<char> >::allocate(std::allocator<char>&, unsigned long) (alloc_traits.h:460)
+==79112==    by 0x139313: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long) (basic_string.tcc:153)
+==79112==    by 0x13DECE: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) (basic_string.tcc:219)
+==79112==    by 0x139867: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct_aux<char*>(char*, char*, std::__false_type) (basic_string.h:247)
+==79112==    by 0x135BD0: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*) (basic_string.h:266)
+==79112==    by 0x133FA9: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (basic_string.h:451)
+==79112==    by 0x1658C9: Exception::Database::Database(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (exceptions.cpp:7)
+==79112==    by 0x162D2C: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:81)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== 26 bytes in 1 blocks are still reachable in loss record 11 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x13DFA0: __gnu_cxx::new_allocator<char>::allocate(unsigned long, void const*) (new_allocator.h:121)
+==79112==    by 0x135CC6: allocate (allocator.h:173)
+==79112==    by 0x135CC6: std::allocator_traits<std::allocator<char> >::allocate(std::allocator<char>&, unsigned long) (alloc_traits.h:460)
+==79112==    by 0x139313: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long) (basic_string.tcc:153)
+==79112==    by 0x13DB2E: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (basic_string.tcc:219)
+==79112==    by 0x5500C1F: __static_initialization_and_destruction_0(int, int) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x550190C: _GLOBAL__sub_I_FBXExporter.cpp (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 26 bytes in 1 blocks are still reachable in loss record 12 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x13DFA0: __gnu_cxx::new_allocator<char>::allocate(unsigned long, void const*) (new_allocator.h:121)
+==79112==    by 0x135CC6: allocate (allocator.h:173)
+==79112==    by 0x135CC6: std::allocator_traits<std::allocator<char> >::allocate(std::allocator<char>&, unsigned long) (alloc_traits.h:460)
+==79112==    by 0x139313: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long) (basic_string.tcc:153)
+==79112==    by 0x13DB2E: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (basic_string.tcc:219)
+==79112==    by 0x5528B7B: __static_initialization_and_destruction_0(int, int) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x5528CF5: _GLOBAL__sub_I_FBXExportNode.cpp (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 27 bytes in 1 blocks are possibly lost in loss record 13 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x13DFA0: __gnu_cxx::new_allocator<char>::allocate(unsigned long, void const*) (new_allocator.h:121)
+==79112==    by 0x135CC6: allocate (allocator.h:173)
+==79112==    by 0x135CC6: std::allocator_traits<std::allocator<char> >::allocate(std::allocator<char>&, unsigned long) (alloc_traits.h:460)
+==79112==    by 0x139313: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long) (basic_string.tcc:153)
+==79112==    by 0x13DECE: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) (basic_string.tcc:219)
+==79112==    by 0x139867: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct_aux<char*>(char*, char*, std::__false_type) (basic_string.h:247)
+==79112==    by 0x135BD0: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*) (basic_string.h:266)
+==79112==    by 0x133FA9: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (basic_string.h:451)
+==79112==    by 0x1658E0: Exception::Database::Database(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (exceptions.cpp:7)
+==79112==    by 0x162D2C: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:81)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== 28 bytes in 1 blocks are still reachable in loss record 14 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DE751: std::__cxx11::basic_string<unsigned int, std::char_traits<unsigned int>, std::allocator<unsigned int> >::reserve(unsigned long) (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x48DDC53: sf::String::String(char const*, std::locale const&) (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x48EF809: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 31 bytes in 1 blocks are still reachable in loss record 15 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x13DFA0: __gnu_cxx::new_allocator<char>::allocate(unsigned long, void const*) (new_allocator.h:121)
+==79112==    by 0x135CC6: allocate (allocator.h:173)
+==79112==    by 0x135CC6: std::allocator_traits<std::allocator<char> >::allocate(std::allocator<char>&, unsigned long) (alloc_traits.h:460)
+==79112==    by 0x139313: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long) (basic_string.tcc:153)
+==79112==    by 0x13DC23: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_mutate(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:307)
+==79112==    by 0x1394F7: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (basic_string.tcc:395)
+==79112==    by 0x135778: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::append(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (basic_string.h:1200)
+==79112==    by 0x133AD6: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) (basic_string.h:6175)
+==79112==    by 0x166197: tools::get_path::databases(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (tools.cpp:26)
+==79112==    by 0x163004: __static_initialization_and_destruction_0(int, int) (databases.cpp:34)
+==79112==    by 0x1630C2: _GLOBAL__sub_I__ZN2db7requestERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE (databases.cpp:101)
+==79112==    by 0x34D40C: __libc_csu_init (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 32 bytes in 1 blocks are still reachable in loss record 16 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x342B1B: createFunctionApi (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x342CAD: sqlite3_create_function_v2 (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x342F0C: sqlite3_overload_function (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F5992: sqlite3RegisterPerConnectionBuiltinFunctions (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3448DC: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162E45: make_sqlite() (databases.cpp:92)
+==79112==    by 0x162C48: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:41)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 17 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DCF14: sf::Mutex::Mutex() (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x48EF5A3: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 18 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DCF14: sf::Mutex::Mutex() (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x48EF6B3: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 19 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DCF14: sf::Mutex::Mutex() (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x48EF785: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 20 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DCF14: sf::Mutex::Mutex() (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x48EF8A3: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 21 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DCF14: sf::Mutex::Mutex() (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x4891099: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 22 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DCF14: sf::Mutex::Mutex() (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x4891120: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 23 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DCF14: sf::Mutex::Mutex() (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x4891149: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 24 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DCF14: sf::Mutex::Mutex() (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x4891180: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 25 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DCF14: sf::Mutex::Mutex() (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x48911A9: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 26 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DCF14: sf::Mutex::Mutex() (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x48911F3: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 27 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DCF14: sf::Mutex::Mutex() (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x48912CB: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 28 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x285D78: sqlite3HashInsert (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F0028: findCollSeqEntry (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F0099: sqlite3FindCollSeq (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3439C4: createCollation (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3445F6: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162E45: make_sqlite() (databases.cpp:92)
+==79112==    by 0x162C48: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:41)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 29 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x285D78: sqlite3HashInsert (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F0028: findCollSeqEntry (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F0099: sqlite3FindCollSeq (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3439C4: createCollation (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344674: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162E45: make_sqlite() (databases.cpp:92)
+==79112==    by 0x162C48: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:41)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 30 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x285D78: sqlite3HashInsert (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F0028: findCollSeqEntry (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F0099: sqlite3FindCollSeq (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3439C4: createCollation (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x34469E: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162E45: make_sqlite() (databases.cpp:92)
+==79112==    by 0x162C48: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:41)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 31 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x285D78: sqlite3HashInsert (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F07B5: sqlite3FindFunction (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x342A0C: sqlite3CreateFunc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x342B9D: createFunctionApi (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x342CAD: sqlite3_create_function_v2 (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x342F0C: sqlite3_overload_function (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F5992: sqlite3RegisterPerConnectionBuiltinFunctions (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3448DC: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 40 bytes in 1 blocks are still reachable in loss record 32 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DFD7: dbMallocRawFinish (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E0B2: sqlite3DbMallocRawNN (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E022: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2813F1: strAccumFinishRealloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2814B5: sqlite3StrAccumFinish (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x281774: sqlite3VMPrintf (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2832E7: sqlite3ErrorWithMsg (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3065C0: sqlite3Prepare (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 48 bytes in 1 blocks are still reachable in loss record 33 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF44: sqlite3MallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D246: pthreadMutexAlloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D0AD: sqlite3MutexAlloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x34449E: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162E45: make_sqlite() (databases.cpp:92)
+==79112==    by 0x162C48: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:41)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== 48 bytes in 1 blocks are still reachable in loss record 34 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF44: sqlite3MallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D29D: pthreadMutexAlloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D07C: sqlite3_mutex_alloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x286848: findInodeInfo (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x289DAD: fillInUnixFile (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28AA28: unixOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27C6A4: sqlite3OsOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x294D1A: sqlite3PagerOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 56 bytes in 2 blocks are still reachable in loss record 35 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DFD7: dbMallocRawFinish (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E0B2: sqlite3DbMallocRawNN (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E022: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E439: sqlite3DbStrDup (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2E6C1A: sqlite3StartTable (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x339023: yy_reduce (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x33E69F: sqlite3Parser (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x33F998: sqlite3RunParser (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 60 bytes in 1 blocks are still reachable in loss record 36 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x48DE751: std::__cxx11::basic_string<unsigned int, std::char_traits<unsigned int>, std::allocator<unsigned int> >::reserve(unsigned long) (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x48DDC53: sf::String::String(char const*, std::locale const&) (in /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1)
+==79112==    by 0x48EF7E3: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-window.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 64 bytes in 1 blocks are still reachable in loss record 37 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DFD7: dbMallocRawFinish (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E0B2: sqlite3DbMallocRawNN (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E022: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF91: sqlite3DbMallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2B0BE9: sqlite3ValueNew (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x283275: sqlite3ErrorWithMsg (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3065C0: sqlite3Prepare (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x306729: sqlite3LockAndPrepare (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 68 bytes in 1 blocks are still reachable in loss record 38 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x13DFA0: __gnu_cxx::new_allocator<char>::allocate(unsigned long, void const*) (new_allocator.h:121)
+==79112==    by 0x135CC6: allocate (allocator.h:173)
+==79112==    by 0x135CC6: std::allocator_traits<std::allocator<char> >::allocate(std::allocator<char>&, unsigned long) (alloc_traits.h:460)
+==79112==    by 0x139313: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long) (basic_string.tcc:153)
+==79112==    by 0x13DB2E: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (basic_string.tcc:219)
+==79112==    by 0x5500EFC: __static_initialization_and_destruction_0(int, int) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x550190C: _GLOBAL__sub_I_FBXExporter.cpp (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 80 bytes in 1 blocks are still reachable in loss record 39 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF44: sqlite3MallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x29FA6F: sqlite3BtreeOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344794: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162E45: make_sqlite() (databases.cpp:92)
+==79112==    by 0x162C48: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:41)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== 80 bytes in 2 blocks are still reachable in loss record 40 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x285D78: sqlite3HashInsert (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2EA0B3: sqlite3EndTable (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3390DB: yy_reduce (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x33E69F: sqlite3Parser (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x33F998: sqlite3RunParser (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3064B1: sqlite3Prepare (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x305381: sqlite3InitCallback (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x305679: sqlite3InitOne (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 80 bytes in 1 blocks are possibly lost in loss record 41 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x62DD356: ??? (in /usr/lib/x86_64-linux-gnu/libGLdispatch.so.0.0.0)
+==79112==    by 0x62DD6B4: __glDispatchInit (in /usr/lib/x86_64-linux-gnu/libGLdispatch.so.0.0.0)
+==79112==    by 0x635878C: ??? (in /usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 80 bytes in 1 blocks are possibly lost in loss record 42 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x62DD356: ??? (in /usr/lib/x86_64-linux-gnu/libGLdispatch.so.0.0.0)
+==79112==    by 0x62DD8A0: __glDispatchRegisterStubCallbacks (in /usr/lib/x86_64-linux-gnu/libGLdispatch.so.0.0.0)
+==79112==    by 0x4951209: ??? (in /usr/lib/x86_64-linux-gnu/libGL.so.1.7.0)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 87 bytes in 1 blocks are still reachable in loss record 43 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x13DFA0: __gnu_cxx::new_allocator<char>::allocate(unsigned long, void const*) (new_allocator.h:121)
+==79112==    by 0x135CC6: allocate (allocator.h:173)
+==79112==    by 0x135CC6: std::allocator_traits<std::allocator<char> >::allocate(std::allocator<char>&, unsigned long) (alloc_traits.h:460)
+==79112==    by 0x139313: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long) (basic_string.tcc:153)
+==79112==    by 0x13DC23: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_mutate(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:307)
+==79112==    by 0x1394F7: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (basic_string.tcc:395)
+==79112==    by 0x135778: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::append(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (basic_string.h:1200)
+==79112==    by 0x133AD6: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) (basic_string.h:6175)
+==79112==    by 0x165A1D: Exception::Database::what() const (exceptions.cpp:14)
+==79112==    by 0x5B909F2: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.29)
+==79112==    by 0x5B9C5DB: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.29)
+==79112==    by 0x5B9C646: std::terminate() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.29)
+==79112== 
+==79112== 88 bytes in 1 blocks are still reachable in loss record 44 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D9A5: sqlite3_malloc64 (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2867E3: findInodeInfo (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x289DAD: fillInUnixFile (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28AA28: unixOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27C6A4: sqlite3OsOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x294D1A: sqlite3PagerOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x29FE58: sqlite3BtreeOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344794: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 88 bytes in 1 blocks are still reachable in loss record 45 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DFD7: dbMallocRawFinish (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E0B2: sqlite3DbMallocRawNN (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E022: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF91: sqlite3DbMallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F0703: sqlite3FindFunction (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x342A0C: sqlite3CreateFunc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x342B9D: createFunctionApi (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x342CAD: sqlite3_create_function_v2 (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 102 bytes in 1 blocks are still reachable in loss record 46 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x13DFA0: __gnu_cxx::new_allocator<char>::allocate(unsigned long, void const*) (new_allocator.h:121)
+==79112==    by 0x135CC6: allocate (allocator.h:173)
+==79112==    by 0x135CC6: std::allocator_traits<std::allocator<char> >::allocate(std::allocator<char>&, unsigned long) (alloc_traits.h:460)
+==79112==    by 0x139313: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long) (basic_string.tcc:153)
+==79112==    by 0x13DB2E: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (basic_string.tcc:219)
+==79112==    by 0x1393CB: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct_aux<char const*>(char const*, char const*, std::__false_type) (basic_string.h:247)
+==79112==    by 0x13564C: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*) (basic_string.h:266)
+==79112==    by 0x1339EB: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(char const*, unsigned long, std::allocator<char> const&) (basic_string.h:513)
+==79112==    by 0x13188D: std::literals::string_literals::operator"" s[abi:cxx11](char const*, unsigned long) (basic_string.h:6947)
+==79112==    by 0x1307DB: main (main.cpp:17)
+==79112== 
+==79112== 128 bytes in 1 blocks are still reachable in loss record 47 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E030: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF91: sqlite3DbMallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2ADA29: sqlite3BtreeSchema (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F09CB: sqlite3SchemaGet (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3447FA: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162E45: make_sqlite() (databases.cpp:92)
+==79112==    by 0x162C48: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:41)
+==79112== 
+==79112== 128 bytes in 1 blocks are still reachable in loss record 48 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E030: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF91: sqlite3DbMallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F09E0: sqlite3SchemaGet (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x34485C: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162E45: make_sqlite() (databases.cpp:92)
+==79112==    by 0x162C48: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:41)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== 136 bytes in 1 blocks are still reachable in loss record 49 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DFD7: dbMallocRawFinish (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E0B2: sqlite3DbMallocRawNN (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E022: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF91: sqlite3DbMallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2EFF7F: findCollSeqEntry (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F0099: sqlite3FindCollSeq (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3439C4: createCollation (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3445F6: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 136 bytes in 1 blocks are still reachable in loss record 50 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DFD7: dbMallocRawFinish (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E0B2: sqlite3DbMallocRawNN (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E022: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF91: sqlite3DbMallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2EFF7F: findCollSeqEntry (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F0099: sqlite3FindCollSeq (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3439C4: createCollation (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344674: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 136 bytes in 1 blocks are still reachable in loss record 51 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DFD7: dbMallocRawFinish (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E0B2: sqlite3DbMallocRawNN (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E022: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF91: sqlite3DbMallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2EFF7F: findCollSeqEntry (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2F0099: sqlite3FindCollSeq (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3439C4: createCollation (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x34469E: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 160 bytes in 1 blocks are still reachable in loss record 52 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF44: sqlite3MallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x29FDF7: sqlite3BtreeOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344794: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162E45: make_sqlite() (databases.cpp:92)
+==79112==    by 0x162C48: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:41)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== 174 bytes in 8 blocks are still reachable in loss record 53 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x13DFA0: __gnu_cxx::new_allocator<char>::allocate(unsigned long, void const*) (new_allocator.h:121)
+==79112==    by 0x135CC6: allocate (allocator.h:173)
+==79112==    by 0x135CC6: std::allocator_traits<std::allocator<char> >::allocate(std::allocator<char>&, unsigned long) (alloc_traits.h:460)
+==79112==    by 0x139313: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long) (basic_string.tcc:153)
+==79112==    by 0x13DECE: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) (basic_string.tcc:219)
+==79112==    by 0x139867: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct_aux<char*>(char*, char*, std::__false_type) (basic_string.h:247)
+==79112==    by 0x135BD0: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*) (basic_string.h:266)
+==79112==    by 0x133FA9: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (basic_string.h:451)
+==79112==    by 0x552545B: std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >::pair(std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x55254E8: void __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::construct<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&>(std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >*, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x5524DD1: void std::allocator_traits<std::allocator<std::_Rb_tree_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > > >::construct<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&>(std::allocator<std::_Rb_tree_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >&, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >*, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x5524149: void std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::_M_construct_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&>(std::_Rb_tree_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >*, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&) (in /usr/local/lib/libassimp.so.5)
+==79112== 
+==79112== 174 bytes in 8 blocks are still reachable in loss record 54 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x13DFA0: __gnu_cxx::new_allocator<char>::allocate(unsigned long, void const*) (new_allocator.h:121)
+==79112==    by 0x135CC6: allocate (allocator.h:173)
+==79112==    by 0x135CC6: std::allocator_traits<std::allocator<char> >::allocate(std::allocator<char>&, unsigned long) (alloc_traits.h:460)
+==79112==    by 0x139313: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long) (basic_string.tcc:153)
+==79112==    by 0x13DECE: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) (basic_string.tcc:219)
+==79112==    by 0x139867: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct_aux<char*>(char*, char*, std::__false_type) (basic_string.h:247)
+==79112==    by 0x135BD0: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*) (basic_string.h:266)
+==79112==    by 0x133FA9: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (basic_string.h:451)
+==79112==    by 0x550866C: std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char>::pair(std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> const&) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x5525476: std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >::pair(std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x55254E8: void __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::construct<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&>(std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >*, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x5524DD1: void std::allocator_traits<std::allocator<std::_Rb_tree_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > > >::construct<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&>(std::allocator<std::_Rb_tree_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >&, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >*, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&) (in /usr/local/lib/libassimp.so.5)
+==79112== 
+==79112== 176 bytes in 1 blocks are still reachable in loss record 55 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF44: sqlite3MallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28F2FF: pcache1Create (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28DA95: sqlite3PcacheSetPageSize (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28DA4B: sqlite3PcacheOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x294EBF: sqlite3PagerOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x29FE58: sqlite3BtreeOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344794: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 200 bytes in 1 blocks are possibly lost in loss record 56 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x5B9B433: __cxa_allocate_exception (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.29)
+==79112==    by 0x162CED: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:81)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== 240 bytes in 10 blocks are still reachable in loss record 57 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DFD7: dbMallocRawFinish (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E0B2: sqlite3DbMallocRawNN (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E022: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2E74EE: sqlite3AddColumn (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3391F0: yy_reduce (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x33E69F: sqlite3Parser (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x33F998: sqlite3RunParser (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3064B1: sqlite3Prepare (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 256 bytes in 2 blocks are still reachable in loss record 58 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DFD7: dbMallocRawFinish (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E0B2: sqlite3DbMallocRawNN (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E022: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF91: sqlite3DbMallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2E6EE3: sqlite3StartTable (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x339023: yy_reduce (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x33E69F: sqlite3Parser (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x33F998: sqlite3RunParser (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 528 bytes in 2 blocks are still reachable in loss record 59 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DFD7: dbMallocRawFinish (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E0B2: sqlite3DbMallocRawNN (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E23D: sqlite3DbRealloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2E764C: sqlite3AddColumn (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3391F0: yy_reduce (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x33E69F: sqlite3Parser (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x33F998: sqlite3RunParser (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x3064B1: sqlite3Prepare (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 744 bytes in 1 blocks are still reachable in loss record 60 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF44: sqlite3MallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x34447F: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162E45: make_sqlite() (databases.cpp:92)
+==79112==    by 0x162C48: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:41)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== 775 bytes in 43 blocks are still reachable in loss record 61 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x5F1238E: strdup (strdup.c:42)
+==79112==    by 0x6371BC2: ??? (in /usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0)
+==79112==    by 0x635FC4B: ??? (in /usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0)
+==79112==    by 0x63587E0: ??? (in /usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 944 bytes in 1 blocks are still reachable in loss record 62 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF44: sqlite3MallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x294AA8: sqlite3PagerOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x29FE58: sqlite3BtreeOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344794: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162E45: make_sqlite() (databases.cpp:92)
+==79112==    by 0x162C48: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:41)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== 1,024 bytes in 1 blocks are still reachable in loss record 63 of 74
+==79112==    at 0x483B723: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x483E017: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x6371B9B: ??? (in /usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0)
+==79112==    by 0x635FC4B: ??? (in /usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0)
+==79112==    by 0x63587E0: ??? (in /usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 1,040 bytes in 1 blocks are still reachable in loss record 64 of 74
+==79112==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x5EB9C41: __new_exitfn (cxa_atexit.c:114)
+==79112==    by 0x5EB9E26: __internal_atexit (cxa_atexit.c:44)
+==79112==    by 0x5EB9E26: __cxa_atexit (cxa_atexit.c:70)
+==79112==    by 0x5012518: __static_initialization_and_destruction_0(int, int) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x5012FEC: _GLOBAL__sub_I_ObjFileMtlImporter.cpp (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 1,040 bytes in 1 blocks are still reachable in loss record 65 of 74
+==79112==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x5EB9C41: __new_exitfn (cxa_atexit.c:114)
+==79112==    by 0x5EB9E26: __internal_atexit (cxa_atexit.c:44)
+==79112==    by 0x5EB9E26: __cxa_atexit (cxa_atexit.c:70)
+==79112==    by 0x50660E4: __static_initialization_and_destruction_0(int, int) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x5066FAE: _GLOBAL__sub_I_OpenGEXImporter.cpp (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 1,040 bytes in 1 blocks are still reachable in loss record 66 of 74
+==79112==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x5EB9C41: __new_exitfn (cxa_atexit.c:114)
+==79112==    by 0x5EB9E26: __internal_atexit (cxa_atexit.c:44)
+==79112==    by 0x5EB9E26: __cxa_atexit (cxa_atexit.c:70)
+==79112==    by 0x5066AC4: __static_initialization_and_destruction_0(int, int) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x5066FAE: _GLOBAL__sub_I_OpenGEXImporter.cpp (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 1,040 bytes in 1 blocks are still reachable in loss record 67 of 74
+==79112==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x5EB9C41: __new_exitfn (cxa_atexit.c:114)
+==79112==    by 0x5EB9E26: __internal_atexit (cxa_atexit.c:44)
+==79112==    by 0x5EB9E26: __cxa_atexit (cxa_atexit.c:70)
+==79112==    by 0x5500ED0: __static_initialization_and_destruction_0(int, int) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x550190C: _GLOBAL__sub_I_FBXExporter.cpp (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 1,040 bytes in 1 blocks are still reachable in loss record 68 of 74
+==79112==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x5EB9C41: __new_exitfn (cxa_atexit.c:114)
+==79112==    by 0x5EB9E26: __internal_atexit (cxa_atexit.c:44)
+==79112==    by 0x5EB9E26: __cxa_atexit (cxa_atexit.c:70)
+==79112==    by 0x489119D: ??? (in /usr/lib/x86_64-linux-gnu/libsfml-graphics.so.2.5.1)
+==79112==    by 0x4011B99: call_init.part.0 (dl-init.c:72)
+==79112==    by 0x4011CA0: call_init (dl-init.c:30)
+==79112==    by 0x4011CA0: _dl_init (dl-init.c:119)
+==79112==    by 0x4001139: ??? (in /usr/lib/x86_64-linux-gnu/ld-2.31.so)
+==79112== 
+==79112== 1,040 bytes in 1 blocks are still reachable in loss record 69 of 74
+==79112==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x5EB9C41: __new_exitfn (cxa_atexit.c:114)
+==79112==    by 0x5EB9E26: __internal_atexit (cxa_atexit.c:44)
+==79112==    by 0x5EB9E26: __cxa_atexit (cxa_atexit.c:70)
+==79112==    by 0x1A03E7: __static_initialization_and_destruction_0(int, int) (iostream:74)
+==79112==    by 0x1A0401: _GLOBAL__sub_I__ZN6ButtonC2ERKN2sf4FontERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE (button.cpp:128)
+==79112==    by 0x34D40C: __libc_csu_init (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x5E9700F: (below main) (libc-start.c:264)
+==79112== 
+==79112== 1,768 bytes in 17 blocks are still reachable in loss record 70 of 74
+==79112==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x5525431: __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::allocate(unsigned long, void const*) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x5524D95: std::allocator_traits<std::allocator<std::_Rb_tree_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > > >::allocate(std::allocator<std::_Rb_tree_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >&, unsigned long) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x55240E2: std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::_M_get_node() (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x5522F99: std::_Rb_tree_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >* std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::_M_create_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&>(std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x552132C: std::_Rb_tree_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >* std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::_Alloc_node::operator()<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&>(std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&) const (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x551E21F: std::_Rb_tree_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::_M_insert_<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&, std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::_Alloc_node>(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&, std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::_Alloc_node&) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x5517BDC: std::_Rb_tree_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::_M_insert_unique_<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&, std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::_Alloc_node>(std::_Rb_tree_const_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const&, std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::_Alloc_node&) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x5510722: std::enable_if<std::is_same<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::iterator_traits<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const*>::value_type>::value, void>::type std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::_M_insert_range_unique<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const*>(std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const*, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > const*) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x5509A23: std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char>, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > >::map(std::initializer_list<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char> > > const&) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x5501467: __static_initialization_and_destruction_0(int, int) (in /usr/local/lib/libassimp.so.5)
+==79112==    by 0x550190C: _GLOBAL__sub_I_FBXExporter.cpp (in /usr/local/lib/libassimp.so.5)
+==79112== 
+==79112== 2,056 bytes in 1 blocks are still reachable in loss record 71 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DF44: sqlite3MallocZero (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28EE1D: pcache1ResizeHash (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28F3C3: pcache1Create (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28DA95: sqlite3PcacheSetPageSize (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28DA4B: sqlite3PcacheOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x294EBF: sqlite3PagerOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x29FE58: sqlite3BtreeOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344794: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== 4,112 bytes in 1 blocks are still reachable in loss record 72 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28EA74: pcache1Alloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28ED6E: sqlite3PageMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x293804: sqlite3PagerSetPagesize (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x294E5B: sqlite3PagerOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x29FE58: sqlite3BtreeOpen (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344794: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162E45: make_sqlite() (databases.cpp:92)
+==79112== 
+==79112== 48,008 bytes in 1 blocks are still reachable in loss record 73 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x341078: setupLookaside (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344972: openDatabase (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x344A47: sqlite3_open (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162E45: make_sqlite() (databases.cpp:92)
+==79112==    by 0x162C48: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:41)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== 87,208 bytes in 1 blocks are still reachable in loss record 74 of 74
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28E8DB: pcache1InitBulk (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28EC21: pcache1AllocPage (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28F703: pcache1FetchStage2 (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28F86E: pcache1FetchNoMutex (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28F8A1: pcache1Fetch (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x28DB4D: sqlite3PcacheFetch (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2956D7: getPageNormal (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x295B78: sqlite3PagerGet (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112== 
+==79112== LEAK SUMMARY:
+==79112==    definitely lost: 0 bytes in 0 blocks
+==79112==    indirectly lost: 0 bytes in 0 blocks
+==79112==      possibly lost: 412 bytes in 5 blocks
+==79112==    still reachable: 157,030 bytes in 154 blocks
+==79112==                       of which reachable via heuristic:
+==79112==                         length64           : 145,920 bytes in 45 blocks
+==79112==         suppressed: 0 bytes in 0 blocks
+==79112== 
+==79112== ERROR SUMMARY: 36 errors from 10 contexts (suppressed: 0 from 0)
+==79112== 
+==79112== 1 errors in context 1 of 10:
+==79112== Invalid read of size 2
+==79112==    at 0x4842B30: memmove (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x1314A2: std::char_traits<char>::copy(char*, char const*, unsigned long) (char_traits.h:409)
+==79112==    by 0x135C70: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy(char*, char const*, unsigned long) (basic_string.h:351)
+==79112==    by 0x140EDE: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy_chars(char*, char const*, char const*) (basic_string.h:398)
+==79112==    by 0x13DB75: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (basic_string.tcc:225)
+==79112==    by 0x1393CB: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct_aux<char const*>(char const*, char const*, std::__false_type) (basic_string.h:247)
+==79112==    by 0x13564C: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*) (basic_string.h:266)
+==79112==    by 0x133CB8: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:527)
+==79112==    by 0x162D13: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:81)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Address 0x689f390 is 32 bytes inside a block of size 40 free'd
+==79112==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CE03: sqlite3MemFree (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DB6F: sqlite3_free (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CE3: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:80)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Block was alloc'd at
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E030: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E439: sqlite3DbStrDup (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2FEAE9: sqlite3_exec (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CCA: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:72)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== 
+==79112== 1 errors in context 2 of 10:
+==79112== Invalid read of size 8
+==79112==    at 0x4842AE4: memmove (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x1314A2: std::char_traits<char>::copy(char*, char const*, unsigned long) (char_traits.h:409)
+==79112==    by 0x135C70: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy(char*, char const*, unsigned long) (basic_string.h:351)
+==79112==    by 0x140EDE: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy_chars(char*, char const*, char const*) (basic_string.h:398)
+==79112==    by 0x13DB75: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (basic_string.tcc:225)
+==79112==    by 0x1393CB: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct_aux<char const*>(char const*, char const*, std::__false_type) (basic_string.h:247)
+==79112==    by 0x13564C: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*) (basic_string.h:266)
+==79112==    by 0x133CB8: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:527)
+==79112==    by 0x162D13: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:81)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Address 0x689f388 is 24 bytes inside a block of size 40 free'd
+==79112==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CE03: sqlite3MemFree (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DB6F: sqlite3_free (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CE3: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:80)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Block was alloc'd at
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E030: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E439: sqlite3DbStrDup (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2FEAE9: sqlite3_exec (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CCA: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:72)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== 
+==79112== 1 errors in context 3 of 10:
+==79112== Invalid read of size 1
+==79112==    at 0x483EF46: strlen (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x131373: std::char_traits<char>::length(char const*) (char_traits.h:371)
+==79112==    by 0x133C94: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:527)
+==79112==    by 0x162D13: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:81)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Address 0x689f378 is 8 bytes inside a block of size 40 free'd
+==79112==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CE03: sqlite3MemFree (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DB6F: sqlite3_free (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CE3: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:80)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Block was alloc'd at
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E030: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E439: sqlite3DbStrDup (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2FEAE9: sqlite3_exec (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CCA: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:72)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== 
+==79112== 2 errors in context 4 of 10:
+==79112== Invalid read of size 8
+==79112==    at 0x4842AD6: memmove (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x1314A2: std::char_traits<char>::copy(char*, char const*, unsigned long) (char_traits.h:409)
+==79112==    by 0x135C70: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy(char*, char const*, unsigned long) (basic_string.h:351)
+==79112==    by 0x140EDE: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy_chars(char*, char const*, char const*) (basic_string.h:398)
+==79112==    by 0x13DB75: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (basic_string.tcc:225)
+==79112==    by 0x1393CB: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct_aux<char const*>(char const*, char const*, std::__false_type) (basic_string.h:247)
+==79112==    by 0x13564C: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*) (basic_string.h:266)
+==79112==    by 0x133CB8: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:527)
+==79112==    by 0x162D13: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:81)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Address 0x689f378 is 8 bytes inside a block of size 40 free'd
+==79112==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CE03: sqlite3MemFree (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DB6F: sqlite3_free (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CE3: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:80)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Block was alloc'd at
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E030: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E439: sqlite3DbStrDup (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2FEAE9: sqlite3_exec (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CCA: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:72)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== 
+==79112== 26 errors in context 5 of 10:
+==79112== Invalid read of size 1
+==79112==    at 0x483EF54: strlen (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x131373: std::char_traits<char>::length(char const*) (char_traits.h:371)
+==79112==    by 0x133C94: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:527)
+==79112==    by 0x162D13: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:81)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Address 0x689f379 is 9 bytes inside a block of size 40 free'd
+==79112==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CE03: sqlite3MemFree (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27DB6F: sqlite3_free (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CE3: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:80)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112==  Block was alloc'd at
+==79112==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==79112==    by 0x27CD97: sqlite3MemMalloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D854: mallocWithAlarm (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27D900: sqlite3Malloc (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E030: sqlite3DbMallocRaw (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x27E439: sqlite3DbStrDup (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x2FEAE9: sqlite3_exec (in /home/ineo/Projects/ToodyEngine/build/application/application)
+==79112==    by 0x162CCA: db::request(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (databases.cpp:72)
+==79112==    by 0x1307F1: main (main.cpp:17)
+==79112== 
+==79112== ERROR SUMMARY: 36 errors from 10 contexts (suppressed: 0 from 0)
