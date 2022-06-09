@@ -7,7 +7,7 @@
 
 namespace tools
 {
-    // TYPO Use std::filesystem
+    /// @todo Use std::filesystem
     /// @brief Get path of folders relatives to root
     namespace get_path
     {

@@ -178,7 +178,7 @@ std::vector< S_Vertex > Model::load_vertices( aiMesh const & mesh )
         // Does the mesh contain texture coordinates?
         if ( mesh.mTextureCoords[0] )
         {
-            // TYPO a vertex can contain up to 8 different texture coordinates.
+            /// @todo a vertex can contain up to 8 different texture coordinates.
             // We thus make the assumption that we won't
             // use models where a vertex can have multiple texture coordinates
             // so we always take the first set (0).

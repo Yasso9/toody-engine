@@ -3,9 +3,10 @@
 #include <vector>
 
 #include "graphics2D/sfml.hpp"
+#include "graphics2D/tile_selector.hpp"
 #include "graphics2D/tileset.hpp"
 
-// TYPO améliorer cette class et la rendre plus éprouvé en delete toute les choses lié à vertex array
+/// @todo améliorer cette class et la rendre plus éprouvé en delete toute les choses lié à vertex array
 struct TileQuad
 {
   public:
@@ -40,7 +41,7 @@ class TileMap : public sf::Drawable,
                 public sf::Transformable
 {
   public:
-    TileMap( Tileset const & tileset, sf::View & view );
+    TileMap( sf::View & view );
     virtual ~TileMap() = default;
 
     /// @brief size of the tilemap in pixel
@@ -51,7 +52,7 @@ class TileMap : public sf::Drawable,
     void update();
 
   protected:
-    Tileset const m_tileset;
+    TileSelector m_tileSelector;
     sf::RectangleShape m_cursor;
     sf::View & m_view;
     /** @brief tri-dimensionnal vector containing the sprite number
@@ -62,6 +63,9 @@ class TileMap : public sf::Drawable,
 
     void set_tile_table(
         std::vector< std::vector< std::vector< int > > > const & table );
+
+    void change_tile( int const & newTileValue,
+                      math::Vector2D const & tilePositionInTile );
 
     void draw( sf::RenderTarget & target,
                sf::RenderStates states ) const override;

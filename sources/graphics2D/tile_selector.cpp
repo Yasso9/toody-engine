@@ -50,6 +50,7 @@ static sf::Color table_to_sfml_color( float const tableColor[4] )
 TileSelector::TileSelector()
   : m_tileset( Resources::get_instance().get_texture(
       Resources::E_TextureKey::Tileset ) ),
+    m_tileSelected( -1 ),
     m_isGridEnabled( true ),
     m_gridColorTable()
 {
@@ -60,6 +61,11 @@ TileSelector::TileSelector()
 Tileset const & TileSelector::get_tileset() const
 {
     return this->m_tileset;
+}
+
+int TileSelector::get_tile_selected() const
+{
+    return this->m_tileSelected;
 }
 
 void TileSelector::update()
@@ -126,8 +132,8 @@ void TileSelector::update_grid( ImDrawList & drawList )
 void TileSelector::update_selection( ImDrawList & drawList )
 {
     math::Vector2D const mousePosition { ImGui::GetMousePos() };
-    bool isInSelection { ImGui::IsWindowHovered()
-                         && this->m_tileset.contain( mousePosition ) };
+    bool const isInSelection { ImGui::IsWindowHovered()
+                               && this->m_tileset.contain( mousePosition ) };
     if ( isInSelection )
     {
         // Calculate the position of the selection rectangle
@@ -142,28 +148,38 @@ void TileSelector::update_selection( ImDrawList & drawList )
                                     this->m_gridColorTable ) ) );
 
         std::stringstream outputSelection {};
-        outputSelection << "Selection Rect : " << selectionPosition << "\n";
-        outputSelection << "Selection Tile : "
+        outputSelection << "Selection pixel position : " << selectionPosition
+                        << "\n";
+        outputSelection << "Selection tile position : "
                         << this->m_tileset.get_tile_position_in_tile(
                                mousePosition,
                                false )
                         << "\n";
         outputSelection << "Tileset Size : "
                         << this->m_tileset.get_size_in_tile() << "\n";
-        outputSelection << "Tile Selected : "
-                        << this->m_tileset.get_tile_value_from_pixel_position(
-                               mousePosition,
-                               false )
-                        << "\n";
+        int const tileHovered {
+            this->m_tileset.get_tile_value_from_pixel_position( mousePosition,
+                                                                false )
+        };
+        outputSelection << "Tile Hovered : " << tileHovered << "\n";
+        if ( sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) )
+        {
+            outputSelection << "Button Pressed"
+                            << "\n";
+            this->m_tileSelected = tileHovered;
+        }
         outputSelection << "Tile Position : "
                         << selectionPosition - this->m_tileset.get_position()
                         << "\n";
         ImGui::Text( "%s", outputSelection.str().c_str() );
     }
+
     std::stringstream output {};
     output << "Mouse Position : " << mousePosition << "\n";
     output << "Tilemap Position : " << this->m_tileset.get_position() << "\n";
     output << "Tilemap Size : " << this->m_tileset.get_size_in_pixel() << "\n";
+    /// @todo avoir le boolalpha partout
     output << "Is In Selection ? : " << std::boolalpha << isInSelection << "\n";
+    output << "TILE SELECTED : " << this->m_tileSelected << "\n";
     ImGui::Text( "%s", output.str().c_str() );
 }

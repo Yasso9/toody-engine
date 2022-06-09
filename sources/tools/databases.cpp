@@ -41,7 +41,7 @@ static int callback( void * /* data */, int argc, char ** argv,
     return 0;
 }
 
-// TYPO create a singleton and initialize sqlite3_open
+/// @todo create a singleton and initialize sqlite3_open
 namespace db
 {
     json request( std::string const & request )
@@ -80,7 +80,7 @@ namespace db
 {
     // Initialisation de la database
 
-    // TYPO mettre tous les databases dans la bonne place
+    /// @todo mettre tous les databases dans la bonne place
     db::request( "DROP TABLE IF EXISTS tilemap;"
                  "CREATE TABLE tilemap ("
                  "tile_table TEXT NOT NULL"

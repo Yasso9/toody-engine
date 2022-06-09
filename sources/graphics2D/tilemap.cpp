@@ -81,8 +81,8 @@ sf::Vertex TileQuad::operator[]( std::size_t index ) const
     return this->m_vextexArray[index];
 }
 
-TileMap::TileMap( Tileset const & tileset, sf::View & view )
-  : m_tileset( tileset ),
+TileMap::TileMap( sf::View & view )
+  : m_tileSelector(),
     m_cursor(),
     m_view( view ),
     m_tileTable(),
@@ -91,7 +91,7 @@ TileMap::TileMap( Tileset const & tileset, sf::View & view )
     // json const tilemapRequest { db::request(
     //     "SELECT table_tilemap FROM tilemap;"s ) };
 
-    // // TYPO pourquoi on doit acceder à [0]["table_tilemap"] pour avoir la valeur
+    // /// @todo pourquoi on doit acceder à [0]["table_tilemap"] pour avoir la valeur
     // json const jsonTilemap { json::parse(
     //     std::string { tilemapRequest[0]["table_tilemap"] } ) };
 
@@ -113,13 +113,13 @@ TileMap::TileMap( Tileset const & tileset, sf::View & view )
 
 math::Vector2D TileMap::get_size() const
 {
-    // TYPO il faut verifier que toute les ligne de toutes les colonnes fasse la même taille
+    /// @todo il faut verifier que toute les ligne de toutes les colonnes fasse la même taille
     return this->get_tile_size() * TILE_PIXEL_SIZE_VECTOR;
 }
 
 math::Vector2D TileMap::get_tile_size() const
 {
-    // TYPO normalement le static cast ne sert à rien
+    /// @todo normalement le static cast ne sert à rien
     return math::Vector2D {
         static_cast< unsigned int >( this->m_tileTable[0].size() ),
         static_cast< unsigned int >( this->m_tileTable.size() )
@@ -128,6 +128,8 @@ math::Vector2D TileMap::get_tile_size() const
 
 void TileMap::update()
 {
+    this->m_tileSelector.update();
+
     if ( ImGui::Begin( "Tilemap Information" ) )
     {
         math::Vector2D const mousePosition { ImGui::GetMousePos() };
@@ -139,11 +141,10 @@ void TileMap::update()
         mouseViewPosition.floor();
 
         std::stringstream infoOutput {};
+        infoOutput << "Tile Selected : "
+                   << this->m_tileSelector.get_tile_selected() << "\n";
         infoOutput << "mouse general position : " << mousePosition << "\n";
         infoOutput << "mouse view position : " << mouseViewPosition << "\n";
-        // mouseViewPosition.floor();
-        // infoOutput << "mouse view position around : " << mouseViewPosition
-        //            << "\n";
         infoOutput << "tilemap position : " << this->getPosition() << "\n";
         infoOutput << "tilemap size : " << this->get_size() << "\n";
         infoOutput << "tilemap - number of tile : "
@@ -172,6 +173,12 @@ void TileMap::update()
             selectionOutput
                 << "tile selected position : " << tileSelectedPosition << "\n";
             ImGui::Text( "%s", selectionOutput.str().c_str() );
+
+            if ( sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) )
+            {
+                this->change_tile( this->m_tileSelector.get_tile_selected(),
+                                   tileSelectedPosition );
+            }
 
             this->m_cursor.setOutlineColor( sf::Color::Black );
             this->m_cursor.setPosition( tileSelectedPosition );
@@ -261,8 +268,11 @@ void TileMap::set_tile_table(
 
                 tile.quad.set_texture_coordinate(
                     tile.value,
-                    this->m_tileset.get_texture().getSize().x
-                        / TILE_PIXEL_SIZE_U );
+                    /// @todo simplify static_cast
+                    static_cast< unsigned int >(
+                        this->m_tileSelector.get_tileset()
+                            .get_size_in_tile()
+                            .x ) );
 
                 // We add the element to the tile table
                 this->m_tileTable[line][column].push_back( tile );
@@ -271,11 +281,36 @@ void TileMap::set_tile_table(
     }
 }
 
+void TileMap::change_tile( int const & newTileValue,
+                           math::Vector2D const & tilePositionInTile )
+{
+    if ( newTileValue < 0 )
+    {
+        std::cout << "Tile negatif not handled" << std::endl;
+        return;
+    }
+
+    /// @todo simplify static_cast
+    S_TileData & tileData {
+        this->m_tileTable[static_cast< unsigned int >( tilePositionInTile.y )]
+                         [static_cast< unsigned int >( tilePositionInTile.x )]
+                         [this->m_currentDepth]
+    };
+
+    /// @todo simplify static_cast
+    tileData.quad.set_texture_coordinate(
+        newTileValue,
+        static_cast< unsigned int >(
+            this->m_tileSelector.get_tileset().get_size_in_tile().x ) );
+
+    tileData.value = newTileValue;
+}
+
 void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
 {
     states.transform *= this->getTransform();
 
-    states.texture = &this->m_tileset.get_texture();
+    states.texture = &this->m_tileSelector.get_tileset().get_texture();
 
     for ( auto const & column : this->m_tileTable )
     {
@@ -290,24 +325,6 @@ void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
 
     target.draw( this->m_cursor, states );
 }
-
-// void TileMapEditor::change_tile( sf::Vector2u const /* tilePositionInTile */,
-//                                  unsigned int const /* newTile */ )
-// {
-// // On actualise les valeurs du tableau
-// this->m_table[this->m_currentDepth][tilePositionInTile.y][tilePositionInTile.x] =
-//     newTile;
-
-// sf::VertexArray & quad {
-//     this->m_vertices[this->m_currentDepth][tilePositionInTile.y][tilePositionInTile.x]
-// };
-
-// // On enlève la transparence du quad
-// quad::set_visible( quad );
-
-// // TYPO c'est foireux : faut mettre le tilePositionInTile de newtile (la tileset et pas la tilemap)
-// quad::set_texture_coordinate( quad, tilePositionInTile );
-// }
 
 // void TileMapEditor::save() const
 // {

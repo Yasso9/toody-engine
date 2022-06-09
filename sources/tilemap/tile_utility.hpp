@@ -2,7 +2,7 @@
 
 #include "graphics2D/sfml.hpp"
 
-// TYPO remove this file
+/// @todo remove this file
 
 /* Prend en parametre la position d'un nombre donné en pixel et retourne sa position
  * en tile */

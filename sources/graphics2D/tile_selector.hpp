@@ -10,10 +10,14 @@ class TileSelector
 
     Tileset const & get_tileset() const;
 
+    int get_tile_selected() const;
+
     void update();
 
   private:
     Tileset m_tileset;
+
+    int m_tileSelected;
 
     bool m_isGridEnabled;
     float m_gridColorTable[4];

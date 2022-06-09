@@ -8,12 +8,12 @@
 
 Settings::Settings() : m_windowSize(), m_refreshRate(), m_verticalSync()
 {
-    // TYPO Récupéré les settings à partir de la base de données
+    /// @todo Récupéré les settings à partir de la base de données
     std::string const configLocation { tools::get_path::data()
                                        + "/window.txt"s };
 
     std::ifstream file { configLocation, std::ios::in };
-    // TYPO if we don't find the file, we must create it and load default ressources
+    /// @todo if we don't find the file, we must create it and load default ressources
     if ( ! file )
     {
         throw Exception::FileNotFound { configLocation };
