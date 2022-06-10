@@ -1,7 +1,7 @@
 #pragma once
 
 #include "graphics2D/sfml.hpp"
-#include "tools/maths.hpp"
+#include "maths/maths.hpp"
 #include "tools/singleton.hpp"
 
 class Settings final : public Singleton< Settings >
@@ -18,7 +18,7 @@ class Settings final : public Singleton< Settings >
   private:
     Settings();
 
-    math::Vector2D m_windowSize;
+    math::Vector2F m_windowSize;
     double m_refreshRate;
     bool m_verticalSync;
 };

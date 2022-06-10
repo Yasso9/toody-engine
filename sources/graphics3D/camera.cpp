@@ -4,8 +4,8 @@
 #include <iostream>
 
 #include "main/window.hpp"
+#include "maths/maths.hpp"
 #include "tools/assertion.hpp"
-#include "tools/maths.hpp"
 
 // Default camera values
 // const float YAW = -90.0f;

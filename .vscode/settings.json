@@ -1,6 +1,5 @@
 {
     "C_Cpp.formatting": "clangFormat",
-    // "C_Cpp.formatting": "Enabled",
     "files.exclude": {
         "**/.git": true,
         "**/.DS_Store": true,

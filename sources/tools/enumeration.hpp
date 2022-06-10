@@ -9,9 +9,17 @@ concept EnumType = std::is_enum_v< E >;
 template < EnumType Type >
 class Enum
 {
+  protected:
+    Type m_currentValue;
+
   public:
+    static Type get_min();
+    static Type get_max();
+
     Enum( Type const & enumValue );
     virtual ~Enum() = default;
+
+    Type get_value() const;
 
     // Increment and decrement operator
     Enum & operator++();
@@ -21,14 +29,6 @@ class Enum
 
     bool operator<( Type const & enumValue );
     bool operator>( Type const & enumValue );
-
-    static Type get_min();
-    static Type get_max();
-
-    Type get_value() const;
-
-  protected:
-    Type m_currentValue;
 };
 
 template < EnumType EnumType >

@@ -6,9 +6,9 @@
 #include <cmath>
 
 #include "main/resources.hpp"
+#include "maths/maths.hpp"
 #include "tools/global_variable.hpp"
 #include "tools/imgui.hpp"
-#include "tools/maths.hpp"
 
 static uint32_t to_integer_imgui_color( sf::Color const & color )
 {
@@ -89,7 +89,7 @@ void TileSelector::update()
 
 void TileSelector::update_grid( ImDrawList & drawList )
 {
-    math::Vector2D const scrolling { 0.f, 0.f };
+    math::Vector2F const scrolling { 0.f, 0.f };
 
     // Tilemap Border
     drawList.AddRect( this->m_tileset.get_position(),
@@ -102,10 +102,10 @@ void TileSelector::update_grid( ImDrawList & drawList )
           x < this->m_tileset.get_size_in_pixel().x;
           x += TILE_PIXEL_SIZE )
     {
-        math::Vector2D const pointA {
-            this->m_tileset.get_position() + math::Vector2D {x, 0.f}
+        math::Vector2F const pointA {
+            this->m_tileset.get_position() + math::Vector2F {x, 0.f}
         };
-        math::Vector2D const pointB { this->m_tileset.get_position().x + x,
+        math::Vector2F const pointB { this->m_tileset.get_position().x + x,
                                       this->m_tileset.get_end_position().y };
 
         drawList.AddLine( pointA,
@@ -118,9 +118,9 @@ void TileSelector::update_grid( ImDrawList & drawList )
           y < this->m_tileset.get_size_in_pixel().y;
           y += TILE_PIXEL_SIZE )
     {
-        math::Vector2D const pointA { this->m_tileset.get_position().x,
+        math::Vector2F const pointA { this->m_tileset.get_position().x,
                                       this->m_tileset.get_position().y + y };
-        math::Vector2D const pointB { this->m_tileset.get_end_position().x,
+        math::Vector2F const pointB { this->m_tileset.get_end_position().x,
                                       this->m_tileset.get_position().y + y };
 
         drawList.AddLine( pointA,
@@ -131,13 +131,13 @@ void TileSelector::update_grid( ImDrawList & drawList )
 }
 void TileSelector::update_selection( ImDrawList & drawList )
 {
-    math::Vector2D const mousePosition { ImGui::GetMousePos() };
+    math::Vector2F const mousePosition { ImGui::GetMousePos() };
     bool const isInSelection { ImGui::IsWindowHovered()
                                && this->m_tileset.contain( mousePosition ) };
     if ( isInSelection )
     {
         // Calculate the position of the selection rectangle
-        math::Vector2D const selectionPosition {
+        math::Vector2F const selectionPosition {
             this->m_tileset.get_tile_position_in_pixel( mousePosition, false )
         };
 

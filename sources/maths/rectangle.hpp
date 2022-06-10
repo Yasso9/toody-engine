@@ -1,10 +1,13 @@
 #pragma once
 
+#include "vector2.hpp"
+
 namespace math
 {
     /// @todo en faire un template
-    struct Rectangle
+    class Rectangle
     {
+      public:
         Vector2< float > position { 0.f, 0.f };
         Vector2< float > size { 0.f, 0.f };
 

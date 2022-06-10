@@ -174,6 +174,10 @@ DEPENDENCIES := $(patsubst %.o,%.d,$(OBJECT_PROJECT))
 
 ############################## call action ##############################
 
+# Compile only one file :
+# make build/object/maths-vector2.o
+# make build/object/<directory>-<filename>.o
+
 # These commands do not represent physical files
 .PHONY: buildrun build run initialize_build \
 		clean_executable clean_project clean_libraries \
@@ -280,11 +284,11 @@ $(C_OBJECT_LIBRARIES) : $(LIBRARIES_OBJECT_DIRECTORY)/%.o : $(LIBRARIES_INCLUDE_
 .SECONDEXPANSION:
 $(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%).cpp # $(DEPS_DIRECTORY)/%.d
 #	Nicer way to print the current file compiled
-	@echo "Project Compile $(subst sources/,,$<)"
+	echo "Project Compile $(subst sources/,,$<)"
 #	compilatorCommand -WarningFlags -compilerOptions -c sources/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
-	@$(CXX_COMMAND) $(GCC_WARNINGS) $(COMPILING_FLAGS) $(DEPENDENCY_FLAGS) -c $< -o $@ $(INCLUDES)
+	$(CXX_COMMAND) $(GCC_WARNINGS) $(COMPILING_FLAGS) $(DEPENDENCY_FLAGS) -c $< -o $@ $(INCLUDES)
 
 # $(DEPS_DIRECTORY)/%.d : ;
 

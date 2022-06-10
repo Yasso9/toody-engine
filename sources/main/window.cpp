@@ -4,7 +4,7 @@
 
 #include "graphics3D/openGL.hpp"
 #include "main/settings.hpp"
-#include "tools/maths.hpp"
+#include "maths/maths.hpp"
 #include "tools/string.hpp"
 
 Window::Window()
@@ -41,7 +41,7 @@ sf::Vector2f Window::get_center_position_f() const
 
 bool Window::has_absolute_focus() const
 {
-    math::Vector2D const mousePosition { sf::Mouse::getPosition(
+    math::Vector2F const mousePosition { sf::Mouse::getPosition(
         Window::get_instance() ) };
 
     return this->hasFocus()

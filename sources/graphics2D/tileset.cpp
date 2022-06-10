@@ -2,7 +2,7 @@
 
 #include "tools/global_variable.hpp"
 
-Tileset::Tileset( sf::Texture const & texture, math::Vector2D const & position )
+Tileset::Tileset( sf::Texture const & texture, math::Vector2F const & position )
   : m_texture( texture ), m_position( position )
 {}
 
@@ -11,21 +11,21 @@ sf::Texture const & Tileset::get_texture() const
     return this->m_texture;
 }
 
-math::Vector2D Tileset::get_position() const
+math::Vector2F Tileset::get_position() const
 {
     return this->m_position;
 }
-math::Vector2D Tileset::get_end_position() const
+math::Vector2F Tileset::get_end_position() const
 {
     return this->get_position() + this->get_size_in_pixel();
 }
 
-math::Vector2D Tileset::get_size_in_pixel() const
+math::Vector2F Tileset::get_size_in_pixel() const
 {
     return this->m_texture.getSize();
 }
 
-math::Vector2D Tileset::get_size_in_tile() const
+math::Vector2F Tileset::get_size_in_tile() const
 {
     sf::Vector2f maxNumberOfTile {};
     maxNumberOfTile.x =
@@ -35,18 +35,18 @@ math::Vector2D Tileset::get_size_in_tile() const
     return maxNumberOfTile;
 }
 
-math::Vector2D Tileset::get_tile_position_in_pixel(
-    math::Vector2D const & pointPosition, bool isRelativePositon ) const
+math::Vector2F Tileset::get_tile_position_in_pixel(
+    math::Vector2F const & pointPosition, bool isRelativePositon ) const
 {
     // Calculate the position of the selection rectangle
     return { this->get_tile_position_in_tile( pointPosition, isRelativePositon )
                  * TILE_PIXEL_SIZE_VECTOR
              + this->m_position };
 }
-math::Vector2D Tileset::get_tile_position_in_tile(
-    math::Vector2D const & pointPosition, bool isRelativePositon ) const
+math::Vector2F Tileset::get_tile_position_in_tile(
+    math::Vector2F const & pointPosition, bool isRelativePositon ) const
 {
-    math::Vector2D relativPointPosition { pointPosition };
+    math::Vector2F relativPointPosition { pointPosition };
     if ( ! isRelativePositon )
     {
         relativPointPosition -= this->m_position;
@@ -57,7 +57,7 @@ math::Vector2D Tileset::get_tile_position_in_tile(
                "The pointer must be between the vector(0, 0) and "
                "vector(SIZE_X, SIZEY)" );
 
-    math::Vector2D selectionTilePosition {};
+    math::Vector2F selectionTilePosition {};
     selectionTilePosition.x =
         std::floor( relativPointPosition.x / TILE_PIXEL_SIZE );
     selectionTilePosition.y =
@@ -66,9 +66,9 @@ math::Vector2D Tileset::get_tile_position_in_tile(
 }
 
 int Tileset::get_tile_value_from_pixel_position(
-    math::Vector2D const & pointPositionInPixel, bool isRelativePositon ) const
+    math::Vector2F const & pointPositionInPixel, bool isRelativePositon ) const
 {
-    math::Vector2D tileCoordinate { this->get_tile_position_in_tile(
+    math::Vector2F tileCoordinate { this->get_tile_position_in_tile(
         pointPositionInPixel,
         isRelativePositon ) };
 
@@ -76,7 +76,7 @@ int Tileset::get_tile_value_from_pixel_position(
 }
 
 int Tileset::get_tile_value_from_tile_position(
-    math::Vector2D const & pointPositionInTile ) const
+    math::Vector2F const & pointPositionInTile ) const
 {
     ASSERTION(
         pointPositionInTile.is_inside( { 0.f, 0.f }, this->get_size_in_tile() ),
@@ -89,12 +89,12 @@ int Tileset::get_tile_value_from_tile_position(
     return static_cast< int >( tileSelected );
 }
 
-void Tileset::set_position( math::Vector2D const & position )
+void Tileset::set_position( math::Vector2F const & position )
 {
     this->m_position = position;
 }
 
-bool Tileset::contain( math::Vector2D const & point ) const
+bool Tileset::contain( math::Vector2F const & point ) const
 {
     return point.is_inside( this->get_position(), this->get_size_in_pixel() );
 }

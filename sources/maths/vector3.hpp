@@ -1,15 +1,19 @@
 #pragma once
 
+#include <cmath>
+
 #include "tools/assertion.hpp"
 
-#include "maths.hpp"
+#include "matrix.hpp"
+#include "trigonometry.hpp"
 #include "vector2.hpp"
 
 namespace math
 {
     /// @todo en faire un template
-    struct Vector3D : public Vector2< float >
+    class Vector3D : public Vector2< float >
     {
+      public:
         float z { 0.f };
 
         Vector3D() = default;
@@ -63,7 +67,7 @@ namespace math
             this->y /= length;
             this->z /= length;
         }
-        void rotate( float const & angle, Vector3D const & directionAxis )
+        void rotate( float const & angle, Vector3D const & axisRotation )
         {
             ASSERTION( angle >= -180.f && angle <= 180.f,
                        "An angle must have a value between 0 and 180"s );

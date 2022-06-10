@@ -15,8 +15,8 @@ struct TileQuad
 
     sf::VertexArray const & get_vertex_array() const;
 
-    void set_position( math::Vector2D const & tilemapPosition,
-                       math::Vector2D const & tileCoordinate );
+    void set_position( math::Vector2F const & tilemapPosition,
+                       math::Vector2F const & tileCoordinate );
 
     void set_texture_coordinate( int const & tileValue,
                                  unsigned int numberOfXAxisTile );
@@ -45,9 +45,9 @@ class TileMap : public sf::Drawable,
     virtual ~TileMap() = default;
 
     /// @brief size of the tilemap in pixel
-    math::Vector2D get_size() const;
+    math::Vector2F get_size() const;
     /// @brief number of tile that the tilemap contain
-    math::Vector2D get_tile_size() const;
+    math::Vector2F get_tile_size() const;
 
     void update();
 
@@ -65,7 +65,7 @@ class TileMap : public sf::Drawable,
         std::vector< std::vector< std::vector< int > > > const & table );
 
     void change_tile( int const & newTileValue,
-                      math::Vector2D const & tilePositionInTile );
+                      math::Vector2F const & tilePositionInTile );
 
     void draw( sf::RenderTarget & target,
                sf::RenderStates states ) const override;
