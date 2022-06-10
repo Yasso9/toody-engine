@@ -31,8 +31,8 @@ class Enum
     bool operator>( Type const & enumValue );
 };
 
-template < EnumType EnumType >
+template < EnumType Type >
 std::ostream & operator<<( std::ostream & output,
-                           Enum< EnumType > const & enumValue );
+                           Enum< Type > const & enumValue );
 
 #include "tools/enumeration.tpp"

@@ -113,7 +113,7 @@ void EditorState::init_map()
     this->m_tilemap.setPosition( 0.f, 0.f );
 
     // Set view position at center of the tilemap
-    this->m_view.setCenter( this->m_tilemap.getPosition()
+    this->m_view.setCenter( math::Vector2F { this->m_tilemap.getPosition() }
                             + ( this->m_tilemap.get_size() / 2.f ) );
     this->m_view.setSize( Window::get_instance().get_size_f() );
 }

@@ -1,21 +1,29 @@
 #pragma once
 
+#include "tools/concepts.hpp"
+
 #include "vector2.hpp"
 
 namespace math
 {
-    /// @todo en faire un template
+    template < C_Primitive Type >
     class Rectangle
     {
       public:
-        Vector2< float > position { 0.f, 0.f };
-        Vector2< float > size { 0.f, 0.f };
+        Vector2< Type > position;
+        Vector2< Type > size;
 
-        Rectangle() = default;
-        Rectangle( Vector2< float > const & aPosition,
-                   Vector2< float > const & aSize );
-        Rectangle( float const & x, float const & y, float const & width,
-                   float const & height );
+        Rectangle();
+        Rectangle( Vector2< Type > const & aPosition,
+                   Vector2< Type > const & aSize );
+        Rectangle( Type const & x, Type const & y, Type const & width,
+                   Type const & height );
         virtual ~Rectangle() = default;
     };
+
+    using RectangleF = Rectangle< float >;
+    using RectangleI = Rectangle< int >;
+    using RectangleU = Rectangle< unsigned int >;
 } // namespace math
+
+#include "rectangle.tpp"

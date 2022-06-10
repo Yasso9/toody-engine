@@ -20,19 +20,14 @@ math::Vector2F Tileset::get_end_position() const
     return this->get_position() + this->get_size_in_pixel();
 }
 
-math::Vector2F Tileset::get_size_in_pixel() const
+math::Vector2U Tileset::get_size_in_pixel() const
 {
     return this->m_texture.getSize();
 }
 
 math::Vector2F Tileset::get_size_in_tile() const
 {
-    sf::Vector2f maxNumberOfTile {};
-    maxNumberOfTile.x =
-        std::floor( this->get_size_in_pixel().x / TILE_PIXEL_SIZE );
-    maxNumberOfTile.y =
-        std::floor( this->get_size_in_pixel().y / TILE_PIXEL_SIZE );
-    return maxNumberOfTile;
+    return math::floor( this->get_size_in_pixel() ) / TILE_PIXEL_SIZE;
 }
 
 math::Vector2F Tileset::get_tile_position_in_pixel(

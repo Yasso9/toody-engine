@@ -15,10 +15,12 @@ GameState::GameState()
 void GameState::init_map()
 {
     this->m_tilemap.setPosition(
-        ( Window::get_instance().get_size_f() - this->m_tilemap.get_size() )
+        ( math::Vector2F { Window::get_instance().get_size_f() }
+          - this->m_tilemap.get_size() )
         / 2.f );
     this->m_player.setPosition(
-        ( Window::get_instance().get_size_f() - this->m_tilemap.get_size() )
+        ( math::Vector2F { Window::get_instance().get_size_f() }
+          - this->m_tilemap.get_size() )
         / 2.f );
 
     this->m_view.setCenter( this->m_player.getPosition() );

@@ -45,8 +45,8 @@ bool Window::has_absolute_focus() const
         Window::get_instance() ) };
 
     return this->hasFocus()
-           && mousePosition.is_inside( sf::Vector2u { 0u, 0u },
-                                       this->getSize() );
+           && mousePosition.is_inside( math::Vector2F { 0.f, 0.f },
+                                       math::Vector2F { this->getSize() } );
 }
 
 void Window::clear_all( sf::Color const & backgroundColor )

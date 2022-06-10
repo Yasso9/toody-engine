@@ -9,11 +9,11 @@
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 
-static math::Rectangle get_tile_rectangle_in_tilemap(
+static math::RectangleF get_tile_rectangle_in_tilemap(
     math::Vector2F const & tilemapPosition,
     math::Vector2F const & tileCoordinate )
 {
-    math::Rectangle rectangle {};
+    math::RectangleF rectangle {};
 
     rectangle.position = tilemapPosition + ( tileCoordinate * TILE_PIXEL_SIZE );
     rectangle.size     = TILE_PIXEL_SIZE_VECTOR;
@@ -21,15 +21,15 @@ static math::Rectangle get_tile_rectangle_in_tilemap(
     return rectangle;
 }
 
-static math::Rectangle get_tile_rectangle_in_texture(
+static math::RectangleF get_tile_rectangle_in_texture(
     int const & tileValue, unsigned int numberOfTile )
 {
     std::div_t divisionValue { std::div( tileValue,
                                          static_cast< int >( numberOfTile ) ) };
 
     return {
-        math::Vector2F {divisionValue.rem, divisionValue.quot}
-            * TILE_PIXEL_SIZE,
+        math::Vector2I {divisionValue.rem, divisionValue.quot}
+            * TILE_PIXEL_SIZE_I,
         TILE_PIXEL_SIZE_VECTOR
     };
 }
@@ -44,7 +44,7 @@ sf::VertexArray const & TileQuad::get_vertex_array() const
 void TileQuad::set_position( math::Vector2F const & tilemapPosition,
                              math::Vector2F const & tileCoordinate )
 {
-    math::Rectangle const rectangle {
+    math::RectangleF const rectangle {
         get_tile_rectangle_in_tilemap( tilemapPosition, tileCoordinate )
     };
 
@@ -59,7 +59,7 @@ void TileQuad::set_position( math::Vector2F const & tilemapPosition,
 void TileQuad::set_texture_coordinate( int const & tileValue,
                                        unsigned int numberOfXAxisTile )
 {
-    math::Rectangle textureTileRectangle {
+    math::RectangleF textureTileRectangle {
         get_tile_rectangle_in_texture( tileValue, numberOfXAxisTile )
     };
 
@@ -120,10 +120,8 @@ math::Vector2F TileMap::get_size() const
 math::Vector2F TileMap::get_tile_size() const
 {
     /// @todo normalement le static cast ne sert à rien
-    return math::Vector2F {
-        static_cast< unsigned int >( this->m_tileTable[0].size() ),
-        static_cast< unsigned int >( this->m_tileTable.size() )
-    };
+    return math::Vector2U { this->m_tileTable[0].size(),
+                            this->m_tileTable.size() };
 }
 
 void TileMap::update()
@@ -135,9 +133,11 @@ void TileMap::update()
         math::Vector2F const mousePosition { ImGui::GetMousePos() };
         math::Vector2F const viewZoom { Window::get_instance().get_size_f()
                                         / this->m_view.getSize() };
-        math::Vector2F mouseViewPosition { ( mousePosition / viewZoom )
-                                           - ( this->m_view.getSize() / 2.f )
-                                           + this->m_view.getCenter() };
+        math::Vector2F mouseViewPosition {
+            ( mousePosition / viewZoom )
+            - math::Vector2F { this->m_view.getSize() / 2.f }
+            + math::Vector2F { this->m_view.getCenter() }
+        };
         mouseViewPosition.floor();
 
         std::stringstream infoOutput {};
@@ -148,7 +148,7 @@ void TileMap::update()
         infoOutput << "tilemap position : " << this->getPosition() << "\n";
         infoOutput << "tilemap size : " << this->get_size() << "\n";
         infoOutput << "tilemap - number of tile : "
-                   << this->get_size() / TILE_PIXEL_SIZE_U << "\n";
+                   << this->get_size() / TILE_PIXEL_SIZE << "\n";
         infoOutput << "view center : " << this->m_view.getCenter() << "\n";
         infoOutput << "view size : " << this->m_view.getSize() << "\n";
         infoOutput << "view zoom : " << viewZoom << "\n";
@@ -157,8 +157,9 @@ void TileMap::update()
         if ( mouseViewPosition.is_inside( this->getPosition(),
                                           this->get_size() ) )
         {
-            math::Vector2F const mouseRelativPosition { mouseViewPosition
-                                                        - this->getPosition() };
+            math::Vector2F const mouseRelativPosition {
+                mouseViewPosition - math::Vector2F { this->getPosition() }
+            };
             math::Vector2F const tileSelectedPosition {
                 mouseRelativPosition
                 - ( mouseRelativPosition % TILE_PIXEL_SIZE_U )
@@ -205,7 +206,7 @@ void TileMap::update()
                 {
                     ImGui::TableSetColumnIndex( static_cast< int >( column ) );
                     std::stringstream buttonStream {};
-                    buttonStream << math::Vector2F { column, line } << " = "
+                    buttonStream << math::Vector2U { column, line } << " = "
                                  << this->m_tileTable[line][column][0].value;
                     if ( ImGui::Button( buttonStream.str().c_str() ) )
                     {
@@ -261,7 +262,7 @@ void TileMap::set_tile_table(
                 S_TileData tile { table[line][column][depth], TileQuad {} };
 
                 // Not in pixel position
-                math::Vector2F const currentTilePosition { column, line };
+                math::Vector2U const currentTilePosition { column, line };
 
                 tile.quad.set_position( this->getPosition(),
                                         currentTilePosition );

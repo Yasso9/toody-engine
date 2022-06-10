@@ -56,9 +56,9 @@ Type Enum< Type >::get_value() const
     return this->m_currentValue;
 }
 
-template < EnumType EnumType >
+template < EnumType Type >
 std::ostream & operator<<( std::ostream & output,
-                           Enum< EnumType > const & enumValue )
+                           Enum< Type > const & enumValue )
 {
     output << static_cast< int >( enumValue.get_value() );
     return output;

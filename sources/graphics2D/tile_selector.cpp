@@ -98,14 +98,17 @@ void TileSelector::update_grid( ImDrawList & drawList )
                           table_to_sfml_color( this->m_gridColorTable ) ) );
 
     // Horizontal lines of the grid
-    for ( float x = fmodf( scrolling.x, TILE_PIXEL_SIZE );
+    for ( unsigned int x {
+              math::division_reminder( scrolling.x, TILE_PIXEL_SIZE ) };
           x < this->m_tileset.get_size_in_pixel().x;
-          x += TILE_PIXEL_SIZE )
+          x += TILE_PIXEL_SIZE_U )
     {
         math::Vector2F const pointA {
-            this->m_tileset.get_position() + math::Vector2F {x, 0.f}
+            this->m_tileset.get_position()
+            + math::Vector2F {static_cast< float >( x ), 0.f}
         };
-        math::Vector2F const pointB { this->m_tileset.get_position().x + x,
+        math::Vector2F const pointB { this->m_tileset.get_position().x
+                                          + static_cast< float >( x ),
                                       this->m_tileset.get_end_position().y };
 
         drawList.AddLine( pointA,
@@ -114,14 +117,17 @@ void TileSelector::update_grid( ImDrawList & drawList )
                               table_to_sfml_color( this->m_gridColorTable ) ) );
     }
     // Vertical lines of the grid
-    for ( float y = fmodf( scrolling.y, TILE_PIXEL_SIZE );
+    for ( unsigned int y {
+              math::division_reminder( scrolling.y, TILE_PIXEL_SIZE ) };
           y < this->m_tileset.get_size_in_pixel().y;
-          y += TILE_PIXEL_SIZE )
+          y += TILE_PIXEL_SIZE_U )
     {
         math::Vector2F const pointA { this->m_tileset.get_position().x,
-                                      this->m_tileset.get_position().y + y };
+                                      this->m_tileset.get_position().y
+                                          + static_cast< float >( y ) };
         math::Vector2F const pointB { this->m_tileset.get_end_position().x,
-                                      this->m_tileset.get_position().y + y };
+                                      this->m_tileset.get_position().y
+                                          + static_cast< float >( y ) };
 
         drawList.AddLine( pointA,
                           pointB,
