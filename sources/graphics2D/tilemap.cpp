@@ -1,7 +1,6 @@
 #include "tilemap.hpp"
 
 #include "main/window.hpp"
-#include "tilemap/tile_utility.hpp"
 #include "tools/databases.hpp"
 #include "tools/global_variable.hpp"
 #include "tools/imgui.hpp"
@@ -130,7 +129,9 @@ void TileMap::update()
 
     if ( ImGui::Begin( "Tilemap Information" ) )
     {
-        math::Vector2F const mousePosition { ImGui::GetMousePos() };
+        math::Vector2F const mousePosition {
+            Window::get_instance().get_mouse_position()
+        };
         math::Vector2F const viewZoom { Window::get_instance().get_size_f()
                                         / this->m_view.getSize() };
         math::Vector2F mouseViewPosition {
@@ -160,9 +161,12 @@ void TileMap::update()
             math::Vector2F const mouseRelativPosition {
                 mouseViewPosition - math::Vector2F { this->getPosition() }
             };
-            math::Vector2F const tileSelectedPosition {
+            math::Vector2F const tileSelectedPositionInPixel {
                 mouseRelativPosition
                 - ( mouseRelativPosition % TILE_PIXEL_SIZE_U )
+            };
+            math::Vector2U const tileSelectedPositionInTile {
+                tileSelectedPositionInPixel / TILE_PIXEL_SIZE_U
             };
 
             std::stringstream selectionOutput {};
@@ -171,18 +175,21 @@ void TileMap::update()
             selectionOutput
                 << "middle : " << ( mouseRelativPosition % TILE_PIXEL_SIZE_U )
                 << "\n";
-            selectionOutput
-                << "tile selected position : " << tileSelectedPosition << "\n";
+            selectionOutput << "tile selected position in pixel : "
+                            << tileSelectedPositionInPixel << "\n";
+            selectionOutput << "tile selected position in tile : "
+                            << tileSelectedPositionInTile << "\n";
             ImGui::Text( "%s", selectionOutput.str().c_str() );
 
             if ( sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) )
             {
-                this->change_tile( this->m_tileSelector.get_tile_selected(),
-                                   tileSelectedPosition );
+                this->change_tile( tileSelectedPositionInTile,
+                                   this->m_tileSelector.get_tile_selected() );
             }
 
             this->m_cursor.setOutlineColor( sf::Color::Black );
-            this->m_cursor.setPosition( tileSelectedPosition );
+            this->m_cursor.setPosition(
+                math::Vector2F { tileSelectedPositionInPixel } );
         }
         else
         {
@@ -282,27 +289,20 @@ void TileMap::set_tile_table(
     }
 }
 
-void TileMap::change_tile( int const & newTileValue,
-                           math::Vector2F const & tilePositionInTile )
+void TileMap::change_tile( math::Vector2U const & tilePositionInTile,
+                           int const & newTileValue )
 {
-    if ( newTileValue < 0 )
-    {
-        std::cout << "Tile negatif not handled" << std::endl;
-        return;
-    }
+    ASSERTION( tilePositionInTile < this->get_tile_size(), "position too big" );
 
-    /// @todo simplify static_cast
     S_TileData & tileData {
-        this->m_tileTable[static_cast< unsigned int >( tilePositionInTile.y )]
-                         [static_cast< unsigned int >( tilePositionInTile.x )]
+        this->m_tileTable[tilePositionInTile.y][tilePositionInTile.x]
                          [this->m_currentDepth]
     };
 
-    /// @todo simplify static_cast
+    /// @todo have a tileData.set(newTileValue) for simplification
     tileData.quad.set_texture_coordinate(
         newTileValue,
-        static_cast< unsigned int >(
-            this->m_tileSelector.get_tileset().get_size_in_tile().x ) );
+        this->m_tileSelector.get_tileset().get_size_in_tile().x );
 
     tileData.value = newTileValue;
 }

@@ -72,7 +72,8 @@ void EditorState::update()
         {
             std::stringstream windowTextOutput {};
             windowTextOutput
-                << "MousePos : " << sf::Vector2f { ImGui::GetMousePos() }
+                << "MousePos : "
+                << sf::Vector2f { Window::get_instance().get_mouse_position() }
                 << "\n";
             windowTextOutput
                 << "CursorPos : " << sf::Vector2f { ImGui::GetCursorPos() }

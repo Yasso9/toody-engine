@@ -16,7 +16,7 @@ class Tileset
     math::Vector2F get_end_position() const;
 
     math::Vector2U get_size_in_pixel() const;
-    math::Vector2F get_size_in_tile() const;
+    math::Vector2U get_size_in_tile() const;
 
     math::Vector2F get_tile_position_in_pixel(
         math::Vector2F const & pointPosition,
@@ -29,7 +29,7 @@ class Tileset
         math::Vector2F const & pointPositionInPixel,
         bool isRelativePositon = true ) const;
     int get_tile_value_from_tile_position(
-        math::Vector2F const & pointPositionInTile ) const;
+        math::Vector2U const & pointPositionInTile ) const;
 
     void set_position( math::Vector2F const & position );
 

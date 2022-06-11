@@ -4,6 +4,7 @@
 
 #include "graphics2D/sfml.hpp"
 #include "graphics3D/openGL.hpp"
+#include "maths/maths.hpp"
 #include "tools/singleton.hpp"
 
 /// @brief check if the class can be drawn
@@ -26,6 +27,8 @@ class Window final : public sf::RenderWindow,
 
     sf::Vector2u get_center_position_u() const;
     sf::Vector2f get_center_position_f() const;
+
+    math::Vector2F get_mouse_position() const;
 
     /// @brief Check if the window have focus and if the mouse is inside the windows
     bool has_absolute_focus() const;

@@ -6,6 +6,7 @@
 #include <cmath>
 
 #include "main/resources.hpp"
+#include "main/window.hpp"
 #include "maths/maths.hpp"
 #include "tools/global_variable.hpp"
 #include "tools/imgui.hpp"
@@ -137,7 +138,9 @@ void TileSelector::update_grid( ImDrawList & drawList )
 }
 void TileSelector::update_selection( ImDrawList & drawList )
 {
-    math::Vector2F const mousePosition { ImGui::GetMousePos() };
+    math::Vector2F const mousePosition {
+        Window::get_instance().get_mouse_position()
+    };
     bool const isInSelection { ImGui::IsWindowHovered()
                                && this->m_tileset.contain( mousePosition ) };
     if ( isInSelection )

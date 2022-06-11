@@ -39,6 +39,11 @@ sf::Vector2f Window::get_center_position_f() const
     return static_cast< sf::Vector2f >( this->get_center_position_u() );
 }
 
+math::Vector2F Window::get_mouse_position() const
+{
+    return math::Vector2I { sf::Mouse::getPosition( *this ) };
+}
+
 bool Window::has_absolute_focus() const
 {
     math::Vector2F const mousePosition { sf::Mouse::getPosition(

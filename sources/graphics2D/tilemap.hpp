@@ -7,8 +7,10 @@
 #include "graphics2D/tileset.hpp"
 
 /// @todo améliorer cette class et la rendre plus éprouvé en delete toute les choses lié à vertex array
-struct TileQuad
+class TileQuad
 {
+    sf::VertexArray m_vextexArray;
+
   public:
     TileQuad();
     virtual ~TileQuad() = default;
@@ -22,9 +24,6 @@ struct TileQuad
                                  unsigned int numberOfXAxisTile );
 
     sf::Vertex operator[]( size_t index ) const;
-
-  private:
-    sf::VertexArray m_vextexArray;
 };
 
 struct S_TileData
@@ -64,8 +63,8 @@ class TileMap : public sf::Drawable,
     void set_tile_table(
         std::vector< std::vector< std::vector< int > > > const & table );
 
-    void change_tile( int const & newTileValue,
-                      math::Vector2F const & tilePositionInTile );
+    void change_tile( math::Vector2U const & tilePositionInTile,
+                      int const & newTileValu );
 
     void draw( sf::RenderTarget & target,
                sf::RenderStates states ) const override;
