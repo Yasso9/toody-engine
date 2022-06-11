@@ -177,6 +177,14 @@ namespace math
     ************************************************************************ */
 
     template < C_Primitive TypeLeft, C_Primitive TypeRight >
+    bool operator==( Vector2< TypeLeft > const & vector2DLeft,
+                     Vector2< TypeRight > const & vector2DRight )
+    {
+        return vector2DLeft.x == static_cast< TypeLeft >( vector2DRight.x )
+               && vector2DLeft.y == static_cast< TypeLeft >( vector2DRight.y );
+    }
+
+    template < C_Primitive TypeLeft, C_Primitive TypeRight >
     bool operator<( Vector2< TypeLeft > const & vector2DLeft,
                     Vector2< TypeRight > const & vector2DRight )
     {

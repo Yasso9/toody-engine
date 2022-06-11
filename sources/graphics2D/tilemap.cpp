@@ -8,78 +8,6 @@
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 
-static math::RectangleF get_tile_rectangle_in_tilemap(
-    math::Vector2F const & tilemapPosition,
-    math::Vector2F const & tileCoordinate )
-{
-    math::RectangleF rectangle {};
-
-    rectangle.position = tilemapPosition + ( tileCoordinate * TILE_PIXEL_SIZE );
-    rectangle.size     = TILE_PIXEL_SIZE_VECTOR;
-
-    return rectangle;
-}
-
-static math::RectangleF get_tile_rectangle_in_texture(
-    int const & tileValue, unsigned int numberOfTile )
-{
-    std::div_t divisionValue { std::div( tileValue,
-                                         static_cast< int >( numberOfTile ) ) };
-
-    return {
-        math::Vector2I {divisionValue.rem, divisionValue.quot}
-            * TILE_PIXEL_SIZE_I,
-        TILE_PIXEL_SIZE_VECTOR
-    };
-}
-
-TileQuad::TileQuad() : m_vextexArray( sf::Quads, 4 ) {}
-
-sf::VertexArray const & TileQuad::get_vertex_array() const
-{
-    return this->m_vextexArray;
-}
-
-void TileQuad::set_position( math::Vector2F const & tilemapPosition,
-                             math::Vector2F const & tileCoordinate )
-{
-    math::RectangleF const rectangle {
-        get_tile_rectangle_in_tilemap( tilemapPosition, tileCoordinate )
-    };
-
-    this->m_vextexArray[0].position = rectangle.position;
-    this->m_vextexArray[1].position =
-        rectangle.position + math::Vector2F { rectangle.size.x, 0.f };
-    this->m_vextexArray[2].position = rectangle.position + rectangle.size;
-    this->m_vextexArray[3].position =
-        rectangle.position + math::Vector2F { 0.f, rectangle.size.y };
-}
-
-void TileQuad::set_texture_coordinate( int const & tileValue,
-                                       unsigned int numberOfXAxisTile )
-{
-    math::RectangleF textureTileRectangle {
-        get_tile_rectangle_in_texture( tileValue, numberOfXAxisTile )
-    };
-
-    this->m_vextexArray[0].texCoords = textureTileRectangle.position;
-    this->m_vextexArray[1].texCoords =
-        textureTileRectangle.position
-        + math::Vector2F { textureTileRectangle.size.x, 0.f };
-    this->m_vextexArray[2].texCoords =
-        textureTileRectangle.position + textureTileRectangle.size;
-    this->m_vextexArray[3].texCoords =
-        textureTileRectangle.position
-        + math::Vector2F { 0.f, textureTileRectangle.size.y };
-}
-
-sf::Vertex TileQuad::operator[]( std::size_t index ) const
-{
-    ASSERTION( index <= 4, "Index must be between 0 and 4" );
-
-    return this->m_vextexArray[index];
-}
-
 TileMap::TileMap( sf::View & view )
   : m_tileSelector(),
     m_cursor(),
@@ -116,11 +44,43 @@ math::Vector2F TileMap::get_size() const
     return this->get_tile_size() * TILE_PIXEL_SIZE_VECTOR;
 }
 
-math::Vector2F TileMap::get_tile_size() const
+math::Vector2U TileMap::get_tile_size() const
 {
-    /// @todo normalement le static cast ne sert à rien
+    /// @todo assert that the size of all element of this->m_tileTable have the same size
     return math::Vector2U { this->m_tileTable[0].size(),
                             this->m_tileTable.size() };
+}
+
+void TileMap::set_tile_size( math::Vector2U const & tileSize )
+{
+    if ( this->get_tile_size() == tileSize )
+    {
+        return;
+    }
+
+    this->m_tileTable.resize( tileSize.y );
+
+    for ( unsigned int line { 0u }; line < tileSize.y; ++line )
+    {
+        if ( this->m_tileTable[line].size() == tileSize.x )
+        {
+            continue;
+        }
+
+        while ( this->m_tileTable[line].size() > tileSize.x )
+        {
+            this->m_tileTable[line].pop_back();
+        }
+
+        while ( this->m_tileTable[line].size() < tileSize.x )
+        {
+            Tile defaultValue { *this, this->m_tileSelector };
+            defaultValue.set_data( 0,
+                                   { this->m_tileTable[line].size(), line } );
+
+            this->m_tileTable[line].push_back( { defaultValue } );
+        }
+    }
 }
 
 void TileMap::update()
@@ -181,7 +141,8 @@ void TileMap::update()
                             << tileSelectedPositionInTile << "\n";
             ImGui::Text( "%s", selectionOutput.str().c_str() );
 
-            if ( sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) )
+            if ( sf::Mouse::isButtonPressed( sf::Mouse::Button::Left )
+                 && this->m_tileSelector.get_tile_selected() >= 0 )
             {
                 this->change_tile( tileSelectedPositionInTile,
                                    this->m_tileSelector.get_tile_selected() );
@@ -201,7 +162,7 @@ void TileMap::update()
         unsigned int tileSizeY { static_cast< unsigned int >(
             this->get_tile_size().y ) };
 
-        static std::vector< S_TileData > tileValueArray {};
+        static std::stringstream tileValueStream {};
 
         if ( ImGui::BeginTable( "table_padding",
                                 static_cast< int >( tileSizeX ) ) )
@@ -213,36 +174,55 @@ void TileMap::update()
                 {
                     ImGui::TableSetColumnIndex( static_cast< int >( column ) );
                     std::stringstream buttonStream {};
-                    buttonStream << math::Vector2U { column, line } << " = "
-                                 << this->m_tileTable[line][column][0].value;
+                    buttonStream
+                        << math::Vector2U { column, line } << " = "
+                        << this->m_tileTable[line][column][this->m_currentDepth]
+                               .get_value();
                     if ( ImGui::Button( buttonStream.str().c_str() ) )
                     {
-                        tileValueArray = this->m_tileTable[line][column];
+                        // Clear the stream
+                        tileValueStream.str( "" );
+
+                        for ( Tile const & element :
+                              this->m_tileTable[line][column] )
+                        {
+                            tileValueStream << element << "\n";
+                        }
                     }
                 }
             }
             ImGui::EndTable();
         }
 
-        if ( ! tileValueArray.empty() )
+        ImGui::Text( "%s", tileValueStream.str().c_str() );
+
         {
-            std::stringstream tileValueStream {};
-            for ( auto const & element : tileValueArray )
+            constexpr unsigned int const MAX_STRING_SIZE { 10u };
+
+            static std::string tileNumberX { std::to_string(
+                this->get_tile_size().x ) };
+            static std::string tileNumberY { std::to_string(
+                this->get_tile_size().y ) };
+
+            ImGui::InputText( "Number of Tile X :",
+                              tileNumberX.data(),
+                              MAX_STRING_SIZE,
+                              ImGuiInputTextFlags_CharsDecimal );
+            ImGui::InputText( "Number of Tile Y :",
+                              tileNumberY.data(),
+                              MAX_STRING_SIZE,
+                              ImGuiInputTextFlags_CharsDecimal );
+
+            if ( ImGui::Button( "Update Size" ) )
             {
-                tileValueStream << "Tile " << element.value << "\n";
-                tileValueStream << "Position [ " << element.quad[0].position
-                                << ", " << element.quad[1].position << ", "
-                                << element.quad[2].position << ", "
-                                << element.quad[3].position << " ]"
-                                << "\n";
-                tileValueStream << "TextCoord [ " << element.quad[0].texCoords
-                                << ", " << element.quad[1].texCoords << ", "
-                                << element.quad[2].texCoords << ", "
-                                << element.quad[3].texCoords << " ]"
-                                << "\n";
-                tileValueStream << "\n";
+                char * tileNumberXEnd;
+                char * tileNumberYEnd;
+                this->set_tile_size( math::Vector2U {
+                    std::strtoul( tileNumberX.c_str(), &tileNumberXEnd, 10 ),
+                    std::strtoul( tileNumberY.c_str(),
+                                  &tileNumberYEnd,
+                                  10 ) } );
             }
-            ImGui::Text( "%s", tileValueStream.str().c_str() );
         }
     }
     ImGui::End();
@@ -266,21 +246,9 @@ void TileMap::set_tile_table(
             for ( unsigned int depth { 0u }; depth < table[line][column].size();
                   ++depth )
             {
-                S_TileData tile { table[line][column][depth], TileQuad {} };
-
-                // Not in pixel position
-                math::Vector2U const currentTilePosition { column, line };
-
-                tile.quad.set_position( this->getPosition(),
-                                        currentTilePosition );
-
-                tile.quad.set_texture_coordinate(
-                    tile.value,
-                    /// @todo simplify static_cast
-                    static_cast< unsigned int >(
-                        this->m_tileSelector.get_tileset()
-                            .get_size_in_tile()
-                            .x ) );
+                Tile tile { *this, this->m_tileSelector };
+                tile.set_data( table[line][column][depth],
+                               math::Vector2U { column, line } );
 
                 // We add the element to the tile table
                 this->m_tileTable[line][column].push_back( tile );
@@ -293,18 +261,11 @@ void TileMap::change_tile( math::Vector2U const & tilePositionInTile,
                            int const & newTileValue )
 {
     ASSERTION( tilePositionInTile < this->get_tile_size(), "position too big" );
+    /// @todo assert that newTileValue is between 0 and max number of tile (maybe put it unsigned int idk)
 
-    S_TileData & tileData {
-        this->m_tileTable[tilePositionInTile.y][tilePositionInTile.x]
-                         [this->m_currentDepth]
-    };
-
-    /// @todo have a tileData.set(newTileValue) for simplification
-    tileData.quad.set_texture_coordinate(
-        newTileValue,
-        this->m_tileSelector.get_tileset().get_size_in_tile().x );
-
-    tileData.value = newTileValue;
+    this->m_tileTable[tilePositionInTile.y][tilePositionInTile.x]
+                     [this->m_currentDepth]
+                         .set_value( newTileValue );
 }
 
 void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
@@ -317,9 +278,9 @@ void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
     {
         for ( auto const & tile : column )
         {
-            for ( S_TileData const & cell : tile )
+            for ( Tile const & cell : tile )
             {
-                target.draw( cell.quad.get_vertex_array(), states );
+                target.draw( cell.get_vertex_array(), states );
             }
         }
     }

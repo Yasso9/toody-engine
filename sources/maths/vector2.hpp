@@ -28,6 +28,7 @@ namespace math
         Vector2( ImVec2 const & imGuiVector );
         constexpr virtual ~Vector2() {};
 
+        /// @todo les mettre dans le cpp et ne pas mettre de type explicite mais plutot Vector2F ou Vector2U
         /// @brief copy constructor
         Vector2( Vector2< Type > const & vector2D )
           : x( vector2D.x ), y( vector2D.y )
@@ -131,6 +132,10 @@ namespace math
     /* ************************************************************************
     **************************** SIGN OPERATOR ********************************
     ************************************************************************ */
+
+    template < C_Primitive TypeLeft, C_Primitive TypeRight >
+    bool operator==( Vector2< TypeLeft > const & vector2DLeft,
+                     Vector2< TypeRight > const & vector2DRight );
 
     template < C_Primitive TypeLeft, C_Primitive TypeRight >
     bool operator<( Vector2< TypeLeft > const & vector2DLeft,

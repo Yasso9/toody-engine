@@ -3,38 +3,9 @@
 #include <vector>
 
 #include "graphics2D/sfml.hpp"
+#include "graphics2D/tile.hpp"
 #include "graphics2D/tile_selector.hpp"
 #include "graphics2D/tileset.hpp"
-
-/// @todo améliorer cette class et la rendre plus éprouvé en delete toute les choses lié à vertex array
-class TileQuad
-{
-    sf::VertexArray m_vextexArray;
-
-  public:
-    TileQuad();
-    virtual ~TileQuad() = default;
-
-    sf::VertexArray const & get_vertex_array() const;
-
-    void set_position( math::Vector2F const & tilemapPosition,
-                       math::Vector2F const & tileCoordinate );
-
-    void set_texture_coordinate( int const & tileValue,
-                                 unsigned int numberOfXAxisTile );
-
-    sf::Vertex operator[]( size_t index ) const;
-};
-
-struct S_TileData
-{
-    int value {};
-    TileQuad quad {};
-
-    S_TileData( int const & aValue, TileQuad const & aVertice )
-      : value( aValue ), quad( aVertice )
-    {}
-};
 
 class TileMap : public sf::Drawable,
                 public sf::Transformable
@@ -46,7 +17,10 @@ class TileMap : public sf::Drawable,
     /// @brief size of the tilemap in pixel
     math::Vector2F get_size() const;
     /// @brief number of tile that the tilemap contain
-    math::Vector2F get_tile_size() const;
+    math::Vector2U get_tile_size() const;
+
+    /// @brief resize
+    void set_tile_size( math::Vector2U const & tileSize );
 
     void update();
 
@@ -56,15 +30,15 @@ class TileMap : public sf::Drawable,
     sf::View & m_view;
     /** @brief tri-dimensionnal vector containing the sprite number
      * of each tile of the tilemap */
-    /// @brief m_tileTable[row][line][depth]
-    std::vector< std::vector< std::vector< S_TileData > > > m_tileTable;
+    /// @brief m_tileTable[line][column][depth]
+    std::vector< std::vector< std::vector< Tile > > > m_tileTable;
     unsigned int m_currentDepth;
 
     void set_tile_table(
         std::vector< std::vector< std::vector< int > > > const & table );
 
     void change_tile( math::Vector2U const & tilePositionInTile,
-                      int const & newTileValu );
+                      int const & newTileValue );
 
     void draw( sf::RenderTarget & target,
                sf::RenderStates states ) const override;
