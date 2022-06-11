@@ -72,6 +72,7 @@ namespace db
 
         sqlite3_close( database );
 
+        /// @todo always return an array : solution - put the return in a string instead of a json
         return s_requestResult;
     }
 } // namespace db
@@ -91,16 +92,19 @@ namespace db
     };
 
     json jsonArray {};
-    jsonArray["table"] = tripleArray;
+    jsonArray = tripleArray;
 
-    std::cout << "dump : '" << jsonArray["table"].dump() << "'" << std::endl;
+    std::cout << "dump : '" << jsonArray.dump() << "'" << std::endl;
 
-    db::request( "INSERT INTO tilemap (tile_table)"
-                 "VALUES('"
-                 + jsonArray["table"].dump() + "');" );
+    json insertionRequest = db::request( "INSERT INTO tilemap (tile_table)"
+                                         "VALUES('"
+                                         + jsonArray.dump() + "');" );
+
+    std::cout << "insertionRequest " << insertionRequest << std::endl;
 
     json const requestValue { db::request(
-        "SELECT tile_table FROM tilemap;" )[0] };
+        "SELECT tile_table FROM tilemap;" ) };
 
-    std::cout << requestValue << std::endl;
+    std::cout << "requestValue " << requestValue << std::endl;
+    std::cout << "requestValue " << requestValue[0] << std::endl;
 }

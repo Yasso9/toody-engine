@@ -24,6 +24,8 @@ class TileMap : public sf::Drawable,
 
     void update();
 
+    void save() const;
+
   protected:
     TileSelector m_tileSelector;
     sf::RectangleShape m_cursor;

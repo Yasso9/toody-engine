@@ -15,19 +15,27 @@ TileMap::TileMap( sf::View & view )
     m_tileTable(),
     m_currentDepth( 0u )
 {
-    // json const tilemapRequest { db::request(
-    //     "SELECT table_tilemap FROM tilemap;"s ) };
+    json const tilemapRequest { db::request(
+        "SELECT tile_table FROM tilemap;" ) };
 
-    // /// @todo pourquoi on doit acceder à [0]["table_tilemap"] pour avoir la valeur
-    // json const jsonTilemap { json::parse(
-    //     std::string { tilemapRequest[0]["table_tilemap"] } ) };
+    // std::cout << tilemapRequest << std::endl;
+    // std::cout << tilemapRequest[0] << std::endl;
+    // std::cout << tilemapRequest[0]["tile_table"] << std::endl;
+    // // std::cout << tilemapRequest[0]["tile_table"][0] << std::endl;
+    // std::cout << std::string { tilemapRequest[0]["tile_table"] } << std::endl;
+    // std::cout << json::parse( std::string { tilemapRequest[0]["tile_table"] } )
+    //           << std::endl;
 
-    // this->set_tile_table( jsonaddon::decode_array( jsonTilemap ) );
+    /// @todo pourquoi on doit acceder à [0]["table_tilemap"] pour avoir la valeur
+    json const jsonTilemap { json::parse(
+        std::string { tilemapRequest[0]["tile_table"] } ) };
 
-    this->set_tile_table( {
-        {{ 0 }, { 2 }},
-        {{ 2 }, { 0 }}
-    } );
+    this->set_tile_table( jsonaddon::decode_array( jsonTilemap ) );
+
+    // this->set_tile_table( {
+    //     {{ 0 }, { 2 }},
+    //     {{ 2 }, { 0 }}
+    // } );
 
     m_cursor.setSize( TILE_PIXEL_SIZE_VECTOR );
     m_cursor.setOutlineThickness( -3.f );
@@ -224,8 +232,46 @@ void TileMap::update()
                                   10 ) } );
             }
         }
+
+        {
+            if ( ImGui::Button( "Save Tilemap" ) )
+            {
+                this->save();
+            }
+        }
     }
     ImGui::End();
+}
+
+void TileMap::save() const
+{
+    std::vector< std::vector< std::vector< int > > > valueArray {};
+    for ( unsigned int line { 0u }; line < this->m_tileTable.size(); ++line )
+    {
+        valueArray.push_back( {} );
+        for ( unsigned int column { 0u };
+              column < this->m_tileTable[line].size();
+              ++column )
+        {
+            valueArray[line].push_back( {} );
+            for ( unsigned int depth { 0u };
+                  depth < this->m_tileTable[line][column].size();
+                  ++depth )
+            {
+                valueArray[line][column].push_back(
+                    this->m_tileTable[line][column][depth].get_value() );
+            }
+        }
+    }
+
+    json tilemapSave {};
+    tilemapSave = valueArray;
+
+    std::cout << "tilemapSave" << tilemapSave << std::endl;
+
+    db::request( "INSERT INTO tilemap (tile_table)"
+                 "VALUES('"
+                 + tilemapSave.dump() + "');" );
 }
 
 void TileMap::set_tile_table(
@@ -287,16 +333,3 @@ void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
 
     target.draw( this->m_cursor, states );
 }
-
-// void TileMapEditor::save() const
-// {
-// json tilemapSave {};
-// tilemapSave["array"] = this->m_table;
-
-// db::request( R"(
-// INSERT INTO tilemap( table_tilemap )
-// VALUES( ")"s + tilemapSave["array"].dump()
-//              +
-//              R"(" );
-// )"s );
-// }
