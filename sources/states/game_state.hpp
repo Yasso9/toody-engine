@@ -19,5 +19,4 @@ class GameState final : public State
     Player m_player;
 
     void init_map();
-    void update_map();
 };

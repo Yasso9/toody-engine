@@ -3,11 +3,7 @@
 #include "main/resources.hpp"
 
 GameState::GameState()
-  : State( State::E_List::Game ),
-    m_view(),
-    m_tilemap( m_view ),
-    m_player( Resources::get_instance().get_texture(
-        Resources::E_TextureKey::Player ) )
+  : State( State::E_List::Game ), m_view(), m_tilemap( m_view ), m_player()
 {
     this->init_map();
 }
@@ -27,44 +23,11 @@ void GameState::init_map()
     this->m_view.setSize( Window::get_instance().get_size_f() / 2.f );
 }
 
-void GameState::update_map()
-{
-    // The view follow the player
-    this->m_view.setCenter( this->m_player.getPosition() );
-}
-
 void GameState::update()
 {
-    this->m_player.set_state( Player::E_State::Normal );
-
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
-    {
-        this->m_player.set_state( Player::E_State::Walking );
-        this->m_player.set_direction( E_Direction::Up );
-    }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
-    {
-        this->m_player.set_state( Player::E_State::Walking );
-        this->m_player.set_direction( E_Direction::Down );
-    }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Q ) )
-    {
-        this->m_player.set_state( Player::E_State::Walking );
-        this->m_player.set_direction( E_Direction::Left );
-    }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
-    {
-        this->m_player.set_state( Player::E_State::Walking );
-        this->m_player.set_direction( E_Direction::Right );
-    }
-
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
-    {
-        this->m_player.set_state( Player::E_State::Running );
-    }
-
     this->m_player.update( this->m_deltaTime );
-    this->update_map();
+    // The view follow the player
+    this->m_view.setCenter( this->m_player.getPosition() );
 }
 
 void GameState::render() const

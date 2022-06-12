@@ -3,11 +3,13 @@
 #include <exception>
 #include <stdexcept>
 
+#include "main/resources.hpp"
 #include "tools/assertion.hpp"
 #include "tools/tools.hpp"
 
-Player::Player( sf::Texture const & texture )
-  : Entity( texture ),
+Player::Player()
+  : Entity( Resources::get_instance().get_texture(
+      Resources::E_TextureKey::Player ) ),
     m_state(),
     m_direction(),
     m_deltaTime(),
@@ -104,6 +106,34 @@ void Player::set_state( Player::E_State const & playerState )
 
 void Player::update( float const & deltaTime )
 {
+    this->set_state( Player::E_State::Normal );
+
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
+    {
+        this->set_state( Player::E_State::Walking );
+        this->set_direction( E_Direction::Up );
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
+    {
+        this->set_state( Player::E_State::Walking );
+        this->set_direction( E_Direction::Down );
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Q ) )
+    {
+        this->set_state( Player::E_State::Walking );
+        this->set_direction( E_Direction::Left );
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
+    {
+        this->set_state( Player::E_State::Walking );
+        this->set_direction( E_Direction::Right );
+    }
+
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
+    {
+        this->set_state( Player::E_State::Running );
+    }
+
     this->update_delta_time( deltaTime );
     this->update_movement();
     this->update_texture_rect();

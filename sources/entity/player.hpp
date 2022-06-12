@@ -21,7 +21,7 @@ class Player final : public Entity
         E_Direction direction;
     };
 
-    Player( sf::Texture const & texture );
+    Player();
     virtual ~Player() = default;
 
     void set_direction( E_Direction const & direction );
@@ -47,6 +47,7 @@ class Player final : public Entity
     ///        sprite number of the player
     sf::IntRect get_current_texture_rect();
 
+    /// @todo trouver un moyen soit d'avoir la ref du delta time, soit d'enelever la variable mambre deltatime
     void update_delta_time( float const & deltaTime );
     void update_movement();
     void update_texture_rect();

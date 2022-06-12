@@ -11,9 +11,11 @@ EditorState::EditorState()
   : State( State::E_List::Editor ),
     m_view(),
     m_tilemap( m_view ),
+    m_player(),
     m_showDemoWindow( false ),
-    m_showTilemapEditor( true ),
-    m_showDebugOptions( false )
+    m_showDebugOptions( false ),
+    m_showEditorOverlay( true ),
+    m_handlePlayer( false )
 {
     this->init_map();
 }
@@ -47,12 +49,12 @@ void EditorState::update()
     {
         if ( ImGui::BeginMenu( "Options" ) )
         {
+            ImGui::MenuItem( "Show Editor Overlay Options",
+                             NULL,
+                             &this->m_showEditorOverlay );
             ImGui::MenuItem( "Show ImGui Demo Window",
                              NULL,
                              &this->m_showDemoWindow );
-            ImGui::MenuItem( "Show Tilemap Editor",
-                             NULL,
-                             &this->m_showTilemapEditor );
             ImGui::MenuItem( "Show Debug Options",
                              NULL,
                              &this->m_showDebugOptions );
@@ -63,43 +65,78 @@ void EditorState::update()
 
     if ( this->m_showDemoWindow )
     {
-        ImGui::ShowDemoWindow();
+        ImGui::ShowDemoWindow( &this->m_showDemoWindow );
     }
 
-    if ( this->m_showDebugOptions )
+    if ( this->m_showDebugOptions
+         && ImGui::Begin( "Debug Options", &this->m_showDebugOptions ) )
     {
-        if ( ImGui::Begin( "Debug Options" ) )
-        {
-            std::stringstream windowTextOutput {};
-            windowTextOutput
-                << "MousePos : "
-                << sf::Vector2f { Window::get_instance().get_mouse_position() }
-                << "\n";
-            windowTextOutput
-                << "CursorPos : " << sf::Vector2f { ImGui::GetCursorPos() }
-                << "\n";
-            windowTextOutput << "CursorStartPos : "
-                             << sf::Vector2f { ImGui::GetCursorStartPos() }
-                             << "\n";
-            windowTextOutput << "CursorScreenPos : "
-                             << sf::Vector2f { ImGui::GetCursorScreenPos() }
-                             << "\n";
-            windowTextOutput << "ContentRegionAvail : "
-                             << sf::Vector2f { ImGui::GetContentRegionAvail() }
-                             << "\n";
+        std::stringstream windowTextOutput {};
+        windowTextOutput
+            << "MousePos : "
+            << sf::Vector2f { Window::get_instance().get_mouse_position() }
+            << "\n";
+        windowTextOutput << "CursorPos : "
+                         << sf::Vector2f { ImGui::GetCursorPos() } << "\n";
+        windowTextOutput << "CursorStartPos : "
+                         << sf::Vector2f { ImGui::GetCursorStartPos() } << "\n";
+        windowTextOutput << "CursorScreenPos : "
+                         << sf::Vector2f { ImGui::GetCursorScreenPos() }
+                         << "\n";
+        windowTextOutput << "ContentRegionAvail : "
+                         << sf::Vector2f { ImGui::GetContentRegionAvail() }
+                         << "\n";
 
-            windowTextOutput << "\n";
+        windowTextOutput << "\n";
 
-            windowTextOutput << "IsWindowFocused : " << std::boolalpha
-                             << ImGui::IsWindowFocused() << "\n";
-            windowTextOutput << "IsWindowHovered : " << ImGui::IsWindowHovered()
-                             << "\n";
-            ImGui::Text( "%s", windowTextOutput.str().c_str() );
-        }
+        windowTextOutput << "IsWindowFocused : " << std::boolalpha
+                         << ImGui::IsWindowFocused() << "\n";
+        windowTextOutput << "IsWindowHovered : " << ImGui::IsWindowHovered()
+                         << "\n";
+        ImGui::Text( "%s", windowTextOutput.str().c_str() );
         ImGui::End();
     }
 
     this->m_tilemap.update();
+
+    if ( this->m_showEditorOverlay )
+    {
+        ImGuiWindowFlags window_flags =
+            ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize
+            | ImGuiWindowFlags_NoSavedSettings
+            | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav
+            | ImGuiWindowFlags_NoMove;
+
+        constexpr math::Vector2F const PADDINGS { 10.f, 10.f };
+        math::Vector2F overlayPosition {
+            math::Vector2F { ImGui::GetMainViewport()->WorkPos } + PADDINGS
+        };
+        ImGui::SetNextWindowPos( overlayPosition, ImGuiCond_Always );
+        ImGui::SetNextWindowBgAlpha( 0.5f );
+        if ( ImGui::Begin( "Editor Main",
+                           &this->m_showEditorOverlay,
+                           window_flags ) )
+        {
+            ImGui::Checkbox( "Handle Player ?", &this->m_handlePlayer );
+
+            static bool showDebug { false };
+            ImGui::Checkbox( "Show Debug", &showDebug );
+            if ( showDebug )
+            {
+                std::stringstream overlayOutput {};
+                overlayOutput << "Window Position : " << overlayPosition
+                              << "\n";
+                ImGui::Text( "%s", overlayOutput.str().c_str() );
+            }
+        }
+        ImGui::End();
+    }
+
+    if ( this->m_handlePlayer )
+    {
+        this->m_player.update( this->m_deltaTime );
+        this->m_view.setCenter( this->m_player.getPosition() );
+    }
 }
 
 void EditorState::render() const
@@ -107,6 +144,12 @@ void EditorState::render() const
     Window::get_instance().setView( this->m_view );
 
     Window::get_instance().sf_draw( this->m_tilemap );
+
+    if ( this->m_handlePlayer )
+    {
+        Window::get_instance().sf_draw( this->m_player );
+    }
+    /// @todo reset the view at the end
 }
 
 void EditorState::init_map()
@@ -117,6 +160,8 @@ void EditorState::init_map()
     this->m_view.setCenter( math::Vector2F { this->m_tilemap.getPosition() }
                             + ( this->m_tilemap.get_size() / 2.f ) );
     this->m_view.setSize( Window::get_instance().get_size_f() );
+
+    this->m_player.setPosition( this->m_view.getCenter() );
 }
 
 void EditorState::mouse_scroll( float const & deltaScroll )

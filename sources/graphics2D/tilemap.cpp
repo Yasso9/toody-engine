@@ -18,24 +18,11 @@ TileMap::TileMap( sf::View & view )
     json const tilemapRequest { db::request(
         "SELECT tile_table FROM tilemap;" ) };
 
-    // std::cout << tilemapRequest << std::endl;
-    // std::cout << tilemapRequest[0] << std::endl;
-    // std::cout << tilemapRequest[0]["tile_table"] << std::endl;
-    // // std::cout << tilemapRequest[0]["tile_table"][0] << std::endl;
-    // std::cout << std::string { tilemapRequest[0]["tile_table"] } << std::endl;
-    // std::cout << json::parse( std::string { tilemapRequest[0]["tile_table"] } )
-    //           << std::endl;
-
     /// @todo pourquoi on doit acceder à [0]["table_tilemap"] pour avoir la valeur
     json const jsonTilemap { json::parse(
         std::string { tilemapRequest[0]["tile_table"] } ) };
 
     this->set_tile_table( jsonaddon::decode_array( jsonTilemap ) );
-
-    // this->set_tile_table( {
-    //     {{ 0 }, { 2 }},
-    //     {{ 2 }, { 0 }}
-    // } );
 
     m_cursor.setSize( TILE_PIXEL_SIZE_VECTOR );
     m_cursor.setOutlineThickness( -3.f );
@@ -266,8 +253,6 @@ void TileMap::save() const
 
     json tilemapSave {};
     tilemapSave = valueArray;
-
-    std::cout << "tilemapSave" << tilemapSave << std::endl;
 
     db::request( "INSERT INTO tilemap (tile_table)"
                  "VALUES('"
