@@ -41,6 +41,8 @@ void EditorState::extra_events()
     {
         this->m_view.move( 5.f, 0.f );
     }
+
+    this->m_tilemap.process_events();
 }
 
 void EditorState::update()
@@ -71,6 +73,9 @@ void EditorState::update()
     if ( this->m_showDebugOptions
          && ImGui::Begin( "Debug Options", &this->m_showDebugOptions ) )
     {
+        std::string testBuffer { "testvalue" };
+        ImGui::InputText( "Test", testBuffer.data(), 20 );
+
         std::stringstream windowTextOutput {};
         windowTextOutput
             << "MousePos : "
@@ -93,6 +98,13 @@ void EditorState::update()
                          << ImGui::IsWindowFocused() << "\n";
         windowTextOutput << "IsWindowHovered : " << ImGui::IsWindowHovered()
                          << "\n";
+
+        windowTextOutput << "\n";
+
+        windowTextOutput << "IsAnyItemActive : " << std::boolalpha
+                         << ImGui::IsAnyItemActive() << "\n";
+        windowTextOutput << "IsAnyItemHovered : " << std::boolalpha
+                         << ImGui::IsAnyItemHovered() << "\n";
         ImGui::Text( "%s", windowTextOutput.str().c_str() );
         ImGui::End();
     }

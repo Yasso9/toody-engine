@@ -22,6 +22,7 @@ class TileMap : public sf::Drawable,
     /// @brief resize
     void set_tile_size( math::Vector2U const & tileSize );
 
+    void process_events();
     void update();
 
     void save() const;
@@ -35,6 +36,9 @@ class TileMap : public sf::Drawable,
     /// @brief m_tileTable[line][column][depth]
     std::vector< std::vector< std::vector< Tile > > > m_tileTable;
     unsigned int m_currentDepth;
+
+    bool m_isLeftButtonPressed;
+    math::Vector2F m_mousePosition;
 
     void set_tile_table(
         std::vector< std::vector< std::vector< int > > > const & table );

@@ -13,7 +13,9 @@ TileMap::TileMap( sf::View & view )
     m_cursor(),
     m_view( view ),
     m_tileTable(),
-    m_currentDepth( 0u )
+    m_currentDepth( 0u ),
+    m_isLeftButtonPressed( false ),
+    m_mousePosition( 0.f, 0.f )
 {
     json const tilemapRequest { db::request(
         "SELECT tile_table FROM tilemap;" ) };
@@ -78,15 +80,22 @@ void TileMap::set_tile_size( math::Vector2U const & tileSize )
     }
 }
 
+void TileMap::process_events()
+{
+    this->m_tileSelector.process_events();
+
+    m_isLeftButtonPressed =
+        sf::Mouse::isButtonPressed( sf::Mouse::Button::Left );
+    m_mousePosition = Window::get_instance().get_mouse_position();
+}
+
 void TileMap::update()
 {
     this->m_tileSelector.update();
 
     if ( ImGui::Begin( "Tilemap Information" ) )
     {
-        math::Vector2F const mousePosition {
-            Window::get_instance().get_mouse_position()
-        };
+        math::Vector2F const mousePosition { this->m_mousePosition };
         math::Vector2F const viewZoom { Window::get_instance().get_size_f()
                                         / this->m_view.getSize() };
         math::Vector2F mouseViewPosition {
@@ -136,7 +145,7 @@ void TileMap::update()
                             << tileSelectedPositionInTile << "\n";
             ImGui::Text( "%s", selectionOutput.str().c_str() );
 
-            if ( sf::Mouse::isButtonPressed( sf::Mouse::Button::Left )
+            if ( this->m_isLeftButtonPressed
                  && this->m_tileSelector.get_tile_selected() >= 0 )
             {
                 this->change_tile( tileSelectedPositionInTile,

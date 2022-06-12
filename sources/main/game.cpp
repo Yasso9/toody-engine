@@ -65,6 +65,7 @@ void Game::run()
 
         if ( deltaTime.asSeconds() > refreshRate )
         {
+            /// @todo remove this try catch and put a more accurate thing to stop the game
             try
             {
                 this->update_events();

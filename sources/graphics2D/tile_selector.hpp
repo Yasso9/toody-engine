@@ -12,6 +12,7 @@ class TileSelector
 
     int get_tile_selected() const;
 
+    void process_events();
     void update();
 
   private:
@@ -21,6 +22,9 @@ class TileSelector
 
     bool m_isGridEnabled;
     float m_gridColorTable[4];
+
+    bool m_isLeftButtonPressed;
+    math::Vector2F m_mousePosition;
 
     void update_grid( ImDrawList & drawList );
     void update_selection( ImDrawList & drawList );

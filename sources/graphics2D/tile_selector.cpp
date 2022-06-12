@@ -53,7 +53,9 @@ TileSelector::TileSelector()
       Resources::E_TextureKey::Tileset ) ),
     m_tileSelected( -1 ),
     m_isGridEnabled( true ),
-    m_gridColorTable()
+    m_gridColorTable(),
+    m_isLeftButtonPressed( false ),
+    m_mousePosition( 0.f, 0.f )
 {
     sf::Color gridColor { 118, 118, 118, 255 };
     sfml_to_table_color( gridColor, this->m_gridColorTable );
@@ -67,6 +69,14 @@ Tileset const & TileSelector::get_tileset() const
 int TileSelector::get_tile_selected() const
 {
     return this->m_tileSelected;
+}
+
+void TileSelector::process_events()
+{
+    m_isLeftButtonPressed =
+        sf::Mouse::isButtonPressed( sf::Mouse::Button::Left );
+    m_mousePosition =
+        math::Vector2F { sf::Mouse::getPosition( Window::get_instance() ) };
 }
 
 void TileSelector::update()
@@ -84,8 +94,8 @@ void TileSelector::update()
             this->update_grid( *ImGui::GetWindowDrawList() );
         }
         this->update_selection( *ImGui::GetWindowDrawList() );
+        ImGui::End();
     }
-    ImGui::End();
 }
 
 void TileSelector::update_grid( ImDrawList & drawList )
@@ -138,9 +148,7 @@ void TileSelector::update_grid( ImDrawList & drawList )
 }
 void TileSelector::update_selection( ImDrawList & drawList )
 {
-    math::Vector2F const mousePosition {
-        Window::get_instance().get_mouse_position()
-    };
+    math::Vector2F const mousePosition { this->m_mousePosition };
     bool const isInSelection { ImGui::IsWindowHovered()
                                && this->m_tileset.contain( mousePosition ) };
     if ( isInSelection )
@@ -171,7 +179,7 @@ void TileSelector::update_selection( ImDrawList & drawList )
                                                                 false )
         };
         outputSelection << "Tile Hovered : " << tileHovered << "\n";
-        if ( sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) )
+        if ( this->m_isLeftButtonPressed )
         {
             outputSelection << "Button Pressed"
                             << "\n";

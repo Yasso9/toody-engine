@@ -7,6 +7,7 @@
 #include "input/button_array.hpp"
 #include "input/mouse_position.hpp"
 
+/// @brief abstract class
 class State
 {
   public:
@@ -25,8 +26,7 @@ class State
         EnumLast,
     };
 
-    // We use a constructor that is only used by childs instead
-    // This is an abstract class
+    /// @brief We use a constructor that is only used by childs instead
     State()          = delete;
     virtual ~State() = default;
 
@@ -38,7 +38,8 @@ class State
 
     /// @brief Update all change that can happen by an event.
     void update_inputs( sf::Event const & event );
-    /// @brief update general events (should be outside the pollevent function)
+    /// @brief update general events that are use with sf::Mouse or sf::Button
+    ///        (should be outside the pollevent function)
     virtual void extra_events();
     /// @brief Update deltaTime and call the update method
     void update_data( float const & deltaTime );
