@@ -1,10 +1,19 @@
-#include "main/game.hpp"
+// #include "main/game.hpp"
+
+#include "tools/databases.hpp"
+#include "tools/serialization.hpp"
 
 int main()
 {
-    Game game {};
+    // Game game {};
 
-    game.run();
+    // game.run();
 
-    return EXIT_SUCCESS;
+    // return EXIT_SUCCESS;
+
+    test_serializer();
+
+    // db::test_database();
+
+    return 0;
 }

@@ -1,10 +1,12 @@
 #pragma once
 
 #include <iostream>
+#include <sstream>
 #include <vector>
 
 /// @todo differences between typename or class in template ?
 /// @todo Type require that the type have operator <<
+/// @todo std::instead of std::vector choose a collection type thatcan handle only array, vector, stack, etc ...
 template < typename Type >
 std::ostream & operator<<( std::ostream & stream,
                            std::vector< Type > const & array );
@@ -14,6 +16,46 @@ std::istream & operator>>( std::istream & stream, std::vector< Type > & array );
 
 bool verify_next( std::istream & stream, char const & character );
 
-[[maybe_unused]] void test();
+[[maybe_unused]] void test_serializer();
+
+/// @todo Type require that the type have operator << and copy contructor
+template < typename TypeToSerialize >
+class Serializer
+{
+    TypeToSerialize m_valueToSerialize;
+
+  public:
+    Serializer( TypeToSerialize const & valueToSerialize )
+      : m_valueToSerialize( valueToSerialize )
+    {}
+
+    std::string to_string() const
+    {
+        std::ostringstream stream {};
+        stream << this->m_valueToSerialize;
+        return stream.str();
+    }
+};
+
+template < typename TypeToUnserialize >
+class Unserializer
+{
+    std::string m_stringToUnserialize;
+
+  public:
+    Unserializer( std::string const & stringToUnserialize )
+      : m_stringToUnserialize( stringToUnserialize )
+    {}
+
+    TypeToUnserialize to_value() const
+    {
+        std::stringstream stream {};
+        stream << this->m_stringToUnserialize;
+
+        TypeToUnserialize value {};
+        stream >> value;
+        return value;
+    }
+};
 
 #include "serialization.tpp"
