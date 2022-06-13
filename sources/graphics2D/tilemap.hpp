@@ -10,6 +10,16 @@
 class TileMap : public sf::Drawable,
                 public sf::Transformable
 {
+    TileSelector m_tileSelector;
+    sf::RectangleShape m_cursor;
+    sf::View & m_view;
+    /// @brief m_tileTable[line][column][depth]
+    std::vector< std::vector< std::vector< Tile > > > m_tileTable;
+    unsigned int m_currentDepth;
+
+    bool m_isLeftButtonPressed;
+    math::Vector2I m_mousePosition;
+
   public:
     TileMap( sf::View & view );
     virtual ~TileMap() = default;
@@ -17,34 +27,26 @@ class TileMap : public sf::Drawable,
     /// @brief size of the tilemap in pixel
     math::Vector2F get_size() const;
     /// @brief number of tile that the tilemap contain
-    math::Vector2U get_tile_size() const;
+    math::Vector2S get_tile_size() const;
 
     /// @brief resize
-    void set_tile_size( math::Vector2U const & tileSize );
+    void set_tile_size( math::Vector2S const & tileSize );
 
     void process_events();
     void update();
 
     void save() const;
 
-  protected:
-    TileSelector m_tileSelector;
-    sf::RectangleShape m_cursor;
-    sf::View & m_view;
-    /** @brief tri-dimensionnal vector containing the sprite number
-     * of each tile of the tilemap */
-    /// @brief m_tileTable[line][column][depth]
-    std::vector< std::vector< std::vector< Tile > > > m_tileTable;
-    unsigned int m_currentDepth;
-
-    bool m_isLeftButtonPressed;
-    math::Vector2F m_mousePosition;
-
+  private:
     void set_tile_table(
         std::vector< std::vector< std::vector< int > > > const & table );
 
     void change_tile( math::Vector2U const & tilePositionInTile,
                       int const & newTileValue );
+
+    void update_informations();
+    void update_table_informations();
+    void update_tile_size_button();
 
     void draw( sf::RenderTarget & target,
                sf::RenderStates states ) const override;

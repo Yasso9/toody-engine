@@ -41,22 +41,25 @@ math::Vector2F TileMap::get_size() const
     return this->get_tile_size() * TILE_PIXEL_SIZE_VECTOR;
 }
 
-math::Vector2U TileMap::get_tile_size() const
+math::Vector2S TileMap::get_tile_size() const
 {
     /// @todo assert that the size of all element of this->m_tileTable have the same size
-    return math::Vector2U { this->m_tileTable[0].size(),
+    /// @todo create a math::Vector2S that have std::size_t
+    return math::Vector2S { this->m_tileTable[0].size(),
                             this->m_tileTable.size() };
 }
 
-void TileMap::set_tile_size( math::Vector2U const & tileSize )
+void TileMap::set_tile_size( math::Vector2S const & tileSize )
 {
     if ( this->get_tile_size() == tileSize )
     {
         return;
     }
 
+    // resize the number of line
     this->m_tileTable.resize( tileSize.y );
 
+    // resize each column
     for ( unsigned int line { 0u }; line < tileSize.y; ++line )
     {
         if ( this->m_tileTable[line].size() == tileSize.x )
@@ -72,8 +75,11 @@ void TileMap::set_tile_size( math::Vector2U const & tileSize )
         while ( this->m_tileTable[line].size() < tileSize.x )
         {
             Tile defaultValue { *this, this->m_tileSelector };
-            defaultValue.set_data( 0,
-                                   { this->m_tileTable[line].size(), line } );
+            defaultValue.set_data(
+                0,
+                math::Vector2U { static_cast< unsigned int >(
+                                     this->m_tileTable[line].size() ),
+                                 line } );
 
             this->m_tileTable[line].push_back( { defaultValue } );
         }
@@ -82,11 +88,11 @@ void TileMap::set_tile_size( math::Vector2U const & tileSize )
 
 void TileMap::process_events()
 {
-    this->m_tileSelector.process_events();
-
     m_isLeftButtonPressed =
         sf::Mouse::isButtonPressed( sf::Mouse::Button::Left );
-    m_mousePosition = Window::get_instance().get_mouse_position();
+    m_mousePosition = sf::Mouse::getPosition( Window::get_instance() );
+
+    this->m_tileSelector.process_events();
 }
 
 void TileMap::update()
@@ -95,148 +101,18 @@ void TileMap::update()
 
     if ( ImGui::Begin( "Tilemap Information" ) )
     {
-        math::Vector2F const mousePosition { this->m_mousePosition };
-        math::Vector2F const viewZoom { Window::get_instance().get_size_f()
-                                        / this->m_view.getSize() };
-        math::Vector2F mouseViewPosition {
-            ( mousePosition / viewZoom )
-            - math::Vector2F { this->m_view.getSize() / 2.f }
-            + math::Vector2F { this->m_view.getCenter() }
-        };
-        mouseViewPosition.floor();
+        this->update_informations();
 
-        std::stringstream infoOutput {};
-        infoOutput << "Tile Selected : "
-                   << this->m_tileSelector.get_tile_selected() << "\n";
-        infoOutput << "mouse general position : " << mousePosition << "\n";
-        infoOutput << "mouse view position : " << mouseViewPosition << "\n";
-        infoOutput << "tilemap position : " << this->getPosition() << "\n";
-        infoOutput << "tilemap size : " << this->get_size() << "\n";
-        infoOutput << "tilemap - number of tile : "
-                   << this->get_size() / TILE_PIXEL_SIZE << "\n";
-        infoOutput << "view center : " << this->m_view.getCenter() << "\n";
-        infoOutput << "view size : " << this->m_view.getSize() << "\n";
-        infoOutput << "view zoom : " << viewZoom << "\n";
-        ImGui::Text( "%s", infoOutput.str().c_str() );
+        this->update_table_informations();
 
-        if ( mouseViewPosition.is_inside( this->getPosition(),
-                                          this->get_size() ) )
+        this->update_tile_size_button();
+
+        if ( ImGui::Button( "Save Tilemap" ) )
         {
-            math::Vector2F const mouseRelativPosition {
-                mouseViewPosition - math::Vector2F { this->getPosition() }
-            };
-            math::Vector2F const tileSelectedPositionInPixel {
-                mouseRelativPosition
-                - ( mouseRelativPosition % TILE_PIXEL_SIZE_U )
-            };
-            math::Vector2U const tileSelectedPositionInTile {
-                tileSelectedPositionInPixel / TILE_PIXEL_SIZE_U
-            };
-
-            std::stringstream selectionOutput {};
-            selectionOutput
-                << "mouse relativ position : " << mouseRelativPosition << "\n";
-            selectionOutput
-                << "middle : " << ( mouseRelativPosition % TILE_PIXEL_SIZE_U )
-                << "\n";
-            selectionOutput << "tile selected position in pixel : "
-                            << tileSelectedPositionInPixel << "\n";
-            selectionOutput << "tile selected position in tile : "
-                            << tileSelectedPositionInTile << "\n";
-            ImGui::Text( "%s", selectionOutput.str().c_str() );
-
-            if ( this->m_isLeftButtonPressed
-                 && this->m_tileSelector.get_tile_selected() >= 0 )
-            {
-                this->change_tile( tileSelectedPositionInTile,
-                                   this->m_tileSelector.get_tile_selected() );
-            }
-
-            this->m_cursor.setOutlineColor( sf::Color::Black );
-            this->m_cursor.setPosition(
-                math::Vector2F { tileSelectedPositionInPixel } );
+            this->save();
         }
-        else
-        {
-            this->m_cursor.setOutlineColor( sf::Color::Transparent );
-        }
-
-        unsigned int tileSizeX { static_cast< unsigned int >(
-            this->get_tile_size().x ) };
-        unsigned int tileSizeY { static_cast< unsigned int >(
-            this->get_tile_size().y ) };
-
-        static std::stringstream tileValueStream {};
-
-        if ( ImGui::BeginTable( "table_padding",
-                                static_cast< int >( tileSizeX ) ) )
-        {
-            for ( unsigned int line { 0u }; line < tileSizeY; ++line )
-            {
-                ImGui::TableNextRow();
-                for ( unsigned int column { 0u }; column < tileSizeX; ++column )
-                {
-                    ImGui::TableSetColumnIndex( static_cast< int >( column ) );
-                    std::stringstream buttonStream {};
-                    buttonStream
-                        << math::Vector2U { column, line } << " = "
-                        << this->m_tileTable[line][column][this->m_currentDepth]
-                               .get_value();
-                    if ( ImGui::Button( buttonStream.str().c_str() ) )
-                    {
-                        // Clear the stream
-                        tileValueStream.str( "" );
-
-                        for ( Tile const & element :
-                              this->m_tileTable[line][column] )
-                        {
-                            tileValueStream << element << "\n";
-                        }
-                    }
-                }
-            }
-            ImGui::EndTable();
-        }
-
-        ImGui::Text( "%s", tileValueStream.str().c_str() );
-
-        {
-            constexpr unsigned int const MAX_STRING_SIZE { 10u };
-
-            static std::string tileNumberX { std::to_string(
-                this->get_tile_size().x ) };
-            static std::string tileNumberY { std::to_string(
-                this->get_tile_size().y ) };
-
-            ImGui::InputText( "Number of Tile X :",
-                              tileNumberX.data(),
-                              MAX_STRING_SIZE,
-                              ImGuiInputTextFlags_CharsDecimal );
-            ImGui::InputText( "Number of Tile Y :",
-                              tileNumberY.data(),
-                              MAX_STRING_SIZE,
-                              ImGuiInputTextFlags_CharsDecimal );
-
-            if ( ImGui::Button( "Update Size" ) )
-            {
-                char * tileNumberXEnd;
-                char * tileNumberYEnd;
-                this->set_tile_size( math::Vector2U {
-                    std::strtoul( tileNumberX.c_str(), &tileNumberXEnd, 10 ),
-                    std::strtoul( tileNumberY.c_str(),
-                                  &tileNumberYEnd,
-                                  10 ) } );
-            }
-        }
-
-        {
-            if ( ImGui::Button( "Save Tilemap" ) )
-            {
-                this->save();
-            }
-        }
+        ImGui::End();
     }
-    ImGui::End();
 }
 
 void TileMap::save() const
@@ -306,6 +182,139 @@ void TileMap::change_tile( math::Vector2U const & tilePositionInTile,
     this->m_tileTable[tilePositionInTile.y][tilePositionInTile.x]
                      [this->m_currentDepth]
                          .set_value( newTileValue );
+}
+
+void TileMap::update_informations()
+{
+    math::Vector2I const mousePosition { this->m_mousePosition };
+    math::Vector2F const viewZoom { Window::get_instance().get_size_f()
+                                    / this->m_view.getSize() };
+    math::Vector2F mouseViewPosition {
+        ( mousePosition / viewZoom )
+        - math::Vector2F { this->m_view.getSize() / 2.f }
+        + math::Vector2F { this->m_view.getCenter() }
+    };
+    mouseViewPosition.floor();
+
+    std::stringstream infoOutput {};
+    infoOutput << "Tile Selected : " << this->m_tileSelector.get_tile_selected()
+               << "\n";
+    infoOutput << "mouse general position : " << mousePosition << "\n";
+    infoOutput << "mouse view position : " << mouseViewPosition << "\n";
+    infoOutput << "tilemap position : " << this->getPosition() << "\n";
+    infoOutput << "tilemap size : " << this->get_size() << "\n";
+    infoOutput << "tilemap - number of tile : "
+               << this->get_size() / TILE_PIXEL_SIZE << "\n";
+    infoOutput << "view center : " << this->m_view.getCenter() << "\n";
+    infoOutput << "view size : " << this->m_view.getSize() << "\n";
+    infoOutput << "view zoom : " << viewZoom << "\n";
+    ImGui::Text( "%s", infoOutput.str().c_str() );
+
+    if ( mouseViewPosition.is_inside( this->getPosition(), this->get_size() ) )
+    {
+        math::Vector2F const mouseRelativPosition {
+            mouseViewPosition - math::Vector2F { this->getPosition() }
+        };
+        math::Vector2F const tileSelectedPositionInPixel {
+            mouseRelativPosition - ( mouseRelativPosition % TILE_PIXEL_SIZE_U )
+        };
+        math::Vector2U const tileSelectedPositionInTile {
+            tileSelectedPositionInPixel / TILE_PIXEL_SIZE_U
+        };
+
+        std::stringstream selectionOutput {};
+        selectionOutput << "mouse relativ position : " << mouseRelativPosition
+                        << "\n";
+        selectionOutput << "middle : "
+                        << ( mouseRelativPosition % TILE_PIXEL_SIZE_U ) << "\n";
+        selectionOutput << "tile selected position in pixel : "
+                        << tileSelectedPositionInPixel << "\n";
+        selectionOutput << "tile selected position in tile : "
+                        << tileSelectedPositionInTile << "\n";
+        ImGui::Text( "%s", selectionOutput.str().c_str() );
+
+        if ( this->m_isLeftButtonPressed
+             && this->m_tileSelector.get_tile_selected() >= 0 )
+        {
+            this->change_tile( tileSelectedPositionInTile,
+                               this->m_tileSelector.get_tile_selected() );
+        }
+
+        this->m_cursor.setOutlineColor( sf::Color::Black );
+        this->m_cursor.setPosition(
+            math::Vector2F { tileSelectedPositionInPixel } );
+    }
+    else
+    {
+        this->m_cursor.setOutlineColor( sf::Color::Transparent );
+    }
+}
+void TileMap::update_table_informations()
+{
+    unsigned int tileSizeX { static_cast< unsigned int >(
+        this->get_tile_size().x ) };
+    unsigned int tileSizeY { static_cast< unsigned int >(
+        this->get_tile_size().y ) };
+
+    static std::stringstream tileValueStream {};
+
+    if ( ImGui::BeginTable( "table_padding", static_cast< int >( tileSizeX ) ) )
+    {
+        for ( unsigned int line { 0u }; line < tileSizeY; ++line )
+        {
+            ImGui::TableNextRow();
+            for ( unsigned int column { 0u }; column < tileSizeX; ++column )
+            {
+                ImGui::TableSetColumnIndex( static_cast< int >( column ) );
+                std::stringstream buttonStream {};
+                buttonStream
+                    << math::Vector2U { column, line } << " = "
+                    << this->m_tileTable[line][column][this->m_currentDepth]
+                           .get_value();
+                if ( ImGui::Button( buttonStream.str().c_str() ) )
+                {
+                    // Clear the stream
+                    tileValueStream.str( "" );
+
+                    for ( Tile const & element :
+                          this->m_tileTable[line][column] )
+                    {
+                        tileValueStream << element << "\n";
+                    }
+                }
+            }
+        }
+        ImGui::EndTable();
+    }
+
+    ImGui::Text( "%s", tileValueStream.str().c_str() );
+}
+void TileMap::update_tile_size_button()
+{
+    constexpr unsigned int const MAX_STRING_SIZE { 10u };
+
+    static std::string tileNumberX { std::to_string(
+        this->get_tile_size().x ) };
+    static std::string tileNumberY { std::to_string(
+        this->get_tile_size().y ) };
+
+    ImGui::InputText( "Number of Tile X :",
+                      tileNumberX.data(),
+                      MAX_STRING_SIZE,
+                      ImGuiInputTextFlags_CharsDecimal );
+    ImGui::InputText( "Number of Tile Y :",
+                      tileNumberY.data(),
+                      MAX_STRING_SIZE,
+                      ImGuiInputTextFlags_CharsDecimal );
+
+    if ( ImGui::Button( "Update Size" ) )
+    {
+        char * tileNumberXEnd;
+        char * tileNumberYEnd;
+        this->set_tile_size( math::Vector2S {
+            std::strtoul( tileNumberX.c_str(), &tileNumberXEnd, 10 ),
+            std::strtoul( tileNumberY.c_str(), &tileNumberYEnd, 10 ) } );
+    }
 }
 
 void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const

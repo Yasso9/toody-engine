@@ -20,6 +20,30 @@ namespace math
     {}
 
     template < C_Primitive Type >
+    Vector2< Type >::Vector2( Vector2< Type > const & vector2D )
+      : x( vector2D.x ), y( vector2D.y )
+    {}
+    template < C_Primitive Type >
+    Vector2< Type >::Vector2( Vector2< Type > && vector2D ) noexcept
+      : x( std::exchange( vector2D.x, {} ) ),
+        y( std::exchange( vector2D.y, {} ) )
+    {}
+    template < C_Primitive Type >
+    Vector2< Type > & Vector2< Type >::operator=(
+        Vector2< Type > const & vector2D )
+    {
+        return *this = Vector2< Type > { vector2D };
+    }
+    template < C_Primitive Type >
+    Vector2< Type > & Vector2< Type >::operator=(
+        Vector2< Type > && vector2D ) noexcept
+    {
+        std::swap( this->x, vector2D.x );
+        std::swap( this->y, vector2D.y );
+        return *this;
+    }
+
+    template < C_Primitive Type >
     Vector2< Type >::operator sf::Vector2< Type >() const
     {
         return sf::Vector2< Type > { this->x, this->y };
@@ -29,6 +53,29 @@ namespace math
     {
         return ImVec2 { static_cast< float >( this->x ),
                         static_cast< float >( this->y ) };
+    }
+    template < C_Primitive Type >
+    Vector2< Type >::operator Vector2F() const
+    {
+        return { static_cast< float >( this->x ),
+                 static_cast< float >( this->y ) };
+    }
+    template < C_Primitive Type >
+    Vector2< Type >::operator Vector2U() const
+    {
+        return { static_cast< unsigned int >( this->x ),
+                 static_cast< unsigned int >( this->y ) };
+    }
+    template < C_Primitive Type >
+    Vector2< Type >::operator Vector2I() const
+    {
+        return { static_cast< int >( this->x ), static_cast< int >( this->y ) };
+    }
+    template < C_Primitive Type >
+    Vector2< Type >::operator Vector2S() const
+    {
+        return { static_cast< std::size_t >( this->x ),
+                 static_cast< std::size_t >( this->y ) };
     }
 
     template < C_Primitive Type >

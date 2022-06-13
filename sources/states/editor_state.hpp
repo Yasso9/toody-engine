@@ -9,16 +9,6 @@
 
 class EditorState final : public State
 {
-  public:
-    EditorState();
-    ~EditorState() = default;
-
-    void extra_events() override;
-
-    void update() override;
-    void render() const override;
-
-  private:
     sf::View m_view;
     TileMap m_tilemap;
 
@@ -29,8 +19,24 @@ class EditorState final : public State
     bool m_showEditorOverlay;
     bool m_handlePlayer;
 
+    math::Vector2I m_mousePosition;
+
+  public:
+    EditorState();
+    ~EditorState() = default;
+
+    void extra_events() override;
+
+    void update() override;
+    void render() const override;
+
+  private:
     void init_map();
 
     void keyboard_pressed( sf::Event event ) override;
     void mouse_scroll( float const & deltaScroll ) override;
+
+    void update_toolbar();
+    void update_debug_window();
+    void update_overlay();
 };
