@@ -16,7 +16,7 @@
 #include "states/main_menu_state.hpp"
 #include "states/test.hpp"
 
-#include "tools/imgui.hpp"
+#include "libraries/imgui.hpp"
 
 /**
  * @brief Throw an exception if something is not available
@@ -114,6 +114,8 @@ void Game::update_events()
     {
         this->m_state->extra_events();
     }
+
+    ImGui::P_ResetWindowFocused();
 }
 
 void Game::update_state( sf::Time const & deltaTime )

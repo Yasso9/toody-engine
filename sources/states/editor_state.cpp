@@ -2,10 +2,12 @@
 
 #include <sstream>
 
+#include "libraries/imgui.hpp"
 #include "main/resources.hpp"
 #include "tools/assertion.hpp"
-#include "tools/imgui.hpp"
 #include "tools/string.hpp"
+
+bool g_isAnyImguiWindowFocused { false };
 
 EditorState::EditorState()
   : State( State::E_List::Editor ),
@@ -23,6 +25,11 @@ EditorState::EditorState()
 
 void EditorState::extra_events()
 {
+    if ( ImGui::P_IsAnyWindowFocused() )
+    {
+        return;
+    }
+
     this->m_mousePosition = sf::Mouse::getPosition( Window::get_instance() );
 
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
@@ -94,12 +101,22 @@ void EditorState::init_map()
 
 void EditorState::mouse_scroll( float const & deltaScroll )
 {
+    if ( ImGui::P_IsAnyWindowFocused() )
+    {
+        return;
+    }
+
     float const scaleValue { 1.f + ( deltaScroll / 4.f ) };
     this->m_view.zoom( scaleValue );
 }
 
 void EditorState::keyboard_pressed( sf::Event event )
 {
+    if ( ImGui::P_IsAnyWindowFocused() )
+    {
+        return;
+    }
+
     if ( event.key.code == sf::Keyboard::C )
     {
         this->init_map();
@@ -134,8 +151,10 @@ void EditorState::update_toolbar()
 void EditorState::update_debug_window()
 {
     if ( this->m_showDebugOptions
-         && ImGui::Begin( "Debug Options", &this->m_showDebugOptions ) )
+         && ImGui::P_Begin( "Debug Options", &this->m_showDebugOptions ) )
     {
+        g_isAnyImguiWindowFocused |= ImGui::IsWindowFocused();
+
         std::string testBuffer { "testvalue" };
         ImGui::InputText( "Test", testBuffer.data(), 20 );
 
@@ -186,9 +205,9 @@ void EditorState::update_overlay()
         };
         ImGui::SetNextWindowPos( overlayPosition, ImGuiCond_Always );
         ImGui::SetNextWindowBgAlpha( 0.5f );
-        if ( ImGui::Begin( "Editor Main",
-                           &this->m_showEditorOverlay,
-                           window_flags ) )
+        if ( ImGui::P_Begin( "Editor Main",
+                             &this->m_showEditorOverlay,
+                             window_flags ) )
         {
             ImGui::Checkbox( "Handle Player ?", &this->m_handlePlayer );
 

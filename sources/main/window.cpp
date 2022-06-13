@@ -118,7 +118,7 @@ void Window::create()
 void Window::initialize()
 {
     this->setVisible( true );
-    this->requestFocus();
+    // this->requestFocus();
     this->setKeyRepeatEnabled( false );
     this->setVerticalSyncEnabled(
         Settings::get_instance().get_vertical_sync() );

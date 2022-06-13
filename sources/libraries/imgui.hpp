@@ -12,3 +12,15 @@
 #include "IMGUI/imgui.h"
 
 #pragma GCC diagnostic pop
+
+// P stands for pernnal fonctions
+
+namespace ImGui
+{
+    bool P_Begin( std::string const & name, bool * p_open = nullptr,
+                  ImGuiWindowFlags const & flags = 0 );
+
+    bool P_IsAnyWindowFocused();
+
+    void P_ResetWindowFocused();
+} // namespace ImGui

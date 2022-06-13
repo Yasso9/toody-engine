@@ -5,11 +5,11 @@
 
 #include <cmath>
 
+#include "libraries/imgui.hpp"
 #include "main/resources.hpp"
 #include "main/window.hpp"
 #include "maths/maths.hpp"
 #include "tools/global_variable.hpp"
-#include "tools/imgui.hpp"
 
 static uint32_t to_integer_imgui_color( sf::Color const & color )
 {
@@ -81,7 +81,7 @@ void TileSelector::process_events()
 
 void TileSelector::update()
 {
-    if ( ImGui::Begin( "Tile Selector" ) )
+    if ( ImGui::P_Begin( "Tile Selector" ) )
     {
         ImGui::Checkbox( "Enable grid", &this->m_isGridEnabled );
         ImGui::ColorEdit4( "Color Edit", this->m_gridColorTable );

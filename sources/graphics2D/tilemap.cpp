@@ -1,9 +1,9 @@
 #include "tilemap.hpp"
 
+#include "libraries/imgui.hpp"
 #include "main/window.hpp"
 #include "tools/databases.hpp"
 #include "tools/global_variable.hpp"
-#include "tools/imgui.hpp"
 #include "tools/json.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
@@ -99,7 +99,7 @@ void TileMap::update()
 {
     this->m_tileSelector.update();
 
-    if ( ImGui::Begin( "Tilemap Information" ) )
+    if ( ImGui::P_Begin( "Tilemap Information" ) )
     {
         this->update_informations();
 
