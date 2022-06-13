@@ -1,8 +1,6 @@
 #pragma once
 
 #include <iostream>
-#include <sstream>
-#include <string>
 #include <vector>
 
 /// @todo differences between typename or class in template ?
@@ -16,4 +14,6 @@ std::istream & operator>>( std::istream & stream, std::vector< Type > & array );
 
 bool verify_next( std::istream & stream, char const & character );
 
-#include "serialization.hpp"
+[[maybe_unused]] void test();
+
+#include "serialization.tpp"
