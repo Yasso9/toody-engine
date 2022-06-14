@@ -20,7 +20,6 @@ extern "C"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 
-// Json Array of all the result requested
 static std::string s_requestResult {};
 static std::string const g_databasePath { tools::get_path::databases()
                                           + "game.db" };
@@ -74,7 +73,6 @@ namespace db
 
         sqlite3_close( database );
 
-        /// @todo always return an array : solution - put the return in a string instead of a json
         return Unserializer { s_requestResult };
     }
 

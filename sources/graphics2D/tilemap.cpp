@@ -4,7 +4,6 @@
 #include "main/window.hpp"
 #include "tools/databases.hpp"
 #include "tools/global_variable.hpp"
-#include "tools/json.hpp"
 #include "tools/string.hpp"
 #include "tools/tools.hpp"
 

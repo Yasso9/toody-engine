@@ -199,9 +199,8 @@ initialize_build: clean_executable
 	@mkdir -p $(LIBRARIES_OBJECT_DIRECTORY)
 # Use the DLL's only on windows
 ifeq ($(DETECTED_OS),Windows)
-# todo : copy only if there's a change between a file
 	@echo "Copy Dll's for Executable"
-	@cp $(DLLS_PATH)/* $(EXECUTABLE_DIRECTORY)
+	@cp -s $(DLLS_PATH)/* $(EXECUTABLE_DIRECTORY)
 endif
 
 clean_executable:
