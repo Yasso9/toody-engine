@@ -84,7 +84,8 @@ void EditorState::render() const
     {
         Window::get_instance().sf_draw( this->m_player );
     }
-    /// @todo reset the view at the end
+
+    Window::get_instance().reset_view();
 }
 
 void EditorState::init_map()

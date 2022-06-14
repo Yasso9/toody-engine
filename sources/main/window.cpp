@@ -59,7 +59,11 @@ void Window::clear_all( sf::Color const & backgroundColor )
     gl::clear_window( backgroundColor );
     this->clear( backgroundColor );
 
-    // Reset the view
+    this->reset_view();
+}
+
+void Window::reset_view()
+{
     Window::get_instance().setView( Window::get_instance().getDefaultView() );
 }
 

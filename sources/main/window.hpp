@@ -36,6 +36,8 @@ class Window final : public sf::RenderWindow,
 
     void clear_all( sf::Color const & backgroundColor );
 
+    void reset_view();
+
     void gl_draw_elements( unsigned int const & vertexArrayObject,
                            GLenum const & primitiveType,
                            GLenum const & dataType,

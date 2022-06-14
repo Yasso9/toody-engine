@@ -38,7 +38,6 @@ math::Vector2F TileMap::get_size() const
 math::Vector2S TileMap::get_tile_size() const
 {
     /// @todo assert that the size of all element of this->m_tileTable have the same size
-    /// @todo create a math::Vector2S that have std::size_t
     return math::Vector2S { this->m_tileTable[0].size(),
                             this->m_tileTable.size() };
 }

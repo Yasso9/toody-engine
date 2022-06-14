@@ -195,7 +195,6 @@ void TileSelector::update_selection( ImDrawList & drawList )
     output << "Mouse Position : " << mousePosition << "\n";
     output << "Tilemap Position : " << this->m_tileset.get_position() << "\n";
     output << "Tilemap Size : " << this->m_tileset.get_size_in_pixel() << "\n";
-    /// @todo avoir le boolalpha partout
     output << "Is In Selection ? : " << std::boolalpha << isInSelection << "\n";
     output << "TILE SELECTED : " << this->m_tileSelected << "\n";
     ImGui::Text( "%s", output.str().c_str() );

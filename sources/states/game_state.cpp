@@ -37,4 +37,6 @@ void GameState::render() const
     Window::get_instance().draw( this->m_tilemap );
 
     Window::get_instance().draw( this->m_player );
+
+    Window::get_instance().reset_view();
 }
