@@ -17,18 +17,12 @@ class Tile
   public:
     Tile( TileMap const & tilemap, TileSelector const & tileSelector );
 
-    /// @brief copy constructor
-    Tile( Tile const & tile );
-    /// @brief move constructor
-    Tile( Tile && tile ) noexcept;
-    /// @brief copy assignement
-    Tile & operator=( Tile const & tile );
-    /// @brief move assignement
-    Tile & operator=( Tile && tile ) noexcept;
+    explicit operator int() const;
 
     sf::VertexArray const & get_vertex_array() const;
 
     int get_value() const;
+    std::string get_debug_info() const;
 
     void set_value( int const & tilesetTileValue );
     void set_data( int const & tilesetTileValue,
@@ -41,7 +35,7 @@ class Tile
                        math::Vector2F const & tileCoordinate );
 
     void set_texture_coordinate( int const & tileValue,
-                                 unsigned int numberOfXAxisTile );
+                                 std::size_t numberOfXAxisTile );
 };
 
 std::ostream & operator<<( std::ostream & stream, Tile const & tileData );

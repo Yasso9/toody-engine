@@ -31,13 +31,14 @@ TileMap::TileMap( sf::View & view )
 
 math::Vector2F TileMap::get_size() const
 {
-    /// @todo il faut verifier que toute les ligne de toutes les colonnes fasse la même taille
     return this->get_tile_size() * TILE_PIXEL_SIZE_VECTOR;
 }
 
 math::Vector2S TileMap::get_tile_size() const
 {
-    /// @todo assert that the size of all element of this->m_tileTable have the same size
+    ASSERTION( tools::is_rectangle( this->m_tileTable ),
+               "column of the table haven't the same size" );
+
     return math::Vector2S { this->m_tileTable[0].size(),
                             this->m_tileTable.size() };
 }
@@ -46,6 +47,7 @@ void TileMap::set_tile_size( math::Vector2S const & tileSize )
 {
     if ( this->get_tile_size() == tileSize )
     {
+        // same size nothing to do
         return;
     }
 
@@ -53,30 +55,33 @@ void TileMap::set_tile_size( math::Vector2S const & tileSize )
     this->m_tileTable.resize( tileSize.y );
 
     // resize each column
-    for ( unsigned int line { 0u }; line < tileSize.y; ++line )
+    for ( unsigned int i_line { 0u }; i_line < tileSize.y; ++i_line )
     {
-        if ( this->m_tileTable[line].size() == tileSize.x )
+        if ( this->m_tileTable[i_line].size() == tileSize.x )
         {
             continue;
         }
 
-        while ( this->m_tileTable[line].size() > tileSize.x )
+        while ( this->m_tileTable[i_line].size() > tileSize.x )
         {
-            this->m_tileTable[line].pop_back();
+            this->m_tileTable[i_line].pop_back();
         }
 
-        while ( this->m_tileTable[line].size() < tileSize.x )
+        while ( this->m_tileTable[i_line].size() < tileSize.x )
         {
             Tile defaultValue { *this, this->m_tileSelector };
             defaultValue.set_data(
                 0,
                 math::Vector2U { static_cast< unsigned int >(
-                                     this->m_tileTable[line].size() ),
-                                 line } );
+                                     this->m_tileTable[i_line].size() ),
+                                 i_line } );
 
-            this->m_tileTable[line].push_back( { defaultValue } );
+            this->m_tileTable[i_line].push_back( { defaultValue } );
         }
     }
+
+    ASSERTION( tools::is_rectangle( this->m_tileTable ),
+               "column of the table haven't the same size" );
 }
 
 void TileMap::process_events()
@@ -94,7 +99,7 @@ void TileMap::update()
 
     if ( ImGui::P_Begin( "Tilemap Information" ) )
     {
-        this->update_informations();
+        this->update_selection();
 
         this->update_table_informations();
 
@@ -110,28 +115,28 @@ void TileMap::update()
 
 void TileMap::save() const
 {
-    std::vector< std::vector< std::vector< int > > > valueArray {};
-    for ( unsigned int line { 0u }; line < this->m_tileTable.size(); ++line )
-    {
-        valueArray.push_back( {} );
-        for ( unsigned int column { 0u };
-              column < this->m_tileTable[line].size();
-              ++column )
-        {
-            valueArray[line].push_back( {} );
-            for ( unsigned int depth { 0u };
-                  depth < this->m_tileTable[line][column].size();
-                  ++depth )
-            {
-                valueArray[line][column].push_back(
-                    this->m_tileTable[line][column][depth].get_value() );
-            }
-        }
-    }
+    // std::vector< std::vector< std::vector< int > > > valueArray {};
+    // for ( unsigned int line { 0u }; line < this->m_tileTable.size(); ++line )
+    // {
+    //     valueArray.push_back( {} );
+    //     for ( unsigned int column { 0u };
+    //           column < this->m_tileTable[line].size();
+    //           ++column )
+    //     {
+    //         valueArray[line].push_back( {} );
+    //         for ( unsigned int depth { 0u };
+    //               depth < this->m_tileTable[line][column].size();
+    //               ++depth )
+    //         {
+    //             valueArray[line][column].push_back(
+    //                 this->m_tileTable[line][column][depth].get_value() );
+    //         }
+    //     }
+    // }
 
     db::request( "INSERT INTO tilemap (tile_table)"
                  "VALUES('"
-                 + Serializer { valueArray }.to_string() + "');" );
+                 + Serializer { this->m_tileTable }.to_string() + "');" );
 }
 
 void TileMap::set_tile_table(
@@ -142,7 +147,7 @@ void TileMap::set_tile_table(
     {
         this->m_tileTable.push_back( {} );
 
-        // Parse all the column of the tilemap
+        // Parse all the tile of each line of the tilemap (column)
         for ( unsigned int column { 0u }; column < table[line].size();
               ++column )
         {
@@ -161,20 +166,26 @@ void TileMap::set_tile_table(
             }
         }
     }
+
+    ASSERTION( tools::is_rectangle( table )
+                   && tools::is_rectangle( this->m_tileTable ),
+               "column of the table haven't the same size" );
 }
 
 void TileMap::change_tile( math::Vector2U const & tilePositionInTile,
                            int const & newTileValue )
 {
     ASSERTION( tilePositionInTile < this->get_tile_size(), "position too big" );
-    /// @todo assert that newTileValue is between 0 and max number of tile (maybe put it unsigned int idk)
+    ASSERTION( newTileValue < static_cast< int >(
+                   this->m_tileSelector.get_tileset().get_number_of_tile() ),
+               "Tileset value too big" );
 
     this->m_tileTable[tilePositionInTile.y][tilePositionInTile.x]
                      [this->m_currentDepth]
                          .set_value( newTileValue );
 }
 
-void TileMap::update_informations()
+void TileMap::update_selection()
 {
     math::Vector2I const mousePosition { this->m_mousePosition };
     math::Vector2F const viewZoom { Window::get_instance().get_size_f()

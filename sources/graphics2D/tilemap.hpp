@@ -44,7 +44,7 @@ class TileMap : public sf::Drawable,
     void change_tile( math::Vector2U const & tilePositionInTile,
                       int const & newTileValue );
 
-    void update_informations();
+    void update_selection();
     void update_table_informations();
     void update_tile_size_button();
 

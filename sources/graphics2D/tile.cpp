@@ -1,5 +1,7 @@
 #include "tile.hpp"
 
+#include <sstream>
+
 #include "graphics2D/tile_selector.hpp"
 #include "graphics2D/tilemap.hpp"
 #include "tools/global_variable.hpp"
@@ -17,7 +19,7 @@ static math::RectangleF get_tile_rectangle_in_tilemap(
 }
 
 static math::RectangleF get_tile_rectangle_in_texture(
-    int const & tileValue, unsigned int numberOfTile )
+    int const & tileValue, std::size_t numberOfTile )
 {
     std::div_t divisionValue { std::div( tileValue,
                                          static_cast< int >( numberOfTile ) ) };
@@ -38,30 +40,6 @@ Tile::Tile( TileMap const & tilemap, TileSelector const & tileSelector )
     this->set_data( 0, math::Vector2U { 0u, 0u } );
 }
 
-Tile::Tile( Tile const & tile )
-  : m_tilemap( tile.m_tilemap ),
-    m_tileSelector( tile.m_tileSelector ),
-    m_value( tile.m_value ),
-    m_quad( tile.m_quad )
-{}
-Tile::Tile( Tile && tile ) noexcept
-  : m_tilemap( tile.m_tilemap ),
-    m_tileSelector( tile.m_tileSelector ),
-    m_value( std::exchange( tile.m_value, {} ) ),
-    m_quad( std::exchange( tile.m_quad, {} ) )
-{}
-Tile & Tile::operator=( Tile const & tile )
-{
-    return *this = Tile { tile };
-}
-Tile & Tile::operator=( Tile && tile ) noexcept
-{
-    *this = Tile { tile };
-    std::swap( this->m_value, tile.m_value );
-    std::swap( this->m_quad, tile.m_quad );
-    return *this;
-}
-
 sf::VertexArray const & Tile::get_vertex_array() const
 {
     return this->m_quad;
@@ -72,8 +50,26 @@ int Tile::get_value() const
     return this->m_value;
 }
 
+std::string Tile::get_debug_info() const
+{
+    std::ostringstream outputStream {};
+    outputStream << "Tile : " << this->m_value << "\n"
+                 << "Position ( " << this->m_quad[0].position << ", "
+                 << this->m_quad[1].position << ", " << this->m_quad[2].position
+                 << ", " << this->m_quad[3].position << " )"
+                 << "\n"
+                 << "TextCoord ( " << this->m_quad[0].texCoords << ", "
+                 << this->m_quad[1].texCoords << ", "
+                 << this->m_quad[2].texCoords << ", "
+                 << this->m_quad[3].texCoords << " )";
+
+    return outputStream.str();
+}
+
 void Tile::set_value( int const & tilesetTileValue )
 {
+    /// @todo what do we do if tilesetTileValue is negativ ?
+
     this->m_value = tilesetTileValue;
 
     this->set_texture_coordinate(
@@ -91,16 +87,7 @@ void Tile::set_data( int const & tilesetTileValue,
 
 std::ostream & Tile::operator<<( std::ostream & stream ) const
 {
-    return stream << "Tile : " << this->m_value << "\n"
-                  << "Position ( " << this->m_quad[0].position << ", "
-                  << this->m_quad[1].position << ", "
-                  << this->m_quad[2].position << ", "
-                  << this->m_quad[3].position << " )"
-                  << "\n"
-                  << "TextCoord ( " << this->m_quad[0].texCoords << ", "
-                  << this->m_quad[1].texCoords << ", "
-                  << this->m_quad[2].texCoords << ", "
-                  << this->m_quad[3].texCoords << " )";
+    return stream << this->m_value;
 }
 
 void Tile::set_position( math::Vector2F const & tilemapPosition,
@@ -119,7 +106,7 @@ void Tile::set_position( math::Vector2F const & tilemapPosition,
 }
 
 void Tile::set_texture_coordinate( int const & tileValue,
-                                   unsigned int numberOfXAxisTile )
+                                   std::size_t numberOfXAxisTile )
 {
     math::RectangleF textureTileRectangle {
         get_tile_rectangle_in_texture( tileValue, numberOfXAxisTile )

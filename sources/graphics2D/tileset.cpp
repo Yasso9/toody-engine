@@ -20,14 +20,19 @@ math::Vector2F Tileset::get_end_position() const
     return this->get_position() + this->get_size_in_pixel();
 }
 
-math::Vector2U Tileset::get_size_in_pixel() const
+math::Vector2S Tileset::get_size_in_pixel() const
 {
-    return this->m_texture.getSize();
+    return math::Vector2S { this->m_texture.getSize() };
 }
 
-math::Vector2U Tileset::get_size_in_tile() const
+math::Vector2S Tileset::get_size_in_tile() const
 {
-    return math::floor( this->get_size_in_pixel() ) / TILE_PIXEL_SIZE;
+    return math::floor( this->get_size_in_pixel() ) / TILE_PIXEL_SIZE_U;
+}
+
+std::size_t Tileset::get_number_of_tile() const
+{
+    return this->get_size_in_tile().x * this->get_size_in_tile().y;
 }
 
 math::Vector2F Tileset::get_tile_position_in_pixel(
@@ -79,8 +84,9 @@ int Tileset::get_tile_value_from_tile_position(
         "vector(SIZE_X, SIZEY)" );
 
     unsigned int tileSelected { pointPositionInTile.x
-                                + pointPositionInTile.y
-                                      * this->get_size_in_tile().x };
+                                + ( pointPositionInTile.y
+                                    * static_cast< unsigned int >(
+                                        this->get_size_in_tile().x ) ) };
 
     return static_cast< int >( tileSelected );
 }
