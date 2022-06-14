@@ -46,7 +46,7 @@ static int callback( void * /* data */, int argc, char ** argv,
 /// @todo create a singleton and initialize sqlite3_open
 namespace db
 {
-    std::string request( std::string const & request )
+    Unserializer request( std::string const & request )
     {
         sqlite3 * database { nullptr };
         if ( sqlite3_open( g_databasePath.c_str(), &database ) )
@@ -75,7 +75,7 @@ namespace db
         sqlite3_close( database );
 
         /// @todo always return an array : solution - put the return in a string instead of a json
-        return s_requestResult;
+        return Unserializer { s_requestResult };
     }
 
     void test_database()
@@ -83,11 +83,12 @@ namespace db
         // Initialisation de la database
 
         /// @todo mettre tous les databases dans la bonne place
-        std::string initRequest = db::request( "DROP TABLE IF EXISTS tilemap;"
-                                               "CREATE TABLE tilemap ("
-                                               "tile_table TEXT NOT NULL"
-                                               ");" );
-        std::cout << "initRequest : |" << initRequest << "|" << std::endl;
+        Unserializer initRequest = db::request( "DROP TABLE IF EXISTS tilemap;"
+                                                "CREATE TABLE tilemap ("
+                                                "tile_table TEXT NOT NULL"
+                                                ");" );
+        std::cout << "initRequest : |" << initRequest.get_content() << "|"
+                  << std::endl;
 
         std::vector< std::vector< std::vector< unsigned int > > > tripleArray {
             {{ 0 }, { 2 }},
@@ -98,23 +99,21 @@ namespace db
         std::cout << "tripleArray serialized : |"
                   << Serializer( tripleArray ).to_string() << "|" << std::endl;
 
-        std::string insertionRequest =
+        Unserializer insertionRequest =
             db::request( "INSERT INTO tilemap (tile_table)"
                          "VALUES('"
                          + Serializer { tripleArray }.to_string() + "');" );
 
-        std::cout << "insertionRequest : |" << insertionRequest << "|"
-                  << std::endl;
+        std::cout << "insertionRequest : |" << insertionRequest.get_content()
+                  << "|" << std::endl;
 
-        std::string selectionRequest { db::request(
+        Unserializer selectionRequest { db::request(
             "SELECT tile_table FROM tilemap;" ) };
 
-        std::cout << "selectionRequest : |" << selectionRequest << "|"
-                  << std::endl;
-        std::cout
-            << "selectionRequest unserialized: |"
-            << Unserializer< decltype( tripleArray ) > { selectionRequest }
-                   .to_value()
-            << "|" << std::endl;
+        std::cout << "selectionRequest content : |"
+                  << selectionRequest.get_content() << "|" << std::endl;
+        std::cout << "selectionRequest unserialized: |"
+                  << selectionRequest.to_value< decltype( tripleArray ) >()
+                  << "|" << std::endl;
     }
 } // namespace db

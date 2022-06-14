@@ -17,14 +17,9 @@ TileMap::TileMap( sf::View & view )
     m_isLeftButtonPressed( false ),
     m_mousePosition( 0.f, 0.f )
 {
-    json const tilemapRequest { db::request(
-        "SELECT tile_table FROM tilemap;" ) };
-
-    /// @todo pourquoi on doit acceder à [0]["table_tilemap"] pour avoir la valeur
-    json const jsonTilemap { json::parse(
-        std::string { tilemapRequest[0]["tile_table"] } ) };
-
-    this->set_tile_table( jsonaddon::decode_array( jsonTilemap ) );
+    this->set_tile_table(
+        db::request( "SELECT tile_table FROM tilemap;" )
+            .to_value< std::vector< std::vector< std::vector< int > > > >() );
 
     m_cursor.setSize( TILE_PIXEL_SIZE_VECTOR );
     m_cursor.setOutlineThickness( -3.f );
@@ -136,12 +131,9 @@ void TileMap::save() const
         }
     }
 
-    json tilemapSave {};
-    tilemapSave = valueArray;
-
     db::request( "INSERT INTO tilemap (tile_table)"
                  "VALUES('"
-                 + tilemapSave.dump() + "');" );
+                 + Serializer { valueArray }.to_string() + "');" );
 }
 
 void TileMap::set_tile_table(

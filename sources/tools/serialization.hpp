@@ -14,6 +14,7 @@ std::ostream & operator<<( std::ostream & stream,
 template < typename Type >
 std::istream & operator>>( std::istream & stream, std::vector< Type > & array );
 
+/// @todo improve this function either by taking into account the return value or launch an exception or an assertion
 bool verify_next( std::istream & stream, char const & character );
 
 [[maybe_unused]] void test_serializer();
@@ -37,7 +38,6 @@ class Serializer
     }
 };
 
-template < typename TypeToUnserialize >
 class Unserializer
 {
     std::string m_stringToUnserialize;
@@ -47,6 +47,10 @@ class Unserializer
       : m_stringToUnserialize( stringToUnserialize )
     {}
 
+    /// @brief return the serialized content
+    std::string get_content() const { return m_stringToUnserialize; }
+
+    template < typename TypeToUnserialize >
     TypeToUnserialize to_value() const
     {
         std::stringstream stream {};
@@ -55,6 +59,8 @@ class Unserializer
         TypeToUnserialize value {};
         stream >> value;
         return value;
+
+        /// @todo assert that the unserialized is equal to the value serialize
     }
 };
 
