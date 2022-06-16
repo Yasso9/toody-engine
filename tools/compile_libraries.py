@@ -24,7 +24,7 @@ def extract_arguments():
 
     for argument in argumentList:
         if not os.path.isdir(argument):
-            launch_error("All the args should be directories that exist")
+            launch_error(f"All the args should be directories that exist : '{argument}'")
 
     return Paths(argumentList[0], argumentList[1], argumentList[2])
 
@@ -69,9 +69,9 @@ def compile_imgui():
     os.system(f"mv {imGuiPath}/*.o {objectPath}")
 
 if __name__ == "__main__":
-    # paths = extract_arguments()
+    paths = extract_arguments()
 
-    # compile_glad(paths.objectCreated, paths.gladLibrary)
-    # compile_sqlite(paths.objectCreated, paths.sqliteLibrary)
+    compile_glad(paths.objectCreated, paths.gladLibrary)
+    compile_sqlite(paths.objectCreated, paths.sqliteLibrary)
 
     compile_imgui()

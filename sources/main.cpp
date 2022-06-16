@@ -1,10 +1,11 @@
-#include "main/game.hpp"
+// #include "main/game.hpp"
 
 int main()
 {
-    Game game {};
+    // Game game {};
 
-    game.run();
+    // game.run();
 
-    return EXIT_SUCCESS;
+    // return EXIT_SUCCESS;
+    return 0;
 }

@@ -54,29 +54,6 @@ namespace math
         return ImVec2 { static_cast< float >( this->x ),
                         static_cast< float >( this->y ) };
     }
-    template < C_Primitive Type >
-    Vector2< Type >::operator Vector2F() const
-    {
-        return { static_cast< float >( this->x ),
-                 static_cast< float >( this->y ) };
-    }
-    template < C_Primitive Type >
-    Vector2< Type >::operator Vector2U() const
-    {
-        return { static_cast< unsigned int >( this->x ),
-                 static_cast< unsigned int >( this->y ) };
-    }
-    template < C_Primitive Type >
-    Vector2< Type >::operator Vector2I() const
-    {
-        return { static_cast< int >( this->x ), static_cast< int >( this->y ) };
-    }
-    template < C_Primitive Type >
-    Vector2< Type >::operator Vector2S() const
-    {
-        return { static_cast< std::size_t >( this->x ),
-                 static_cast< std::size_t >( this->y ) };
-    }
 
     template < C_Primitive Type >
     Type Vector2< Type >::operator[]( std::size_t index ) const

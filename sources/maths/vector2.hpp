@@ -4,8 +4,15 @@
 #include <utility>
 
 #include "graphics2D/sfml.hpp"
-#include "tools/concepts.hpp"
 #include "libraries/imgui.hpp"
+#include "tools/concepts.hpp"
+
+// template < typename OtherType, typename Type >
+// concept C_NotSameValue = C_Primitive< OtherType > && requires(
+//     OtherType otherTypeValue, Type typeValue )
+// {
+//     requires not std::is_same_v< OtherType, Type >;
+// };
 
 namespace math
 {
@@ -46,10 +53,40 @@ namespace math
 
         operator sf::Vector2< Type >() const;
         operator ImVec2() const;
-        operator Vector2F() const;
-        operator Vector2U() const;
-        operator Vector2I() const;
-        operator Vector2S() const;
+
+        operator Vector2F() const
+        {
+            return { static_cast< float >( this->x ),
+                     static_cast< float >( this->y ) };
+        }
+        operator Vector2U() const
+        {
+            return { static_cast< unsigned int >( this->x ),
+                     static_cast< unsigned int >( this->y ) };
+        }
+        operator Vector2I() const
+        {
+            return { static_cast< int >( this->x ),
+                     static_cast< int >( this->y ) };
+        }
+
+        // template < C_Primitive Type >
+        // // template < C_IsSameThanUnsigned >
+        // Vector2< Type >::operator Vector2S() const
+        // {
+        //     return { static_cast< std::size_t >( this->x ),
+        //              static_cast< std::size_t >( this->y ) };
+        // }
+
+        // template < typename OtherType >
+        //     requires C_NotSameValue< OtherType, Type >
+        // operator Vector2< OtherType >() const
+        // {
+        //     return { static_cast< OtherType >( this->x ),
+        //              static_cast< OtherType >( this->y ) };
+        // }
+
+        // #endif
 
         virtual Type operator[]( std::size_t index ) const;
 

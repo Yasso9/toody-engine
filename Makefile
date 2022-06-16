@@ -79,6 +79,9 @@ GCC_WARNINGS_REMOVE := \
 	-Wno-undef \
 
 GCC_WARNINGS := $(GENERAL_WARNINGS) $(GCC_WARNINGS_ENABLE) $(GCC_WARNINGS_REMOVE)
+CLANG_WARNINGS := $(GENERAL_WARNINGS)
+
+FINAL_WARNINGS := $(GCC_WARNINGS)
 # Warning that must not be used in clang \
 -Wfloat-equal # The equality between floats works, it's the addition that is wrong
 
@@ -115,7 +118,6 @@ DLLS_PATH := $(EXTERNAL_DIRECTORY)/DLLs
 EXECUTABLE_DIRECTORY := $(BUILD_DIRECTORY)/application
 EXECUTABLE := $(EXECUTABLE_DIRECTORY)/application
 
-# clang
 C_COMMAND := gcc
 CXX_COMMAND := g++
 # DEPENDENCY_FLAGS := -MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
@@ -200,7 +202,7 @@ initialize_build: clean_executable
 # Use the DLL's only on windows
 ifeq ($(DETECTED_OS),Windows)
 	@echo "Copy Dll's for Executable"
-	@cp -s $(DLLS_PATH)/* $(EXECUTABLE_DIRECTORY)
+	@cp $(DLLS_PATH)/* $(EXECUTABLE_DIRECTORY)
 endif
 
 clean_executable:
@@ -288,7 +290,7 @@ $(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%)
 #	compilatorCommand -WarningFlags -compilerOptions -c sources/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
-	@$(CXX_COMMAND) $(GCC_WARNINGS) $(COMPILING_FLAGS) $(DEPENDENCY_FLAGS) -c $< -o $@ $(INCLUDES)
+	@$(CXX_COMMAND) $(FINAL_WARNINGS) $(COMPILING_FLAGS) $(DEPENDENCY_FLAGS) -c $< -o $@ $(INCLUDES)
 
 # $(DEPS_DIRECTORY)/%.d : ;
 

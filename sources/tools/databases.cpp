@@ -67,8 +67,8 @@ namespace db
 
         if ( result != 0 )
         {
-            throw Exception::Database { g_databasePath, requestErrorMessage };
             sqlite3_free( requestErrorMessage );
+            throw Exception::Database { g_databasePath, requestErrorMessage };
         }
 
         sqlite3_close( database );

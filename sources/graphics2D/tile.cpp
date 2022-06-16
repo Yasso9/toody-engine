@@ -24,7 +24,7 @@ static math::RectangleF get_tile_rectangle_in_texture(
     std::div_t divisionValue { std::div( tileValue,
                                          static_cast< int >( numberOfTile ) ) };
 
-    return {
+    return math::RectangleF {
         math::Vector2I {divisionValue.rem, divisionValue.quot}
             * TILE_PIXEL_SIZE_I,
         TILE_PIXEL_SIZE_VECTOR
