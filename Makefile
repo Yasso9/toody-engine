@@ -183,7 +183,7 @@ DEPENDENCIES := $(patsubst %.o,%.d,$(OBJECT_PROJECT))
 # These commands do not represent physical files
 .PHONY: buildrun build run initialize_build \
 		clean_executable clean_project clean_libraries \
-		clean debug remake nothing valgrind
+		clean debug remake nothing valgrind release
 
 buildrun : build run
 
@@ -231,6 +231,17 @@ valgrind :
 		$(EXECUTABLE)
 
 remake: clean buildrun
+
+RELEASE_DIRECTORY := Game
+
+release:
+	rm -rf $(RELEASE_DIRECTORY)
+	mkdir $(RELEASE_DIRECTORY)
+	cp $(EXECUTABLE) $(RELEASE_DIRECTORY)
+ifeq ($(DETECTED_OS),Windows)
+	cp $(DLLS_PATH)/* $(RELEASE_DIRECTORY)
+endif
+	cp -r data $(RELEASE_DIRECTORY)
 
 nothing:
 
