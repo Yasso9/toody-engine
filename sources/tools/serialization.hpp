@@ -6,7 +6,6 @@
 
 /// @todo differences between typename or class in template ?
 /// @todo Type require that the type have operator <<
-/// @todo std::instead of std::vector choose a collection type thatcan handle only array, vector, stack, etc ...
 template < typename Type >
 std::ostream & operator<<( std::ostream & stream,
                            std::vector< Type > const & array );

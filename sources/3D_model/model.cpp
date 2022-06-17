@@ -2,14 +2,16 @@
 
 #include <iostream>
 
+#include "tools/path.hpp"
 #include "tools/timer.hpp"
 
 static glm::vec3 to_vector3( aiVector3D const & assimpVector3D );
 static glm::vec2 to_vector2( aiVector3D const & assimpVector3D );
 
 Model::Model( std::string const & filePathModel )
-  : Transformable( tools::get_path::shaders( "shader.vert"s ),
-                   tools::get_path::shaders( "shader.frag"s ) ),
+  : Transformable(
+      path::get_folder( path::E_Folder::Shaders ) / "shader.vert"s,
+      path::get_folder( path::E_Folder::Shaders ) / "shader.frag"s ),
     m_texturesLoaded(),
     m_meshes(),
     m_filePath( filePathModel )

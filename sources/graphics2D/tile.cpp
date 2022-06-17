@@ -72,30 +72,14 @@ void Tile::set_value( int const & tilesetTileValue )
 
     this->m_value = tilesetTileValue;
 
-    this->set_texture_coordinate(
-        this->m_value,
-        this->m_tileSelector.get_tileset().get_size_in_tile().x );
+    this->update_texture_coordinate();
 }
 
-void Tile::set_data( int const & tilesetTileValue,
-                     math::Vector2U const & tilemapTilePosition )
+void Tile::set_position( math::Vector2F const & tileCoordinate )
 {
-    this->set_value( tilesetTileValue );
-
-    this->set_position( this->m_tilemap.getPosition(), tilemapTilePosition );
-}
-
-std::ostream & Tile::operator<<( std::ostream & stream ) const
-{
-    return stream << this->m_value;
-}
-
-void Tile::set_position( math::Vector2F const & tilemapPosition,
-                         math::Vector2F const & tileCoordinate )
-{
-    math::RectangleF const rectangle {
-        get_tile_rectangle_in_tilemap( tilemapPosition, tileCoordinate )
-    };
+    math::RectangleF const rectangle { get_tile_rectangle_in_tilemap(
+        this->m_tilemap.getPosition(),
+        tileCoordinate ) };
 
     this->m_quad[0].position = rectangle.position;
     this->m_quad[1].position =
@@ -105,12 +89,24 @@ void Tile::set_position( math::Vector2F const & tilemapPosition,
         rectangle.position + math::Vector2F { 0.f, rectangle.size.y };
 }
 
-void Tile::set_texture_coordinate( int const & tileValue,
-                                   std::size_t numberOfXAxisTile )
+void Tile::set_data( int const & tilesetTileValue,
+                     math::Vector2U const & tilemapTilePosition )
 {
-    math::RectangleF textureTileRectangle {
-        get_tile_rectangle_in_texture( tileValue, numberOfXAxisTile )
-    };
+    this->set_value( tilesetTileValue );
+
+    this->set_position( tilemapTilePosition );
+}
+
+std::ostream & Tile::operator<<( std::ostream & stream ) const
+{
+    return stream << this->m_value;
+}
+
+void Tile::update_texture_coordinate()
+{
+    math::RectangleF textureTileRectangle { get_tile_rectangle_in_texture(
+        this->m_value,
+        this->m_tileSelector.get_tileset().get_size_in_tile().x ) };
 
     this->m_quad[0].texCoords = textureTileRectangle.position;
     this->m_quad[1].texCoords =

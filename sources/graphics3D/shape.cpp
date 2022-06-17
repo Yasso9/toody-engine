@@ -5,6 +5,7 @@
 
 #include "main/window.hpp"
 #include "tools/assertion.hpp"
+#include "tools/path.hpp"
 #include "tools/tools.hpp"
 
 template < typename ArrayType >
@@ -25,8 +26,9 @@ unsigned int Shape::Data::get_number_of_element() const
 }
 
 Shape::Shape()
-  : Transformable( tools::get_path::shaders( "shape_shader.vert"s ),
-                   tools::get_path::shaders( "shape_shader.frag"s ) ),
+  : Transformable(
+      path::get_folder( path::E_Folder::Shaders ) / "shape_shader.vert"s,
+      path::get_folder( path::E_Folder::Shaders ) / "shape_shader.frag"s ),
     m_textureA(),
     m_textureB(),
     m_vertexArrayObject(),
@@ -92,7 +94,7 @@ void Shape::load_textures_and_shaders()
 {
     bool textureLoad { true };
     textureLoad &= this->m_textureA.loadFromFile(
-        tools::get_path::resources( "wall.jpg"s ) );
+        path::get_folder( path::E_Folder::Resources ) / "wall.jpg"s );
     textureLoad &= this->m_textureA.generateMipmap();
     if ( ! textureLoad )
     {
@@ -100,7 +102,7 @@ void Shape::load_textures_and_shaders()
     }
 
     textureLoad &= this->m_textureB.loadFromFile(
-        tools::get_path::resources( "town_hall.png"s ) );
+        path::get_folder( path::E_Folder::Resources ) / "town_hall.png"s );
     textureLoad &= this->m_textureB.generateMipmap();
     if ( ! textureLoad )
     {

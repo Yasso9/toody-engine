@@ -3,8 +3,8 @@
 #include "tools/assertion.hpp"
 #include "tools/enumeration.hpp"
 #include "tools/exceptions.hpp"
+#include "tools/path.hpp"
 #include "tools/string.hpp"
-#include "tools/tools.hpp"
 
 static void init_textures(
     std::map< Resources::E_TextureKey, sf::Texture > & textures );
@@ -78,18 +78,19 @@ static void init_fonts(
 static std::string get_texture_localisation(
     Resources::E_TextureKey const & textureKey )
 {
-    std::string imagePath { tools::get_path::resources() };
+    std::filesystem::path imagePath { path::get_folder(
+        path::E_Folder::Resources ) };
 
     switch ( textureKey )
     {
     case Resources::E_TextureKey::Tileset :
-        imagePath += "/sprites/tileset/ground.png"s;
+        imagePath /= "sprites/tileset/ground.png"s;
         break;
     case Resources::E_TextureKey::Player :
-        imagePath += "/gold_sprite.png"s;
+        imagePath /= "gold_sprite.png"s;
         break;
     case Resources::E_TextureKey::HomeWallpaper :
-        imagePath += "/home_wallpaper.jpg"s;
+        imagePath /= "home_wallpaper.jpg"s;
         break;
     default :
         ASSERTION( false, "A texture hasn't been loaded"s );
@@ -101,12 +102,13 @@ static std::string get_texture_localisation(
 
 static std::string get_font_localisation( Resources::E_FontKey const & fontKey )
 {
-    std::string fontPath { tools::get_path::resources() };
+    std::filesystem::path fontPath { path::get_folder(
+        path::E_Folder::Resources ) };
 
     switch ( fontKey )
     {
     case Resources::E_FontKey::Arial :
-        fontPath += "/arial.ttf"s;
+        fontPath /= "arial.ttf"s;
         break;
     default :
         ASSERTION( false, "A font hasn't been loaded"s );

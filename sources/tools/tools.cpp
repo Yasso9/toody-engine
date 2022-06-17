@@ -7,26 +7,6 @@
 
 namespace tools
 {
-    namespace get_path
-    {
-        std::string data( std::string const & fileName )
-        {
-            return "./data/"s + fileName;
-        }
-        std::string resources( std::string const & fileName )
-        {
-            return tools::get_path::data() + "resources/"s + fileName;
-        }
-        std::string shaders( std::string const & fileName )
-        {
-            return tools::get_path::resources() + "shaders/"s + fileName;
-        }
-        std::string databases( std::string const & fileName )
-        {
-            return tools::get_path::data() + "databases/"s + fileName;
-        }
-    } // namespace get_path
-
     bool is_integer( float const & number )
     {
         return std::trunc( number ) != number;

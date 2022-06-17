@@ -7,16 +7,6 @@
 
 namespace tools
 {
-    /// @todo Use std::filesystem
-    /// @brief Get path of folders relatives to root
-    namespace get_path
-    {
-        std::string data( std::string const & fileName = ""s );
-        std::string resources( std::string const & fileName = ""s );
-        std::string shaders( std::string const & fileName = ""s );
-        std::string databases( std::string const & fileName = ""s );
-    } // namespace get_path
-
     bool is_integer( float const & number );
 
     std::string read_file( std::string const & fileName );

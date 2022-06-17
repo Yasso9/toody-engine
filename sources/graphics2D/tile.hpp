@@ -25,17 +25,15 @@ class Tile
     std::string get_debug_info() const;
 
     void set_value( int const & tilesetTileValue );
+    void set_position( math::Vector2F const & tileCoordinate );
+
     void set_data( int const & tilesetTileValue,
                    math::Vector2U const & tilemapTilePosition );
 
     std::ostream & operator<<( std::ostream & stream ) const;
 
   private:
-    void set_position( math::Vector2F const & tilemapPosition,
-                       math::Vector2F const & tileCoordinate );
-
-    void set_texture_coordinate( int const & tileValue,
-                                 std::size_t numberOfXAxisTile );
+    void update_texture_coordinate();
 };
 
 std::ostream & operator<<( std::ostream & stream, Tile const & tileData );

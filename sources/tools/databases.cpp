@@ -16,13 +16,11 @@ extern "C"
 #pragma GCC diagnostic pop
 
 #include "tools/exceptions.hpp"
+#include "tools/path.hpp"
 #include "tools/serialization.hpp"
 #include "tools/string.hpp"
-#include "tools/tools.hpp"
 
 static std::string s_requestResult {};
-static std::string const g_databasePath { tools::get_path::databases()
-                                          + "game.db" };
 
 static int callback( void * /* data */, int argc, char ** argv,
                      char ** azColName )
@@ -47,10 +45,13 @@ namespace db
 {
     Unserializer request( std::string const & request )
     {
+        std::string const databasePath { path::get_file_str(
+            path::E_File::Database ) };
+
         sqlite3 * database { nullptr };
-        if ( sqlite3_open( g_databasePath.c_str(), &database ) )
+        if ( sqlite3_open( databasePath.c_str(), &database ) )
         {
-            throw Exception::Database { g_databasePath,
+            throw Exception::Database { databasePath,
                                         "Can't open database - "s
                                             + sqlite3_errmsg( database ) };
         }
@@ -68,7 +69,7 @@ namespace db
         if ( result != 0 )
         {
             sqlite3_free( requestErrorMessage );
-            throw Exception::Database { g_databasePath, requestErrorMessage };
+            throw Exception::Database { databasePath, requestErrorMessage };
         }
 
         sqlite3_close( database );
@@ -80,7 +81,6 @@ namespace db
     {
         // Initialisation de la database
 
-        /// @todo mettre tous les databases dans la bonne place
         Unserializer initRequest = db::request( "DROP TABLE IF EXISTS tilemap;"
                                                 "CREATE TABLE tilemap ("
                                                 "tile_table TEXT NOT NULL"
