@@ -12,7 +12,9 @@ class TileMap : public sf::Drawable,
 {
     TileSelector m_tileSelector;
     sf::RectangleShape m_cursor;
+    /// @todo check if the reference is useful here by comparing the argument reference ande the member ref
     sf::View & m_view;
+    /// @todo think of a better way to structur this variable : https://stackoverflow.com/questions/2286991/c-two-dimensional-stdvector-best-practices
     /// @brief m_tileTable[line][column][depth]
     std::vector< std::vector< std::vector< Tile > > > m_tileTable;
     unsigned int m_currentDepth;
@@ -35,11 +37,11 @@ class TileMap : public sf::Drawable,
     void process_events();
     void update();
 
+    /// @brief save the tilemap table into the sqlite3 database
     void save() const;
 
   private:
-    void set_tile_table(
-        std::vector< std::vector< std::vector< int > > > const & table );
+    void init_tile_table_from_database();
 
     void change_tile( math::Vector2U const & tilePositionInTile,
                       int const & newTileValue );

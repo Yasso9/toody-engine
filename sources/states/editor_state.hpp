@@ -14,6 +14,7 @@ class EditorState final : public State
 
     Player m_player;
 
+    /// @todo create a map and enum as key to handles all the boolean variable show demo
     bool m_showDemoWindow;
     bool m_showDebugOptions;
     bool m_showEditorOverlay;

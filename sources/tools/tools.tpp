@@ -16,6 +16,7 @@ namespace tools
         return &array[0];
     }
 
+    /// @brief Check if the all the size of the subvectors are equal
     template < typename Type >
     bool is_rectangle(
         std::vector< std::vector< Type > > const & dimensionnalVector )

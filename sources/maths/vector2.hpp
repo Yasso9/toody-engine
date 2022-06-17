@@ -33,7 +33,7 @@ namespace math
         {}
         Vector2( sf::Vector2< Type > const & sfmlVector );
         Vector2( ImVec2 const & imGuiVector );
-        constexpr virtual ~Vector2() {};
+        constexpr virtual ~Vector2() = default;
 
         /// @brief copy constructor
         Vector2( Vector2< Type > const & vector2D );
@@ -45,63 +45,21 @@ namespace math
         Vector2< Type > & operator=( Vector2< Type > && vector2D ) noexcept;
 
         operator sf::Vector2< Type >() const;
-        operator ImVec2() const;
-
-        /// @todo put this operator explicit and create method to convert values. Comme ça on peut voir quand y'aura des casts
-        // operator Vector2F() const
-        // {
-        //     return { static_cast< float >( this->x ),
-        //              static_cast< float >( this->y ) };
-        // }
-        // operator Vector2U() const
-        // {
-        //     return { static_cast< unsigned int >( this->x ),
-        //              static_cast< unsigned int >( this->y ) };
-        // }
-        // operator Vector2I() const
-        // {
-        //     return { static_cast< int >( this->x ),
-        //              static_cast< int >( this->y ) };
-        // }
-
-        // template < C_Primitive Type >
-        // // template < C_IsSameThanUnsigned >
-        // Vector2< Type >::operator Vector2S() const
-        // {
-        //     return { static_cast< std::size_t >( this->x ),
-        //              static_cast< std::size_t >( this->y ) };
-        // }
-
-        Vector2< float > to_float() const
-            requires( not std::is_same_v< Type, float > )
-        {
-            return static_cast< Vector2< float > >( *this );
-        }
-        Vector2< unsigned int > to_u_int() const
-            requires( not std::is_same_v< Type,  unsigned int > )
-        {
-            return static_cast< Vector2< unsigned int > >( *this );
-        }
-        Vector2< int > to_int() const
-            requires( not std::is_same_v< Type, int > )
-        {
-            return static_cast< Vector2< int > >( *this );
-        }
-        Vector2< std::size_t > to_size_t() const
-            requires( not std::is_same_v< Type, std::size_t > )
-        {
-            return static_cast< Vector2< std::size_t > >( *this );
-        }
-
+        /// @brief conversion to ImVec2 must be possible only if the same type
+        operator ImVec2() const
+            requires( std::is_same_v< Type, decltype( ImVec2::x ) > );
         template < C_Primitive OtherType >
             requires( not std::is_same_v< Type, OtherType > )
-        explicit operator Vector2< OtherType >() const
-        {
-            return { static_cast< OtherType >( this->x ),
-                     static_cast< OtherType >( this->y ) };
-        }
+        explicit operator Vector2< OtherType >() const;
 
-        // #endif
+        Vector2< float > to_float() const
+            requires( not std::is_same_v< Type, float > );
+        Vector2< unsigned int > to_u_int() const
+            requires( not std::is_same_v< Type, unsigned int > );
+        Vector2< int > to_int() const
+            requires( not std::is_same_v< Type, int > );
+        Vector2< std::size_t > to_size_t() const
+            requires( not std::is_same_v< Type, std::size_t > );
 
         virtual Type operator[]( std::size_t index ) const;
 
@@ -111,6 +69,10 @@ namespace math
         void floor();
         void round();
     };
+
+    /* ************************************************************************
+    ************************** VECTOR FUNCTIONS *******************************
+    ************************************************************************ */
 
     template < C_Primitive Type >
     bool is_inside( Vector2< Type > const & value,
@@ -157,7 +119,6 @@ namespace math
     template < C_Primitive Type >
     Vector2< Type > operator%( Vector2< Type > const & vector2D,
                                int const & modulo );
-
     template < C_Primitive Type >
     Vector2< Type > operator%( Vector2< Type > const & vector2D,
                                unsigned int const & modulo );

@@ -5,7 +5,6 @@
 #include "main/window.hpp"
 
 #include "input/button_array.hpp"
-#include "input/mouse_position.hpp"
 
 /// @brief abstract class
 class State

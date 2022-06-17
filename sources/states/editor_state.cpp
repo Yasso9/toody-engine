@@ -104,8 +104,7 @@ void EditorState::init_map()
     // Set view position at center of the tilemap
     this->m_view.setCenter( math::Vector2F { this->m_tilemap.getPosition() }
                             + ( this->m_tilemap.get_size() / 2.f ) );
-    this->m_view.setSize(
-        math::Vector2F { Window::get_instance().get_size() } );
+    this->m_view.setSize( Window::get_instance().get_size().to_float() );
 
     this->m_player.setPosition( this->m_view.getCenter() );
 }
@@ -117,8 +116,8 @@ void EditorState::mouse_scroll( float const & deltaScroll )
         return;
     }
 
-    float const scaleValue { 1.f + ( deltaScroll / 4.f ) };
-    this->m_view.zoom( scaleValue );
+    float const scaleFactor { 1.f + ( deltaScroll / 4.f ) };
+    this->m_view.zoom( scaleFactor );
 }
 
 void EditorState::keyboard_pressed( sf::Event event )
@@ -128,13 +127,10 @@ void EditorState::keyboard_pressed( sf::Event event )
         return;
     }
 
+    /// @todo put also that in the overlay
     if ( event.key.code == sf::Keyboard::C )
     {
         this->init_map();
-    }
-    else if ( event.key.code == sf::Keyboard::S )
-    {
-        // this->m_tilemap.save();
     }
 }
 
