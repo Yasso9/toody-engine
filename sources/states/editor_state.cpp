@@ -32,6 +32,7 @@ void EditorState::extra_events()
 
     this->m_mousePosition = sf::Mouse::getPosition( Window::get_instance() );
 
+    /// @todo changer les events de la view pour pouvoir bouger la vue à partir de la souris (clique du milieu)
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
     {
         this->m_view.move( 0.f, -5.f );
@@ -50,6 +51,11 @@ void EditorState::extra_events()
     }
 
     this->m_tilemap.process_events();
+
+    if ( this->m_handlePlayer )
+    {
+        this->m_player.update_events();
+    }
 }
 
 void EditorState::update()
@@ -58,8 +64,10 @@ void EditorState::update()
 
     this->update_overlay();
 
-    this->update_debug_window();
-
+    if ( this->m_showDebugOptions )
+    {
+        this->update_debug_window();
+    }
     if ( this->m_showDemoWindow )
     {
         ImGui::ShowDemoWindow( &this->m_showDemoWindow );
@@ -92,10 +100,12 @@ void EditorState::init_map()
 {
     this->m_tilemap.setPosition( 0.f, 0.f );
 
+    /// @todo create a methode for tilemap called .get_center who return the center position of the tilemap (relatively or asbolutely)
     // Set view position at center of the tilemap
     this->m_view.setCenter( math::Vector2F { this->m_tilemap.getPosition() }
                             + ( this->m_tilemap.get_size() / 2.f ) );
-    this->m_view.setSize( Window::get_instance().get_size_f() );
+    this->m_view.setSize(
+        math::Vector2F { Window::get_instance().get_size() } );
 
     this->m_player.setPosition( this->m_view.getCenter() );
 }
@@ -151,8 +161,7 @@ void EditorState::update_toolbar()
 
 void EditorState::update_debug_window()
 {
-    if ( this->m_showDebugOptions
-         && ImGui::P_Begin( "Debug Options", &this->m_showDebugOptions ) )
+    if ( ImGui::P_Begin( "Debug Options", &this->m_showDebugOptions ) )
     {
         g_isAnyImguiWindowFocused |= ImGui::IsWindowFocused();
 

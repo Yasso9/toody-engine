@@ -212,9 +212,8 @@ void Camera::update_keyboard_inputs_game( float const & deltaTime )
 
 void Camera::update_mouse_inputs_game( float const & deltaTime )
 {
-    sf::Vector2f const windowCenter {
-        Window::get_instance().get_center_position_f()
-    };
+    sf::Vector2f const windowCenter { math::Vector2F {
+        Window::get_instance().get_center_position() } };
     sf::Vector2f const currentMousePosition { sf::Mouse::getPosition(
         Window::get_instance() ) };
 
@@ -244,10 +243,10 @@ void Camera::update_keyboard_inputs_editor( float const & deltaTime )
 }
 void Camera::update_mouse_inputs_editor( float const & deltaTime )
 {
-    sf::Vector2f const windowCenter {
-        Window::get_instance().get_center_position_f()
+    math::Vector2F const windowCenter {
+        Window::get_instance().get_center_position()
     };
-    sf::Vector2f const currentMousePosition { sf::Mouse::getPosition(
+    math::Vector2F const currentMousePosition { sf::Mouse::getPosition(
         Window::get_instance() ) };
 
     if ( windowCenter == currentMousePosition )
@@ -261,7 +260,7 @@ void Camera::update_mouse_inputs_editor( float const & deltaTime )
     offset.z = 0.f;
 
     // Reset Mouse Position
-    sf::Mouse::setPosition( static_cast< sf::Vector2i >( windowCenter ),
+    sf::Mouse::setPosition( math::Vector2I { windowCenter },
                             Window::get_instance() );
 
     float const sensitivity = 1.f;

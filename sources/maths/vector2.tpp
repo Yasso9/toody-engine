@@ -185,8 +185,9 @@ namespace math
     Vector2< Type > operator%( Vector2< Type > const & vector2D,
                                int const & modulo )
     {
-        return Vector2< int > { static_cast< int >( vector2D.x ) % modulo,
-                                static_cast< int >( vector2D.y ) % modulo };
+        return static_cast< Vector2< Type > >(
+            Vector2< int > { vector2D.to_int().x % modulo,
+                             vector2D.to_int().y % modulo } );
     }
 
     template < C_Primitive Type >

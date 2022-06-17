@@ -31,7 +31,7 @@ TileMap::TileMap( sf::View & view )
 
 math::Vector2F TileMap::get_size() const
 {
-    return this->get_tile_size() * TILE_PIXEL_SIZE_VECTOR;
+    return this->get_tile_size().to_float() * TILE_PIXEL_SIZE_VECTOR;
 }
 
 math::Vector2S TileMap::get_tile_size() const
@@ -188,7 +188,8 @@ void TileMap::change_tile( math::Vector2U const & tilePositionInTile,
 void TileMap::update_selection()
 {
     math::Vector2I const mousePosition { this->m_mousePosition };
-    math::Vector2F const viewZoom { Window::get_instance().get_size_f()
+    math::Vector2F const viewZoom { math::Vector2F {
+                                        Window::get_instance().get_size() }
                                     / this->m_view.getSize() };
     math::Vector2F mouseViewPosition {
         ( mousePosition / viewZoom )

@@ -13,35 +13,20 @@ Window::Window()
     this->initialize();
 }
 
-sf::Vector2f Window::get_size_f() const
+math::Vector2U Window::get_size() const
 {
-    return static_cast< sf::Vector2f >( this->getSize() );
-}
-
-sf::Vector2i Window::get_size_i() const
-{
-    return static_cast< sf::Vector2i >( this->getSize() );
+    return math::Vector2U { this->getSize() };
 }
 
 float Window::get_aspect_ratio() const
 {
-    return ( Window::get_instance().get_size_f().x
-             / Window::get_instance().get_size_f().y );
+    return static_cast< float >( Window::get_instance().get_size().x
+                                 / Window::get_instance().get_size().y );
 }
 
-sf::Vector2u Window::get_center_position_u() const
+math::Vector2U Window::get_center_position() const
 {
-    return ( this->getSize() / 2u );
-}
-
-sf::Vector2f Window::get_center_position_f() const
-{
-    return static_cast< sf::Vector2f >( this->get_center_position_u() );
-}
-
-math::Vector2F Window::get_mouse_position() const
-{
-    return math::Vector2I { sf::Mouse::getPosition( *this ) };
+    return this->get_size() / 2u;
 }
 
 bool Window::has_absolute_focus() const

@@ -7,13 +7,6 @@
 #include "libraries/imgui.hpp"
 #include "tools/concepts.hpp"
 
-// template < typename OtherType, typename Type >
-// concept C_NotSameValue = C_Primitive< OtherType > && requires(
-//     OtherType otherTypeValue, Type typeValue )
-// {
-//     requires not std::is_same_v< OtherType, Type >;
-// };
-
 namespace math
 {
     // Vector2 is used in Rectangle, we need to forward declare
@@ -54,21 +47,22 @@ namespace math
         operator sf::Vector2< Type >() const;
         operator ImVec2() const;
 
-        operator Vector2F() const
-        {
-            return { static_cast< float >( this->x ),
-                     static_cast< float >( this->y ) };
-        }
-        operator Vector2U() const
-        {
-            return { static_cast< unsigned int >( this->x ),
-                     static_cast< unsigned int >( this->y ) };
-        }
-        operator Vector2I() const
-        {
-            return { static_cast< int >( this->x ),
-                     static_cast< int >( this->y ) };
-        }
+        /// @todo put this operator explicit and create method to convert values. Comme ça on peut voir quand y'aura des casts
+        // operator Vector2F() const
+        // {
+        //     return { static_cast< float >( this->x ),
+        //              static_cast< float >( this->y ) };
+        // }
+        // operator Vector2U() const
+        // {
+        //     return { static_cast< unsigned int >( this->x ),
+        //              static_cast< unsigned int >( this->y ) };
+        // }
+        // operator Vector2I() const
+        // {
+        //     return { static_cast< int >( this->x ),
+        //              static_cast< int >( this->y ) };
+        // }
 
         // template < C_Primitive Type >
         // // template < C_IsSameThanUnsigned >
@@ -78,13 +72,34 @@ namespace math
         //              static_cast< std::size_t >( this->y ) };
         // }
 
-        // template < typename OtherType >
-        //     requires C_NotSameValue< OtherType, Type >
-        // operator Vector2< OtherType >() const
-        // {
-        //     return { static_cast< OtherType >( this->x ),
-        //              static_cast< OtherType >( this->y ) };
-        // }
+        Vector2< float > to_float() const
+            requires( not std::is_same_v< Type, float > )
+        {
+            return static_cast< Vector2< float > >( *this );
+        }
+        Vector2< unsigned int > to_u_int() const
+            requires( not std::is_same_v< Type,  unsigned int > )
+        {
+            return static_cast< Vector2< unsigned int > >( *this );
+        }
+        Vector2< int > to_int() const
+            requires( not std::is_same_v< Type, int > )
+        {
+            return static_cast< Vector2< int > >( *this );
+        }
+        Vector2< std::size_t > to_size_t() const
+            requires( not std::is_same_v< Type, std::size_t > )
+        {
+            return static_cast< Vector2< std::size_t > >( *this );
+        }
+
+        template < C_Primitive OtherType >
+            requires( not std::is_same_v< Type, OtherType > )
+        explicit operator Vector2< OtherType >() const
+        {
+            return { static_cast< OtherType >( this->x ),
+                     static_cast< OtherType >( this->y ) };
+        }
 
         // #endif
 

@@ -27,8 +27,7 @@ class Player final : public Entity
     void set_direction( E_Direction const & direction );
     void set_state( Player::E_State const & playerState );
 
-    /// @brief Update the position and the shape of the player
-    ///        depending of the direction and the state
+    void update_events();
     void update( float const & deltaTime );
 
   private:

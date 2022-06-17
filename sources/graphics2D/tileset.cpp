@@ -52,10 +52,11 @@ math::Vector2F Tileset::get_tile_position_in_tile(
         relativPointPosition -= this->m_position;
     }
 
-    ASSERTION( relativPointPosition.is_inside( { 0.f, 0.f },
-                                               this->get_size_in_pixel() ),
-               "The pointer must be between the vector(0, 0) and "
-               "vector(SIZE_X, SIZEY)" );
+    ASSERTION(
+        relativPointPosition.is_inside( { 0.f, 0.f },
+                                        this->get_size_in_pixel().to_float() ),
+        "The pointer must be between the vector(0, 0) and "
+        "vector(SIZE_X, SIZEY)" );
 
     math::Vector2F selectionTilePosition {};
     selectionTilePosition.x =
@@ -72,14 +73,15 @@ int Tileset::get_tile_value_from_pixel_position(
         pointPositionInPixel,
         isRelativePositon ) };
 
-    return this->get_tile_value_from_tile_position( tileCoordinate );
+    return this->get_tile_value_from_tile_position( tileCoordinate.to_u_int() );
 }
 
 int Tileset::get_tile_value_from_tile_position(
     math::Vector2U const & pointPositionInTile ) const
 {
     ASSERTION(
-        pointPositionInTile.is_inside( { 0u, 0u }, this->get_size_in_tile() ),
+        pointPositionInTile.is_inside( { 0u, 0u },
+                                       this->get_size_in_tile().to_u_int() ),
         "The pointer must be between the vector(0, 0) and "
         "vector(SIZE_X, SIZEY)" );
 
@@ -98,5 +100,6 @@ void Tileset::set_position( math::Vector2F const & position )
 
 bool Tileset::contain( math::Vector2F const & point ) const
 {
-    return point.is_inside( this->get_position(), this->get_size_in_pixel() );
+    return point.is_inside( this->get_position(),
+                            this->get_size_in_pixel().to_float() );
 }

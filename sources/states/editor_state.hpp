@@ -17,13 +17,14 @@ class EditorState final : public State
     bool m_showDemoWindow;
     bool m_showDebugOptions;
     bool m_showEditorOverlay;
+    /// @todo faire de player un std::optionnal, pour que lorsuqu'il sera mis à  faux, le player ne pourra pas bouger
     bool m_handlePlayer;
 
+    /// @todo Create a class events who take paramters like mouse position and mouse click that is updated automatically
     math::Vector2I m_mousePosition;
 
   public:
     EditorState();
-    ~EditorState() = default;
 
     void extra_events() override;
 

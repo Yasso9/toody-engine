@@ -104,7 +104,7 @@ void Player::set_state( Player::E_State const & playerState )
     this->m_state = playerState;
 }
 
-void Player::update( float const & deltaTime )
+void Player::update_events()
 {
     this->set_state( Player::E_State::Normal );
 
@@ -133,7 +133,10 @@ void Player::update( float const & deltaTime )
     {
         this->set_state( Player::E_State::Running );
     }
+}
 
+void Player::update( float const & deltaTime )
+{
     this->update_delta_time( deltaTime );
     this->update_movement();
     this->update_texture_rect();

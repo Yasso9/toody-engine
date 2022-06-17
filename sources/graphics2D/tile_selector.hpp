@@ -4,6 +4,16 @@
 
 class TileSelector
 {
+    Tileset m_tileset;
+
+    int m_tileSelected;
+
+    bool m_isGridEnabled;
+    float m_gridColorTable[4];
+
+    bool m_isLeftButtonPressed;
+    math::Vector2F m_mousePosition;
+
   public:
     TileSelector();
     virtual ~TileSelector() = default;
@@ -16,16 +26,6 @@ class TileSelector
     void update();
 
   private:
-    Tileset m_tileset;
-
-    int m_tileSelected;
-
-    bool m_isGridEnabled;
-    float m_gridColorTable[4];
-
-    bool m_isLeftButtonPressed;
-    math::Vector2F m_mousePosition;
-
     void update_grid( ImDrawList & drawList );
     void update_selection( ImDrawList & drawList );
 };

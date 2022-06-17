@@ -26,7 +26,8 @@ static math::RectangleF get_tile_rectangle_in_texture(
 
     return math::RectangleF {
         math::Vector2I {divisionValue.rem, divisionValue.quot}
-            * TILE_PIXEL_SIZE_I,
+         .to_float()
+            * TILE_PIXEL_SIZE,
         TILE_PIXEL_SIZE_VECTOR
     };
 }
@@ -94,7 +95,7 @@ void Tile::set_data( int const & tilesetTileValue,
 {
     this->set_value( tilesetTileValue );
 
-    this->set_position( tilemapTilePosition );
+    this->set_position( tilemapTilePosition.to_float() );
 }
 
 std::ostream & Tile::operator<<( std::ostream & stream ) const

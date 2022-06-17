@@ -233,7 +233,6 @@ valgrind :
 remake: clean buildrun
 
 RELEASE_DIRECTORY := Game
-
 release:
 	rm -rf $(RELEASE_DIRECTORY)
 	mkdir $(RELEASE_DIRECTORY)

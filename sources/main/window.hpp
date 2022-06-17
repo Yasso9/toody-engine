@@ -20,16 +20,11 @@ class Window final : public sf::RenderWindow,
   public:
     virtual ~Window() = default;
 
-    sf::Vector2f get_size_f() const;
-    sf::Vector2i get_size_i() const;
+    math::Vector2U get_size() const;
 
     float get_aspect_ratio() const;
 
-    sf::Vector2u get_center_position_u() const;
-    sf::Vector2f get_center_position_f() const;
-
-    /// @brief deprecated
-    [[deprecated]] math::Vector2F get_mouse_position() const;
+    math::Vector2U get_center_position() const;
 
     /// @brief Check if the window have focus and if the mouse is inside the windows
     bool has_absolute_focus() const;

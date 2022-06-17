@@ -5,6 +5,10 @@
 
 class Tileset
 {
+    sf::Texture const m_texture;
+    /// @brief Absolute position of the tileset
+    math::Vector2F m_position;
+
   public:
     /// @param position Position in pixel
     explicit Tileset( sf::Texture const & texture,
@@ -35,9 +39,4 @@ class Tileset
     void set_position( math::Vector2F const & position );
 
     bool contain( math::Vector2F const & point ) const;
-
-  private:
-    sf::Texture const m_texture;
-    /// @brief Absolute position of the tileset
-    math::Vector2F m_position;
 };

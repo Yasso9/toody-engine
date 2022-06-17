@@ -43,7 +43,8 @@ void MainMenuState::init_background()
 {
     this->m_background.setFillColor( sf::Color( 82, 88, 92 ) );
 
-    this->m_background.setSize( Window::get_instance().get_size_f() );
+    this->m_background.setSize(
+        static_cast< math::Vector2F >( Window::get_instance().get_size() ) );
     this->m_background.setPosition( 0.f, 0.f );
 }
 

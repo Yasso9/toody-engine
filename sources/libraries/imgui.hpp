@@ -13,13 +13,17 @@
 
 #pragma GCC diagnostic pop
 
-// P stands for pernnal fonctions
+// P stands for pernnal fonctions (overloading ImGui)
 
 namespace ImGui
 {
     bool P_Begin( std::string const & name, bool * p_open = nullptr,
                   ImGuiWindowFlags const & flags = 0 );
 
+    /**
+     * @brief Check if a ImGui Window created with P_Begin is Focused
+     * @return true if a ImGui Window created with P_Begin is Focused, false otherwise
+     */
     bool P_IsAnyWindowFocused();
 
     void P_ResetWindowFocused();
