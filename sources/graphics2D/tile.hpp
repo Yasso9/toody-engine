@@ -2,6 +2,7 @@
 
 #include "graphics2D/quad_vertex.hpp"
 #include "graphics2D/sfml.hpp"
+#include "graphics2D/tile_position.hpp"
 #include "maths/maths.hpp"
 
 class TileMap;
@@ -14,25 +15,23 @@ class Tile
     /// @brief The Tilemap where the Tile is based/retrieved
     TileSelector const & m_tileSelector;
 
-    int m_value;
-
     QuadVertex m_quadVertex;
-    /// @brief position of the tile in the tileset
-    math::Vector2U tilesetPosition;
-    // math::Vector2U tilemapPosition;
 
   public:
     Tile( TileMap const & tilemap, TileSelector const & tileSelector );
 
     sf::VertexArray const & get_vertex_array() const;
-    int get_value() const;
+    TilePosition get_position_in_tilemap() const;
+    TilePosition get_position_in_tileset() const;
 
-    void set_data( int const & tilesetTileValue,
-                   math::Vector2U const & tilemapTilePosition );
+    void set_positions( TilePosition const & tileset,
+                        TilePosition const & tilemap );
+    void set_position_in_tileset( TilePosition const & tileset );
 
     std::string get_debug_info() const;
 
     std::ostream & operator<<( std::ostream & stream ) const;
 };
 
+/// @todo faire qqch pour pas avoir ça a chaque fois
 std::ostream & operator<<( std::ostream & stream, Tile const & tileData );

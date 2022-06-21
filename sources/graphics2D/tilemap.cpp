@@ -34,13 +34,16 @@ math::Vector2F TileMap::get_size() const
     return this->get_tile_size().to_float() * TILE_PIXEL_SIZE_VECTOR;
 }
 
-math::Vector2S TileMap::get_tile_size() const
+math::Vector2U TileMap::get_tile_size() const
 {
-    return math::Vector2S { this->m_tileTable[0].size(),
-                            this->m_tileTable.size() };
+    /// @todo faire un constructeur de size_t à partir de vector2U seulement
+    return math::Vector2U {
+        static_cast< unsigned int >( this->m_tileTable[0].size() ),
+        static_cast< unsigned int >( this->m_tileTable.size() )
+    };
 }
 
-void TileMap::set_tile_size( math::Vector2S const & tileSize )
+void TileMap::set_tile_size( math::Vector2U const & tileSize )
 {
     if ( this->get_tile_size() == tileSize )
     {
@@ -71,11 +74,17 @@ void TileMap::set_tile_size( math::Vector2S const & tileSize )
             // size too low, must append some element
             // the defualt value must set the tile at the correct position
             Tile defaultValue { *this, this->m_tileSelector };
-            defaultValue.set_data(
-                0,
-                math::Vector2U { static_cast< unsigned int >(
-                                     this->m_tileTable[i_line].size() ),
-                                 i_line } );
+            defaultValue.set_positions(
+                TilePosition {
+                    0u,
+                    this->m_tileSelector.get_tileset().get_size_in_tile().x
+            },
+                TilePosition {
+                    math::Vector2U { static_cast< unsigned int >(
+                                         this->m_tileTable[i_line].size() ),
+                                     i_line },
+                    this->get_tile_size().x,
+                    TilePosition::Tile } );
 
             this->m_tileTable[i_line].push_back( { defaultValue } );
         }
@@ -143,8 +152,23 @@ void TileMap::init_tile_table_from_database()
                   ++depth )
             {
                 Tile tile { *this, this->m_tileSelector };
-                tile.set_data( table[line][column][depth],
-                               math::Vector2U { column, line } );
+
+                unsigned int tableValue { table[line][column][depth] >= 0
+                                              ? static_cast< unsigned int >(
+                                                  table[line][column][depth] )
+                                              : 0u };
+
+                TilePosition positionInTileset {
+                    tableValue,
+                    this->m_tileSelector.get_tileset().get_size_in_tile().x
+                };
+                TilePosition positionInTilemap {
+                    math::Vector2U {column, line},
+                    this->get_tile_size().x,
+                    TilePosition::Tile
+                };
+
+                tile.set_positions( positionInTileset, positionInTilemap );
 
                 // We add the element to the tile table
                 this->m_tileTable[line][column].push_back( tile );
@@ -165,9 +189,16 @@ void TileMap::change_tile( math::Vector2U const & tilePositionInTile,
                    this->m_tileSelector.get_tileset().get_number_of_tile() ),
                "Tileset value too big" );
 
-    this->m_tileTable[tilePositionInTile.y][tilePositionInTile.x]
+    unsigned int tableValue { newTileValue >= 0
+                                  ? static_cast< unsigned int >( newTileValue )
+                                  : 0u };
+
+    this
+        ->m_tileTable[tilePositionInTile.y][tilePositionInTile.x]
                      [this->m_currentDepth]
-                         .set_value( newTileValue );
+        .set_position_in_tileset( TilePosition {
+            tableValue,
+            this->m_tileSelector.get_tileset().get_size_in_tile().x } );
 }
 
 void TileMap::update_selection()
@@ -256,7 +287,8 @@ void TileMap::update_table_informations()
                 buttonStream
                     << math::Vector2U { column, line } << " = "
                     << this->m_tileTable[line][column][this->m_currentDepth]
-                           .get_value();
+                           .get_position_in_tileset()
+                           .value();
                 if ( ImGui::Button( buttonStream.str().c_str() ) )
                 {
                     // Clear the stream
@@ -298,7 +330,7 @@ void TileMap::update_tile_size_button()
         /// @todo useful to have this pointers ?
         char * tileNumberXEnd;
         char * tileNumberYEnd;
-        this->set_tile_size( math::Vector2S {
+        this->set_tile_size( math::Vector2U {
             std::strtoul( tileNumberX.c_str(), &tileNumberXEnd, 10 ),
             std::strtoul( tileNumberY.c_str(), &tileNumberYEnd, 10 ) } );
     }

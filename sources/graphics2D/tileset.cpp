@@ -20,12 +20,12 @@ math::Vector2F Tileset::get_end_position() const
     return this->get_position() + this->get_size_in_pixel();
 }
 
-math::Vector2S Tileset::get_size_in_pixel() const
+math::Vector2U Tileset::get_size_in_pixel() const
 {
-    return math::Vector2S { this->m_texture.getSize() };
+    return math::Vector2U { this->m_texture.getSize() };
 }
 
-math::Vector2S Tileset::get_size_in_tile() const
+math::Vector2U Tileset::get_size_in_tile() const
 {
     return math::floor( this->get_size_in_pixel() ) / TILE_PIXEL_SIZE_U;
 }
@@ -80,8 +80,7 @@ int Tileset::get_tile_value_from_tile_position(
     math::Vector2U const & pointPositionInTile ) const
 {
     ASSERTION(
-        pointPositionInTile.is_inside( { 0u, 0u },
-                                       this->get_size_in_tile().to_u_int() ),
+        pointPositionInTile.is_inside( { 0u, 0u }, this->get_size_in_tile() ),
         "The pointer must be between the vector(0, 0) and "
         "vector(SIZE_X, SIZEY)" );
 

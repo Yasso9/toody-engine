@@ -94,7 +94,8 @@ void Shape::load_textures_and_shaders()
 {
     bool textureLoad { true };
     textureLoad &= this->m_textureA.loadFromFile(
-        path::get_folder( path::E_Folder::Resources ) / "wall.jpg"s );
+        ( path::get_folder( path::E_Folder::Resources ) / "wall.jpg"s )
+            .string() );
     textureLoad &= this->m_textureA.generateMipmap();
     if ( ! textureLoad )
     {
@@ -102,7 +103,8 @@ void Shape::load_textures_and_shaders()
     }
 
     textureLoad &= this->m_textureB.loadFromFile(
-        path::get_folder( path::E_Folder::Resources ) / "town_hall.png"s );
+        ( path::get_folder( path::E_Folder::Resources ) / "town_hall.png"s )
+            .string() );
     textureLoad &= this->m_textureB.generateMipmap();
     if ( ! textureLoad )
     {

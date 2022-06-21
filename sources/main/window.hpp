@@ -50,6 +50,6 @@ class Window final : public sf::RenderWindow,
   private:
     Window();
 
-    void create();
+    void creation();
     void initialize();
 };

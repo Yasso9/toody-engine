@@ -19,8 +19,8 @@ class Tileset
     math::Vector2F get_position() const;
     math::Vector2F get_end_position() const;
 
-    math::Vector2S get_size_in_pixel() const;
-    math::Vector2S get_size_in_tile() const;
+    math::Vector2U get_size_in_pixel() const;
+    math::Vector2U get_size_in_tile() const;
     std::size_t get_number_of_tile() const;
 
     math::Vector2F get_tile_position_in_pixel(

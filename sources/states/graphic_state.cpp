@@ -16,8 +16,9 @@ GraphicState::GraphicState()
     // m_model( "C:/Users/Turki/Downloads/GUN/acp smith.obj" )
     // m_model( "C:/Users/Turki/Downloads/BED/black_bed.obj" )
     m_modelA( "C:/Users/Turki/Documents/Model3D/house.obj"s ),
-    m_modelB( path::get_folder( path::E_Folder::Resources )
-              / "backpack/backpack.obj"s ),
+    m_modelB( ( path::get_folder( path::E_Folder::Resources )
+                / "backpack/backpack.obj"s )
+                  .string() ),
     m_modelC( "C:/Users/Turki/Documents/Model3D/door.obj"s )
 {
     this->m_shape.create( get_sample_shape_data_A() );

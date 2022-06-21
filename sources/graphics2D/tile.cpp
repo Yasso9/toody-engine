@@ -8,13 +8,13 @@
 #include "tools/global_variable.hpp"
 
 Tile::Tile( TileMap const & tilemap, TileSelector const & tileSelector )
-  : m_tilemap( tilemap ),
-    m_tileSelector( tileSelector ),
-    m_value( 0 ),
-    m_quadVertex(),
-    tilesetPosition( 0u, 0u )
+  : m_tilemap( tilemap ), m_tileSelector( tileSelector ), m_quadVertex()
 {
-    this->set_data( 0, math::Vector2U { 0u, 0u } );
+    this->set_positions(
+        TilePosition {
+            0,
+            this->m_tileSelector.get_tileset().get_size_in_tile().x },
+        TilePosition { 0, this->m_tilemap.get_tile_size().x } );
 }
 
 sf::VertexArray const & Tile::get_vertex_array() const
@@ -22,15 +22,29 @@ sf::VertexArray const & Tile::get_vertex_array() const
     return this->m_quadVertex.array;
 }
 
-int Tile::get_value() const
+TilePosition Tile::get_position_in_tilemap() const
 {
-    return this->m_value;
+    return TilePosition {
+        ( this->m_quadVertex.get_position()
+          - math::Vector2F { this->m_tilemap.getPosition() } )
+            .to_u_int(),
+        this->m_tileSelector.get_tileset().get_size_in_tile().x,
+        TilePosition::Pixel
+    };
+}
+TilePosition Tile::get_position_in_tileset() const
+{
+    return TilePosition {
+        this->m_quadVertex.get_texture_position().to_u_int(),
+        this->m_tileSelector.get_tileset().get_size_in_tile().x,
+        TilePosition::Pixel
+    };
 }
 
 std::string Tile::get_debug_info() const
 {
     std::ostringstream outputStream {};
-    outputStream << "Tile : " << this->m_value << "\n"
+    outputStream << "Tile : " << this->get_position_in_tileset().value() << "\n"
                  << "Position ( " << this->m_quadVertex.array[0].position
                  << ", " << this->m_quadVertex.array[1].position << ", "
                  << this->m_quadVertex.array[2].position << ", "
@@ -44,38 +58,29 @@ std::string Tile::get_debug_info() const
     return outputStream.str();
 }
 
-void Tile::set_data( int const & tilesetTileValue,
-                     math::Vector2U const & tilemapTilePosition )
+void Tile::set_positions( TilePosition const & tileset,
+                          TilePosition const & tilemap )
 {
-    // @todo what do we do if tilesetTileValue is negativ ?
-
-    this->m_value = tilesetTileValue;
-
-    std::div_t divisionValue { std::div(
-        this->m_value,
-        static_cast< int >(
-            this->m_tileSelector.get_tileset().get_size_in_tile().x ) ) };
-    math::RectangleF textureTileRectangle {
-        math::Vector2I {divisionValue.rem, divisionValue.quot}
-         .to_float()
-            * TILE_PIXEL_SIZE,
-        TILE_PIXEL_SIZE_VECTOR
-    };
-
-    this->m_quadVertex.set_texture_coord( textureTileRectangle );
+    this->set_position_in_tileset( tileset );
 
     math::RectangleF positionRectangle {};
     positionRectangle.position =
-        math::Vector2F { this->m_tilemap.getPosition() }
-        + ( tilemapTilePosition * TILE_PIXEL_SIZE );
+        math::Vector2F { this->m_tilemap.getPosition() } + tilemap.pixel();
     positionRectangle.size = TILE_PIXEL_SIZE_VECTOR;
-
     this->m_quadVertex.set_position( positionRectangle );
+}
+
+void Tile::set_position_in_tileset( TilePosition const & tileset )
+{
+    math::RectangleF textureTileRectangle {};
+    textureTileRectangle.position = tileset.pixel().to_float();
+    textureTileRectangle.size     = TILE_PIXEL_SIZE_VECTOR;
+    this->m_quadVertex.set_texture_coord( textureTileRectangle );
 }
 
 std::ostream & Tile::operator<<( std::ostream & stream ) const
 {
-    return stream << this->m_value;
+    return stream << this->get_position_in_tileset().value();
 }
 
 std::ostream & operator<<( std::ostream & stream, Tile const & tileData )

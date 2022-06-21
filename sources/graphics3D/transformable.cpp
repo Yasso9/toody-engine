@@ -2,15 +2,16 @@
 
 #include "tools/string.hpp"
 
-Transformable::Transformable( std::string const & vertexShaderPath,
-                              std::string const & fragmentShaderPath )
+Transformable::Transformable( std::filesystem::path const & vertexShaderPath,
+                              std::filesystem::path const & fragmentShaderPath )
   : m_shader(), m_space(), m_spaceModel()
 {
-    if ( ! this->m_shader.loadFromFile( vertexShaderPath, fragmentShaderPath ) )
+    if ( ! this->m_shader.loadFromFile( vertexShaderPath.string(),
+                                        fragmentShaderPath.string() ) )
     {
         throw std::runtime_error { "Loading error with at one shader : '"s
-                                   + vertexShaderPath + "' or '"s
-                                   + fragmentShaderPath + '\'' };
+                                   + vertexShaderPath.string() + "' or '"s
+                                   + fragmentShaderPath.string() + '\'' };
     }
 }
 

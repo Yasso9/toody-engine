@@ -10,8 +10,9 @@
 Settings::Settings() : m_windowSize(), m_refreshRate(), m_verticalSync()
 {
     /// @todo Récupéré les settings à partir de la base de données
-    std::string const configLocation { path::get_folder( path::E_Folder::Data )
-                                       / "window.txt"s };
+    std::string const configLocation {
+        ( path::get_folder( path::E_Folder::Data ) / "window.txt"s ).string()
+    };
 
     std::ifstream file { configLocation, std::ios::in };
     /// @todo if we don't find the file, we must create it and load default ressources

@@ -29,10 +29,10 @@ class TileMap : public sf::Drawable,
     /// @brief size of the tilemap in pixel
     math::Vector2F get_size() const;
     /// @brief number of tile that the tilemap contain
-    math::Vector2S get_tile_size() const;
+    math::Vector2U get_tile_size() const;
 
     /// @brief resize
-    void set_tile_size( math::Vector2S const & tileSize );
+    void set_tile_size( math::Vector2U const & tileSize );
 
     void process_events();
     void update();

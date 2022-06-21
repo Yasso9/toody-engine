@@ -9,6 +9,12 @@ struct QuadVertex
 
     QuadVertex() : array( sf::Quads, 4 ) {};
 
+    math::Vector2F get_position() const { return { this->array[0].position }; }
+    math::Vector2F get_texture_position() const
+    {
+        return { this->array[0].texCoords };
+    }
+
     /// @brief set vertex array position and size
     void set_position( math::RectangleF const & rectangle )
     {

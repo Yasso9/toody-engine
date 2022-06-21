@@ -97,7 +97,7 @@ static std::string get_texture_localisation(
         break;
     }
 
-    return imagePath;
+    return imagePath.string();
 }
 
 static std::string get_font_localisation( Resources::E_FontKey const & fontKey )
@@ -115,5 +115,5 @@ static std::string get_font_localisation( Resources::E_FontKey const & fontKey )
         break;
     }
 
-    return fontPath;
+    return fontPath.string();
 }

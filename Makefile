@@ -59,7 +59,7 @@ GENERAL_WARNINGS := \
 -Wvariadic-macros \
 -Wwrite-strings \
 -Weffc++ \
--Werror \
+# -Werror \
 -Wunused-parameter \
 -Wlong-long \
 -fno-common
@@ -251,7 +251,7 @@ nothing:
 
 INCLUDES := -I"$(FILES_DIRECTORY)" -I"$(LIBRARIES_INCLUDE_PATH)"
 
-LIB_FLAG_SFML := -lsfml-graphics -lsfml-system -lsfml-window
+LIB_FLAG_SFML := -lsfml-main -lsfml-graphics -lsfml-system -lsfml-window
 ifeq ($(DETECTED_OS),Windows)
 	LIB_FLAG_IMGUI := -lopengl32
 else # Linux
@@ -304,7 +304,7 @@ $(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%)
 
 # $(DEPS_DIRECTORY)/%.d : ;
 
-# Create the executable by Linking all the object files and the SFML together
+# Create the executable by Linking all the object files and the libraries together
 $(EXECUTABLE) : $(OBJECT_ALL)
 	@echo "Building $@"
 #	compilator++ -linkingOptions sub_directory_A_filename_A.o sub_directory_B_filename_B.o etc... -o executable -L"/Path/To/Library" -libraries_flags

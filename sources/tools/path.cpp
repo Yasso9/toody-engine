@@ -26,7 +26,7 @@ namespace path
         return fileRelativPath;
     }
 
-    std::filesystem::path get_file_str( E_File const & filePath )
+    std::string get_file_str( E_File const & filePath )
     {
         return get_file( filePath ).string();
     }
@@ -60,7 +60,7 @@ namespace path
         return folderRelativPath;
     }
 
-    std::filesystem::path get_folder_str( E_Folder const & folderPath )
+    std::string get_folder_str( E_Folder const & folderPath )
     {
         return get_folder( folderPath ).string();
     }

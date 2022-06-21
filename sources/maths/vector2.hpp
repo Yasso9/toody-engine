@@ -18,7 +18,6 @@ namespace math
     using Vector2F = Vector2< float >;
     using Vector2I = Vector2< int >;
     using Vector2U = Vector2< unsigned int >;
-    using Vector2S = Vector2< std::size_t >;
 
     template < C_Primitive Type >
     class Vector2

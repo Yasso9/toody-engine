@@ -1,12 +1,14 @@
 #pragma once
 
+#include <filesystem>
+
 #include "graphics3D/openGL.hpp"
 
 class Transformable
 {
   public:
-    Transformable( std::string const & vertexShaderPath,
-                   std::string const & fragmentShaderPath );
+    Transformable( std::filesystem::path const & vertexShaderPath,
+                   std::filesystem::path const & fragmentShaderPath );
     virtual ~Transformable() = default;
 
     void translate( glm::vec3 const & tranlationVector );

@@ -9,7 +9,7 @@
 
 Window::Window()
 {
-    this->create();
+    this->creation();
     this->initialize();
 }
 
@@ -85,7 +85,7 @@ void Window::gl_draw_arrays( unsigned int const & vertexArrayObject,
     glBindVertexArray( 0 );
 }
 
-void Window::create()
+void Window::creation()
 {
     std::string const gameTitle { "Toody Engine (In Developpement)"s };
 
