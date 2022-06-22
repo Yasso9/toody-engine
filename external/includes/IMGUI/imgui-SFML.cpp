@@ -214,7 +214,7 @@ struct WindowContext {
         window = w;
         imContext = ImGui::CreateContext();
 
-        windowHasFocus = window->hasFocus();
+        windowHasFocus = true;
         mouseMoved = false;
         for (int i = 0; i < 3; ++i) {
             mousePressed[i] = false;
