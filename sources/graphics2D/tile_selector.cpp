@@ -110,7 +110,7 @@ void TileSelector::update_grid( ImDrawList & drawList )
 
     // Horizontal lines of the grid
     for ( unsigned int x {
-              math::division_reminder( scrolling.x, TILE_PIXEL_SIZE ) };
+              math::division_reminder_u( scrolling.x, TILE_PIXEL_SIZE ) };
           x < this->m_tileset.get_size_in_pixel().x;
           x += TILE_PIXEL_SIZE_U )
     {
@@ -129,7 +129,7 @@ void TileSelector::update_grid( ImDrawList & drawList )
     }
     // Vertical lines of the grid
     for ( unsigned int y {
-              math::division_reminder( scrolling.y, TILE_PIXEL_SIZE ) };
+              math::division_reminder_u( scrolling.y, TILE_PIXEL_SIZE ) };
           y < this->m_tileset.get_size_in_pixel().y;
           y += TILE_PIXEL_SIZE_U )
     {

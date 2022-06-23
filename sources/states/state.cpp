@@ -13,8 +13,6 @@ State::E_List State::get_state_to_print() const
 
 void State::update_inputs( sf::Event const & event )
 {
-    float constexpr mouseWheelSensibility { 0.8f };
-
     switch ( event.type )
     {
     case sf::Event::Closed :
@@ -44,10 +42,7 @@ void State::update_inputs( sf::Event const & event )
         this->mouse_released( event );
         break;
     case sf::Event::MouseWheelScrolled :
-        if ( std::abs( event.mouseWheelScroll.delta ) > mouseWheelSensibility )
-        {
-            this->mouse_scroll( event.mouseWheelScroll.delta );
-        }
+        this->mouse_scroll( event.mouseWheelScroll.delta );
         break;
     default :
         break;

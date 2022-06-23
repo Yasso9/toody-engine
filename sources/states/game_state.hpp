@@ -13,7 +13,7 @@ class GameState final : public State
     void render() const override;
 
   private:
-    sf::View m_view;
+    View m_view;
     TileMap m_tilemap;
 
     Player m_player;

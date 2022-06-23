@@ -6,6 +6,12 @@
 
 class TilePosition
 {
+    /** @brief value of the tilemap
+     * example of possible values in a 7<3 tilemap
+     * | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
+     * | 7 | 8 | 9 | 10 | 11 | 12 | 13 |
+     * | 14 | 15 | 16 | 17 | 18 | 19 | 20 |
+    */
     unsigned int m_value;
     /// @brief number of tile in the X axis of the map/grid
     ///        where the tile is positionned
@@ -31,6 +37,8 @@ class TilePosition
     }
 
     unsigned int value() const { return this->m_value; }
+
+    /// @brief convert the value to a tile position
     math::Vector2U tile() const
     {
         std::div_t divisionValue { std::div(
@@ -39,6 +47,7 @@ class TilePosition
         return math::Vector2I { divisionValue.rem, divisionValue.quot }
             .to_u_int();
     }
+    /// @brief convert the value to a pixel position
     math::Vector2U pixel() const
     {
         return this->tile() * TILE_PIXEL_SIZE_VECTOR;

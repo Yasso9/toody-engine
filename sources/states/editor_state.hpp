@@ -6,10 +6,11 @@
 #include "graphics2D/tile_selector.hpp"
 #include "graphics2D/tilemap.hpp"
 #include "graphics2D/tileset.hpp"
+#include "graphics2D/view.hpp"
 
 class EditorState final : public State
 {
-    sf::View m_view;
+    View m_view;
     TileMap m_tilemap;
 
     Player m_player;

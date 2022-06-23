@@ -1,5 +1,6 @@
 #include "editor_state.hpp"
 
+#include <memory>
 #include <sstream>
 
 #include "libraries/imgui.hpp"
@@ -7,11 +8,9 @@
 #include "tools/assertion.hpp"
 #include "tools/string.hpp"
 
-bool g_isAnyImguiWindowFocused { false };
-
 EditorState::EditorState()
   : State( State::E_List::Editor ),
-    m_view(),
+    m_view(), // init in init_map
     m_tilemap( m_view ),
     m_player(),
     m_showDemoWindow( false ),
@@ -25,12 +24,14 @@ EditorState::EditorState()
 
 void EditorState::extra_events()
 {
+    this->m_mousePosition = sf::Mouse::getPosition( Window::get_instance() );
+
+    this->m_tilemap.process_events();
+
     if ( ImGui::P_IsAnyWindowFocused() )
     {
         return;
     }
-
-    this->m_mousePosition = sf::Mouse::getPosition( Window::get_instance() );
 
     /// @todo changer les events de la view pour pouvoir bouger la vue à partir de la souris (clique du milieu)
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
@@ -49,8 +50,6 @@ void EditorState::extra_events()
     {
         this->m_view.move( 5.f, 0.f );
     }
-
-    this->m_tilemap.process_events();
 
     if ( this->m_handlePlayer )
     {
@@ -106,7 +105,7 @@ void EditorState::init_map()
                             + ( this->m_tilemap.get_size() / 2.f ) );
     this->m_view.setSize( Window::get_instance().get_size().to_float() );
 
-    this->m_player.setPosition( this->m_view.getCenter() );
+    this->m_player.setPosition( this->m_view.get_center() );
 }
 
 void EditorState::mouse_scroll( float const & deltaScroll )
@@ -116,8 +115,20 @@ void EditorState::mouse_scroll( float const & deltaScroll )
         return;
     }
 
-    float const scaleFactor { 1.f + ( deltaScroll / 4.f ) };
+    float const scaleFactor { 1.f - ( deltaScroll / 4.f ) };
     this->m_view.zoom( scaleFactor );
+
+    // Check if the zoom doesn't go too far
+    constexpr float MAXIMUM_ZOOM { 15.f };
+    constexpr float MINIMUM_ZOOM { 0.7f };
+    if ( this->m_view.get_zoom().get_max() > MAXIMUM_ZOOM )
+    {
+        this->m_view.set_zoom( MAXIMUM_ZOOM );
+    }
+    if ( this->m_view.get_zoom().get_min() < MINIMUM_ZOOM )
+    {
+        this->m_view.set_zoom( MINIMUM_ZOOM );
+    }
 }
 
 void EditorState::keyboard_pressed( sf::Event event )
@@ -159,8 +170,6 @@ void EditorState::update_debug_window()
 {
     if ( ImGui::P_Begin( "Debug Options", &this->m_showDebugOptions ) )
     {
-        g_isAnyImguiWindowFocused |= ImGui::IsWindowFocused();
-
         std::string testBuffer { "testvalue" };
         ImGui::InputText( "Test", testBuffer.data(), 20 );
 
@@ -199,14 +208,14 @@ void EditorState::update_overlay()
 {
     if ( this->m_showEditorOverlay )
     {
-        ImGuiWindowFlags window_flags =
+        ImGuiWindowFlags const window_flags =
             ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize
             | ImGuiWindowFlags_NoSavedSettings
             | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav
             | ImGuiWindowFlags_NoMove;
 
         constexpr math::Vector2F const PADDINGS { 10.f, 10.f };
-        math::Vector2F overlayPosition {
+        math::Vector2F const overlayPosition {
             math::Vector2F { ImGui::GetMainViewport()->WorkPos } + PADDINGS
         };
         ImGui::SetNextWindowPos( overlayPosition, ImGuiCond_Always );

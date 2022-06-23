@@ -11,7 +11,8 @@ namespace ImGui
 
         if ( isWindowBegin )
         {
-            g_isAnyWindowFocused |= ImGui::IsWindowFocused();
+            g_isAnyWindowFocused =
+                g_isAnyWindowFocused || ImGui::IsWindowFocused();
         }
 
         return isWindowBegin;

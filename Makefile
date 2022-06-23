@@ -35,7 +35,6 @@ GENERAL_WARNINGS := \
 -Wshadow \
 -Wsign-conversion \
 -Wsign-promo \
--Wstrict-overflow=5 \
 -Wswitch-default \
 -Wundef \
 -Wno-unused \
@@ -59,10 +58,13 @@ GENERAL_WARNINGS := \
 -Wvariadic-macros \
 -Wwrite-strings \
 -Weffc++ \
-# -Werror \
+-Werror \
 -Wunused-parameter \
 -Wlong-long \
 -fno-common
+
+# Warning I don't understand
+# -Wstrict-overflow=5
 
 # Warnings that works only on clang :
 # adding 'no' after '-W' remove the warning

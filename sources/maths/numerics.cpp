@@ -1,13 +1,32 @@
 #include "numerics.hpp"
 
 #include <cmath>
+#include <sstream>
 
 namespace math
 {
-    unsigned int division_reminder( float const & leftValue,
-                                    float const & rightValue )
+    bool are_equal( float leftValue, float rightValue, float precision )
+    {
+        return std::abs( leftValue - rightValue ) < precision;
+    }
+
+    std::string get_full_value( float value )
+    {
+        std::stringstream stream {};
+
+        stream.precision( std::numeric_limits< float >::max_digits10 );
+        stream << value;
+
+        return stream.str();
+    }
+
+    float division_reminder( float leftValue, float rightValue )
+    {
+        return std::fmod( leftValue, rightValue );
+    }
+    unsigned int division_reminder_u( float leftValue, float rightValue )
     {
         return static_cast< unsigned int >(
-            std::fmod( leftValue, rightValue ) );
+            division_reminder( leftValue, rightValue ) );
     }
 } // namespace math

@@ -120,14 +120,14 @@ namespace math
         return math::is_inside( *this, position, size );
     }
     template < C_Primitive Type >
-    void Vector2< Type >::floor()
+    Vector2< Type > Vector2< Type >::floor()
     {
-        *this = math::floor( *this );
+        return *this = math::floor( *this );
     }
     template < C_Primitive Type >
-    void Vector2< Type >::round()
+    Vector2< Type > Vector2< Type >::round()
     {
-        *this = math::round( *this );
+        return *this = math::round( *this );
     }
 
     /* ************************************************************************
@@ -182,8 +182,16 @@ namespace math
     Vector2< TypeLeft > operator/( Vector2< TypeLeft > const & vector2DLeft,
                                    Vector2< TypeRight > const & vector2DRight )
     {
-        return { vector2DLeft.x / static_cast< TypeLeft >( vector2DRight.x ),
-                 vector2DLeft.y / static_cast< TypeLeft >( vector2DRight.y ) };
+        Vector2< TypeLeft > vector2DRightCast {
+            static_cast< Vector2< TypeLeft > >( vector2DRight )
+        };
+        if ( vector2DRightCast.x == 0 || vector2DRightCast.y == 0 )
+        {
+            throw std::runtime_error { "Division by Zero" };
+        }
+
+        return { vector2DLeft.x / vector2DRightCast.x,
+                 vector2DLeft.y / vector2DRightCast.y };
     }
     template < C_Primitive TypeLeft, C_Primitive TypeRight >
     Vector2< TypeLeft > operator+( Vector2< TypeLeft > const & vector2DLeft,
@@ -220,9 +228,12 @@ namespace math
     Vector2< Type > operator%( Vector2< Type > const & vector2D,
                                int const & modulo )
     {
+        Vector2< int > const vector2DCastToInt { static_cast< Vector2< int > >(
+            vector2D ) };
+
         return static_cast< Vector2< Type > >(
-            Vector2< int > { vector2D.to_int().x % modulo,
-                             vector2D.to_int().y % modulo } );
+            Vector2< int > { vector2DCastToInt.x % modulo,
+                             vector2DCastToInt.y % modulo } );
     }
 
     template < C_Primitive Type >

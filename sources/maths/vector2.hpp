@@ -62,11 +62,16 @@ namespace math
 
         virtual Type operator[]( std::size_t index ) const;
 
+        /// @brief get the biggest value between x and y
+        Type get_max() const { return std::max( this->x, this->y ); }
+        /// @brief get the lowest value between x and y
+        Type get_min() const { return std::min( this->x, this->y ); }
+
         bool is_inside( Rectangle< Type > const & rectangle ) const;
         bool is_inside( Vector2< Type > const & position,
                         Vector2< Type > const & size ) const;
-        void floor();
-        void round();
+        Vector2< Type > floor();
+        Vector2< Type > round();
     };
 
     /* ************************************************************************

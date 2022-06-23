@@ -20,8 +20,7 @@ void GameState::init_map()
         / 2.f );
 
     this->m_view.setCenter( this->m_player.getPosition() );
-    this->m_view.setSize( math::Vector2F { Window::get_instance().get_size() }
-                          / 2u );
+    this->m_view.setSize( Window::get_instance().get_size().to_float() / 2.f );
 }
 
 void GameState::update()
