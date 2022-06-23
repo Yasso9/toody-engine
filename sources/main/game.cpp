@@ -18,26 +18,22 @@
 
 #include "libraries/imgui.hpp"
 
-/**
- * @brief Throw an exception if something is not available
- */
-static void check_configuration()
+Game::Game() : m_state( nullptr )
 {
     if ( ! sf::Shader::isAvailable() )
     {
         throw std::runtime_error { "Shader's not available"s };
     }
-}
-
-Game::Game() : m_state( nullptr )
-{
-    check_configuration();
 
     Window::get_instance();
+
+    // imgui initialisation (@todo put that in a separate function)
     if ( ! ImGui::SFML::Init( Window::get_instance() ) )
     {
         throw std::runtime_error { "Cannot init ImGui"s };
     }
+    // Disable use of imgui.ini file
+    // ImGui::GetIO().IniFilename = nullptr;
 
     this->init_state();
 }
@@ -116,7 +112,7 @@ void Game::update_events()
         this->m_state->extra_events();
     }
 
-    ImGui::P_ResetWindowFocused();
+    ImGui::P_ResetVariables();
 }
 
 void Game::update_state( sf::Time const & deltaTime )

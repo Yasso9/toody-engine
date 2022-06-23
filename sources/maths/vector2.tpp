@@ -130,6 +130,24 @@ namespace math
         return *this = math::round( *this );
     }
 
+    template < C_Primitive Type >
+    float Vector2< Type >::get_length() const
+    {
+        return std::sqrt( ( this->x * this->x ) + ( this->y * this->y ) );
+    }
+    template < C_Primitive Type >
+    Vector2< Type > Vector2< Type >::normalize()
+    {
+        float const vectorLength { this->get_length() };
+
+        if ( vectorLength != 0 )
+        {
+            *this /= vectorLength;
+        }
+
+        return *this;
+    }
+
     /* ************************************************************************
     ************************** VECTOR FUNCTIONS *******************************
     ************************************************************************ */
@@ -277,7 +295,23 @@ namespace math
     Vector2< Type > operator-=( Vector2< Type > & vector2DLeft,
                                 Vector2< Type > const & vector2DRight )
     {
-        vector2DLeft = vector2DLeft - vector2DRight;
-        return vector2DLeft;
+        return vector2DLeft = vector2DLeft - vector2DRight;
+    }
+    template < C_RelativePrimitive Type >
+    Vector2< Type > operator+=( Vector2< Type > & vector2DLeft,
+                                Vector2< Type > const & vector2DRight )
+    {
+        return vector2DLeft = vector2DLeft + vector2DRight;
+    }
+    template < C_RelativePrimitive Type >
+    Vector2< Type > operator/=( Vector2< Type > & vector2DLeft,
+                                Vector2< Type > const & vector2DRight )
+    {
+        return vector2DLeft = vector2DLeft / vector2DRight;
+    }
+    template < C_RelativePrimitive Type >
+    Vector2< Type > operator/=( Vector2< Type > & vector2D, float factor )
+    {
+        return vector2D = vector2D / factor;
     }
 } // namespace math

@@ -70,8 +70,12 @@ namespace math
         bool is_inside( Rectangle< Type > const & rectangle ) const;
         bool is_inside( Vector2< Type > const & position,
                         Vector2< Type > const & size ) const;
+
         Vector2< Type > floor();
         Vector2< Type > round();
+
+        float get_length() const;
+        Vector2< Type > normalize();
     };
 
     /* ************************************************************************
@@ -146,9 +150,21 @@ namespace math
     template < C_RelativePrimitive Type >
     Vector2< Type > operator-( Vector2< Type > const & vector2D );
 
+    /* ************************************************************************
+    *********************** ASSIGNEMENT OPERATOR ******************************
+    ************************************************************************ */
+
     template < C_RelativePrimitive Type >
     Vector2< Type > operator-=( Vector2< Type > & vector2DLeft,
                                 Vector2< Type > const & vector2DRight );
+    template < C_RelativePrimitive Type >
+    Vector2< Type > operator+=( Vector2< Type > & vector2DLeft,
+                                Vector2< Type > const & vector2DRight );
+    template < C_RelativePrimitive Type >
+    Vector2< Type > operator/=( Vector2< Type > & vector2DLeft,
+                                Vector2< Type > const & vector2DRight );
+    template < C_RelativePrimitive Type >
+    Vector2< Type > operator/=( Vector2< Type > & vector2D, float factor );
 } // namespace math
 
 #include "vector2.tpp"

@@ -4,6 +4,7 @@
 #include "tools/assertion.hpp"
 #include "tools/global_variable.hpp"
 
+/// @todo create a cpp file
 class TilePosition
 {
     /** @brief value of the tilemap

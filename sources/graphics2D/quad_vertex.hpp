@@ -7,31 +7,12 @@ struct QuadVertex
 {
     sf::VertexArray array;
 
-    QuadVertex() : array( sf::Quads, 4 ) {};
+    QuadVertex();
 
-    math::Vector2F get_position() const { return { this->array[0].position }; }
-    math::Vector2F get_texture_position() const
-    {
-        return { this->array[0].texCoords };
-    }
+    math::Vector2F get_position() const;
+    math::Vector2F get_texture_position() const;
 
     /// @brief set vertex array position and size
-    void set_position( math::RectangleF const & rectangle )
-    {
-        this->array[0].position = rectangle.position;
-        this->array[1].position =
-            rectangle.position + math::Vector2F { rectangle.size.x, 0.f };
-        this->array[2].position = rectangle.position + rectangle.size;
-        this->array[3].position =
-            rectangle.position + math::Vector2F { 0.f, rectangle.size.y };
-    }
-    void set_texture_coord( math::RectangleF const & rectangle )
-    {
-        this->array[0].texCoords = rectangle.position;
-        this->array[1].texCoords =
-            rectangle.position + math::Vector2F { rectangle.size.x, 0.f };
-        this->array[2].texCoords = rectangle.position + rectangle.size;
-        this->array[3].texCoords =
-            rectangle.position + math::Vector2F { 0.f, rectangle.size.y };
-    }
+    void set_position( math::RectangleF const & rectangle );
+    void set_texture_coord( math::RectangleF const & rectangle );
 };

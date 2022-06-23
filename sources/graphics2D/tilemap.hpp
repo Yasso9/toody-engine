@@ -20,6 +20,7 @@ class TileMap : public sf::Drawable,
     std::vector< std::vector< std::vector< Tile > > > m_tileTable;
     unsigned int m_currentDepth;
 
+    // Events
     bool m_isLeftButtonPressed;
     math::Vector2I m_mousePosition;
 

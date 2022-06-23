@@ -8,6 +8,7 @@
 #include "tools/tools.hpp"
 
 /// @todo create a button reset database who call init_tile_table_from_database()
+/// @todo put a grid on the tilemap
 
 TileMap::TileMap( View & view )
   : m_tileSelector(),
@@ -114,6 +115,7 @@ void TileMap::update()
 {
     this->m_tileSelector.update();
 
+    ImGui::SetNextWindowBgAlpha( 0.5f );
     if ( ImGui::P_Begin( "Tilemap Information" ) )
     {
         this->update_selection();
@@ -126,8 +128,8 @@ void TileMap::update()
         {
             this->save();
         }
-        ImGui::End();
     }
+    ImGui::End();
 }
 
 void TileMap::save() const
@@ -216,6 +218,7 @@ void TileMap::update_selection()
 
     infoOutput << "Tilemap - Position : " << this->getPosition() << "\n";
     infoOutput << "Tilemap - Size : " << this->get_size() << "\n";
+    /// @todo create a number of tile method
     infoOutput << "Tilemap - Number of Tile : "
                << this->get_size() / TILE_PIXEL_SIZE << "\n";
 
@@ -238,8 +241,9 @@ void TileMap::update_selection()
 
     ImGui::Text( "%s", infoOutput.str().c_str() );
 
-    if ( ! mousePositionRelativToView.is_inside( this->getPosition(),
-                                                 this->get_size() ) )
+    if ( ImGui::P_IsAnyWindowHovered()
+         || ! mousePositionRelativToView.is_inside( this->getPosition(),
+                                                    this->get_size() ) )
     {
         // The mouse is outside the tilemap
         this->m_cursor.setOutlineColor( sf::Color::Transparent );

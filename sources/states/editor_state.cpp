@@ -33,23 +33,31 @@ void EditorState::extra_events()
         return;
     }
 
+    constexpr float moveSpeedBaseValue { 10.f };
+    math::Vector2F const moveSpeed {
+        math::Vector2F {moveSpeedBaseValue, moveSpeedBaseValue}
+        / this->m_view.get_zoom()
+    };
     /// @todo changer les events de la view pour pouvoir bouger la vue à partir de la souris (clique du milieu)
+    math::Vector2F moveDirection { 0.f, 0.f };
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
     {
-        this->m_view.move( 0.f, -5.f );
+        moveDirection += math::Vector2F { 0.f, -1.f };
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
     {
-        this->m_view.move( 0.f, 5.f );
+        moveDirection += math::Vector2F { 0.f, 1.f };
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Q ) )
     {
-        this->m_view.move( -5.f, 0.f );
+        moveDirection += math::Vector2F { -1.f, 0.f };
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
     {
-        this->m_view.move( 5.f, 0.f );
+        moveDirection += math::Vector2F { 1.f, 0.f };
     }
+    // std::cout << moveDirection.normalize() << std::endl;
+    this->m_view.move( moveDirection.normalize() * moveSpeed );
 
     if ( this->m_handlePlayer )
     {
@@ -60,8 +68,6 @@ void EditorState::extra_events()
 void EditorState::update()
 {
     this->update_toolbar();
-
-    this->update_overlay();
 
     if ( this->m_showDebugOptions )
     {
@@ -79,6 +85,8 @@ void EditorState::update()
         this->m_player.update( this->m_deltaTime );
         this->m_view.setCenter( this->m_player.getPosition() );
     }
+
+    this->update_overlay();
 }
 
 void EditorState::render() const
@@ -110,7 +118,7 @@ void EditorState::init_map()
 
 void EditorState::mouse_scroll( float const & deltaScroll )
 {
-    if ( ImGui::P_IsAnyWindowFocused() )
+    if ( ImGui::P_IsAnyWindowHovered() )
     {
         return;
     }
@@ -200,8 +208,8 @@ void EditorState::update_debug_window()
         windowTextOutput << "IsAnyItemHovered : " << std::boolalpha
                          << ImGui::IsAnyItemHovered() << "\n";
         ImGui::Text( "%s", windowTextOutput.str().c_str() );
-        ImGui::End();
     }
+    ImGui::End();
 }
 
 void EditorState::update_overlay()
@@ -233,6 +241,10 @@ void EditorState::update_overlay()
                 std::stringstream overlayOutput {};
                 overlayOutput << "Window Position : " << overlayPosition
                               << "\n";
+                overlayOutput << "Is Any Window Focused ? " << std::boolalpha
+                              << ImGui::P_IsAnyWindowFocused() << "\n";
+                overlayOutput << "Is Any Window Hovered ? : "
+                              << ImGui::P_IsAnyWindowHovered() << "\n";
                 ImGui::Text( "%s", overlayOutput.str().c_str() );
             }
         }

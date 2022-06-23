@@ -94,8 +94,8 @@ void TileSelector::update()
             this->update_grid( *ImGui::GetWindowDrawList() );
         }
         this->update_selection( *ImGui::GetWindowDrawList() );
-        ImGui::End();
     }
+    ImGui::End();
 }
 
 void TileSelector::update_grid( ImDrawList & drawList )
