@@ -22,7 +22,7 @@ MacOs : Not taken in charge.
         mkdir build
         cd build
         CC=gcc CXX=g++ cmake -G"Unix Makefiles" -DWARNINGS_AS_ERRORS=OFF ..
-        make
+        make all
     2. Linux
         > sudo apt-get install libsfml-dev
 

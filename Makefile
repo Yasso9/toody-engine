@@ -192,7 +192,11 @@ buildrun : build run
 build : initialize_build $(OBJECT_ALL) $(EXECUTABLE)
 
 run :
+ifeq ($(DETECTED_OS),Linux)
+	export LD_LIBRARY_PATH="$(LIBRARIES_PATH)" && $(EXECUTABLE)
+else
 	$(EXECUTABLE)
+endif
 
 initialize_build: clean_executable
 	@echo "Create Build Directories"
@@ -253,19 +257,26 @@ nothing:
 
 INCLUDES := -I"$(FILES_DIRECTORY)" -I"$(LIBRARIES_INCLUDE_PATH)"
 
-LIB_FLAG_SFML := -lsfml-main -lsfml-graphics -lsfml-system -lsfml-window
+ifeq ($(DETECTED_OS),Windows)
+	LIB_FLAG_SFML := -lsfml-main
+endif
+LIB_FLAG_SFML := $(LIB_FLAG_SFML) -lsfml-graphics -lsfml-system -lsfml-window
+
 ifeq ($(DETECTED_OS),Windows)
 	LIB_FLAG_IMGUI := -lopengl32
 else # Linux
 	LIB_FLAG_IMGUI := -lGL -ldl
 endif
+
 LIB_FLAG_ASSIMP := -lassimp
 LIB_FLAG_SQLITE := -lpthread -ldl
+
 LIBRARIES_FLAG := $(LIB_FLAG_SFML) $(LIB_FLAG_IMGUI) \
 				  $(LIB_FLAG_ASSIMP) $(LIB_FLAG_SQLITE)
-ifeq ($(DETECTED_OS),Windows)
-	LIBRARIES := -L"$(LIBRARIES_PATH)"
-endif
+
+# ifeq ($(DETECTED_OS),Windows)
+LIBRARIES := -L"$(LIBRARIES_PATH)"
+# endif
 LIBRARIES := $(LIBRARIES) $(LIBRARIES_FLAG)
 
 

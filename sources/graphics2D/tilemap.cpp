@@ -154,7 +154,9 @@ void TileMap::init_tile_table_from_database()
         0u,
         this->m_tileSelector.get_tileset().get_size_in_tile().x
     };
-    TilePosition positionInTilemap { 0u, table[0].size() };
+    TilePosition positionInTilemap { 0u,
+                                     static_cast< unsigned int >(
+                                         table[0].size() ) };
 
     // Parse all the line of the tilemap
     for ( unsigned int line { 0u }; line < table.size(); ++line )

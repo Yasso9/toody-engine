@@ -25,14 +25,14 @@ class TilePosition
         Pixel
     };
 
-    TilePosition( unsigned int aValue, unsigned int aNumberOfTileInX )
-      : m_value( aValue ), m_numberOfTileInX( aNumberOfTileInX )
+    TilePosition( unsigned int value, unsigned int numberOfTileInX )
+      : m_value(), m_numberOfTileInX( numberOfTileInX )
     {
-        this->set_value( aValue );
+        this->set_value( value );
     }
-    TilePosition( math::Vector2U position, unsigned int aNumberOfTileInX,
+    TilePosition( math::Vector2U position, unsigned int numberOfTileInX,
                   Type type )
-      : TilePosition { 0u, aNumberOfTileInX }
+      : TilePosition { 0u, numberOfTileInX }
     {
         this->set_value( position, type );
     }

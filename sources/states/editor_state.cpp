@@ -13,6 +13,8 @@ EditorState::EditorState()
     m_view(), // init in init_map
     m_tilemap( m_view ),
     m_player(),
+    m_staticEntity(),
+    m_moveableEntity(),
     m_showDemoWindow( false ),
     m_showDebugOptions( false ),
     m_showEditorOverlay( true ),

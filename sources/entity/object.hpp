@@ -30,9 +30,9 @@ class Entity2D : public sf::ConvexShape
     void set_quadrangle( math::QuadrangleF quadrangle )
     {
         this->setPoint( 0u, quadrangle.topLeftPosition );
-        this->setPoint( 0u, quadrangle.topRightPosition );
-        this->setPoint( 0u, quadrangle.bottomRightPosition );
-        this->setPoint( 0u, quadrangle.bottomLeftPosition );
+        this->setPoint( 1u, quadrangle.topRightPosition );
+        this->setPoint( 2u, quadrangle.bottomRightPosition );
+        this->setPoint( 3u, quadrangle.bottomLeftPosition );
     }
 
     bool is_intersected_by( Entity2D const & otherEntity ) const

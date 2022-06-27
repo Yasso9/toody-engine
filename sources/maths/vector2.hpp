@@ -11,7 +11,7 @@ namespace math
 {
     // Vector2 is used in Rectangle, we need to forward declare
     template < C_Primitive Type >
-    class Quadrangle;
+    class Rectangle;
 
     template < C_Primitive Type >
     class Vector2;
@@ -27,20 +27,28 @@ namespace math
         Type y;
 
         constexpr Vector2() : x( 0 ), y( 0 ) {}
-        constexpr Vector2( Type const & xAxisValue, Type const & yAxisValue )
+        constexpr Vector2( Type xAxisValue, Type yAxisValue )
           : x( xAxisValue ), y( yAxisValue )
+        {}
+        /// @brief We can construct an unsigned int vector with size_t variables
+        Vector2( std::size_t const & xAxisValue, std::size_t yAxisValue ) requires(
+            std::is_same_v<
+                Type,
+                unsigned int > && not std::is_same_v< std::size_t, unsigned int > )
+          : x( static_cast< unsigned int >( xAxisValue ) ),
+            y( static_cast< unsigned int >( yAxisValue ) )
         {}
         Vector2( sf::Vector2< Type > const & sfmlVector );
         Vector2( ImVec2 const & imGuiVector );
         constexpr virtual ~Vector2() = default;
 
-        /// @brief copy constructor
+        /// @brief Copy Constructor
         Vector2( Vector2< Type > const & vector2D );
-        /// @brief move constructor
+        /// @brief Move Constructor
         Vector2( Vector2< Type > && vector2D ) noexcept;
-        /// @brief copy assignement
+        /// @brief Copy Assignement
         Vector2< Type > & operator=( Vector2< Type > const & vector2D );
-        /// @brief move assignement
+        /// @brief Move Assignement
         Vector2< Type > & operator=( Vector2< Type > && vector2D ) noexcept;
 
         operator sf::Vector2< Type >() const;
@@ -67,7 +75,8 @@ namespace math
         /// @brief get the lowest value between x and y
         Type get_min() const { return std::min( this->x, this->y ); }
 
-        bool is_inside( Quadrangle< Type > const & rectangle ) const;
+        /// @todo put this two functions inside class Point
+        bool is_inside( Rectangle< Type > const & rectangle ) const;
         bool is_inside( Vector2< Type > const & position,
                         Vector2< Type > const & size ) const;
 

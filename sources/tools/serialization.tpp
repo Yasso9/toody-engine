@@ -1,3 +1,5 @@
+#pragma once
+
 #include "serialization.hpp"
 
 #include "tools/string.hpp"

@@ -65,7 +65,8 @@ void Tile::set_positions( TilePosition const & tileset,
 
     math::RectangleF positionRectangle {};
     positionRectangle.position =
-        math::Vector2F { this->m_tilemap.getPosition() } + tilemap.pixel();
+        math::Vector2F { this->m_tilemap.getPosition() }
+        + tilemap.pixel().to_float();
     positionRectangle.size = TILE_PIXEL_SIZE_VECTOR;
     this->m_quadVertex.set_position( positionRectangle );
 }
