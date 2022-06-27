@@ -2,6 +2,7 @@
 
 #include "states/state.hpp"
 
+#include "entity/object.hpp"
 #include "entity/player.hpp"
 #include "graphics2D/tile_selector.hpp"
 #include "graphics2D/tilemap.hpp"
@@ -14,6 +15,9 @@ class EditorState final : public State
     TileMap m_tilemap;
 
     Player m_player;
+
+    Entity2D m_staticEntity;
+    Entity2D m_moveableEntity;
 
     /// @todo create a map and enum as key to handles all the boolean variable show demo
     bool m_showDemoWindow;

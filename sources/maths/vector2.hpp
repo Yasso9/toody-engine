@@ -11,7 +11,7 @@ namespace math
 {
     // Vector2 is used in Rectangle, we need to forward declare
     template < C_Primitive Type >
-    class Rectangle;
+    class Quadrangle;
 
     template < C_Primitive Type >
     class Vector2;
@@ -67,7 +67,7 @@ namespace math
         /// @brief get the lowest value between x and y
         Type get_min() const { return std::min( this->x, this->y ); }
 
-        bool is_inside( Rectangle< Type > const & rectangle ) const;
+        bool is_inside( Quadrangle< Type > const & rectangle ) const;
         bool is_inside( Vector2< Type > const & position,
                         Vector2< Type > const & size ) const;
 

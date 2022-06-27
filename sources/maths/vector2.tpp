@@ -109,7 +109,8 @@ namespace math
     }
 
     template < C_Primitive Type >
-    bool Vector2< Type >::is_inside( Rectangle< Type > const & rectangle ) const
+    bool Vector2< Type >::is_inside(
+        Quadrangle< Type > const & rectangle ) const
     {
         return math::is_inside( *this, rectangle.position, rectangle.size );
     }

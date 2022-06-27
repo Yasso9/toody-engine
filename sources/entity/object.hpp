@@ -2,11 +2,42 @@
 
 #include "maths/maths.hpp"
 
-class Object2D
-{
-    math::Vector2F m_position;
-    math::Vector2F m_size;
+#include "graphics2D/sfml.hpp"
 
+static constexpr unsigned int NUMBER_OF_POINT { 4u };
+
+class Entity2D : public sf::ConvexShape
+{
   public:
-    Object2D() : m_position( 0.f, 0.f ), m_size( 0.f, 0.f ) {}
+    Entity2D()
+    {
+        this->setPointCount( NUMBER_OF_POINT );
+        this->set_quadrangle( math::QuadrangleF {} );
+        this->setFillColor( sf::Color::Black );
+        // this->setOutlineColor( sf::Color::White );
+    }
+
+    math::QuadrangleF get_quadrangle() const
+    {
+        math::QuadrangleF quadrangle {};
+        quadrangle.topLeftPosition     = this->getPoint( 0u );
+        quadrangle.topRightPosition    = this->getPoint( 1u );
+        quadrangle.bottomRightPosition = this->getPoint( 2u );
+        quadrangle.bottomLeftPosition  = this->getPoint( 3u );
+        return quadrangle;
+    }
+
+    void set_quadrangle( math::QuadrangleF quadrangle )
+    {
+        this->setPoint( 0u, quadrangle.topLeftPosition );
+        this->setPoint( 0u, quadrangle.topRightPosition );
+        this->setPoint( 0u, quadrangle.bottomRightPosition );
+        this->setPoint( 0u, quadrangle.bottomLeftPosition );
+    }
+
+    bool is_intersected_by( Entity2D const & otherEntity ) const
+    {
+        return math::is_intersection( this->get_quadrangle(),
+                                      otherEntity.get_quadrangle() );
+    }
 };

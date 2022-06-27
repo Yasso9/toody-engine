@@ -20,13 +20,25 @@ EditorState::EditorState()
     m_mousePosition( 0, 0 )
 {
     this->init_map();
+
+    m_staticEntity.setPosition( 0.f, 0.f );
+    m_staticEntity.set_quadrangle( math::Rectangle { 0.f, 0.f, 100.f, 200.f } );
+    m_staticEntity.setFillColor( sf::Color::Red );
+    m_staticEntity.setOutlineColor( sf::Color::Black );
+    m_staticEntity.setOutlineThickness( 4.f );
+
+    m_moveableEntity.setPosition( 600.f, 600.f );
+    m_moveableEntity.set_quadrangle( math::Rectangle { 0.f, 0.f, 40.f, 40.f } );
+    m_moveableEntity.setFillColor( sf::Color::Green );
+    m_moveableEntity.setOutlineColor( sf::Color::Black );
+    m_moveableEntity.setOutlineThickness( 4.f );
 }
 
 void EditorState::extra_events()
 {
-    this->m_mousePosition = sf::Mouse::getPosition( Window::get_instance() );
+    m_mousePosition = sf::Mouse::getPosition( Window::get_instance() );
 
-    this->m_tilemap.process_events();
+    m_tilemap.process_events();
 
     if ( ImGui::P_IsAnyWindowFocused() )
     {
@@ -36,7 +48,7 @@ void EditorState::extra_events()
     constexpr float moveSpeedBaseValue { 10.f };
     math::Vector2F const moveSpeed {
         math::Vector2F {moveSpeedBaseValue, moveSpeedBaseValue}
-        / this->m_view.get_zoom()
+        / m_view.get_zoom()
     };
     /// @todo changer les events de la view pour pouvoir bouger la vue à partir de la souris (clique du milieu)
     math::Vector2F moveDirection { 0.f, 0.f };
@@ -56,12 +68,11 @@ void EditorState::extra_events()
     {
         moveDirection += math::Vector2F { 1.f, 0.f };
     }
-    // std::cout << moveDirection.normalize() << std::endl;
-    this->m_view.move( moveDirection.normalize() * moveSpeed );
+    m_view.move( moveDirection.normalize() * moveSpeed );
 
-    if ( this->m_handlePlayer )
+    if ( m_handlePlayer )
     {
-        this->m_player.update_events();
+        m_player.update_events();
     }
 }
 
@@ -69,21 +80,21 @@ void EditorState::update()
 {
     this->update_toolbar();
 
-    if ( this->m_showDebugOptions )
+    if ( m_showDebugOptions )
     {
         this->update_debug_window();
     }
-    if ( this->m_showDemoWindow )
+    if ( m_showDemoWindow )
     {
-        ImGui::ShowDemoWindow( &this->m_showDemoWindow );
+        ImGui::ShowDemoWindow( &m_showDemoWindow );
     }
 
-    this->m_tilemap.update();
+    m_tilemap.update();
 
-    if ( this->m_handlePlayer )
+    if ( m_handlePlayer )
     {
-        this->m_player.update( this->m_deltaTime );
-        this->m_view.setCenter( this->m_player.getPosition() );
+        m_player.update( m_deltaTime );
+        m_view.setCenter( m_player.getPosition() );
     }
 
     this->update_overlay();
@@ -91,13 +102,16 @@ void EditorState::update()
 
 void EditorState::render() const
 {
-    Window::get_instance().setView( this->m_view );
+    Window::get_instance().setView( m_view );
 
-    Window::get_instance().sf_draw( this->m_tilemap );
+    Window::get_instance().sf_draw( m_tilemap );
 
-    if ( this->m_handlePlayer )
+    Window::get_instance().sf_draw( m_staticEntity );
+    Window::get_instance().sf_draw( m_moveableEntity );
+
+    if ( m_handlePlayer )
     {
-        Window::get_instance().sf_draw( this->m_player );
+        Window::get_instance().sf_draw( m_player );
     }
 
     Window::get_instance().reset_view();
@@ -105,15 +119,15 @@ void EditorState::render() const
 
 void EditorState::init_map()
 {
-    this->m_tilemap.setPosition( 0.f, 0.f );
+    m_tilemap.setPosition( 0.f, 0.f );
 
     /// @todo create a methode for tilemap called .get_center who return the center position of the tilemap (relatively or asbolutely)
     // Set view position at center of the tilemap
-    this->m_view.setCenter( math::Vector2F { this->m_tilemap.getPosition() }
-                            + ( this->m_tilemap.get_size() / 2.f ) );
-    this->m_view.setSize( Window::get_instance().get_size().to_float() );
+    m_view.setCenter( math::Vector2F { m_tilemap.getPosition() }
+                      + ( m_tilemap.get_size() / 2.f ) );
+    m_view.setSize( Window::get_instance().get_size().to_float() );
 
-    this->m_player.setPosition( this->m_view.get_center() );
+    m_player.setPosition( m_view.get_center() );
 }
 
 void EditorState::mouse_scroll( float const & deltaScroll )
@@ -124,18 +138,18 @@ void EditorState::mouse_scroll( float const & deltaScroll )
     }
 
     float const scaleFactor { 1.f - ( deltaScroll / 4.f ) };
-    this->m_view.zoom( scaleFactor );
+    m_view.zoom( scaleFactor );
 
     // Check if the zoom doesn't go too far
     constexpr float MAXIMUM_ZOOM { 15.f };
     constexpr float MINIMUM_ZOOM { 0.7f };
-    if ( this->m_view.get_zoom().get_max() > MAXIMUM_ZOOM )
+    if ( m_view.get_zoom().get_max() > MAXIMUM_ZOOM )
     {
-        this->m_view.set_zoom( MAXIMUM_ZOOM );
+        m_view.set_zoom( MAXIMUM_ZOOM );
     }
-    if ( this->m_view.get_zoom().get_min() < MINIMUM_ZOOM )
+    if ( m_view.get_zoom().get_min() < MINIMUM_ZOOM )
     {
-        this->m_view.set_zoom( MINIMUM_ZOOM );
+        m_view.set_zoom( MINIMUM_ZOOM );
     }
 }
 
@@ -161,13 +175,11 @@ void EditorState::update_toolbar()
         {
             ImGui::MenuItem( "Show Editor Overlay Options",
                              NULL,
-                             &this->m_showEditorOverlay );
+                             &m_showEditorOverlay );
             ImGui::MenuItem( "Show ImGui Demo Window",
                              NULL,
-                             &this->m_showDemoWindow );
-            ImGui::MenuItem( "Show Debug Options",
-                             NULL,
-                             &this->m_showDebugOptions );
+                             &m_showDemoWindow );
+            ImGui::MenuItem( "Show Debug Options", NULL, &m_showDebugOptions );
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
@@ -176,13 +188,13 @@ void EditorState::update_toolbar()
 
 void EditorState::update_debug_window()
 {
-    if ( ImGui::P_Begin( "Debug Options", &this->m_showDebugOptions ) )
+    if ( ImGui::P_Begin( "Debug Options", &m_showDebugOptions ) )
     {
         std::string testBuffer { "testvalue" };
         ImGui::InputText( "Test", testBuffer.data(), 20 );
 
         std::stringstream windowTextOutput {};
-        windowTextOutput << "MousePos : " << this->m_mousePosition << "\n";
+        windowTextOutput << "MousePos : " << m_mousePosition << "\n";
         windowTextOutput << "CursorPos : "
                          << sf::Vector2f { ImGui::GetCursorPos() } << "\n";
         windowTextOutput << "CursorStartPos : "
@@ -214,7 +226,7 @@ void EditorState::update_debug_window()
 
 void EditorState::update_overlay()
 {
-    if ( this->m_showEditorOverlay )
+    if ( m_showEditorOverlay )
     {
         ImGuiWindowFlags const window_flags =
             ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize
@@ -229,10 +241,10 @@ void EditorState::update_overlay()
         ImGui::SetNextWindowPos( overlayPosition, ImGuiCond_Always );
         ImGui::SetNextWindowBgAlpha( 0.5f );
         if ( ImGui::P_Begin( "Editor Main",
-                             &this->m_showEditorOverlay,
+                             &m_showEditorOverlay,
                              window_flags ) )
         {
-            ImGui::Checkbox( "Handle Player ?", &this->m_handlePlayer );
+            ImGui::Checkbox( "Handle Player ?", &m_handlePlayer );
 
             static bool showDebug { false };
             ImGui::Checkbox( "Show Debug", &showDebug );
