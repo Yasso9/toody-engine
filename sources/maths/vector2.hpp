@@ -75,6 +75,15 @@ namespace math
         /// @brief get the lowest value between x and y
         Type get_min() const { return std::min( this->x, this->y ); }
 
+        Vector2< Type > get_x_axis() const
+        {
+            return Vector2< Type > { this->x, 0 };
+        }
+        Vector2< Type > get_y_axis() const
+        {
+            return Vector2< Type > { 0, this->y };
+        }
+
         /// @todo put this two functions inside class Point
         bool is_inside( Rectangle< Type > const & rectangle ) const;
         bool is_inside( Vector2< Type > const & position,

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "maths/point.hpp"
+#include "maths/geometry/point.hpp"
 
 namespace math
 {

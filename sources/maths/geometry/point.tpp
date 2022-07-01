@@ -47,7 +47,8 @@ namespace math
                && this->y >= std::min( segment.pointA.y, segment.pointB.y );
     }
     template < C_Primitive Type >
-    bool Point< Type >::is_inside( Quadrangle< Type > quadrangle ) const
+    template < unsigned int NB_OF_POINT >
+    bool Point< Type >::is_inside( Polygon< Type, NB_OF_POINT > polygon ) const
     {
         /// @todo recuperer ça dynamiquement
         constexpr float LIMIT_ZONE { 10000.f };
@@ -57,7 +58,7 @@ namespace math
         Segment< Type > segmentToCheck { *this, extremePoint };
 
         unsigned int numberOfIntersection { 0u };
-        for ( Segment< Type > segment : quadrangle.get_segments() )
+        for ( Segment< Type > segment : polygon.get_segments() )
         {
             if ( is_intersection( segmentToCheck, segment ) )
             {

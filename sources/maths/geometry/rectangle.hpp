@@ -2,7 +2,7 @@
 
 #include "tools/concepts.hpp"
 
-#include "maths/segment.hpp"
+#include "maths/geometry/segment.hpp"
 #include "maths/vector2.hpp"
 
 namespace math

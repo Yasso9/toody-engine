@@ -20,19 +20,22 @@ class Entity2D : public sf::ConvexShape
     math::QuadrangleF get_quadrangle() const
     {
         math::QuadrangleF quadrangle {};
-        quadrangle.topLeftPosition     = this->getPoint( 0u );
-        quadrangle.topRightPosition    = this->getPoint( 1u );
-        quadrangle.bottomRightPosition = this->getPoint( 2u );
-        quadrangle.bottomLeftPosition  = this->getPoint( 3u );
+        for ( unsigned int i_point = 0u; i_point < this->getPointCount();
+              ++i_point )
+        {
+            quadrangle[i_point] = this->getPoint( i_point );
+        }
+
         return quadrangle;
     }
 
     void set_quadrangle( math::QuadrangleF quadrangle )
     {
-        this->setPoint( 0u, quadrangle.topLeftPosition );
-        this->setPoint( 1u, quadrangle.topRightPosition );
-        this->setPoint( 2u, quadrangle.bottomRightPosition );
-        this->setPoint( 3u, quadrangle.bottomLeftPosition );
+        for ( unsigned int i_point = 0u; i_point < this->getPointCount();
+              ++i_point )
+        {
+            this->setPoint( i_point, quadrangle[i_point] );
+        }
     }
 
     bool is_intersected_by( Entity2D const & otherEntity ) const

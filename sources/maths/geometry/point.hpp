@@ -6,8 +6,8 @@ namespace math
 {
     template < C_Primitive Type >
     struct Segment;
-    template < C_Primitive Type >
-    class Quadrangle;
+    template < C_Primitive Type, unsigned int NB_OF_POINT >
+    class Polygon;
 
     enum class E_Orientation
     {
@@ -38,7 +38,9 @@ namespace math
         explicit operator Vector2< Type >() const;
 
         bool is_inside( Segment< Type > segment ) const;
-        bool is_inside( Quadrangle< Type > quadrangle ) const;
+
+        template < unsigned int NB_OF_POINT >
+        bool is_inside( Polygon< Type, NB_OF_POINT > polygon ) const;
     };
 
     template < C_Primitive Type >

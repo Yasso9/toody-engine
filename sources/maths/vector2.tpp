@@ -7,7 +7,7 @@
 
 #include "tools/assertion.hpp"
 
-#include "rectangle.hpp"
+#include "maths/geometry/rectangle.hpp"
 
 namespace math
 {

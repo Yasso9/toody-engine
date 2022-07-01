@@ -9,9 +9,9 @@ namespace math
     {
         // Find the four orientations needed for general and
         // special cases
-        E_Orientation o1 = get_orientation( segment1.pointA,
-                                            segment1.pointB,
-                                            segment2.pointA );
+        E_Orientation s1a_s1b_s2a = get_orientation( segment1.pointA,
+                                                     segment1.pointB,
+                                                     segment2.pointA );
 
         E_Orientation o2 = get_orientation( segment1.pointA,
                                             segment1.pointB,
@@ -26,12 +26,12 @@ namespace math
                                             segment1.pointB );
 
         // General case
-        if ( o1 != o2 && o3 != o4 )
+        if ( s1a_s1b_s2a != o2 && o3 != o4 )
             return true;
 
         // Special Cases
         // p1, q1 and p2 are collinear and p2 lies on segment p1q1
-        if ( o1 == E_Orientation::Collinear
+        if ( s1a_s1b_s2a == E_Orientation::Collinear
              && segment2.pointA.is_inside( segment1 ) )
             return true;
 
