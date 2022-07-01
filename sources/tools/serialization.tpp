@@ -2,6 +2,7 @@
 
 #include "serialization.hpp"
 
+#include "tools/print.hpp"
 #include "tools/string.hpp"
 
 template < typename Type >

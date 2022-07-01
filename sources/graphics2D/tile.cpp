@@ -83,10 +83,3 @@ std::ostream & Tile::operator<<( std::ostream & stream ) const
 {
     return stream << this->get_position_in_tileset().value();
 }
-
-std::ostream & operator<<( std::ostream & stream, Tile const & tileData )
-{
-    tileData.operator<<( stream );
-
-    return stream;
-}

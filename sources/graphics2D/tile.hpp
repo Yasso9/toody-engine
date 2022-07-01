@@ -32,6 +32,3 @@ class Tile
 
     std::ostream & operator<<( std::ostream & stream ) const;
 };
-
-/// @todo faire qqch pour pas avoir ça a chaque fois
-std::ostream & operator<<( std::ostream & stream, Tile const & tileData );

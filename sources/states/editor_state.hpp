@@ -25,6 +25,7 @@ class EditorState final : public State
     bool m_showEditorOverlay;
     /// @todo faire de player un std::optionnal, pour que lorsuqu'il sera mis à  faux, le player ne pourra pas bouger
     bool m_handlePlayer;
+    bool m_showCollisionWindow;
 
     /// @todo Create a class events who take paramters like mouse position and mouse click that is updated automatically
     math::Vector2I m_mousePosition;
@@ -45,5 +46,6 @@ class EditorState final : public State
 
     void update_toolbar();
     void update_debug_window();
+    void update_collision_window();
     void update_overlay();
 };

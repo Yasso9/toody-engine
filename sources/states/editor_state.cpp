@@ -19,6 +19,7 @@ EditorState::EditorState()
     m_showDebugOptions( false ),
     m_showEditorOverlay( true ),
     m_handlePlayer( false ),
+    m_showCollisionWindow( true ),
     m_mousePosition( 0, 0 )
 {
     this->init_map();
@@ -27,7 +28,7 @@ EditorState::EditorState()
     m_staticEntity.set_quadrangle( math::Rectangle { 0.f, 0.f, 100.f, 200.f } );
     m_staticEntity.setFillColor( sf::Color::Red );
     m_staticEntity.setOutlineColor( sf::Color::Black );
-    m_staticEntity.setOutlineThickness( 4.f );
+    m_staticEntity.setOutlineThickness( 2.f );
 
     m_moveableEntity.setPosition( 600.f, 600.f );
     m_moveableEntity.set_quadrangle( math::Rectangle { 0.f, 0.f, 40.f, 40.f } );
@@ -52,6 +53,7 @@ void EditorState::extra_events()
         math::Vector2F {moveSpeedBaseValue, moveSpeedBaseValue}
         / m_view.get_zoom()
     };
+
     /// @todo changer les events de la view pour pouvoir bouger la vue à partir de la souris (clique du milieu)
     math::Vector2F moveDirection { 0.f, 0.f };
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
@@ -85,6 +87,10 @@ void EditorState::update()
     if ( m_showDebugOptions )
     {
         this->update_debug_window();
+    }
+    if ( m_showCollisionWindow )
+    {
+        this->update_collision_window();
     }
     if ( m_showDemoWindow )
     {
@@ -222,6 +228,18 @@ void EditorState::update_debug_window()
         windowTextOutput << "IsAnyItemHovered : " << std::boolalpha
                          << ImGui::IsAnyItemHovered() << "\n";
         ImGui::Text( "%s", windowTextOutput.str().c_str() );
+    }
+    ImGui::End();
+}
+
+void EditorState::update_collision_window()
+{
+    if ( ImGui::P_Begin( "Collisions", &m_showCollisionWindow ) )
+    {
+        std::stringstream output {};
+        output << "MousePos : " << m_mousePosition << "\n";
+
+        ImGui::Text( "%s", output.str().c_str() );
     }
     ImGui::End();
 }
