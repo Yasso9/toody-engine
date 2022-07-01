@@ -18,3 +18,7 @@ concept C_Printable = requires( Type type, std::ostream ostream )
         type.operator<<( ostream )
         } -> std::same_as< std::ostream & >;
 };
+
+/// @brief Number greater than zero
+template < unsigned int number >
+concept C_Size = ( number >= 1u );

@@ -39,7 +39,6 @@ math::Vector2F TileMap::get_size() const
 
 math::Vector2U TileMap::get_tile_size() const
 {
-    /// @todo faire un constructeur de size_t à partir de vector2U seulement
     return math::Vector2U {
         static_cast< unsigned int >( this->m_tileTable[0].size() ),
         static_cast< unsigned int >( this->m_tileTable.size() )
@@ -233,7 +232,7 @@ void TileMap::update_selection()
     math::Vector2F const mousePositionViewZoom {
         this->m_mousePosition.to_float() / this->m_view.get_zoom()
     };
-    math::Vector2F const mousePositionRelativToView { math::floor(
+    math::PointF const mousePositionRelativToView { math::floor(
         mousePositionViewZoom + this->m_view.get_position() ) };
     infoOutput << "Mouse Position - Absolute : " << this->m_mousePosition
                << "\n";

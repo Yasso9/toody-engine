@@ -47,14 +47,28 @@ namespace math
                && this->y >= std::min( segment.pointA.y, segment.pointB.y );
     }
     template < C_Primitive Type >
-    template < unsigned int NB_OF_POINT >
-    bool Point< Type >::is_inside( Polygon< Type, NB_OF_POINT > polygon ) const
+    bool Point< Type >::is_inside( Point< Type > position,
+                                   Vector< Type > size ) const
+    {
+        return this->is_inside( Rectangle< Type > { position, size } );
+    }
+    template < C_Primitive Type >
+    bool Point< Type >::is_inside( Rectangle< Type > rectangle ) const
+    {
+        return ( this->x >= rectangle.position.x
+                 && this->x < rectangle.position.x + rectangle.size.x
+                 && this->y >= rectangle.position.y
+                 && this->y < rectangle.position.y + rectangle.size.y );
+    }
+    template < C_Primitive Type >
+    template < unsigned int NbOfPoints >
+    bool Point< Type >::is_inside( Polygon< Type, NbOfPoints > polygon ) const
     {
         /// @todo recuperer ça dynamiquement
         constexpr float LIMIT_ZONE { 10000.f };
 
         // Create a point for line segment from p to infinite
-        Vector2< Type > extremePoint { LIMIT_ZONE, this->y };
+        Point< Type > extremePoint { LIMIT_ZONE, this->y };
         Segment< Type > segmentToCheck { *this, extremePoint };
 
         unsigned int numberOfIntersection { 0u };
@@ -74,9 +88,8 @@ namespace math
     ************************************************************************ */
 
     template < C_Primitive Type >
-    E_Orientation get_orientation( Vector2< Type > pointA,
-                                   Vector2< Type > pointB,
-                                   Vector2< Type > pointC )
+    E_Orientation get_orientation( Point< Type > pointA, Point< Type > pointB,
+                                   Point< Type > pointC )
     {
         float value = ( ( pointB.y - pointA.y ) * ( pointC.x - pointB.x ) )
                       - ( ( pointB.x - pointA.x ) * ( pointC.y - pointB.y ) );
@@ -99,8 +112,8 @@ namespace math
     }
 
     template < C_Primitive Type >
-    bool are_collinear( Vector2< Type > pointA, Vector2< Type > pointB,
-                        Vector2< Type > pointC )
+    bool are_collinear( Point< Type > pointA, Point< Type > pointB,
+                        Point< Type > pointC )
     {
         return E_Orientation::Collinear
                == get_orientation( pointA, pointB, pointC );

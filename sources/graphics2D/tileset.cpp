@@ -46,7 +46,7 @@ math::Vector2F Tileset::get_tile_position_in_pixel(
 math::Vector2F Tileset::get_tile_position_in_tile(
     math::Vector2F const & pointPosition, bool isRelativePositon ) const
 {
-    math::Vector2F relativPointPosition { pointPosition };
+    math::PointF relativPointPosition { pointPosition };
     if ( ! isRelativePositon )
     {
         relativPointPosition -= this->m_position;
@@ -77,7 +77,7 @@ int Tileset::get_tile_value_from_pixel_position(
 }
 
 int Tileset::get_tile_value_from_tile_position(
-    math::Vector2U const & pointPositionInTile ) const
+    math::PointU const & pointPositionInTile ) const
 {
     ASSERTION(
         pointPositionInTile.is_inside( { 0u, 0u }, this->get_size_in_tile() ),
@@ -97,7 +97,7 @@ void Tileset::set_position( math::Vector2F const & position )
     this->m_position = position;
 }
 
-bool Tileset::contain( math::Vector2F const & point ) const
+bool Tileset::contain( math::PointF const & point ) const
 {
     return point.is_inside( this->get_position(),
                             this->get_size_in_pixel().to_float() );

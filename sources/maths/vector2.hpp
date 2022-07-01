@@ -84,11 +84,6 @@ namespace math
             return Vector2< Type > { 0, this->y };
         }
 
-        /// @todo put this two functions inside class Point
-        bool is_inside( Rectangle< Type > const & rectangle ) const;
-        bool is_inside( Vector2< Type > const & position,
-                        Vector2< Type > const & size ) const;
-
         Vector2< Type > floor();
         Vector2< Type > round();
 
@@ -99,11 +94,6 @@ namespace math
     /* ************************************************************************
     ************************** VECTOR FUNCTIONS *******************************
     ************************************************************************ */
-
-    template < C_Primitive Type >
-    bool is_inside( Vector2< Type > const & value,
-                    Vector2< Type > const & position,
-                    Vector2< Type > const & size );
 
     template < C_Primitive Type >
     Vector2< Type > floor( Vector2< Type > const & vector2D );

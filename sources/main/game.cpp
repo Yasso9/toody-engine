@@ -27,7 +27,6 @@ Game::Game() : m_state( nullptr )
 
     Window::get_instance();
 
-    // imgui initialisation (@todo put that in a separate function)
     if ( ! ImGui::SFML::Init( Window::get_instance() ) )
     {
         throw std::runtime_error { "Cannot init ImGui"s };

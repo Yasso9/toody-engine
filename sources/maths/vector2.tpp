@@ -111,17 +111,6 @@ namespace math
     }
 
     template < C_Primitive Type >
-    bool Vector2< Type >::is_inside( Rectangle< Type > const & rectangle ) const
-    {
-        return math::is_inside( *this, rectangle.position, rectangle.size );
-    }
-    template < C_Primitive Type >
-    bool Vector2< Type >::is_inside( Vector2< Type > const & position,
-                                     Vector2< Type > const & size ) const
-    {
-        return math::is_inside( *this, position, size );
-    }
-    template < C_Primitive Type >
     Vector2< Type > Vector2< Type >::floor()
     {
         return *this = math::floor( *this );

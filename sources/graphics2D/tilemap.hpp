@@ -22,7 +22,7 @@ class TileMap : public sf::Drawable,
 
     // Events
     bool m_isLeftButtonPressed;
-    math::Vector2I m_mousePosition;
+    math::PointI m_mousePosition;
 
   public:
     TileMap( View & view );

@@ -79,8 +79,7 @@ namespace math
         {
             unsigned int i_pointNext { ( i_point + 1 )
                                        % this->get_number_of_point() };
-            segments.push_back(
-                { ( *this )[i_point], ( *this )[i_pointNext] } );
+            segments[i_point] = { ( *this )[i_point], ( *this )[i_pointNext] };
         }
 
         return segments;

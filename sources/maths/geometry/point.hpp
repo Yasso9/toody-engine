@@ -1,14 +1,10 @@
 #pragma once
 
+#include "maths/geometry/segment.hpp"
 #include "maths/vector2.hpp"
 
 namespace math
 {
-    template < C_Primitive Type >
-    struct Segment;
-    template < C_Primitive Type, unsigned int NB_OF_POINT >
-    class Polygon;
-
     enum class E_Orientation
     {
         Collinear = 0,
@@ -38,19 +34,23 @@ namespace math
         explicit operator Vector2< Type >() const;
 
         bool is_inside( Segment< Type > segment ) const;
-
-        template < unsigned int NB_OF_POINT >
-        bool is_inside( Polygon< Type, NB_OF_POINT > polygon ) const;
+        bool is_inside( Point< Type > position, Vector< Type > size ) const;
+        bool is_inside( Rectangle< Type > rectangle ) const;
+        template < unsigned int NbOfPoints >
+        bool is_inside( Polygon< Type, NbOfPoints > polygon ) const;
     };
 
-    template < C_Primitive Type >
-    E_Orientation get_orientation( Vector2< Type > pointA,
-                                   Vector2< Type > pointB,
-                                   Vector2< Type > pointC );
+    using PointF = Point< float >;
+    using PointI = Point< int >;
+    using PointU = Point< unsigned int >;
 
     template < C_Primitive Type >
-    bool are_collinear( Vector2< Type > pointA, Vector2< Type > pointB,
-                        Vector2< Type > pointC );
+    E_Orientation get_orientation( Point< Type > pointA, Point< Type > pointB,
+                                   Point< Type > pointC );
+
+    template < C_Primitive Type >
+    bool are_collinear( Point< Type > pointA, Point< Type > pointB,
+                        Point< Type > pointC );
 } // namespace math
 
 #include "point.tpp"

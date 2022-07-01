@@ -10,8 +10,7 @@ class TilePosition
      * example of possible values in a 7<3 tilemap
      * | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
      * | 7 | 8 | 9 | 10 | 11 | 12 | 13 |
-     * | 14 | 15 | 16 | 17 | 18 | 19 | 20 |
-    */
+     * | 14 | 15 | 16 | 17 | 18 | 19 | 20 | */
     unsigned int m_value;
     /// @brief number of tile in the X axis of the map/grid
     ///        where the tile is positionned

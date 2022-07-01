@@ -10,7 +10,6 @@
 
 namespace math
 {
-    /// @todo en faire un template
     class Vector3D : public Vector2< float >
     {
       public:

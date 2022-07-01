@@ -34,9 +34,9 @@ class Tileset
         math::Vector2F const & pointPositionInPixel,
         bool isRelativePositon = true ) const;
     int get_tile_value_from_tile_position(
-        math::Vector2U const & pointPositionInTile ) const;
+        math::PointU const & pointPositionInTile ) const;
 
     void set_position( math::Vector2F const & position );
 
-    bool contain( math::Vector2F const & point ) const;
+    bool contain( math::PointF const & point ) const;
 };
