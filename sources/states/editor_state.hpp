@@ -16,7 +16,7 @@ class EditorState final : public State
 
     Player m_player;
 
-    Entity2D m_redEntity;
+    T_CollisionMap m_collisionMap;
     Entity2D m_greenEntity;
 
     /// @todo create a map and enum as key to handles all the boolean variable show demo

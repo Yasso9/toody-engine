@@ -13,8 +13,9 @@ EditorState::EditorState()
     m_view(), // init in init_map
     m_tilemap( m_view ),
     m_player(),
-    m_redEntity( keyboard_move::ARROW ),
-    m_greenEntity( keyboard_move::ILKJ ),
+    m_collisionMap(),
+    m_greenEntity( math::RectangleF { 0.f, 0.f, 40.f, 40.f }, m_collisionMap,
+                   keyboard_move::ILKJ ),
     m_showDemoWindow( false ),
     m_showDebugOptions( false ),
     m_showEditorOverlay( true ),
@@ -24,17 +25,20 @@ EditorState::EditorState()
 {
     this->init_map();
 
-    m_redEntity.setPosition( 300.f, 0.f );
-    m_redEntity.set_polygon( math::Rectangle { 0.f, 0.f, 100.f, 200.f } );
-    m_redEntity.setFillColor( sf::Color::Red );
-    m_redEntity.setOutlineColor( sf::Color::Black );
-    m_redEntity.setOutlineThickness( 2.f );
-
     m_greenEntity.setPosition( 0.f, 0.f );
-    m_greenEntity.set_polygon( math::Rectangle { 0.f, 0.f, 40.f, 40.f } );
     m_greenEntity.setFillColor( sf::Color::Green );
     m_greenEntity.setOutlineColor( sf::Color::Black );
-    m_greenEntity.setOutlineThickness( 4.f );
+    m_greenEntity.setOutlineThickness( 2.f );
+
+    m_collisionMap.push_back( StaticEntity2D {
+        math::RectangleF {100.f, 100.f, 50.f, 50.f}
+    } );
+    m_collisionMap.push_back( StaticEntity2D {
+        math::RectangleF {-300.f, 0.f, 200.f, 200.f}
+    } );
+    m_collisionMap.push_back( StaticEntity2D {
+        math::RectangleF {0.f, 500.f, 100.f, 50.f}
+    } );
 }
 
 void EditorState::extra_events()
@@ -49,7 +53,6 @@ void EditorState::extra_events()
     }
 
     m_greenEntity.update( m_deltaTime );
-    m_redEntity.update( m_deltaTime );
 
     constexpr float moveSpeedBaseValue { 10.f };
     math::Vector2F const moveSpeed {
@@ -117,7 +120,10 @@ void EditorState::render() const
 
     Window::get_instance().sf_draw( m_tilemap );
 
-    Window::get_instance().sf_draw( m_redEntity );
+    for ( StaticEntity2D const & entity : m_collisionMap )
+    {
+        Window::get_instance().sf_draw( entity );
+    }
     Window::get_instance().sf_draw( m_greenEntity );
 
     if ( m_handlePlayer )
@@ -250,10 +256,15 @@ void EditorState::update_collision_window()
         // output << "Green Speed : " << m_greenEntity.get_speed() << "\n";
         output << "Green Polygon : " << m_greenEntity.get_polygon().print()
                << "\n";
-        // output << "Red Speed : " << m_redEntity.get_speed() << "\n";
-        output << "Red Polygon : " << m_redEntity.get_polygon().print() << "\n";
-        output << "Intersection ? " << std::boolalpha
-               << m_greenEntity.is_intersected_by( m_redEntity ) << "\n";
+
+        for ( StaticEntity2D const & entity : m_collisionMap )
+        {
+            output << "Intersection with " << entity.getPosition() << " ? "
+                   << std::boolalpha
+                   << m_greenEntity.is_intersected_by( entity ) << "\n";
+        }
+        output << "Is collision detected : "
+               << m_greenEntity.is_collision_detected() << "\n";
 
         ImGui::Text( "%s", output.str().c_str() );
     }

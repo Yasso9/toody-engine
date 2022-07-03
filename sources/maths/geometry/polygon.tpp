@@ -75,13 +75,13 @@ namespace math
     {
         std::stringstream stream {};
 
-        stream << this->get_number_of_point() << " points ("
+        stream << this->get_number_of_point() << " points ["
                << "\n";
         for ( auto point : m_points )
         {
-            stream << "\t" << point << "\n";
+            stream << "\t" << point << ",\n";
         }
-        stream << ")";
+        stream << "]";
 
         return stream.str();
     }

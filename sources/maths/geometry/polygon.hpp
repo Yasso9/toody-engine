@@ -12,6 +12,7 @@ namespace math
     template < unsigned int number >
     concept C_Quadrangle = ( number == 4u );
 
+    /// @todo remove template parameters NbOfPoints
     /// @todo require that number of points isn't equal to 0
     template < C_Primitive Type, unsigned int NbOfPoints >
     class Polygon
