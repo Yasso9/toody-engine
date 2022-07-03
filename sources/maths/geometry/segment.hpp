@@ -5,7 +5,7 @@
 namespace math
 {
     template < C_Primitive Type >
-    struct Segment
+    class Segment
     {
       public:
         Point< Type > pointA;
@@ -15,6 +15,8 @@ namespace math
         Segment( Point< Type > point1, Point< Type > point2 )
           : pointA( point1 ), pointB( point2 )
         {}
+
+        bool is_intersected_by( Segment< Type > segment ) const;
     };
 
     using SegmentF = Segment< float >;
@@ -24,3 +26,5 @@ namespace math
     template < C_Primitive Type >
     bool is_intersection( Segment< Type > segment1, Segment< Type > segment2 );
 } // namespace math
+
+#include "segment.tpp"

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "graphics2D/sfml.hpp"
-#include "maths/vector2.hpp"
+#include "maths/maths.hpp"
 
 struct QuadVertex
 {

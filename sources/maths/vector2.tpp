@@ -1,13 +1,10 @@
 #pragma once
-
 #include "vector2.hpp"
 
 #include <cmath>
 #include <iostream>
 
 #include "tools/assertion.hpp"
-
-#include "maths/geometry/rectangle.hpp"
 
 namespace math
 {

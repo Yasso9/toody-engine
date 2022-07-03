@@ -33,6 +33,8 @@ namespace math
         void set_rectangle( Rectangle< Type > rectangle ) requires(
             C_Quadrangle< NbOfPoints > );
 
+        std::string print() const;
+
         std::array< Segment< Type >, NbOfPoints > get_segments() const;
         std::array< Point< Type >, NbOfPoints > get_points() const;
     };

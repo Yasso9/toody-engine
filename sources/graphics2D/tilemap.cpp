@@ -244,8 +244,9 @@ void TileMap::update_selection()
     ImGui::Text( "%s", infoOutput.str().c_str() );
 
     if ( ImGui::P_IsAnyWindowHovered()
-         || ! mousePositionRelativToView.is_inside( this->getPosition(),
-                                                    this->get_size() ) )
+         || ! mousePositionRelativToView.is_inside(
+             math::PointF { this->getPosition() },
+             this->get_size() ) )
     {
         // The mouse is outside the tilemap
         this->m_cursor.setOutlineColor( sf::Color::Transparent );

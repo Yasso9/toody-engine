@@ -1,6 +1,8 @@
 #pragma once
 #include "polygon.hpp"
 
+#include <sstream>
+
 namespace math
 {
     template < C_Primitive Type, unsigned int NbOfPoints >
@@ -69,6 +71,22 @@ namespace math
     }
 
     template < C_Primitive Type, unsigned int NbOfPoints >
+    std::string Polygon< Type, NbOfPoints >::print() const
+    {
+        std::stringstream stream {};
+
+        stream << this->get_number_of_point() << " points ("
+               << "\n";
+        for ( auto point : m_points )
+        {
+            stream << "\t" << point << "\n";
+        }
+        stream << ")";
+
+        return stream.str();
+    }
+
+    template < C_Primitive Type, unsigned int NbOfPoints >
     std::array< Segment< Type >, NbOfPoints >
         Polygon< Type, NbOfPoints >::get_segments() const
     {
@@ -95,16 +113,16 @@ namespace math
     bool is_intersection( Polygon< Type, NbOfPoints > polygonLeft,
                           Polygon< Type, NbOfPoints > polygonRight )
     {
-        for ( Point< Type > pointA : polygonLeft.get_points() )
+        for ( Point< Type > pointPolygonLeft : polygonLeft.get_points() )
         {
-            if ( pointA.is_inside( polygonRight ) )
+            if ( pointPolygonLeft.is_inside( polygonRight ) )
             {
                 return true;
             }
         }
-        for ( Point< Type > pointB : polygonRight.get_points() )
+        for ( Point< Type > pointPolygonRight : polygonRight.get_points() )
         {
-            if ( pointB.is_inside( polygonLeft ) )
+            if ( pointPolygonRight.is_inside( polygonLeft ) )
             {
                 return true;
             }

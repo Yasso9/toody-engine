@@ -5,6 +5,12 @@
 namespace math
 {
     template < C_Primitive Type >
+    bool Segment< Type >::is_intersected_by( Segment< Type > segment ) const
+    {
+        return is_intersection( *this, segment );
+    }
+
+    template < C_Primitive Type >
     bool is_intersection( Segment< Type > segment1, Segment< Type > segment2 )
     {
         // Find the four orientations needed for general and

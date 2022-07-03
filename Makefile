@@ -139,7 +139,7 @@ LINKING_FLAGS :=
 # Produce list of the current cpp files in the form "./sources/filename.cpp"
 SOURCES_FILES := $(wildcard $(FILES_DIRECTORY)/*.cpp)
 # Add also all the subfolders "./sources/sub_directory/filename.cpp"
-SOURCES_FILES := $(SOURCES_FILES) $(wildcard $(FILES_DIRECTORY)/*/*.cpp)
+SOURCES_FILES := $(SOURCES_FILES) $(wildcard $(FILES_DIRECTORY)/**/*.cpp)
 # Erase files directory => "sub_directory/filename.cpp"
 SOURCES_FILES := $(subst $(FILES_DIRECTORY)/,,$(SOURCES_FILES))
 

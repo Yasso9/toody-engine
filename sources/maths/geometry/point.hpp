@@ -1,6 +1,5 @@
 #pragma once
 
-#include "maths/geometry/segment.hpp"
 #include "maths/vector2.hpp"
 
 namespace math
@@ -12,6 +11,13 @@ namespace math
         CounterClockWise,
         Unkown
     };
+
+    template < C_Primitive Type >
+    class Segment;
+    template < C_Primitive Type >
+    class Rectangle;
+    template < C_Primitive Type, unsigned int NbOfPoints >
+    class Polygon;
 
     template < C_Primitive Type >
     class Point : public Vector2< Type >
@@ -34,7 +40,7 @@ namespace math
         explicit operator Vector2< Type >() const;
 
         bool is_inside( Segment< Type > segment ) const;
-        bool is_inside( Point< Type > position, Vector< Type > size ) const;
+        bool is_inside( Point< Type > position, Vector2< Type > size ) const;
         bool is_inside( Rectangle< Type > rectangle ) const;
         template < unsigned int NbOfPoints >
         bool is_inside( Polygon< Type, NbOfPoints > polygon ) const;

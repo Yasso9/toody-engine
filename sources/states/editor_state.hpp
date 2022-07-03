@@ -16,8 +16,8 @@ class EditorState final : public State
 
     Player m_player;
 
-    Entity2D m_staticEntity;
-    Entity2D m_moveableEntity;
+    Entity2D m_redEntity;
+    Entity2D m_greenEntity;
 
     /// @todo create a map and enum as key to handles all the boolean variable show demo
     bool m_showDemoWindow;

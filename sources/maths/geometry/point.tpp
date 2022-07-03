@@ -48,7 +48,7 @@ namespace math
     }
     template < C_Primitive Type >
     bool Point< Type >::is_inside( Point< Type > position,
-                                   Vector< Type > size ) const
+                                   Vector2< Type > size ) const
     {
         return this->is_inside( Rectangle< Type > { position, size } );
     }
@@ -74,7 +74,7 @@ namespace math
         unsigned int numberOfIntersection { 0u };
         for ( Segment< Type > segment : polygon.get_segments() )
         {
-            if ( is_intersection( segmentToCheck, segment ) )
+            if ( segmentToCheck.is_intersected_by( segment ) )
             {
                 ++numberOfIntersection;
             }

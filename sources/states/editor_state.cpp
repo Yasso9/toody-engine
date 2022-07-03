@@ -13,8 +13,8 @@ EditorState::EditorState()
     m_view(), // init in init_map
     m_tilemap( m_view ),
     m_player(),
-    m_staticEntity(),
-    m_moveableEntity(),
+    m_redEntity( keyboard_move::ARROW ),
+    m_greenEntity( keyboard_move::ILKJ ),
     m_showDemoWindow( false ),
     m_showDebugOptions( false ),
     m_showEditorOverlay( true ),
@@ -24,17 +24,17 @@ EditorState::EditorState()
 {
     this->init_map();
 
-    m_staticEntity.setPosition( 0.f, 0.f );
-    m_staticEntity.set_quadrangle( math::Rectangle { 0.f, 0.f, 100.f, 200.f } );
-    m_staticEntity.setFillColor( sf::Color::Red );
-    m_staticEntity.setOutlineColor( sf::Color::Black );
-    m_staticEntity.setOutlineThickness( 2.f );
+    m_redEntity.setPosition( 300.f, 0.f );
+    m_redEntity.set_polygon( math::Rectangle { 0.f, 0.f, 100.f, 200.f } );
+    m_redEntity.setFillColor( sf::Color::Red );
+    m_redEntity.setOutlineColor( sf::Color::Black );
+    m_redEntity.setOutlineThickness( 2.f );
 
-    m_moveableEntity.setPosition( 600.f, 600.f );
-    m_moveableEntity.set_quadrangle( math::Rectangle { 0.f, 0.f, 40.f, 40.f } );
-    m_moveableEntity.setFillColor( sf::Color::Green );
-    m_moveableEntity.setOutlineColor( sf::Color::Black );
-    m_moveableEntity.setOutlineThickness( 4.f );
+    m_greenEntity.setPosition( 0.f, 0.f );
+    m_greenEntity.set_polygon( math::Rectangle { 0.f, 0.f, 40.f, 40.f } );
+    m_greenEntity.setFillColor( sf::Color::Green );
+    m_greenEntity.setOutlineColor( sf::Color::Black );
+    m_greenEntity.setOutlineThickness( 4.f );
 }
 
 void EditorState::extra_events()
@@ -47,6 +47,9 @@ void EditorState::extra_events()
     {
         return;
     }
+
+    m_greenEntity.update( m_deltaTime );
+    m_redEntity.update( m_deltaTime );
 
     constexpr float moveSpeedBaseValue { 10.f };
     math::Vector2F const moveSpeed {
@@ -114,8 +117,8 @@ void EditorState::render() const
 
     Window::get_instance().sf_draw( m_tilemap );
 
-    Window::get_instance().sf_draw( m_staticEntity );
-    Window::get_instance().sf_draw( m_moveableEntity );
+    Window::get_instance().sf_draw( m_redEntity );
+    Window::get_instance().sf_draw( m_greenEntity );
 
     if ( m_handlePlayer )
     {
@@ -238,6 +241,19 @@ void EditorState::update_collision_window()
     {
         std::stringstream output {};
         output << "MousePos : " << m_mousePosition << "\n";
+        // ImGui::SliderScalar( "Green Speed",
+        //                      ImGuiDataType_S8,
+        //                      &s8_v,
+        //                      &s8_min,
+        //                      &s8_max,
+        //                      "%d" );
+        // output << "Green Speed : " << m_greenEntity.get_speed() << "\n";
+        output << "Green Polygon : " << m_greenEntity.get_polygon().print()
+               << "\n";
+        // output << "Red Speed : " << m_redEntity.get_speed() << "\n";
+        output << "Red Polygon : " << m_redEntity.get_polygon().print() << "\n";
+        output << "Intersection ? " << std::boolalpha
+               << m_greenEntity.is_intersected_by( m_redEntity ) << "\n";
 
         ImGui::Text( "%s", output.str().c_str() );
     }
