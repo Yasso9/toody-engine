@@ -107,7 +107,7 @@ namespace math
             return E_Orientation::CounterClockWise;
         }
 
-        ASSERTION( false );
+        ASSERTION( false, "" );
         return E_Orientation::Unkown;
     }
 

@@ -10,20 +10,22 @@
 
 EditorState::EditorState()
   : State( State::E_List::Editor ),
+    m_showWindow(),
     m_view(), // init in init_map
     m_tilemap( m_view ),
     m_player(),
     m_collisionMap(),
     m_greenEntity( math::RectangleF { 0.f, 0.f, 40.f, 40.f }, m_collisionMap,
                    keyboard_move::ILKJ ),
-    m_showDemoWindow( false ),
-    m_showDebugOptions( false ),
-    m_showEditorOverlay( true ),
-    m_handlePlayer( false ),
-    m_showCollisionWindow( true ),
     m_mousePosition( 0, 0 )
 {
     this->init_map();
+
+    m_showWindow[E_WindowKey::DemoWindow]     = false;
+    m_showWindow[E_WindowKey::DebugOptions]   = false;
+    m_showWindow[E_WindowKey::EditorOverlay]  = false;
+    m_showWindow[E_WindowKey::Collision]      = true;
+    m_showWindow[E_WindowKey::PlayerHandling] = false;
 
     m_greenEntity.setPosition( 0.f, 0.f );
     m_greenEntity.setFillColor( sf::Color::Green );
@@ -43,8 +45,6 @@ EditorState::EditorState()
 
 void EditorState::extra_events()
 {
-    m_mousePosition = sf::Mouse::getPosition( Window::get_instance() );
-
     m_tilemap.process_events();
 
     if ( ImGui::P_IsAnyWindowFocused() )
@@ -80,7 +80,7 @@ void EditorState::extra_events()
     }
     m_view.move( moveDirection.normalize() * moveSpeed );
 
-    if ( m_handlePlayer )
+    if ( m_showWindow[E_WindowKey::PlayerHandling] )
     {
         m_player.update_events();
     }
@@ -90,22 +90,22 @@ void EditorState::update()
 {
     this->update_toolbar();
 
-    if ( m_showDebugOptions )
+    if ( m_showWindow[E_WindowKey::DebugOptions] )
     {
         this->update_debug_window();
     }
-    if ( m_showCollisionWindow )
+    if ( m_showWindow[E_WindowKey::Collision] )
     {
         this->update_collision_window();
     }
-    if ( m_showDemoWindow )
+    if ( m_showWindow[E_WindowKey::DemoWindow] )
     {
-        ImGui::ShowDemoWindow( &m_showDemoWindow );
+        ImGui::ShowDemoWindow( &m_showWindow.at( E_WindowKey::DemoWindow ) );
     }
 
     m_tilemap.update();
 
-    if ( m_handlePlayer )
+    if ( m_showWindow[E_WindowKey::PlayerHandling] )
     {
         m_player.update( m_deltaTime );
         m_view.setCenter( m_player.getPosition() );
@@ -126,7 +126,7 @@ void EditorState::render() const
     }
     Window::get_instance().sf_draw( m_greenEntity );
 
-    if ( m_handlePlayer )
+    if ( m_showWindow.at( E_WindowKey::PlayerHandling ) )
     {
         Window::get_instance().sf_draw( m_player );
     }
@@ -192,11 +192,13 @@ void EditorState::update_toolbar()
         {
             ImGui::MenuItem( "Show Editor Overlay Options",
                              NULL,
-                             &m_showEditorOverlay );
+                             &m_showWindow.at( E_WindowKey::EditorOverlay ) );
             ImGui::MenuItem( "Show ImGui Demo Window",
                              NULL,
-                             &m_showDemoWindow );
-            ImGui::MenuItem( "Show Debug Options", NULL, &m_showDebugOptions );
+                             &m_showWindow.at( E_WindowKey::DemoWindow ) );
+            ImGui::MenuItem( "Show Debug Options",
+                             NULL,
+                             &m_showWindow.at( E_WindowKey::DebugOptions ) );
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
@@ -205,7 +207,8 @@ void EditorState::update_toolbar()
 
 void EditorState::update_debug_window()
 {
-    if ( ImGui::P_Begin( "Debug Options", &m_showDebugOptions ) )
+    if ( ImGui::P_Begin( "Debug Options",
+                         &m_showWindow.at( E_WindowKey::DebugOptions ) ) )
     {
         std::string testBuffer { "testvalue" };
         ImGui::InputText( "Test", testBuffer.data(), 20 );
@@ -243,7 +246,8 @@ void EditorState::update_debug_window()
 
 void EditorState::update_collision_window()
 {
-    if ( ImGui::P_Begin( "Collisions", &m_showCollisionWindow ) )
+    if ( ImGui::P_Begin( "Collisions",
+                         &m_showWindow.at( E_WindowKey::Collision ) ) )
     {
         std::stringstream output {};
         output << "MousePos : " << m_mousePosition << "\n";
@@ -273,7 +277,7 @@ void EditorState::update_collision_window()
 
 void EditorState::update_overlay()
 {
-    if ( m_showEditorOverlay )
+    if ( m_showWindow[E_WindowKey::EditorOverlay] )
     {
         ImGuiWindowFlags const window_flags =
             ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize
@@ -288,10 +292,11 @@ void EditorState::update_overlay()
         ImGui::SetNextWindowPos( overlayPosition, ImGuiCond_Always );
         ImGui::SetNextWindowBgAlpha( 0.5f );
         if ( ImGui::P_Begin( "Editor Main",
-                             &m_showEditorOverlay,
+                             &m_showWindow.at( E_WindowKey::EditorOverlay ),
                              window_flags ) )
         {
-            ImGui::Checkbox( "Handle Player ?", &m_handlePlayer );
+            ImGui::Checkbox( "Handle Player ?",
+                             &m_showWindow.at( E_WindowKey::PlayerHandling ) );
 
             static bool showDebug { false };
             ImGui::Checkbox( "Show Debug", &showDebug );

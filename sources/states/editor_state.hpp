@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include "states/state.hpp"
 
 #include "entity/object.hpp"
@@ -11,6 +13,16 @@
 
 class EditorState final : public State
 {
+    enum class E_WindowKey
+    {
+        DemoWindow = 0,
+        DebugOptions,
+        EditorOverlay,
+        Collision,
+        PlayerHandling,
+    };
+    std::map< E_WindowKey, bool > m_showWindow;
+
     View m_view;
     TileMap m_tilemap;
 
@@ -18,14 +30,6 @@ class EditorState final : public State
 
     T_CollisionMap m_collisionMap;
     Entity2D m_greenEntity;
-
-    /// @todo create a map and enum as key to handles all the boolean variable show demo
-    bool m_showDemoWindow;
-    bool m_showDebugOptions;
-    bool m_showEditorOverlay;
-    /// @todo faire de player un std::optionnal, pour que lorsuqu'il sera mis à  faux, le player ne pourra pas bouger
-    bool m_handlePlayer;
-    bool m_showCollisionWindow;
 
     /// @todo Create a class events who take paramters like mouse position and mouse click that is updated automatically
     math::Vector2I m_mousePosition;

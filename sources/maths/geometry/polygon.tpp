@@ -55,7 +55,7 @@ namespace math
     template < C_Primitive Type, unsigned int NbOfPoints >
     unsigned int Polygon< Type, NbOfPoints >::get_number_of_point() const
     {
-        ASSERTION( NbOfPoints == m_points.size() );
+        ASSERTION( NbOfPoints == m_points.size(), "" );
 
         return NbOfPoints;
     }
