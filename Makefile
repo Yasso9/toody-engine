@@ -2,18 +2,41 @@
 
 # Get the OS information
 ifeq ($(OS),Windows_NT)
-    DETECTED_OS := Windows
+DETECTED_OS := Windows
 else
-	DETECTED_OS := $(shell uname)
+DETECTED_OS := $(shell uname)
 endif
 
 ifneq ($(DETECTED_OS),Windows)
 	ifneq ($(DETECTED_OS),Linux)
-		$(error ERROR : OS UNDETECTED)
+	$(error ERROR : OS UNDETECTED)
 	endif
 endif
 
+COMPILER_COMMAND := clang
+COMPILER_VERSION :=
 
+GCC_COMPILER := gcc$(COMPILER_VERSION)
+G++_COMPILER := g++$(COMPILER_VERSION)
+CLANG_COMPILER := clang$(COMPILER_VERSION)
+CLANG++_COMPILER := clang++$(COMPILER_VERSION)
+
+C_COMMAND := $(COMPILER_COMMAND)$(COMPILER_VERSION)
+ifeq ($(C_COMMAND),$(GCC_COMPILER))
+CXX_COMMAND := $(G++_COMPILER)
+else ifeq ($(C_COMMAND),$(CLANG_COMPILER))
+CXX_COMMAND := $(CLANG++_COMPILER)
+else
+$(error ERROR : UNKNOWN COMPILER)
+endif
+# DEPENDENCY_FLAGS := -MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
+DEPENDENCY_FLAGS := -MMD -MP
+# -MMD => Create .d files for dependencies of users files only (not system files)
+# -MP => Handle renamed or missing files for dependency
+COMPILING_FLAGS := -std=c++20 -O0 -g
+# -g => Generate debug information
+# -O0 => No optmization, faster compilation time, better for debugging builds
+LINKING_FLAGS :=
 
 
 ############################## Warnings ##############################
@@ -83,7 +106,13 @@ GCC_WARNINGS_REMOVE := \
 GCC_WARNINGS := $(GENERAL_WARNINGS) $(GCC_WARNINGS_ENABLE) $(GCC_WARNINGS_REMOVE)
 CLANG_WARNINGS := $(GENERAL_WARNINGS)
 
-FINAL_WARNINGS := $(GCC_WARNINGS)
+ifeq ($(C_COMMAND),$(GCC_COMPILER))
+	FINAL_WARNINGS := $(GCC_WARNINGS)
+else ifeq ($(C_COMMAND),$(CLANG_COMPILER))
+	FINAL_WARNINGS := $(CLANG_WARNINGS)
+else
+$(error ERROR : UNKNOWN COMPILER)
+endif
 # Warning that must not be used in clang \
 -Wfloat-equal # The equality between floats works, it's the addition that is wrong
 
@@ -119,17 +148,6 @@ DLLS_PATH := $(EXTERNAL_DIRECTORY)/DLLs
 # Path of the exe file
 EXECUTABLE_DIRECTORY := $(BUILD_DIRECTORY)/application
 EXECUTABLE := $(EXECUTABLE_DIRECTORY)/application
-
-C_COMMAND := gcc
-CXX_COMMAND := g++
-# DEPENDENCY_FLAGS := -MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
-DEPENDENCY_FLAGS := -MMD -MP
-# -MMD => Create .d files for dependencies of users files only (not system files)
-# -MP => Handle renamed or missing files for dependency
-COMPILING_FLAGS := -std=c++20 -O0 -g
-# -g => Generate debug information
-# -O0 => No optmization, faster compilation time, better for debugging builds
-LINKING_FLAGS :=
 
 
 
