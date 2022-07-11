@@ -35,5 +35,9 @@ MacOs : Not taken in charge.
         CC=gcc CXX=g++ cmake -G"Unix Makefiles" ..
         cmake --build .
 
-3. Glad and Sqlite <br>
+3. Glad and Sqlite
     Makefile already run them
+
+4. Moreover installation on linux
+    libminizip-dev
+    freeglut3-dev
