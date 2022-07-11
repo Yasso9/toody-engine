@@ -21,11 +21,13 @@ EditorState::EditorState()
 {
     this->init_map();
 
-    m_showWindow[E_WindowKey::DemoWindow]     = false;
-    m_showWindow[E_WindowKey::DebugOptions]   = false;
-    m_showWindow[E_WindowKey::EditorOverlay]  = false;
-    m_showWindow[E_WindowKey::Collision]      = true;
-    m_showWindow[E_WindowKey::PlayerHandling] = false;
+    m_showWindow = {
+        {E_WindowKey::DemoWindow,      false},
+        { E_WindowKey::DebugOptions,   false},
+        { E_WindowKey::EditorOverlay,  false},
+        { E_WindowKey::Collision,      true },
+        { E_WindowKey::PlayerHandling, false},
+    };
 
     m_greenEntity.setPosition( 0.f, 0.f );
     m_greenEntity.setFillColor( sf::Color::Green );

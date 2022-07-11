@@ -4,16 +4,10 @@
 #include <memory>
 #include <sstream>
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wlong-long"
-#if defined( __clang__ )
-    #pragma GCC diagnostic ignored "-Wlanguage-extension-token"
-#endif
 extern "C"
 {
 #include <SQLITE/sqlite3.h>
 }
-#pragma GCC diagnostic pop
 
 #include "tools/exceptions.hpp"
 #include "tools/path.hpp"
@@ -89,8 +83,8 @@ namespace db
                   << std::endl;
 
         std::vector< std::vector< std::vector< unsigned int > > > tripleArray {
-            {{ 0 }, { 2 }},
-            {{ 2 }, { 0 }}
+            {{ 0 },  { 2 }},
+            { { 2 }, { 0 }}
         };
 
         std::cout << "tripleArray : |" << tripleArray << "|" << std::endl;

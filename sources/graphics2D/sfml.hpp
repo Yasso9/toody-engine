@@ -1,19 +1,8 @@
 #pragma once
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsign-conversion"
-#if defined( __clang__ )
-    #pragma GCC diagnostic ignored "-Wlanguage-extension-token"
-#endif
-#if defined( __GNUC__ )
-    #pragma GCC diagnostic ignored "-Weffc++"
-#endif
-
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
-
-#pragma GCC diagnostic pop
 
 /// @brief Improve readability of the use of SFML Library
 namespace sfpp

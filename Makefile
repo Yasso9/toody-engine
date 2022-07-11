@@ -1,6 +1,17 @@
+############################## USER CUSTOM ##############################
+
+# Specify the compiler command and version
+COMPILER_COMMAND := clang
+COMPILER_VERSION := 
+
+# Put @ if we should not show the command, put nothing otherwise
+SHOW := @
+
+
+
 ############################## OS detection ##############################
 
-# Get the OS information
+# Know in what operating system we are
 ifeq ($(OS),Windows_NT)
 DETECTED_OS := Windows
 else
@@ -8,14 +19,18 @@ DETECTED_OS := $(shell uname)
 endif
 
 ifneq ($(DETECTED_OS),Windows)
-	ifneq ($(DETECTED_OS),Linux)
-	$(error ERROR : OS UNDETECTED)
-	endif
+ifneq ($(DETECTED_OS),Linux)
+$(error ERROR : OS UNDETECTED)
+endif
 endif
 
-COMPILER_COMMAND := clang
-COMPILER_VERSION :=
 
+
+############################## COMPILER SETUP ##############################
+
+ifneq ($(COMPILER_VERSION),)
+COMPILER_VERSION := -$(COMPILER_VERSION)
+endif
 GCC_COMPILER := gcc$(COMPILER_VERSION)
 G++_COMPILER := g++$(COMPILER_VERSION)
 CLANG_COMPILER := clang$(COMPILER_VERSION)
@@ -107,9 +122,9 @@ GCC_WARNINGS := $(GENERAL_WARNINGS) $(GCC_WARNINGS_ENABLE) $(GCC_WARNINGS_REMOVE
 CLANG_WARNINGS := $(GENERAL_WARNINGS)
 
 ifeq ($(C_COMMAND),$(GCC_COMPILER))
-	FINAL_WARNINGS := $(GCC_WARNINGS)
+FINAL_WARNINGS := $(GCC_WARNINGS)
 else ifeq ($(C_COMMAND),$(CLANG_COMPILER))
-	FINAL_WARNINGS := $(CLANG_WARNINGS)
+FINAL_WARNINGS := $(CLANG_WARNINGS)
 else
 $(error ERROR : UNKNOWN COMPILER)
 endif
@@ -138,9 +153,9 @@ LIBRARIES_INCLUDE_PATH := $(EXTERNAL_DIRECTORY)/includes
 LIBRARIES_OBJECT_DIRECTORY := $(BUILD_DIRECTORY)/object_libraries
 # .a files of librairies
 ifeq ($(DETECTED_OS),Windows)
-	LIBRARIES_PATH := $(EXTERNAL_DIRECTORY)/libraries/Windows
+LIBRARIES_PATH := $(EXTERNAL_DIRECTORY)/libraries/Windows
 else
-	LIBRARIES_PATH := $(EXTERNAL_DIRECTORY)/libraries/Linux
+LIBRARIES_PATH := $(EXTERNAL_DIRECTORY)/libraries/Linux
 endif
 # .dll files needed for executable to work on windows
 DLLS_PATH := $(EXTERNAL_DIRECTORY)/DLLs
@@ -217,21 +232,21 @@ else
 endif
 
 initialize_build: clean_executable
-	@echo "Create Build Directories"
-	@mkdir -p $(BUILD_DIRECTORY)
-	@mkdir -p $(EXECUTABLE_DIRECTORY)
-	@mkdir -p $(OBJECT_DIRECTORY)
-	@mkdir -p $(DEPS_DIRECTORY)
-	@mkdir -p $(LIBRARIES_OBJECT_DIRECTORY)
+	$(SHOW)echo "Create Build Directories"
+	$(SHOW)mkdir -p $(BUILD_DIRECTORY)
+	$(SHOW)mkdir -p $(EXECUTABLE_DIRECTORY)
+	$(SHOW)mkdir -p $(OBJECT_DIRECTORY)
+	$(SHOW)mkdir -p $(DEPS_DIRECTORY)
+	$(SHOW)mkdir -p $(LIBRARIES_OBJECT_DIRECTORY)
 # Use the DLL's only on windows
 ifeq ($(DETECTED_OS),Windows)
-	@echo "Copy Dll's for Executable"
-	@cp $(DLLS_PATH)/* $(EXECUTABLE_DIRECTORY)
+	$(SHOW)echo "Copy Dll's for Executable"
+	$(SHOW)cp $(DLLS_PATH)/* $(EXECUTABLE_DIRECTORY)
 endif
 
 clean_executable:
-	@echo "Clean Executable"
-	@rm -rf $(EXECUTABLE)
+	$(SHOW)echo "Clean Executable"
+	$(SHOW)rm -rf $(EXECUTABLE)
 
 clean_project: clean_executable
 	rm -rf $(OBJECT_DIRECTORY)
@@ -273,17 +288,17 @@ nothing:
 
 ############################## include and libraries ##############################
 
-INCLUDES := -I"$(FILES_DIRECTORY)" -I"$(LIBRARIES_INCLUDE_PATH)"
+INCLUDES := -I"$(FILES_DIRECTORY)" -isystem"$(LIBRARIES_INCLUDE_PATH)"
 
 ifeq ($(DETECTED_OS),Windows)
-	LIB_FLAG_SFML := -lsfml-main
+LIB_FLAG_SFML := -lsfml-main
 endif
 LIB_FLAG_SFML := $(LIB_FLAG_SFML) -lsfml-graphics -lsfml-system -lsfml-window
 
 ifeq ($(DETECTED_OS),Windows)
-	LIB_FLAG_IMGUI := -lopengl32
+LIB_FLAG_IMGUI := -lopengl32
 else # Linux
-	LIB_FLAG_IMGUI := -lGL -ldl
+LIB_FLAG_IMGUI := -lGL -ldl
 endif
 
 LIB_FLAG_ASSIMP := -lassimp
@@ -305,20 +320,20 @@ LIBRARIES := $(LIBRARIES) $(LIBRARIES_FLAG)
 # Creating object files of the cpp libraries
 .SECONDEXPANSION:
 $(CPP_OBJECT_LIBRARIES) : $(LIBRARIES_OBJECT_DIRECTORY)/%.o : $(LIBRARIES_INCLUDE_PATH)/$$(subst ~,/,%).cpp
-	@echo "C++ Library Compile $(subst external/includes/,,$<)"
+	$(SHOW)echo "C++ Library Compile $(subst external/includes/,,$<)"
 #	compilatorCommand -c filename.cpp -o filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
-	@$(CXX_COMMAND) -c $< -o $@ $(INCLUDES)
+	$(SHOW)$(CXX_COMMAND) -c $< -o $@ $(INCLUDES)
 
 # Creating object files of the c libraries
 .SECONDEXPANSION:
 $(C_OBJECT_LIBRARIES) : $(LIBRARIES_OBJECT_DIRECTORY)/%.o : $(LIBRARIES_INCLUDE_PATH)/$$(subst ~,/,%).c
-	@echo "C Library Compile $(subst external/includes/,,$<)"
+	$(SHOW)echo "C Library Compile $(subst external/includes/,,$<)"
 #	compilatorCommand -c filename.cpp -o filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
-	@$(C_COMMAND) -c $< -o $@ $(INCLUDES)
+	$(SHOW)$(C_COMMAND) -c $< -o $@ $(INCLUDES)
 
 # set up the dependencies
 -include $(DEPENDENCIES)
@@ -327,17 +342,17 @@ $(C_OBJECT_LIBRARIES) : $(LIBRARIES_OBJECT_DIRECTORY)/%.o : $(LIBRARIES_INCLUDE_
 .SECONDEXPANSION:
 $(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%).cpp # $(DEPS_DIRECTORY)/%.d
 #	Nicer way to print the current file compiled
-	@echo "Project Compile $(subst sources/,,$<)"
+	$(SHOW)echo "Project Compile $(subst sources/,,$<)"
 #	compilatorCommand -WarningFlags -compilerOptions -c sources/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
-	@$(CXX_COMMAND) $(FINAL_WARNINGS) $(COMPILING_FLAGS) $(DEPENDENCY_FLAGS) -c $< -o $@ $(INCLUDES)
+	$(SHOW)$(CXX_COMMAND) $(FINAL_WARNINGS) $(COMPILING_FLAGS) $(DEPENDENCY_FLAGS) -c $< -o $@ $(INCLUDES)
 
 # $(DEPS_DIRECTORY)/%.d : ;
 
 # Create the executable by Linking all the object files and the libraries together
 $(EXECUTABLE) : $(OBJECT_ALL)
-	@echo "Building $@"
+	$(SHOW)echo "Building $@"
 #	compilator++ -linkingOptions sub_directory_A_filename_A.o sub_directory_B_filename_B.o etc... -o executable -L"/Path/To/Library" -libraries_flags
 #   -o => choose custom object
-	@$(CXX_COMMAND) $(LINKING_FLAGS) $^ -o $@ $(LIBRARIES)
+	$(SHOW)$(CXX_COMMAND) $(LINKING_FLAGS) $^ -o $@ $(LIBRARIES)

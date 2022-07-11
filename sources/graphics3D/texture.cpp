@@ -65,26 +65,9 @@ aiTextureType Texture::to_assimp_type( Texture::E_Type const & type )
     }
 }
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wold-style-cast"
-#pragma GCC diagnostic ignored "-Wsign-conversion"
-#pragma GCC diagnostic ignored "-Wcast-align"
-#pragma GCC diagnostic ignored "-Wcast-qual"
-#pragma GCC diagnostic ignored "-Wunused-function"
-#if defined( __clang__ )
-    #pragma GCC diagnostic ignored "-Wimplicit-int-conversion"
-#endif
-#if defined( __GNUC__ )
-    #pragma GCC diagnostic ignored "-Wconversion"
-    #pragma GCC diagnostic ignored "-Wswitch-default"
-    #pragma GCC diagnostic ignored "-Wstrict-overflow"
-#endif
-
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_NO_THREAD_LOCALS
 #include <OTHERS/stb_image.h>
-
-#pragma GCC diagnostic pop
 
 #include "graphics3D/openGL.hpp"
 

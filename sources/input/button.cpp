@@ -57,11 +57,11 @@ void Button::synchronize_string()
     this->m_text.setOrigin( this->m_text.getLocalBounds().left,
                             this->m_text.getLocalBounds().top );
 
-    // Scale of the shape in relation of size of text
-    float const factorSize { 1.8f };
     sf::Vector2f const textSize { this->m_text.getLocalBounds().width,
                                   this->m_text.getLocalBounds().height };
 
+    // Scale of the shape in relation of size of text
+    float const factorSize { 1.8f };
     // Adapt size of the shape according to the size of the text
     this->m_shape.setSize( textSize * factorSize );
 

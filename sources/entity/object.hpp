@@ -4,8 +4,6 @@
 #include "input/movement_key.hpp"
 #include "maths/maths.hpp"
 
-static constexpr unsigned int NUMBER_OF_POINT { 4u };
-
 class StaticEntity2D : public sf::ConvexShape
 {
   public:
