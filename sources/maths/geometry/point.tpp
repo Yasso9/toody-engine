@@ -4,6 +4,8 @@
 
 namespace math
 {
+    /// @todo delete function like to_float because they return vector and not point
+
     /* ************************************************************************
     ****************************** METHODS ************************************
     ************************************************************************ */
@@ -36,6 +38,40 @@ namespace math
     Point< Type >::operator Vector2< Type >() const
     {
         return Vector2< Type > { this->x, this->y };
+    }
+
+    template < C_Primitive Type >
+    template < C_Primitive OtherType >
+        requires( not std::is_same_v< Type, OtherType > )
+    Point< Type >::operator Point< OtherType >() const
+    {
+        return { static_cast< OtherType >( this->x ),
+                 static_cast< OtherType >( this->y ) };
+    }
+
+    template < C_Primitive Type >
+    Point< float > Point< Type >::to_float() const
+        requires( not std::is_same_v< Type, float > )
+    {
+        return static_cast< Point< float > >( *this );
+    }
+    template < C_Primitive Type >
+    Point< unsigned int > Point< Type >::to_u_int() const
+        requires( not std::is_same_v< Type, unsigned int > )
+    {
+        return static_cast< Point< unsigned int > >( *this );
+    }
+    template < C_Primitive Type >
+    Point< int > Point< Type >::to_int() const
+        requires( not std::is_same_v< Type, int > )
+    {
+        return static_cast< Point< int > >( *this );
+    }
+    template < C_Primitive Type >
+    Point< std::size_t > Point< Type >::to_size_t() const
+        requires( not std::is_same_v< Type, std::size_t > )
+    {
+        return static_cast< Point< std::size_t > >( *this );
     }
 
     template < C_Primitive Type >

@@ -8,15 +8,30 @@
 #include "main/window.hpp"
 #include "maths/maths.hpp"
 
-class Dialogue
+class Dialogue : public sf::Drawable
 {
   private:
     sf::RectangleShape m_shape;
     sf::Text m_text;
     bool m_showCustomisation;
 
+    std::string m_textRemaining;
+
+    /// @todo create a singleton class where we can access all type of cursor (or set all type of cursor)
+    sf::Cursor m_regularCursor;
+    sf::Cursor m_moveCursor;
+
   public:
-    Dialogue() : m_shape(), m_text(), m_showCustomisation( true )
+    /// @ number of character that can be print on a single dialogue box
+    unsigned int const CHARACTER_LIMIT { 150u };
+
+    Dialogue()
+      : m_shape(),
+        m_text(),
+        m_showCustomisation( true ),
+        m_textRemaining( "" ),
+        m_regularCursor(),
+        m_moveCursor()
     {
         math::Vector2F const windowSizeF {
             Window::get_instance().get_size().to_float()
@@ -29,6 +44,8 @@ class Dialogue
             ( windowSizeF.y - m_shape.getSize().y ) * 0.8f,
         } );
         m_shape.setFillColor( sf::Color::White );
+        m_shape.setOutlineThickness( 3.f );
+        m_shape.setOutlineColor( sf::Color::Black );
 
         m_text.setFont(
             Resources::get_instance().get_font( Resources::E_FontKey::Arial ) );
@@ -36,8 +53,50 @@ class Dialogue
         m_text.setFillColor( sf::Color::Black );
 
         this->set_text( "" );
+
+        if ( ! m_regularCursor.loadFromSystem( sf::Cursor::Arrow ) )
+        {
+            throw std::runtime_error { "Cannot load regular Cursor" };
+        }
+        if ( ! m_moveCursor.loadFromSystem( sf::Cursor::SizeAll ) )
+        {
+            throw std::runtime_error { "Cannot load move Cursor" };
+        }
     }
     virtual ~Dialogue() = default;
+
+    /**
+     * @brief go to the next dialogue section if available
+     * @return true if there is something else to read
+     * @return false if there is nothing else to read
+     */
+    bool next()
+    {
+        if ( ! m_textRemaining.empty() )
+        {
+            this->set_text( "" );
+        }
+
+        return ! m_textRemaining.empty();
+    }
+
+    /// @todo create an inherited class DialogueCustmable that can have process_events_customisation and update_customisation and delete this two functions from this class
+    void process_events_customisation()
+    {
+        math::PointI mousePosition { sf::Mouse::getPosition(
+            Window::get_instance() ) };
+
+        if ( mousePosition.to_float().is_inside(
+                 math::PointF { this->m_shape.getPosition() },
+                 this->m_shape.getSize() ) )
+        {
+            Window::get_instance().setMouseCursor( m_moveCursor );
+        }
+        else
+        {
+            Window::get_instance().setMouseCursor( m_regularCursor );
+        }
+    }
 
     void update_customisation()
     {
@@ -72,16 +131,34 @@ class Dialogue
         ImGui::End();
     }
 
-    void show() const
+    void draw( sf::RenderTarget & target,
+               sf::RenderStates states ) const override
     {
-        Window::get_instance().sf_draw( m_shape );
-        Window::get_instance().sf_draw( m_text );
+        target.draw( m_shape, states );
+        target.draw( m_text, states );
     }
 
   private:
     void set_text( std::string const & text )
     {
-        m_text.setString( text );
+        std::string currentDioalogueText { text };
+        if ( text.size() >= CHARACTER_LIMIT )
+        {
+            m_textRemaining +=
+                text.substr( CHARACTER_LIMIT + 1, text.size() - 1 );
+            currentDioalogueText = text.substr( 0, CHARACTER_LIMIT );
+        }
+        else
+        {
+            currentDioalogueText += m_textRemaining.substr(
+                0,
+                CHARACTER_LIMIT - currentDioalogueText.size() );
+            m_textRemaining.erase(
+                0,
+                CHARACTER_LIMIT - currentDioalogueText.size() );
+        }
+
+        m_text.setString( currentDioalogueText );
         // The origin has an offset (value of the left and top local bounds)
         m_text.setOrigin( m_text.getLocalBounds().left,
                           m_text.getLocalBounds().top );
