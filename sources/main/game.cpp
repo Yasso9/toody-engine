@@ -68,7 +68,7 @@ void Game::run()
                 this->update_state( deltaTime );
                 this->render();
             }
-            catch ( Exception::QuitApplication const & )
+            catch ( exception::QuitApplication const & )
             {
                 gameShouldRun = false;
             }
@@ -96,7 +96,7 @@ void Game::update_events()
     {
         if ( event.type == sf::Event::Closed )
         {
-            throw Exception::QuitApplication {};
+            throw exception::QuitApplication {};
             return;
         }
         else if ( Window::get_instance().has_absolute_focus() )
@@ -174,7 +174,7 @@ void Game::change_state( State::E_List const & newState )
         break;
 
     case State::E_List::Quit :
-        throw Exception::QuitApplication {};
+        throw exception::QuitApplication {};
         break;
 
     default :

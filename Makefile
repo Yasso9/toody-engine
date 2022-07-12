@@ -73,7 +73,6 @@ GENERAL_WARNINGS := \
 -Wshadow \
 -Wsign-conversion \
 -Wsign-promo \
--Wswitch-default \
 -Wundef \
 -Wno-unused \
 -Wconversion \
@@ -103,6 +102,9 @@ GENERAL_WARNINGS := \
 
 # Warning I don't understand
 # -Wstrict-overflow=5
+
+# Warning not used be can be useful in certain scenario
+# -Wswitch-default # Warn if there is not a default in a switch statement
 
 # Warnings that works only on clang :
 # adding 'no' after '-W' remove the warning

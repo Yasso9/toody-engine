@@ -3,8 +3,20 @@
 #include <exception>
 #include "tools/string.hpp"
 
-namespace Exception
+namespace exception
 {
+    class FileIssue final : public std::exception
+    {
+      public:
+        FileIssue( std::string const & filePath );
+        virtual ~FileIssue() = default;
+
+        virtual const char * what() const noexcept override;
+
+      private:
+        std::string const m_fileName;
+    };
+
     class Database final : public std::exception
     {
       public:
@@ -40,4 +52,4 @@ namespace Exception
 
         virtual const char * what() const noexcept override;
     };
-} // namespace Exception
+} // namespace exception

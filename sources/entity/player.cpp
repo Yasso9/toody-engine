@@ -83,7 +83,7 @@ void Player::init_sprite_number_of_cells()
 
     if ( tools::is_integer( numberOfRow ) && tools::is_integer( numberOfLine ) )
     {
-        throw std::runtime_error {
+        throw std::domain_error {
             "Player texture rect not correctly set. The number of pixel per "
             "sprite does not correspond to the size that the texture have"
         };

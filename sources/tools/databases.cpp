@@ -45,7 +45,7 @@ namespace db
         sqlite3 * database { nullptr };
         if ( sqlite3_open( databasePath.c_str(), &database ) )
         {
-            throw Exception::Database { databasePath,
+            throw exception::Database { databasePath,
                                         "Can't open database - "s
                                             + sqlite3_errmsg( database ) };
         }
@@ -63,7 +63,7 @@ namespace db
         if ( result != 0 )
         {
             sqlite3_free( requestErrorMessage );
-            throw Exception::Database { databasePath, requestErrorMessage };
+            throw exception::Database { databasePath, requestErrorMessage };
         }
 
         sqlite3_close( database );

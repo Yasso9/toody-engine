@@ -98,6 +98,12 @@
         "numbers": "cpp",
         "*.ipp": "cpp",
         "stop_token": "cpp",
-        "codecvt": "cpp"
+        "codecvt": "cpp",
+        "cassert": "cpp",
+        "cerrno": "cpp",
+        "cfloat": "cpp",
+        "climits": "cpp",
+        "queue": "cpp",
+        "cstdbool": "cpp"
     }
 }

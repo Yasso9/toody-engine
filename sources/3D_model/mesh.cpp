@@ -46,9 +46,6 @@ void Mesh::update( sf::Shader & shader,
         case Texture::E_Type::Height :
             number = std::to_string( heightNr++ );
             break;
-        default :
-            throw std::runtime_error { "Texture type not supported"s };
-            break;
         }
 
         // Name of the uniform variable in the shader source file

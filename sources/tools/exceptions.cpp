@@ -1,6 +1,6 @@
 #include "exceptions.hpp"
 
-namespace Exception
+namespace exception
 {
     Database::Database( std::string const & databasePath,
                         std::string const & errorMessage /* = ""s */ )

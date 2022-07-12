@@ -18,7 +18,7 @@ Settings::Settings() : m_windowSize(), m_refreshRate(), m_verticalSync()
     /// @todo if we don't find the file, we must create it and load default ressources
     if ( ! file )
     {
-        throw Exception::FileNotFound { configLocation };
+        throw exception::FileNotFound { configLocation };
     }
 
     unsigned int framePerSecond;

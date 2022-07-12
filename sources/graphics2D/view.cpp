@@ -9,7 +9,7 @@ void View::set_zoom( float newZoom )
     if ( newZoom == 0 )
     {
         /// @todo revoir les classe throw pendant les exceptions et vérifié si elles sont cohérentes dans tous le programme
-        std::runtime_error { "Division by Zero" };
+        throw std::logic_error { "Division by Zero" };
     }
 
     this->setSize( Window::get_instance().get_size().to_float() / newZoom );
