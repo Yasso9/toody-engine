@@ -61,6 +61,7 @@ class State
 
     virtual void mouse_pressed( sf::Event event );
     virtual void mouse_released( sf::Event event );
+    virtual void mouse_moved( sf::Event event );
 
     virtual void mouse_scroll( float const & deltaScroll );
 };

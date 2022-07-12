@@ -41,6 +41,9 @@ void State::update_inputs( sf::Event const & event )
     case sf::Event::MouseButtonReleased :
         this->mouse_released( event );
         break;
+    case sf::Event::MouseMoved :
+        this->mouse_moved( event );
+        break;
     case sf::Event::MouseWheelScrolled :
         this->mouse_scroll( event.mouseWheelScroll.delta );
         break;
@@ -60,6 +63,7 @@ void State::keyboard_released( sf::Event /* event */ ) {}
 
 void State::mouse_pressed( sf::Event /* event */ ) {}
 void State::mouse_released( sf::Event /* event */ ) {}
+void State::mouse_moved( sf::Event /* event */ ) {}
 
 void State::mouse_scroll( float const & /* deltaScroll */ ) {}
 

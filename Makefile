@@ -1,8 +1,8 @@
 ############################## USER CUSTOM ##############################
 
 # Specify the compiler command and version
-COMPILER_COMMAND := clang
-COMPILER_VERSION := 
+COMPILER_COMMAND := gcc
+COMPILER_VERSION :=
 
 # Put @ if we should not show the command, put nothing otherwise
 SHOW := @

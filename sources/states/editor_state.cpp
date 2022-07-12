@@ -6,6 +6,7 @@
 #include "libraries/imgui.hpp"
 #include "main/resources.hpp"
 #include "tools/assertion.hpp"
+#include "tools/path.hpp"
 #include "tools/string.hpp"
 
 EditorState::EditorState()
@@ -13,6 +14,7 @@ EditorState::EditorState()
     m_showWindow(),
     m_view(), // init in init_map
     m_tilemap( m_view ),
+    // m_imageMap(),
     m_player(),
     m_collisionMap(),
     m_greenEntity( math::RectangleF { 0.f, 0.f, 40.f, 40.f }, m_collisionMap,
@@ -43,6 +45,12 @@ EditorState::EditorState()
     m_collisionMap.push_back( StaticEntity2D {
         math::RectangleF {0.f, 500.f, 100.f, 50.f}
     } );
+}
+
+void EditorState::mouse_moved( sf::Event event )
+{
+    math::Vector2I mouseMovement { event.mouseMove.x, event.mouseMove.y };
+    ( void )mouseMovement;
 }
 
 void EditorState::extra_events()

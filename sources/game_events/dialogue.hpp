@@ -81,14 +81,24 @@ class Dialogue : public sf::Drawable
     }
 
     /// @todo create an inherited class DialogueCustmable that can have process_events_customisation and update_customisation and delete this two functions from this class
-    void process_events_customisation()
+    void process_mouse_movement_customisation( math::Vector2I mouseMovement )
     {
+        static bool mouseIsInsideBox { false };
+
+        // If the mouse was already inside and we have clicked in the right button
+        if ( mouseIsInsideBox
+             && sf::Mouse::isButtonPressed( sf::Mouse::Right ) )
+        {
+            this->m_shape.move( mouseMovement.to_float() );
+        }
+
         math::PointI mousePosition { sf::Mouse::getPosition(
             Window::get_instance() ) };
+        mouseIsInsideBox = mousePosition.to_float().is_inside(
+            math::PointF { this->m_shape.getPosition() },
+            this->m_shape.getSize() );
 
-        if ( mousePosition.to_float().is_inside(
-                 math::PointF { this->m_shape.getPosition() },
-                 this->m_shape.getSize() ) )
+        if ( mouseIsInsideBox )
         {
             Window::get_instance().setMouseCursor( m_moveCursor );
         }
@@ -131,6 +141,7 @@ class Dialogue : public sf::Drawable
         ImGui::End();
     }
 
+  private:
     void draw( sf::RenderTarget & target,
                sf::RenderStates states ) const override
     {
@@ -138,7 +149,6 @@ class Dialogue : public sf::Drawable
         target.draw( m_text, states );
     }
 
-  private:
     void set_text( std::string const & text )
     {
         std::string currentDioalogueText { text };

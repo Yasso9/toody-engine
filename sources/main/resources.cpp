@@ -15,20 +15,21 @@ static std::string get_texture_localisation(
 static std::string get_font_localisation(
     Resources::E_FontKey const & fontKey );
 
-Resources::Resources() : m_textures(), m_fonts()
+Resources::Resources()
+  : m_textures(), m_deprecatedTextures(), m_deprecatedFonts()
 {
-    init_textures( this->m_textures );
-    init_fonts( this->m_fonts );
+    init_textures( this->m_deprecatedTextures );
+    init_fonts( this->m_deprecatedFonts );
 }
 
 sf::Texture const & Resources::get_texture(
     Resources::E_TextureKey const & textureKey )
 {
-    return this->m_textures.at( textureKey );
+    return this->m_deprecatedTextures.at( textureKey );
 }
 sf::Font const & Resources::get_font( Resources::E_FontKey const & fontKey )
 {
-    return this->m_fonts.at( fontKey );
+    return this->m_deprecatedFonts.at( fontKey );
 }
 
 static void init_textures(

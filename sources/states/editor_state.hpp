@@ -1,11 +1,13 @@
 #pragma once
 
+#include <filesystem>
 #include <map>
 
 #include "states/state.hpp"
 
 #include "entity/object.hpp"
 #include "entity/player.hpp"
+#include "graphics2D/image.hpp"
 #include "graphics2D/tile_selector.hpp"
 #include "graphics2D/tilemap.hpp"
 #include "graphics2D/tileset.hpp"
@@ -25,6 +27,7 @@ class EditorState final : public State
 
     View m_view;
     TileMap m_tilemap;
+    // ImageMap m_imageMap;
 
     Player m_player;
 
@@ -37,6 +40,7 @@ class EditorState final : public State
   public:
     EditorState();
 
+    void mouse_moved( sf::Event event ) override;
     void extra_events() override;
 
     void update() override;
