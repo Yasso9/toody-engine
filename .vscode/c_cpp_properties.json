@@ -1,6 +1,7 @@
 {
     "configurations": [
         {
+            "name": "MultiPlatform",
             "cppStandard": "c++20",
             "includePath": [
                 "${default}",

@@ -2,8 +2,7 @@
     "C_Cpp.formatting": "clangFormat",
     "files.exclude": {
         "**/.git": true,
-        "**/.DS_Store": true,
-        "external/": true
+        "**/.DS_Store": true
     },
     "files.associations": {
         "*.txt": "plaintext",

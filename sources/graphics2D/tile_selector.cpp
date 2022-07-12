@@ -11,43 +11,6 @@
 #include "maths/maths.hpp"
 #include "tools/global_variable.hpp"
 
-static uint32_t to_integer_imgui_color( sf::Color const & color )
-{
-    return ( static_cast< ImU32 >( color.a ) << 24 )
-           | ( static_cast< ImU32 >( color.b ) << 16 )
-           | ( static_cast< ImU32 >( color.g ) << 8 )
-           | ( static_cast< ImU32 >( color.r ) << 0 );
-}
-
-static void sfml_to_table_color( sf::Color const & sfmlColor,
-                                 float tableColor[4] )
-{
-    ASSERTION( ( sfmlColor.r >= 0 && sfmlColor.r <= 255 )
-                   && ( sfmlColor.g >= 0 && sfmlColor.g <= 255 )
-                   && ( sfmlColor.b >= 0 && sfmlColor.b <= 255 )
-                   && ( sfmlColor.a >= 0 && sfmlColor.a <= 255 ),
-               "SFML colors value must be between 0 and 255" );
-
-    tableColor[0] = static_cast< float >( sfmlColor.r ) / COLOR_RANGE;
-    tableColor[1] = static_cast< float >( sfmlColor.g ) / COLOR_RANGE;
-    tableColor[2] = static_cast< float >( sfmlColor.b ) / COLOR_RANGE;
-    tableColor[3] = static_cast< float >( sfmlColor.a ) / COLOR_RANGE;
-}
-
-static sf::Color table_to_sfml_color( float const tableColor[4] )
-{
-    ASSERTION( ( tableColor[0] >= 0.f && tableColor[0] <= 1.f )
-                   && ( tableColor[1] >= 0.f && tableColor[1] <= 1.f )
-                   && ( tableColor[2] >= 0.f && tableColor[2] <= 1.f )
-                   && ( tableColor[3] >= 0.f && tableColor[3] <= 1.f ),
-               "Table colors value must be between 0 and 1" );
-
-    return { static_cast< sf::Uint8 >( tableColor[0] * COLOR_RANGE ),
-             static_cast< sf::Uint8 >( tableColor[1] * COLOR_RANGE ),
-             static_cast< sf::Uint8 >( tableColor[2] * COLOR_RANGE ),
-             static_cast< sf::Uint8 >( tableColor[3] * COLOR_RANGE ) };
-}
-
 TileSelector::TileSelector()
   : m_tileset( Resources::get_instance().get_texture(
       Resources::E_TextureKey::Tileset ) ),
@@ -58,7 +21,7 @@ TileSelector::TileSelector()
     m_mousePosition( 0.f, 0.f )
 {
     sf::Color gridColor { 118, 118, 118, 255 };
-    sfml_to_table_color( gridColor, this->m_gridColorTable );
+    ImGui::color::to_table( gridColor, this->m_gridColorTable );
 }
 
 Tileset const & TileSelector::get_tileset() const
@@ -105,8 +68,8 @@ void TileSelector::update_grid( ImDrawList & drawList )
     // Tilemap Border
     drawList.AddRect( this->m_tileset.get_position(),
                       this->m_tileset.get_end_position(),
-                      to_integer_imgui_color(
-                          table_to_sfml_color( this->m_gridColorTable ) ) );
+                      ImGui::color::to_integer( ImGui::color::table_to_sfml(
+                          this->m_gridColorTable ) ) );
 
     // Horizontal lines of the grid
     for ( unsigned int x {
@@ -124,8 +87,8 @@ void TileSelector::update_grid( ImDrawList & drawList )
 
         drawList.AddLine( pointA,
                           pointB,
-                          to_integer_imgui_color(
-                              table_to_sfml_color( this->m_gridColorTable ) ) );
+                          ImGui::color::to_integer( ImGui::color::table_to_sfml(
+                              this->m_gridColorTable ) ) );
     }
     // Vertical lines of the grid
     for ( unsigned int y {
@@ -142,8 +105,8 @@ void TileSelector::update_grid( ImDrawList & drawList )
 
         drawList.AddLine( pointA,
                           pointB,
-                          to_integer_imgui_color(
-                              table_to_sfml_color( this->m_gridColorTable ) ) );
+                          ImGui::color::to_integer( ImGui::color::table_to_sfml(
+                              this->m_gridColorTable ) ) );
     }
 }
 void TileSelector::update_selection( ImDrawList & drawList )
@@ -159,10 +122,11 @@ void TileSelector::update_selection( ImDrawList & drawList )
         };
 
         // Selection Rectangle
-        drawList.AddRectFilled( selectionPosition,
-                                selectionPosition + TILE_PIXEL_SIZE_VECTOR,
-                                to_integer_imgui_color( table_to_sfml_color(
-                                    this->m_gridColorTable ) ) );
+        drawList.AddRectFilled(
+            selectionPosition,
+            selectionPosition + TILE_PIXEL_SIZE_VECTOR,
+            ImGui::color::to_integer(
+                ImGui::color::table_to_sfml( this->m_gridColorTable ) ) );
 
         std::stringstream outputSelection {};
         outputSelection << "Selection pixel position : " << selectionPosition
