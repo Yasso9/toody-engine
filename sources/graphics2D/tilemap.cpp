@@ -98,7 +98,8 @@ void TileMap::set_tile_size( math::Vector2U const & tileSize )
 
 void TileMap::process_events()
 {
-    this->m_mousePosition = sf::Mouse::getPosition( Window::get_instance() );
+    this->m_mousePosition =
+        math::PointI { sf::Mouse::getPosition( Window::get_instance() ) };
     this->m_tileSelector.process_events();
 
     if ( ImGui::P_IsAnyWindowFocused() )

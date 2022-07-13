@@ -31,6 +31,9 @@ namespace ImGui
     bool P_InputNumber( std::string const & label, unsigned int & value,
                         int step = 1, int step_fast = 100,
                         ImGuiInputTextFlags flags = 0 );
+    bool P_InputNumber( std::string const & label, std::size_t & value,
+                        int step = 1, int step_fast = 100,
+                        ImGuiInputTextFlags flags = 0 );
 
     namespace color
     {

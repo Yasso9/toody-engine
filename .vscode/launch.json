@@ -9,10 +9,16 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceRoot}/build/application/application",
+            // "additionalSOLibSearchPath": "${workspaceFolder}/external/libraries/Linux",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment": [],
+            "environment": [
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "${workspaceFolder}/external/libraries/Linux",
+                }
+            ],
             "externalConsole": true,
             "MIMode": "gdb",
             "miDebuggerPath": "gdb",

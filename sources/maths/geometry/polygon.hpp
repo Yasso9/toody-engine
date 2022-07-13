@@ -1,67 +1,43 @@
 #pragma once
 
-#include <array>
-
-#include "tools/concepts.hpp"
+#include <vector>
 
 #include "maths/geometry/point.hpp"
 #include "maths/geometry/rectangle.hpp"
+#include "tools/concepts.hpp"
 
 namespace math
 {
-    template < unsigned int number >
-    concept C_Quadrangle = ( number == 4u );
-
-    /// @todo remove template parameters NbOfPoints
-    /// @todo require that number of points isn't equal to 0
-    template < C_Primitive Type, unsigned int NbOfPoints >
+    template < C_Primitive Type >
     class Polygon
     {
-        std::array< Point< Type >, NbOfPoints > m_points;
+        std::vector< Point< Type > > m_points;
 
       public:
         Polygon();
-        Polygon( Rectangle< Type > rectangle ) requires(
-            C_Quadrangle< NbOfPoints > );
+        Polygon( Rectangle< Type > rectangle );
 
         virtual ~Polygon() = default;
 
         Point< Type > operator[]( unsigned int index ) const;
         Point< Type > & operator[]( unsigned int index );
-        unsigned int get_number_of_point() const;
+        unsigned int get_number_of_points() const;
 
-        /// @todo mettre un argument pour la rotation
-        void set_rectangle( Rectangle< Type > rectangle ) requires(
-            C_Quadrangle< NbOfPoints > );
+        void set_rectangle( Rectangle< Type > rectangle );
 
         std::string print() const;
 
-        std::array< Segment< Type >, NbOfPoints > get_segments() const;
-        std::array< Point< Type >, NbOfPoints > get_points() const;
+        std::vector< Segment< Type > > get_segments() const;
+        std::vector< Point< Type > > get_points() const;
     };
 
-    template < unsigned int NbOfPoints >
-    using PolygonF = Polygon< float, NbOfPoints >;
-    template < unsigned int NbOfPoints >
-    using PolygonI = Polygon< int, NbOfPoints >;
-    template < unsigned int NbOfPoints >
-    using PolygonU = Polygon< unsigned int, NbOfPoints >;
+    using PolygonF = Polygon< float >;
+    using PolygonI = Polygon< int >;
+    using PolygonU = Polygon< unsigned int >;
 
     template < C_Primitive Type >
-    using Quadrangle  = Polygon< Type, 4u >;
-    using QuadrangleF = Quadrangle< float >;
-    using QuadrangleI = Quadrangle< int >;
-    using QuadrangleU = Quadrangle< unsigned int >;
-
-    template < C_Primitive Type >
-    using Triangle  = Polygon< Type, 3u >;
-    using TriangleF = Triangle< float >;
-    using TriangleI = Triangle< int >;
-    using TriangleU = Triangle< unsigned int >;
-
-    template < C_Primitive Type, unsigned int NbOfPoints >
-    bool is_intersection( Polygon< Type, NbOfPoints > polygonLeft,
-                          Polygon< Type, NbOfPoints > polygonRight );
+    bool is_intersection( Polygon< Type > polygonLeft,
+                          Polygon< Type > polygonRight );
 
 } // namespace math
 

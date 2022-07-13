@@ -261,7 +261,11 @@ clean : clean_project clean_libraries
 	rm -rf $(BUILD_DIRECTORY)
 
 debug :
-	gdb -quiet $(EXECUTABLE)
+ifeq ($(DETECTED_OS),Linux)
+	export LD_LIBRARY_PATH="$(LIBRARIES_PATH)" && gdb -quiet $(EXECUTABLE)
+else
+	$(EXECUTABLE)
+endif
 
 valgrind :
 	valgrind --leak-check=full \

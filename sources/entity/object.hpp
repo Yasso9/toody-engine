@@ -1,60 +1,40 @@
 #pragma once
 
-#include "graphics2D/sfml.hpp"
 #include "input/movement_key.hpp"
-#include "maths/maths.hpp"
 
-class StaticEntity2D : public sf::ConvexShape
+class StaticEntity2D : public sf::Shape
 {
+  protected:
+    math::PolygonF m_polygon;
+
   public:
-    StaticEntity2D( math::QuadrangleF polygon )
+    explicit StaticEntity2D( math::PolygonF polygon );
+    ~StaticEntity2D() = default;
+
+    unsigned int get_point_count() const
     {
-        this->set_polygon( polygon );
-        this->setFillColor( sf::Color::Red );
+        return m_polygon.get_number_of_points();
+    }
+    math::Vector2F get_point( unsigned int index ) const
+    {
+        return m_polygon[index];
     }
 
-    math::PointF get_position() const
+    math::PointF get_position() const;
+    math::PolygonF get_polygon( bool getSize = true ) const;
+
+    void set_polygon( math::PolygonF polygon );
+
+    bool is_intersected_by( StaticEntity2D const & otherEntity ) const;
+
+  private:
+    std::size_t getPointCount() const override
     {
-        return math::PointF { this->getPosition() };
+        return static_cast< std::size_t >( this->get_point_count() );
     }
-
-    math::QuadrangleF get_polygon( bool getSize = true ) const
+    sf::Vector2f getPoint( std::size_t index ) const override
     {
-        math::QuadrangleF quadrangle {};
-        for ( unsigned int i_point = 0u; i_point < this->getPointCount();
-              ++i_point )
-        {
-            quadrangle[i_point] = this->getPoint( i_point );
-            if ( getSize )
-            {
-                quadrangle[i_point] += this->get_position();
-            }
-        }
-
-        return quadrangle;
-    }
-
-    void set_polygon( math::QuadrangleF polygon )
-    {
-        this->setPointCount( polygon.get_number_of_point() );
-
-        this->setPosition( 0.f, 0.f );
-        if ( polygon[0] == math::Vector2F { 0.f, 0.f } )
-        {
-            this->setPosition( polygon[0] );
-        }
-
-        for ( unsigned int i_point = 0u; i_point < this->getPointCount();
-              ++i_point )
-        {
-            this->setPoint( i_point, polygon[i_point] - this->get_position() );
-        }
-    }
-
-    bool is_intersected_by( StaticEntity2D const & otherEntity ) const
-    {
-        return math::is_intersection( this->get_polygon(),
-                                      otherEntity.get_polygon() );
+        return this->get_point( static_cast< unsigned int >( index ) );
     }
 };
 
@@ -68,46 +48,89 @@ class Entity2D : public StaticEntity2D
     math::Vector2F m_speed;
 
   public:
-    Entity2D( math::QuadrangleF quadrangle, T_CollisionMap const & collisionMap,
-              keyboard_move::S_Key movementKey )
-      : StaticEntity2D( quadrangle ),
-        m_collisionMap( collisionMap ),
-        m_movementKey( movementKey ),
-        m_speed()
-    {
-        this->set_speed( 500.f );
-    }
+    Entity2D( math::PolygonF quadrangle, T_CollisionMap const & collisionMap,
+              keyboard_move::S_Key movementKey );
 
-    math::Vector2F get_speed() const { return m_speed; }
+    math::Vector2F get_speed() const;
 
-    void set_speed( float speed ) { this->m_speed = { speed, speed }; }
-    void set_speed( math::Vector2F speed ) { this->m_speed = speed; }
+    void set_speed( float speed );
+    void set_speed( math::Vector2F speed );
 
-    bool is_collision_detected() const
-    {
-        for ( StaticEntity2D const & entity : m_collisionMap )
-        {
-            if ( this->is_intersected_by( entity ) )
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+    bool is_collision_detected() const;
 
     void update( float deltaTime,
-                 math::Vector2F viewZoom = math::Vector2F( 1.f, 1.f ) )
+                 math::Vector2F viewZoom = math::Vector2F( 1.f, 1.f ) );
+};
+
+namespace customize
+{
+    static void circle_shape( sf::CircleShape & circleShape )
     {
-        math::Vector2F moveSpeed { ( m_speed / viewZoom ) * deltaTime };
-        /// @todo changer les events de la view pour pouvoir bouger la vue à partir de la souris (clique du milieu)
-        math::Vector2F moveDirection { keyboard_move::get_vector(
-            m_movementKey ) };
+        /// @todo check if a window has begin
 
-        this->move( moveSpeed * moveDirection );
+        sf::Color background { circleShape.getFillColor() };
+        sf::Color outline { circleShape.getOutlineColor() };
+        float outlineThickness { circleShape.getOutlineThickness() };
+        float radius { circleShape.getRadius() };
+        std::size_t numberOfPoint { circleShape.getPointCount() };
 
-        if ( this->is_collision_detected() )
+        ImGui::P_ColorEditor( "Background Color", background );
+        ImGui::P_ColorEditor( "Outline Color", outline );
+        ImGui::InputFloat( "Outline Thickness", &outlineThickness );
+        ImGui::InputFloat( "Radius", &radius );
+        /// @todo if doesn't work, cast it to unsigned int
+        ImGui::P_InputNumber( "Number of Point", numberOfPoint );
+
+        circleShape.setFillColor( background );
+        circleShape.setOutlineColor( outline );
+        circleShape.setOutlineThickness( outlineThickness );
+        circleShape.setRadius( radius );
+        circleShape.setPointCount( numberOfPoint );
+    }
+} // namespace customize
+
+/// @brief Entity that can be customised
+class CustomEntity2D : public StaticEntity2D
+{
+    bool m_showCustomisation;
+    bool m_editPoint;
+    sf::CircleShape m_pointShape;
+
+  public:
+    CustomEntity2D( math::PolygonF quadrangle )
+      : StaticEntity2D( quadrangle ),
+        m_showCustomisation( true ),
+        m_editPoint( false ),
+        m_pointShape { 5.f, 40 }
+    {}
+
+    void update_customisation()
+    {
+        if ( ! m_showCustomisation )
         {
-            this->move( -( moveSpeed * moveDirection ) );
+            return;
+        }
+
+        if ( ImGui::P_Begin( "Customise Entity", &m_showCustomisation ) )
+        {
+            customize::circle_shape( m_pointShape );
+
+            ImGui::Checkbox( "Edit Points ?", &m_editPoint );
+        }
+        ImGui::End();
+    }
+
+  private:
+    void draw( sf::RenderTarget & target,
+               sf::RenderStates states ) const override
+    {
+        target.draw( *this, states );
+
+        sf::CircleShape pointShape { m_pointShape };
+        for ( math::PointF const & point : m_polygon.get_points() )
+        {
+            pointShape.setPosition( point.x, point.y );
+            target.draw( pointShape, states );
         }
     }
 };

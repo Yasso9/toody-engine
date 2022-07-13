@@ -16,26 +16,20 @@ namespace math
     class Segment;
     template < C_Primitive Type >
     class Rectangle;
-    template < C_Primitive Type, unsigned int NbOfPoints >
+    template < C_Primitive Type >
     class Polygon;
 
     template < C_Primitive Type >
     class Point : public Vector2< Type >
     {
       public:
-        Point() : Vector2< Type >() {}
+        Point() noexcept : Vector2< Type >() {}
         Point( Type xAxisValue, Type yAxisValue )
           : Vector2< Type >( xAxisValue, yAxisValue )
         {}
 
         /// @brief Copy Constructor
         Point( Vector2< Type > const & vector2D );
-        /// @brief Move Constructor
-        Point( Vector2< Type > && vector2D ) noexcept;
-        /// @brief Copy Assignement
-        Point< Type > & operator=( Vector2< Type > const & vector2D );
-        /// @brief Move Assignement
-        Point< Type > & operator=( Vector2< Type > && vector2D ) noexcept;
 
         explicit operator Vector2< Type >() const;
         template < C_Primitive OtherType >
@@ -58,8 +52,7 @@ namespace math
         bool is_inside( Segment< Type > segment ) const;
         bool is_inside( Point< Type > position, Vector2< Type > size ) const;
         bool is_inside( Rectangle< Type > rectangle ) const;
-        template < unsigned int NbOfPoints >
-        bool is_inside( Polygon< Type, NbOfPoints > polygon ) const;
+        bool is_inside( Polygon< Type > polygon ) const;
     };
 
     using PointF = Point< float >;

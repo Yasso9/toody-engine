@@ -5,34 +5,20 @@
 
 namespace math
 {
-    template < C_Primitive Type, unsigned int NbOfPoints >
-    Polygon< Type, NbOfPoints >::Polygon() : m_points()
-    {
-        m_points.fill( Point< Type > { 0, 0 } );
-    }
+    template < C_Primitive Type >
+    Polygon< Type >::Polygon() : m_points()
+    {}
 
-    // template < C_Primitive Type, unsigned int NbOfPoints >
-    // Polygon< Type, NbOfPoints >::Polygon( Point< Type > a, Point< Type > b,
-    //                                        Point< Type > c, Point< Type > d )
-    //   : topLeftPosition( a ),
-    //     topRightPosition( b ),
-    //     bottomRightPosition( c ),
-    //     bottomLeftPosition( d )
-    // {}
-
-    template < C_Primitive Type, unsigned int NbOfPoints >
-    Polygon< Type, NbOfPoints >::Polygon(
-        Rectangle< Type > rectangle ) requires( C_Quadrangle< NbOfPoints > )
-      : Polygon {}
+    template < C_Primitive Type >
+    Polygon< Type >::Polygon( Rectangle< Type > rectangle ) : Polygon {}
     {
         this->set_rectangle( rectangle );
     }
 
-    template < C_Primitive Type, unsigned int NbOfPoints >
-    Point< Type > Polygon< Type, NbOfPoints >::operator[](
-        unsigned int index ) const
+    template < C_Primitive Type >
+    Point< Type > Polygon< Type >::operator[]( unsigned int index ) const
     {
-        if ( index >= NbOfPoints )
+        if ( index >= this->get_number_of_points() )
         {
             throw std::overflow_error { "Polygon index out of range" };
         }
@@ -40,11 +26,10 @@ namespace math
         return m_points[index];
     }
 
-    template < C_Primitive Type, unsigned int NbOfPoints >
-    Point< Type > & Polygon< Type, NbOfPoints >::operator[](
-        unsigned int index )
+    template < C_Primitive Type >
+    Point< Type > & Polygon< Type >::operator[]( unsigned int index )
     {
-        if ( index >= NbOfPoints )
+        if ( index >= this->get_number_of_points() )
         {
             throw std::overflow_error { "Polygon index out of range" };
         }
@@ -52,30 +37,29 @@ namespace math
         return m_points[index];
     }
 
-    template < C_Primitive Type, unsigned int NbOfPoints >
-    unsigned int Polygon< Type, NbOfPoints >::get_number_of_point() const
+    template < C_Primitive Type >
+    unsigned int Polygon< Type >::get_number_of_points() const
     {
-        ASSERTION( NbOfPoints == m_points.size(), "" );
-
-        return NbOfPoints;
+        return static_cast< unsigned int >( m_points.size() );
     }
 
-    template < C_Primitive Type, unsigned int NbOfPoints >
-    void Polygon< Type, NbOfPoints >::set_rectangle(
-        Rectangle< Type > rectangle ) requires( C_Quadrangle< NbOfPoints > )
+    template < C_Primitive Type >
+    void Polygon< Type >::set_rectangle( Rectangle< Type > rectangle )
     {
+        m_points.resize( 4 );
+
         m_points[0] = rectangle.position;
         m_points[1] = rectangle.position + rectangle.size.get_x_axis();
         m_points[2] = rectangle.position + rectangle.size;
         m_points[3] = rectangle.position + rectangle.size.get_y_axis();
     }
 
-    template < C_Primitive Type, unsigned int NbOfPoints >
-    std::string Polygon< Type, NbOfPoints >::print() const
+    template < C_Primitive Type >
+    std::string Polygon< Type >::print() const
     {
         std::stringstream stream {};
 
-        stream << this->get_number_of_point() << " points ["
+        stream << this->get_number_of_points() << " points ["
                << "\n";
         for ( auto point : m_points )
         {
@@ -86,32 +70,30 @@ namespace math
         return stream.str();
     }
 
-    template < C_Primitive Type, unsigned int NbOfPoints >
-    std::array< Segment< Type >, NbOfPoints >
-        Polygon< Type, NbOfPoints >::get_segments() const
+    template < C_Primitive Type >
+    std::vector< Segment< Type > > Polygon< Type >::get_segments() const
     {
-        std::array< Segment< Type >, NbOfPoints > segments {};
+        std::vector< Segment< Type > > segments {};
 
-        for ( unsigned int i_point { 0 }; i_point < this->get_number_of_point();
+        for ( unsigned int i_point = 0u; i_point < this->get_number_of_points();
               ++i_point )
         {
             unsigned int i_pointNext { ( i_point + 1 )
-                                       % this->get_number_of_point() };
+                                       % this->get_number_of_points() };
             segments[i_point] = { ( *this )[i_point], ( *this )[i_pointNext] };
         }
 
         return segments;
     }
-    template < C_Primitive Type, unsigned int NbOfPoints >
-    std::array< Point< Type >, NbOfPoints >
-        Polygon< Type, NbOfPoints >::get_points() const
+    template < C_Primitive Type >
+    std::vector< Point< Type > > Polygon< Type >::get_points() const
     {
         return m_points;
     }
 
-    template < C_Primitive Type, unsigned int NbOfPoints >
-    bool is_intersection( Polygon< Type, NbOfPoints > polygonLeft,
-                          Polygon< Type, NbOfPoints > polygonRight )
+    template < C_Primitive Type >
+    bool is_intersection( Polygon< Type > polygonLeft,
+                          Polygon< Type > polygonRight )
     {
         for ( Point< Type > pointPolygonLeft : polygonLeft.get_points() )
         {

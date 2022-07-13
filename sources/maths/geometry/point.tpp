@@ -14,25 +14,6 @@ namespace math
     Point< Type >::Point( Vector2< Type > const & vector2D )
       : Vector2< Type >( vector2D )
     {}
-    template < C_Primitive Type >
-    Point< Type >::Point( Vector2< Type > && vector2D ) noexcept
-      : Vector2< Type >( std::exchange( vector2D, {} ) )
-    {}
-
-    template < C_Primitive Type >
-    Point< Type > & Point< Type >::operator=( Vector2< Type > const & vector2D )
-    {
-        return *this = Point< Type > { vector2D };
-    }
-
-    template < C_Primitive Type >
-    Point< Type > & Point< Type >::operator=(
-        Vector2< Type > && vector2D ) noexcept
-    {
-        std::swap( this->x, vector2D.x );
-        std::swap( this->y, vector2D.y );
-        return *this;
-    }
 
     template < C_Primitive Type >
     Point< Type >::operator Vector2< Type >() const
@@ -97,8 +78,7 @@ namespace math
                  && this->y < rectangle.position.y + rectangle.size.y );
     }
     template < C_Primitive Type >
-    template < unsigned int NbOfPoints >
-    bool Point< Type >::is_inside( Polygon< Type, NbOfPoints > polygon ) const
+    bool Point< Type >::is_inside( Polygon< Type > polygon ) const
     {
         /// @todo recuperer ça dynamiquement
         constexpr float LIMIT_ZONE { 10000.f };
