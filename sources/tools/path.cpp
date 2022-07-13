@@ -1,5 +1,7 @@
 #include "path.hpp"
 
+#include "tools/exceptions.hpp"
+
 namespace path
 {
     std::filesystem::path get_file( E_File const & filePath )
@@ -19,8 +21,7 @@ namespace path
 
         if ( ! std::filesystem::is_regular_file( fileRelativPath ) )
         {
-            throw std::runtime_error { "Error with file : '"
-                                       + fileRelativPath.string() + "'" };
+            throw exception::FileIssue { fileRelativPath };
         }
 
         return fileRelativPath;
@@ -53,8 +54,7 @@ namespace path
 
         if ( ! std::filesystem::is_directory( folderRelativPath ) )
         {
-            throw std::runtime_error { "Error with folder : '"
-                                       + folderRelativPath.string() + "'" };
+            throw exception::FileIssue { folderRelativPath };
         }
 
         return folderRelativPath;

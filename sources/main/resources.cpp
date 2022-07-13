@@ -47,7 +47,8 @@ static void init_textures(
             textureKey.get_value() ) };
         if ( ! texture.loadFromFile( textureLocalisation ) )
         {
-            throw exception::FileNotFound { textureLocalisation };
+            throw exception::FileLoadingIssue { textureLocalisation,
+                                                "Texture" };
         }
 
         textures.insert( std::make_pair( textureKey.get_value(), texture ) );
@@ -69,7 +70,7 @@ static void init_fonts(
             fontKey.get_value() ) };
         if ( ! font.loadFromFile( fontLocalisation ) )
         {
-            throw exception::FileNotFound { fontLocalisation };
+            throw exception::FileLoadingIssue { fontLocalisation, "Texture" };
         }
 
         fonts.insert( std::make_pair( fontKey.get_value(), font ) );

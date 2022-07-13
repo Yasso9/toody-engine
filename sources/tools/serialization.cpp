@@ -6,11 +6,10 @@ bool verify_next( std::istream & stream, char const & character )
 {
     if ( stream.peek() != character )
     {
-        /// @todo throw an exception
-        std::cerr << "\n\nERROR :";
-        std::cerr << " we should have the character : '" << character
-                  << "' and not '" << stream.peek() << "'\n"
-                  << std::endl;
+        std::stringstream streamError {};
+        streamError << "We should have the character : '" << character
+                    << "' and not '" << stream.peek() << "'\n";
+        throw std::runtime_error { streamError.str() };
 
         return false;
     }
@@ -37,10 +36,10 @@ void test_serializer()
     std::cout << "\n\n\n" << std::endl;
 
     std::vector< std::vector< int > > arrayB {
-        {745,   524,  879,   858},
-        {745,   454,  879, 45714},
-        {745, 45474, 4141,   858},
-        {474,   454,  879,   858}
+        {745,  524,   879,  858  },
+        { 745, 454,   879,  45714},
+        { 745, 45474, 4141, 858  },
+        { 474, 454,   879,  858  }
     };
     std::cout << "arrayB : " << arrayB << std::endl;
 

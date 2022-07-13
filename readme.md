@@ -41,3 +41,8 @@ MacOs : Not taken in charge.
 4. Moreover installation on linux
     libminizip-dev
     freeglut3-dev
+
+# todo
+
+Fix Error of failed request:  BadCursor (invalid Cursor parameter)
+C'est quand on ferme la fenêtre ou quelque chose comme ça et qu'on a toujours les truc de la souris qui se mettent en place.

@@ -4,6 +4,7 @@
 #include <map>
 
 #include "graphics2D/sfml.hpp"
+#include "tools/exceptions.hpp"
 #include "tools/path.hpp"
 #include "tools/singleton.hpp"
 
@@ -47,8 +48,7 @@ class Resources final : public Singleton< Resources >
             sf::Texture texture {};
             if ( ! texture.loadFromFile( texturePath ) )
             {
-                throw std::runtime_error { "Cannot load file : "
-                                           + texturePath.string() };
+                throw exception::FileLoadingIssue { texturePath, "Texture" };
             }
 
             m_textures.insert( { texturePath, texture } );

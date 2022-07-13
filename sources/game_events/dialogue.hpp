@@ -7,6 +7,7 @@
 #include "main/resources.hpp"
 #include "main/window.hpp"
 #include "maths/maths.hpp"
+#include "tools/exceptions.hpp"
 
 class Dialogue : public sf::Drawable
 {
@@ -56,11 +57,11 @@ class Dialogue : public sf::Drawable
 
         if ( ! m_regularCursor.loadFromSystem( sf::Cursor::Arrow ) )
         {
-            throw std::runtime_error { "Cannot load regular Cursor" };
+            throw exception::System { "Cannot load regular Cursor" };
         }
         if ( ! m_moveCursor.loadFromSystem( sf::Cursor::SizeAll ) )
         {
-            throw std::runtime_error { "Cannot load move Cursor" };
+            throw exception::System { "Cannot load move Cursor" };
         }
     }
     virtual ~Dialogue() = default;

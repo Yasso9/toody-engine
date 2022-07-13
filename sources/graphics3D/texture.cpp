@@ -2,18 +2,18 @@
 
 #include <iostream>
 
+#include "tools/exceptions.hpp"
+
 Texture::Texture( std::string const & filePath, Texture::E_Type const & type )
   : m_type( type ), m_path( filePath )
 {
     if ( ! this->loadFromFile( filePath ) )
     {
-        throw std::runtime_error { "Loading Texture '"s + filePath
-                                   + "' not successfull"s };
+        throw exception::FileIssue { filePath };
     }
     if ( ! this->generateMipmap() )
     {
-        throw std::runtime_error { "Cannot generate MipMap for texture '"s
-                                   + filePath + '\'' };
+        throw exception::FileIssue { filePath };
     }
 
     std::cout << "Texture Loaded : " << filePath << std::endl;
@@ -33,6 +33,7 @@ std::string Texture::get_type_name() const
 {
     switch ( this->m_type )
     {
+    /// @todo pourquoi c'est que des texture_diffuse ?
     case Texture::E_Type::Diffuse :
         return "texture_diffuse"s;
     case Texture::E_Type::Specular :
@@ -41,10 +42,9 @@ std::string Texture::get_type_name() const
         return "texture_diffuse"s;
     case Texture::E_Type::Height :
         return "texture_diffuse"s;
-    default :
-        throw std::runtime_error { "Type not supported"s };
-        break;
     }
+
+    throw exception::EnumUnexcpected {};
 }
 
 aiTextureType Texture::to_assimp_type( Texture::E_Type const & type )
@@ -59,10 +59,9 @@ aiTextureType Texture::to_assimp_type( Texture::E_Type const & type )
         return aiTextureType::aiTextureType_NORMALS;
     case Texture::E_Type::Height :
         return aiTextureType::aiTextureType_HEIGHT;
-    default :
-        throw std::runtime_error { "Type not supported"s };
-        break;
     }
+
+    throw exception::EnumUnexcpected {};
 }
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -89,9 +88,7 @@ namespace GLTexture
         if ( data == NULL )
         {
             stbi_image_free( data );
-            throw std::runtime_error {
-                "ERROR : Texture failed to load at path: '"s + filePath + "'"s
-            };
+            throw exception::FileLoadingIssue { filePath, "Texture" };
         }
 
         GLenum format;
@@ -105,9 +102,6 @@ namespace GLTexture
             break;
         case 4 :
             format = GL_RGBA;
-            break;
-        default :
-            throw std::runtime_error { "Error while loading the texture"s };
             break;
         }
 

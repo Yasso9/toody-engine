@@ -5,6 +5,7 @@
 
 #include "main/window.hpp"
 #include "tools/assertion.hpp"
+#include "tools/exceptions.hpp"
 #include "tools/path.hpp"
 #include "tools/tools.hpp"
 
@@ -93,22 +94,24 @@ void Shape::draw_intra() const
 void Shape::load_textures_and_shaders()
 {
     bool textureLoad { true };
-    textureLoad &= this->m_textureA.loadFromFile(
-        ( path::get_folder( path::E_Folder::Resources ) / "wall.jpg"s )
-            .string() );
+    std::filesystem::path const textureAPath {
+        path::get_folder( path::E_Folder::Resources ) / "wall.jpg"s
+    };
+    textureLoad &= this->m_textureA.loadFromFile( textureAPath.string() );
     textureLoad &= this->m_textureA.generateMipmap();
     if ( ! textureLoad )
     {
-        throw std::runtime_error { "Cannot load texture"s };
+        throw exception::FileLoadingIssue { textureAPath, "Texture" };
     }
 
-    textureLoad &= this->m_textureB.loadFromFile(
-        ( path::get_folder( path::E_Folder::Resources ) / "town_hall.png"s )
-            .string() );
+    std::filesystem::path const textureBPath {
+        path::get_folder( path::E_Folder::Resources ) / "town_hall.jpg"s
+    };
+    textureLoad &= this->m_textureB.loadFromFile( textureBPath.string() );
     textureLoad &= this->m_textureB.generateMipmap();
     if ( ! textureLoad )
     {
-        throw std::runtime_error { "Cannot load texture"s };
+        throw exception::FileLoadingIssue { textureBPath, "Texture" };
     }
 }
 

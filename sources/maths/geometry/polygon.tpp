@@ -34,7 +34,7 @@ namespace math
     {
         if ( index >= NbOfPoints )
         {
-            throw std::runtime_error { "Polygon index out of range" };
+            throw std::overflow_error { "Polygon index out of range" };
         }
 
         return m_points[index];
@@ -46,7 +46,7 @@ namespace math
     {
         if ( index >= NbOfPoints )
         {
-            throw std::runtime_error { "Polygon index out of range" };
+            throw std::overflow_error { "Polygon index out of range" };
         }
 
         return m_points[index];

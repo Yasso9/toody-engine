@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "tools/exceptions.hpp"
 #include "tools/path.hpp"
 #include "tools/timer.hpp"
 
@@ -52,7 +53,9 @@ void Model::load_model()
     if ( ! scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE
          || ! scene->mRootNode )
     {
-        throw std::runtime_error { importer.GetErrorString() };
+        throw exception::FileLoadingIssue { m_filePath,
+                                            "Assimp",
+                                            importer.GetErrorString() };
     }
 
     // process ASSIMP's root node recursively

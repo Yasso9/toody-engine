@@ -193,7 +193,7 @@ namespace math
         };
         if ( vector2DRightCast.x == 0 || vector2DRightCast.y == 0 )
         {
-            throw std::runtime_error { "Division by Zero" };
+            throw std::logic_error { "Division by Zero" };
         }
 
         return { vector2DLeft.x / vector2DRightCast.x,
