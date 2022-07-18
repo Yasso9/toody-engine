@@ -264,7 +264,7 @@ debug :
 ifeq ($(DETECTED_OS),Linux)
 	export LD_LIBRARY_PATH="$(LIBRARIES_PATH)" && gdb -quiet $(EXECUTABLE)
 else
-	$(EXECUTABLE)
+	gdb -quiet $(EXECUTABLE)
 endif
 
 valgrind :

@@ -19,7 +19,7 @@ namespace math
 
         virtual ~Polygon() = default;
 
-        Point< Type > operator[]( unsigned int index ) const;
+        Point< Type > const & operator[]( unsigned int index ) const;
         Point< Type > & operator[]( unsigned int index );
         unsigned int get_number_of_points() const;
 

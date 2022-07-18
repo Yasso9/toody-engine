@@ -26,8 +26,8 @@ namespace math
         Type x;
         Type y;
 
-        constexpr Vector2() : x( 0 ), y( 0 ) {}
-        constexpr Vector2( Type xAxisValue, Type yAxisValue )
+        constexpr Vector2() noexcept : x( 0 ), y( 0 ) {}
+        constexpr Vector2( Type xAxisValue, Type yAxisValue ) noexcept
           : x( xAxisValue ), y( yAxisValue )
         {}
         /// @brief We can construct an unsigned int vector with size_t variables
@@ -43,11 +43,12 @@ namespace math
         constexpr virtual ~Vector2() = default;
 
         /// @brief Copy Constructor
-        Vector2( Vector2< Type > const & vector2D );
+        Vector2( Vector2< Type > const & vector2D ) noexcept;
         /// @brief Move Constructor
         Vector2( Vector2< Type > && vector2D ) noexcept;
         /// @brief Copy Assignement
-        Vector2< Type > & operator=( Vector2< Type > const & vector2D );
+        Vector2< Type > & operator=(
+            Vector2< Type > const & vector2D ) noexcept;
         /// @brief Move Assignement
         Vector2< Type > & operator=( Vector2< Type > && vector2D ) noexcept;
 

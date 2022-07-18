@@ -19,7 +19,7 @@ namespace math
     {}
 
     template < C_Primitive Type >
-    Vector2< Type >::Vector2( Vector2< Type > const & vector2D )
+    Vector2< Type >::Vector2( Vector2< Type > const & vector2D ) noexcept
       : x( vector2D.x ), y( vector2D.y )
     {}
     template < C_Primitive Type >
@@ -29,7 +29,7 @@ namespace math
     {}
     template < C_Primitive Type >
     Vector2< Type > & Vector2< Type >::operator=(
-        Vector2< Type > const & vector2D )
+        Vector2< Type > const & vector2D ) noexcept
     {
         return *this = Vector2< Type > { vector2D };
     }

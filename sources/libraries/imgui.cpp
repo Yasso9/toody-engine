@@ -65,18 +65,6 @@ namespace ImGui
             "%u",
             flags );
     }
-    bool P_InputNumber( std::string const & label, std::size_t & value,
-                        int step, int step_fast, ImGuiInputTextFlags flags )
-    {
-        return InputScalar(
-            label.c_str(),
-            ImGuiDataType_U32,
-            reinterpret_cast< void * >( &value ),
-            reinterpret_cast< void * >( step > 0 ? &step : NULL ),
-            reinterpret_cast< void * >( step_fast > 0 ? &step_fast : NULL ),
-            "%zu",
-            flags );
-    }
 
     namespace color
     {

@@ -24,12 +24,12 @@ namespace math
     {
       public:
         Point() noexcept : Vector2< Type >() {}
-        Point( Type xAxisValue, Type yAxisValue )
+        Point( Type xAxisValue, Type yAxisValue ) noexcept
           : Vector2< Type >( xAxisValue, yAxisValue )
         {}
 
         /// @brief Copy Constructor
-        Point( Vector2< Type > const & vector2D );
+        Point( Vector2< Type > const & vector2D ) noexcept;
 
         explicit operator Vector2< Type >() const;
         template < C_Primitive OtherType >

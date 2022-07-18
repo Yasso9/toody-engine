@@ -72,7 +72,8 @@ namespace customize
         sf::Color outline { circleShape.getOutlineColor() };
         float outlineThickness { circleShape.getOutlineThickness() };
         float radius { circleShape.getRadius() };
-        std::size_t numberOfPoint { circleShape.getPointCount() };
+        unsigned int numberOfPoint { static_cast< unsigned int >(
+            circleShape.getPointCount() ) };
 
         ImGui::P_ColorEditor( "Background Color", background );
         ImGui::P_ColorEditor( "Outline Color", outline );

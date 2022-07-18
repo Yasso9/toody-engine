@@ -16,7 +16,8 @@ namespace math
     }
 
     template < C_Primitive Type >
-    Point< Type > Polygon< Type >::operator[]( unsigned int index ) const
+    Point< Type > const & Polygon< Type >::operator[](
+        unsigned int index ) const
     {
         if ( index >= this->get_number_of_points() )
         {
@@ -29,12 +30,9 @@ namespace math
     template < C_Primitive Type >
     Point< Type > & Polygon< Type >::operator[]( unsigned int index )
     {
-        if ( index >= this->get_number_of_points() )
-        {
-            throw std::overflow_error { "Polygon index out of range" };
-        }
-
-        return m_points[index];
+        return const_cast< Point< Type > & >(
+            const_cast< const Polygon< Type > * >( *this )->operator[](
+                index ) );
     }
 
     template < C_Primitive Type >
@@ -74,13 +72,17 @@ namespace math
     std::vector< Segment< Type > > Polygon< Type >::get_segments() const
     {
         std::vector< Segment< Type > > segments {};
+        // Set the number of elements that the vector should contain
+        segments.resize( this->get_number_of_points() );
 
         for ( unsigned int i_point = 0u; i_point < this->get_number_of_points();
               ++i_point )
         {
             unsigned int i_pointNext { ( i_point + 1 )
                                        % this->get_number_of_points() };
-            segments[i_point] = { ( *this )[i_point], ( *this )[i_pointNext] };
+            segments[i_point] =
+                math::Segment< Type > { ( *this )[i_point],
+                                        ( *this )[i_pointNext] };
         }
 
         return segments;

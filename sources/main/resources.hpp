@@ -46,7 +46,7 @@ class Resources final : public Singleton< Resources >
         if ( ! m_textures.contains( texturePath ) )
         {
             sf::Texture texture {};
-            if ( ! texture.loadFromFile( texturePath ) )
+            if ( ! texture.loadFromFile( texturePath.string() ) )
             {
                 throw exception::FileLoadingIssue { texturePath, "Texture" };
             }

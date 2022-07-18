@@ -11,7 +11,7 @@ namespace math
     ************************************************************************ */
 
     template < C_Primitive Type >
-    Point< Type >::Point( Vector2< Type > const & vector2D )
+    Point< Type >::Point( Vector2< Type > const & vector2D ) noexcept
       : Vector2< Type >( vector2D )
     {}
 

@@ -11,7 +11,7 @@ namespace math
         Point< Type > pointA;
         Point< Type > pointB;
 
-        Segment() : Segment( { 0, 0 }, { 0, 0 } ) {}
+        Segment() noexcept : Segment( { 0, 0 }, { 0, 0 } ) {}
         Segment( Point< Type > point1, Point< Type > point2 )
           : pointA( point1 ), pointB( point2 )
         {}
