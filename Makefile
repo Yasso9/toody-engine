@@ -267,13 +267,20 @@ else
 	gdb -quiet $(EXECUTABLE)
 endif
 
-valgrind :
-	valgrind --leak-check=full \
+valgrind : build
+ifeq ($(DETECTED_OS),Linux)
+	export LD_LIBRARY_PATH="$(LIBRARIES_PATH)" && valgrind \
+		--leak-check=full \
 		--show-leak-kinds=all \
 		--track-origins=yes \
-		--verbose \
+		--trace-children=yes --track-fds=yes \
+		--num-callers=50 \
 		--log-file=valgrind-out.txt \
 		$(EXECUTABLE)
+else
+$(error ERROR : Valgrind not usable on Windows)
+endif
+
 
 remake: clean buildrun
 
@@ -313,10 +320,7 @@ LIB_FLAG_SQLITE := -lpthread -ldl
 LIBRARIES_FLAG := $(LIB_FLAG_SFML) $(LIB_FLAG_IMGUI) \
 				  $(LIB_FLAG_ASSIMP) $(LIB_FLAG_SQLITE)
 
-# ifeq ($(DETECTED_OS),Windows)
-LIBRARIES := -L"$(LIBRARIES_PATH)"
-# endif
-LIBRARIES := $(LIBRARIES) $(LIBRARIES_FLAG)
+LIBRARIES := -L"$(LIBRARIES_PATH)" $(LIBRARIES_FLAG)
 
 
 

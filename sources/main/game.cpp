@@ -20,16 +20,14 @@
 
 Game::Game() : m_state( nullptr )
 {
-    if ( ! sf::Shader::isAvailable() )
-    {
-        throw exception::System { "Shader's not available"s };
-    }
-
-    Window::get_instance();
-
     if ( ! ImGui::SFML::Init( Window::get_instance() ) )
     {
         throw exception::System { "Cannot init ImGui"s };
+    }
+
+    if ( ! sf::Shader::isAvailable() )
+    {
+        throw exception::System { "Shader's not available"s };
     }
     // Disable use of imgui.ini file
     // ImGui::GetIO().IniFilename = nullptr;
