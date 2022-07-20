@@ -25,6 +25,18 @@ namespace math
 
         void set_rectangle( Rectangle< Type > rectangle );
 
+        /**
+         * @brief Move all Points to the same distance
+         * @param distance value of what all points should be moved
+         */
+        void move( math::Vector2< Type > distance )
+        {
+            for ( auto & point : m_points )
+            {
+                point += distance;
+            }
+        }
+
         std::string print() const;
 
         std::vector< Segment< Type > > get_segments() const;

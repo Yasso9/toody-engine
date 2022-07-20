@@ -51,6 +51,17 @@ namespace math
             Vector2< Type > const & vector2D ) noexcept;
         /// @brief Move Assignement
         Vector2< Type > & operator=( Vector2< Type > && vector2D ) noexcept;
+        /// @brief Array operator
+        virtual Type operator[]( std::size_t index ) const;
+
+        /* ************************************************************************
+        *********************** ASSIGNEMENT OPERATOR ******************************
+        ************************************************************************ */
+
+        Vector2< Type > operator-=( Vector2< Type > vector2D );
+        Vector2< Type > operator+=( Vector2< Type > vector2D );
+        Vector2< Type > operator/=( Vector2< Type > vector2D );
+        Vector2< Type > operator/=( float factor );
 
         operator sf::Vector2< Type >() const;
         /// @brief conversion to ImVec2 must be possible only if the same type
@@ -68,8 +79,6 @@ namespace math
             requires( not std::is_same_v< Type, int > );
         Vector2< std::size_t > to_size_t() const
             requires( not std::is_same_v< Type, std::size_t > );
-
-        virtual Type operator[]( std::size_t index ) const;
 
         /// @brief get the biggest value between x and y
         Type get_max() const { return std::max( this->x, this->y ); }
@@ -158,22 +167,6 @@ namespace math
 
     template < C_RelativePrimitive Type >
     Vector2< Type > operator-( Vector2< Type > const & vector2D );
-
-    /* ************************************************************************
-    *********************** ASSIGNEMENT OPERATOR ******************************
-    ************************************************************************ */
-
-    template < C_RelativePrimitive Type >
-    Vector2< Type > operator-=( Vector2< Type > & vector2DLeft,
-                                Vector2< Type > const & vector2DRight );
-    template < C_RelativePrimitive Type >
-    Vector2< Type > operator+=( Vector2< Type > & vector2DLeft,
-                                Vector2< Type > const & vector2DRight );
-    template < C_RelativePrimitive Type >
-    Vector2< Type > operator/=( Vector2< Type > & vector2DLeft,
-                                Vector2< Type > const & vector2DRight );
-    template < C_RelativePrimitive Type >
-    Vector2< Type > operator/=( Vector2< Type > & vector2D, float factor );
 } // namespace math
 
 #include "vector2.tpp"

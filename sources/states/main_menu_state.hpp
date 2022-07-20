@@ -8,8 +8,8 @@ class MainMenuState final : public State
     MainMenuState();
     virtual ~MainMenuState() = default;
 
-    void update() override;
-    void render() const override;
+    void update_extra( float deltaTime ) override;
+    // void render( sf::RenderTarget & target ) const override;
 
   private:
     sf::RectangleShape m_background;
@@ -21,5 +21,6 @@ class MainMenuState final : public State
     void init_text();
     void init_buttons();
 
-    void extra_events() override;
+    /// @todo delete that function
+    void extra_events();
 };

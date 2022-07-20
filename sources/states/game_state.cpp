@@ -23,20 +23,21 @@ void GameState::init_map()
     this->m_view.setSize( Window::get_instance().get_size().to_float() / 2.f );
 }
 
-void GameState::update()
+void GameState::update_extra( float deltaTime )
 {
-    this->m_player.update( this->m_deltaTime );
+    this->m_player.update( deltaTime );
     // The view follow the player
     this->m_view.setCenter( this->m_player.getPosition() );
 }
 
-void GameState::render() const
-{
-    Window::get_instance().setView( this->m_view );
+// void GameState::render( sf::RenderTarget & target ) const
+// {
+//     /// @todo handle the view
+//     // Window::get_instance().setView( this->m_view );
 
-    Window::get_instance().draw( this->m_tilemap );
+//     target.draw( this->m_tilemap );
 
-    Window::get_instance().draw( this->m_player );
+//     target.draw( this->m_player );
 
-    Window::get_instance().reset_view();
-}
+//     // Window::get_instance().reset_view();
+// }

@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 
+#include "input/input.hpp"
 #include "main/window.hpp"
 #include "maths/maths.hpp"
 #include "tools/assertion.hpp"
@@ -159,51 +160,51 @@ glm::vec3 Camera::get_y_axis() const
 
 void Camera::update_keyboard_inputs_game( float const & deltaTime )
 {
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
+    if ( input::is_pressed( sf::Keyboard::Z ) )
     {
         this->move( Camera::E_Movement::Up, deltaTime );
     }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
+    if ( input::is_pressed( sf::Keyboard::S ) )
     {
         this->move( Camera::E_Movement::Down, deltaTime );
     }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Q ) )
+    if ( input::is_pressed( sf::Keyboard::Q ) )
     {
         this->move( Camera::E_Movement::Left, deltaTime );
     }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
+    if ( input::is_pressed( sf::Keyboard::D ) )
     {
         this->move( Camera::E_Movement::Right, deltaTime );
     }
 
     float const & rotationSensivity { 20.f };
 
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Up ) )
+    if ( input::is_pressed( sf::Keyboard::Up ) )
     {
         this->rotate( glm::vec3 { 1.f, 0.f, 0.f } * rotationSensivity,
                       deltaTime );
     }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) )
+    if ( input::is_pressed( sf::Keyboard::Down ) )
     {
         this->rotate( glm::vec3 { -1.f, 0.f, 0.f } * rotationSensivity,
                       deltaTime );
     }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) )
+    if ( input::is_pressed( sf::Keyboard::Left ) )
     {
         this->rotate( glm::vec3 { -1.f, 0.f, 0.f } * rotationSensivity,
                       deltaTime );
     }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Right ) )
+    if ( input::is_pressed( sf::Keyboard::Right ) )
     {
         this->rotate( glm::vec3 { 1.f, 0.f, 0.f } * rotationSensivity,
                       deltaTime );
     }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::B ) )
+    if ( input::is_pressed( sf::Keyboard::B ) )
     {
         this->rotate( glm::vec3 { 0.f, 0.f, -1.f } * rotationSensivity,
                       deltaTime );
     }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::N ) )
+    if ( input::is_pressed( sf::Keyboard::N ) )
     {
         this->rotate( glm::vec3 { 1.f, 0.f, 1.f } * rotationSensivity,
                       deltaTime );
@@ -212,10 +213,10 @@ void Camera::update_keyboard_inputs_game( float const & deltaTime )
 
 void Camera::update_mouse_inputs_game( float const & deltaTime )
 {
-    sf::Vector2f const windowCenter { math::Vector2F {
-        Window::get_instance().get_center_position() } };
-    sf::Vector2f const currentMousePosition { sf::Mouse::getPosition(
-        Window::get_instance() ) };
+    math::Vector2F const windowCenter {
+        Window::get_instance().get_center_position()
+    };
+    math::Vector2F const currentMousePosition { input::get_mouse_position() };
 
     if ( windowCenter == currentMousePosition )
     {
@@ -228,8 +229,7 @@ void Camera::update_mouse_inputs_game( float const & deltaTime )
     offset.z = 0.f;
 
     // Reset Mouse Position
-    sf::Mouse::setPosition( static_cast< sf::Vector2i >( windowCenter ),
-                            Window::get_instance() );
+    input::set_mouse_position( windowCenter.to_int() );
 
     float const sensitivity = 1.f;
     offset *= sensitivity;
@@ -246,8 +246,7 @@ void Camera::update_mouse_inputs_editor( float const & deltaTime )
     math::Vector2F const windowCenter {
         Window::get_instance().get_center_position()
     };
-    math::Vector2F const currentMousePosition { sf::Mouse::getPosition(
-        Window::get_instance() ) };
+    math::Vector2F const currentMousePosition { input::get_mouse_position() };
 
     if ( windowCenter == currentMousePosition )
     {
@@ -260,8 +259,7 @@ void Camera::update_mouse_inputs_editor( float const & deltaTime )
     offset.z = 0.f;
 
     // Reset Mouse Position
-    sf::Mouse::setPosition( math::Vector2I { windowCenter },
-                            Window::get_instance() );
+    input::set_mouse_position( windowCenter.to_int() );
 
     float const sensitivity = 1.f;
     offset *= sensitivity;

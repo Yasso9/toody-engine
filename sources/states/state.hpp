@@ -1,13 +1,18 @@
 #pragma once
 
 #include <memory>
+#include <optional>
+#include <vector>
 
-#include "main/window.hpp"
-
+#include "graphics2D/component.hpp"
+#include "graphics2D/view.hpp"
 #include "input/button_array.hpp"
+#include "main/window.hpp"
+#include "tools/concepts.hpp"
 
+/// @todo inherit from Component
 /// @brief abstract class
-class State
+class State : public Component
 {
   public:
     /**
@@ -25,8 +30,14 @@ class State
         EnumLast,
     };
 
-    /// @brief We use a constructor that is only used by childs instead
-    State()          = delete;
+  protected:
+    /** @brief value corresponding of the state that the game should run */
+    State::E_List m_stateName;
+    View m_view;
+
+    State( State::E_List const & stateName );
+
+  public:
     virtual ~State() = default;
 
     /**
@@ -35,26 +46,14 @@ class State
      */
     State::E_List get_state_to_print() const;
 
-    /// @brief Update all change that can happen by an event.
+    /// @brief Update any change that can happen by an event. Must be called in the pollevent function
     void update_inputs( sf::Event const & event );
-    /// @brief update general events that are use with sf::Mouse or sf::Button
-    ///        (should be outside the pollevent function)
-    virtual void extra_events();
-    /// @brief Update deltaTime and call the update method
-    void update_data( float const & deltaTime );
 
-    /// @brief Update any change that can happen in the current state.
-    virtual void update() = 0;
-    /// @brief Draw all the things that we have to draw in our window
-    virtual void render() const = 0;
-
-  protected:
-    State( State::E_List const & stateName );
-
-    /** @brief value corresponding of the state that the game should run */
-    State::E_List m_stateName;
-
-    float m_deltaTime;
+  private:
+    void render_before( sf::RenderTarget & target,
+                        sf::RenderStates states ) const override;
+    void render_after( sf::RenderTarget & target,
+                       sf::RenderStates states ) const override;
 
     virtual void keyboard_pressed( sf::Event event );
     virtual void keyboard_released( sf::Event event );

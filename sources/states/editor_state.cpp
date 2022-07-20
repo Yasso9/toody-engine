@@ -3,6 +3,7 @@
 #include <memory>
 #include <sstream>
 
+#include "input/input.hpp"
 #include "libraries/imgui.hpp"
 #include "main/resources.hpp"
 #include "tools/assertion.hpp"
@@ -11,15 +12,20 @@
 
 EditorState::EditorState()
   : State( State::E_List::Editor ),
-    m_showWindow(),
-    m_view(), // init in init_map
-    m_tilemap( m_view ),
-    // m_imageMap(),
-    m_player(),
-    m_collisionMap(),
-    m_greenEntity( math::RectangleF { 0.f, 0.f, 40.f, 40.f }, m_collisionMap,
-                   keyboard_move::ILKJ ),
-    m_mousePosition( 0, 0 )
+    m_showWindow {
+},
+    m_tilemap { m_view },
+    // m_imageMap{},
+    m_player {},
+    m_collisionMap {
+        StaticEntity2D { math::RectangleF { 100.f, 100.f, 50.f, 50.f } },
+        StaticEntity2D { math::RectangleF { -300.f, 0.f, 200.f, 200.f } },
+        StaticEntity2D { math::RectangleF { 0.f, 500.f, 100.f, 50.f } }
+    },
+    m_greenEntity { math::RectangleF { 0.f, 0.f, 40.f, 40.f },
+                    m_collisionMap,
+                    m_view,
+                    keyboard_move::ILKJ }
 {
     this->init_map();
 
@@ -32,37 +38,31 @@ EditorState::EditorState()
     };
 
     m_greenEntity.setPosition( 0.f, 0.f );
-    m_greenEntity.setFillColor( sf::Color::Green );
-    m_greenEntity.setOutlineColor( sf::Color::Black );
-    m_greenEntity.setOutlineThickness( 2.f );
+    m_greenEntity.get_shape().setFillColor( sf::Color::Green );
+    m_greenEntity.get_shape().setOutlineColor( sf::Color::Black );
+    m_greenEntity.get_shape().setOutlineThickness( 2.f );
 
-    m_collisionMap.push_back( StaticEntity2D {
-        math::RectangleF {100.f, 100.f, 50.f, 50.f}
-    } );
-    m_collisionMap.push_back( StaticEntity2D {
-        math::RectangleF {-300.f, 0.f, 200.f, 200.f}
-    } );
-    m_collisionMap.push_back( StaticEntity2D {
-        math::RectangleF {0.f, 500.f, 100.f, 50.f}
-    } );
+    this->add_child( m_tilemap );
+    this->add_childs( m_collisionMap );
+    this->add_child( m_greenEntity );
+    this->add_child( m_player );
 }
 
 void EditorState::mouse_moved( sf::Event event )
 {
     math::Vector2I mouseMovement { event.mouseMove.x, event.mouseMove.y };
     ( void )mouseMovement;
+    /// @todo what do we do here ?
 }
 
-void EditorState::extra_events()
+void EditorState::update_extra( float deltaTime )
 {
-    m_tilemap.process_events();
-
     if ( ImGui::P_IsAnyWindowFocused() )
     {
         return;
     }
 
-    m_greenEntity.update( m_deltaTime );
+    m_greenEntity.update( deltaTime );
 
     constexpr float moveSpeedBaseValue { 10.f };
     math::Vector2F const moveSpeed {
@@ -72,32 +72,24 @@ void EditorState::extra_events()
 
     /// @todo changer les events de la view pour pouvoir bouger la vue à partir de la souris (clique du milieu)
     math::Vector2F moveDirection { 0.f, 0.f };
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
+    if ( input::is_pressed( sf::Keyboard::Z ) )
     {
         moveDirection += math::Vector2F { 0.f, -1.f };
     }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
+    if ( input::is_pressed( sf::Keyboard::S ) )
     {
         moveDirection += math::Vector2F { 0.f, 1.f };
     }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Q ) )
+    if ( input::is_pressed( sf::Keyboard::Q ) )
     {
         moveDirection += math::Vector2F { -1.f, 0.f };
     }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
+    if ( input::is_pressed( sf::Keyboard::D ) )
     {
         moveDirection += math::Vector2F { 1.f, 0.f };
     }
     m_view.move( moveDirection.normalize() * moveSpeed );
 
-    if ( m_showWindow[E_WindowKey::PlayerHandling] )
-    {
-        m_player.update_events();
-    }
-}
-
-void EditorState::update()
-{
     this->update_toolbar();
 
     if ( m_showWindow[E_WindowKey::DebugOptions] )
@@ -113,45 +105,41 @@ void EditorState::update()
         ImGui::ShowDemoWindow( &m_showWindow.at( E_WindowKey::DemoWindow ) );
     }
 
-    m_tilemap.update();
-
-    if ( m_showWindow[E_WindowKey::PlayerHandling] )
-    {
-        m_player.update( m_deltaTime );
-        m_view.setCenter( m_player.getPosition() );
-    }
+    // if ( m_showWindow[E_WindowKey::PlayerHandling] )
+    // {
+    //     m_player.update( deltaTime );
+    //     m_view.setCenter( m_player.getPosition() );
+    // }
 
     this->update_overlay();
 }
 
-void EditorState::render() const
-{
-    Window::get_instance().setView( m_view );
+// void EditorState::render() const
+// {
+//     Window::get_instance().setView( m_view );
 
-    Window::get_instance().sf_draw( m_tilemap );
+//     Window::get_instance().sf_draw( m_tilemap );
 
-    for ( StaticEntity2D const & entity : m_collisionMap )
-    {
-        Window::get_instance().sf_draw( entity );
-    }
-    Window::get_instance().sf_draw( m_greenEntity );
+//     for ( StaticEntity2D const & entity : m_collisionMap )
+//     {
+//         Window::get_instance().sf_draw( entity );
+//     }
+//     Window::get_instance().sf_draw( m_greenEntity );
 
-    if ( m_showWindow.at( E_WindowKey::PlayerHandling ) )
-    {
-        Window::get_instance().sf_draw( m_player );
-    }
+//     if ( m_showWindow.at( E_WindowKey::PlayerHandling ) )
+//     {
+//         Window::get_instance().sf_draw( m_player );
+//     }
 
-    Window::get_instance().reset_view();
-}
+//     Window::get_instance().reset_view();
+// }
 
 void EditorState::init_map()
 {
     m_tilemap.setPosition( 0.f, 0.f );
 
-    /// @todo create a methode for tilemap called .get_center who return the center position of the tilemap (relatively or asbolutely)
     // Set view position at center of the tilemap
-    m_view.setCenter( math::Vector2F { m_tilemap.getPosition() }
-                      + ( m_tilemap.get_size() / 2.f ) );
+    m_view.setCenter( m_tilemap.get_center() );
     m_view.setSize( Window::get_instance().get_size().to_float() );
 
     m_player.setPosition( m_view.get_center() );
@@ -224,7 +212,8 @@ void EditorState::update_debug_window()
         ImGui::InputText( "Test", testBuffer.data(), 20 );
 
         std::stringstream windowTextOutput {};
-        windowTextOutput << "MousePos : " << m_mousePosition << "\n";
+        windowTextOutput << "MousePos : " << input::get_mouse_position()
+                         << "\n";
         windowTextOutput << "CursorPos : "
                          << sf::Vector2f { ImGui::GetCursorPos() } << "\n";
         windowTextOutput << "CursorStartPos : "
@@ -260,7 +249,7 @@ void EditorState::update_collision_window()
                          &m_showWindow.at( E_WindowKey::Collision ) ) )
     {
         std::stringstream output {};
-        output << "MousePos : " << m_mousePosition << "\n";
+        output << "MousePos : " << input::get_mouse_position() << "\n";
         // ImGui::SliderScalar( "Green Speed",
         //                      ImGuiDataType_S8,
         //                      &s8_v,

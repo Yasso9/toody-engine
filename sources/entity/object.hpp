@@ -1,31 +1,24 @@
 #pragma once
 
+#include "graphics2D/component.hpp"
+#include "graphics2D/view.hpp"
 #include "input/movement_key.hpp"
 
-class StaticEntity2D : public sf::Shape
+class Shape2D : public sf::Shape
 {
-  protected:
-    math::PolygonF m_polygon;
-
   public:
-    explicit StaticEntity2D( math::PolygonF polygon );
-    ~StaticEntity2D() = default;
+    math::PolygonF polygon;
+
+    Shape2D( math::PolygonF aPolygon ) : polygon { aPolygon } {}
 
     unsigned int get_point_count() const
     {
-        return m_polygon.get_number_of_points();
-    }
+        return polygon.get_number_of_points();
+    };
     math::Vector2F get_point( unsigned int index ) const
     {
-        return m_polygon[index];
-    }
-
-    math::PointF get_position() const;
-    math::PolygonF get_polygon( bool getSize = true ) const;
-
-    void set_polygon( math::PolygonF polygon );
-
-    bool is_intersected_by( StaticEntity2D const & otherEntity ) const;
+        return polygon[index];
+    };
 
   private:
     std::size_t getPointCount() const override
@@ -38,18 +31,43 @@ class StaticEntity2D : public sf::Shape
     }
 };
 
-using T_CollisionMap = std::vector< StaticEntity2D >;
+class StaticEntity2D : public TransformableComponent
+{
+  protected:
+    Shape2D m_shape;
+
+  public:
+    explicit StaticEntity2D( math::PolygonF polygon );
+    ~StaticEntity2D() = default;
+
+    math::PointF get_position() const;
+    math::PolygonF get_polygon( bool getSize = true ) const;
+    Shape2D & get_shape() { return m_shape; }
+
+    void set_polygon( math::PolygonF polygon );
+
+    bool is_intersected_by( StaticEntity2D const & otherEntity ) const;
+
+  protected:
+    void render( sf::RenderTarget & target,
+                 sf::RenderStates states ) const override
+    {
+        target.draw( m_shape, states );
+    }
+};
 
 /// @brief Moveable Entity
 class Entity2D : public StaticEntity2D
 {
-    T_CollisionMap const & m_collisionMap;
+    std::vector< StaticEntity2D > const & m_collisionMap;
+    View const & m_view;
     keyboard_move::S_Key m_movementKey;
     math::Vector2F m_speed;
 
   public:
-    Entity2D( math::PolygonF quadrangle, T_CollisionMap const & collisionMap,
-              keyboard_move::S_Key movementKey );
+    Entity2D( math::PolygonF quadrangle,
+              std::vector< StaticEntity2D > const & collisionMap,
+              View const & view, keyboard_move::S_Key movementKey );
 
     math::Vector2F get_speed() const;
 
@@ -58,8 +76,7 @@ class Entity2D : public StaticEntity2D
 
     bool is_collision_detected() const;
 
-    void update( float deltaTime,
-                 math::Vector2F viewZoom = math::Vector2F( 1.f, 1.f ) );
+    void update_extra( float deltaTime ) override;
 };
 
 namespace customize
@@ -79,7 +96,6 @@ namespace customize
         ImGui::P_ColorEditor( "Outline Color", outline );
         ImGui::InputFloat( "Outline Thickness", &outlineThickness );
         ImGui::InputFloat( "Radius", &radius );
-        /// @todo if doesn't work, cast it to unsigned int
         ImGui::P_InputNumber( "Number of Point", numberOfPoint );
 
         circleShape.setFillColor( background );
@@ -122,13 +138,13 @@ class CustomEntity2D : public StaticEntity2D
     }
 
   private:
-    void draw( sf::RenderTarget & target,
-               sf::RenderStates states ) const override
+    void render( sf::RenderTarget & target,
+                 sf::RenderStates states ) const override
     {
         target.draw( *this, states );
 
         sf::CircleShape pointShape { m_pointShape };
-        for ( math::PointF const & point : m_polygon.get_points() )
+        for ( math::PointF const & point : m_shape.polygon.get_points() )
         {
             pointShape.setPosition( point.x, point.y );
             target.draw( pointShape, states );

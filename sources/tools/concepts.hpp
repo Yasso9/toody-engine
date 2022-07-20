@@ -1,6 +1,7 @@
 #pragma once
 
 #include <type_traits>
+#include <vector>
 
 /// @brief Require numbers type like float, int or unsigned int
 template < typename Type >

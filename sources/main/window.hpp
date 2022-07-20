@@ -11,6 +11,7 @@
 template < typename Type >
 concept Drawable = std::is_base_of< sf::Drawable, Type >::value;
 
+/// @todo maybe think to remove the singleton pattern for this class
 class Window final : public sf::RenderWindow,
                      public Singleton< Window >
 {
@@ -26,12 +27,11 @@ class Window final : public sf::RenderWindow,
 
     math::Vector2U get_center_position() const;
 
+    bool is_hovered() const;
     /// @brief Check if the window have focus and if the mouse is inside the windows
     bool has_absolute_focus() const;
 
     void clear_all( sf::Color const & backgroundColor );
-
-    void reset_view();
 
     void gl_draw_elements( unsigned int const & vertexArrayObject,
                            GLenum const & primitiveType,
@@ -49,6 +49,8 @@ class Window final : public sf::RenderWindow,
 
   private:
     Window();
+
+    using sf::RenderWindow::draw;
 
     void creation();
     void initialize();

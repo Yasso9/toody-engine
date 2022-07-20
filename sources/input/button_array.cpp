@@ -99,14 +99,15 @@ void ButtonArray::set_direction(
     this->set_strings( this->m_strings );
 }
 
-int ButtonArray::update( sf::Vector2f const & position, bool const & click )
+int ButtonArray::update_button_array( sf::Vector2f const & position,
+                                      bool const & click )
 {
     for ( std::size_t i_buttonNummber { 0 };
           i_buttonNummber < this->m_buttons.size();
           ++i_buttonNummber )
     {
         bool const isPressed {
-            this->m_buttons[i_buttonNummber].update( position, click )
+            this->m_buttons[i_buttonNummber].update_button( position, click )
         };
 
         if ( isPressed )
@@ -118,8 +119,8 @@ int ButtonArray::update( sf::Vector2f const & position, bool const & click )
     return -1;
 }
 
-void ButtonArray::draw( sf::RenderTarget & target,
-                        sf::RenderStates states ) const
+void ButtonArray::render( sf::RenderTarget & target,
+                          sf::RenderStates states ) const
 {
     states.transform *= this->getTransform();
 

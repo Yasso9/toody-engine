@@ -5,7 +5,6 @@
 #include <iostream>
 
 #ifndef NDEBUG
-    /// @todo trouver un moyen pour cacher ASSERTION2 ASSERTION1 et GET_MACRO
     #define ASSERTION( expression, message ) \
         too::assertion( expression,          \
                         __FILE__,            \

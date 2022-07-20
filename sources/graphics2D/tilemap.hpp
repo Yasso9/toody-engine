@@ -2,14 +2,14 @@
 
 #include <vector>
 
+#include "graphics2D/component.hpp"
 #include "graphics2D/sfml.hpp"
 #include "graphics2D/tile.hpp"
 #include "graphics2D/tile_selector.hpp"
 #include "graphics2D/tileset.hpp"
 #include "graphics2D/view.hpp"
 
-class TileMap : public sf::Drawable,
-                public sf::Transformable
+class TileMap : public TransformableComponent
 {
     TileSelector m_tileSelector;
     sf::RectangleShape m_cursor;
@@ -20,10 +20,6 @@ class TileMap : public sf::Drawable,
     std::vector< std::vector< std::vector< Tile > > > m_tileTable;
     unsigned int m_currentDepth;
 
-    // Events
-    bool m_isLeftButtonPressed;
-    math::PointI m_mousePosition;
-
   public:
     TileMap( View & view );
     virtual ~TileMap() = default;
@@ -33,6 +29,17 @@ class TileMap : public sf::Drawable,
     /// @brief number of tile that the tilemap contain
     math::Vector2U get_tile_size() const;
 
+    math::Vector2F get_center( bool isAbsolutePosition = true ) const
+    {
+        math::Vector2F centerPosition { this->get_size() / 2.f };
+        if ( isAbsolutePosition )
+        {
+            centerPosition += math::Vector2F { this->getPosition() };
+        }
+
+        return centerPosition;
+    }
+
     Tileset const & get_tileset() const
     {
         return this->m_tileSelector.get_tileset();
@@ -41,11 +48,10 @@ class TileMap : public sf::Drawable,
     /// @brief resize
     void set_tile_size( math::Vector2U const & tileSize );
 
-    void process_events();
-    void update();
-
     /// @brief save the tilemap table into the sqlite3 database
     void save() const;
+
+    void update_extra( float deltaTime ) override;
 
   private:
     void init_tile_table_from_database();
@@ -57,6 +63,6 @@ class TileMap : public sf::Drawable,
     void update_table_informations();
     void update_tile_size_button();
 
-    void draw( sf::RenderTarget & target,
-               sf::RenderStates states ) const override;
+    void render( sf::RenderTarget & target,
+                 sf::RenderStates states ) const override;
 };

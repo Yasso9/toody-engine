@@ -9,8 +9,7 @@ class GameState final : public State
   public:
     GameState();
 
-    void update() override;
-    void render() const override;
+    void update_extra( float deltaTime ) override;
 
   private:
     View m_view;

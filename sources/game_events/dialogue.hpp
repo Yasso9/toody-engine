@@ -2,14 +2,16 @@
 
 #include <string>
 
+#include "graphics2D/component.hpp"
 #include "graphics2D/sfml.hpp"
+#include "input/input.hpp"
 #include "libraries/imgui.hpp"
 #include "main/resources.hpp"
 #include "main/window.hpp"
 #include "maths/maths.hpp"
 #include "tools/exceptions.hpp"
 
-class Dialogue : public sf::Drawable
+class Dialogue : public Component
 {
   private:
     sf::RectangleShape m_shape;
@@ -87,13 +89,12 @@ class Dialogue : public sf::Drawable
         static bool mouseIsInsideBox { false };
 
         // If the mouse was already inside and we have clicked in the right button
-        if ( mouseIsInsideBox
-             && sf::Mouse::isButtonPressed( sf::Mouse::Right ) )
+        if ( mouseIsInsideBox && input::is_pressed( sf::Mouse::Right ) )
         {
             this->m_shape.move( mouseMovement.to_float() );
         }
 
-        math::PointI mousePosition { sf::Mouse::getPosition(
+        math::PointI mousePosition { input::get_mouse_position(
             Window::get_instance() ) };
         mouseIsInsideBox = mousePosition.to_float().is_inside(
             math::PointF { this->m_shape.getPosition() },
@@ -109,7 +110,7 @@ class Dialogue : public sf::Drawable
         }
     }
 
-    void update_customisation()
+    void update( float /* deltaTime */ ) override
     {
         if ( ! m_showCustomisation )
         {
@@ -143,8 +144,8 @@ class Dialogue : public sf::Drawable
     }
 
   private:
-    void draw( sf::RenderTarget & target,
-               sf::RenderStates states ) const override
+    void render( sf::RenderTarget & target,
+                 sf::RenderStates states ) const override
     {
         target.draw( m_shape, states );
         target.draw( m_text, states );

@@ -1,5 +1,6 @@
 #include "tilemap.hpp"
 
+#include "input/input.hpp"
 #include "libraries/imgui.hpp"
 #include "main/window.hpp"
 #include "tools/databases.hpp"
@@ -16,9 +17,7 @@ TileMap::TileMap( View & view )
     m_cursor(),
     m_view( view ),
     m_tileTable(),
-    m_currentDepth( 0u ),
-    m_isLeftButtonPressed( false ),
-    m_mousePosition( 0.f, 0.f )
+    m_currentDepth( 0u )
 {
     this->init_tile_table_from_database();
 
@@ -30,6 +29,8 @@ TileMap::TileMap( View & view )
     m_cursor.setPosition( 0.f, 0.f );
 
     this->setPosition( 0.f, 0.f );
+
+    this->add_child( m_tileSelector );
 }
 
 math::Vector2F TileMap::get_size() const
@@ -96,25 +97,12 @@ void TileMap::set_tile_size( math::Vector2U const & tileSize )
                "columns of the table haven't the same size" );
 }
 
-void TileMap::process_events()
+void TileMap::update_extra( float /* deltaTime */ )
 {
-    this->m_mousePosition =
-        math::PointI { sf::Mouse::getPosition( Window::get_instance() ) };
-    this->m_tileSelector.process_events();
-
     if ( ImGui::P_IsAnyWindowFocused() )
     {
-        this->m_isLeftButtonPressed = false;
         return;
     }
-
-    this->m_isLeftButtonPressed =
-        sf::Mouse::isButtonPressed( sf::Mouse::Button::Left );
-}
-
-void TileMap::update()
-{
-    this->m_tileSelector.update();
 
     ImGui::SetNextWindowBgAlpha( 0.5f );
     if ( ImGui::P_Begin( "Tilemap Information" ) )
@@ -231,11 +219,11 @@ void TileMap::update_selection()
     infoOutput << "View - Zoom : " << this->m_view.get_zoom() << "\n";
 
     math::Vector2F const mousePositionViewZoom {
-        this->m_mousePosition.to_float() / this->m_view.get_zoom()
+        input::get_mouse_position().to_float() / this->m_view.get_zoom()
     };
     math::PointF const mousePositionRelativToView { math::floor(
         mousePositionViewZoom + this->m_view.get_position() ) };
-    infoOutput << "Mouse Position - Absolute : " << this->m_mousePosition
+    infoOutput << "Mouse Position - Absolute : " << input::get_mouse_position()
                << "\n";
     infoOutput << "Mouse Position - View Zoom : " << mousePositionViewZoom
                << "\n";
@@ -277,7 +265,7 @@ void TileMap::update_selection()
 
     ImGui::Text( "%s", selectionOutput.str().c_str() );
 
-    if ( this->m_isLeftButtonPressed )
+    if ( input::is_pressed( sf::Mouse::Button::Left ) )
     {
         // There's a left click and the mouse is inside the tilemap
         this->change_tile( tileSelectedPositionInTile,
@@ -362,7 +350,7 @@ void TileMap::update_tile_size_button()
     }
 }
 
-void TileMap::draw( sf::RenderTarget & target, sf::RenderStates states ) const
+void TileMap::render( sf::RenderTarget & target, sf::RenderStates states ) const
 {
     states.transform *= this->getTransform();
 

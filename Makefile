@@ -69,6 +69,7 @@ GENERAL_WARNINGS := \
 -Wmissing-include-dirs \
 -Wold-style-cast \
 -Woverloaded-virtual \
+-Wvirtual-inheritance  \
 -Wredundant-decls \
 -Wshadow \
 -Wsign-conversion \
@@ -98,6 +99,7 @@ GENERAL_WARNINGS := \
 -Werror \
 -Wunused-parameter \
 -Wlong-long \
+-Wsuggest-override \
 -fno-common
 
 # Warning I don't understand
@@ -278,7 +280,7 @@ ifeq ($(DETECTED_OS),Linux)
 		--log-file=valgrind-out.txt \
 		$(EXECUTABLE)
 else
-$(error ERROR : Valgrind not usable on Windows)
+	$(error ERROR : Valgrind not usable on Windows)
 endif
 
 

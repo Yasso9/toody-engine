@@ -98,7 +98,7 @@ bool Button::is_inside( sf::Vector2f const & position ) const
              && position.y <= this->getPosition().y + this->get_size().y );
 }
 
-bool Button::update( sf::Vector2f const & position, bool const & click )
+bool Button::update_button( sf::Vector2f const & position, bool const & click )
 {
     if ( this->is_inside( position ) )
     {
@@ -119,7 +119,7 @@ bool Button::update( sf::Vector2f const & position, bool const & click )
     return false;
 }
 
-void Button::draw( sf::RenderTarget & target, sf::RenderStates states ) const
+void Button::render( sf::RenderTarget & target, sf::RenderStates states ) const
 {
     states.transform *= this->getTransform();
 

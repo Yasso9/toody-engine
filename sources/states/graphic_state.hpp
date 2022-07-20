@@ -11,8 +11,8 @@ class GraphicState final : public State
     GraphicState();
     virtual ~GraphicState() = default;
 
-    void update() override;
-    void render() const override;
+    void update_extra( float deltaTime ) override;
+    // void render( sf::RenderTarget & target ) const override;
 
   private:
     Camera m_camera;
@@ -24,5 +24,6 @@ class GraphicState final : public State
     Model m_modelC;
 
     void mouse_scroll( float const & deltaScroll ) override;
-    void extra_events() override;
+    /// @todo delete that function
+    void extra_events();
 };

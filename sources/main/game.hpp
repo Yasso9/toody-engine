@@ -14,14 +14,17 @@ class Game final
 
   private:
     std::shared_ptr< State > m_state;
+    bool m_shouldRun;
 
     /// @brief To know where do we start the game
     void init_state();
 
+    /// @brief update input change
     void update_events();
     /// @brief Update all the things that can happen in the state
     void update_state( sf::Time const & deltaTime );
 
+    /// @render the game
     void render();
 
     /**

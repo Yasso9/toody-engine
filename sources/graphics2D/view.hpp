@@ -6,6 +6,9 @@
 class View : public sf::View
 {
   public:
+    View() : sf::View {} {}
+    View( sf::View view ) noexcept : sf::View { view } {}
+
     void set_zoom( float newZoom );
 
     math::Vector2F get_zoom() const;

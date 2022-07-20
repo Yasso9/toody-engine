@@ -5,6 +5,7 @@
 
 #include <cmath>
 
+#include "input/input.hpp"
 #include "libraries/imgui.hpp"
 #include "main/resources.hpp"
 #include "main/window.hpp"
@@ -16,9 +17,7 @@ TileSelector::TileSelector()
       Resources::E_TextureKey::Tileset ) ),
     m_tileSelected( -1 ),
     m_isGridEnabled( true ),
-    m_gridColorTable(),
-    m_isLeftButtonPressed( false ),
-    m_mousePosition( 0.f, 0.f )
+    m_gridColorTable()
 {
     sf::Color gridColor { 118, 118, 118, 255 };
     ImGui::color::to_table( gridColor, this->m_gridColorTable );
@@ -34,15 +33,7 @@ int TileSelector::get_tile_selected() const
     return this->m_tileSelected;
 }
 
-void TileSelector::process_events()
-{
-    m_isLeftButtonPressed =
-        sf::Mouse::isButtonPressed( sf::Mouse::Button::Left );
-    m_mousePosition =
-        math::Vector2F { sf::Mouse::getPosition( Window::get_instance() ) };
-}
-
-void TileSelector::update()
+void TileSelector::update_extra( float /* deltaTime */ )
 {
     if ( ImGui::P_Begin( "Tile Selector" ) )
     {
@@ -111,7 +102,7 @@ void TileSelector::update_grid( ImDrawList & drawList )
 }
 void TileSelector::update_selection( ImDrawList & drawList )
 {
-    math::Vector2F const mousePosition { this->m_mousePosition };
+    math::Vector2F const mousePosition { input::get_mouse_position() };
     bool const isInSelection { ImGui::IsWindowHovered()
                                && this->m_tileset.contain( mousePosition ) };
     if ( isInSelection )
@@ -143,7 +134,7 @@ void TileSelector::update_selection( ImDrawList & drawList )
                                                                 false )
         };
         outputSelection << "Tile Hovered : " << tileHovered << "\n";
-        if ( this->m_isLeftButtonPressed )
+        if ( input::is_pressed( sf::Mouse::Button::Left ) )
         {
             outputSelection << "Button Pressed"
                             << "\n";

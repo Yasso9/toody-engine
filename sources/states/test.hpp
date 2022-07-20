@@ -13,6 +13,6 @@ class TestState final : public State
     TestState();
     virtual ~TestState() = default;
 
-    void update() override;
-    void render() const override;
+    void update_extra( float deltaTime ) override;
+    // void render( sf::RenderTarget & target ) const override;
 };

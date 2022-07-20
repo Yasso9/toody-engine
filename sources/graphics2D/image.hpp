@@ -20,7 +20,7 @@ struct Image
     {}
 };
 
-class ImageMap : public sf::Drawable
+class ImageMap : public Component
 {
     std::vector< Image > m_data;
 
@@ -46,10 +46,10 @@ class ImageMap : public sf::Drawable
     std::vector< Image > const & get_data() const { return m_data; }
 
   private:
-    void draw( sf::RenderTarget & target,
-               sf::RenderStates states ) const override
+    void render( sf::RenderTarget & target,
+                 sf::RenderStates states ) const override
     {
-        for ( auto const & image : m_data )
+        for ( Image const & image : m_data )
         {
             target.draw( image.sprite, states );
         }

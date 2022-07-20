@@ -42,6 +42,31 @@ namespace math
         return *this;
     }
 
+    /* ************************************************************************
+    *********************** ASSIGNEMENT OPERATOR ******************************
+    ************************************************************************ */
+
+    template < C_Primitive Type >
+    Vector2< Type > Vector2< Type >::operator-=( Vector2< Type > vector2D )
+    {
+        return *this = *this - vector2D;
+    }
+    template < C_Primitive Type >
+    Vector2< Type > Vector2< Type >::operator+=( Vector2< Type > vector2D )
+    {
+        return *this = *this + vector2D;
+    }
+    template < C_Primitive Type >
+    Vector2< Type > Vector2< Type >::operator/=( Vector2< Type > vector2D )
+    {
+        return *this = *this / vector2D;
+    }
+    template < C_Primitive Type >
+    Vector2< Type > Vector2< Type >::operator/=( float factor )
+    {
+        return *this = *this / factor;
+    }
+
     template < C_Primitive Type >
     Vector2< Type >::operator sf::Vector2< Type >() const
     {
@@ -277,29 +302,5 @@ namespace math
     Vector2< Type > operator-( Vector2< Type > const & vector2D )
     {
         return Vector2< Type > { -vector2D.x, -vector2D.y };
-    }
-
-    template < C_RelativePrimitive Type >
-    Vector2< Type > operator-=( Vector2< Type > & vector2DLeft,
-                                Vector2< Type > const & vector2DRight )
-    {
-        return vector2DLeft = vector2DLeft - vector2DRight;
-    }
-    template < C_RelativePrimitive Type >
-    Vector2< Type > operator+=( Vector2< Type > & vector2DLeft,
-                                Vector2< Type > const & vector2DRight )
-    {
-        return vector2DLeft = vector2DLeft + vector2DRight;
-    }
-    template < C_RelativePrimitive Type >
-    Vector2< Type > operator/=( Vector2< Type > & vector2DLeft,
-                                Vector2< Type > const & vector2DRight )
-    {
-        return vector2DLeft = vector2DLeft / vector2DRight;
-    }
-    template < C_RelativePrimitive Type >
-    Vector2< Type > operator/=( Vector2< Type > & vector2D, float factor )
-    {
-        return vector2D = vector2D / factor;
     }
 } // namespace math

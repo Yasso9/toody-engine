@@ -3,13 +3,17 @@
 #include <exception>
 #include <stdexcept>
 
+#include "input/input.hpp"
 #include "main/resources.hpp"
 #include "tools/assertion.hpp"
 #include "tools/tools.hpp"
 
 Player::Player()
-  : Entity( Resources::get_instance().get_texture(
+  : m_texture( Resources::get_instance().get_texture(
       Resources::E_TextureKey::Player ) ),
+    m_sprite( m_texture ),
+    m_name( "Unkown"s ),
+    m_speed( 30.f ),
     m_state(),
     m_direction(),
     m_deltaTime(),
@@ -104,44 +108,20 @@ void Player::set_state( Player::E_State const & playerState )
     this->m_state = playerState;
 }
 
-void Player::update_events()
-{
-    this->set_state( Player::E_State::Normal );
-
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
-    {
-        this->set_state( Player::E_State::Walking );
-        this->set_direction( E_Direction::Up );
-    }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
-    {
-        this->set_state( Player::E_State::Walking );
-        this->set_direction( E_Direction::Down );
-    }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Q ) )
-    {
-        this->set_state( Player::E_State::Walking );
-        this->set_direction( E_Direction::Left );
-    }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
-    {
-        this->set_state( Player::E_State::Walking );
-        this->set_direction( E_Direction::Right );
-    }
-
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Z ) )
-    {
-        this->set_state( Player::E_State::Running );
-    }
-}
-
-void Player::update( float const & deltaTime )
+void Player::update_extra( float deltaTime )
 {
     this->update_delta_time( deltaTime );
     this->update_movement();
     this->update_texture_rect();
 
     this->m_lastState = { this->m_state, this->m_direction };
+}
+
+void Player::render( sf::RenderTarget & target, sf::RenderStates states ) const
+{
+    states.transform *= this->getTransform();
+
+    target.draw( this->m_sprite, states );
 }
 
 void Player::update_delta_time( float const & deltaTime )
@@ -173,6 +153,37 @@ void Player::update_texture_rect()
 {
     // We choose the proper texture rect of the texture that we had loaded
     this->m_sprite.setTextureRect( this->get_current_texture_rect() );
+}
+
+void Player::update_events()
+{
+    this->set_state( Player::E_State::Normal );
+
+    if ( input::is_pressed( sf::Keyboard::Z ) )
+    {
+        this->set_state( Player::E_State::Walking );
+        this->set_direction( E_Direction::Up );
+    }
+    if ( input::is_pressed( sf::Keyboard::S ) )
+    {
+        this->set_state( Player::E_State::Walking );
+        this->set_direction( E_Direction::Down );
+    }
+    if ( input::is_pressed( sf::Keyboard::Q ) )
+    {
+        this->set_state( Player::E_State::Walking );
+        this->set_direction( E_Direction::Left );
+    }
+    if ( input::is_pressed( sf::Keyboard::D ) )
+    {
+        this->set_state( Player::E_State::Walking );
+        this->set_direction( E_Direction::Right );
+    }
+
+    if ( input::is_pressed( sf::Keyboard::Z ) )
+    {
+        this->set_state( Player::E_State::Running );
+    }
 }
 
 sf::Vector2f Player::get_movement() const

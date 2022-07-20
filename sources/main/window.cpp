@@ -29,27 +29,23 @@ math::Vector2U Window::get_center_position() const
     return this->get_size() / 2u;
 }
 
+bool Window::is_hovered() const
+{
+    math::PointI const mousePosition { sf::Mouse::getPosition( *this ) };
+
+    return mousePosition.is_inside( math::PointI { 0, 0 },
+                                    math::Vector2I { this->getSize() } );
+}
+
 bool Window::has_absolute_focus() const
 {
-    math::PointI const mousePosition { sf::Mouse::getPosition(
-        Window::get_instance() ) };
-
-    return this->hasFocus()
-           && mousePosition.is_inside( math::PointI { 0, 0 },
-                                       math::Vector2I { this->getSize() } );
+    return this->hasFocus() && this->is_hovered();
 }
 
 void Window::clear_all( sf::Color const & backgroundColor )
 {
     gl::clear_window( backgroundColor );
     this->clear( backgroundColor );
-
-    this->reset_view();
-}
-
-void Window::reset_view()
-{
-    Window::get_instance().setView( Window::get_instance().getDefaultView() );
 }
 
 void Window::gl_draw_elements( unsigned int const & vertexArrayObject,

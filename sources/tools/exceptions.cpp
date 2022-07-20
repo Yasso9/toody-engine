@@ -30,9 +30,4 @@ namespace exception
         return errorInfo.c_str();
     }
 
-    const char * QuitApplication::what() const noexcept
-    {
-        return "Application haven't exited in a good way";
-    }
-
-} // namespace Exception
+} // namespace exception

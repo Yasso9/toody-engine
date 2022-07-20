@@ -24,7 +24,7 @@ GraphicState::GraphicState()
     this->m_shape.create( get_sample_shape_data_A() );
 }
 
-void GraphicState::update()
+void GraphicState::update_extra( float /* deltaTime */ )
 {
     this->m_modelA.update( this->m_camera.get_projection(),
                            this->m_camera.get_view() );
@@ -44,14 +44,14 @@ void GraphicState::update()
                           this->m_camera.get_view() );
 }
 
-void GraphicState::render() const
-{
-    this->m_modelA.draw();
-    this->m_modelB.draw();
-    this->m_modelC.draw();
+// void GraphicState::render() const
+// {
+//     this->m_modelA.draw();
+//     this->m_modelB.draw();
+//     this->m_modelC.draw();
 
-    this->m_shape.draw();
-}
+//     this->m_shape.draw();
+// }
 
 void GraphicState::mouse_scroll( float const & deltaScroll )
 {
@@ -63,12 +63,14 @@ void GraphicState::mouse_scroll( float const & deltaScroll )
     }
     // else positiv scroll
 
-    this->m_camera.zoom( scrollSpeed, this->m_deltaTime );
+    /// @todo have deltatime available
+    // this->m_camera.zoom( scrollSpeed, this->m_deltaTime );
 }
 
 void GraphicState::extra_events()
 {
-    this->m_camera.update_inputs( this->m_deltaTime );
+    /// @todo have deltatime available
+    // this->m_camera.update_inputs( this->m_deltaTime );
 }
 
 static Shape::Data get_sample_shape_data_A()

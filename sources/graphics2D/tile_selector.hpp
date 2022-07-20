@@ -1,8 +1,9 @@
 #pragma once
 
+#include "graphics2D/component.hpp"
 #include "graphics2D/tileset.hpp"
 
-class TileSelector
+class TileSelector : public Component
 {
     Tileset m_tileset;
 
@@ -10,9 +11,6 @@ class TileSelector
 
     bool m_isGridEnabled;
     float m_gridColorTable[4];
-
-    bool m_isLeftButtonPressed;
-    math::Vector2F m_mousePosition;
 
   public:
     TileSelector();
@@ -22,8 +20,7 @@ class TileSelector
 
     int get_tile_selected() const;
 
-    void process_events();
-    void update();
+    void update_extra( float deltaTime ) override;
 
   private:
     void update_grid( ImDrawList & drawList );

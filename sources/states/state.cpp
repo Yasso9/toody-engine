@@ -1,14 +1,16 @@
 #include "state.hpp"
 
+#include "graphics2D/view.hpp"
 #include "main/resources.hpp"
 
 State::State( State::E_List const & stateName )
-  : m_stateName( stateName ), m_deltaTime( 0.f )
+  : m_stateName { stateName },
+    m_view { Window::get_instance().getDefaultView() }
 {}
 
 State::E_List State::get_state_to_print() const
 {
-    return this->m_stateName;
+    return m_stateName;
 }
 
 void State::update_inputs( sf::Event const & event )
@@ -16,7 +18,7 @@ void State::update_inputs( sf::Event const & event )
     switch ( event.type )
     {
     case sf::Event::Closed :
-        this->m_stateName = State::E_List::Quit;
+        m_stateName = State::E_List::Quit;
         break;
     case sf::Event::KeyPressed :
         this->keyboard_pressed( event );
@@ -24,13 +26,13 @@ void State::update_inputs( sf::Event const & event )
     case sf::Event::KeyReleased :
         if ( event.key.code == sf::Keyboard::Escape )
         {
-            if ( this->m_stateName == State::E_List::MainMenu )
+            if ( m_stateName == State::E_List::MainMenu )
             {
-                this->m_stateName = State::E_List::Quit;
+                m_stateName = State::E_List::Quit;
                 break;
             }
 
-            this->m_stateName = State::E_List::MainMenu;
+            m_stateName = State::E_List::MainMenu;
             break;
         }
         this->keyboard_released( event );
@@ -52,10 +54,15 @@ void State::update_inputs( sf::Event const & event )
     }
 }
 
-void State::update_data( float const & deltaTime )
+void State::render_before( sf::RenderTarget & target,
+                           sf::RenderStates /* states */ ) const
 {
-    this->m_deltaTime = deltaTime;
-    this->update();
+    target.setView( m_view );
+}
+void State::render_after( sf::RenderTarget & target,
+                          sf::RenderStates /* states */ ) const
+{
+    target.setView( target.getDefaultView() );
 }
 
 void State::keyboard_pressed( sf::Event /* event */ ) {}
@@ -66,5 +73,3 @@ void State::mouse_released( sf::Event /* event */ ) {}
 void State::mouse_moved( sf::Event /* event */ ) {}
 
 void State::mouse_scroll( float const & /* deltaScroll */ ) {}
-
-void State::extra_events() {}

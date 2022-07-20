@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "input/input.hpp"
 #include "libraries/imgui.hpp"
 #include "main/resources.hpp"
 #include "tools/string.hpp"
@@ -17,10 +18,9 @@ MainMenuState::MainMenuState()
 
 void MainMenuState::extra_events()
 {
-    int const buttonNumberPressed { this->m_buttons.update(
-        static_cast< sf::Vector2f >(
-            sf::Mouse::getPosition( Window::get_instance() ) ),
-        sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) ) };
+    int const buttonNumberPressed { this->m_buttons.update_button_array(
+        static_cast< sf::Vector2f >( input::get_mouse_position().to_float() ),
+        input::is_pressed( sf::Mouse::Button::Left ) ) };
 
     if ( buttonNumberPressed != -1 )
     {
@@ -28,16 +28,16 @@ void MainMenuState::extra_events()
     }
 }
 
-void MainMenuState::update() {}
+void MainMenuState::update_extra( float /* deltaTime */ ) {}
 
-void MainMenuState::render() const
-{
-    Window::get_instance().draw( this->m_background );
+// void MainMenuState::render() const
+// {
+//     Window::get_instance().draw( this->m_background );
 
-    Window::get_instance().draw( this->m_text );
+//     Window::get_instance().draw( this->m_text );
 
-    Window::get_instance().draw( this->m_buttons );
-}
+//     Window::get_instance().draw( this->m_buttons );
+// }
 
 void MainMenuState::init_background()
 {

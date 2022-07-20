@@ -4,9 +4,9 @@
 
 TestState::TestState() : State( State::E_List::Test ) {}
 
-void TestState::update()
+void TestState::update_extra( float /* deltaTime */ )
 {
     ImGui::ShowDemoWindow();
 }
 
-void TestState::render() const {}
+// void TestState::render() const {}

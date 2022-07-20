@@ -2,8 +2,7 @@
 
 #include "input/button.hpp"
 
-class ButtonArray final : public sf::Drawable,
-                          public sf::Transformable
+class ButtonArray final : public TransformableComponent
 {
   public:
     enum class E_Direction
@@ -23,11 +22,11 @@ class ButtonArray final : public sf::Drawable,
     void set_strings( std::vector< std::string > const & buttonStrings );
     void set_direction( ButtonArray::E_Direction const & buttonsDirection );
 
-    int update( sf::Vector2f const & position, bool const & click );
+    int update_button_array( sf::Vector2f const & position, bool const & click );
 
   private:
-    void draw( sf::RenderTarget & target,
-               sf::RenderStates states ) const override;
+    void render( sf::RenderTarget & target,
+                 sf::RenderStates states ) const override;
 
     std::vector< Button > m_buttons;
     std::vector< std::string > m_strings;

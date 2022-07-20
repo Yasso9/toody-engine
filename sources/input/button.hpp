@@ -1,9 +1,9 @@
 #pragma once
 
+#include "graphics2D/component.hpp"
 #include "graphics2D/sfml.hpp"
 
-class Button final : public sf::Drawable,
-                     public sf::Transformable
+class Button final : public TransformableComponent
 {
   public:
     Button( sf::Font const & font, std::string const & string = "Button" );
@@ -22,7 +22,7 @@ class Button final : public sf::Drawable,
      * @param click true if there is a click from the mouse, false otherwise
      * @return true if there's a click in the button, false otherwise
      */
-    bool update( sf::Vector2f const & position, bool const & click );
+    bool update_button( sf::Vector2f const & position, bool const & click );
 
   private:
     void set_selected( bool const & isSelected );
@@ -37,8 +37,8 @@ class Button final : public sf::Drawable,
 
     void synchronize_string();
 
-    void draw( sf::RenderTarget & target,
-               sf::RenderStates states ) const override;
+    void render( sf::RenderTarget & target,
+                 sf::RenderStates states ) const override;
 
     /// @brief shape of the button
     sf::RectangleShape m_shape {};

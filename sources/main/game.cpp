@@ -18,7 +18,7 @@
 
 #include "libraries/imgui.hpp"
 
-Game::Game() : m_state( nullptr )
+Game::Game() : m_state( nullptr ), m_shouldRun( true )
 {
     if ( ! ImGui::SFML::Init( Window::get_instance() ) )
     {
@@ -48,28 +48,17 @@ void Game::run()
     // Reset the clock juste before the game run
     clock.restart();
 
-    bool gameShouldRun { true };
-
     double const refreshRate { Settings::get_instance().get_refresh_rate() };
 
-    while ( gameShouldRun )
+    while ( m_shouldRun )
     {
         sf::Time const deltaTime { clock.getElapsedTime() };
 
         if ( deltaTime.asSeconds() > refreshRate )
         {
-            /// @todo remove this try catch and put a more accurate thing to stop the game
-            /// solution : put gameShouldRun as a member variable
-            try
-            {
-                this->update_events();
-                this->update_state( deltaTime );
-                this->render();
-            }
-            catch ( exception::QuitApplication const & )
-            {
-                gameShouldRun = false;
-            }
+            this->update_events();
+            this->update_state( deltaTime );
+            this->render();
 
             // reset the counter
             clock.restart();
@@ -94,19 +83,13 @@ void Game::update_events()
     {
         if ( event.type == sf::Event::Closed )
         {
-            throw exception::QuitApplication {};
-            return;
+            m_shouldRun = false;
         }
         else if ( Window::get_instance().has_absolute_focus() )
         {
             ImGui::SFML::ProcessEvent( Window::get_instance(), event );
             this->m_state->update_inputs( event );
         }
-    }
-
-    if ( Window::get_instance().has_absolute_focus() )
-    {
-        this->m_state->extra_events();
     }
 
     ImGui::P_ResetVariables();
@@ -118,21 +101,21 @@ void Game::update_state( sf::Time const & deltaTime )
 
     static State::E_List lastState { this->m_state->get_state_to_print() };
 
-    this->m_state->update_data( deltaTime.asSeconds() );
+    this->m_state->update( deltaTime.asSeconds() );
 
     State::E_List const newState { this->m_state->get_state_to_print() };
     if ( lastState != newState )
     {
-        this->change_state( newState );
         lastState = newState;
+        this->change_state( newState );
     }
 }
 
 void Game::render()
 {
-    Window::get_instance().clear_all( sf::Color { 40, 40, 40 } );
+    Window::get_instance().clear_all( sf::Color { 0, 0, 0 } );
 
-    this->m_state->render();
+    Window::get_instance().sf_draw( *m_state );
 
     // We render after our state render, so the imGui's windows
     // will be drawn if we have a background
@@ -172,7 +155,7 @@ void Game::change_state( State::E_List const & newState )
         break;
 
     case State::E_List::Quit :
-        throw exception::QuitApplication {};
+        m_shouldRun = false;
         break;
 
     default :

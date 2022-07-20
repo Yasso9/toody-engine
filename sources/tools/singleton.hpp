@@ -3,11 +3,12 @@
 // Put this line in all derived class :
 // friend DerivedClass & Singleton< DerivedClass >::get_instance();
 
+/// @todo put a concept to force the fact that DerivedClass is a class or a struct, and not an other thing
 template < typename DerivedClass >
 class Singleton
 {
   public:
-    Singleton( Singleton const & ) = delete;
+    Singleton( Singleton const & )      = delete;
     void operator=( Singleton const & ) = delete;
 
     static DerivedClass & get_instance();
