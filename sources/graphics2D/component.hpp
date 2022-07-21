@@ -41,11 +41,16 @@ class Component
     virtual void update( float deltaTime ) final;
     virtual void render_all( Render & render ) const final;
 
+  protected:
+
   private:
     virtual void update_extra( float deltaTime );
     virtual void render_before( Render & render ) const;
     virtual void render( Render & render ) const;
     virtual void render_after( Render & render ) const;
+
+  public:
+    E_Type get_type() const;
 };
 
 class Component3D : public Component

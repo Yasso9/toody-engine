@@ -26,7 +26,7 @@ void Component::render_all( Render & render ) const
 
     for ( std::shared_ptr< Component > component : m_childs )
     {
-        switch ( m_type )
+        switch ( component->get_type() )
         {
         case E_Type::OpenGL :
             render.draw(
@@ -40,6 +40,11 @@ void Component::render_all( Render & render ) const
     }
 
     this->render_after( render );
+}
+
+Component::E_Type Component::get_type() const
+{
+    return m_type;
 }
 
 void Component2D::draw( sf::RenderTarget & target,

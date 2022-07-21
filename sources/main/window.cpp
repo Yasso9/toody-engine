@@ -2,7 +2,9 @@
 
 #include <iostream>
 
+#include "graphics2D/component.hpp"
 #include "graphics3D/openGL.hpp"
+#include "main/render.hpp"
 #include "main/settings.hpp"
 #include "maths/maths.hpp"
 #include "tools/string.hpp"
@@ -81,9 +83,12 @@ void Window::gl_draw_arrays( unsigned int const & vertexArrayObject,
     glBindVertexArray( 0 );
 }
 
-void Window::draw( Component3D const & /* component */ ) const
+void Window::draw( Component3D const & component, sf::RenderTarget & target,
+                   sf::RenderStates const & states ) const
 {
-    std::cerr << "DRAW NOTHING" << std::endl;
+    /// @todo imporve that
+    Render render { *this, target, states };
+    component.render_all( render );
 }
 
 void Window::creation()

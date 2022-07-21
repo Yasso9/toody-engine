@@ -34,26 +34,7 @@ GraphicState::GraphicState()
 void GraphicState::update_extra( float deltaTime )
 {
     m_camera.update_inputs( deltaTime );
-
-    // for ( Model & model : m_models )
-    // {
-    //     model.update( deltaTime );
-    // }
-
-    // for ( Shape & shape : m_shapes )
-    // {
-    //     shape.update( deltaTime );
-    // }
 }
-
-// void GraphicState::render() const
-// {
-//     m_modelA.draw();
-//     m_modelB.draw();
-//     m_modelC.draw();
-
-//     m_shape.draw();
-// }
 
 void GraphicState::mouse_scroll( float const & deltaScroll )
 {
