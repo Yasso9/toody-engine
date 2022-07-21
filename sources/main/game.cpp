@@ -20,6 +20,8 @@
 
 Game::Game() : m_state( nullptr ), m_shouldRun( true )
 {
+    std::cout << "Game Started" << std::endl;
+
     if ( ! ImGui::SFML::Init( Window::get_instance() ) )
     {
         throw exception::System { "Cannot init ImGui"s };
@@ -40,6 +42,8 @@ Game::~Game()
     ImGui::SFML::Shutdown();
     // Must be made before closing the window
     gl::check_error();
+
+    std::cout << "Game Ended" << std::endl;
 }
 
 void Game::run()
@@ -115,7 +119,7 @@ void Game::render()
 {
     Window::get_instance().clear_all( sf::Color { 0, 0, 0 } );
 
-    Window::get_instance().sf_draw( *m_state );
+    Window::get_instance().draw( *m_state );
 
     // We render after our state render, so the imGui's windows
     // will be drawn if we have a background

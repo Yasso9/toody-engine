@@ -1,121 +1,141 @@
 #include "resources.hpp"
 
-#include "tools/assertion.hpp"
-#include "tools/enumeration.hpp"
+#include <filesystem>
+#include <map>
+
 #include "tools/exceptions.hpp"
 #include "tools/path.hpp"
-#include "tools/string.hpp"
+#include "tools/singleton.hpp"
 
-static void init_textures(
-    std::map< Resources::E_TextureKey, sf::Texture > & textures );
-static void init_fonts(
-    std::map< Resources::Resources::E_FontKey, sf::Font > & fonts );
-static std::string get_texture_localisation(
-    Resources::E_TextureKey const & textureKey );
-static std::string get_font_localisation(
-    Resources::E_FontKey const & fontKey );
-
-Resources::Resources()
-  : m_textures(), m_deprecatedTextures(), m_deprecatedFonts()
+namespace resources
 {
-    init_textures( this->m_deprecatedTextures );
-    init_fonts( this->m_deprecatedFonts );
-}
+    static bool is_file_suitable(
+        std::filesystem::path path,
+        std::vector< std::string > imageExtensionHandled );
 
-sf::Texture const & Resources::get_texture(
-    Resources::E_TextureKey const & textureKey )
-{
-    return this->m_deprecatedTextures.at( textureKey );
-}
-sf::Font const & Resources::get_font( Resources::E_FontKey const & fontKey )
-{
-    return this->m_deprecatedFonts.at( fontKey );
-}
-
-static void init_textures(
-    std::map< Resources::E_TextureKey, sf::Texture > & textures )
-{
-    textures.clear();
-
-    for ( Enum< Resources::E_TextureKey > textureKey {
-              Enum< Resources::E_TextureKey >::get_min() };
-          textureKey < Enum< Resources::E_TextureKey >::get_max();
-          ++textureKey )
+    sf::Texture const & get_texture( std::string const & file )
     {
-        sf::Texture texture {};
-        std::string const textureLocalisation { get_texture_localisation(
-            textureKey.get_value() ) };
-        if ( ! texture.loadFromFile( textureLocalisation ) )
+        static std::map< std::filesystem::path, sf::Texture > textures {};
+
+        std::filesystem::path const texturePath {
+            path::get_folder( path::E_Folder::Resources ) / file
+        };
+        if ( ! is_file_suitable( texturePath, { ".jpg", ".png" } ) )
         {
-            throw exception::FileLoadingIssue { textureLocalisation,
-                                                "Texture" };
+            /// @todo mettre une expcetion plus valable
+            throw exception::FileLoadingIssue { texturePath, "Texture" };
         }
 
-        textures.insert( std::make_pair( textureKey.get_value(), texture ) );
-    }
-}
+        if ( ! textures.contains( texturePath ) )
+        { // The texture is new, we load it
+            bool textureLoad { true };
 
-static void init_fonts(
-    std::map< Resources::Resources::E_FontKey, sf::Font > & fonts )
-{
-    fonts.clear();
+            sf::Texture texture {};
 
-    for ( Enum< Resources::E_FontKey > fontKey {
-              Enum< Resources::E_FontKey >::get_min() };
-          fontKey < Enum< Resources::E_FontKey >::get_max();
-          ++fontKey )
-    {
-        sf::Font font {};
-        std::string const fontLocalisation { get_font_localisation(
-            fontKey.get_value() ) };
-        if ( ! font.loadFromFile( fontLocalisation ) )
-        {
-            throw exception::FileLoadingIssue { fontLocalisation, "Texture" };
+            textureLoad &= texture.loadFromFile( texturePath.string() );
+            textureLoad &= texture.generateMipmap();
+
+            if ( ! textureLoad )
+            {
+                throw exception::FileLoadingIssue { texturePath, "Texture" };
+            }
+
+            /// @todo verify that the texture loaded and the texture insert hhave the same adress
+            textures.insert( { texturePath, texture } );
         }
 
-        fonts.insert( std::make_pair( fontKey.get_value(), font ) );
+        return textures.at( texturePath );
     }
-}
 
-static std::string get_texture_localisation(
-    Resources::E_TextureKey const & textureKey )
-{
-    std::filesystem::path imagePath { path::get_folder(
-        path::E_Folder::Resources ) };
-
-    switch ( textureKey )
+    sf::Font const & get_font( std::string const & file )
     {
-    case Resources::E_TextureKey::Tileset :
-        imagePath /= "sprites/tileset/ground.png"s;
-        break;
-    case Resources::E_TextureKey::Player :
-        imagePath /= "gold_sprite.png"s;
-        break;
-    case Resources::E_TextureKey::HomeWallpaper :
-        imagePath /= "home_wallpaper.jpg"s;
-        break;
-    default :
-        ASSERTION( false, "A texture hasn't been loaded"s );
-        break;
+        static std::map< std::filesystem::path, sf::Font > fonts {};
+
+        std::filesystem::path const path {
+            path::get_folder( path::E_Folder::Resources ) / file
+        };
+        if ( ! is_file_suitable( path, { ".ttf" } ) )
+        {
+            /// @todo mettre une excption plus valable
+            throw exception::FileLoadingIssue { path, "Font" };
+        }
+
+        if ( ! fonts.contains( path ) )
+        { // The texture is new, we load it
+            sf::Font font {};
+            if ( ! font.loadFromFile( path.string() ) )
+            {
+                throw exception::FileLoadingIssue { path, "Font" };
+            }
+
+            /// @todo verify that the texture loaded and the texture insert hhave the same adress
+            fonts.insert( { path, font } );
+        }
+
+        return fonts.at( path );
     }
 
-    return imagePath.string();
-}
-
-static std::string get_font_localisation( Resources::E_FontKey const & fontKey )
-{
-    std::filesystem::path fontPath { path::get_folder(
-        path::E_Folder::Resources ) };
-
-    switch ( fontKey )
+    struct S_ShaderFiles
     {
-    case Resources::E_FontKey::Arial :
-        fontPath /= "arial.ttf"s;
-        break;
-    default :
-        ASSERTION( false, "A font hasn't been loaded"s );
-        break;
+        std::filesystem::path vertexPath {};
+        std::filesystem::path fragmentPath {};
+
+        bool operator<( S_ShaderFiles const & rhs ) const
+        {
+            return this->vertexPath < rhs.vertexPath
+                   && this->fragmentPath < rhs.fragmentPath;
+        }
+    };
+
+    sf::Shader & get_shader( std::string const & vertexShaderFile,
+                             std::string const & fragmentShaderFile )
+    {
+        static std::map< S_ShaderFiles, std::unique_ptr< sf::Shader > >
+            shaders {};
+
+        S_ShaderFiles shaderFiles {
+            path::get_folder( path::E_Folder::Shaders ) / vertexShaderFile,
+            path::get_folder( path::E_Folder::Shaders ) / fragmentShaderFile
+        };
+        if ( ! is_file_suitable( shaderFiles.vertexPath, { ".vert" } ) )
+        {
+            /// @todo mettre une excption plus valable (spécialisé pour les shaders)
+            throw exception::FileLoadingIssue { shaderFiles.vertexPath,
+                                                "Shaders" };
+        }
+        if ( ! is_file_suitable( shaderFiles.fragmentPath, { ".frag" } ) )
+        {
+            throw exception::FileLoadingIssue { shaderFiles.fragmentPath,
+                                                "Shaders" };
+        }
+
+        if ( ! shaders.contains( shaderFiles ) )
+        { // The texture is new, we load it
+            std::unique_ptr< sf::Shader > shader {
+                std::make_unique< sf::Shader >()
+            };
+            if ( ! shader->loadFromFile( shaderFiles.vertexPath.string(),
+                                         shaderFiles.fragmentPath.string() ) )
+            {
+                throw exception::FileLoadingIssue { shaderFiles.vertexPath,
+                                                    "Font" };
+            }
+
+            /// @todo verify that the texture loaded and the texture insert hhave the same adress
+            shaders.insert( { shaderFiles, std::move( shader ) } );
+        }
+        return *( shaders.at( shaderFiles ) );
     }
 
-    return fontPath.string();
-}
+    static bool is_file_suitable(
+        std::filesystem::path path,
+        std::vector< std::string > imageExtensionHandled )
+    {
+        // The path should exist and the extension must tell us that is an image
+        return std::filesystem::exists( path )
+               && std::find( imageExtensionHandled.begin(),
+                             imageExtensionHandled.end(),
+                             path.extension().string() )
+                      != imageExtensionHandled.end();
+    }
+} // namespace resources

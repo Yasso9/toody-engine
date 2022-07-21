@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "main/resources.hpp"
 #include "tools/exceptions.hpp"
 #include "tools/path.hpp"
 #include "tools/timer.hpp"
@@ -9,13 +10,12 @@
 static glm::vec3 to_vector3( aiVector3D const & assimpVector3D );
 static glm::vec2 to_vector2( aiVector3D const & assimpVector3D );
 
-Model::Model( std::string const & filePathModel )
-  : Transformable(
-      path::get_folder( path::E_Folder::Shaders ) / "shader.vert"s,
-      path::get_folder( path::E_Folder::Shaders ) / "shader.frag"s ),
+Model::Model( std::string const & filePathModel, Camera const & camera )
+  : Transformable( camera,
+                   resources::get_shader( "shader.vert"s, "shader.frag"s ) ),
     m_texturesLoaded(),
     m_meshes(),
-    m_filePath( filePathModel )
+    m_filePath( path::get_folder( path::E_Folder::Resources ) / filePathModel )
 {
     Timer timer { "Model creation ("s + filePathModel + ')' };
     std::cout << "Loading Model : " << filePathModel << std::endl;
@@ -23,20 +23,19 @@ Model::Model( std::string const & filePathModel )
     this->load_model();
 }
 
-void Model::update_intra()
+void Model::update_custom( float /* deltaTime */ )
 {
     for ( Mesh & mesh : this->m_meshes )
     {
-        mesh.update( this->m_shader, this->m_texturesLoaded );
+        mesh.update( this->get_shader(), this->m_texturesLoaded );
     }
 }
-
-// draws the model, and thus all its meshes
-void Model::draw_intra() const
+void Model::render_custom( Window const & window ) const
 {
     for ( Mesh const & mesh : this->m_meshes )
     {
-        mesh.draw();
+        /// @todo make mesh inherit from componentn to have a nice synthax here
+        mesh.draw( window );
     }
 }
 
@@ -47,7 +46,7 @@ void Model::load_model()
                                        | aiProcess_GenSmoothNormals
                                        | aiProcess_FlipUVs
                                        | aiProcess_CalcTangentSpace };
-    aiScene const * scene { importer.ReadFile( this->m_filePath,
+    aiScene const * scene { importer.ReadFile( this->m_filePath.string(),
                                                importerFlags ) };
     // check for when reading file
     if ( ! scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE
@@ -118,9 +117,9 @@ std::vector< std::string > Model::load_material_textures(
     aiMaterial const & material, Texture::E_Type const & textureType )
 {
     std::vector< std::string > textures {};
-    std::string const directory {
-        this->m_filePath.substr( 0, this->m_filePath.find_last_of( '/' ) + 1 )
-    };
+    std::string const directory { this->m_filePath.string().substr(
+        0,
+        this->m_filePath.string().find_last_of( '/' ) + 1 ) };
 
     for ( unsigned int i_textureToLoad { 0u };
           i_textureToLoad

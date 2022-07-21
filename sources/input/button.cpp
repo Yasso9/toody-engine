@@ -119,10 +119,8 @@ bool Button::update_button( sf::Vector2f const & position, bool const & click )
     return false;
 }
 
-void Button::render( sf::RenderTarget & target, sf::RenderStates states ) const
+void Button::render( Render & render ) const
 {
-    states.transform *= this->getTransform();
-
-    target.draw( this->m_shape, states );
-    target.draw( this->m_text, states );
+    render.draw( this->m_shape );
+    render.draw( this->m_text );
 }

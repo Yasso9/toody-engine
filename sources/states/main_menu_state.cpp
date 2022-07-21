@@ -50,8 +50,7 @@ void MainMenuState::init_background()
 
 void MainMenuState::init_text()
 {
-    this->m_text.setFont(
-        Resources::get_instance().get_font( Resources::E_FontKey::Arial ) );
+    this->m_text.setFont( resources::get_font( "arial.ttf" ) );
     this->m_text.setCharacterSize( 30u );
     this->m_text.setFillColor( sf::Color::Black );
     this->m_text.setPosition( 100.f, 500.f );
@@ -60,8 +59,7 @@ void MainMenuState::init_text()
 
 void MainMenuState::init_buttons()
 {
-    this->m_buttons.set_font(
-        Resources::get_instance().get_font( Resources::E_FontKey::Arial ) );
+    this->m_buttons.set_font( resources::get_font( "arial.ttf" ) );
     this->m_buttons.set_direction( ButtonArray::E_Direction::Horizontal );
     this->m_buttons.set_strings(
         { "Main Menu"s, "Game"s, "Editor"s, "Graphics"s, "Test"s, "Exit"s } );

@@ -119,13 +119,10 @@ int ButtonArray::update_button_array( sf::Vector2f const & position,
     return -1;
 }
 
-void ButtonArray::render( sf::RenderTarget & target,
-                          sf::RenderStates states ) const
+void ButtonArray::render( Render & render ) const
 {
-    states.transform *= this->getTransform();
-
     for ( auto const & button : this->m_buttons )
     {
-        target.draw( button, states );
+        render.draw( button );
     }
 }

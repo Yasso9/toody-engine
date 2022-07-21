@@ -54,15 +54,13 @@ void State::update_inputs( sf::Event const & event )
     }
 }
 
-void State::render_before( sf::RenderTarget & target,
-                           sf::RenderStates /* states */ ) const
+void State::render_before( Render & render ) const
 {
-    target.setView( m_view );
+    render.get_target().setView( m_view );
 }
-void State::render_after( sf::RenderTarget & target,
-                          sf::RenderStates /* states */ ) const
+void State::render_after( Render & render ) const
 {
-    target.setView( target.getDefaultView() );
+    render.get_target().setView( render.get_target().getDefaultView() );
 }
 
 void State::keyboard_pressed( sf::Event /* event */ ) {}

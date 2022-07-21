@@ -3,7 +3,7 @@
 #include "graphics2D/component.hpp"
 #include "graphics2D/sfml.hpp"
 
-class Button final : public TransformableComponent
+class Button final : public TransformableComponent2D
 {
   public:
     Button( sf::Font const & font, std::string const & string = "Button" );
@@ -37,8 +37,7 @@ class Button final : public TransformableComponent
 
     void synchronize_string();
 
-    void render( sf::RenderTarget & target,
-                 sf::RenderStates states ) const override;
+    void render( Render & render ) const override;
 
     /// @brief shape of the button
     sf::RectangleShape m_shape {};

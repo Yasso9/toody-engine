@@ -15,10 +15,10 @@
 // const float SENSITIVITY = 0.1f;
 // const float ZOOM = 45.0f;
 
-Camera::Camera( E_Type const & type )
+Camera::Camera()
   : m_position( glm::vec3 { 0.0f, 0.0f, 3.0f } ),
     m_direction(),
-    m_type( type ),
+    m_type( E_Type::Editor ),
     m_movementSpeed(),
     m_fieldOfView( 45.f )
 {
@@ -71,13 +71,12 @@ glm::mat4 Camera::get_view() const
                         pureYAxis );
 }
 
-void Camera::set_target_position( glm::vec3 const & targetPosition )
+void Camera::set_target_position( glm::vec3 targetPosition )
 {
     this->m_direction = glm::normalize( targetPosition - this->m_position );
 }
 
-void Camera::move( Camera::E_Movement const & direction,
-                   float const & deltaTime )
+void Camera::move( Camera::E_Movement direction, float deltaTime )
 {
     float const velocity { this->m_movementSpeed * deltaTime };
 
@@ -100,7 +99,7 @@ void Camera::move( Camera::E_Movement const & direction,
     }
 }
 
-void Camera::rotate( glm::vec3 const & angle, float const & deltaTime )
+void Camera::rotate( glm::vec3 angle, float deltaTime )
 {
     glm::vec3 const trueAngle { angle * deltaTime * 0.05f };
     std::cout << "angle : " << angle << std::endl;
@@ -108,27 +107,25 @@ void Camera::rotate( glm::vec3 const & angle, float const & deltaTime )
 
     std::cout << "direction before" << this->m_direction << std::endl;
 
-    math::Vector3D direction { this->m_direction.x,
-                               this->m_direction.y,
-                               this->m_direction.z };
+    math::Vector3F direction { m_direction };
 
-    direction.rotate( trueAngle.x, math::Vector3D { 1.f, 0.f, 0.f } );
-    direction.rotate( trueAngle.y, math::Vector3D { 0.f, 1.f, 0.f } );
-    direction.rotate( trueAngle.z, math::Vector3D { 0.f, 0.f, 1.f } );
+    direction.rotate( trueAngle.x, math::Vector3F { 1.f, 0.f, 0.f } );
+    direction.rotate( trueAngle.y, math::Vector3F { 0.f, 1.f, 0.f } );
+    direction.rotate( trueAngle.z, math::Vector3F { 0.f, 0.f, 1.f } );
 
-    this->m_direction = glm::vec3 { direction.x, direction.y, direction.z };
+    this->m_direction = direction.to_glm();
 
     std::cout << "direction after" << this->m_direction << std::endl;
 }
 
-void Camera::zoom( float const & factor, float const & deltaTime )
+void Camera::zoom( float factor, float deltaTime )
 {
     float const velocity { this->m_movementSpeed * deltaTime };
 
     this->m_position += factor * ( this->m_direction * velocity );
 }
 
-void Camera::update_inputs( float const & deltaTime )
+void Camera::update_inputs( float deltaTime )
 {
     switch ( this->m_type )
     {
@@ -158,7 +155,7 @@ glm::vec3 Camera::get_y_axis() const
         glm::cross( this->get_x_axis(), this->m_direction ) );
 }
 
-void Camera::update_keyboard_inputs_game( float const & deltaTime )
+void Camera::update_keyboard_inputs_game( float deltaTime )
 {
     if ( input::is_pressed( sf::Keyboard::Z ) )
     {
@@ -177,7 +174,7 @@ void Camera::update_keyboard_inputs_game( float const & deltaTime )
         this->move( Camera::E_Movement::Right, deltaTime );
     }
 
-    float const & rotationSensivity { 20.f };
+    float rotationSensivity { 20.f };
 
     if ( input::is_pressed( sf::Keyboard::Up ) )
     {
@@ -211,7 +208,7 @@ void Camera::update_keyboard_inputs_game( float const & deltaTime )
     }
 }
 
-void Camera::update_mouse_inputs_game( float const & deltaTime )
+void Camera::update_mouse_inputs_game( float deltaTime )
 {
     math::Vector2F const windowCenter {
         Window::get_instance().get_center_position()
@@ -237,11 +234,11 @@ void Camera::update_mouse_inputs_game( float const & deltaTime )
     this->rotate( offset, deltaTime );
 }
 
-void Camera::update_keyboard_inputs_editor( float const & deltaTime )
+void Camera::update_keyboard_inputs_editor( float deltaTime )
 {
     ( void )deltaTime;
 }
-void Camera::update_mouse_inputs_editor( float const & deltaTime )
+void Camera::update_mouse_inputs_editor( float deltaTime )
 {
     math::Vector2F const windowCenter {
         Window::get_instance().get_center_position()

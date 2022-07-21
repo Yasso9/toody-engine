@@ -3,7 +3,7 @@
 #include "graphics2D/component.hpp"
 #include "graphics2D/tileset.hpp"
 
-class TileSelector : public Component
+class TileSelector : public Component2D
 {
     Tileset m_tileset;
 

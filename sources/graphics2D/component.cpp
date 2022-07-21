@@ -1,37 +1,50 @@
 #include "component.hpp"
 
+#include "main/render.hpp"
+#include "main/window.hpp"
+
 void Component::update( float deltaTime )
 {
     this->update_extra( deltaTime );
 
-    for ( auto component : m_childs )
+    for ( std::shared_ptr< Component > component : m_childs )
     {
         component->update( deltaTime );
     }
 }
-
 void Component::update_extra( float /* deltaTime */ ) {}
 
-void Component::render_before( sf::RenderTarget & /* target */,
-                               sf::RenderStates /* states */ ) const
-{}
-void Component::render( sf::RenderTarget & /* target */,
-                        sf::RenderStates /* states */ ) const
-{}
-void Component::render_after( sf::RenderTarget & /* target */,
-                              sf::RenderStates /* states */ ) const
-{}
+void Component::render_before( Render & /* render */ ) const {}
+void Component::render( Render & /* render */ ) const {}
+void Component::render_after( Render & /* render */ ) const {}
 
-void Component::draw( sf::RenderTarget & target, sf::RenderStates states ) const
+void Component::render_all( Render & render ) const
 {
-    this->render_before( target, states );
+    this->render_before( render );
 
-    this->render( target, states );
+    this->render( render );
 
     for ( std::shared_ptr< Component > component : m_childs )
     {
-        target.draw( *component, states );
+        switch ( m_type )
+        {
+        case E_Type::OpenGL :
+            render.draw(
+                *( dynamic_cast< Component3D * >( component.get() ) ) );
+            break;
+        case E_Type::SFML :
+            render.draw(
+                *( dynamic_cast< Component2D * >( component.get() ) ) );
+            break;
+        }
     }
 
-    this->render_after( target, states );
+    this->render_after( render );
+}
+
+void Component2D::draw( sf::RenderTarget & target,
+                        sf::RenderStates states ) const
+{
+    Render render { Window::get_instance(), target, states };
+    this->render_all( render );
 }

@@ -2,82 +2,70 @@
 
 #include "tools/string.hpp"
 
-Transformable::Transformable( std::filesystem::path const & vertexShaderPath,
-                              std::filesystem::path const & fragmentShaderPath )
-  : m_shader(), m_space(), m_spaceModel()
+Transformable::Transformable( Camera const & camera, sf::Shader & shader )
+  : m_camera { camera }, m_shader { shader }, m_spaceModel { 1.f }
+{}
+
+void Transformable::update_extra( float deltaTime )
 {
-    if ( ! this->m_shader.loadFromFile( vertexShaderPath.string(),
-                                        fragmentShaderPath.string() ) )
-    {
-        throw std::runtime_error { "Loading error with at one shader : '"s
-                                   + vertexShaderPath.string() + "' or '"s
-                                   + fragmentShaderPath.string() + '\'' };
-    }
+    gl::S_SpaceMatrix const spaceMatrix { this->get_space_matrix() };
+
+    m_shader.setUniform(
+        "model"s,
+        sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.model ) } );
+    m_shader.setUniform(
+        "view"s,
+        sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.view ) } );
+    m_shader.setUniform(
+        "projection"s,
+        sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.projection ) } );
+
+    this->update_custom( deltaTime );
 }
 
-void Transformable::translate( glm::vec3 const & tranlationVector )
-{
-    glm::mat4 const translationMatrix { glm::translate( glm::mat4 { 1.f },
-                                                        tranlationVector ) };
-
-    this->m_spaceModel *= translationMatrix;
-}
-void Transformable::rotate( glm::vec3 const & rotationVector,
-                            float const & angle )
-{
-    glm::mat4 const rotationMatrix { glm::rotate(
-        glm::mat4 { 1.f },
-        glm::radians( angle ),
-        glm::vec3 { rotationVector } ) };
-
-    this->m_spaceModel *= rotationMatrix;
-}
-void Transformable::scale( glm::vec3 const & scaleVector )
-{
-    glm::mat4 const scaleMatrix { glm::scale( glm::mat4 { 1.f },
-                                              glm::vec3 { scaleVector } ) };
-    this->m_spaceModel *= scaleMatrix;
-}
-
-void Transformable::update( glm::mat4 const & projection,
-                            glm::mat4 const & view )
-{
-    this->m_space.projection = projection;
-    this->m_space.view       = view;
-    this->m_space.model      = this->m_spaceModel;
-
-    // All the object transformation have been made, so we reset the matrix to identity
-    this->reset_space_model();
-
-    this->transform();
-
-    this->update_intra();
-}
+void Transformable::update_custom( float /* deltaTime */ ) {}
 
 // draws the model, and thus all its meshes
-void Transformable::draw() const
+void Transformable::render( Render & render ) const
 {
-    sf::Shader::bind( &this->m_shader );
+    sf::Shader::bind( &m_shader );
 
-    this->draw_intra();
+    this->render_custom( render.get_window() );
 
     sf::Shader::bind( NULL );
 }
 
-void Transformable::transform()
+void Transformable::render_custom( Window const & /* window */ ) const {}
+
+void Transformable::move( math::Vector3F tranlationVector )
 {
-    this->m_shader.setUniform(
-        "model"s,
-        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.model ) } );
-    this->m_shader.setUniform(
-        "view"s,
-        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.view ) } );
-    this->m_shader.setUniform(
-        "projection"s,
-        sf::Glsl::Mat4 { glm::value_ptr( this->m_space.projection ) } );
+    glm::mat4 const translationMatrix {
+        glm::translate( glm::mat4 { 1.f }, tranlationVector.to_glm() )
+    };
+
+    m_spaceModel *= translationMatrix;
+}
+void Transformable::rotate( math::Vector3F rotationVector, float angle )
+{
+    glm::mat4 const rotationMatrix { glm::rotate( glm::mat4 { 1.f },
+                                                  glm::radians( angle ),
+                                                  rotationVector.to_glm() ) };
+
+    m_spaceModel *= rotationMatrix;
+}
+void Transformable::scale( math::Vector3F scaleVector )
+{
+    glm::mat4 const scaleMatrix { glm::scale( glm::mat4 { 1.f },
+                                              scaleVector.to_glm() ) };
+    m_spaceModel *= scaleMatrix;
 }
 
-void Transformable::reset_space_model()
+gl::S_SpaceMatrix Transformable::get_space_matrix() const
 {
-    this->m_spaceModel = glm::mat4 { 1.f };
+    return { m_camera.get_projection(), m_camera.get_view(), m_spaceModel };
+}
+
+sf::Shader & Transformable::get_shader()
+{
+    return m_shader;
 }

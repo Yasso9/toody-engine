@@ -3,7 +3,7 @@
 #include "graphics2D/component.hpp"
 #include "tools/tools.hpp"
 
-class Player : public TransformableComponent
+class Player : public TransformableComponent2D
 {
   public:
     /// @todo create the state in the gui
@@ -58,8 +58,7 @@ class Player : public TransformableComponent
     void update_extra( float deltaTime ) override;
 
   private:
-    void render( sf::RenderTarget & target,
-                 sf::RenderStates states ) const override;
+    void render( Render & render )const override;
 
     void init_sprite_value();
     void init_sprite_number_of_cells();

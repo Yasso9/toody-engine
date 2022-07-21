@@ -31,7 +31,7 @@ class Shape2D : public sf::Shape
     }
 };
 
-class StaticEntity2D : public TransformableComponent
+class StaticEntity2D : public TransformableComponent2D
 {
   protected:
     Shape2D m_shape;
@@ -49,11 +49,7 @@ class StaticEntity2D : public TransformableComponent
     bool is_intersected_by( StaticEntity2D const & otherEntity ) const;
 
   protected:
-    void render( sf::RenderTarget & target,
-                 sf::RenderStates states ) const override
-    {
-        target.draw( m_shape, states );
-    }
+    void render( Render & render ) const override { render.draw( m_shape ); }
 };
 
 /// @brief Moveable Entity
@@ -138,16 +134,15 @@ class CustomEntity2D : public StaticEntity2D
     }
 
   private:
-    void render( sf::RenderTarget & target,
-                 sf::RenderStates states ) const override
+    void render( Render & render ) const override
     {
-        target.draw( *this, states );
+        render.draw( *this );
 
         sf::CircleShape pointShape { m_pointShape };
         for ( math::PointF const & point : m_shape.polygon.get_points() )
         {
             pointShape.setPosition( point.x, point.y );
-            target.draw( pointShape, states );
+            render.draw( pointShape );
         }
     }
 };

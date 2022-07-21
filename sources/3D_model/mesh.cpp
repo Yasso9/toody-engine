@@ -58,13 +58,13 @@ void Mesh::update( sf::Shader & shader,
     }
 }
 
-void Mesh::draw() const
+void Mesh::draw( Window const & window ) const
 {
     // draw mesh
-    Window::get_instance().gl_draw_elements( this->VAO,
-                                             GL_TRIANGLES,
-                                             GL_UNSIGNED_INT,
-                                             this->m_indices.size() );
+    window.gl_draw_elements( this->VAO,
+                             GL_TRIANGLES,
+                             GL_UNSIGNED_INT,
+                             this->m_indices.size() );
 }
 
 void Mesh::generate()

@@ -11,7 +11,7 @@
 #include "maths/maths.hpp"
 #include "tools/exceptions.hpp"
 
-class Dialogue : public Component
+class Dialogue : public Component2D
 {
   private:
     sf::RectangleShape m_shape;
@@ -50,8 +50,7 @@ class Dialogue : public Component
         m_shape.setOutlineThickness( 3.f );
         m_shape.setOutlineColor( sf::Color::Black );
 
-        m_text.setFont(
-            Resources::get_instance().get_font( Resources::E_FontKey::Arial ) );
+        m_text.setFont( resources::get_font( "arial.ttf" ) );
         m_text.setCharacterSize( 30u );
         m_text.setFillColor( sf::Color::Black );
 
@@ -94,8 +93,7 @@ class Dialogue : public Component
             this->m_shape.move( mouseMovement.to_float() );
         }
 
-        math::PointI mousePosition { input::get_mouse_position(
-            Window::get_instance() ) };
+        math::PointI mousePosition { input::get_mouse_position() };
         mouseIsInsideBox = mousePosition.to_float().is_inside(
             math::PointF { this->m_shape.getPosition() },
             this->m_shape.getSize() );
@@ -110,7 +108,7 @@ class Dialogue : public Component
         }
     }
 
-    void update( float /* deltaTime */ ) override
+    void update_extra( float /* deltaTime */ ) override
     {
         if ( ! m_showCustomisation )
         {
@@ -144,11 +142,10 @@ class Dialogue : public Component
     }
 
   private:
-    void render( sf::RenderTarget & target,
-                 sf::RenderStates states ) const override
+    void render( Render & render ) const override
     {
-        target.draw( m_shape, states );
-        target.draw( m_text, states );
+        render.draw( m_shape );
+        render.draw( m_text );
     }
 
     void set_text( std::string const & text )

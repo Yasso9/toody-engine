@@ -350,11 +350,9 @@ void TileMap::update_tile_size_button()
     }
 }
 
-void TileMap::render( sf::RenderTarget & target, sf::RenderStates states ) const
+void TileMap::render( Render & render ) const
 {
-    states.transform *= this->getTransform();
-
-    states.texture = &this->m_tileSelector.get_tileset().get_texture();
+    render.set_texture( this->m_tileSelector.get_tileset().get_texture() );
 
     for ( auto const & column : this->m_tileTable )
     {
@@ -362,10 +360,10 @@ void TileMap::render( sf::RenderTarget & target, sf::RenderStates states ) const
         {
             for ( Tile const & cell : tile )
             {
-                target.draw( cell.get_vertex_array(), states );
+                render.draw( cell.get_vertex_array() );
             }
         }
     }
 
-    target.draw( this->m_cursor, states );
+    render.draw( this->m_cursor );
 }
