@@ -102,10 +102,10 @@ void Camera::move( Camera::E_Movement direction, float deltaTime )
 void Camera::rotate( glm::vec3 angle, float deltaTime )
 {
     glm::vec3 const trueAngle { angle * deltaTime * 0.05f };
-    std::cout << "angle : " << angle << std::endl;
-    std::cout << "trueAngle : " << trueAngle << std::endl;
+    // std::cout << "angle : " << angle << std::endl;
+    // std::cout << "trueAngle : " << trueAngle << std::endl;
 
-    std::cout << "direction before" << this->m_direction << std::endl;
+    // std::cout << "direction before" << this->m_direction << std::endl;
 
     math::Vector3F direction { m_direction };
 
@@ -115,7 +115,7 @@ void Camera::rotate( glm::vec3 angle, float deltaTime )
 
     this->m_direction = direction.to_glm();
 
-    std::cout << "direction after" << this->m_direction << std::endl;
+    // std::cout << "direction after" << this->m_direction << std::endl;
 }
 
 void Camera::zoom( float factor, float deltaTime )

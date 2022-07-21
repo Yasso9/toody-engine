@@ -33,5 +33,5 @@ void Render::draw( Component2D const & component ) const
 }
 void Render::draw( Component3D const & component ) const
 {
-    m_window.draw( component );
+    m_window.draw( component, m_target, m_states );
 }

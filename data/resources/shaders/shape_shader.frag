@@ -7,13 +7,13 @@ in vec2 textureCoodinate;
 out vec4 fragmentColor;
 
 // used to specify the type of our texture
-uniform sampler2D my_textureA;
-uniform sampler2D my_textureB;
+uniform sampler2D my_texture0;
+uniform sampler2D my_texture1;
 
 void main()
 {
-    vec4 textureA = texture(my_textureA, textureCoodinate);
-    vec4 textureB = texture(my_textureB, textureCoodinate);
+    vec4 textureA = texture(my_texture0, textureCoodinate);
+    vec4 textureB = texture(my_texture1, textureCoodinate);
     if(textureB.a < 0.1)
         discard;
 

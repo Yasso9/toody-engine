@@ -16,7 +16,7 @@ MainMenuState::MainMenuState()
     this->init_buttons();
 }
 
-void MainMenuState::extra_events()
+void MainMenuState::update_extra( float /* deltaTime */ )
 {
     int const buttonNumberPressed { this->m_buttons.update_button_array(
         static_cast< sf::Vector2f >( input::get_mouse_position().to_float() ),
@@ -28,16 +28,14 @@ void MainMenuState::extra_events()
     }
 }
 
-void MainMenuState::update_extra( float /* deltaTime */ ) {}
+void MainMenuState::render( Render & render ) const
+{
+    render.draw( this->m_background );
 
-// void MainMenuState::render() const
-// {
-//     Window::get_instance().draw( this->m_background );
+    render.draw( this->m_text );
 
-//     Window::get_instance().draw( this->m_text );
-
-//     Window::get_instance().draw( this->m_buttons );
-// }
+    render.draw( this->m_buttons );
+}
 
 void MainMenuState::init_background()
 {

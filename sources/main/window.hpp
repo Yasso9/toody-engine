@@ -45,7 +45,8 @@ class Window final : public sf::RenderWindow,
 
     using sf::RenderWindow::draw;
     /// @todo à définir
-    void draw( Component3D const & component ) const;
+    void draw( Component3D const & component, sf::RenderTarget & target,
+               sf::RenderStates const & states ) const;
 
   private:
     Window();

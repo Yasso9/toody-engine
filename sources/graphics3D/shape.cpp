@@ -27,7 +27,8 @@ Shape::Shape( S_Data const & data, Camera const & camera )
   : Transformable { camera,
                     resources::get_shader( "shape_shader.vert"s,
                                            "shape_shader.frag"s ) },
-    m_textures { resources::get_texture( "wall.jpg" ) },
+    m_textures { resources::get_texture( "wall.jpg" ),
+                 resources::get_texture( "town_hall.png" ) },
     m_vertexArrayObject {},
     m_vertexBufferObject {},
     m_elementBufferObject {},
@@ -50,9 +51,10 @@ Shape::~Shape()
 
 void Shape::update_custom( float /* deltaTime */ )
 {
-    for ( auto const & texture : m_textures )
+    for ( unsigned int i = 0u; i < m_textures.size(); ++i )
     {
-        this->get_shader().setUniform( "my_texture", texture );
+        this->get_shader().setUniform( "my_texture"s + std::to_string( i ),
+                                       m_textures[i] );
     }
 }
 void Shape::render_custom( Window const & window ) const
