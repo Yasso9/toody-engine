@@ -9,8 +9,7 @@
 #include "tools/tools.hpp"
 
 Player::Player()
-  : m_texture( Resources::get_instance().get_texture(
-      Resources::E_TextureKey::Player ) ),
+  : m_texture( resources::get_texture( "gold_sprite.png" ) ),
     m_sprite( m_texture ),
     m_name( "Unkown"s ),
     m_speed( 30.f ),
@@ -117,11 +116,9 @@ void Player::update_extra( float deltaTime )
     this->m_lastState = { this->m_state, this->m_direction };
 }
 
-void Player::render( sf::RenderTarget & target, sf::RenderStates states ) const
+void Player::render( Render & render ) const
 {
-    states.transform *= this->getTransform();
-
-    target.draw( this->m_sprite, states );
+    render.draw( m_sprite );
 }
 
 void Player::update_delta_time( float const & deltaTime )

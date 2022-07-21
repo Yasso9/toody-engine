@@ -7,9 +7,11 @@
 #include "maths/maths.hpp"
 #include "tools/singleton.hpp"
 
+class Component3D;
+
 /// @brief check if the class can be drawn
 template < typename Type >
-concept Drawable = std::is_base_of< sf::Drawable, Type >::value;
+concept C_IsDrawable = std::is_base_of< sf::Drawable, Type >::value;
 
 /// @todo maybe think to remove the singleton pattern for this class
 class Window final : public sf::RenderWindow,
@@ -33,6 +35,12 @@ class Window final : public sf::RenderWindow,
 
     void clear_all( sf::Color const & backgroundColor );
 
+    /// @todo à définir
+    void draw( Component3D const & /* component */ ) const
+    {
+        std::cerr << "DRAW NOTHING" << std::endl;
+    }
+
     void gl_draw_elements( unsigned int const & vertexArrayObject,
                            GLenum const & primitiveType,
                            GLenum const & dataType,
@@ -41,7 +49,7 @@ class Window final : public sf::RenderWindow,
                          GLenum const & primitiveType,
                          unsigned int const & arraySize ) const;
 
-    template < Drawable DrawableClass >
+    template < C_IsDrawable DrawableClass >
     void sf_draw( DrawableClass const & target )
     {
         this->draw( target );

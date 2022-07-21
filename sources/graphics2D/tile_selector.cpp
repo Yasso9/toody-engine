@@ -13,8 +13,7 @@
 #include "tools/global_variable.hpp"
 
 TileSelector::TileSelector()
-  : m_tileset( Resources::get_instance().get_texture(
-      Resources::E_TextureKey::Tileset ) ),
+  : m_tileset( resources::get_texture( "ground.png" ) ),
     m_tileSelected( -1 ),
     m_isGridEnabled( true ),
     m_gridColorTable()

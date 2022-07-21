@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include <vector>
 
 #include "graphics2D/sfml.hpp"
@@ -11,16 +12,18 @@
 class Shape final : public Transformable
 {
   public:
-    struct Data
+    struct S_Data
     {
         /// @brief Array of all the attributes of the shape
         std::vector< float > vertices {};
         /// @brief Array of all the indices of the shape
         ///        If empty, we don't create an element buffer object
-        std::vector< unsigned int > indices {};
+        std::optional< std::vector< unsigned int > > indices {};
 
         /// @brief Array of the vector's size contained in each point
         std::vector< unsigned int > dataPerPoint {};
+
+        /// @todo assert que dataperpoint est cohérent et que si on le divise par vertices ça donne bien un entier
 
         /// @brief Array size of each point
         unsigned int get_data_per_point_sum() const;
@@ -28,37 +31,38 @@ class Shape final : public Transformable
         unsigned int get_number_of_element() const;
     };
 
-    Shape();
-    virtual ~Shape();
-
-    /**
-     * @brief Create the shape. If the indices is empty,
-     *        we don't create an element buffer object
-     */
-    void create( Data const & data );
-
   private:
-    sf::Texture m_textureA;
-    sf::Texture m_textureB;
+    std::vector< sf::Texture > m_textures;
 
     unsigned int m_vertexArrayObject;
     unsigned int m_vertexBufferObject;
     /// @brief To simplify the point for the vertices
     unsigned int m_elementBufferObject;
 
-    Shape::Data m_data;
+    S_Data m_data;
 
-    void update_intra() override;
-    void draw_intra() const override;
+  public:
+    /**
+     * @brief Create the shape. If the indices is empty,
+     *        we don't create an element buffer object
+     */
+    explicit Shape( S_Data const & data, Camera const & camera );
+    virtual ~Shape();
 
-    void load_textures_and_shaders();
+  private:
+    virtual void update_custom( float deltaTime ) override final;
+    virtual void render_custom( Window const & window ) const override final;
+
+  public:
+    unsigned int get_VAO() const;
+    unsigned int & get_VAO();
+    unsigned int get_VBO() const;
+    unsigned int & get_VBO();
+    unsigned int get_EBO() const;
+    unsigned int & get_EBO();
+    S_Data const & get_data() const;
 
     /// @brief Return true if we need an element buffer object for the actual shape,
     ///        false otherwise
-    bool is_element_buffer_set() const;
-
-    void objects_generation();
-    void objects_binding();
-    void vertex_shader_attribution();
-    void unbind();
+    bool is_EBO_handled() const;
 };

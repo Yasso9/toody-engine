@@ -19,7 +19,7 @@
 
 namespace gl
 {
-    struct SpaceMatrix
+    struct S_SpaceMatrix
     {
         glm::mat4 projection { 1.f };
         glm::mat4 view { 1.f };

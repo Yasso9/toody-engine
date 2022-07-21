@@ -10,9 +10,7 @@
 #include "main/window.hpp"
 #include "tools/concepts.hpp"
 
-/// @todo inherit from Component
-/// @brief abstract class
-class State : public Component
+class State : public Component2D
 {
   public:
     /**
@@ -38,8 +36,6 @@ class State : public Component
     State( State::E_List const & stateName );
 
   public:
-    virtual ~State() = default;
-
     /**
      * @brief Know the next state to render after the input update.
      * @returns State::E_List value of the next state to print
@@ -50,10 +46,8 @@ class State : public Component
     void update_inputs( sf::Event const & event );
 
   private:
-    void render_before( sf::RenderTarget & target,
-                        sf::RenderStates states ) const override;
-    void render_after( sf::RenderTarget & target,
-                       sf::RenderStates states ) const override;
+    void render_before( Render & render ) const override;
+    void render_after( Render & render ) const override;
 
     virtual void keyboard_pressed( sf::Event event );
     virtual void keyboard_released( sf::Event event );

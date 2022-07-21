@@ -52,7 +52,7 @@ namespace math
         /// @brief Move Assignement
         Vector2< Type > & operator=( Vector2< Type > && vector2D ) noexcept;
         /// @brief Array operator
-        virtual Type operator[]( std::size_t index ) const;
+        Type operator[]( std::size_t index ) const;
 
         /* ************************************************************************
         *********************** ASSIGNEMENT OPERATOR ******************************

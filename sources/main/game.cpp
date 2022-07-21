@@ -20,6 +20,8 @@
 
 Game::Game() : m_state( nullptr ), m_shouldRun( true )
 {
+    std::cout << "Game Started" << std::endl;
+
     if ( ! ImGui::SFML::Init( Window::get_instance() ) )
     {
         throw exception::System { "Cannot init ImGui"s };
@@ -40,6 +42,8 @@ Game::~Game()
     ImGui::SFML::Shutdown();
     // Must be made before closing the window
     gl::check_error();
+
+    std::cout << "Game Ended" << std::endl;
 }
 
 void Game::run()

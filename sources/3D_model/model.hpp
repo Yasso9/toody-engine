@@ -8,12 +8,9 @@
 #include "graphics3D/transformable.hpp"
 #include "tools/tools.hpp"
 
+/// @todo rework all this class
 class Model final : public Transformable
 {
-  public:
-    Model( std::string const & filePathModel );
-
-  private:
     /** @brief Model data.
      * Stores all the textures loaded so far,
      * optimization to make sure textures aren't loaded more than once.
@@ -22,10 +19,14 @@ class Model final : public Transformable
     /// @brief All the meshes that the model contains
     std::vector< Mesh > m_meshes;
     /// @brief Path of the model object file
-    std::string const m_filePath;
+    std::filesystem::path const m_filePath;
 
-    void update_intra() override;
-    void draw_intra() const override;
+  public:
+    explicit Model( std::string const & filePathModel, Camera const & camera );
+
+  private:
+    virtual void update_custom( float deltaTime ) override final;
+    virtual void render_custom( Window const & window ) const override final;
 
     /**
      * @brief Loads a model with supported ASSIMP extensions from file

@@ -22,7 +22,7 @@ class Camera
         Right
     };
 
-    Camera( E_Type const & type );
+    Camera();
 
     float get_field_of_view() const;
 
@@ -36,16 +36,15 @@ class Camera
     glm::mat4 get_view() const;
 
     /// @brief change the position to where the camera should look at
-    void set_target_position( glm::vec3 const & targetPosition );
+    void set_target_position( glm::vec3 targetPosition );
 
-    void move( Camera::E_Movement const & direction, float const & deltaTime );
-    void rotate( glm::vec3 const & angle, float const & deltaTime );
-    void rotate_from_target( glm::vec3 const & target,
-                             sf::Vector2f const & angle,
-                             float const & deltaTime );
-    void zoom( float const & factor, float const & deltaTime );
+    void move( Camera::E_Movement direction, float deltaTime );
+    void rotate( glm::vec3 angle, float deltaTime );
+    void rotate_from_target( glm::vec3 target, sf::Vector2f angle,
+                             float deltaTime );
+    void zoom( float factor, float deltaTime );
 
-    void update_inputs( float const & deltaTime );
+    void update_inputs( float deltaTime );
 
   private:
     /// @brief Position of the camera in the space
@@ -62,9 +61,9 @@ class Camera
     glm::vec3 get_x_axis() const;
     glm::vec3 get_y_axis() const;
 
-    void update_keyboard_inputs_game( float const & deltaTime );
-    void update_mouse_inputs_game( float const & deltaTime );
+    void update_keyboard_inputs_game( float deltaTime );
+    void update_mouse_inputs_game( float deltaTime );
 
-    void update_keyboard_inputs_editor( float const & deltaTime );
-    void update_mouse_inputs_editor( float const & deltaTime );
+    void update_keyboard_inputs_editor( float deltaTime );
+    void update_mouse_inputs_editor( float deltaTime );
 };

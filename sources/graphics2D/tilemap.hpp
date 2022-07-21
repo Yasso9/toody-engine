@@ -9,7 +9,7 @@
 #include "graphics2D/tileset.hpp"
 #include "graphics2D/view.hpp"
 
-class TileMap : public TransformableComponent
+class TileMap : public TransformableComponent2D
 {
     TileSelector m_tileSelector;
     sf::RectangleShape m_cursor;
@@ -63,6 +63,5 @@ class TileMap : public TransformableComponent
     void update_table_informations();
     void update_tile_size_button();
 
-    void render( sf::RenderTarget & target,
-                 sf::RenderStates states ) const override;
+    void render( Render & render ) const override;
 };

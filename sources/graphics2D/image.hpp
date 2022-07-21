@@ -20,7 +20,7 @@ struct Image
     {}
 };
 
-class ImageMap : public Component
+class ImageMap : public Component2D
 {
     std::vector< Image > m_data;
 
@@ -30,14 +30,11 @@ class ImageMap : public Component
         /// @todo load the the sprites path and the positions from the database from the database
 
         m_data = {
-            {sf::Sprite { Resources::get_instance().get_texture(
-                  "happy_square.png"s ) },
+            {sf::Sprite { resources::get_texture( "happy_square.png"s ) },
              { 0u, 0u }  },
-            { sf::Sprite {
-                  Resources::get_instance().get_texture( "logo.png"s ) },
+            { sf::Sprite { resources::get_texture( "logo.png"s ) },
              { 100u, 0u }},
-            { sf::Sprite {
-                  Resources::get_instance().get_texture( "townhall.png"s ) },
+            { sf::Sprite { resources::get_texture( "townhall.png"s ) },
              { 0u, 200u }},
         };
     }
@@ -46,12 +43,11 @@ class ImageMap : public Component
     std::vector< Image > const & get_data() const { return m_data; }
 
   private:
-    void render( sf::RenderTarget & target,
-                 sf::RenderStates states ) const override
+    void render( Render & render ) const override
     {
         for ( Image const & image : m_data )
         {
-            target.draw( image.sprite, states );
+            render.draw( image.sprite );
         }
     }
 };
