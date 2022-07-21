@@ -3,47 +3,48 @@
 #include "main/render.hpp"
 #include "main/window.hpp"
 
-void BaseComponent::update( float deltaTime )
+void Component::update( float deltaTime )
 {
     this->update_extra( deltaTime );
 
-    for ( std::shared_ptr< Component2D > component : m_childs2D )
-    {
-        component->update( deltaTime );
-    }
-    for ( std::shared_ptr< Component3D > component : m_childs3D )
+    for ( std::shared_ptr< Component > component : m_childs )
     {
         component->update( deltaTime );
     }
 }
-void BaseComponent::update_extra( float /* deltaTime */ ) {}
+void Component::update_extra( float /* deltaTime */ ) {}
 
-void BaseComponent::render_before( Render & /* render */ ) const {}
-void BaseComponent::render( Render & /* render */ ) const {}
-void BaseComponent::render_after( Render & /* render */ ) const {}
+void Component::render_before( Render & /* render */ ) const {}
+void Component::render( Render & /* render */ ) const {}
+void Component::render_after( Render & /* render */ ) const {}
 
-void BaseComponent::render_all( Render & render ) const
+void Component::render_all( Render & render ) const
 {
     this->render_before( render );
 
     this->render( render );
 
-    for ( std::shared_ptr< Component3D > component : m_childs3D )
+    for ( std::shared_ptr< Component > component : m_childs )
     {
-        render.draw( *component );
-    }
-    for ( std::shared_ptr< Component2D > component : m_childs2D )
-    {
-        render.draw( *component );
+        switch ( m_type )
+        {
+        case E_Type::OpenGL :
+            render.draw(
+                *( dynamic_cast< Component3D * >( component.get() ) ) );
+            break;
+        case E_Type::SFML :
+            render.draw(
+                *( dynamic_cast< Component2D * >( component.get() ) ) );
+            break;
+        }
     }
 
     this->render_after( render );
 }
 
-void Component2D::draw( sf::RenderTarget & /* target */,
-                        sf::RenderStates /* states */ ) const
+void Component2D::draw( sf::RenderTarget & target,
+                        sf::RenderStates states ) const
 {
-    /// @todo à définir
-    std::cout << "We draw nothing" << std::endl;
-    // BaseComponent::render_all { {}, target, states };
+    Render render { Window::get_instance(), target, states };
+    this->render_all( render );
 }

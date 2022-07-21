@@ -119,7 +119,7 @@ void Game::render()
 {
     Window::get_instance().clear_all( sf::Color { 0, 0, 0 } );
 
-    Window::get_instance().sf_draw( *m_state );
+    Window::get_instance().draw( *m_state );
 
     // We render after our state render, so the imGui's windows
     // will be drawn if we have a background

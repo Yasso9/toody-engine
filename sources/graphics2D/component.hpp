@@ -9,36 +9,30 @@
 
 class Window;
 
-class BaseComponent;
-class Component2D;
-class Component3D;
+class Component;
 
-/// @brief check if the Type is derived from BaseComponent
+/// @brief check if the Type is derived from Component
 template < typename Type >
-concept C_IsComponent = std::derived_from< Type, BaseComponent >;
-/// @brief check if the Type is derived from Component2D
-template < typename Type >
-concept C_IsComponent2D = std::derived_from< Type, Component2D >;
-/// @brief check if the Type is derived from Component3D
-template < typename Type >
-concept C_IsComponent3D = std::derived_from< Type, Component3D >;
+concept C_IsComponent = std::derived_from< Type, Component >;
 
-class BaseComponent
+class Component
 {
-    friend class Component2D;
-    friend class Component3D;
+  public:
+    enum class E_Type
+    {
+        OpenGL = 0,
+        SFML,
+    };
+
+  private:
+    E_Type m_type;
+    std::vector< std::shared_ptr< Component > > m_childs;
 
   protected:
-    std::vector< std::shared_ptr< Component2D > > m_childs2D;
-    std::vector< std::shared_ptr< Component3D > > m_childs3D;
-    /// @todo faire un get_child quir éupère le type de la classe hérité
+    Component( E_Type type ) : m_type( type ), m_childs {} {};
+    virtual ~Component() = default;
 
-    BaseComponent() : m_childs2D {}, m_childs3D {} {};
-    virtual ~BaseComponent() = default;
-
-    template < C_IsComponent2D ComponentClass >
-    void add_child( ComponentClass & component );
-    template < C_IsComponent3D ComponentClass >
+    template < C_IsComponent ComponentClass >
     void add_child( ComponentClass & component );
     template < C_IsComponent ComponentClass >
     void add_childs( std::vector< ComponentClass > & components );
@@ -54,24 +48,23 @@ class BaseComponent
     virtual void render_after( Render & render ) const;
 };
 
-/// @brief OpenGL Component
-class Component3D : public BaseComponent
+class Component3D : public Component
 {
   protected:
-    Component3D() = default;
+    Component3D() : Component { Component::E_Type::OpenGL } {}
+    virtual ~Component3D() = default;
 };
 
-/// @brief SFML Component
-class Component2D : public BaseComponent,
+class Component2D : public Component,
                     public sf::Drawable
 {
     friend class TransformableComponent2D;
 
   protected:
-    Component2D() = default;
+    Component2D() : Component { Component::E_Type::SFML } {}
+    virtual ~Component2D() = default;
 
-    /// @todo trouver un moyen pour que cela ne soit pas virtual
-    /// @brief do not overload this unless if you are sure about what to do
+  private:
     virtual void draw( sf::RenderTarget & target,
                        sf::RenderStates states ) const override;
 };

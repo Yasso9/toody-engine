@@ -35,12 +35,6 @@ class Window final : public sf::RenderWindow,
 
     void clear_all( sf::Color const & backgroundColor );
 
-    /// @todo à définir
-    void draw( Component3D const & /* component */ ) const
-    {
-        std::cerr << "DRAW NOTHING" << std::endl;
-    }
-
     void gl_draw_elements( unsigned int const & vertexArrayObject,
                            GLenum const & primitiveType,
                            GLenum const & dataType,
@@ -49,16 +43,12 @@ class Window final : public sf::RenderWindow,
                          GLenum const & primitiveType,
                          unsigned int const & arraySize ) const;
 
-    template < C_IsDrawable DrawableClass >
-    void sf_draw( DrawableClass const & target )
-    {
-        this->draw( target );
-    }
+    using sf::RenderWindow::draw;
+    /// @todo à définir
+    void draw( Component3D const & component ) const;
 
   private:
     Window();
-
-    using sf::RenderWindow::draw;
 
     void creation();
     void initialize();

@@ -46,7 +46,7 @@ void Model::load_model()
                                        | aiProcess_GenSmoothNormals
                                        | aiProcess_FlipUVs
                                        | aiProcess_CalcTangentSpace };
-    aiScene const * scene { importer.ReadFile( this->m_filePath,
+    aiScene const * scene { importer.ReadFile( this->m_filePath.string(),
                                                importerFlags ) };
     // check for when reading file
     if ( ! scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE

@@ -144,8 +144,8 @@ class Dialogue : public Component2D
   private:
     void render( Render & render ) const override
     {
-        target.draw( m_shape, states );
-        target.draw( m_text, states );
+        render.draw( m_shape );
+        render.draw( m_text );
     }
 
     void set_text( std::string const & text )
