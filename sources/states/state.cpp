@@ -1,6 +1,7 @@
 #include "state.hpp"
 
 #include "graphics2D/view.hpp"
+#include "input/input.hpp"
 #include "main/resources.hpp"
 
 State::State( State::E_List const & stateName )
@@ -47,7 +48,11 @@ void State::update_inputs( sf::Event const & event )
         this->mouse_moved( event );
         break;
     case sf::Event::MouseWheelScrolled :
-        this->mouse_scroll( event.mouseWheelScroll.delta );
+        if ( event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel )
+        {
+            input::set_mouse_scroll( event.mouseWheelScroll.delta );
+            this->mouse_scroll( event.mouseWheelScroll.delta );
+        }
         break;
     default :
         break;
@@ -56,10 +61,12 @@ void State::update_inputs( sf::Event const & event )
 
 void State::render_before( Render & render ) const
 {
+    /// @todo create method set view
     render.get_target().setView( m_view );
 }
 void State::render_after( Render & render ) const
 {
+    /// @todo create method reset view
     render.get_target().setView( render.get_target().getDefaultView() );
 }
 

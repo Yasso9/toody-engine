@@ -8,27 +8,26 @@ class Component3D;
 
 class Render
 {
-    Window const & m_window;
     sf::RenderTarget & m_target;
     sf::RenderStates m_states;
 
   public:
-    Render( Window const & window, sf::RenderTarget & target,
-            sf::RenderStates states );
+    Render( sf::RenderTarget  & target,
+            sf::RenderStates states = sf::RenderStates::Default );
 
-    Window const & get_window() const;
     sf::RenderTarget const & get_target() const;
     sf::RenderTarget & get_target();
+    sf::RenderStates get_state() const;
     void set_texture( sf::Texture const & texture );
 
-    void draw( Component2D const & component ) const;
-    void draw( Component3D const & component ) const;
-    template < C_IsDrawable DrawableClass >
-    void draw( DrawableClass const & sfmlDrawable ) const;
+    // void draw( Component2D const & component ) const;
+    // void draw( Component3D const & component ) const;
+    // template < C_IsDrawable DrawableClass >
+    // void draw( DrawableClass const & sfmlDrawable ) const;
 };
 
-template < C_IsDrawable DrawableClass >
-void Render::draw( DrawableClass const & sfmlDrawable ) const
-{
-    m_target.draw( sfmlDrawable, m_states );
-}
+// template < C_IsDrawable DrawableClass >
+// void Render::draw( DrawableClass const & sfmlDrawable ) const
+// {
+//     m_target.draw( sfmlDrawable, m_states );
+// }

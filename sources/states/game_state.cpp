@@ -32,7 +32,6 @@ void GameState::update_extra( float deltaTime )
 
 // void GameState::render( sf::RenderTarget & target ) const
 // {
-//     /// @todo handle the view
 //     // Window::get_instance().setView( this->m_view );
 
 //     target.draw( this->m_tilemap );

@@ -38,15 +38,21 @@ class Component
     void add_childs( std::vector< ComponentClass > & components );
 
   public:
+    /// @brief update the component
     virtual void update( float deltaTime ) final;
+    /// @brief draw the component to the render
     virtual void render_all( Render & render ) const final;
 
   protected:
 
   private:
+    /// @brief custom update
     virtual void update_extra( float deltaTime );
+    /// @brief custom render
     virtual void render_before( Render & render ) const;
+    /// @brief custom render
     virtual void render( Render & render ) const;
+    /// @brief custom render
     virtual void render_after( Render & render ) const;
 
   public:

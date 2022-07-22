@@ -123,6 +123,6 @@ void ButtonArray::render( Render & render ) const
 {
     for ( auto const & button : this->m_buttons )
     {
-        render.draw( button );
+        render.get_target().draw( button, render.get_state() );
     }
 }

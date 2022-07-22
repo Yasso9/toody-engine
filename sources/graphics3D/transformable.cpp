@@ -30,12 +30,12 @@ void Transformable::render( Render & render ) const
 {
     sf::Shader::bind( &m_shader );
 
-    this->render_custom( render.get_window() );
+    this->render_custom( render );
 
     sf::Shader::bind( NULL );
 }
 
-void Transformable::render_custom( Window const & /* window */ ) const {}
+void Transformable::render_custom( Render & /* render */ ) const {}
 
 void Transformable::move( math::Vector3F tranlationVector )
 {

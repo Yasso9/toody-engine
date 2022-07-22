@@ -18,6 +18,8 @@ bool verify_next( std::istream & stream, char const & character );
 
 [[maybe_unused]] void test_serializer();
 
+/// @todo Serializer and Unserializer must be the same class
+
 /// @todo Type require that the type have operator << and copy contructor
 template < typename TypeToSerialize >
 class Serializer

@@ -30,12 +30,12 @@ void Model::update_custom( float /* deltaTime */ )
         mesh.update( this->get_shader(), this->m_texturesLoaded );
     }
 }
-void Model::render_custom( Window const & window ) const
+void Model::render_custom( Render & /* render */ ) const
 {
     for ( Mesh const & mesh : this->m_meshes )
     {
         /// @todo make mesh inherit from componentn to have a nice synthax here
-        mesh.draw( window );
+        mesh.draw();
     }
 }
 

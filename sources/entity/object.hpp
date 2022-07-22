@@ -2,7 +2,7 @@
 
 #include "graphics2D/component.hpp"
 #include "graphics2D/view.hpp"
-#include "input/movement_key.hpp"
+#include "input/input.hpp"
 
 class Shape2D : public sf::Shape
 {
@@ -49,7 +49,10 @@ class StaticEntity2D : public TransformableComponent2D
     bool is_intersected_by( StaticEntity2D const & otherEntity ) const;
 
   protected:
-    void render( Render & render ) const override { render.draw( m_shape ); }
+    void render( Render & render ) const override
+    {
+        render.get_target().draw( m_shape, render.get_state() );
+    }
 };
 
 /// @brief Moveable Entity
@@ -57,13 +60,13 @@ class Entity2D : public StaticEntity2D
 {
     std::vector< StaticEntity2D > const & m_collisionMap;
     View const & m_view;
-    keyboard_move::S_Key m_movementKey;
+    input::S_KeyboardMove m_movementKey;
     math::Vector2F m_speed;
 
   public:
     Entity2D( math::PolygonF quadrangle,
               std::vector< StaticEntity2D > const & collisionMap,
-              View const & view, keyboard_move::S_Key movementKey );
+              View const & view, input::S_KeyboardMove movementKey );
 
     math::Vector2F get_speed() const;
 
@@ -77,28 +80,31 @@ class Entity2D : public StaticEntity2D
 
 namespace customize
 {
-    static void circle_shape( sf::CircleShape & circleShape )
+    static void circle_shape( std::string windowName,
+                              sf::CircleShape & circleShape )
     {
-        /// @todo check if a window has begin
+        if ( ImGui::Begin( windowName.c_str() ) )
+        {
+            sf::Color background { circleShape.getFillColor() };
+            sf::Color outline { circleShape.getOutlineColor() };
+            float outlineThickness { circleShape.getOutlineThickness() };
+            float radius { circleShape.getRadius() };
+            unsigned int numberOfPoint { static_cast< unsigned int >(
+                circleShape.getPointCount() ) };
 
-        sf::Color background { circleShape.getFillColor() };
-        sf::Color outline { circleShape.getOutlineColor() };
-        float outlineThickness { circleShape.getOutlineThickness() };
-        float radius { circleShape.getRadius() };
-        unsigned int numberOfPoint { static_cast< unsigned int >(
-            circleShape.getPointCount() ) };
+            ImGui::P_ColorEditor( "Background Color", background );
+            ImGui::P_ColorEditor( "Outline Color", outline );
+            ImGui::InputFloat( "Outline Thickness", &outlineThickness );
+            ImGui::InputFloat( "Radius", &radius );
+            ImGui::P_InputNumber( "Number of Point", numberOfPoint );
 
-        ImGui::P_ColorEditor( "Background Color", background );
-        ImGui::P_ColorEditor( "Outline Color", outline );
-        ImGui::InputFloat( "Outline Thickness", &outlineThickness );
-        ImGui::InputFloat( "Radius", &radius );
-        ImGui::P_InputNumber( "Number of Point", numberOfPoint );
-
-        circleShape.setFillColor( background );
-        circleShape.setOutlineColor( outline );
-        circleShape.setOutlineThickness( outlineThickness );
-        circleShape.setRadius( radius );
-        circleShape.setPointCount( numberOfPoint );
+            circleShape.setFillColor( background );
+            circleShape.setOutlineColor( outline );
+            circleShape.setOutlineThickness( outlineThickness );
+            circleShape.setRadius( radius );
+            circleShape.setPointCount( numberOfPoint );
+        }
+        ImGui::End();
     }
 } // namespace customize
 
@@ -124,9 +130,9 @@ class CustomEntity2D : public StaticEntity2D
             return;
         }
 
-        if ( ImGui::P_Begin( "Customise Entity", &m_showCustomisation ) )
+        if ( ImGui::Begin( "Customise Entity", &m_showCustomisation ) )
         {
-            customize::circle_shape( m_pointShape );
+            customize::circle_shape( "Customise Entity", m_pointShape );
 
             ImGui::Checkbox( "Edit Points ?", &m_editPoint );
         }
@@ -136,13 +142,13 @@ class CustomEntity2D : public StaticEntity2D
   private:
     void render( Render & render ) const override
     {
-        render.draw( *this );
+        StaticEntity2D::render( render );
 
         sf::CircleShape pointShape { m_pointShape };
         for ( math::PointF const & point : m_shape.polygon.get_points() )
         {
             pointShape.setPosition( point.x, point.y );
-            render.draw( pointShape );
+            render.get_target().draw( pointShape, render.get_state() );
         }
     }
 };

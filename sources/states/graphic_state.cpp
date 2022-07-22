@@ -13,7 +13,7 @@ GraphicState::GraphicState()
     m_camera {
 },
     m_shapes { Shape { get_sample_shape_data_A(), m_camera } },
-    m_models { Model { "backpack/backpack.obj"s, m_camera } }
+    m_models { /* Model { "backpack/backpack.obj"s, m_camera }  */ }
 {
     this->add_childs( m_shapes );
     this->add_childs( m_models );
@@ -45,8 +45,6 @@ void GraphicState::mouse_scroll( float const & deltaScroll )
         scrollSpeed = -scrollSpeed;
     }
     // else positiv scroll
-
-    /// @todo have deltatime available
     // m_camera.zoom( scrollSpeed, m_deltaTime );
 }
 

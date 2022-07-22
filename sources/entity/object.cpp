@@ -39,7 +39,7 @@ bool StaticEntity2D::is_intersected_by(
 
 Entity2D::Entity2D( math::PolygonF quadrangle,
                     std::vector< StaticEntity2D > const & collisionMap,
-                    View const & view, keyboard_move::S_Key movementKey )
+                    View const & view, input::S_KeyboardMove movementKey )
   : StaticEntity2D( quadrangle ),
     m_collisionMap( collisionMap ),
     m_view( view ),
@@ -80,7 +80,8 @@ void Entity2D::update_extra( float deltaTime )
     math::Vector2F moveSpeed { ( m_speed / m_view.get_zoom() ) * deltaTime };
     /// @todo changer les events de la view pour pouvoir bouger la vue à partir de la souris (clique du milieu)
     /// @todo mettre ça dans le process event
-    math::Vector2F moveDirection { keyboard_move::get_vector( m_movementKey ) };
+    math::Vector2F moveDirection { input::get_movement_vector(
+        m_movementKey ) };
 
     this->move( moveSpeed * moveDirection );
 

@@ -115,7 +115,7 @@ class Dialogue : public Component2D
             return;
         }
 
-        if ( ImGui::P_Begin( "Dialogue Editor", &m_showCustomisation ) )
+        if ( ImGui::Begin( "Dialogue Editor", &m_showCustomisation ) )
         {
             sf::Color background { m_shape.getFillColor() };
             sf::Color outline { m_shape.getOutlineColor() };
@@ -144,8 +144,8 @@ class Dialogue : public Component2D
   private:
     void render( Render & render ) const override
     {
-        render.draw( m_shape );
-        render.draw( m_text );
+        render.get_target().draw( m_shape, render.get_state() );
+        render.get_target().draw( m_text, render.get_state() );
     }
 
     void set_text( std::string const & text )

@@ -2,14 +2,13 @@
 
 #include "graphics2D/component.hpp"
 
-Render::Render( Window const & window, sf::RenderTarget & target,
-                sf::RenderStates states )
-  : m_window( window ), m_target( target ), m_states( states )
+Render::Render( sf::RenderTarget & target, sf::RenderStates states )
+  : m_target( target ), m_states( states )
 {}
 
-Window const & Render::get_window() const
+sf::RenderStates Render::get_state() const
 {
-    return m_window;
+    return m_states;
 }
 
 sf::RenderTarget const & Render::get_target() const
@@ -27,11 +26,11 @@ void Render::set_texture( sf::Texture const & texture )
     m_states.texture = &texture;
 }
 
-void Render::draw( Component2D const & component ) const
-{
-    m_target.draw( component, m_states );
-}
-void Render::draw( Component3D const & component ) const
-{
-    m_window.draw( component, m_target, m_states );
-}
+// void Render::draw( Component2D const & component ) const
+// {
+//     m_target.draw( component, m_states );
+// }
+// void Render::draw( Component3D const & component ) const
+// {
+//     m_window.draw( component, m_target, m_states );
+// }

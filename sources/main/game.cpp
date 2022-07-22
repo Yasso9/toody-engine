@@ -73,9 +73,9 @@ void Game::run()
 void Game::init_state()
 {
     // this->change_state( State::E_List::MainMenu );
-    // this->change_state( State::E_List::Editor );
+    this->change_state( State::E_List::Editor );
     // this->change_state( State::E_List::Test );
-    this->change_state( State::E_List::Graphics );
+    // this->change_state( State::E_List::Graphics );
 }
 
 void Game::update_events()
@@ -95,8 +95,6 @@ void Game::update_events()
             this->m_state->update_inputs( event );
         }
     }
-
-    ImGui::P_ResetVariables();
 }
 
 void Game::update_state( sf::Time const & deltaTime )
@@ -119,7 +117,8 @@ void Game::render()
 {
     Window::get_instance().clear_all( sf::Color { 0, 0, 0 } );
 
-    Window::get_instance().draw( *m_state );
+    Render render { Window::get_instance() };
+    m_state->render_all( render );
 
     // We render after our state render, so the imGui's windows
     // will be drawn if we have a background

@@ -40,7 +40,7 @@ class Mesh
     void update( sf::Shader & shader,
                  std::map< std::string, Texture > const & textureLoaded );
 
-    void draw( Window const & window ) const;
+    void draw() const;
 
   private:
     std::vector< S_Vertex > const m_vertices;
