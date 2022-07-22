@@ -57,7 +57,7 @@ void Shape::update_custom( float /* deltaTime */ )
                                        m_textures[i] );
     }
 }
-void Shape::render_custom( Window const & window ) const
+void Shape::render_custom( Render & /* Render */ ) const
 {
     GLenum const primitiveType { GL_TRIANGLES };
 
@@ -65,16 +65,16 @@ void Shape::render_custom( Window const & window ) const
     {
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_elementBufferObject );
         GLenum const dataType { GL_UNSIGNED_INT };
-        window.gl_draw_elements( m_vertexArrayObject,
-                                 primitiveType,
-                                 dataType,
-                                 m_data.vertices.size() );
+        gl::draw_elements( m_vertexArrayObject,
+                           primitiveType,
+                           dataType,
+                           m_data.vertices.size() );
     }
     else
     {
-        window.gl_draw_arrays( m_vertexArrayObject,
-                               primitiveType,
-                               m_data.get_number_of_element() );
+        gl::draw_arrays( m_vertexArrayObject,
+                         primitiveType,
+                         m_data.get_number_of_element() );
     }
 }
 

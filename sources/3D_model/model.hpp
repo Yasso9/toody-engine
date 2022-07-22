@@ -26,7 +26,7 @@ class Model final : public Transformable
 
   private:
     virtual void update_custom( float deltaTime ) override final;
-    virtual void render_custom( Window const & window ) const override final;
+    virtual void render_custom( Render & render ) const override final;
 
     /**
      * @brief Loads a model with supported ASSIMP extensions from file

@@ -99,13 +99,8 @@ void TileMap::set_tile_size( math::Vector2U const & tileSize )
 
 void TileMap::update_extra( float /* deltaTime */ )
 {
-    if ( ImGui::P_IsAnyWindowFocused() )
-    {
-        return;
-    }
-
     ImGui::SetNextWindowBgAlpha( 0.5f );
-    if ( ImGui::P_Begin( "Tilemap Information" ) )
+    if ( ImGui::Begin( "Tilemap Information" ) )
     {
         this->update_selection();
 
@@ -210,8 +205,10 @@ void TileMap::update_selection()
     infoOutput << "Tilemap - Position : " << this->getPosition() << "\n";
     infoOutput << "Tilemap - Size : " << this->get_size() << "\n";
     /// @todo create a number of tile method
-    infoOutput << "Tilemap - Number of Tile : "
+    infoOutput << "Tilemap - Number of Tile A : "
                << this->get_size() / TILE_PIXEL_SIZE << "\n";
+    infoOutput << "Tilemap - Number of Tile B (if same than A, remove A) : "
+               << this->get_tile_size() << "\n";
 
     infoOutput << "View - Center : " << this->m_view.get_center() << "\n";
     infoOutput << "View - Size : " << this->m_view.get_size() << "\n";
@@ -232,7 +229,7 @@ void TileMap::update_selection()
 
     ImGui::Text( "%s", infoOutput.str().c_str() );
 
-    if ( ImGui::P_IsAnyWindowHovered()
+    if ( ImGui::IsWindowHovered( ImGuiHoveredFlags_AnyWindow )
          || ! mousePositionRelativToView.is_inside(
              math::PointF { this->getPosition() },
              this->get_size() ) )
@@ -360,10 +357,11 @@ void TileMap::render( Render & render ) const
         {
             for ( Tile const & cell : tile )
             {
-                render.draw( cell.get_vertex_array() );
+                render.get_target().draw( cell.get_vertex_array(),
+                                          render.get_state() );
             }
         }
     }
 
-    render.draw( this->m_cursor );
+    render.get_target().draw( m_cursor, render.get_state() );
 }

@@ -118,7 +118,7 @@ void Player::update_extra( float deltaTime )
 
 void Player::render( Render & render ) const
 {
-    render.draw( m_sprite );
+    render.get_target().draw( m_sprite, render.get_state() );
 }
 
 void Player::update_delta_time( float const & deltaTime )

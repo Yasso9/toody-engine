@@ -9,9 +9,10 @@ class View : public sf::View
     View() : sf::View {} {}
     View( sf::View view ) noexcept : sf::View { view } {}
 
+    math::Vector2F get_zoom() const;
     void set_zoom( float newZoom );
 
-    math::Vector2F get_zoom() const;
+    void zoom( float factor );
 
     math::Vector2F get_size() const;
     math::Vector2F get_center() const;
@@ -22,4 +23,5 @@ class View : public sf::View
   private:
     using sf::View::getCenter;
     using sf::View::getSize;
+    using sf::View::zoom;
 };

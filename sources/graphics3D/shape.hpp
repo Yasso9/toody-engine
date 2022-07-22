@@ -51,7 +51,7 @@ class Shape final : public Transformable
 
   private:
     virtual void update_custom( float deltaTime ) override final;
-    virtual void render_custom( Window const & window ) const override final;
+    virtual void render_custom( Render & Render ) const override final;
 
   public:
     unsigned int get_VAO() const;

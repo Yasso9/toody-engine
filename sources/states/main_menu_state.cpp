@@ -30,11 +30,9 @@ void MainMenuState::update_extra( float /* deltaTime */ )
 
 void MainMenuState::render( Render & render ) const
 {
-    render.draw( this->m_background );
-
-    render.draw( this->m_text );
-
-    render.draw( this->m_buttons );
+    render.get_target().draw( m_background, render.get_state() );
+    render.get_target().draw( m_text, render.get_state() );
+    render.get_target().draw( m_buttons, render.get_state() );
 }
 
 void MainMenuState::init_background()

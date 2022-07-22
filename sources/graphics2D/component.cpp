@@ -26,17 +26,18 @@ void Component::render_all( Render & render ) const
 
     for ( std::shared_ptr< Component > component : m_childs )
     {
-        switch ( component->get_type() )
-        {
-        case E_Type::OpenGL :
-            render.draw(
-                *( dynamic_cast< Component3D * >( component.get() ) ) );
-            break;
-        case E_Type::SFML :
-            render.draw(
-                *( dynamic_cast< Component2D * >( component.get() ) ) );
-            break;
-        }
+        component->render_all( render );
+        // switch ( component->get_type() )
+        // {
+        // case E_Type::OpenGL :
+        //     render.draw(
+        //         *( dynamic_cast< Component3D * >( component.get() ) ) );
+        //     break;
+        // case E_Type::SFML :
+        //     render.draw(
+        //         *( dynamic_cast< Component2D * >( component.get() ) ) );
+        //     break;
+        // }
     }
 
     this->render_after( render );
@@ -47,9 +48,9 @@ Component::E_Type Component::get_type() const
     return m_type;
 }
 
-void Component2D::draw( sf::RenderTarget & target,
-                        sf::RenderStates states ) const
+void Component2D::draw( sf::RenderTarget & /* target */,
+                        sf::RenderStates /* states */ ) const
 {
-    Render render { Window::get_instance(), target, states };
-    this->render_all( render );
+    // Render render { Window::get_instance(), target, states };
+    // this->render_all( render );
 }

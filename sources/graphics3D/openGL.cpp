@@ -6,6 +6,46 @@
 
 namespace gl
 {
+    namespace
+    {
+        class BindVertexArray
+        {
+          public:
+            BindVertexArray( unsigned int vertexArrayObject )
+            {
+                glBindVertexArray( vertexArrayObject );
+                // enable openGL Z buffer
+                glEnable( GL_DEPTH_TEST );
+            }
+            ~BindVertexArray()
+            {
+                glDisable( GL_DEPTH_TEST );
+                glBindVertexArray( 0 );
+            }
+        };
+    } // namespace
+
+    void draw_elements( unsigned int vertexArrayObject, GLenum primitiveType,
+                        GLenum dataType, std::size_t elementsSize )
+    {
+        BindVertexArray VAOBinding { vertexArrayObject };
+
+        glDrawElements( primitiveType,
+                        static_cast< int >( elementsSize ),
+                        dataType,
+                        0 );
+    }
+    void draw_arrays( unsigned int vertexArrayObject, GLenum primitiveType,
+                      unsigned int arraySize )
+    {
+        BindVertexArray VAOBinding { vertexArrayObject };
+
+        int const verticesBeginPosition { 0 };
+        glDrawArrays( primitiveType,
+                      verticesBeginPosition,
+                      static_cast< int >( arraySize ) );
+    }
+
     void initialize( unsigned int const & width, unsigned int const & height )
     {
         // Load glad so we can use openGL function
@@ -39,9 +79,15 @@ namespace gl
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     }
 
-    void set_wireframe() { glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); }
+    void set_wireframe()
+    {
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    }
 
-    void remove_wireframe() { glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ); }
+    void remove_wireframe()
+    {
+        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    }
 
     void check_error()
     {
@@ -84,7 +130,7 @@ namespace gl
             errorMessage += " | ";
         }
 
-        ASSERTION( numberOfError == 0u, errorMessage );
+        // ASSERTION( numberOfError == 0u, errorMessage );
     }
 } // namespace gl
 

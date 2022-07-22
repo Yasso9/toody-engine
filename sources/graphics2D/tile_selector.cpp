@@ -34,7 +34,7 @@ int TileSelector::get_tile_selected() const
 
 void TileSelector::update_extra( float /* deltaTime */ )
 {
-    if ( ImGui::P_Begin( "Tile Selector" ) )
+    if ( ImGui::Begin( "Tile Selector" ) )
     {
         ImGui::Checkbox( "Enable grid", &this->m_isGridEnabled );
         ImGui::ColorEdit4( "Color Edit", this->m_gridColorTable );

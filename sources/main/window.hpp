@@ -34,19 +34,7 @@ class Window final : public sf::RenderWindow,
     bool has_absolute_focus() const;
 
     void clear_all( sf::Color const & backgroundColor );
-
-    void gl_draw_elements( unsigned int const & vertexArrayObject,
-                           GLenum const & primitiveType,
-                           GLenum const & dataType,
-                           std::size_t const & elementsSize ) const;
-    void gl_draw_arrays( unsigned int const & vertexArrayObject,
-                         GLenum const & primitiveType,
-                         unsigned int const & arraySize ) const;
-
     using sf::RenderWindow::draw;
-    /// @todo à définir
-    void draw( Component3D const & component, sf::RenderTarget & target,
-               sf::RenderStates const & states ) const;
 
   private:
     Window();

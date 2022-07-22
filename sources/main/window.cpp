@@ -50,46 +50,13 @@ void Window::clear_all( sf::Color const & backgroundColor )
     this->clear( backgroundColor );
 }
 
-void Window::gl_draw_elements( unsigned int const & vertexArrayObject,
-                               GLenum const & primitiveType,
-                               GLenum const & dataType,
-                               std::size_t const & elementsSize ) const
-{
-    glBindVertexArray( vertexArrayObject );
-    // enable openGL Z buffer
-    glEnable( GL_DEPTH_TEST );
-
-    glDrawElements( primitiveType,
-                    static_cast< int >( elementsSize ),
-                    dataType,
-                    0 );
-
-    glDisable( GL_DEPTH_TEST );
-    glBindVertexArray( 0 );
-}
-void Window::gl_draw_arrays( unsigned int const & vertexArrayObject,
-                             GLenum const & primitiveType,
-                             unsigned int const & arraySize ) const
-{
-    glBindVertexArray( vertexArrayObject );
-    glEnable( GL_DEPTH_TEST );
-
-    int const verticesBeginPosition { 0 };
-    glDrawArrays( primitiveType,
-                  verticesBeginPosition,
-                  static_cast< int >( arraySize ) );
-
-    glDisable( GL_DEPTH_TEST );
-    glBindVertexArray( 0 );
-}
-
-void Window::draw( Component3D const & component, sf::RenderTarget & target,
-                   sf::RenderStates const & states ) const
-{
-    /// @todo imporve that
-    Render render { *this, target, states };
-    component.render_all( render );
-}
+// void Window::draw( Component3D const & component, sf::RenderTarget & target,
+//                    sf::RenderStates const & states ) const
+// {
+//     /// @todo imporve that
+//     Render render { *this, target, states };
+//     component.render_all( render );
+// }
 
 void Window::creation()
 {

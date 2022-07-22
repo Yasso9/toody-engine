@@ -7,7 +7,7 @@
 
 #include "entity/object.hpp"
 #include "entity/player.hpp"
-#include "graphics2D/image.hpp"
+#include "graphics2D/image_map.hpp"
 #include "graphics2D/tile_selector.hpp"
 #include "graphics2D/tilemap.hpp"
 #include "graphics2D/tileset.hpp"
@@ -26,13 +26,12 @@ class EditorState final : public State
     std::map< E_WindowKey, bool > m_showWindow;
 
     TileMap m_tilemap;
-    /// @todo activer l'imagemap
-    // ImageMap m_imageMap;
-
-    Player m_player;
+    ImageMap m_imageMap;
 
     std::vector< StaticEntity2D > m_collisionMap;
     Entity2D m_greenEntity;
+
+    Player m_player;
 
   public:
     EditorState();
@@ -40,12 +39,6 @@ class EditorState final : public State
     void update_extra( float deltaTime ) override;
 
   private:
-    void init_map();
-
-    void keyboard_pressed( sf::Event event ) override;
-    void mouse_moved( sf::Event event ) override;
-    void mouse_scroll( float const & deltaScroll ) override;
-
     void update_toolbar();
     void update_debug_window();
     void update_collision_window();

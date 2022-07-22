@@ -22,7 +22,7 @@ namespace resources
         };
         if ( ! is_file_suitable( texturePath, { ".jpg", ".png" } ) )
         {
-            /// @todo mettre une expcetion plus valable
+            /// @todo mettre une exception plus valable
             throw exception::FileLoadingIssue { texturePath, "Texture" };
         }
 
@@ -40,7 +40,6 @@ namespace resources
                 throw exception::FileLoadingIssue { texturePath, "Texture" };
             }
 
-            /// @todo verify that the texture loaded and the texture insert hhave the same adress
             textures.insert( { texturePath, texture } );
         }
 
@@ -121,7 +120,6 @@ namespace resources
                                                     "Font" };
             }
 
-            /// @todo verify that the texture loaded and the texture insert hhave the same adress
             shaders.insert( { shaderFiles, std::move( shader ) } );
         }
         return *( shaders.at( shaderFiles ) );

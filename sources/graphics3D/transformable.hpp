@@ -24,7 +24,7 @@ class Transformable : public Component3D
     virtual void update_extra( float deltaTime ) override final;
     virtual void update_custom( float deltaTime );
     virtual void render( Render & render ) const override final;
-    virtual void render_custom( Window const & window ) const;
+    virtual void render_custom( Render & render ) const;
 
   public:
     void move( math::Vector3F tranlationVector );

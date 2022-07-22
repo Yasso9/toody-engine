@@ -1,28 +1,27 @@
 #pragma once
 
-/// @todo rename this file to image_map.hpp
-
 #include <filesystem>
 #include <vector>
 
+#include "graphics2D/component.hpp"
 #include "graphics2D/sfml.hpp"
 #include "main/resources.hpp"
 #include "maths/maths.hpp"
 #include "tools/path.hpp"
 
-struct Image
+struct S_Image
 {
     sf::Sprite sprite {};
     math::PointU position { 0u, 0u };
 
-    Image( sf::Sprite aSprite, math::PointU aPosition )
+    S_Image( sf::Sprite aSprite, math::PointU aPosition )
       : sprite( aSprite ), position( aPosition )
     {}
 };
 
 class ImageMap : public Component2D
 {
-    std::vector< Image > m_data;
+    std::vector< S_Image > m_data;
 
   public:
     ImageMap() : m_data()
@@ -40,14 +39,14 @@ class ImageMap : public Component2D
     }
     virtual ~ImageMap() = default;
 
-    std::vector< Image > const & get_data() const { return m_data; }
+    std::vector< S_Image > const & get_data() const { return m_data; }
 
   private:
     void render( Render & render ) const override
     {
-        for ( Image const & image : m_data )
+        for ( S_Image const & image : m_data )
         {
-            render.draw( image.sprite );
+            render.get_target().draw( image.sprite, render.get_state() );
         }
     }
 };
