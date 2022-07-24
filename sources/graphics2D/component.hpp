@@ -17,21 +17,16 @@ concept C_IsComponent = std::derived_from< Type, Component >;
 
 class Component
 {
-  public:
-    enum class E_Type
-    {
-        OpenGL = 0,
-        SFML,
-    };
-
   private:
-    E_Type m_type;
-    std::vector< std::shared_ptr< Component > > m_childs;
+    std::vector< Component * > m_childs;
 
   protected:
-    Component( E_Type type ) : m_type( type ), m_childs {} {};
+    Component() : m_childs {} {};
+
+  public:
     virtual ~Component() = default;
 
+  protected:
     template < C_IsComponent ComponentClass >
     void add_child( ComponentClass & component );
     template < C_IsComponent ComponentClass >
@@ -47,53 +42,34 @@ class Component
 
   private:
     /// @brief custom update
-    virtual void update_extra( float deltaTime );
+    virtual void update_before( float deltaTime );
+    /// @brief custom update
+    virtual void update_after( float deltaTime );
     /// @brief custom render
     virtual void render_before( Render & render ) const;
     /// @brief custom render
-    virtual void render( Render & render ) const;
-    /// @brief custom render
     virtual void render_after( Render & render ) const;
-
-  public:
-    E_Type get_type() const;
 };
 
+// A voir si on garde tous ça ?
+class Component2D : public Component
+{
+  protected:
+    Component2D()          = default;
+    virtual ~Component2D() = default;
+};
 class Component3D : public Component
 {
   protected:
-    Component3D() : Component { Component::E_Type::OpenGL } {}
+    Component3D()          = default;
     virtual ~Component3D() = default;
 };
-
-class Component2D : public Component,
-                    public sf::Drawable
-{
-    friend class TransformableComponent2D;
-
-  protected:
-    Component2D() : Component { Component::E_Type::SFML } {}
-    virtual ~Component2D() = default;
-
-  private:
-    virtual void draw( sf::RenderTarget & target,
-                       sf::RenderStates states ) const override;
-};
-
 class TransformableComponent2D : public Component2D,
                                  public sf::Transformable
 {
   protected:
-    TransformableComponent2D() = default;
-
-  private:
-    virtual void draw( sf::RenderTarget & target,
-                       sf::RenderStates states ) const override final
-    {
-        states.transform *= this->getTransform();
-
-        Component2D::draw( target, states );
-    }
+    TransformableComponent2D()          = default;
+    virtual ~TransformableComponent2D() = default;
 };
 
 #include "component.tpp"

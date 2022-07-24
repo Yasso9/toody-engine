@@ -51,7 +51,7 @@ class TileMap : public TransformableComponent2D
     /// @brief save the tilemap table into the sqlite3 database
     void save() const;
 
-    void update_extra( float deltaTime ) override;
+    void update_before( float deltaTime ) override;
 
   private:
     void init_tile_table_from_database();
@@ -63,5 +63,5 @@ class TileMap : public TransformableComponent2D
     void update_table_informations();
     void update_tile_size_button();
 
-    void render( Render & render ) const override;
+    void render_before( Render & render ) const override;
 };

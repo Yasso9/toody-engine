@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include <IMGUI/imgui-SFML.h>
 #include <IMGUI/imgui.h>
 
@@ -7,6 +9,12 @@
 
 namespace ImGui
 {
+    void P_Begin( std::string name, std::function< void() > const & lambda );
+    void P_Begin( std::string name, bool * isWindowOpen,
+                  std::function< void() > const & lambda );
+    void P_Begin( std::string name, bool * isWindowOpen, ImGuiWindowFlags flags,
+                  std::function< void() > const & lambda );
+
     /// @brief bindings for sfml colors
     bool P_ColorEditor( std::string const & label, sf::Color & color,
                         ImGuiColorEditFlags flags = 0 );

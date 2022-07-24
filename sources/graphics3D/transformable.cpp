@@ -6,7 +6,7 @@ Transformable::Transformable( Camera const & camera, sf::Shader & shader )
   : m_camera { camera }, m_shader { shader }, m_spaceModel { 1.f }
 {}
 
-void Transformable::update_extra( float deltaTime )
+void Transformable::update_before( float deltaTime )
 {
     gl::S_SpaceMatrix const spaceMatrix { this->get_space_matrix() };
 
@@ -26,7 +26,7 @@ void Transformable::update_extra( float deltaTime )
 void Transformable::update_custom( float /* deltaTime */ ) {}
 
 // draws the model, and thus all its meshes
-void Transformable::render( Render & render ) const
+void Transformable::render_before( Render & render ) const
 {
     sf::Shader::bind( &m_shader );
 

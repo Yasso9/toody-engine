@@ -45,14 +45,14 @@ void State::update_inputs( sf::Event const & event )
         this->mouse_released( event );
         break;
     case sf::Event::MouseMoved :
+        input::set_mouse_movement(
+            math::Vector2I { event.mouseMove.x, event.mouseMove.y }
+                .to_float() );
         this->mouse_moved( event );
         break;
     case sf::Event::MouseWheelScrolled :
-        if ( event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel )
-        {
-            input::set_mouse_scroll( event.mouseWheelScroll.delta );
-            this->mouse_scroll( event.mouseWheelScroll.delta );
-        }
+        input::set_mouse_scroll( event.mouseWheelScroll.delta );
+        this->mouse_scroll( event.mouseWheelScroll.delta );
         break;
     default :
         break;

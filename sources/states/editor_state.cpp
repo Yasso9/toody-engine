@@ -13,11 +13,12 @@
 EditorState::EditorState()
   : State( State::E_List::Editor ),
     m_showWindow {
-        {E_WindowKey::DemoWindow,      false},
-        { E_WindowKey::DebugOptions,   false},
-        { E_WindowKey::EditorOverlay,  false},
-        { E_WindowKey::Collision,      true },
-        { E_WindowKey::PlayerHandling, false},
+        {"demo_window",      false},
+        { "debug_options",   false},
+        { "editor_overlay",  false},
+        { "collision",       true },
+        { "player_handling", false},
+        { "view",            false},
 },
     m_tilemap { m_view },
     m_imageMap {},
@@ -36,76 +37,94 @@ EditorState::EditorState()
     this->add_childs( m_collisionMap );
     this->add_child( m_greenEntity );
     this->add_child( m_player );
-    this->add_child( m_imageMap );
+    // this->add_child( m_imageMap );
 
     m_tilemap.setPosition( 0.f, 0.f );
 
-    // Set view position at center of the tilemap
-    m_view.setCenter( m_tilemap.get_center() );
-    m_view.setSize( Window::get_instance().get_size().to_float() );
+    this->reset_view();
 
-    m_player.setPosition( m_view.get_center() );
-
-    m_greenEntity.setPosition( 0.f, 0.f );
-    m_greenEntity.get_shape().setFillColor( sf::Color::Green );
-    m_greenEntity.get_shape().setOutlineColor( sf::Color::Black );
-    m_greenEntity.get_shape().setOutlineThickness( 2.f );
+    m_greenEntity.setFillColor( sf::Color::Green );
+    m_greenEntity.setOutlineColor( sf::Color::Black );
+    m_greenEntity.setOutlineThickness( 2.f );
 }
 
-void EditorState::update_extra( float deltaTime )
+void EditorState::update_before( float deltaTime )
 {
-    m_greenEntity.update( deltaTime );
-
-    constexpr float moveSpeedBaseValue { 10.f };
-    math::Vector2F const moveSpeed {
-        math::Vector2F {moveSpeedBaseValue, moveSpeedBaseValue}
-        / m_view.get_zoom()
-    };
-
-    if ( input::is_pressed( sf::Mouse::Middle ) )
-    {
-        m_view.move( input::get_mouse_movement().normalize() * moveSpeed );
-    }
-
-    m_view.zoom( input::get_mouse_scroll() / 4.f );
-
     this->update_toolbar();
 
-    if ( m_showWindow[E_WindowKey::DebugOptions] )
+    this->update_view( deltaTime );
+
+    if ( m_showWindow.at( "debug_options" ) )
     {
         this->update_debug_window();
     }
-    if ( m_showWindow[E_WindowKey::Collision] )
+    if ( m_showWindow.at( "collision" ) )
     {
         this->update_collision_window();
     }
-    if ( m_showWindow[E_WindowKey::DemoWindow] )
+    if ( m_showWindow.at( "demo_window" ) )
     {
-        ImGui::ShowDemoWindow( &m_showWindow.at( E_WindowKey::DemoWindow ) );
+        ImGui::ShowDemoWindow( &m_showWindow.at( "demo_window" ) );
     }
 
     this->update_overlay();
 }
 
-// void EditorState::render() const
-// {
-//     Window::get_instance().setView( m_view );
+void EditorState::reset_view()
+{
+    m_view.setCenter( m_tilemap.get_center() );
+    m_view.setSize( Window::get_instance().get_size().to_float() );
+    m_player.setPosition( m_view.get_center() );
+}
 
-//     Window::get_instance().sf_draw( m_tilemap );
+void EditorState::update_view( float /* deltaTime */ )
+{
+    static float viewScrollSpeed { 0.2f };
+    static float viewMoveSpeedBase { 1.f };
 
-//     for ( StaticEntity2D const & entity : m_collisionMap )
-//     {
-//         Window::get_instance().sf_draw( entity );
-//     }
-//     Window::get_instance().sf_draw( m_greenEntity );
+    /// @todo use this function for all Imgui::P_Begin
+    ImGui::P_Begin( "View Options",
+                    &m_showWindow.at( "view" ),
+                    []()
+                    {
+                        ImGui::SliderFloat( "View Scroll Speed",
+                                            &viewScrollSpeed,
+                                            0.f,
+                                            5.f,
+                                            "%.2f" );
+                        ImGui::SliderFloat( "View Movement Speed",
+                                            &viewMoveSpeedBase,
+                                            0.f,
+                                            50.f,
+                                            "%.0f" );
+                    } );
 
-//     if ( m_showWindow.at( E_WindowKey::PlayerHandling ) )
-//     {
-//         Window::get_instance().sf_draw( m_player );
-//     }
+    float const viewScrollValue { input::get_mouse_scroll() * viewScrollSpeed };
+    math::Vector2F const viewMoveSpeed {
+        math::Vector2F {viewMoveSpeedBase, viewMoveSpeedBase}
+        / m_view.get_zoom()
+    };
+    math::Vector2F const viewMoveValue {
+        input::is_pressed( sf::Mouse::Right )
+            ? input::get_mouse_movement() * viewMoveSpeed
+            : math::Vector2F {0.f, 0.f}
+    };
 
-//     Window::get_instance().reset_view();
-// }
+    if ( ImGui::Begin( "View Options" ) )
+    {
+        std::stringstream output {};
+        output << "Mouse Scroll : " << input::get_mouse_scroll() << "\n";
+        output << "View Scroll Value : " << viewScrollValue << "\n";
+        output << "Mouse Movement : " << input::get_mouse_movement() << "\n";
+        output << "View Movement Speed : " << viewMoveSpeed << "\n";
+        output << "View Movement Value : " << viewMoveValue << "\n";
+        ImGui::Text( "%s", output.str().c_str() );
+    }
+    ImGui::End();
+
+    m_view.zoom( viewScrollValue );
+    m_view.move( viewMoveValue );
+}
 
 void EditorState::update_toolbar()
 {
@@ -115,13 +134,16 @@ void EditorState::update_toolbar()
         {
             ImGui::MenuItem( "Show Editor Overlay Options",
                              NULL,
-                             &m_showWindow.at( E_WindowKey::EditorOverlay ) );
+                             &m_showWindow.at( "editor_overlay" ) );
             ImGui::MenuItem( "Show ImGui Demo Window",
                              NULL,
-                             &m_showWindow.at( E_WindowKey::DemoWindow ) );
+                             &m_showWindow.at( "demo_window" ) );
             ImGui::MenuItem( "Show Debug Options",
                              NULL,
-                             &m_showWindow.at( E_WindowKey::DebugOptions ) );
+                             &m_showWindow.at( "debug_options" ) );
+            ImGui::MenuItem( "Show View Options",
+                             NULL,
+                             &m_showWindow.at( "view" ) );
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
@@ -130,8 +152,7 @@ void EditorState::update_toolbar()
 
 void EditorState::update_debug_window()
 {
-    if ( ImGui::Begin( "Debug Options",
-                       &m_showWindow.at( E_WindowKey::DebugOptions ) ) )
+    if ( ImGui::Begin( "Debug Options", &m_showWindow.at( "debug_options" ) ) )
     {
         std::string testBuffer { "testvalue" };
         ImGui::InputText( "Test", testBuffer.data(), 20 );
@@ -170,24 +191,15 @@ void EditorState::update_debug_window()
 
 void EditorState::update_collision_window()
 {
-    if ( ImGui::Begin( "Collisions",
-                       &m_showWindow.at( E_WindowKey::Collision ) ) )
+    if ( ImGui::Begin( "Collisions", &m_showWindow.at( "collision" ) ) )
     {
         std::stringstream output {};
-        output << "MousePos : " << input::get_mouse_position() << "\n";
-        // ImGui::SliderScalar( "Green Speed",
-        //                      ImGuiDataType_S8,
-        //                      &s8_v,
-        //                      &s8_min,
-        //                      &s8_max,
-        //                      "%d" );
-        // output << "Green Speed : " << m_greenEntity.get_speed() << "\n";
         output << "Green Polygon : " << m_greenEntity.get_polygon().print()
                << "\n";
 
         for ( StaticEntity2D const & entity : m_collisionMap )
         {
-            output << "Intersection with " << entity.getPosition() << " ? "
+            output << "Intersection with " << entity.get_position() << " ? "
                    << std::boolalpha
                    << m_greenEntity.is_intersected_by( entity ) << "\n";
         }
@@ -201,7 +213,7 @@ void EditorState::update_collision_window()
 
 void EditorState::update_overlay()
 {
-    if ( m_showWindow[E_WindowKey::EditorOverlay] )
+    if ( m_showWindow.at( "editor_overlay" ) )
     {
         ImGuiWindowFlags const window_flags =
             ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize
@@ -216,11 +228,11 @@ void EditorState::update_overlay()
         ImGui::SetNextWindowPos( overlayPosition, ImGuiCond_Always );
         ImGui::SetNextWindowBgAlpha( 0.5f );
         if ( ImGui::Begin( "Editor Main",
-                           &m_showWindow.at( E_WindowKey::EditorOverlay ),
+                           &m_showWindow.at( "editor_overlay" ),
                            window_flags ) )
         {
             ImGui::Checkbox( "Handle Player ?",
-                             &m_showWindow.at( E_WindowKey::PlayerHandling ) );
+                             &m_showWindow.at( "player_handling" ) );
 
             static bool showDebug { false };
             ImGui::Checkbox( "Show Debug", &showDebug );

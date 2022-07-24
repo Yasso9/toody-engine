@@ -4,7 +4,7 @@
 
 TestState::TestState() : State( State::E_List::Test ) {}
 
-void TestState::update_extra( float /* deltaTime */ )
+void TestState::update_before( float /* deltaTime */ )
 {
     ImGui::ShowDemoWindow();
 }

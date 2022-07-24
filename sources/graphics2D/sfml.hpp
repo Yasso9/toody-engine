@@ -31,6 +31,7 @@ sf::Vector2f operator%( sf::Vector2f const & vector, int const & modulo );
 
 std::ostream & operator<<( std::ostream & stream,
                            sf::ContextSettings const & settings );
+std::ostream & operator<<( std::ostream & stream, sf::Color const & color );
 
 template < typename T >
 std::ostream & operator<<( std::ostream & stream, sf::Rect< T > const & rect );

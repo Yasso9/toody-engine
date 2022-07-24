@@ -12,18 +12,12 @@ class Render
     sf::RenderStates m_states;
 
   public:
-    Render( sf::RenderTarget  & target,
+    Render( sf::RenderTarget & target,
             sf::RenderStates states = sf::RenderStates::Default );
 
-    sf::RenderTarget const & get_target() const;
     sf::RenderTarget & get_target();
     sf::RenderStates get_state() const;
     void set_texture( sf::Texture const & texture );
-
-    // void draw( Component2D const & component ) const;
-    // void draw( Component3D const & component ) const;
-    // template < C_IsDrawable DrawableClass >
-    // void draw( DrawableClass const & sfmlDrawable ) const;
 };
 
 // template < C_IsDrawable DrawableClass >

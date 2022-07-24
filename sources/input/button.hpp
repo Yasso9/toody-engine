@@ -37,7 +37,7 @@ class Button final : public TransformableComponent2D
 
     void synchronize_string();
 
-    void render( Render & render ) const override;
+    void render_before( Render & render ) const override;
 
     /// @brief shape of the button
     sf::RectangleShape m_shape {};

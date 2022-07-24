@@ -23,7 +23,7 @@ void GameState::init_map()
     this->m_view.setSize( Window::get_instance().get_size().to_float() / 2.f );
 }
 
-void GameState::update_extra( float deltaTime )
+void GameState::update_before( float deltaTime )
 {
     this->m_player.update( deltaTime );
     // The view follow the player

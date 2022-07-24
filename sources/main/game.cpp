@@ -60,6 +60,7 @@ void Game::run()
 
         if ( deltaTime.asSeconds() > refreshRate )
         {
+            // std::cout << "Loop Start" << std::endl;
             this->update_events();
             this->update_state( deltaTime );
             this->render();
@@ -80,6 +81,9 @@ void Game::init_state()
 
 void Game::update_events()
 {
+    input::set_mouse_scroll( 0.f );
+    input::reset_mouse_movement();
+
     sf::Event event {};
     // The event loop must always be part of the main loop,
     // otherwise bug and crash could happen

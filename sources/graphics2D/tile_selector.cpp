@@ -32,7 +32,7 @@ int TileSelector::get_tile_selected() const
     return this->m_tileSelected;
 }
 
-void TileSelector::update_extra( float /* deltaTime */ )
+void TileSelector::update_before( float /* deltaTime */ )
 {
     if ( ImGui::Begin( "Tile Selector" ) )
     {

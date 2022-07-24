@@ -119,10 +119,10 @@ int ButtonArray::update_button_array( sf::Vector2f const & position,
     return -1;
 }
 
-void ButtonArray::render( Render & render ) const
+void ButtonArray::render_before( Render & render ) const
 {
-    for ( auto const & button : this->m_buttons )
+    for ( Button const & button : this->m_buttons )
     {
-        render.get_target().draw( button, render.get_state() );
+        button.render_all( render );
     }
 }

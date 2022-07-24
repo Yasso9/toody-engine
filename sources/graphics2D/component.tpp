@@ -5,7 +5,7 @@
 template < C_IsComponent ComponentClass >
 void Component::add_child( ComponentClass & component )
 {
-    m_childs.push_back( std::make_shared< ComponentClass >( component ) );
+    m_childs.push_back( &component );
 }
 
 template < C_IsComponent ComponentClass >
