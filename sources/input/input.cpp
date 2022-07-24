@@ -50,21 +50,29 @@ namespace input
         return math::PointI { get_mouse_position() };
     }
 
+    namespace
+    {
+        math::Vector2F g_mouseMovement { 0.f, 0.f };
+    } // namespace
+    void reset_mouse_movement()
+    {
+        g_mouseMovement = { 0.f, 0.f };
+    }
+    void set_mouse_movement( math::Vector2F mouseMovement )
+    {
+        math::Vector2F const currentMousePosition { mouseMovement };
+        static math::Vector2F s_lastMousePosition { currentMousePosition };
+
+        g_mouseMovement = { s_lastMousePosition - currentMousePosition };
+
+        s_lastMousePosition = currentMousePosition;
+    }
     math::Vector2F get_mouse_movement()
     {
         if ( ! handle_input() )
             return { 0.f, 0.f };
 
-        math::Vector2F const currentMousePosition {
-            input::get_mouse_position()
-        };
-        static math::Vector2F s_lastMousePosition { currentMousePosition };
-
-        math::Vector2F const offsetMovement { currentMousePosition
-                                              - s_lastMousePosition };
-        s_lastMousePosition = currentMousePosition;
-
-        return offsetMovement;
+        return g_mouseMovement;
     }
 
     namespace

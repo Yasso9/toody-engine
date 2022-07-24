@@ -9,7 +9,7 @@ class GameState final : public State
   public:
     GameState();
 
-    void update_extra( float deltaTime ) override;
+    void update_before( float deltaTime ) override;
 
   private:
     View m_view;

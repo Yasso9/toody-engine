@@ -31,7 +31,7 @@ GraphicState::GraphicState()
     }
 }
 
-void GraphicState::update_extra( float deltaTime )
+void GraphicState::update_before( float deltaTime )
 {
     m_camera.update_inputs( deltaTime );
 }

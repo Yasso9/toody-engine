@@ -20,7 +20,7 @@ class TileSelector : public Component2D
 
     int get_tile_selected() const;
 
-    void update_extra( float deltaTime ) override;
+    void update_before( float deltaTime ) override;
 
   private:
     void update_grid( ImDrawList & drawList );

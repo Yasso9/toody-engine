@@ -21,9 +21,9 @@ class Transformable : public Component3D
     virtual ~Transformable() = default;
 
   private:
-    virtual void update_extra( float deltaTime ) override final;
+    virtual void update_before( float deltaTime ) override final;
     virtual void update_custom( float deltaTime );
-    virtual void render( Render & render ) const override final;
+    virtual void render_before( Render & render ) const override final;
     virtual void render_custom( Render & render ) const;
 
   public:

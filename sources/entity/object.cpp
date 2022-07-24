@@ -3,31 +3,9 @@
 #include "graphics2D/sfml.hpp"
 #include "maths/maths.hpp"
 
-StaticEntity2D::StaticEntity2D( math::PolygonF polygon ) : m_shape( polygon )
+StaticEntity2D::StaticEntity2D( math::PolygonF polygon ) : Shape2D { polygon }
 {
-    this->m_shape.setFillColor( sf::Color::Red );
-}
-
-math::PointF StaticEntity2D::get_position() const
-{
-    return math::PointF { this->getPosition() };
-}
-
-math::PolygonF StaticEntity2D::get_polygon( bool isSizeAdded ) const
-{
-    math::PolygonF polygonToReturn { m_shape.polygon };
-
-    if ( isSizeAdded )
-    {
-        polygonToReturn.move( this->getPosition() );
-    }
-
-    return polygonToReturn;
-}
-
-void StaticEntity2D::set_polygon( math::PolygonF polygon )
-{
-    m_shape.polygon = polygon;
+    this->setFillColor( sf::Color::Red );
 }
 
 bool StaticEntity2D::is_intersected_by(
@@ -35,6 +13,11 @@ bool StaticEntity2D::is_intersected_by(
 {
     return math::is_intersection( this->get_polygon(),
                                   otherEntity.get_polygon() );
+}
+
+void StaticEntity2D::render_before( Render & render ) const
+{
+    this->custom_draw( render );
 }
 
 Entity2D::Entity2D( math::PolygonF quadrangle,
@@ -75,13 +58,19 @@ bool Entity2D::is_collision_detected() const
     return false;
 }
 
-void Entity2D::update_extra( float deltaTime )
+void Entity2D::update_before( float deltaTime )
 {
     math::Vector2F moveSpeed { ( m_speed / m_view.get_zoom() ) * deltaTime };
-    /// @todo changer les events de la view pour pouvoir bouger la vue à partir de la souris (clique du milieu)
-    /// @todo mettre ça dans le process event
     math::Vector2F moveDirection { input::get_movement_vector(
         m_movementKey ) };
+
+    // ImGui::P_Begin( "Entity Update Extra",
+    //                 [moveDirection]()
+    //                 {
+    //                     std::stringstream output {};
+    //                     output << "Move Direction : " << moveDirection << "\n";
+    //                     ImGui::Text( "%s", output.str().c_str() );
+    //                 } );
 
     this->move( moveSpeed * moveDirection );
 

@@ -97,7 +97,7 @@ void TileMap::set_tile_size( math::Vector2U const & tileSize )
                "columns of the table haven't the same size" );
 }
 
-void TileMap::update_extra( float /* deltaTime */ )
+void TileMap::update_before( float /* deltaTime */ )
 {
     ImGui::SetNextWindowBgAlpha( 0.5f );
     if ( ImGui::Begin( "Tilemap Information" ) )
@@ -347,7 +347,7 @@ void TileMap::update_tile_size_button()
     }
 }
 
-void TileMap::render( Render & render ) const
+void TileMap::render_before( Render & render ) const
 {
     render.set_texture( this->m_tileSelector.get_tileset().get_texture() );
 

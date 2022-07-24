@@ -107,7 +107,7 @@ void Player::set_state( Player::E_State const & playerState )
     this->m_state = playerState;
 }
 
-void Player::update_extra( float deltaTime )
+void Player::update_before( float deltaTime )
 {
     this->update_delta_time( deltaTime );
     this->update_movement();
@@ -116,7 +116,7 @@ void Player::update_extra( float deltaTime )
     this->m_lastState = { this->m_state, this->m_direction };
 }
 
-void Player::render( Render & render ) const
+void Player::render_before( Render & render ) const
 {
     render.get_target().draw( m_sprite, render.get_state() );
 }

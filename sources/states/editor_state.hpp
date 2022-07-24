@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <map>
+#include <string>
 
 #include "states/state.hpp"
 
@@ -15,15 +16,7 @@
 
 class EditorState final : public State
 {
-    enum class E_WindowKey
-    {
-        DemoWindow = 0,
-        DebugOptions,
-        EditorOverlay,
-        Collision,
-        PlayerHandling,
-    };
-    std::map< E_WindowKey, bool > m_showWindow;
+    std::map< std::string, bool > m_showWindow;
 
     TileMap m_tilemap;
     ImageMap m_imageMap;
@@ -36,9 +29,12 @@ class EditorState final : public State
   public:
     EditorState();
 
-    void update_extra( float deltaTime ) override;
+    void update_before( float deltaTime ) override;
 
   private:
+    void reset_view();
+    void update_view( float deltaTime );
+
     void update_toolbar();
     void update_debug_window();
     void update_collision_window();

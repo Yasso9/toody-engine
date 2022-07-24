@@ -19,7 +19,7 @@ namespace exception
         {
             // Static is used to not return the adress of a local variable
             static std::string errorInfo {};
-            errorInfo = "\n'"s + m_message + "'\n\n"s;
+            errorInfo = "'"s + m_message + "'"s;
 
             return errorInfo.c_str();
         }
@@ -40,13 +40,11 @@ namespace exception
         virtual const char * what() const noexcept override
         {
             static std::string errorInfo {};
-            errorInfo = "\nIssue with file : '"s + m_filePath.string() + "'"s;
+            errorInfo = "Issue with file : '"s + m_filePath.string() + "'"s;
             if ( ! m_message.empty() )
             {
-                errorInfo += "\nDetail : '"s + m_message + "'"s;
+                errorInfo += "Detail : '"s + m_message + "'"s;
             }
-
-            errorInfo += "\n\n"s;
 
             return errorInfo.c_str();
         }
@@ -69,7 +67,7 @@ namespace exception
             // Static is used to not return the adress of a local variable
             static std::string errorInfo {};
             errorInfo =
-                FileIssue::what() + "Cannot load '"s + m_fileType + "'\n\n"s;
+                FileIssue::what() + "Cannot load '"s + m_fileType + "'"s;
 
             return errorInfo.c_str();
         }
@@ -84,7 +82,7 @@ namespace exception
         virtual const char * what() const noexcept override
         {
             static std::string errorInfo {};
-            errorInfo = "\nUnexpected Enum value'\n\n"s;
+            errorInfo = "Unexpected Enum value"s;
 
             return errorInfo.c_str();
         }

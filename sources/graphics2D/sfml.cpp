@@ -64,6 +64,16 @@ std::ostream & operator<<( std::ostream & stream,
     return stream;
 }
 
+std::ostream & operator<<( std::ostream & stream, sf::Color const & color )
+{
+    stream << "( " << static_cast< unsigned int >( color.r ) << ", "
+           << static_cast< unsigned int >( color.g ) << ", "
+           << static_cast< unsigned int >( color.b ) << ", "
+           << static_cast< unsigned int >( color.a ) << " )";
+
+    return stream;
+}
+
 template < typename T >
 std::ostream & operator<<( std::ostream & stream, sf::Rect< T > const & rect )
 {

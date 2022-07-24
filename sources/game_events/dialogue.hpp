@@ -108,7 +108,7 @@ class Dialogue : public Component2D
         }
     }
 
-    void update_extra( float /* deltaTime */ ) override
+    void update_before( float /* deltaTime */ ) override
     {
         if ( ! m_showCustomisation )
         {
@@ -142,7 +142,7 @@ class Dialogue : public Component2D
     }
 
   private:
-    void render( Render & render ) const override
+    void render_before( Render & render ) const override
     {
         render.get_target().draw( m_shape, render.get_state() );
         render.get_target().draw( m_text, render.get_state() );

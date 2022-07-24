@@ -9,6 +9,30 @@
 
 namespace ImGui
 {
+    void P_Begin( std::string name, std::function< void() > const & lambda )
+    {
+        P_Begin( name, NULL, lambda );
+    }
+    void P_Begin( std::string name, bool * isWindowOpen,
+                  std::function< void() > const & lambda )
+    {
+        P_Begin( name, isWindowOpen, 0, lambda );
+    }
+    void P_Begin( std::string name, bool * isWindowOpen, ImGuiWindowFlags flags,
+                  std::function< void() > const & lambda )
+    {
+        if ( isWindowOpen != NULL && ! *isWindowOpen )
+        {
+            return;
+        }
+
+        if ( ImGui::Begin( name.c_str(), isWindowOpen, flags ) )
+        {
+            lambda();
+            ImGui::End();
+        }
+    }
+
     bool P_ColorEditor( std::string const & label, sf::Color & color,
                         ImGuiColorEditFlags flags )
     {

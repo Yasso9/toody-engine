@@ -42,8 +42,10 @@ namespace input
 
     math::Vector2I get_mouse_position();
     math::PointI get_mouse_position_point();
+    void reset_mouse_movement();
     void set_mouse_position( math::PointI newMousePosition );
     math::Vector2F get_mouse_movement();
+    void set_mouse_movement( math::Vector2F mouseMovement );
     float get_mouse_scroll();
     /// @remark must be used only by the pollevent MouseScroll event
     void set_mouse_scroll( float mouseScrollDelta );

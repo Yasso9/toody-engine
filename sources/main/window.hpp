@@ -34,7 +34,6 @@ class Window final : public sf::RenderWindow,
     bool has_absolute_focus() const;
 
     void clear_all( sf::Color const & backgroundColor );
-    using sf::RenderWindow::draw;
 
   private:
     Window();

@@ -26,7 +26,7 @@ class ButtonArray final : public TransformableComponent2D
                              bool const & click );
 
   private:
-    void render( Render & render ) const override;
+    void render_before( Render & render ) const override;
 
     std::vector< Button > m_buttons;
     std::vector< std::string > m_strings;
