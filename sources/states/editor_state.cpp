@@ -15,26 +15,25 @@ EditorState::EditorState()
     m_showWindow {
         {"demo_window",      false},
         { "debug_options",   false},
-        { "editor_overlay",  false},
+        { "editor_overlay",  true },
         { "collision",       true },
         { "player_handling", false},
         { "view",            false},
 },
     m_tilemap { m_view },
     m_imageMap {},
-    m_collisionMap {
+    m_collisionList { std::vector {
         StaticEntity2D { math::RectangleF { 100.f, 100.f, 50.f, 50.f } },
         StaticEntity2D { math::RectangleF { -300.f, 0.f, 200.f, 200.f } },
-        StaticEntity2D { math::RectangleF { 0.f, 500.f, 100.f, 50.f } }
-    },
+        StaticEntity2D { math::RectangleF { 0.f, 500.f, 100.f, 50.f } } } },
     m_greenEntity { math::RectangleF { 0.f, 0.f, 40.f, 40.f },
-                    m_collisionMap,
+                    m_collisionList,
                     m_view,
                     input::ILKJ },
     m_player {}
 {
     this->add_child( m_tilemap );
-    this->add_childs( m_collisionMap );
+    this->add_child( m_collisionList );
     this->add_child( m_greenEntity );
     this->add_child( m_player );
     // this->add_child( m_imageMap );
@@ -197,7 +196,7 @@ void EditorState::update_collision_window()
         output << "Green Polygon : " << m_greenEntity.get_polygon().print()
                << "\n";
 
-        for ( StaticEntity2D const & entity : m_collisionMap )
+        for ( StaticEntity2D const & entity : m_collisionList.get_array() )
         {
             output << "Intersection with " << entity.get_position() << " ? "
                    << std::boolalpha
@@ -231,6 +230,10 @@ void EditorState::update_overlay()
                            &m_showWindow.at( "editor_overlay" ),
                            window_flags ) )
         {
+            static bool customizeCollision { false };
+            ImGui::Checkbox( "Customize Collisions ?", &customizeCollision );
+            m_collisionList.set_customisation( customizeCollision );
+
             ImGui::Checkbox( "Handle Player ?",
                              &m_showWindow.at( "player_handling" ) );
 

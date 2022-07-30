@@ -6,9 +6,11 @@
 
 #include "states/state.hpp"
 
-#include "entity/object.hpp"
+#include "collision2D/collision_list.hpp"
 #include "entity/player.hpp"
 #include "graphics2D/image_map.hpp"
+#include "graphics2D/moveable_entity.hpp"
+#include "graphics2D/static_entity.hpp"
 #include "graphics2D/tile_selector.hpp"
 #include "graphics2D/tilemap.hpp"
 #include "graphics2D/tileset.hpp"
@@ -21,8 +23,8 @@ class EditorState final : public State
     TileMap m_tilemap;
     ImageMap m_imageMap;
 
-    std::vector< StaticEntity2D > m_collisionMap;
-    Entity2D m_greenEntity;
+    CollisionList m_collisionList;
+    MoveableEntity2D m_greenEntity;
 
     Player m_player;
 
