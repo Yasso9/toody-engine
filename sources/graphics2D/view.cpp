@@ -1,9 +1,12 @@
 #include "view.hpp"
 
-#include <string>
+#include <stdexcept> // for logic_error
+#include <string>    // for string_literals
+
 using namespace std::string_literals;
-#include "input/input.hpp"
-#include "main/window.hpp"
+#include "main/window.hpp"     // for Window
+#include "maths/vector2.tpp"   // for operator/, Vector2::Vector2<Type>
+#include "tools/singleton.tpp" // for Singleton::get_instance
 
 math::Vector2F View::get_zoom() const
 {

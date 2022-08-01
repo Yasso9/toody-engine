@@ -1,9 +1,8 @@
 #pragma once
 
-#include <vector>
-
-#include "graphics2D/sfml.hpp"
-#include "tools/string.hpp"
+#include <cstddef> // for size_t
+#include <string>  // for string
+#include <vector>  // for vector
 
 namespace tools
 {
@@ -35,5 +34,3 @@ enum class E_Direction
     Left,
     EnumLast,
 };
-
-#include "tools.tpp"

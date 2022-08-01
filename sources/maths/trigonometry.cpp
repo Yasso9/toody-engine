@@ -1,7 +1,7 @@
 #include "trigonometry.hpp"
 
-#include <cmath>
-#include <numbers>
+#include <cmath>   // for cos, sin
+#include <numbers> // for pi
 
 namespace math
 {

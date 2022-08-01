@@ -1,6 +1,14 @@
 #include "load_shape.hpp"
 
-#include "tools/tools.hpp"
+#include <optional> // for optional
+#include <stdint.h> // for intptr_t
+#include <vector>   // for vector
+
+#include <GLAD/glad.h> // for GLenum, GL_ARRAY_BUFFER, GL_ELEMENT_...
+
+#include "graphics3D/shape.hpp" // for Shape, Shape::S_Data
+#include "tools/assertion.hpp"  // for ASSERTION
+#include "tools/tools.tpp"      // for size_of, to_c_style_array
 
 namespace load_gl_shape
 {

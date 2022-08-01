@@ -1,6 +1,7 @@
 #include "path.hpp"
 
-#include "tools/exceptions.hpp"
+#include "tools/assertion.hpp"  // for ASSERTION
+#include "tools/exceptions.hpp" // for FileIssue
 
 namespace path
 {

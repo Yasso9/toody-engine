@@ -1,7 +1,8 @@
 #pragma once
 
-#include "graphics2D/sfml.hpp"
-#include "maths/maths.hpp"
+#include <SFML/Graphics/View.hpp> // for View
+
+#include "maths/vector2.hpp" // for Vector2F
 
 class View : public sf::View
 {

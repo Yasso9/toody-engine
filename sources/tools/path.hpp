@@ -1,8 +1,7 @@
 #pragma once
 
-#include <filesystem>
-
-#include "tools/assertion.hpp"
+#include <filesystem> // for path
+#include <string>     // for string
 
 namespace path
 {

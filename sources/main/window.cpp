@@ -1,13 +1,24 @@
 #include "window.hpp"
 
-#include <iostream>
+#include <iostream> // for operator<<, endl, basic_o...
+#include <string>   // for allocator, string
 
-#include "graphics2D/component.hpp"
-#include "graphics3D/openGL.hpp"
-#include "main/render.hpp"
-#include "main/settings.hpp"
-#include "maths/maths.hpp"
-#include "tools/string.hpp"
+#include <SFML/System/Vector2.hpp>         // for Vector2u
+#include <SFML/Window/ContextSettings.hpp> // for ContextSettings
+#include <SFML/Window/Mouse.hpp>           // for Mouse
+#include <SFML/Window/WindowStyle.hpp>     // for Default
+
+#include "graphics3D/openGL.hpp"    // for clear_window, initialize
+#include "main/settings.hpp"        // for Settings
+#include "maths/geometry/point.hpp" // for PointI
+#include "maths/geometry/point.tpp" // for Point::Point<Type>, Point...
+#include "maths/vector2.tpp"        // for Vector2::Vector2<Type>
+#include "tools/singleton.tpp"      // for Singleton::get_instance
+
+namespace sf
+{
+    class Color;
+} // namespace sf
 
 Window::Window()
 {
@@ -60,7 +71,7 @@ void Window::clear_all( sf::Color const & backgroundColor )
 
 void Window::creation()
 {
-    std::string const gameTitle { "Toody Engine (In Developpement)"s };
+    std::string const gameTitle { "Toody Engine (In Developpement)" };
 
     unsigned int const windowStyle { sf::Style::Default };
 

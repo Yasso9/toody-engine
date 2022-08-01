@@ -1,7 +1,20 @@
 #include "static_entity.hpp"
 
-#include "graphics2D/sfml.hpp"
-#include "maths/maths.hpp"
+#include <algorithm> // for max, min
+#include <sstream>   // for operator<<, basic_ostream:...
+#include <string>    // for allocator, string, basic_s...
+#include <vector>    // for vector
+
+#include <IMGUI/imgui.h>                  // for InputFloat, Begin, Checkbox
+#include <SFML/Graphics/Color.hpp>        // for Color, Color::Red
+#include <SFML/Graphics/RenderTarget.hpp> // for RenderTarget
+
+#include "libraries/imgui.hpp"        // for P_ColorEditor, P_Begin
+#include "main/render.hpp"            // for Render
+#include "maths/geometry/point.hpp"   // for PointF
+#include "maths/geometry/point.tpp"   // for Point::is_inside
+#include "maths/geometry/polygon.tpp" // for is_intersection, Polygon::...
+#include "maths/geometry/segment.tpp" // for Segment::is_intersected_by
 
 namespace customisation
 {

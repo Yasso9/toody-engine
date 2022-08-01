@@ -1,8 +1,9 @@
 #pragma once
 
-#include "3D_model/assimp.hpp"
-#include "graphics2D/sfml.hpp"
-#include "tools/string.hpp"
+#include <string> // for string
+
+#include <assimp/material.h>         // for aiTextureType
+#include <SFML/Graphics/Texture.hpp> // for Texture
 
 // struct Texture
 // {

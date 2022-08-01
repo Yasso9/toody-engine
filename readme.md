@@ -4,7 +4,18 @@ Game engine for 2D games made with C++ and SFML. <br>
 Projet d'un moteur 2D ecrit en C++ en utlisant la SFML. <br>
 
 - Format all files
-clang-format -i -style=file sources/**
+clang-format -i --verbose -style=file:.clang-format $(find . -regex './sources/.*\.\(cpp\|hpp\|cc\|cxx\)')
+
+make 2> iwyu_file.txt
+sed -i '/.inl/d' ./iwyu_file.txt
+python3 fix_includes.py --comments --update_comments < iwyu_file.txt
+
+cppclean --verbose --include-path=sources --include-path=external/includes sources/**
+
+#include <GLM/gtc/matrix_transform.hpp>
+#include <GLM/glm.hpp>
+
+#include <GLM/gtc/type_ptr.hpp>
 
 ## Compilation
 

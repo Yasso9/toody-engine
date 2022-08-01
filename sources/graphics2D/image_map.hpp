@@ -1,13 +1,13 @@
 #pragma once
 
-#include <filesystem>
-#include <vector>
+#include <vector> // for vector
 
-#include "graphics2D/component.hpp"
-#include "graphics2D/sfml.hpp"
-#include "main/resources.hpp"
-#include "maths/maths.hpp"
-#include "tools/path.hpp"
+#include <SFML/Graphics/Sprite.hpp> // for Sprite
+
+#include "graphics2D/component.hpp" // for Component2D
+#include "maths/geometry/point.hpp" // for PointU, Point
+
+class Render;
 
 struct S_Image
 {
@@ -24,30 +24,11 @@ class ImageMap : public Component2D
     std::vector< S_Image > m_data;
 
   public:
-    ImageMap() : m_data()
-    {
-        /// @todo load the the sprites path and the positions from the database from the database
-
-        m_data = {
-            /*
-            {sf::Sprite { resources::get_texture( "happy_square.png"s ) },
-             { 0u, 0u }  },
-            { sf::Sprite { resources::get_texture( "logo.png"s ) },
-             { 100u, 0u }},
-            { sf::Sprite { resources::get_texture( "town_hall.png"s ) },
-             { 0u, 200u }}, */
-        };
-    }
+    ImageMap();
     virtual ~ImageMap() = default;
 
-    std::vector< S_Image > const & get_data() const { return m_data; }
+    std::vector< S_Image > const & get_data() const;
 
   private:
-    void render_before( Render & render ) const override
-    {
-        for ( S_Image const & image : m_data )
-        {
-            render.get_target().draw( image.sprite, render.get_state() );
-        }
-    }
+    void render_before( Render & render ) const override;
 };

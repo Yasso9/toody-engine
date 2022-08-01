@@ -1,8 +1,13 @@
 #pragma once
 
-#include <memory>
+#include <memory> // for shared_ptr
 
-#include "states/state.hpp"
+#include "states/state.hpp" // for State, State::E_List
+
+namespace sf
+{
+    class Time;
+} // namespace sf
 
 class Game final
 {

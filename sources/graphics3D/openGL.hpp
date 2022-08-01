@@ -1,21 +1,16 @@
 #pragma once
 
-#include <GLAD/glad.h>
-#include <SFML/OpenGL.hpp>
+#include <cstddef> // for size_t
+#include <ostream> // for ostream
 
-#include <GLM/ext/matrix_clip_space.hpp> // glm::perspective
-#include <GLM/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale
-#include <GLM/ext/scalar_constants.hpp> // glm::pi
-#include <GLM/glm.hpp>
-#include <GLM/gtc/type_ptr.hpp>
-#include <GLM/gtx/rotate_vector.hpp> // vector rotation
-#include <GLM/mat4x4.hpp> // glm::mat4
-#include <GLM/vec3.hpp> // glm::vec3
-#include <GLM/vec4.hpp> // glm::vec4
+#include <GLAD/glad.h>                 // for GLenum
+#include <GLM/ext/matrix_float4x4.hpp> // for mat4
+#include <GLM/ext/vector_float3.hpp>   // for vec3
 
-#include <ostream>
-
-#include "graphics2D/sfml.hpp"
+namespace sf
+{
+    class Color;
+} // namespace sf
 
 namespace gl
 {

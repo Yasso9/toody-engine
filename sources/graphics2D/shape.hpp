@@ -1,8 +1,15 @@
 #pragma once
 
-#include "graphics2D/sfml.hpp"
-#include "main/render.hpp"
-#include "maths/maths.hpp"
+#include <cstddef> // for size_t
+
+#include <SFML/Graphics/Shape.hpp> // for Shape
+#include <SFML/System/Vector2.hpp> // for Vector2f
+
+#include "maths/geometry/point.hpp"   // for PointF
+#include "maths/geometry/polygon.hpp" // for PolygonF
+#include "maths/vector2.hpp"          // for Vector2F
+
+class Render;
 
 class Shape2D : public sf::Shape
 {

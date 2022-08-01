@@ -1,8 +1,11 @@
 #include "openGL.hpp"
 
-#include "main/window.hpp"
-#include "tools/assertion.hpp"
-#include "tools/string.hpp"
+#include <stdexcept> // for runtime_error
+#include <string>    // for allocator, string, operator+
+
+#include <GLM/detail/type_vec3.hpp> // for vec<>::(anonymous)
+#include <SFML/Graphics/Color.hpp>  // for Color
+#include <SFML/Window/Context.hpp>  // for Context
 
 namespace gl
 {
@@ -92,39 +95,39 @@ namespace gl
     void check_error()
     {
         GLenum errorCode;
-        std::string errorMessage { ""s };
+        std::string errorMessage { "" };
         unsigned int numberOfError { 0u };
 
         if ( ( errorCode = glGetError() ) != GL_NO_ERROR )
         {
             errorMessage +=
-                "OpenGL Error "s + std::to_string( ++numberOfError ) + " : "s;
+                "OpenGL Error " + std::to_string( ++numberOfError ) + " : ";
 
             switch ( errorCode )
             {
             case GL_INVALID_ENUM :
-                errorMessage += "Invalid Enum"s;
+                errorMessage += "Invalid Enum";
                 break;
             case GL_INVALID_VALUE :
-                errorMessage += "Invalid Value"s;
+                errorMessage += "Invalid Value";
                 break;
             case GL_INVALID_OPERATION :
-                errorMessage += "Invalid Operation"s;
+                errorMessage += "Invalid Operation";
                 break;
             case GL_STACK_OVERFLOW :
-                errorMessage += "Stack Overflow"s;
+                errorMessage += "Stack Overflow";
                 break;
             case GL_STACK_UNDERFLOW :
-                errorMessage += "Stack Underflow"s;
+                errorMessage += "Stack Underflow";
                 break;
             case GL_OUT_OF_MEMORY :
-                errorMessage += "Out Of Memory"s;
+                errorMessage += "Out Of Memory";
                 break;
             case GL_INVALID_FRAMEBUFFER_OPERATION :
-                errorMessage += "Invalid Framebuffer Operation"s;
+                errorMessage += "Invalid Framebuffer Operation";
                 break;
             default :
-                errorMessage += "Unkown GL Error"s;
+                errorMessage += "Unkown GL Error";
                 break;
             }
             errorMessage += " | ";

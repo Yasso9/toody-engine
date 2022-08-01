@@ -1,6 +1,9 @@
 #include "game_state.hpp"
 
-#include "main/resources.hpp"
+#include "main/window.hpp"     // for Window
+#include "maths/vector2.hpp"   // for Vector2, Vector2U, Vector2F
+#include "maths/vector2.tpp"   // for operator/, operator-, Vector2::operat...
+#include "tools/singleton.tpp" // for Singleton::get_instance
 
 GameState::GameState()
   : State( State::E_List::Game ), m_view(), m_tilemap( m_view ), m_player()

@@ -1,8 +1,5 @@
 #include "component.hpp"
 
-#include "main/render.hpp"
-#include "main/window.hpp"
-
 void Component::update( float deltaTime )
 {
     this->update_before( deltaTime );

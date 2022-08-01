@@ -1,6 +1,6 @@
 #pragma once
 
-#include "graphics3D/shape.hpp"
+class Shape;
 
 namespace load_gl_shape
 {

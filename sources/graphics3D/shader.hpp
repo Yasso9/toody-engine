@@ -1,6 +1,6 @@
 #pragma once
 
-#include "tools/string.hpp"
+#include <string> // for string
 
 class Shaders final
 {

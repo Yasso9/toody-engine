@@ -1,4 +1,6 @@
-#include "main/game.hpp"
+#include <stdlib.h> // for EXIT_SUCCESS
+
+#include "main/game.hpp" // for Game
 
 int main()
 {

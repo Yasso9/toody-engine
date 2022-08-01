@@ -1,12 +1,21 @@
 #pragma once
 
-#include <optional>
+#include <filesystem> // for path
+#include <map>        // for map
+#include <optional>   // for optional
+#include <string>     // for string
+#include <vector>     // for vector
 
-#include "3D_model/assimp.hpp"
-#include "3D_model/mesh.hpp"
-#include "graphics3D/texture.hpp"
-#include "graphics3D/transformable.hpp"
-#include "tools/tools.hpp"
+#include "3D_model/mesh.hpp"            // for Mesh, S_Vertex (ptr only)
+#include "graphics3D/texture.hpp"       // for Texture, Texture::E_Type
+#include "graphics3D/transformable.hpp" // for Transformable
+
+class Camera;
+class Render;
+struct aiMaterial;
+struct aiMesh;
+struct aiNode;
+struct aiScene;
 
 /// @todo rework all this class
 class Model final : public Transformable

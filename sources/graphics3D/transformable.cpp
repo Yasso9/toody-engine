@@ -1,6 +1,17 @@
 #include "transformable.hpp"
 
-#include "tools/string.hpp"
+#include <stddef.h> // for NULL
+#include <string>   // for allocator
+
+#include <GLM/fwd.hpp>              // for mat4
+#include <GLM/glm.hpp>              // for radians
+#include <GLM/gtc/type_ptr.hpp>     // for value_ptr
+#include <SFML/Graphics/Glsl.hpp>   // for Mat4
+#include <SFML/Graphics/Shader.hpp> // for Shader
+
+#include "graphics3D/camera.hpp" // for Camera
+
+class Render;
 
 Transformable::Transformable( Camera const & camera, sf::Shader & shader )
   : m_camera { camera }, m_shader { shader }, m_spaceModel { 1.f }
@@ -11,13 +22,13 @@ void Transformable::update_before( float deltaTime )
     gl::S_SpaceMatrix const spaceMatrix { this->get_space_matrix() };
 
     m_shader.setUniform(
-        "model"s,
+        "model",
         sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.model ) } );
     m_shader.setUniform(
-        "view"s,
+        "view",
         sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.view ) } );
     m_shader.setUniform(
-        "projection"s,
+        "projection",
         sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.projection ) } );
 
     this->update_custom( deltaTime );

@@ -1,9 +1,12 @@
 #pragma once
 
-#include "graphics2D/component.hpp"
-#include "graphics2D/shape.hpp"
-#include "graphics2D/view.hpp"
-#include "input/input.hpp"
+#include <SFML/Graphics/CircleShape.hpp> // for CircleShape
+
+#include "graphics2D/component.hpp"   // for Component2D
+#include "graphics2D/shape.hpp"       // for Shape2D
+#include "maths/geometry/polygon.hpp" // for PolygonF
+
+class Render;
 
 class StaticEntity2D : public Component2D,
                        public Shape2D

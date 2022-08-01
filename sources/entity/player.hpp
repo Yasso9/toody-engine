@@ -1,7 +1,22 @@
 #pragma once
 
-#include "graphics2D/component.hpp"
-#include "tools/tools.hpp"
+#include <map>    // for map
+#include <string> // for string
+#include <vector> // for vector
+
+#include <SFML/Graphics/Rect.hpp>   // for IntRect
+#include <SFML/Graphics/Sprite.hpp> // for Sprite
+#include <SFML/System/Vector2.hpp>  // for Vector2f, Vector2u
+
+#include "graphics2D/component.hpp" // for TransformableComponent2D
+#include "tools/tools.hpp"          // for E_Direction
+
+class Render;
+
+namespace sf
+{
+    class Texture;
+} // namespace sf
 
 class Player : public TransformableComponent2D
 {

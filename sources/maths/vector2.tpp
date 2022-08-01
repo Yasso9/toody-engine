@@ -1,10 +1,9 @@
 #pragma once
-#include "vector2.hpp"
-
 #include <cmath>
 #include <iostream>
 
 #include "tools/assertion.hpp"
+#include "vector2.hpp"
 
 namespace math
 {

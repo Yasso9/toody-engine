@@ -1,15 +1,11 @@
 #pragma once
 
-#include <concepts>
-#include <memory>
-#include <optional>
+#include <vector> // for vector
 
-#include "graphics2D/sfml.hpp"
-#include "main/render.hpp"
-
-class Window;
+#include <SFML/Graphics/Transformable.hpp> // for Transformable
 
 class Component;
+class Render;
 
 /// @brief check if the Type is derived from Component
 template < typename Type >
@@ -71,5 +67,3 @@ class TransformableComponent2D : public Component2D,
     TransformableComponent2D()          = default;
     virtual ~TransformableComponent2D() = default;
 };
-
-#include "component.tpp"

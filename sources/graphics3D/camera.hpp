@@ -1,7 +1,8 @@
 #pragma once
 
-#include "graphics2D/sfml.hpp"
-#include "graphics3D/openGL.hpp"
+#include <GLM/ext/vector_float3.hpp> // for vec3
+#include <GLM/fwd.hpp>               // for mat4
+#include <SFML/System/Vector2.hpp>   // for Vector2f
 
 class Camera
 {

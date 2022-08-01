@@ -1,8 +1,7 @@
 #pragma once
 
-#include <chrono>
-
-#include "tools/string.hpp"
+#include <chrono> // for steady_clock, steady_clock::time_point
+#include <string> // for string
 
 /**
  * @brief Create an instance of this class at the begginning

@@ -3,3 +3,4 @@ build
 imgui.ini
 Game
 valgrind-out.txt
+iwyu_file.txt

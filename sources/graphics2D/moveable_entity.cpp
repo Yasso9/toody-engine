@@ -1,7 +1,8 @@
 #include "moveable_entity.hpp"
 
-#include "graphics2D/sfml.hpp"
-#include "maths/maths.hpp"
+#include <vector> // for vector
+
+#include "maths/vector2.tpp" // for operator*, Vector2::operator=, operator/
 
 MoveableEntity2D::MoveableEntity2D( math::PolygonF quadrangle,
                                     CollisionList const & collisionList,

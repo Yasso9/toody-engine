@@ -1,10 +1,12 @@
 #pragma once
 
-#include "graphics2D/sfml.hpp"
-#include "main/window.hpp"
+#include <SFML/Graphics/RenderStates.hpp> // for RenderStates, RenderStates...
 
-class Component2D;
-class Component3D;
+namespace sf
+{
+    class RenderTarget;
+    class Texture;
+} // namespace sf
 
 class Render
 {

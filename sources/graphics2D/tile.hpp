@@ -1,12 +1,18 @@
 #pragma once
 
-#include "graphics2D/quad_vertex.hpp"
-#include "graphics2D/sfml.hpp"
-#include "graphics2D/tile_position.hpp"
-#include "maths/maths.hpp"
+#include <iosfwd> // for ostream
+#include <string> // for string
+
+#include "graphics2D/quad_vertex.hpp" // for QuadVertex
 
 class TileMap;
+class TilePosition;
 class TileSelector;
+
+namespace sf
+{
+    class VertexArray;
+} // namespace sf
 
 class Tile
 {

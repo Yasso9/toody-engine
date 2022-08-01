@@ -1,5 +1,12 @@
 #include "quad_vertex.hpp"
 
+#include <SFML/Graphics/PrimitiveType.hpp> // for Quads
+#include <SFML/Graphics/Vertex.hpp>        // for Vertex
+#include <SFML/System/Vector2.hpp>         // for Vector2f
+
+#include "maths/geometry/point.hpp" // for Point
+#include "maths/vector2.tpp"        // for operator+, Vector2::opera...
+
 QuadVertex::QuadVertex() : array( sf::Quads, 4 ) {};
 
 math::Vector2F QuadVertex::get_position() const

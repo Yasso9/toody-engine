@@ -1,8 +1,15 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
+#include <iosfwd> // for ostream
+
+#include <SFML/System/Vector2.hpp>   // for Vector2f, Vector2u, Vector2 (pt...
+#include <SFML/Window/VideoMode.hpp> // for VideoMode
+
+namespace sf
+{
+    class Color;
+    struct ContextSettings;
+} // namespace sf
 
 /// @brief Improve readability of the use of SFML Library
 namespace sfpp
@@ -33,8 +40,6 @@ std::ostream & operator<<( std::ostream & stream,
                            sf::ContextSettings const & settings );
 std::ostream & operator<<( std::ostream & stream, sf::Color const & color );
 
-template < typename T >
-std::ostream & operator<<( std::ostream & stream, sf::Rect< T > const & rect );
 template < typename T >
 std::ostream & operator<<( std::ostream & stream,
                            sf::Vector2< T > const & vector );

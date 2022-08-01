@@ -1,7 +1,11 @@
 #pragma once
 
-#include "graphics2D/sfml.hpp"
-#include "maths/maths.hpp"
+#include <cstddef> // for size_t
+
+#include <SFML/Graphics/Texture.hpp> // for Texture
+
+#include "maths/geometry/point.hpp" // for PointF, PointU
+#include "maths/vector2.hpp"        // for Vector2F, Vector2U
 
 class Tileset
 {

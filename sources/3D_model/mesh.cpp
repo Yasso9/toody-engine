@@ -1,8 +1,12 @@
 #include "mesh.hpp"
 
-#include <iostream>
+#include <stdint.h> // for intptr_t
 
-#include "tools/timer.hpp"
+#include <GLAD/glad.h>              // for GL_ARRAY_BUFFER, GL_ELEMENT_ARRA...
+#include <SFML/Graphics/Shader.hpp> // for Shader
+
+#include "graphics3D/openGL.hpp"  // for draw_elements
+#include "graphics3D/texture.hpp" // for Texture, Texture::E_Type, Textur...
 
 Mesh::Mesh( std::vector< S_Vertex > const & vertices,
             std::vector< unsigned int > const & indices,

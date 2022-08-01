@@ -1,7 +1,19 @@
 #pragma once
 
-#include "graphics2D/component.hpp"
-#include "graphics2D/sfml.hpp"
+#include <string> // for allocator, string
+
+#include <SFML/Graphics/RectangleShape.hpp> // for RectangleShape
+#include <SFML/Graphics/Text.hpp>           // for Text
+#include <SFML/System/Vector2.hpp>          // for Vector2f
+
+#include "graphics2D/component.hpp" // for TransformableComponent2D
+
+class Render;
+
+namespace sf
+{
+    class Font;
+} // namespace sf
 
 class Button final : public TransformableComponent2D
 {

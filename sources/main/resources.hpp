@@ -1,6 +1,13 @@
 #pragma once
 
-#include "graphics2D/sfml.hpp"
+#include <string> // for string
+
+namespace sf
+{
+    class Font;
+    class Shader;
+    class Texture;
+} // namespace sf
 
 namespace resources
 {

@@ -1,6 +1,9 @@
 #include "input.hpp"
 
-#include "main/window.hpp"
+#include "main/window.hpp"          // for Window
+#include "maths/geometry/point.tpp" // for Point::Point<Type>
+#include "maths/vector2.tpp"        // for Vector2::operator=, Vector2::ope...
+#include "tools/singleton.tpp"      // for Singleton::get_instance
 
 namespace input
 {

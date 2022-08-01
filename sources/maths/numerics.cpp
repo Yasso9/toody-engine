@@ -1,7 +1,9 @@
 #include "numerics.hpp"
 
-#include <cmath>
-#include <sstream>
+#include <cmath>   // for fmod
+#include <sstream> // for stringstream, basic_ostream
+
+#include <bits/std_abs.h> // for abs
 
 namespace math
 {

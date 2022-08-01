@@ -1,5 +1,10 @@
 #include "sfml.hpp"
 
+#include <ostream> // for operator<<, basic_ostream
+
+#include <SFML/Graphics/Color.hpp>         // for Color
+#include <SFML/Window/ContextSettings.hpp> // for ContextSettings
+
 namespace sfpp
 {
     sf::VideoMode to_video_mode( sf::Vector2u const & vector2u )
@@ -73,17 +78,6 @@ std::ostream & operator<<( std::ostream & stream, sf::Color const & color )
 
     return stream;
 }
-
-template < typename T >
-std::ostream & operator<<( std::ostream & stream, sf::Rect< T > const & rect )
-{
-    return stream << "( " << rect.left << ", " << rect.top << ", " << rect.width
-                  << ", " << rect.height << " )";
-}
-template std::ostream & operator<<( std::ostream & stream,
-                                    sf::Rect< int > const & rect );
-template std::ostream & operator<<( std::ostream & stream,
-                                    sf::Rect< float > const & rect );
 
 template < typename T >
 std::ostream & operator<<( std::ostream & stream,

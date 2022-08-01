@@ -1,8 +1,8 @@
 #pragma once
 
-#include <iostream>
-#include <sstream>
-#include <vector>
+#include <sstream> // for istream, ostream
+#include <string>  // for string
+#include <vector>  // for vector
 
 /// @todo differences between typename or class in template ?
 /// @todo Type require that the type have operator <<
@@ -27,16 +27,9 @@ class Serializer
     TypeToSerialize m_valueToSerialize;
 
   public:
-    Serializer( TypeToSerialize const & valueToSerialize )
-      : m_valueToSerialize( valueToSerialize )
-    {}
+    Serializer( TypeToSerialize const & valueToSerialize );
 
-    std::string to_string() const
-    {
-        std::ostringstream stream {};
-        stream << this->m_valueToSerialize;
-        return stream.str();
-    }
+    std::string to_string() const;
 };
 
 class Unserializer
@@ -44,25 +37,11 @@ class Unserializer
     std::string m_stringToUnserialize;
 
   public:
-    Unserializer( std::string const & stringToUnserialize )
-      : m_stringToUnserialize( stringToUnserialize )
-    {}
+    Unserializer( std::string const & stringToUnserialize );
 
     /// @brief return the serialized content
-    std::string get_content() const { return m_stringToUnserialize; }
+    std::string get_content() const;
 
     template < typename TypeToUnserialize >
-    TypeToUnserialize to_value() const
-    {
-        std::stringstream stream {};
-        stream << this->m_stringToUnserialize;
-
-        TypeToUnserialize value {};
-        stream >> value;
-        return value;
-
-        /// @todo assert that the unserialized is equal to the value serialize
-    }
+    TypeToUnserialize to_value() const;
 };
-
-#include "serialization.tpp"

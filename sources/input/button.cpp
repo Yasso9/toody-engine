@@ -1,8 +1,16 @@
 #include "button.hpp"
 
-#include "tools/string.hpp"
+#include <SFML/Graphics/Color.hpp>        // for Color, Color::Black, Color...
+#include <SFML/Graphics/Rect.hpp>         // for FloatRect
+#include <SFML/Graphics/RenderTarget.hpp> // for RenderTarget
 
-#include <iostream>
+#include "main/render.hpp" // for Render
+
+namespace sf
+{
+
+    class Font;
+} // namespace sf
 
 Button::Button( sf::Font const & font,
                 std::string const & string /* = "Button" */ )

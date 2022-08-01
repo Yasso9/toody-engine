@@ -1,5 +1,12 @@
 #include "tile_position.hpp"
 
+#include <cstdlib> // for div, (anonymous), div_t
+#include <memory>  // for allocator
+
+#include "maths/vector2.tpp"         // for Vector2::operator=, floor, oper...
+#include "tools/assertion.hpp"       // for ASSERTION
+#include "tools/global_variable.hpp" // for TILE_PIXEL_SIZE_VECTOR
+
 TilePosition::TilePosition( unsigned int value, unsigned int numberOfTileInX )
   : m_value(), m_numberOfTileInX( numberOfTileInX )
 {

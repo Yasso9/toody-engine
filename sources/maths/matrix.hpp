@@ -1,9 +1,9 @@
 #pragma once
 
-#include <array>
-#include <vector>
+#include <array>   // for array
+#include <cstddef> // for size_t
 
-#include "vector2.hpp"
+#include "vector2.hpp" // for Vector2
 
 namespace math
 {

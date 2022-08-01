@@ -65,15 +65,13 @@ namespace math
     bool Point< Type >::is_inside( Point< Type > position,
                                    Vector2< Type > size ) const
     {
-        return this->is_inside( Rectangle< Type > { position, size } );
+        return ( this->x >= position.x && this->x < position.x + size.x
+                 && this->y >= position.y && this->y < position.y + size.y );
     }
     template < C_Primitive Type >
     bool Point< Type >::is_inside( Rectangle< Type > rectangle ) const
     {
-        return ( this->x >= rectangle.position.x
-                 && this->x < rectangle.position.x + rectangle.size.x
-                 && this->y >= rectangle.position.y
-                 && this->y < rectangle.position.y + rectangle.size.y );
+        return this->is_inside( rectangle.position, rectangle.size );
     }
     template < C_Primitive Type >
     bool Point< Type >::is_inside( Polygon< Type > polygon ) const

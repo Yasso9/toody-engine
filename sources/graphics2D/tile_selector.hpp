@@ -1,7 +1,9 @@
 #pragma once
 
-#include "graphics2D/component.hpp"
-#include "graphics2D/tileset.hpp"
+#include "graphics2D/component.hpp" // for Component2D
+#include "graphics2D/tileset.hpp"   // for Tileset
+
+struct ImDrawList;
 
 class TileSelector : public Component2D
 {

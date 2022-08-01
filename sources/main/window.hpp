@@ -1,13 +1,17 @@
 #pragma once
 
-#include <type_traits>
+#include <type_traits> // for is_base_of
 
-#include "graphics2D/sfml.hpp"
-#include "graphics3D/openGL.hpp"
-#include "maths/maths.hpp"
-#include "tools/singleton.hpp"
+#include <SFML/Graphics/RenderWindow.hpp> // for RenderWindow
 
-class Component3D;
+#include "maths/vector2.hpp"   // for Vector2U
+#include "tools/singleton.hpp" // for Singleton
+
+namespace sf
+{
+    class Color;
+    class Drawable;
+} // namespace sf
 
 /// @brief check if the class can be drawn
 template < typename Type >

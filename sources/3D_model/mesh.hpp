@@ -1,14 +1,20 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
+#include <map>    // for map
+#include <string> // for string
+#include <vector> // for vector
 
-#include "3D_model/assimp.hpp"
-#include "graphics2D/sfml.hpp"
-#include "graphics3D/openGL.hpp"
-#include "graphics3D/texture.hpp"
-#include "main/window.hpp"
-#include "tools/string.hpp"
+#include <GLM/detail/type_vec2.hpp>  // for vec
+#include <GLM/detail/type_vec3.hpp>  // for vec
+#include <GLM/ext/vector_float2.hpp> // for vec2
+#include <GLM/ext/vector_float3.hpp> // for vec3
+
+class Texture;
+
+namespace sf
+{
+    class Shader;
+} // namespace sf
 
 constexpr unsigned int const maxBoneInfluence { 4u };
 

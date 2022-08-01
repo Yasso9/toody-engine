@@ -1,7 +1,7 @@
 #pragma once
 
-#include <limits>
-#include <string>
+#include <limits> // for numeric_limits
+#include <string> // for string
 
 namespace math
 {

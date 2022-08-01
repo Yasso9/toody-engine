@@ -1,6 +1,18 @@
 #include "serialization.hpp"
 
-#include <sstream>
+#include <iostream>  // for cout
+#include <stdexcept> // for runtime_error
+
+#include "tools/serialization.tpp" // for operator<<, operator>>
+
+Unserializer::Unserializer( std::string const & stringToUnserialize )
+  : m_stringToUnserialize( stringToUnserialize )
+{}
+
+std::string Unserializer::get_content() const
+{
+    return m_stringToUnserialize;
+}
 
 bool verify_next( std::istream & stream, char const & character )
 {

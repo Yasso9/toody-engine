@@ -1,12 +1,22 @@
 #include "camera.hpp"
 
-#include <cmath>
-#include <iostream>
+#include <string> // for allocator
 
-#include "input/input.hpp"
-#include "main/window.hpp"
-#include "maths/maths.hpp"
-#include "tools/assertion.hpp"
+#include <GLM/detail/type_vec3.hpp>     // for vec<>::(anonymous), vec
+#include <GLM/ext/matrix_float4x4.hpp>  // for mat4
+#include <GLM/glm.hpp>                  // for radians
+#include <GLM/gtc/matrix_transform.hpp> // for perspective
+#include <SFML/Window/Keyboard.hpp>     // for Keyboard, Keyboard::B, Keyb...
+
+#include "input/input.hpp"          // for is_pressed, get_mouse_position
+#include "main/window.hpp"          // for Window
+#include "maths/geometry/point.tpp" // for Point::Point<Type>
+#include "maths/vector2.hpp"        // for Vector2F, Vector2I, Vector2U
+#include "maths/vector2.tpp"        // for operator==, Vector2::operat...
+#include "maths/vector3.hpp"        // for Vector3F
+#include "maths/vector3.tpp"        // for Vector3::rotate
+#include "tools/assertion.hpp"      // for ASSERTION
+#include "tools/singleton.tpp"      // for Singleton::get_instance
 
 // Default camera values
 // const float YAW = -90.0f;
@@ -138,7 +148,7 @@ void Camera::update_inputs( float deltaTime )
         this->update_mouse_inputs_editor( deltaTime );
         break;
     default :
-        ASSERTION( false, "Enum value unknown"s );
+        ASSERTION( false, "Enum value unknown" );
         break;
     }
 }

@@ -1,22 +1,31 @@
 #include "game.hpp"
 
-#include <sstream>
+#include <iostream> // for operator<<, basic_ostream, endl
+#include <sstream>  // for stringstream
+#include <string>   // for operator""s, operator<<
 
-#include "tools/assertion.hpp"
-#include "tools/enumeration.hpp"
-#include "tools/exceptions.hpp"
-#include "tools/string.hpp"
+#include <IMGUI/imgui-SFML.h>       // for Init, ProcessEvent, Render
+#include <SFML/Graphics/Color.hpp>  // for Color
+#include <SFML/Graphics/Shader.hpp> // for Shader
+#include <SFML/System/Clock.hpp>    // for Clock
+#include <SFML/System/Time.hpp>     // for Time
+#include <SFML/Window/Event.hpp>    // for Event, Event::Closed
 
-#include "main/settings.hpp"
-#include "main/window.hpp"
-
-#include "states/editor_state.hpp"
-#include "states/game_state.hpp"
-#include "states/graphic_state.hpp"
-#include "states/main_menu_state.hpp"
-#include "states/test.hpp"
-
-#include "libraries/imgui.hpp"
+#include "graphics3D/openGL.hpp"      // for check_error
+#include "input/input.hpp"            // for reset_mouse_movement, set_mous...
+#include "main/render.hpp"            // for Render
+#include "main/settings.hpp"          // for Settings
+#include "main/window.hpp"            // for Window
+#include "states/editor_state.hpp"    // for EditorState
+#include "states/game_state.hpp"      // for GameState
+#include "states/graphic_state.hpp"   // for GraphicState
+#include "states/main_menu_state.hpp" // for MainMenuState
+#include "states/test.hpp"            // for TestState
+#include "tools/assertion.hpp"        // for ASSERTION
+#include "tools/enumeration.hpp"      // for Enum
+#include "tools/enumeration.tpp"      // for operator<<, Enum::Enum<Type>
+#include "tools/exceptions.hpp"       // for System
+#include "tools/singleton.tpp"        // for Singleton::get_instance
 
 Game::Game() : m_state( nullptr ), m_shouldRun( true )
 {

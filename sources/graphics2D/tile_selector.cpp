@@ -1,16 +1,21 @@
 #include "tile_selector.hpp"
 
-#include <iostream>
-#include <sstream>
+#include <sstream> // for operator<<, basic_ostream, stri...
+#include <string>  // for char_traits, allocator, basic_s...
 
-#include <cmath>
+#include <IMGUI/imgui-SFML.h>      // for Image
+#include <IMGUI/imgui.h>           // for GetWindowDrawList, IsWindowHovered
+#include <SFML/Graphics/Color.hpp> // for Color
+#include <SFML/Window/Mouse.hpp>   // for Mouse, Mouse::Button, Mouse::Left
 
-#include "input/input.hpp"
-#include "libraries/imgui.hpp"
-#include "main/resources.hpp"
-#include "main/window.hpp"
-#include "maths/maths.hpp"
-#include "tools/global_variable.hpp"
+#include "input/input.hpp"           // for get_mouse_position, is_pressed
+#include "libraries/imgui.hpp"       // for table_to_sfml, to_integer, to_t...
+#include "main/resources.hpp"        // for get_texture
+#include "maths/geometry/point.tpp"  // for Point::Point<Type>
+#include "maths/numerics.hpp"        // for division_reminder_u
+#include "maths/vector2.hpp"         // for Vector2F, Vector2, Vector2I
+#include "maths/vector2.tpp"         // for operator<<, operator+, Vector2:...
+#include "tools/global_variable.hpp" // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZE_U
 
 TileSelector::TileSelector()
   : m_tileset( resources::get_texture( "ground.png" ) ),

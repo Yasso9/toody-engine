@@ -1,11 +1,11 @@
 #pragma once
 
-#include <vector>
+#include <vector> // for vector
 
-#include "3D_model/model.hpp"
-#include "graphics3D/camera.hpp"
-#include "graphics3D/shape.hpp"
-#include "states/state.hpp"
+#include "3D_model/model.hpp"    // for Model
+#include "graphics3D/camera.hpp" // for Camera
+#include "graphics3D/shape.hpp"  // for Shape
+#include "states/state.hpp"      // for State
 
 class GraphicState final : public State
 {

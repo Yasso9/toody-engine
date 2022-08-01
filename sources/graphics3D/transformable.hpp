@@ -1,11 +1,18 @@
 #pragma once
 
-#include <filesystem>
+#include <GLM/ext/matrix_float4x4.hpp> // for mat4
 
-#include "graphics2D/component.hpp"
-#include "graphics3D/camera.hpp"
-#include "graphics3D/openGL.hpp"
-#include "maths/maths.hpp"
+#include "graphics2D/component.hpp" // for Component3D
+#include "graphics3D/openGL.hpp"    // for S_SpaceMatrix
+#include "maths/vector3.hpp"        // for Vector3F
+
+class Camera;
+class Render;
+
+namespace sf
+{
+    class Shader;
+} // namespace sf
 
 class Transformable : public Component3D
 {

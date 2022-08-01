@@ -1,6 +1,12 @@
 #include "tileset.hpp"
 
-#include "tools/global_variable.hpp"
+#include <cmath>  // for floor
+#include <memory> // for allocator
+
+#include "maths/geometry/point.tpp"  // for Point::Point<Type>, Point::is_i...
+#include "maths/vector2.tpp"         // for operator+, Vector2::Vector2<Type>
+#include "tools/assertion.hpp"       // for ASSERTION
+#include "tools/global_variable.hpp" // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZ...
 
 Tileset::Tileset( sf::Texture const & texture, math::Vector2F const & position )
   : m_texture( texture ), m_position( position )

@@ -1,8 +1,16 @@
 #include "state.hpp"
 
-#include "graphics2D/view.hpp"
-#include "input/input.hpp"
-#include "main/resources.hpp"
+#include <SFML/Graphics/RenderTarget.hpp> // for RenderTarget
+#include <SFML/Window/Event.hpp>          // for Event, Event::(anonymous)
+#include <SFML/Window/Keyboard.hpp>       // for Keyboard, Keyboard::Escape
+
+#include "graphics2D/view.hpp" // for View
+#include "input/input.hpp"     // for set_mouse_movement, set_mo...
+#include "main/render.hpp"     // for Render
+#include "main/window.hpp"     // for Window
+#include "maths/vector2.hpp"   // for Vector2I
+#include "maths/vector2.tpp"   // for Vector2::to_float
+#include "tools/singleton.tpp" // for Singleton::get_instance
 
 State::State( State::E_List const & stateName )
   : m_stateName { stateName },

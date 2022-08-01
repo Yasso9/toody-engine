@@ -1,11 +1,25 @@
 #include "model.hpp"
 
-#include <iostream>
+#include <algorithm> // for max
+#include <iostream>  // for operator<<, basic_ostream, endl
 
-#include "main/resources.hpp"
-#include "tools/exceptions.hpp"
-#include "tools/path.hpp"
-#include "tools/timer.hpp"
+#include <assimp/Importer.hpp>       // for Importer
+#include <assimp/material.h>         // for aiMaterial
+#include <assimp/mesh.h>             // for aiMesh, aiFace
+#include <assimp/postprocess.h>      // for aiProcess_CalcTangentSpace, aiP...
+#include <assimp/scene.h>            // for aiScene, aiNode, AI_SCENE_FLAGS...
+#include <assimp/types.h>            // for aiString
+#include <assimp/vector3.h>          // for aiVector3D
+#include <GLM/detail/type_vec2.hpp>  // for vec<>::(anonymous)
+#include <GLM/detail/type_vec3.hpp>  // for vec<>::(anonymous)
+#include <GLM/ext/vector_float2.hpp> // for vec2
+#include <GLM/ext/vector_float3.hpp> // for vec3
+#include <GLM/fwd.hpp>               // for vec2
+
+#include "main/resources.hpp"   // for get_shader
+#include "tools/exceptions.hpp" // for FileLoadingIssue
+#include "tools/path.hpp"       // for get_folder, E_Folder, E_Folder:...
+#include "tools/timer.hpp"      // for Timer
 
 static glm::vec3 to_vector3( aiVector3D const & assimpVector3D );
 static glm::vec2 to_vector2( aiVector3D const & assimpVector3D );

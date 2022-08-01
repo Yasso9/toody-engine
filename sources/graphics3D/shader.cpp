@@ -1,10 +1,11 @@
 #include "shader.hpp"
 
-#include <cstdlib>
+#include <cstdlib>   // for NULL
+#include <stdexcept> // for runtime_error
 
-#include "graphics2D/sfml.hpp"
-#include "graphics3D/openGL.hpp"
-#include "tools/tools.hpp"
+#include <GLAD/glad.h> // for glAttachShader, glDeleteShader, GL_COMPIL...
+
+#include "tools/tools.hpp" // for read_file
 
 Shaders::~Shaders()
 {
@@ -47,8 +48,9 @@ bool Shaders::check_error( unsigned int const & shaderValue,
     {
         char infoLog[512];
         glGetProgramInfoLog( shaderValue, 512, NULL, infoLog );
-        throw std::runtime_error { "Error - Shader extraction failed - "s
-                                   + infoLog };
+        throw std::runtime_error {
+            std::string { "Error - Shader extraction failed - " } + infoLog
+        };
     }
     return success;
 }

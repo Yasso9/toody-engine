@@ -1,13 +1,15 @@
 #pragma once
 
-#include <optional>
-#include <vector>
+#include <algorithm> // for copy
+#include <optional>  // for optional
+#include <vector>    // for vector
 
-#include "graphics2D/sfml.hpp"
-#include "graphics3D/openGL.hpp"
-#include "graphics3D/shader.hpp"
-#include "graphics3D/texture.hpp"
-#include "graphics3D/transformable.hpp"
+#include <SFML/Graphics/Texture.hpp> // for Texture
+
+#include "graphics3D/transformable.hpp" // for Transformable
+
+class Camera;
+class Render;
 
 class Shape final : public Transformable
 {

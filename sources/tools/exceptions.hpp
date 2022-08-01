@@ -1,9 +1,10 @@
 #pragma once
 
-#include <exception>
-#include <filesystem>
+#include <exception>  // for exception
+#include <filesystem> // for path
+#include <string>     // for allocator, string, char_traits, operator+, ope...
 
-#include "tools/string.hpp"
+using namespace std::string_literals;
 
 namespace exception
 {

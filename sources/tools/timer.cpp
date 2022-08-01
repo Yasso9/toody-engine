@@ -1,6 +1,6 @@
 #include "timer.hpp"
 
-#include <iostream>
+#include <iostream> // for operator<<, basic_ostream, endl, basic_ostream<>...
 
 Timer::Timer( std::string const & indication )
   : m_indication( indication ), m_beginTime( std::chrono::steady_clock::now() )
@@ -16,6 +16,6 @@ Timer::~Timer()
             .count()
     };
 
-    std::cout << "Elapsed Time for '"s << this->m_indication << "' : "s
-              << elapsedTime << " [ms]" << std::endl;
+    std::cout << "Elapsed Time for '" << this->m_indication
+              << "' : " << elapsedTime << " [ms]" << std::endl;
 };

@@ -1,8 +1,6 @@
 #pragma once
 
-#include "maths/maths.hpp"
-#include "tools/assertion.hpp"
-#include "tools/global_variable.hpp"
+#include "maths/vector2.hpp" // for Vector2U
 
 class TilePosition
 {

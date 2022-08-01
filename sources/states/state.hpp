@@ -1,14 +1,14 @@
 #pragma once
 
-#include <memory>
-#include <optional>
-#include <vector>
+#include "graphics2D/component.hpp" // for Component2D
+#include "graphics2D/view.hpp"      // for View
 
-#include "graphics2D/component.hpp"
-#include "graphics2D/view.hpp"
-#include "input/button_array.hpp"
-#include "main/window.hpp"
-#include "tools/concepts.hpp"
+class Render;
+
+namespace sf
+{
+    class Event;
+} // namespace sf
 
 class State : public Component2D
 {

@@ -5,11 +5,10 @@
 
 #include <GLM/vec3.hpp>
 
-#include "tools/assertion.hpp"
-#include "tools/concepts.hpp"
-
 #include "maths/matrix.hpp"
 #include "maths/trigonometry.hpp"
+#include "tools/assertion.hpp"
+#include "tools/concepts.hpp"
 
 namespace math
 {

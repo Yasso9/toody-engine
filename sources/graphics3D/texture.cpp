@@ -1,8 +1,9 @@
 #include "texture.hpp"
 
-#include <iostream>
+#include <filesystem> // for path
+#include <iostream>   // for operator<<, basic_ostream, endl, cout
 
-#include "tools/exceptions.hpp"
+#include "tools/exceptions.hpp" // for EnumUnexcpected, FileIssue, FileLoad...
 
 Texture::Texture( std::string const & filePath, Texture::E_Type const & type )
   : m_type( type ), m_path( filePath )
@@ -66,9 +67,10 @@ aiTextureType Texture::to_assimp_type( Texture::E_Type const & type )
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_NO_THREAD_LOCALS
-#include <OTHERS/stb_image.h>
+#include <stddef.h> // for NULL
 
-#include "graphics3D/openGL.hpp"
+#include <GLAD/glad.h>        // for GL_TEXTURE_2D, glPixelStorei, glTexP...
+#include <OTHERS/stb_image.h> // for stbi_image_free, stbi_load, stbi_set...
 
 namespace GLTexture
 {

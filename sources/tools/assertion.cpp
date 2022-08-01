@@ -1,5 +1,8 @@
 #include "assertion.hpp"
 
+#include <iostream> // for operator<<, basic_ostream, basic_ostream::operat...
+#include <stdlib.h> // for abort
+
 namespace too
 {
     void assertion( bool const & expression, std::string const & fileName,

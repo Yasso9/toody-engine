@@ -1,8 +1,13 @@
 #include "button_array.hpp"
 
-#include <algorithm>
+#include <algorithm> // for max
+#include <cstddef>   // for size_t
+#include <memory>    // for allocator_traits<>::value_type
 
-#include "tools/assertion.hpp"
+#include "graphics2D/sfml.hpp" // for operator*, operator/
+#include "tools/assertion.hpp" // for ASSERTION
+
+class Render;
 
 ButtonArray::ButtonArray( sf::Font const & font /* = sf::Font {} */ )
   : m_buttons(),
@@ -32,7 +37,7 @@ sf::Vector2f ButtonArray::get_size() const
         }
         else
         {
-            ASSERTION( false, "The direction must be vertical or horizontal"s );
+            ASSERTION( false, "The direction must be vertical or horizontal" );
         }
     }
 
@@ -85,7 +90,7 @@ void ButtonArray::set_strings(
         }
         else
         {
-            ASSERTION( false, "The direction must be vertical or horizontal"s );
+            ASSERTION( false, "The direction must be vertical or horizontal" );
         }
     }
 }

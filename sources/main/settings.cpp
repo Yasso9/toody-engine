@@ -1,11 +1,11 @@
 #include "settings.hpp"
 
-#include <fstream>
+#include <filesystem> // for operator/, path
+#include <fstream>    // for basic_istream<>::__istream_type, ifs...
+#include <string>     // for string, operator""s
 
-#include "tools/exceptions.hpp"
-#include "tools/path.hpp"
-#include "tools/string.hpp"
-#include "tools/tools.hpp"
+#include "tools/exceptions.hpp" // for FileIssue
+#include "tools/path.hpp"       // for get_folder, E_Folder, E_Folder::Data
 
 Settings::Settings() : m_windowSize(), m_refreshRate(), m_verticalSync()
 {

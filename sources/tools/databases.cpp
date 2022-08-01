@@ -1,18 +1,17 @@
 #include "databases.hpp"
 
-#include <iostream>
-#include <memory>
-#include <sstream>
+#include <iostream> // for operator<<, basic_ostream, endl
+#include <vector>   // for vector
 
 extern "C"
 {
-#include <SQLITE/sqlite3.h>
+#include <SQLITE/sqlite3.h> // for sqlite3_close, sqlite3_errmsg
 }
 
-#include "tools/exceptions.hpp"
-#include "tools/path.hpp"
-#include "tools/serialization.hpp"
-#include "tools/string.hpp"
+#include "tools/exceptions.hpp"    // for Database
+#include "tools/path.hpp"          // for get_file_str, E_File, E_File::Dat...
+#include "tools/serialization.hpp" // for Unserializer, Serializer
+#include "tools/serialization.tpp" // for operator<<, Serializer::Serialize...
 
 static std::string s_requestResult {};
 

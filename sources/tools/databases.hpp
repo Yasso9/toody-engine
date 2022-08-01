@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
+#include <string> // for string
 
-#include "tools/serialization.hpp"
+#include "tools/serialization.hpp" // for Unserializer
 
 namespace db
 {

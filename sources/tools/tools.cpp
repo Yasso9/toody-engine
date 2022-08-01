@@ -1,9 +1,10 @@
 #include "tools.hpp"
 
-#include <cmath>
-#include <fstream>
-#include <iostream>
-#include <sstream>
+#include <cmath>    // for trunc
+#include <fstream>  // for basic_ostream, basic_ostream::operator<<, ifstream
+#include <iostream> // for cerr
+#include <sstream>  // for stringstream
+#include <stdint.h> // for intptr_t, uintptr_t
 
 namespace tools
 {

@@ -9,7 +9,7 @@ namespace math
                                   Vector3< Type > /* axisRotation */ )
     {
         ASSERTION( angle >= -180.f && angle <= 180.f,
-                   "An angle must have a value between 0 and 180"s );
+                   "An angle must have a value between 0 and 180" );
 
         // Vector3 const qValue { math::cosinus_degree( angle )
         //                        + math::sinus_degree( angle ) * axisRotation };

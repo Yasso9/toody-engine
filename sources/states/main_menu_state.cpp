@@ -1,12 +1,19 @@
 #include "main_menu_state.hpp"
 
-#include <iostream>
+#include <string> // for string, allocator
 
-#include "input/input.hpp"
-#include "libraries/imgui.hpp"
-#include "main/resources.hpp"
-#include "tools/string.hpp"
-#include "tools/tools.hpp"
+#include <SFML/Graphics/Color.hpp>        // for Color, Color::Black
+#include <SFML/Graphics/RenderTarget.hpp> // for RenderTarget
+#include <SFML/System/Vector2.hpp>        // for Vector2f
+#include <SFML/Window/Mouse.hpp>          // for Mouse, Mouse::Button, Mous...
+
+#include "input/input.hpp"     // for get_mouse_position, is_pre...
+#include "main/render.hpp"     // for Render
+#include "main/resources.hpp"  // for get_font
+#include "main/window.hpp"     // for Window
+#include "maths/vector2.hpp"   // for Vector2, Vector2F, Vector2I
+#include "maths/vector2.tpp"   // for Vector2::operator Vector2<...
+#include "tools/singleton.tpp" // for Singleton::get_instance
 
 MainMenuState::MainMenuState()
   : State( State::E_List::MainMenu ), m_background(), m_text(), m_buttons()
@@ -50,7 +57,7 @@ void MainMenuState::init_text()
     this->m_text.setCharacterSize( 30u );
     this->m_text.setFillColor( sf::Color::Black );
     this->m_text.setPosition( 100.f, 500.f );
-    this->m_text.setString( "Main Menu"s );
+    this->m_text.setString( "Main Menu" );
 }
 
 void MainMenuState::init_buttons()
@@ -58,6 +65,6 @@ void MainMenuState::init_buttons()
     this->m_buttons.set_font( resources::get_font( "arial.ttf" ) );
     this->m_buttons.set_direction( ButtonArray::E_Direction::Horizontal );
     this->m_buttons.set_strings(
-        { "Main Menu"s, "Game"s, "Editor"s, "Graphics"s, "Test"s, "Exit"s } );
+        { "Main Menu", "Game", "Editor", "Graphics", "Test", "Exit" } );
     this->m_buttons.setPosition( 0.f, 0.f );
 }

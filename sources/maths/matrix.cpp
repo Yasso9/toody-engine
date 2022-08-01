@@ -1,5 +1,8 @@
 #include "matrix.hpp"
 
+#include "maths/vector2.hpp" // for Vector2
+#include "maths/vector2.tpp" // for Vector2::operator[], Vector2::Vector2<T...
+
 namespace math
 {
     Matrix2::Matrix2( Vector2< float > const & vectorLine1,

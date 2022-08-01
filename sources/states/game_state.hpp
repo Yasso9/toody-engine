@@ -1,8 +1,9 @@
 #pragma once
 
-#include "entity/player.hpp"
-#include "graphics2D/tilemap.hpp"
-#include "states/state.hpp"
+#include "entity/player.hpp"      // for Player
+#include "graphics2D/tilemap.hpp" // for TileMap
+#include "graphics2D/view.hpp"    // for View
+#include "states/state.hpp"       // for State
 
 class GameState final : public State
 {

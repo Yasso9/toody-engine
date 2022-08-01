@@ -1,13 +1,18 @@
 #pragma once
 
-#include <vector>
+#include <vector> // for vector
 
-#include "graphics2D/component.hpp"
-#include "graphics2D/sfml.hpp"
-#include "graphics2D/tile.hpp"
-#include "graphics2D/tile_selector.hpp"
-#include "graphics2D/tileset.hpp"
-#include "graphics2D/view.hpp"
+#include <SFML/Graphics/RectangleShape.hpp> // for RectangleShape
+
+#include "graphics2D/component.hpp"     // for TransformableComponent2D
+#include "graphics2D/tile.hpp"          // for Tile
+#include "graphics2D/tile_selector.hpp" // for TileSelector
+#include "maths/vector2.hpp"            // for Vector2F, Vector2U
+#include "maths/vector2.tpp"            // for operator/, Vector2::oper...
+
+class Render;
+class Tileset;
+class View;
 
 class TileMap : public TransformableComponent2D
 {

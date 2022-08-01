@@ -1,11 +1,12 @@
 #include "imgui.hpp"
 
-#include <functional>
-#include <set>
-#include <vector>
+#include <functional> // for function
+#include <stddef.h>   // for NULL
 
-#include "tools/assertion.hpp"
-#include "tools/global_variable.hpp"
+#include <SFML/Config.hpp> // for Uint8
+
+#include "tools/assertion.hpp"       // for ASSERTION
+#include "tools/global_variable.hpp" // for COLOR_RANGE
 
 namespace ImGui
 {

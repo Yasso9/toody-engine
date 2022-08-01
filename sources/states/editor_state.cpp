@@ -1,14 +1,29 @@
 #include "editor_state.hpp"
 
-#include <memory>
-#include <sstream>
+#include <algorithm> // for max
+#include <sstream>   // for operator<<, basic_ostream
+#include <stddef.h>  // for NULL
+#include <vector>    // for vector
 
-#include "input/input.hpp"
-#include "libraries/imgui.hpp"
-#include "main/resources.hpp"
-#include "tools/assertion.hpp"
-#include "tools/path.hpp"
-#include "tools/string.hpp"
+#include <IMGUI/imgui.h>           // for Begin, End, MenuItem, Text
+#include <SFML/Graphics/Color.hpp> // for Color, Color::Black, Color::...
+#include <SFML/System/Vector2.hpp> // for Vector2f
+#include <SFML/Window/Mouse.hpp>   // for Mouse, Mouse::Right
+
+#include "graphics2D/component.tpp"     // for Component::add_child
+#include "graphics2D/sfml.hpp"          // for operator<<
+#include "graphics2D/static_entity.hpp" // for StaticEntity2D
+#include "graphics2D/view.hpp"          // for View
+#include "input/input.hpp"              // for get_mouse_movement, get_mous...
+#include "libraries/imgui.hpp"          // for P_Begin
+#include "main/window.hpp"              // for Window
+#include "maths/geometry/point.hpp"     // for PointF
+#include "maths/geometry/polygon.hpp"   // for PolygonF
+#include "maths/geometry/polygon.tpp"   // for Polygon::Polygon<Type>, Poly...
+#include "maths/geometry/rectangle.hpp" // for RectangleF
+#include "maths/vector2.hpp"            // for Vector2F, Vector2, Vector2U
+#include "maths/vector2.tpp"            // for operator<<, operator*, opera...
+#include "tools/singleton.tpp"          // for Singleton::get_instance
 
 EditorState::EditorState()
   : State( State::E_List::Editor ),

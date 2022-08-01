@@ -1,17 +1,21 @@
 #include "player.hpp"
 
-#include <exception>
-#include <stdexcept>
+#include <stdexcept> // for domain_error
 
-#include "input/input.hpp"
-#include "main/resources.hpp"
-#include "tools/assertion.hpp"
-#include "tools/tools.hpp"
+#include <SFML/Graphics/RenderTarget.hpp> // for RenderTarget
+#include <SFML/Graphics/Texture.hpp>      // for Texture
+#include <SFML/Window/Keyboard.hpp>       // for Keyboard, Keyboard::Z, Key...
+
+#include "input/input.hpp"     // for is_pressed
+#include "main/render.hpp"     // for Render
+#include "main/resources.hpp"  // for get_texture
+#include "tools/assertion.hpp" // for ASSERTION
+#include "tools/tools.hpp"     // for E_Direction, E_Direction::...
 
 Player::Player()
   : m_texture( resources::get_texture( "gold_sprite.png" ) ),
     m_sprite( m_texture ),
-    m_name( "Unkown"s ),
+    m_name( "Unkown" ),
     m_speed( 30.f ),
     m_state(),
     m_direction(),
@@ -203,7 +207,7 @@ sf::Vector2f Player::get_movement() const
         movementDistance.x = -distance;
         break;
     default :
-        ASSERTION( false, "Unknown Direction"s );
+        ASSERTION( false, "Unknown Direction" );
         break;
     }
 
@@ -241,9 +245,9 @@ unsigned int Player::get_current_sprite_number()
     }
 
     ASSERTION( ! spriteNumbers.empty(),
-               "No information about what sprite to print"s );
+               "No information about what sprite to print" );
     ASSERTION( this->m_lastSpriteIndex < spriteNumbers.size(),
-               "Issues with sprites numbers"s );
+               "Issues with sprites numbers" );
 
     return spriteNumbers[this->m_lastSpriteIndex];
 }

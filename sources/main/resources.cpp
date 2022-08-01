@@ -1,11 +1,19 @@
 #include "resources.hpp"
 
-#include <filesystem>
-#include <map>
+#include <algorithm>  // for find
+#include <compare>    // for operator<, strong_ordering
+#include <filesystem> // for path, operator/, operator<=>
+#include <map>        // for map
+#include <memory>     // for unique_ptr, make_unique
+#include <utility>    // for move
+#include <vector>     // for vector
 
-#include "tools/exceptions.hpp"
-#include "tools/path.hpp"
-#include "tools/singleton.hpp"
+#include <SFML/Graphics/Font.hpp>    // for Font
+#include <SFML/Graphics/Shader.hpp>  // for Shader
+#include <SFML/Graphics/Texture.hpp> // for Texture
+
+#include "tools/exceptions.hpp" // for FileLoadingIssue
+#include "tools/path.hpp"       // for get_folder, E_Folder, E_Folder:...
 
 namespace resources
 {

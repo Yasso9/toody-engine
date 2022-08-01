@@ -1,6 +1,15 @@
 #pragma once
 
-#include "input/button.hpp"
+#include <string> // for string
+#include <vector> // for vector
+
+#include <SFML/Graphics/Font.hpp>  // for Font
+#include <SFML/System/Vector2.hpp> // for Vector2f
+
+#include "graphics2D/component.hpp" // for TransformableComponent2D
+#include "input/button.hpp"         // for Button
+
+class Render;
 
 class ButtonArray final : public TransformableComponent2D
 {

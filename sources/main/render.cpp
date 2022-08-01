@@ -1,6 +1,10 @@
 #include "render.hpp"
 
-#include "graphics2D/component.hpp"
+namespace sf
+{
+    class RenderTarget;
+    class Texture;
+} // namespace sf
 
 Render::Render( sf::RenderTarget & target, sf::RenderStates states )
   : m_target( target ), m_states( states )

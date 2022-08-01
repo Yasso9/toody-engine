@@ -6,7 +6,7 @@ AlignConsecutiveDeclarations: None
 AlignConsecutiveMacros: AcrossEmptyLines
 AlignEscapedNewlines: Left
 AlignOperands: Align
-AlignTrailingComments: false
+AlignTrailingComments: true
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: Empty
@@ -59,7 +59,14 @@ DisableFormat: false
 EmptyLineAfterAccessModifier: Never # clang 13
 EmptyLineBeforeAccessModifier: Always
 FixNamespaceComments: true
-IncludeBlocks: Preserve
+IncludeBlocks: Regroup
+IncludeCategories:
+# Libraries
+  - Regex:           '<.*\/.*>'
+    Priority:        2
+# STD includes
+  - Regex:           '<.*>'
+    Priority:        1
 IndentAccessModifiers: false # clang 13
 IndentCaseBlocks: true
 IndentCaseLabels: false

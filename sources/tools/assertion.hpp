@@ -1,8 +1,6 @@
 #pragma once
 
-#include "tools/string.hpp"
-
-#include <iostream>
+#include <string> // for allocator, string
 
 #ifndef NDEBUG
     #define ASSERTION( expression, message ) \
@@ -21,5 +19,5 @@ namespace too
     void assertion( bool const & expression, std::string const & fileName,
                     int const & line, std::string const & functionName,
                     std::string const & expressionString,
-                    std::string const & message = ""s );
+                    std::string const & message = "" );
 } // namespace too

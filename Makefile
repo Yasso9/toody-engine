@@ -1,9 +1,5 @@
 ############################## USER CUSTOM ##############################
 
-# Specify the compiler command and version
-COMPILER_COMMAND := gcc
-COMPILER_VERSION :=
-
 # Put @ if we should not show the command, put nothing otherwise
 SHOW := @
 
@@ -13,7 +9,7 @@ SHOW := @
 
 # Know in what operating system we are
 ifeq ($(OS),Windows_NT)
-DETECTED_OS := Windows
+DETECTED_OS := Windowsq
 else
 DETECTED_OS := $(shell uname)
 endif
@@ -28,22 +24,17 @@ endif
 
 ############################## COMPILER SETUP ##############################
 
-ifneq ($(COMPILER_VERSION),)
-COMPILER_VERSION := -$(COMPILER_VERSION)
-endif
-GCC_COMPILER := gcc$(COMPILER_VERSION)
-G++_COMPILER := g++$(COMPILER_VERSION)
-CLANG_COMPILER := clang$(COMPILER_VERSION)
-CLANG++_COMPILER := clang++$(COMPILER_VERSION)
-
-C_COMMAND := $(COMPILER_COMMAND)$(COMPILER_VERSION)
-ifeq ($(C_COMMAND),$(GCC_COMPILER))
-CXX_COMMAND := $(G++_COMPILER)
-else ifeq ($(C_COMMAND),$(CLANG_COMPILER))
-CXX_COMMAND := $(CLANG++_COMPILER)
+ifeq ($(CC),)
+C_COMMAND := gcc
 else
-$(error ERROR : UNKNOWN COMPILER)
+C_COMMAND := $(CC)
 endif
+ifeq ($(CXX),)
+CXX_COMMAND := g++
+else
+CXX_COMMAND := $(CXX)
+endif
+
 # DEPENDENCY_FLAGS := -MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
 DEPENDENCY_FLAGS := -MMD -MP
 # -MMD => Create .d files for dependencies of users files only (not system files)
@@ -51,8 +42,6 @@ DEPENDENCY_FLAGS := -MMD -MP
 COMPILING_FLAGS := -std=c++20 -O0 -g
 # -g => Generate debug information
 # -O0 => No optmization, faster compilation time, better for debugging builds
-LINKING_FLAGS :=
-
 
 ############################## Warnings ##############################
 
@@ -122,20 +111,21 @@ GCC_WARNINGS_REMOVE := \
 	-Wno-long-long \
 	-Wno-undef \
 
-GCC_WARNINGS := $(GENERAL_WARNINGS) $(GCC_WARNINGS_ENABLE) $(GCC_WARNINGS_REMOVE)
-CLANG_WARNINGS := $(GENERAL_WARNINGS)
-
-ifeq ($(C_COMMAND),$(GCC_COMPILER))
-FINAL_WARNINGS := $(GCC_WARNINGS)
-else ifeq ($(C_COMMAND),$(CLANG_COMPILER))
-FINAL_WARNINGS := $(CLANG_WARNINGS)
+ifeq ($(CXX_COMMAND),g++)
+FINAL_WARNINGS := $(GENERAL_WARNINGS) $(GCC_WARNINGS_ENABLE) $(GCC_WARNINGS_REMOVE)
 else
-$(error ERROR : UNKNOWN COMPILER)
+FINAL_WARNINGS := $(GENERAL_WARNINGS)
 endif
 # Warning that must not be used in clang \
 -Wfloat-equal # The equality between floats works, it's the addition that is wrong
 
+ifeq ($(CPP_FLAGS),)
+CPP_FLAGS := $(FINAL_WARNINGS) $(COMPILING_FLAGS) $(DEPENDENCY_FLAGS)
+else
+CPP_FLAGS := $(CPP_FLAGS)
+endif
 
+LINKING_FLAGS :=
 
 
 ############################## Global Informations ##############################
@@ -198,11 +188,11 @@ C_SOURCES_LIBRARIES := $(subst $(LIBRARIES_INCLUDE_PATH)/,,$(C_SOURCES_LIBRARIES
 C_OBJECT_LIBRARIES := $(patsubst %.c,%.o,$(C_SOURCES_LIBRARIES))
 C_OBJECT_LIBRARIES := $(addprefix $(LIBRARIES_OBJECT_DIRECTORY)/,$(subst /,~,$(C_OBJECT_LIBRARIES)))
 
+OBJECT_LIBRARIES := $(C_OBJECT_LIBRARIES) $(CPP_OBJECT_LIBRARIES)
+
 # All object needed for the project to compile
 # (the project files objects + the libraries objects)
-OBJECT_ALL := $(OBJECT_PROJECT) $(CPP_OBJECT_LIBRARIES) $(C_OBJECT_LIBRARIES)
-
-
+OBJECT_ALL := $(OBJECT_PROJECT) $(OBJECT_LIBRARIES)
 
 # Dependencies (.d files) will be on the same directories
 # and have the same name than object files
@@ -220,20 +210,41 @@ DEPENDENCIES := $(patsubst %.o,%.d,$(OBJECT_PROJECT))
 # make build/object/<directory>-<filename>.o
 
 # These commands do not represent physical files
-.PHONY: buildrun build run initialize_build \
+.PHONY: buildrun build compile link run initialize_build \
 		clean_executable clean_project clean_libraries \
-		clean debug remake nothing valgrind release
+		clean debug remake nothing valgrind release iwyu format cppclean compile_command
 
 buildrun : build run
 
-build : initialize_build $(OBJECT_ALL) $(EXECUTABLE)
+build : initialize_build compile compile_libraries link
+
+compile : $(OBJECT_PROJECT)
+
+compile_libraries : $(OBJECT_LIBRARIES)
+
+link : $(EXECUTABLE)
 
 run :
 ifeq ($(DETECTED_OS),Linux)
-	export LD_LIBRARY_PATH="$(LIBRARIES_PATH)" && $(EXECUTABLE)
+	LD_LIBRARY_PATH="$(LIBRARIES_PATH)" $(EXECUTABLE)
 else
 	$(EXECUTABLE)
 endif
+
+compile_command :
+	bear -- $(MAKE) compile
+
+iwyu : clean
+	CXX="include-what-you-use" CPP_FLAGS="-Xiwyu --update_comments -Xiwyu --mapping_file=iwyu_mapping.imp -std=c++20" $(MAKE) compile 2>iwyu_file.txt
+	sed -i '/.inl/d' ./iwyu_file.txt
+	python3 fix_includes.py --comments --update_comments --nosafe_headers < iwyu_file.txt
+	$(MAKE) format
+
+format:
+	clang-format -i --verbose -style=file:.clang-format $(wildcard $(FILES_DIRECTORY)/*.cpp) $(wildcard $(FILES_DIRECTORY)/**/*.cpp) $(wildcard $(FILES_DIRECTORY)/**/*.hpp) $(wildcard $(FILES_DIRECTORY)/**/*.tpp)
+
+cppclean:
+	cppclean --verbose --include-path=sources --include-path=external/includes sources/**
 
 initialize_build: clean_executable
 	$(SHOW)echo "Create Build Directories"
@@ -352,15 +363,13 @@ $(C_OBJECT_LIBRARIES) : $(LIBRARIES_OBJECT_DIRECTORY)/%.o : $(LIBRARIES_INCLUDE_
 
 # Creating the object files of the project
 .SECONDEXPANSION:
-$(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%).cpp # $(DEPS_DIRECTORY)/%.d
+$(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%).cpp
 #	Nicer way to print the current file compiled
 	$(SHOW)echo "Project Compile $(subst sources/,,$<)"
 #	compilatorCommand -WarningFlags -compilerOptions -c sources/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
-	$(SHOW)$(CXX_COMMAND) $(FINAL_WARNINGS) $(COMPILING_FLAGS) $(DEPENDENCY_FLAGS) -c $< -o $@ $(INCLUDES)
-
-# $(DEPS_DIRECTORY)/%.d : ;
+	$(SHOW)$(CXX_COMMAND) $(CPP_FLAGS) -c $< -o $@ $(INCLUDES)
 
 # Create the executable by Linking all the object files and the libraries together
 $(EXECUTABLE) : $(OBJECT_ALL)

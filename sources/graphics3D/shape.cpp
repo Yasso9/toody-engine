@@ -1,15 +1,17 @@
 #include "shape.hpp"
 
-#include <iostream>
-#include <numeric>
+#include <numeric> // for accumulate
+#include <string>  // for operator+, to_string
 
-#include "graphics3D/load_shape.hpp"
-#include "main/resources.hpp"
-#include "main/window.hpp"
-#include "tools/assertion.hpp"
-#include "tools/exceptions.hpp"
-#include "tools/path.hpp"
-#include "tools/tools.hpp"
+#include <GLAD/glad.h>              // for GLenum, glDeleteBuffers, GL_ELE...
+#include <SFML/Graphics/Shader.hpp> // for Shader
+
+#include "graphics3D/load_shape.hpp" // for complete
+#include "graphics3D/openGL.hpp"     // for draw_arrays, draw_elements
+#include "main/resources.hpp"        // for get_texture, get_shader
+
+class Camera;
+class Render;
 
 unsigned int Shape::S_Data::get_data_per_point_sum() const
 {
@@ -25,8 +27,8 @@ unsigned int Shape::S_Data::get_number_of_element() const
 
 Shape::Shape( S_Data const & data, Camera const & camera )
   : Transformable { camera,
-                    resources::get_shader( "shape_shader.vert"s,
-                                           "shape_shader.frag"s ) },
+                    resources::get_shader( "shape_shader.vert",
+                                           "shape_shader.frag" ) },
     m_textures { resources::get_texture( "wall.jpg" ),
                  resources::get_texture( "town_hall.png" ) },
     m_vertexArrayObject {},
@@ -53,7 +55,7 @@ void Shape::update_custom( float /* deltaTime */ )
 {
     for ( unsigned int i = 0u; i < m_textures.size(); ++i )
     {
-        this->get_shader().setUniform( "my_texture"s + std::to_string( i ),
+        this->get_shader().setUniform( "my_texture" + std::to_string( i ),
                                        m_textures[i] );
     }
 }

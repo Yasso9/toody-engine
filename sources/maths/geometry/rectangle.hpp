@@ -1,8 +1,7 @@
 #pragma once
 
-#include "tools/concepts.hpp"
-
 #include "maths/geometry/point.hpp"
+#include "tools/concepts.hpp"
 
 namespace math
 {

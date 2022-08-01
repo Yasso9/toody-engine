@@ -1,8 +1,9 @@
 #pragma once
 
-#include "graphics2D/sfml.hpp"
-#include "maths/maths.hpp"
-#include "tools/singleton.hpp"
+#include <SFML/Window/VideoMode.hpp> // for VideoMode
+
+#include "maths/vector2.hpp"   // for Vector2F
+#include "tools/singleton.hpp" // for Singleton
 
 class Settings final : public Singleton< Settings >
 {

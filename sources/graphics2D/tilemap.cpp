@@ -1,13 +1,33 @@
 #include "tilemap.hpp"
 
-#include "input/input.hpp"
-#include "libraries/imgui.hpp"
-#include "main/window.hpp"
-#include "tools/databases.hpp"
-#include "tools/global_variable.hpp"
-#include "tools/print.hpp"
-#include "tools/string.hpp"
-#include "tools/tools.hpp"
+#include <algorithm> // for max
+#include <cstdlib>   // for strtoul
+#include <memory>    // for allocator_traits<>::value_...
+#include <sstream>   // for operator<<, basic_ostream
+#include <string>    // for char_traits, to_string
+
+#include <ext/alloc_traits.h>             // for __alloc_traits<>::value_type
+#include <IMGUI/imgui.h>                  // for Button, Text, InputText
+#include <SFML/Graphics/Color.hpp>        // for Color, Color::Transparent
+#include <SFML/Graphics/RenderTarget.hpp> // for RenderTarget
+#include <SFML/Graphics/VertexArray.hpp>  // for VertexArray
+#include <SFML/Window/Mouse.hpp>          // for Mouse, Mouse::Button, Mous...
+
+#include "graphics2D/component.tpp"     // for Component::add_child
+#include "graphics2D/sfml.hpp"          // for operator<<
+#include "graphics2D/tile_position.hpp" // for TilePosition, TilePosition...
+#include "graphics2D/tileset.hpp"       // for Tileset
+#include "graphics2D/view.hpp"          // for View
+#include "input/input.hpp"              // for get_mouse_position, is_pre...
+#include "main/render.hpp"              // for Render
+#include "maths/geometry/point.hpp"     // for PointF
+#include "maths/geometry/point.tpp"     // for Point::Point<Type>, Point:...
+#include "tools/assertion.hpp"          // for ASSERTION
+#include "tools/databases.hpp"          // for request
+#include "tools/global_variable.hpp"    // for TILE_PIXEL_SIZE_I, TILE_PI...
+#include "tools/serialization.hpp"      // for Serializer, Unserializer
+#include "tools/serialization.tpp"      // for Serializer::Serializer<Typ...
+#include "tools/tools.tpp"              // for is_rectangle
 
 /// @todo create a button reset database who call init_tile_table_from_database()
 /// @todo put a grid on the tilemap

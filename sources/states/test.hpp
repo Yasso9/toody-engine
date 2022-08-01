@@ -1,11 +1,6 @@
 #pragma once
 
-#include <iostream>
-
-#include "states/state.hpp"
-
-#include "graphics3D/openGL.hpp"
-#include "tools/tools.hpp"
+#include "states/state.hpp" // for State
 
 class TestState final : public State
 {

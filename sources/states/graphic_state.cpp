@@ -1,10 +1,10 @@
 #include "graphic_state.hpp"
 
-#include <cmath>
-#include <iostream>
+#include <algorithm> // for max
 
-#include "tools/path.hpp"
-#include "tools/tools.hpp"
+#include <GLM/ext/vector_float3.hpp> // for vec3
+
+#include "graphics2D/component.tpp" // for Component::add_childs
 
 [[maybe_unused]] static Shape::S_Data get_sample_shape_data_A();
 

@@ -1,7 +1,9 @@
 #pragma once
 
-#include "graphics2D/sfml.hpp"
-#include "maths/maths.hpp"
+#include <SFML/Graphics/VertexArray.hpp> // for VertexArray
+
+#include "maths/geometry/rectangle.hpp" // for RectangleF
+#include "maths/vector2.hpp"            // for Vector2F
 
 struct QuadVertex
 {

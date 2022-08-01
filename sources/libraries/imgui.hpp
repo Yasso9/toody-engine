@@ -1,9 +1,11 @@
 #pragma once
 
-#include <functional>
+#include <functional> // for function
+#include <stdint.h>   // for uint32_t
+#include <string>     // for string
 
-#include <IMGUI/imgui-SFML.h>
-#include <IMGUI/imgui.h>
+#include <IMGUI/imgui.h>           // for ImGuiColorEditFlags, ImGuiInputTe...
+#include <SFML/Graphics/Color.hpp> // for Color
 
 // P stands for personnal fonctions (overloading ImGui)
 
