@@ -1,19 +1,20 @@
 #include "tile_position.hpp"
 
-#include <cstdlib> // for div, (anonymous), div_t
-#include <memory>  // for allocator
+#include <cstdlib>  // for div, (anonymous), div_t
+#include <memory>   // for allocator
 
-#include "maths/vector2.tpp"         // for Vector2::operator=, floor, oper...
-#include "tools/assertion.hpp"       // for ASSERTION
-#include "tools/global_variable.hpp" // for TILE_PIXEL_SIZE_VECTOR
+#include "maths/vector2.tpp"          // for Vector2::operator=, floor, oper...
+#include "tools/assertion.hpp"        // for ASSERTION
+#include "tools/global_variable.hpp"  // for TILE_PIXEL_SIZE_VECTOR
 
 TilePosition::TilePosition( unsigned int value, unsigned int numberOfTileInX )
   : m_value(), m_numberOfTileInX( numberOfTileInX )
 {
     this->set_value( value );
 }
-TilePosition::TilePosition( math::Vector2U position,
-                            unsigned int numberOfTileInX, Type type )
+
+TilePosition::TilePosition(
+    math::Vector2U position, unsigned int numberOfTileInX, Type type )
   : TilePosition { 0u, numberOfTileInX }
 {
     this->set_value( position, type );
@@ -32,6 +33,7 @@ math::Vector2U TilePosition::tile() const
         static_cast< int >( this->m_numberOfTileInX ) ) };
     return math::Vector2I { divisionValue.rem, divisionValue.quot }.to_u_int();
 }
+
 /// @brief convert the value to a pixel position
 math::Vector2U TilePosition::pixel() const
 {
@@ -42,6 +44,7 @@ void TilePosition::set_value( unsigned int newValue )
 {
     this->m_value = newValue;
 }
+
 void TilePosition::set_value( math::Vector2U position, Type type )
 {
     ASSERTION( type == Tile || type == Pixel, "Enum not handled" );

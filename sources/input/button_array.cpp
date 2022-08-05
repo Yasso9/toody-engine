@@ -1,11 +1,11 @@
 #include "button_array.hpp"
 
-#include <algorithm> // for max
-#include <cstddef>   // for size_t
-#include <memory>    // for allocator_traits<>::value_type
+#include <algorithm>  // for max
+#include <cstddef>    // for size_t
+#include <memory>     // for allocator_traits<>::value_type
 
-#include "graphics2D/sfml.hpp" // for operator*, operator/
-#include "tools/assertion.hpp" // for ASSERTION
+#include "graphics2D/sfml.hpp"  // for operator*, operator/
+#include "tools/assertion.hpp"  // for ASSERTION
 
 class Render;
 
@@ -104,16 +104,14 @@ void ButtonArray::set_direction(
     this->set_strings( this->m_strings );
 }
 
-int ButtonArray::update_button_array( sf::Vector2f const & position,
-                                      bool const & click )
+int ButtonArray::update_button_array(
+    sf::Vector2f const & position, bool const & click )
 {
     for ( std::size_t i_buttonNummber { 0 };
-          i_buttonNummber < this->m_buttons.size();
-          ++i_buttonNummber )
+          i_buttonNummber < this->m_buttons.size(); ++i_buttonNummber )
     {
         bool const isPressed {
-            this->m_buttons[i_buttonNummber].update_button( position, click )
-        };
+            this->m_buttons[i_buttonNummber].update_button( position, click ) };
 
         if ( isPressed )
         {

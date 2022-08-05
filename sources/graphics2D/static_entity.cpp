@@ -1,27 +1,27 @@
 #include "static_entity.hpp"
 
-#include <algorithm> // for max, min
-#include <sstream>   // for operator<<, basic_ostream:...
-#include <string>    // for allocator, string, basic_s...
-#include <vector>    // for vector
+#include <algorithm>  // for max, min
+#include <sstream>    // for operator<<, basic_ostream:...
+#include <string>     // for allocator, string, basic_s...
+#include <vector>     // for vector
 
-#include <IMGUI/imgui.h>                  // for InputFloat, Begin, Checkbox
-#include <SFML/Graphics/Color.hpp>        // for Color, Color::Red
-#include <SFML/Graphics/RenderTarget.hpp> // for RenderTarget
+#include <IMGUI/imgui.h>                   // for InputFloat, Begin, Checkbox
+#include <SFML/Graphics/Color.hpp>         // for Color, Color::Red
+#include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
 
-#include "libraries/imgui.hpp"        // for P_ColorEditor, P_Begin
-#include "main/render.hpp"            // for Render
-#include "maths/geometry/point.hpp"   // for PointF
-#include "maths/geometry/point.tpp"   // for Point::is_inside
-#include "maths/geometry/polygon.tpp" // for is_intersection, Polygon::...
-#include "maths/geometry/segment.tpp" // for Segment::is_intersected_by
+#include "libraries/imgui.hpp"         // for P_ColorEditor, P_Begin
+#include "main/render.hpp"             // for Render
+#include "maths/geometry/point.hpp"    // for PointF
+#include "maths/geometry/point.tpp"    // for Point::is_inside
+#include "maths/geometry/polygon.tpp"  // for is_intersection, Polygon::...
+#include "maths/geometry/segment.tpp"  // for Segment::is_intersected_by
 
 namespace customisation
 {
     namespace
     {
-        static void circle_shape( std::string windowName, int shapeID,
-                                  sf::CircleShape & circleShape )
+        static void circle_shape (
+            std::string windowName, int shapeID, sf::CircleShape & circleShape )
         {
             if ( ImGui::Begin( windowName.c_str() ) )
             {
@@ -53,8 +53,8 @@ namespace customisation
             }
             ImGui::End();
         }
-    } // namespace
-} // namespace customisation
+    }  // namespace
+}  // namespace customisation
 
 StaticEntity2D::StaticEntity2D( math::PolygonF polygon )
   : Shape2D { polygon },
@@ -77,15 +77,10 @@ void StaticEntity2D::update_before( float /* deltaTime */ )
         return;
     }
 
-    ImGui::P_Begin( "Customise Entity",
-                    &m_isCustomisable,
-                    [&]()
-                    {
-                        customisation::circle_shape( "Customise Entity",
-                                                     m_ID,
-                                                     m_pointShape );
-                        ImGui::Checkbox( "Edit Points ?", &m_editPoint );
-                    } );
+    ImGui::P_Begin( "Customise Entity", &m_isCustomisable, [&] () {
+        customisation::circle_shape( "Customise Entity", m_ID, m_pointShape );
+        ImGui::Checkbox( "Edit Points ?", &m_editPoint );
+    } );
 }
 
 void StaticEntity2D::render_before( Render & render ) const
@@ -113,6 +108,6 @@ void StaticEntity2D::set_customisation( bool isCustomisable )
 bool StaticEntity2D::is_intersected_by(
     StaticEntity2D const & otherEntity ) const
 {
-    return math::is_intersection( this->get_polygon(),
-                                  otherEntity.get_polygon() );
+    return math::is_intersection(
+        this->get_polygon(), otherEntity.get_polygon() );
 }

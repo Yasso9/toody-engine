@@ -1,20 +1,20 @@
 #pragma once
 
-#include <map>    // for map
-#include <string> // for string
-#include <vector> // for vector
+#include <map>     // for map
+#include <string>  // for string
+#include <vector>  // for vector
 
-#include <GLM/detail/type_vec2.hpp>  // for vec
-#include <GLM/detail/type_vec3.hpp>  // for vec
-#include <GLM/ext/vector_float2.hpp> // for vec2
-#include <GLM/ext/vector_float3.hpp> // for vec3
+#include <GLM/detail/type_vec2.hpp>   // for vec
+#include <GLM/detail/type_vec3.hpp>   // for vec
+#include <GLM/ext/vector_float2.hpp>  // for vec2
+#include <GLM/ext/vector_float3.hpp>  // for vec3
 
 class Texture;
 
 namespace sf
 {
     class Shader;
-} // namespace sf
+}  // namespace sf
 
 constexpr unsigned int const maxBoneInfluence { 4u };
 
@@ -31,31 +31,33 @@ struct S_Vertex
     /// @brief bitangent
     glm::vec3 bitangent;
     /// @brief bone indexes which will influence this vertex
-    int boneIDs[maxBoneInfluence];
+    int       boneIDs[maxBoneInfluence];
     /// @brief weights from each bone
-    float weights[maxBoneInfluence];
+    float     weights[maxBoneInfluence];
 };
 
 class Mesh
 {
   public:
-    Mesh( std::vector< S_Vertex > const & vertices,
-          std::vector< unsigned int > const & indices,
-          std::vector< std::string > const & textures );
+    Mesh(
+        std::vector< S_Vertex > const &     vertices,
+        std::vector< unsigned int > const & indices,
+        std::vector< std::string > const &  textures );
 
-    void update( sf::Shader & shader,
-                 std::map< std::string, Texture > const & textureLoaded );
+    void update (
+        sf::Shader &                             shader,
+        std::map< std::string, Texture > const & textureLoaded );
 
-    void draw() const;
+    void draw () const;
 
   private:
-    std::vector< S_Vertex > const m_vertices;
+    std::vector< S_Vertex > const     m_vertices;
     std::vector< unsigned int > const m_indices;
-    std::vector< std::string > const m_textures;
+    std::vector< std::string > const  m_textures;
 
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
 
-    void generate();
+    void generate ();
 };

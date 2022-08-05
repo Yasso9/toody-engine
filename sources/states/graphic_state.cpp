@@ -1,12 +1,12 @@
 #include "graphic_state.hpp"
 
-#include <algorithm> // for max
+#include <algorithm>  // for max
 
-#include <GLM/ext/vector_float3.hpp> // for vec3
+#include <GLM/ext/vector_float3.hpp>  // for vec3
 
-#include "graphics2D/component.tpp" // for Component::add_childs
+#include "graphics2D/component.tpp"  // for Component::add_childs
 
-[[maybe_unused]] static Shape::S_Data get_sample_shape_data_A();
+[[maybe_unused]] static Shape::S_Data get_sample_shape_data_A ();
 
 GraphicState::GraphicState()
   : State( State::E_List::Graphics ),
@@ -48,7 +48,7 @@ void GraphicState::mouse_scroll( float const & deltaScroll )
     // m_camera.zoom( scrollSpeed, m_deltaTime );
 }
 
-static Shape::S_Data get_sample_shape_data_A()
+static Shape::S_Data get_sample_shape_data_A ()
 {
     std::vector< float > const vertices {
         -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f,  -0.5f, -0.5f, 1.0f, 0.0f,
@@ -73,8 +73,7 @@ static Shape::S_Data get_sample_shape_data_A()
 
         -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f, 0.5f,  0.5f,  -0.5f, 1.0f, 1.0f,
         0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, 0.5f,  0.5f,  0.0f, 0.0f, -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f
-    };
+        -0.5f, 0.5f,  0.5f,  0.0f, 0.0f, -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f };
     std::vector< unsigned int > const numberOfDataPerAttribute { 3u, 2u };
 
     return Shape::S_Data { vertices, {}, numberOfDataPerAttribute };

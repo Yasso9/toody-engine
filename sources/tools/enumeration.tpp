@@ -2,12 +2,12 @@
 
 #include "tools/enumeration.hpp"
 
-template < EnumType Type >
+template< EnumType Type >
 Enum< Type >::Enum( Type const & enumValue ) : m_currentValue( enumValue )
 {}
 
-template < EnumType Type >
-Enum< Type > & Enum< Type >::operator++()
+template< EnumType Type >
+Enum< Type > & Enum< Type >::operator++ ()
 {
     // Convert the enum value to int
     int integerValue { static_cast< int >( this->m_currentValue ) };
@@ -19,46 +19,47 @@ Enum< Type > & Enum< Type >::operator++()
 }
 
 // postfix increment
-template < EnumType Type >
-Enum< Type > Enum< Type >::operator++( int )
+template< EnumType Type >
+Enum< Type > Enum< Type >::operator++ ( int )
 {
     Enum< Type > const oldEnum { *this };
-    this->operator++();
+    this->             operator++ ();
     return oldEnum;
 }
 
-template < EnumType Type >
+template< EnumType Type >
 bool Enum< Type >::operator<( Type const & enumValue )
 {
     return this->m_currentValue < enumValue;
 }
-template < EnumType Type >
-bool Enum< Type >::operator>( Type const & enumValue )
+
+template< EnumType Type >
+bool Enum< Type >::operator> ( Type const & enumValue )
 {
     return this->m_currentValue > enumValue;
 }
 
-template < EnumType Type >
+template< EnumType Type >
 Type Enum< Type >::get_min()
 {
     return static_cast< Type >( 0 );
 }
 
-template < EnumType Type >
+template< EnumType Type >
 Type Enum< Type >::get_max()
 {
     return Type::EnumLast;
 }
 
-template < EnumType Type >
+template< EnumType Type >
 Type Enum< Type >::get_value() const
 {
     return this->m_currentValue;
 }
 
-template < EnumType Type >
-std::ostream & operator<<( std::ostream & output,
-                           Enum< Type > const & enumValue )
+template< EnumType Type >
+std::ostream & operator<< (
+    std::ostream & output, Enum< Type > const & enumValue )
 {
     output << static_cast< int >( enumValue.get_value() );
     return output;

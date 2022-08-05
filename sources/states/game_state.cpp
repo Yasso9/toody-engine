@@ -1,9 +1,9 @@
 #include "game_state.hpp"
 
-#include "main/window.hpp"     // for Window
-#include "maths/vector2.hpp"   // for Vector2, Vector2U, Vector2F
-#include "maths/vector2.tpp"   // for operator/, operator-, Vector2::operat...
-#include "tools/singleton.tpp" // for Singleton::get_instance
+#include "main/window.hpp"      // for Window
+#include "maths/vector2.hpp"    // for Vector2, Vector2U, Vector2F
+#include "maths/vector2.tpp"    // for operator/, operator-, Vector2::operat...
+#include "tools/singleton.tpp"  // for Singleton::get_instance
 
 GameState::GameState()
   : State( State::E_List::Game ), m_view(), m_tilemap( m_view ), m_player()
@@ -37,9 +37,8 @@ void GameState::update_before( float deltaTime )
 // {
 //     // Window::get_instance().setView( this->m_view );
 
-//     target.draw( this->m_tilemap );
+// target.draw( this->m_tilemap );
 
-//     target.draw( this->m_player );
+// target.draw( this->m_player );
 
-//     // Window::get_instance().reset_view();
-// }
+// // Window::get_instance().reset_view();}

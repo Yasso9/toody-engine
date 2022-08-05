@@ -1,25 +1,26 @@
 #pragma once
 
-#include <SFML/Graphics/RenderStates.hpp> // for RenderStates, RenderStates...
+#include <SFML/Graphics/RenderStates.hpp>  // for RenderStates, RenderStates...
 
 namespace sf
 {
     class RenderTarget;
     class Texture;
-} // namespace sf
+}  // namespace sf
 
 class Render
 {
     sf::RenderTarget & m_target;
-    sf::RenderStates m_states;
+    sf::RenderStates   m_states;
 
   public:
-    Render( sf::RenderTarget & target,
-            sf::RenderStates states = sf::RenderStates::Default );
+    Render(
+        sf::RenderTarget & target,
+        sf::RenderStates   states = sf::RenderStates::Default );
 
-    sf::RenderTarget & get_target();
-    sf::RenderStates get_state() const;
-    void set_texture( sf::Texture const & texture );
+    sf::RenderTarget & get_target ();
+    sf::RenderStates   get_state () const;
+    void               set_texture ( sf::Texture const & texture );
 };
 
 // template < C_IsDrawable DrawableClass >

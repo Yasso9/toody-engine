@@ -1,24 +1,24 @@
 #include "shape.hpp"
 
-#include <numeric> // for accumulate
-#include <string>  // for operator+, to_string
+#include <numeric>  // for accumulate
+#include <string>   // for operator+, to_string
 
-#include <GLAD/glad.h>              // for GLenum, glDeleteBuffers, GL_ELE...
-#include <SFML/Graphics/Shader.hpp> // for Shader
+#include <GLAD/glad.h>               // for GLenum, glDeleteBuffers, GL_ELE...
+#include <SFML/Graphics/Shader.hpp>  // for Shader
 
-#include "graphics3D/load_shape.hpp" // for complete
-#include "graphics3D/openGL.hpp"     // for draw_arrays, draw_elements
-#include "main/resources.hpp"        // for get_texture, get_shader
+#include "graphics3D/load_shape.hpp"  // for complete
+#include "graphics3D/openGL.hpp"      // for draw_arrays, draw_elements
+#include "main/resources.hpp"         // for get_texture, get_shader
 
 class Camera;
 class Render;
 
 unsigned int Shape::S_Data::get_data_per_point_sum() const
 {
-    return std::accumulate( this->dataPerPoint.begin(),
-                            this->dataPerPoint.end(),
-                            0u );
+    return std::accumulate(
+        this->dataPerPoint.begin(), this->dataPerPoint.end(), 0u );
 }
+
 unsigned int Shape::S_Data::get_number_of_element() const
 {
     return static_cast< unsigned int >( this->vertices.size() )
@@ -55,10 +55,11 @@ void Shape::update_custom( float /* deltaTime */ )
 {
     for ( unsigned int i = 0u; i < m_textures.size(); ++i )
     {
-        this->get_shader().setUniform( "my_texture" + std::to_string( i ),
-                                       m_textures[i] );
+        this->get_shader().setUniform(
+            "my_texture" + std::to_string( i ), m_textures[i] );
     }
 }
+
 void Shape::render_custom( Render & /* Render */ ) const
 {
     GLenum const primitiveType { GL_TRIANGLES };
@@ -67,16 +68,15 @@ void Shape::render_custom( Render & /* Render */ ) const
     {
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_elementBufferObject );
         GLenum const dataType { GL_UNSIGNED_INT };
-        gl::draw_elements( m_vertexArrayObject,
-                           primitiveType,
-                           dataType,
-                           m_data.vertices.size() );
+        gl::draw_elements(
+            m_vertexArrayObject, primitiveType, dataType,
+            m_data.vertices.size() );
     }
     else
     {
-        gl::draw_arrays( m_vertexArrayObject,
-                         primitiveType,
-                         m_data.get_number_of_element() );
+        gl::draw_arrays(
+            m_vertexArrayObject, primitiveType,
+            m_data.get_number_of_element() );
     }
 }
 
@@ -84,6 +84,7 @@ unsigned int Shape::get_VAO() const
 {
     return const_cast< Shape * >( this )->get_VAO();
 }
+
 unsigned int & Shape::get_VAO()
 {
     return m_vertexArrayObject;
@@ -93,6 +94,7 @@ unsigned int Shape::get_VBO() const
 {
     return const_cast< Shape * >( this )->get_VBO();
 }
+
 unsigned int & Shape::get_VBO()
 {
     return m_vertexBufferObject;
@@ -102,6 +104,7 @@ unsigned int Shape::get_EBO() const
 {
     return const_cast< Shape * >( this )->get_EBO();
 }
+
 unsigned int & Shape::get_EBO()
 {
     return m_elementBufferObject;

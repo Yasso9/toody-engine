@@ -1,22 +1,22 @@
 #include "camera.hpp"
 
-#include <string> // for allocator
+#include <string>  // for allocator
 
-#include <GLM/detail/type_vec3.hpp>     // for vec<>::(anonymous), vec
-#include <GLM/ext/matrix_float4x4.hpp>  // for mat4
-#include <GLM/glm.hpp>                  // for radians
-#include <GLM/gtc/matrix_transform.hpp> // for perspective
-#include <SFML/Window/Keyboard.hpp>     // for Keyboard, Keyboard::B, Keyb...
+#include <GLM/detail/type_vec3.hpp>      // for vec<>::(anonymous), vec
+#include <GLM/ext/matrix_float4x4.hpp>   // for mat4
+#include <GLM/glm.hpp>                   // for radians
+#include <GLM/gtc/matrix_transform.hpp>  // for perspective
+#include <SFML/Window/Keyboard.hpp>      // for Keyboard, Keyboard::B, Keyb...
 
-#include "input/input.hpp"          // for is_pressed, get_mouse_position
-#include "main/window.hpp"          // for Window
-#include "maths/geometry/point.tpp" // for Point::Point<Type>
-#include "maths/vector2.hpp"        // for Vector2F, Vector2I, Vector2U
-#include "maths/vector2.tpp"        // for operator==, Vector2::operat...
-#include "maths/vector3.hpp"        // for Vector3F
-#include "maths/vector3.tpp"        // for Vector3::rotate
-#include "tools/assertion.hpp"      // for ASSERTION
-#include "tools/singleton.tpp"      // for Singleton::get_instance
+#include "input/input.hpp"           // for is_pressed, get_mouse_position
+#include "main/window.hpp"           // for Window
+#include "maths/geometry/point.tpp"  // for Point::Point<Type>
+#include "maths/vector2.hpp"         // for Vector2F, Vector2I, Vector2U
+#include "maths/vector2.tpp"         // for operator==, Vector2::operat...
+#include "maths/vector3.hpp"         // for Vector3F
+#include "maths/vector3.tpp"         // for Vector3::rotate
+#include "tools/assertion.hpp"       // for ASSERTION
+#include "tools/singleton.tpp"       // for Singleton::get_instance
 
 // Default camera values
 // const float YAW = -90.0f;
@@ -61,10 +61,9 @@ glm::mat4 Camera::get_projection() const
     float const nearDistanceFromCamera { 0.1f };
     float const farDistanceFromCamera { 100.f };
 
-    return glm::perspective( fieldOfView,
-                             screenRatio,
-                             nearDistanceFromCamera,
-                             farDistanceFromCamera );
+    return glm::perspective(
+        fieldOfView, screenRatio, nearDistanceFromCamera,
+        farDistanceFromCamera );
 }
 
 glm::mat4 Camera::get_view() const
@@ -76,9 +75,8 @@ glm::mat4 Camera::get_view() const
 
     constexpr glm::vec3 const pureYAxis { 0.0f, 1.0f, 0.0f };
 
-    return glm::lookAt( this->m_position,
-                        this->get_target_position(),
-                        pureYAxis );
+    return glm::lookAt(
+        this->m_position, this->get_target_position(), pureYAxis );
 }
 
 void Camera::set_target_position( glm::vec3 targetPosition )
@@ -188,41 +186,40 @@ void Camera::update_keyboard_inputs_game( float deltaTime )
 
     if ( input::is_pressed( sf::Keyboard::Up ) )
     {
-        this->rotate( glm::vec3 { 1.f, 0.f, 0.f } * rotationSensivity,
-                      deltaTime );
+        this->rotate(
+            glm::vec3 { 1.f, 0.f, 0.f } * rotationSensivity, deltaTime );
     }
     if ( input::is_pressed( sf::Keyboard::Down ) )
     {
-        this->rotate( glm::vec3 { -1.f, 0.f, 0.f } * rotationSensivity,
-                      deltaTime );
+        this->rotate(
+            glm::vec3 { -1.f, 0.f, 0.f } * rotationSensivity, deltaTime );
     }
     if ( input::is_pressed( sf::Keyboard::Left ) )
     {
-        this->rotate( glm::vec3 { -1.f, 0.f, 0.f } * rotationSensivity,
-                      deltaTime );
+        this->rotate(
+            glm::vec3 { -1.f, 0.f, 0.f } * rotationSensivity, deltaTime );
     }
     if ( input::is_pressed( sf::Keyboard::Right ) )
     {
-        this->rotate( glm::vec3 { 1.f, 0.f, 0.f } * rotationSensivity,
-                      deltaTime );
+        this->rotate(
+            glm::vec3 { 1.f, 0.f, 0.f } * rotationSensivity, deltaTime );
     }
     if ( input::is_pressed( sf::Keyboard::B ) )
     {
-        this->rotate( glm::vec3 { 0.f, 0.f, -1.f } * rotationSensivity,
-                      deltaTime );
+        this->rotate(
+            glm::vec3 { 0.f, 0.f, -1.f } * rotationSensivity, deltaTime );
     }
     if ( input::is_pressed( sf::Keyboard::N ) )
     {
-        this->rotate( glm::vec3 { 1.f, 0.f, 1.f } * rotationSensivity,
-                      deltaTime );
+        this->rotate(
+            glm::vec3 { 1.f, 0.f, 1.f } * rotationSensivity, deltaTime );
     }
 }
 
 void Camera::update_mouse_inputs_game( float deltaTime )
 {
     math::Vector2F const windowCenter {
-        Window::get_instance().get_center_position()
-    };
+        Window::get_instance().get_center_position() };
     math::Vector2F const currentMousePosition { input::get_mouse_position() };
 
     if ( windowCenter == currentMousePosition )
@@ -248,11 +245,11 @@ void Camera::update_keyboard_inputs_editor( float deltaTime )
 {
     ( void )deltaTime;
 }
+
 void Camera::update_mouse_inputs_editor( float deltaTime )
 {
     math::Vector2F const windowCenter {
-        Window::get_instance().get_center_position()
-    };
+        Window::get_instance().get_center_position() };
     math::Vector2F const currentMousePosition { input::get_mouse_position() };
 
     if ( windowCenter == currentMousePosition )

@@ -2,7 +2,7 @@
 
 #include "singleton.hpp"
 
-template < typename SingletonClass >
+template< typename SingletonClass >
 SingletonClass & Singleton< SingletonClass >::get_instance()
 {
     static SingletonClass instance {};

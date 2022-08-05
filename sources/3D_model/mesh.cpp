@@ -1,16 +1,17 @@
 #include "mesh.hpp"
 
-#include <stdint.h> // for intptr_t
+#include <stdint.h>  // for intptr_t
 
-#include <GLAD/glad.h>              // for GL_ARRAY_BUFFER, GL_ELEMENT_ARRA...
-#include <SFML/Graphics/Shader.hpp> // for Shader
+#include <GLAD/glad.h>               // for GL_ARRAY_BUFFER, GL_ELEMENT_ARRA...
+#include <SFML/Graphics/Shader.hpp>  // for Shader
 
-#include "graphics3D/openGL.hpp"  // for draw_elements
-#include "graphics3D/texture.hpp" // for Texture, Texture::E_Type, Textur...
+#include "graphics3D/openGL.hpp"   // for draw_elements
+#include "graphics3D/texture.hpp"  // for Texture, Texture::E_Type, Textur...
 
-Mesh::Mesh( std::vector< S_Vertex > const & vertices,
-            std::vector< unsigned int > const & indices,
-            std::vector< std::string > const & textures )
+Mesh::Mesh(
+    std::vector< S_Vertex > const &     vertices,
+    std::vector< unsigned int > const & indices,
+    std::vector< std::string > const &  textures )
   : m_vertices( vertices ),
     m_indices( indices ),
     m_textures( textures ),
@@ -23,8 +24,9 @@ Mesh::Mesh( std::vector< S_Vertex > const & vertices,
     this->generate();
 }
 
-void Mesh::update( sf::Shader & shader,
-                   std::map< std::string, Texture > const & textureLoaded )
+void Mesh::update(
+    sf::Shader &                             shader,
+    std::map< std::string, Texture > const & textureLoaded )
 {
     // bind appropriate textures
     unsigned int diffuseNr { 1u };
@@ -54,21 +56,18 @@ void Mesh::update( sf::Shader & shader,
 
         // Name of the uniform variable in the shader source file
         std::string const uniformVariableName {
-            textureLoaded.at( texturePath ).get_type_name() + number
-        };
+            textureLoaded.at( texturePath ).get_type_name() + number };
 
-        shader.setUniform( uniformVariableName,
-                           textureLoaded.at( texturePath ) );
+        shader.setUniform(
+            uniformVariableName, textureLoaded.at( texturePath ) );
     }
 }
 
 void Mesh::draw() const
 {
     // draw mesh
-    gl::draw_elements( this->VAO,
-                       GL_TRIANGLES,
-                       GL_UNSIGNED_INT,
-                       this->m_indices.size() );
+    gl::draw_elements(
+        this->VAO, GL_TRIANGLES, GL_UNSIGNED_INT, this->m_indices.size() );
 }
 
 void Mesh::generate()
@@ -81,27 +80,26 @@ void Mesh::generate()
     glBindVertexArray( VAO );
     // load data into vertex buffers
     glBindBuffer( GL_ARRAY_BUFFER, VBO );
-    // A great thing about structs is that their memory layout is sequential for all its items.
-    // The effect is that we can simply pass a pointer to the struct and it translates perfectly to a glm::vec3/2 array which
-    // again translates to 3/2 floats which translates to a byte array.
+    // A great thing about structs is that their memory layout is sequential for
+    // all its items. The effect is that we can simply pass a pointer to the
+    // struct and it translates perfectly to a glm::vec3/2 array which again
+    // translates to 3/2 floats which translates to a byte array.
     glBufferData(
         GL_ARRAY_BUFFER,
         static_cast< long >( this->m_vertices.size() * sizeof( S_Vertex ) ),
-        &m_vertices[0],
-        GL_STATIC_DRAW );
+        &m_vertices[0], GL_STATIC_DRAW );
 
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, EBO );
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
         static_cast< long >( this->m_indices.size() * sizeof( unsigned int ) ),
-        &this->m_indices[0],
-        GL_STATIC_DRAW );
+        &this->m_indices[0], GL_STATIC_DRAW );
 
     std::vector< unsigned int > dataPerPoint { 3u, 3u, 2u, 3u, 3u, 4u, 4u };
-    GLenum const valueType { GL_FLOAT };
-    GLenum const hasDataToBeNormalised { GL_FALSE };
-    unsigned int const fullSize { sizeof( S_Vertex ) };
-    unsigned int vectorSizeCounter { 0u };
+    GLenum const                valueType { GL_FLOAT };
+    GLenum const                hasDataToBeNormalised { GL_FALSE };
+    unsigned int const          fullSize { sizeof( S_Vertex ) };
+    unsigned int                vectorSizeCounter { 0u };
 
     for ( unsigned int location { 0u }; location < 7; ++location )
     {
@@ -109,12 +107,9 @@ void Mesh::generate()
             static_cast< intptr_t >( vectorSizeCounter * sizeof( float ) ) ) };
 
         glEnableVertexAttribArray( location );
-        glVertexAttribPointer( location,
-                               static_cast< int >( dataPerPoint[location] ),
-                               valueType,
-                               hasDataToBeNormalised,
-                               fullSize,
-                               offsetStart );
+        glVertexAttribPointer(
+            location, static_cast< int >( dataPerPoint[location] ), valueType,
+            hasDataToBeNormalised, fullSize, offsetStart );
 
         vectorSizeCounter += dataPerPoint[location];
     }

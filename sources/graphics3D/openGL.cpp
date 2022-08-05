@@ -1,11 +1,11 @@
 #include "openGL.hpp"
 
-#include <stdexcept> // for runtime_error
-#include <string>    // for allocator, string, operator+
+#include <stdexcept>  // for runtime_error
+#include <string>     // for allocator, string, operator+
 
-#include <GLM/detail/type_vec3.hpp> // for vec<>::(anonymous)
-#include <SFML/Graphics/Color.hpp>  // for Color
-#include <SFML/Window/Context.hpp>  // for Context
+#include <GLM/detail/type_vec3.hpp>  // for vec<>::(anonymous)
+#include <SFML/Graphics/Color.hpp>   // for Color
+#include <SFML/Window/Context.hpp>   // for Context
 
 namespace gl
 {
@@ -20,36 +20,38 @@ namespace gl
                 // enable openGL Z buffer
                 glEnable( GL_DEPTH_TEST );
             }
+
             ~BindVertexArray()
             {
                 glDisable( GL_DEPTH_TEST );
                 glBindVertexArray( 0 );
             }
         };
-    } // namespace
+    }  // namespace
 
-    void draw_elements( unsigned int vertexArrayObject, GLenum primitiveType,
-                        GLenum dataType, std::size_t elementsSize )
+    void draw_elements (
+        unsigned int vertexArrayObject, GLenum primitiveType, GLenum dataType,
+        std::size_t elementsSize )
     {
         BindVertexArray VAOBinding { vertexArrayObject };
 
-        glDrawElements( primitiveType,
-                        static_cast< int >( elementsSize ),
-                        dataType,
-                        0 );
+        glDrawElements(
+            primitiveType, static_cast< int >( elementsSize ), dataType, 0 );
     }
-    void draw_arrays( unsigned int vertexArrayObject, GLenum primitiveType,
-                      unsigned int arraySize )
+
+    void draw_arrays (
+        unsigned int vertexArrayObject, GLenum primitiveType,
+        unsigned int arraySize )
     {
         BindVertexArray VAOBinding { vertexArrayObject };
 
         int const verticesBeginPosition { 0 };
-        glDrawArrays( primitiveType,
-                      verticesBeginPosition,
-                      static_cast< int >( arraySize ) );
+        glDrawArrays(
+            primitiveType, verticesBeginPosition,
+            static_cast< int >( arraySize ) );
     }
 
-    void initialize( unsigned int const & width, unsigned int const & height )
+    void initialize ( unsigned int const & width, unsigned int const & height )
     {
         // Load glad so we can use openGL function
         if ( ! gladLoadGLLoader( reinterpret_cast< GLADloadproc >(
@@ -67,35 +69,32 @@ namespace gl
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
         // Je ne sais pas ce que c'est ?
-        glViewport( 0,
-                    0,
-                    static_cast< int >( width ),
-                    static_cast< int >( height ) );
+        glViewport(
+            0, 0, static_cast< int >( width ), static_cast< int >( height ) );
     }
 
-    void clear_window( sf::Color const & backgroundColor )
+    void clear_window ( sf::Color const & backgroundColor )
     {
-        glClearColor( backgroundColor.r,
-                      backgroundColor.g,
-                      backgroundColor.b,
-                      backgroundColor.a );
+        glClearColor(
+            backgroundColor.r, backgroundColor.g, backgroundColor.b,
+            backgroundColor.a );
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     }
 
-    void set_wireframe()
+    void set_wireframe ()
     {
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     }
 
-    void remove_wireframe()
+    void remove_wireframe ()
     {
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     }
 
-    void check_error()
+    void check_error ()
     {
-        GLenum errorCode;
-        std::string errorMessage { "" };
+        GLenum       errorCode;
+        std::string  errorMessage { "" };
         unsigned int numberOfError { 0u };
 
         if ( ( errorCode = glGetError() ) != GL_NO_ERROR )
@@ -135,9 +134,9 @@ namespace gl
 
         // ASSERTION( numberOfError == 0u, errorMessage );
     }
-} // namespace gl
+}  // namespace gl
 
-std::ostream & operator<<( std::ostream & stream, glm::vec3 const & vector3 )
+std::ostream & operator<< ( std::ostream & stream, glm::vec3 const & vector3 )
 {
     return stream << "( " << vector3.x << ", " << vector3.y << ", " << vector3.z
                   << " )";

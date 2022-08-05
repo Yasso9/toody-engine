@@ -1,50 +1,49 @@
 #include "editor_state.hpp"
 
-#include <algorithm> // for max
-#include <sstream>   // for operator<<, basic_ostream
-#include <stddef.h>  // for NULL
-#include <vector>    // for vector
+#include <algorithm>  // for max
+#include <sstream>    // for operator<<, basic_ostream
+#include <stddef.h>   // for NULL
+#include <vector>     // for vector
 
-#include <IMGUI/imgui.h>           // for Begin, End, MenuItem, Text
-#include <SFML/Graphics/Color.hpp> // for Color, Color::Black, Color::...
-#include <SFML/System/Vector2.hpp> // for Vector2f
-#include <SFML/Window/Mouse.hpp>   // for Mouse, Mouse::Right
+#include <IMGUI/imgui.h>            // for Begin, End, MenuItem, Text
+#include <SFML/Graphics/Color.hpp>  // for Color, Color::Black, Color::...
+#include <SFML/System/Vector2.hpp>  // for Vector2f
+#include <SFML/Window/Mouse.hpp>    // for Mouse, Mouse::Right
 
-#include "graphics2D/component.tpp"     // for Component::add_child
-#include "graphics2D/sfml.hpp"          // for operator<<
-#include "graphics2D/static_entity.hpp" // for StaticEntity2D
-#include "graphics2D/view.hpp"          // for View
-#include "input/input.hpp"              // for get_mouse_movement, get_mous...
-#include "libraries/imgui.hpp"          // for P_Begin
-#include "main/window.hpp"              // for Window
-#include "maths/geometry/point.hpp"     // for PointF
-#include "maths/geometry/polygon.hpp"   // for PolygonF
-#include "maths/geometry/polygon.tpp"   // for Polygon::Polygon<Type>, Poly...
-#include "maths/geometry/rectangle.hpp" // for RectangleF
-#include "maths/vector2.hpp"            // for Vector2F, Vector2, Vector2U
-#include "maths/vector2.tpp"            // for operator<<, operator*, opera...
-#include "tools/singleton.tpp"          // for Singleton::get_instance
+#include "graphics2D/component.tpp"      // for Component::add_child
+#include "graphics2D/sfml.hpp"           // for operator<<
+#include "graphics2D/static_entity.hpp"  // for StaticEntity2D
+#include "graphics2D/view.hpp"           // for View
+#include "input/input.hpp"               // for get_mouse_movement, get_mous...
+#include "libraries/imgui.hpp"           // for P_Begin
+#include "main/window.hpp"               // for Window
+#include "maths/geometry/point.hpp"      // for PointF
+#include "maths/geometry/polygon.hpp"    // for PolygonF
+#include "maths/geometry/polygon.tpp"    // for Polygon::Polygon<Type>, Poly...
+#include "maths/geometry/rectangle.hpp"  // for RectangleF
+#include "maths/vector2.hpp"             // for Vector2F, Vector2, Vector2U
+#include "maths/vector2.tpp"             // for operator<<, operator*, opera...
+#include "tools/singleton.tpp"           // for Singleton::get_instance
 
 EditorState::EditorState()
   : State( State::E_List::Editor ),
     m_showWindow {
-        {"demo_window",      false},
-        { "debug_options",   false},
-        { "editor_overlay",  true },
-        { "collision",       true },
-        { "player_handling", false},
-        { "view",            false},
+        {    "demo_window", false},
+        {  "debug_options", false},
+        { "editor_overlay",  true},
+        {      "collision",  true},
+        {"player_handling", false},
+        {           "view", false},
 },
     m_tilemap { m_view },
     m_imageMap {},
-    m_collisionList { std::vector {
-        StaticEntity2D { math::RectangleF { 100.f, 100.f, 50.f, 50.f } },
-        StaticEntity2D { math::RectangleF { -300.f, 0.f, 200.f, 200.f } },
-        StaticEntity2D { math::RectangleF { 0.f, 500.f, 100.f, 50.f } } } },
-    m_greenEntity { math::RectangleF { 0.f, 0.f, 40.f, 40.f },
-                    m_collisionList,
-                    m_view,
-                    input::ILKJ },
+    m_collisionList {
+        { StaticEntity2D { math::RectangleF { 100.f, 100.f, 50.f, 50.f } },
+          StaticEntity2D { math::RectangleF { -300.f, 0.f, 200.f, 200.f } },
+          StaticEntity2D { math::RectangleF { 0.f, 500.f, 100.f, 50.f } } } },
+    m_greenEntity {
+        math::RectangleF { 0.f, 0.f, 40.f, 40.f }, m_collisionList, m_view,
+        input::ILKJ },
     m_player {}
 {
     this->add_child( m_tilemap );
@@ -96,22 +95,13 @@ void EditorState::update_view( float /* deltaTime */ )
     static float viewScrollSpeed { 0.2f };
     static float viewMoveSpeedBase { 1.f };
 
-    /// @todo use this function for all Imgui::P_Begin
-    ImGui::P_Begin( "View Options",
-                    &m_showWindow.at( "view" ),
-                    []()
-                    {
-                        ImGui::SliderFloat( "View Scroll Speed",
-                                            &viewScrollSpeed,
-                                            0.f,
-                                            5.f,
-                                            "%.2f" );
-                        ImGui::SliderFloat( "View Movement Speed",
-                                            &viewMoveSpeedBase,
-                                            0.f,
-                                            50.f,
-                                            "%.0f" );
-                    } );
+    ///@todo use this function for all Imgui::P_Begin
+    ImGui::P_Begin( "View Options", &m_showWindow.at( "view" ), [] () {
+        ImGui::SliderFloat(
+            "View Scroll Speed", &viewScrollSpeed, 0.f, 5.f, "%.2f" );
+        ImGui::SliderFloat(
+            "View Movement Speed", &viewMoveSpeedBase, 0.f, 50.f, "%.0f" );
+    } );
 
     float const viewScrollValue { input::get_mouse_scroll() * viewScrollSpeed };
     math::Vector2F const viewMoveSpeed {
@@ -146,18 +136,17 @@ void EditorState::update_toolbar()
     {
         if ( ImGui::BeginMenu( "Options" ) )
         {
-            ImGui::MenuItem( "Show Editor Overlay Options",
-                             NULL,
-                             &m_showWindow.at( "editor_overlay" ) );
-            ImGui::MenuItem( "Show ImGui Demo Window",
-                             NULL,
-                             &m_showWindow.at( "demo_window" ) );
-            ImGui::MenuItem( "Show Debug Options",
-                             NULL,
-                             &m_showWindow.at( "debug_options" ) );
-            ImGui::MenuItem( "Show View Options",
-                             NULL,
-                             &m_showWindow.at( "view" ) );
+            ImGui::MenuItem(
+                "Show Editor Overlay Options", NULL,
+                &m_showWindow.at( "editor_overlay" ) );
+            ImGui::MenuItem(
+                "Show ImGui Demo Window", NULL,
+                &m_showWindow.at( "demo_window" ) );
+            ImGui::MenuItem(
+                "Show Debug Options", NULL,
+                &m_showWindow.at( "debug_options" ) );
+            ImGui::MenuItem(
+                "Show View Options", NULL, &m_showWindow.at( "view" ) );
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
@@ -236,21 +225,20 @@ void EditorState::update_overlay()
             | ImGuiWindowFlags_NoMove;
 
         constexpr math::Vector2F const PADDINGS { 10.f, 10.f };
-        math::Vector2F const overlayPosition {
-            math::Vector2F { ImGui::GetMainViewport()->WorkPos } + PADDINGS
-        };
+        math::Vector2F const           overlayPosition {
+            math::Vector2F { ImGui::GetMainViewport()->WorkPos } + PADDINGS };
         ImGui::SetNextWindowPos( overlayPosition, ImGuiCond_Always );
         ImGui::SetNextWindowBgAlpha( 0.5f );
-        if ( ImGui::Begin( "Editor Main",
-                           &m_showWindow.at( "editor_overlay" ),
-                           window_flags ) )
+        if ( ImGui::Begin(
+                 "Editor Main", &m_showWindow.at( "editor_overlay" ),
+                 window_flags ) )
         {
             static bool customizeCollision { false };
             ImGui::Checkbox( "Customize Collisions ?", &customizeCollision );
             m_collisionList.set_customisation( customizeCollision );
 
-            ImGui::Checkbox( "Handle Player ?",
-                             &m_showWindow.at( "player_handling" ) );
+            ImGui::Checkbox(
+                "Handle Player ?", &m_showWindow.at( "player_handling" ) );
 
             static bool showDebug { false };
             ImGui::Checkbox( "Show Debug", &showDebug );

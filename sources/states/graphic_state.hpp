@@ -1,11 +1,11 @@
 #pragma once
 
-#include <vector> // for vector
+#include <vector>  // for vector
 
-#include "3D_model/model.hpp"    // for Model
-#include "graphics3D/camera.hpp" // for Camera
-#include "graphics3D/shape.hpp"  // for Shape
-#include "states/state.hpp"      // for State
+#include "3D_model/model.hpp"     // for Model
+#include "graphics3D/camera.hpp"  // for Camera
+#include "graphics3D/shape.hpp"   // for Shape
+#include "states/state.hpp"       // for State
 
 class GraphicState final : public State
 {
@@ -17,8 +17,8 @@ class GraphicState final : public State
   public:
     GraphicState();
 
-    void update_before( float deltaTime ) override;
+    void update_before ( float deltaTime ) override;
 
   private:
-    void mouse_scroll( float const & deltaScroll ) override;
+    void mouse_scroll ( float const & deltaScroll ) override;
 };

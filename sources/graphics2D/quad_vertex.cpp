@@ -1,11 +1,11 @@
 #include "quad_vertex.hpp"
 
-#include <SFML/Graphics/PrimitiveType.hpp> // for Quads
-#include <SFML/Graphics/Vertex.hpp>        // for Vertex
-#include <SFML/System/Vector2.hpp>         // for Vector2f
+#include <SFML/Graphics/PrimitiveType.hpp>  // for Quads
+#include <SFML/Graphics/Vertex.hpp>         // for Vertex
+#include <SFML/System/Vector2.hpp>          // for Vector2f
 
-#include "maths/geometry/point.hpp" // for Point
-#include "maths/vector2.tpp"        // for operator+, Vector2::opera...
+#include "maths/geometry/point.hpp"  // for Point
+#include "maths/vector2.tpp"         // for operator+, Vector2::opera...
 
 QuadVertex::QuadVertex() : array( sf::Quads, 4 ) {};
 
@@ -13,6 +13,7 @@ math::Vector2F QuadVertex::get_position() const
 {
     return { this->array[0].position };
 }
+
 math::Vector2F QuadVertex::get_texture_position() const
 {
     return { this->array[0].texCoords };
@@ -28,6 +29,7 @@ void QuadVertex::set_position( math::RectangleF const & rectangle )
     this->array[3].position =
         rectangle.position + math::Vector2F { 0.f, rectangle.size.y };
 }
+
 void QuadVertex::set_texture_coord( math::RectangleF const & rectangle )
 {
     this->array[0].texCoords = rectangle.position;

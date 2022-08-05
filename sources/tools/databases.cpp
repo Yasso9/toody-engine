@@ -1,22 +1,22 @@
 #include "databases.hpp"
 
-#include <iostream> // for operator<<, basic_ostream, endl
-#include <vector>   // for vector
+#include <iostream>  // for operator<<, basic_ostream, endl
+#include <vector>    // for vector
 
 extern "C"
 {
-#include <SQLITE/sqlite3.h> // for sqlite3_close, sqlite3_errmsg
+#include <SQLITE/sqlite3.h>  // for sqlite3_close, sqlite3_errmsg
 }
 
-#include "tools/exceptions.hpp"    // for Database
-#include "tools/path.hpp"          // for get_file_str, E_File, E_File::Dat...
-#include "tools/serialization.hpp" // for Unserializer, Serializer
-#include "tools/serialization.tpp" // for operator<<, Serializer::Serialize...
+#include "tools/exceptions.hpp"     // for Database
+#include "tools/path.hpp"           // for get_file_str, E_File, E_File::Dat...
+#include "tools/serialization.hpp"  // for Unserializer, Serializer
+#include "tools/serialization.tpp"  // for operator<<, Serializer::Serialize...
 
 static std::string s_requestResult {};
 
-static int callback( void * /* data */, int argc, char ** argv,
-                     char ** azColName )
+static int callback (
+    void * /* data */, int argc, char ** argv, char ** azColName )
 {
     for ( unsigned int i { 0u }; i < static_cast< unsigned int >( argc ); ++i )
     {
@@ -36,28 +36,25 @@ static int callback( void * /* data */, int argc, char ** argv,
 /// @todo create a singleton and initialize sqlite3_open
 namespace db
 {
-    Unserializer request( std::string const & request )
+    Unserializer request ( std::string const & request )
     {
-        std::string const databasePath { path::get_file_str(
-            path::E_File::Database ) };
+        std::string const databasePath {
+            path::get_file_str( path::E_File::Database ) };
 
         sqlite3 * database { nullptr };
         if ( sqlite3_open( databasePath.c_str(), &database ) )
         {
-            throw exception::Database { databasePath,
-                                        "Can't open database - "s
-                                            + sqlite3_errmsg( database ) };
+            throw exception::Database {
+                databasePath,
+                "Can't open database - "s + sqlite3_errmsg( database ) };
         }
 
         // Reset before every request
         s_requestResult.clear();
 
         char * requestErrorMessage { const_cast< char * >( "" ) };
-        int result = sqlite3_exec( database,
-                                   request.c_str(),
-                                   callback,
-                                   0,
-                                   &requestErrorMessage );
+        int    result = sqlite3_exec(
+               database, request.c_str(), callback, 0, &requestErrorMessage );
 
         if ( result != 0 )
         {
@@ -70,36 +67,37 @@ namespace db
         return Unserializer { s_requestResult };
     }
 
-    void test_database()
+    void test_database ()
     {
         // Initialisation de la database
 
-        Unserializer initRequest = db::request( "DROP TABLE IF EXISTS tilemap;"
-                                                "CREATE TABLE tilemap ("
-                                                "tile_table TEXT NOT NULL"
-                                                ");" );
+        Unserializer initRequest = db::request(
+            "DROP TABLE IF EXISTS tilemap;"
+            "CREATE TABLE tilemap ("
+            "tile_table TEXT NOT NULL"
+            ");" );
         std::cout << "initRequest : |" << initRequest.get_content() << "|"
                   << std::endl;
 
         std::vector< std::vector< std::vector< unsigned int > > > tripleArray {
-            {{ 0 },  { 2 }},
-            { { 2 }, { 0 }}
+            {{ 0 }, { 2 }},
+            {{ 2 }, { 0 }}
         };
 
         std::cout << "tripleArray : |" << tripleArray << "|" << std::endl;
         std::cout << "tripleArray serialized : |"
                   << Serializer( tripleArray ).to_string() << "|" << std::endl;
 
-        Unserializer insertionRequest =
-            db::request( "INSERT INTO tilemap (tile_table)"
-                         "VALUES('"
-                         + Serializer { tripleArray }.to_string() + "');" );
+        Unserializer insertionRequest = db::request(
+            "INSERT INTO tilemap (tile_table)"
+            "VALUES('"
+            + Serializer { tripleArray }.to_string() + "');" );
 
         std::cout << "insertionRequest : |" << insertionRequest.get_content()
                   << "|" << std::endl;
 
-        Unserializer selectionRequest { db::request(
-            "SELECT tile_table FROM tilemap;" ) };
+        Unserializer selectionRequest {
+            db::request( "SELECT tile_table FROM tilemap;" ) };
 
         std::cout << "selectionRequest content : |"
                   << selectionRequest.get_content() << "|" << std::endl;
@@ -107,4 +105,4 @@ namespace db
                   << selectionRequest.to_value< decltype( tripleArray ) >()
                   << "|" << std::endl;
     }
-} // namespace db
+}  // namespace db

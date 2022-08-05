@@ -3,9 +3,9 @@
 #include "serialization.hpp"
 #include "tools/print.hpp"
 
-template < typename Type >
-std::ostream & operator<<( std::ostream & stream,
-                           std::vector< Type > const & array )
+template< typename Type >
+std::ostream & operator<< (
+    std::ostream & stream, std::vector< Type > const & array )
 {
     stream << '[';
     stream << ' ';
@@ -19,8 +19,8 @@ std::ostream & operator<<( std::ostream & stream,
     return stream;
 }
 
-template < typename Type >
-std::istream & operator>>( std::istream & stream, std::vector< Type > & array )
+template< typename Type >
+std::istream & operator>> ( std::istream & stream, std::vector< Type > & array )
 {
     array = std::vector< Type > {};
 
@@ -40,13 +40,13 @@ std::istream & operator>>( std::istream & stream, std::vector< Type > & array )
     return stream;
 }
 
-template < typename TypeToSerialize >
+template< typename TypeToSerialize >
 Serializer< TypeToSerialize >::Serializer(
     TypeToSerialize const & valueToSerialize )
   : m_valueToSerialize( valueToSerialize )
 {}
 
-template < typename TypeToSerialize >
+template< typename TypeToSerialize >
 std::string Serializer< TypeToSerialize >::to_string() const
 {
     std::ostringstream stream {};
@@ -54,7 +54,7 @@ std::string Serializer< TypeToSerialize >::to_string() const
     return stream.str();
 }
 
-template < typename TypeToUnserialize >
+template< typename TypeToUnserialize >
 TypeToUnserialize Unserializer::to_value() const
 {
     std::stringstream stream {};

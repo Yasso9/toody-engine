@@ -1,21 +1,21 @@
 #include "tile_selector.hpp"
 
-#include <sstream> // for operator<<, basic_ostream, stri...
-#include <string>  // for char_traits, allocator, basic_s...
+#include <sstream>  // for operator<<, basic_ostream, stri...
+#include <string>   // for char_traits, allocator, basic_s...
 
-#include <IMGUI/imgui-SFML.h>      // for Image
-#include <IMGUI/imgui.h>           // for GetWindowDrawList, IsWindowHovered
-#include <SFML/Graphics/Color.hpp> // for Color
-#include <SFML/Window/Mouse.hpp>   // for Mouse, Mouse::Button, Mouse::Left
+#include <IMGUI/imgui-SFML.h>       // for Image
+#include <IMGUI/imgui.h>            // for GetWindowDrawList, IsWindowHovered
+#include <SFML/Graphics/Color.hpp>  // for Color
+#include <SFML/Window/Mouse.hpp>    // for Mouse, Mouse::Button, Mouse::Left
 
-#include "input/input.hpp"           // for get_mouse_position, is_pressed
-#include "libraries/imgui.hpp"       // for table_to_sfml, to_integer, to_t...
-#include "main/resources.hpp"        // for get_texture
-#include "maths/geometry/point.tpp"  // for Point::Point<Type>
-#include "maths/numerics.hpp"        // for division_reminder_u
-#include "maths/vector2.hpp"         // for Vector2F, Vector2, Vector2I
-#include "maths/vector2.tpp"         // for operator<<, operator+, Vector2:...
-#include "tools/global_variable.hpp" // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZE_U
+#include "input/input.hpp"            // for get_mouse_position, is_pressed
+#include "libraries/imgui.hpp"        // for table_to_sfml, to_integer, to_t...
+#include "main/resources.hpp"         // for get_texture
+#include "maths/geometry/point.tpp"   // for Point::Point<Type>
+#include "maths/numerics.hpp"         // for division_reminder_u
+#include "maths/vector2.hpp"          // for Vector2F, Vector2, Vector2I
+#include "maths/vector2.tpp"          // for operator<<, operator+, Vector2:...
+#include "tools/global_variable.hpp"  // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZE_U
 
 TileSelector::TileSelector()
   : m_tileset( resources::get_texture( "ground.png" ) ),
@@ -61,65 +61,63 @@ void TileSelector::update_grid( ImDrawList & drawList )
     math::Vector2F const scrolling { 0.f, 0.f };
 
     // Tilemap Border
-    drawList.AddRect( this->m_tileset.get_position(),
-                      this->m_tileset.get_end_position(),
-                      ImGui::color::to_integer( ImGui::color::table_to_sfml(
-                          this->m_gridColorTable ) ) );
+    drawList.AddRect(
+        this->m_tileset.get_position(), this->m_tileset.get_end_position(),
+        ImGui::color::to_integer(
+            ImGui::color::table_to_sfml( this->m_gridColorTable ) ) );
 
     // Horizontal lines of the grid
     for ( unsigned int x {
               math::division_reminder_u( scrolling.x, TILE_PIXEL_SIZE ) };
-          x < this->m_tileset.get_size_in_pixel().x;
-          x += TILE_PIXEL_SIZE_U )
+          x < this->m_tileset.get_size_in_pixel().x; x += TILE_PIXEL_SIZE_U )
     {
         math::Vector2F const pointA {
             this->m_tileset.get_position()
             + math::Vector2F {static_cast< float >( x ), 0.f}
         };
-        math::Vector2F const pointB { this->m_tileset.get_position().x
-                                          + static_cast< float >( x ),
-                                      this->m_tileset.get_end_position().y };
+        math::Vector2F const pointB {
+            this->m_tileset.get_position().x + static_cast< float >( x ),
+            this->m_tileset.get_end_position().y };
 
-        drawList.AddLine( pointA,
-                          pointB,
-                          ImGui::color::to_integer( ImGui::color::table_to_sfml(
-                              this->m_gridColorTable ) ) );
+        drawList.AddLine(
+            pointA, pointB,
+            ImGui::color::to_integer(
+                ImGui::color::table_to_sfml( this->m_gridColorTable ) ) );
     }
     // Vertical lines of the grid
     for ( unsigned int y {
               math::division_reminder_u( scrolling.y, TILE_PIXEL_SIZE ) };
-          y < this->m_tileset.get_size_in_pixel().y;
-          y += TILE_PIXEL_SIZE_U )
+          y < this->m_tileset.get_size_in_pixel().y; y += TILE_PIXEL_SIZE_U )
     {
-        math::Vector2F const pointA { this->m_tileset.get_position().x,
-                                      this->m_tileset.get_position().y
-                                          + static_cast< float >( y ) };
-        math::Vector2F const pointB { this->m_tileset.get_end_position().x,
-                                      this->m_tileset.get_position().y
-                                          + static_cast< float >( y ) };
+        math::Vector2F const pointA {
+            this->m_tileset.get_position().x,
+            this->m_tileset.get_position().y + static_cast< float >( y ) };
+        math::Vector2F const pointB {
+            this->m_tileset.get_end_position().x,
+            this->m_tileset.get_position().y + static_cast< float >( y ) };
 
-        drawList.AddLine( pointA,
-                          pointB,
-                          ImGui::color::to_integer( ImGui::color::table_to_sfml(
-                              this->m_gridColorTable ) ) );
+        drawList.AddLine(
+            pointA, pointB,
+            ImGui::color::to_integer(
+                ImGui::color::table_to_sfml( this->m_gridColorTable ) ) );
     }
 }
+
 void TileSelector::update_selection( ImDrawList & drawList )
 {
     math::Vector2F const mousePosition { input::get_mouse_position() };
-    bool const isInSelection { ImGui::IsWindowHovered()
-                               && this->m_tileset.contain( mousePosition ) };
+    bool const           isInSelection {
+        ImGui::IsWindowHovered() && this->m_tileset.contain( mousePosition ) };
     if ( isInSelection )
     {
         // Calculate the position of the selection rectangle
         math::Vector2F const selectionPosition {
-            this->m_tileset.get_tile_position_in_pixel( mousePosition, false )
-        };
+            this->m_tileset.get_tile_position_in_pixel(
+                mousePosition, false ) };
 
         // Selection Rectangle
         drawList.AddRectFilled(
-            selectionPosition,
-            selectionPosition + TILE_PIXEL_SIZE_VECTOR,
+            selectionPosition, selectionPosition + TILE_PIXEL_SIZE_VECTOR,
             ImGui::color::to_integer(
                 ImGui::color::table_to_sfml( this->m_gridColorTable ) ) );
 
@@ -128,15 +126,13 @@ void TileSelector::update_selection( ImDrawList & drawList )
                         << "\n";
         outputSelection << "Selection tile position : "
                         << this->m_tileset.get_tile_position_in_tile(
-                               mousePosition,
-                               false )
+                               mousePosition, false )
                         << "\n";
         outputSelection << "Tileset Size : "
                         << this->m_tileset.get_size_in_tile() << "\n";
         int const tileHovered {
-            this->m_tileset.get_tile_value_from_pixel_position( mousePosition,
-                                                                false )
-        };
+            this->m_tileset.get_tile_value_from_pixel_position(
+                mousePosition, false ) };
         outputSelection << "Tile Hovered : " << tileHovered << "\n";
         if ( input::is_pressed( sf::Mouse::Button::Left ) )
         {

@@ -4,21 +4,21 @@
 
 namespace tools
 {
-    template < typename Type >
-    std::size_t size_of( std::vector< Type > const & array )
+    template< typename Type >
+    std::size_t size_of ( std::vector< Type > const & array )
     {
         return array.size() * sizeof( Type );
     }
 
-    template < typename Type >
-    Type const * to_c_style_array( std::vector< Type > const & array )
+    template< typename Type >
+    Type const * to_c_style_array ( std::vector< Type > const & array )
     {
         return &array[0];
     }
 
     /// @brief Check if the all the size of the subvectors are equal
-    template < typename Type >
-    bool is_rectangle(
+    template< typename Type >
+    bool is_rectangle (
         std::vector< std::vector< Type > > const & dimensionnalVector )
     {
         if ( dimensionnalVector.empty() )
@@ -27,7 +27,7 @@ namespace tools
             return true;
         }
 
-        bool sameSizeForAllColumn { true };
+        bool        sameSizeForAllColumn { true };
         std::size_t baseColumnSize { dimensionnalVector[0].size() };
         for ( auto const & element : dimensionnalVector )
         {
@@ -40,4 +40,4 @@ namespace tools
 
         return sameSizeForAllColumn;
     }
-} // namespace tools
+}  // namespace tools

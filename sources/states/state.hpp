@@ -1,14 +1,14 @@
 #pragma once
 
-#include "graphics2D/component.hpp" // for Component2D
-#include "graphics2D/view.hpp"      // for View
+#include "graphics2D/component.hpp"  // for Component2D
+#include "graphics2D/view.hpp"       // for View
 
 class Render;
 
 namespace sf
 {
     class Event;
-} // namespace sf
+}  // namespace sf
 
 class State : public Component2D
 {
@@ -31,7 +31,7 @@ class State : public Component2D
   protected:
     /** @brief value corresponding of the state that the game should run */
     State::E_List m_stateName;
-    View m_view;
+    View          m_view;
 
     State( State::E_List const & stateName );
 
@@ -40,21 +40,22 @@ class State : public Component2D
      * @brief Know the next state to render after the input update.
      * @returns State::E_List value of the next state to print
      */
-    State::E_List get_state_to_print() const;
+    State::E_List get_state_to_print () const;
 
-    /// @brief Update any change that can happen by an event. Must be called in the pollevent function
-    void update_inputs( sf::Event const & event );
+    /// @brief Update any change that can happen by an event. Must be called in
+    /// the pollevent function
+    void update_inputs ( sf::Event const & event );
 
   private:
-    void render_before( Render & render ) const override;
-    void render_after( Render & render ) const override;
+    void render_before ( Render & render ) const override;
+    void render_after ( Render & render ) const override;
 
-    virtual void keyboard_pressed( sf::Event event );
-    virtual void keyboard_released( sf::Event event );
+    virtual void keyboard_pressed ( sf::Event event );
+    virtual void keyboard_released ( sf::Event event );
 
-    virtual void mouse_pressed( sf::Event event );
-    virtual void mouse_released( sf::Event event );
-    virtual void mouse_moved( sf::Event event );
+    virtual void mouse_pressed ( sf::Event event );
+    virtual void mouse_released ( sf::Event event );
+    virtual void mouse_moved ( sf::Event event );
 
-    virtual void mouse_scroll( float const & deltaScroll );
+    virtual void mouse_scroll ( float const & deltaScroll );
 };

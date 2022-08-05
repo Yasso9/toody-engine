@@ -1,11 +1,11 @@
 #include "path.hpp"
 
-#include "tools/assertion.hpp"  // for ASSERTION
-#include "tools/exceptions.hpp" // for FileIssue
+#include "tools/assertion.hpp"   // for ASSERTION
+#include "tools/exceptions.hpp"  // for FileIssue
 
 namespace path
 {
-    std::filesystem::path get_file( E_File const & filePath )
+    std::filesystem::path get_file ( E_File const & filePath )
     {
         std::filesystem::path fileRelativPath {};
 
@@ -28,12 +28,12 @@ namespace path
         return fileRelativPath;
     }
 
-    std::string get_file_str( E_File const & filePath )
+    std::string get_file_str ( E_File const & filePath )
     {
         return get_file( filePath ).string();
     }
 
-    std::filesystem::path get_folder( E_Folder const & folderPath )
+    std::filesystem::path get_folder ( E_Folder const & folderPath )
     {
         std::filesystem::path folderRelativPath {};
 
@@ -61,8 +61,8 @@ namespace path
         return folderRelativPath;
     }
 
-    std::string get_folder_str( E_Folder const & folderPath )
+    std::string get_folder_str ( E_Folder const & folderPath )
     {
         return get_folder( folderPath ).string();
     }
-} // namespace path
+}  // namespace path

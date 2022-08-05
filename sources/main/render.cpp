@@ -4,7 +4,7 @@ namespace sf
 {
     class RenderTarget;
     class Texture;
-} // namespace sf
+}  // namespace sf
 
 Render::Render( sf::RenderTarget & target, sf::RenderStates states )
   : m_target( target ), m_states( states )

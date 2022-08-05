@@ -1,21 +1,21 @@
 #include "settings.hpp"
 
-#include <filesystem> // for operator/, path
-#include <fstream>    // for basic_istream<>::__istream_type, ifs...
-#include <string>     // for string, operator""s
+#include <filesystem>  // for operator/, path
+#include <fstream>     // for basic_istream<>::__istream_type, ifs...
+#include <string>      // for string, operator""s
 
-#include "tools/exceptions.hpp" // for FileIssue
-#include "tools/path.hpp"       // for get_folder, E_Folder, E_Folder::Data
+#include "tools/exceptions.hpp"  // for FileIssue
+#include "tools/path.hpp"        // for get_folder, E_Folder, E_Folder::Data
 
 Settings::Settings() : m_windowSize(), m_refreshRate(), m_verticalSync()
 {
     /// @todo Récupéré les settings à partir de la base de données
     std::string const configLocation {
-        ( path::get_folder( path::E_Folder::Data ) / "window.txt"s ).string()
-    };
+        ( path::get_folder( path::E_Folder::Data ) / "window.txt"s ).string() };
 
     std::ifstream file { configLocation, std::ios::in };
-    /// @todo if we don't find the file, we must create it and load default ressources
+    /// @todo if we don't find the file, we must create it and load default
+    /// ressources
     if ( ! file )
     {
         throw exception::FileIssue { configLocation };
@@ -30,15 +30,16 @@ Settings::Settings() : m_windowSize(), m_refreshRate(), m_verticalSync()
 
 sf::VideoMode Settings::get_video_mode() const
 {
-    return sf::VideoMode { static_cast< unsigned int >( this->m_windowSize.x ),
-                           static_cast< unsigned int >(
-                               this->m_windowSize.y ) };
+    return sf::VideoMode {
+        static_cast< unsigned int >( this->m_windowSize.x ),
+        static_cast< unsigned int >( this->m_windowSize.y ) };
 }
 
 double Settings::get_refresh_rate() const
 {
     return this->m_refreshRate;
 }
+
 bool Settings::get_vertical_sync() const
 {
     return this->m_verticalSync;

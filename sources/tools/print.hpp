@@ -4,9 +4,9 @@
 
 #include "tools/concepts.hpp"
 
-template < C_Printable Type >
-std::ostream & operator<<( std::ostream & stream, Type const & tileData )
+template< C_Printable Type >
+std::ostream & operator<< ( std::ostream & stream, Type const & tileData )
 {
-    tileData.operator<<( stream );
+    tileData.operator<< ( stream );
     return stream;
 }

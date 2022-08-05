@@ -1,8 +1,8 @@
-#include <stdlib.h> // for EXIT_SUCCESS
+#include <stdlib.h>  // for EXIT_SUCCESS
 
-#include "main/game.hpp" // for Game
+#include "main/game.hpp"  // for Game
 
-int main()
+int main ()
 {
     Game game {};
 

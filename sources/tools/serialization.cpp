@@ -1,9 +1,9 @@
 #include "serialization.hpp"
 
-#include <iostream>  // for cout
-#include <stdexcept> // for runtime_error
+#include <iostream>   // for cout
+#include <stdexcept>  // for runtime_error
 
-#include "tools/serialization.tpp" // for operator<<, operator>>
+#include "tools/serialization.tpp"  // for operator<<, operator>>
 
 Unserializer::Unserializer( std::string const & stringToUnserialize )
   : m_stringToUnserialize( stringToUnserialize )
@@ -14,7 +14,7 @@ std::string Unserializer::get_content() const
     return m_stringToUnserialize;
 }
 
-bool verify_next( std::istream & stream, char const & character )
+bool verify_next ( std::istream & stream, char const & character )
 {
     if ( stream.peek() != character )
     {
@@ -32,7 +32,7 @@ bool verify_next( std::istream & stream, char const & character )
     return true;
 }
 
-void test_serializer()
+void test_serializer ()
 {
     std::vector< int > arrayA { 714545, 4524, 9, 10002 };
     std::cout << "arrayA : " << arrayA << std::endl;
@@ -48,10 +48,10 @@ void test_serializer()
     std::cout << "\n\n\n" << std::endl;
 
     std::vector< std::vector< int > > arrayB {
-        {745,  524,   879,  858  },
-        { 745, 454,   879,  45714},
-        { 745, 45474, 4141, 858  },
-        { 474, 454,   879,  858  }
+        {745,   524,  879,   858},
+        {745,   454,  879, 45714},
+        {745, 45474, 4141,   858},
+        {474,   454,  879,   858}
     };
     std::cout << "arrayB : " << arrayB << std::endl;
 

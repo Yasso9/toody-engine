@@ -1,9 +1,9 @@
 #include "texture.hpp"
 
-#include <filesystem> // for path
-#include <iostream>   // for operator<<, basic_ostream, endl, cout
+#include <filesystem>  // for path
+#include <iostream>    // for operator<<, basic_ostream, endl, cout
 
-#include "tools/exceptions.hpp" // for EnumUnexcpected, FileIssue, FileLoad...
+#include "tools/exceptions.hpp"  // for EnumUnexcpected, FileIssue, FileLoad...
 
 Texture::Texture( std::string const & filePath, Texture::E_Type const & type )
   : m_type( type ), m_path( filePath )
@@ -67,14 +67,14 @@ aiTextureType Texture::to_assimp_type( Texture::E_Type const & type )
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_NO_THREAD_LOCALS
-#include <stddef.h> // for NULL
+#include <stddef.h>  // for NULL
 
-#include <GLAD/glad.h>        // for GL_TEXTURE_2D, glPixelStorei, glTexP...
-#include <OTHERS/stb_image.h> // for stbi_image_free, stbi_load, stbi_set...
+#include <GLAD/glad.h>         // for GL_TEXTURE_2D, glPixelStorei, glTexP...
+#include <OTHERS/stb_image.h>  // for stbi_image_free, stbi_load, stbi_set...
 
 namespace GLTexture
 {
-    unsigned int load( std::string const & filePath )
+    unsigned int load ( std::string const & filePath )
     {
         unsigned int textureID;
         glGenTextures( 1, &textureID );
@@ -83,10 +83,9 @@ namespace GLTexture
 
         stbi_set_flip_vertically_on_load( true );
 
-        int width, height, nrComponents;
+        int             width, height, nrComponents;
         unsigned char * data {
-            stbi_load( filePath.c_str(), &width, &height, &nrComponents, 3 )
-        };
+            stbi_load( filePath.c_str(), &width, &height, &nrComponents, 3 ) };
         if ( data == NULL )
         {
             stbi_image_free( data );
@@ -115,26 +114,19 @@ namespace GLTexture
 
         // std::cout << "Texture ID : " << textureID << std::endl;
         glBindTexture( GL_TEXTURE_2D, textureID );
-        glTexImage2D( GL_TEXTURE_2D,
-                      0,
-                      static_cast< GLint >( format ),
-                      width,
-                      height,
-                      0,
-                      format,
-                      GL_UNSIGNED_BYTE,
-                      data );
+        glTexImage2D(
+            GL_TEXTURE_2D, 0, static_cast< GLint >( format ), width, height, 0,
+            format, GL_UNSIGNED_BYTE, data );
         glGenerateMipmap( GL_TEXTURE_2D );
 
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-        glTexParameteri( GL_TEXTURE_2D,
-                         GL_TEXTURE_MIN_FILTER,
-                         GL_LINEAR_MIPMAP_LINEAR );
+        glTexParameteri(
+            GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
         stbi_image_free( data );
 
         return textureID;
     }
-} // namespace GLTexture
+}  // namespace GLTexture

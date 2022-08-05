@@ -1,9 +1,9 @@
 #pragma once
 
-#include <iosfwd> // for ostream
-#include <string> // for string
+#include <iosfwd>  // for ostream
+#include <string>  // for string
 
-#include "graphics2D/quad_vertex.hpp" // for QuadVertex
+#include "graphics2D/quad_vertex.hpp"  // for QuadVertex
 
 class TileMap;
 class TilePosition;
@@ -12,12 +12,12 @@ class TileSelector;
 namespace sf
 {
     class VertexArray;
-} // namespace sf
+}  // namespace sf
 
 class Tile
 {
     /// @brief The Tilemap where the Tile is drawed
-    TileMap const & m_tilemap;
+    TileMap const &      m_tilemap;
     /// @brief The Tilemap where the Tile is based/retrieved
     TileSelector const & m_tileSelector;
 
@@ -26,15 +26,15 @@ class Tile
   public:
     Tile( TileMap const & tilemap, TileSelector const & tileSelector );
 
-    sf::VertexArray const & get_vertex_array() const;
-    TilePosition get_position_in_tilemap() const;
-    TilePosition get_position_in_tileset() const;
+    sf::VertexArray const & get_vertex_array () const;
+    TilePosition            get_position_in_tilemap () const;
+    TilePosition            get_position_in_tileset () const;
 
-    void set_positions( TilePosition const & tileset,
-                        TilePosition const & tilemap );
-    void set_position_in_tileset( TilePosition const & tileset );
+    void set_positions (
+        TilePosition const & tileset, TilePosition const & tilemap );
+    void set_position_in_tileset ( TilePosition const & tileset );
 
-    std::string get_debug_info() const;
+    std::string get_debug_info () const;
 
-    std::ostream & operator<<( std::ostream & stream ) const;
+    std::ostream & operator<< ( std::ostream & stream ) const;
 };

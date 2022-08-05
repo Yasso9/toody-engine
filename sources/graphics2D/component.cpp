@@ -13,9 +13,11 @@ void Component::update( float deltaTime )
 }
 
 void Component::update_before( float /* deltaTime */ ) {}
+
 void Component::update_after( float /* deltaTime */ ) {}
 
 void Component::render_before( Render & /* render */ ) const {}
+
 void Component::render_after( Render & /* render */ ) const {}
 
 void Component::render_all( Render & render ) const

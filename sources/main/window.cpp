@@ -1,24 +1,24 @@
 #include "window.hpp"
 
-#include <iostream> // for operator<<, endl, basic_o...
-#include <string>   // for allocator, string
+#include <iostream>  // for operator<<, endl, basic_o...
+#include <string>    // for allocator, string
 
-#include <SFML/System/Vector2.hpp>         // for Vector2u
-#include <SFML/Window/ContextSettings.hpp> // for ContextSettings
-#include <SFML/Window/Mouse.hpp>           // for Mouse
-#include <SFML/Window/WindowStyle.hpp>     // for Default
+#include <SFML/System/Vector2.hpp>          // for Vector2u
+#include <SFML/Window/ContextSettings.hpp>  // for ContextSettings
+#include <SFML/Window/Mouse.hpp>            // for Mouse
+#include <SFML/Window/WindowStyle.hpp>      // for Default
 
-#include "graphics3D/openGL.hpp"    // for clear_window, initialize
-#include "main/settings.hpp"        // for Settings
-#include "maths/geometry/point.hpp" // for PointI
-#include "maths/geometry/point.tpp" // for Point::Point<Type>, Point...
-#include "maths/vector2.tpp"        // for Vector2::Vector2<Type>
-#include "tools/singleton.tpp"      // for Singleton::get_instance
+#include "graphics3D/openGL.hpp"     // for clear_window, initialize
+#include "main/settings.hpp"         // for Settings
+#include "maths/geometry/point.hpp"  // for PointI
+#include "maths/geometry/point.tpp"  // for Point::Point<Type>, Point...
+#include "maths/vector2.tpp"         // for Vector2::Vector2<Type>
+#include "tools/singleton.tpp"       // for Singleton::get_instance
 
 namespace sf
 {
     class Color;
-} // namespace sf
+}  // namespace sf
 
 Window::Window()
 {
@@ -33,8 +33,9 @@ math::Vector2U Window::get_size() const
 
 float Window::get_aspect_ratio() const
 {
-    return static_cast< float >( Window::get_instance().get_size().x
-                                 / Window::get_instance().get_size().y );
+    return static_cast< float >(
+        Window::get_instance().get_size().x
+        / Window::get_instance().get_size().y );
 }
 
 math::Vector2U Window::get_center_position() const
@@ -46,8 +47,8 @@ bool Window::is_hovered() const
 {
     math::PointI const mousePosition { sf::Mouse::getPosition( *this ) };
 
-    return mousePosition.is_inside( math::PointI { 0, 0 },
-                                    math::Vector2I { this->getSize() } );
+    return mousePosition.is_inside(
+        math::PointI { 0, 0 }, math::Vector2I { this->getSize() } );
 }
 
 bool Window::has_absolute_focus() const
@@ -83,11 +84,11 @@ void Window::creation()
     contextSettings.majorVersion      = 4;
     contextSettings.minorVersion      = 6;
 
-    this->sf::RenderWindow::create( Settings::get_instance().get_video_mode(),
-                                    gameTitle,
-                                    windowStyle,
-                                    contextSettings );
+    this->sf::RenderWindow::create(
+        Settings::get_instance().get_video_mode(), gameTitle, windowStyle,
+        contextSettings );
 }
+
 void Window::initialize()
 {
     this->setVisible( true );

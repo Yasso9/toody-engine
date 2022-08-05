@@ -1,11 +1,11 @@
 #include "shader.hpp"
 
-#include <cstdlib>   // for NULL
-#include <stdexcept> // for runtime_error
+#include <cstdlib>    // for NULL
+#include <stdexcept>  // for runtime_error
 
-#include <GLAD/glad.h> // for glAttachShader, glDeleteShader, GL_COMPIL...
+#include <GLAD/glad.h>  // for glAttachShader, glDeleteShader, GL_COMPIL...
 
-#include "tools/tools.hpp" // for read_file
+#include "tools/tools.hpp"  // for read_file
 
 Shaders::~Shaders()
 {
@@ -22,13 +22,14 @@ int Shaders::get_uniform_location( std::string const & variableName ) const
     return glGetUniformLocation( this->m_id, variableName.c_str() );
 }
 
-void Shaders::load( std::string const & vertexShaderPath,
-                    std::string const & fragmentShaderPath )
+void Shaders::load(
+    std::string const & vertexShaderPath,
+    std::string const & fragmentShaderPath )
 {
-    unsigned int const vertexShader { this->compile( GL_VERTEX_SHADER,
-                                                     vertexShaderPath ) };
-    unsigned int const fragmentShader { this->compile( GL_FRAGMENT_SHADER,
-                                                       fragmentShaderPath ) };
+    unsigned int const vertexShader {
+        this->compile( GL_VERTEX_SHADER, vertexShaderPath ) };
+    unsigned int const fragmentShader {
+        this->compile( GL_FRAGMENT_SHADER, fragmentShaderPath ) };
 
     this->m_id = this->link( vertexShader, fragmentShader );
 }
@@ -39,8 +40,8 @@ void Shaders::use() const
 }
 
 // check for shader compile errors
-bool Shaders::check_error( unsigned int const & shaderValue,
-                           unsigned int const & type )
+bool Shaders::check_error(
+    unsigned int const & shaderValue, unsigned int const & type )
 {
     int success;
     glGetProgramiv( shaderValue, type, &success );
@@ -49,19 +50,18 @@ bool Shaders::check_error( unsigned int const & shaderValue,
         char infoLog[512];
         glGetProgramInfoLog( shaderValue, 512, NULL, infoLog );
         throw std::runtime_error {
-            std::string { "Error - Shader extraction failed - " } + infoLog
-        };
+            std::string { "Error - Shader extraction failed - " } + infoLog };
     }
     return success;
 }
 
-unsigned int Shaders::compile( unsigned int const & shaderType,
-                               std::string const & fileName )
+unsigned int Shaders::compile(
+    unsigned int const & shaderType, std::string const & fileName )
 {
     unsigned int shader { glCreateShader( shaderType ) };
 
     std::string const fileContent { tools::read_file( fileName ) };
-    char const * shaderSource { fileContent.c_str() };
+    char const *      shaderSource { fileContent.c_str() };
 
     glShaderSource( shader, 1, &shaderSource, NULL );
     glCompileShader( shader );
@@ -71,8 +71,8 @@ unsigned int Shaders::compile( unsigned int const & shaderType,
     return shader;
 }
 
-unsigned int Shaders::link( unsigned int const & vertexShader,
-                            unsigned int const & fragmentShader )
+unsigned int Shaders::link(
+    unsigned int const & vertexShader, unsigned int const & fragmentShader )
 {
     unsigned int const shaderProgram { glCreateProgram() };
     glAttachShader( shaderProgram, vertexShader );

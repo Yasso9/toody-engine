@@ -14,12 +14,12 @@ class CollisionList : public Component2D
         this->add_childs( m_collisionArray );
     }
 
-    std::vector< StaticEntity2D > const & get_array() const
+    std::vector< StaticEntity2D > const & get_array () const
     {
         return m_collisionArray;
     }
 
-    void set_customisation( bool isCustomisable )
+    void set_customisation ( bool isCustomisable )
     {
         for ( StaticEntity2D & entity : m_collisionArray )
         {

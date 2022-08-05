@@ -1,14 +1,14 @@
 #include "assertion.hpp"
 
-#include <iostream> // for operator<<, basic_ostream, basic_ostream::operat...
-#include <stdlib.h> // for abort
+#include <iostream>  // for operator<<, basic_ostream, basic_ostream::operat...
+#include <stdlib.h>  // for abort
 
 namespace too
 {
-    void assertion( bool const & expression, std::string const & fileName,
-                    int const & line, std::string const & functionName,
-                    std::string const & expressionString,
-                    std::string const & message )
+    void assertion (
+        bool const & expression, std::string const & fileName, int const & line,
+        std::string const & functionName, std::string const & expressionString,
+        std::string const & message )
     {
         if ( ! expression )
         {
@@ -20,4 +20,4 @@ namespace too
             abort();
         }
     }
-} // namespace too
+}  // namespace too

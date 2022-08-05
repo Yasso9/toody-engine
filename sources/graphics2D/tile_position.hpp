@@ -1,6 +1,6 @@
 #pragma once
 
-#include "maths/vector2.hpp" // for Vector2U
+#include "maths/vector2.hpp"  // for Vector2U
 
 class TilePosition
 {
@@ -22,16 +22,16 @@ class TilePosition
     };
 
     TilePosition( unsigned int value, unsigned int numberOfTileInX );
-    TilePosition( math::Vector2U position, unsigned int numberOfTileInX,
-                  Type type );
+    TilePosition(
+        math::Vector2U position, unsigned int numberOfTileInX, Type type );
 
-    unsigned int value() const;
+    unsigned int value () const;
 
     /// @brief convert the value to a tile position
-    math::Vector2U tile() const;
+    math::Vector2U tile () const;
     /// @brief convert the value to a pixel position
-    math::Vector2U pixel() const;
+    math::Vector2U pixel () const;
 
-    void set_value( unsigned int newValue );
-    void set_value( math::Vector2U position, Type type );
+    void set_value ( unsigned int newValue );
+    void set_value ( math::Vector2U position, Type type );
 };

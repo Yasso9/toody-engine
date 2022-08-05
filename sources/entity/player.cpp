@@ -1,16 +1,16 @@
 #include "player.hpp"
 
-#include <stdexcept> // for domain_error
+#include <stdexcept>  // for domain_error
 
-#include <SFML/Graphics/RenderTarget.hpp> // for RenderTarget
-#include <SFML/Graphics/Texture.hpp>      // for Texture
-#include <SFML/Window/Keyboard.hpp>       // for Keyboard, Keyboard::Z, Key...
+#include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
+#include <SFML/Graphics/Texture.hpp>       // for Texture
+#include <SFML/Window/Keyboard.hpp>        // for Keyboard, Keyboard::Z, Key...
 
-#include "input/input.hpp"     // for is_pressed
-#include "main/render.hpp"     // for Render
-#include "main/resources.hpp"  // for get_texture
-#include "tools/assertion.hpp" // for ASSERTION
-#include "tools/tools.hpp"     // for E_Direction, E_Direction::...
+#include "input/input.hpp"      // for is_pressed
+#include "main/render.hpp"      // for Render
+#include "main/resources.hpp"   // for get_texture
+#include "tools/assertion.hpp"  // for ASSERTION
+#include "tools/tools.hpp"      // for E_Direction, E_Direction::...
 
 Player::Player()
   : m_texture( resources::get_texture( "gold_sprite.png" ) ),
@@ -83,22 +83,21 @@ void Player::init_sprite_number_of_cells()
     sf::Vector2u const textureSize { this->m_texture.getSize() };
 
     // Get the number of sprite that the texture have
-    float const numberOfRow { static_cast< float >( textureSize.x )
-                              / this->m_spritePixelSize.x };
-    float const numberOfLine { static_cast< float >( textureSize.y )
-                               / this->m_spritePixelSize.y };
+    float const numberOfRow {
+        static_cast< float >( textureSize.x ) / this->m_spritePixelSize.x };
+    float const numberOfLine {
+        static_cast< float >( textureSize.y ) / this->m_spritePixelSize.y };
 
     if ( tools::is_integer( numberOfRow ) && tools::is_integer( numberOfLine ) )
     {
         throw std::domain_error {
             "Player texture rect not correctly set. The number of pixel per "
-            "sprite does not correspond to the size that the texture have"
-        };
+            "sprite does not correspond to the size that the texture have" };
     }
 
-    this->m_spriteNumberOfCells =
-        sf::Vector2u { static_cast< unsigned int >( numberOfRow ),
-                       static_cast< unsigned int >( numberOfLine ) };
+    this->m_spriteNumberOfCells = sf::Vector2u {
+        static_cast< unsigned int >( numberOfRow ),
+        static_cast< unsigned int >( numberOfLine ) };
 }
 
 void Player::set_direction( E_Direction const & direction )
@@ -146,8 +145,9 @@ void Player::update_movement()
         break;
     }
 
-    this->move( this->get_movement() * this->m_speed * speedVariation
-                * this->m_deltaTime );
+    this->move(
+        this->get_movement() * this->m_speed * speedVariation
+        * this->m_deltaTime );
 }
 
 void Player::update_texture_rect()
@@ -190,7 +190,7 @@ void Player::update_events()
 sf::Vector2f Player::get_movement() const
 {
     sf::Vector2f movementDistance { 0.f, 0.f };
-    float const distance { 1.f };
+    float const  distance { 1.f };
 
     switch ( this->m_direction )
     {
@@ -217,8 +217,7 @@ sf::Vector2f Player::get_movement() const
 unsigned int Player::get_current_sprite_number()
 {
     std::vector< unsigned int > const spriteNumbers {
-        this->m_spriteValue.at( this->m_state ).at( this->m_direction )
-    };
+        this->m_spriteValue.at( this->m_state ).at( this->m_direction ) };
 
     float const timesPerFrame { 0.2f };
     this->m_timeElapsed += this->m_deltaTime;
@@ -244,18 +243,19 @@ unsigned int Player::get_current_sprite_number()
         this->m_timeElapsed = 0.f;
     }
 
-    ASSERTION( ! spriteNumbers.empty(),
-               "No information about what sprite to print" );
-    ASSERTION( this->m_lastSpriteIndex < spriteNumbers.size(),
-               "Issues with sprites numbers" );
+    ASSERTION(
+        ! spriteNumbers.empty(), "No information about what sprite to print" );
+    ASSERTION(
+        this->m_lastSpriteIndex < spriteNumbers.size(),
+        "Issues with sprites numbers" );
 
     return spriteNumbers[this->m_lastSpriteIndex];
 }
 
 sf::IntRect Player::get_current_texture_rect()
 {
-    int const currentSpriteNumber { static_cast< int >(
-        this->get_current_sprite_number() ) };
+    int const currentSpriteNumber {
+        static_cast< int >( this->get_current_sprite_number() ) };
 
     // Cast to make things easier to read
     sf::Vector2i const spriteSize {
@@ -270,7 +270,8 @@ sf::IntRect Player::get_current_texture_rect()
         ( currentSpriteNumber - spritePosition.x ) / spriteSize.x;
 
     sf::IntRect textureRect {};
-    // Transform the sprite position into the rectangle of the sprite in the texture
+    // Transform the sprite position into the rectangle of the sprite in the
+    // texture
     textureRect.left = spritePosition.x * spriteSize.x;
     textureRect.top  = spritePosition.y * spriteSize.y;
     // Assign the size of a sprite cell

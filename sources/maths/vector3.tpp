@@ -4,15 +4,17 @@
 
 namespace math
 {
-    template < C_Primitive Type >
-    void Vector3< Type >::rotate( float angle,
-                                  Vector3< Type > /* axisRotation */ )
+    template< C_Primitive Type >
+    void Vector3< Type >::rotate(
+        float angle, Vector3< Type > /* axisRotation */ )
     {
-        ASSERTION( angle >= -180.f && angle <= 180.f,
-                   "An angle must have a value between 0 and 180" );
+        ASSERTION(
+            angle >= -180.f && angle <= 180.f,
+            "An angle must have a value between 0 and 180" );
 
         // Vector3 const qValue { math::cosinus_degree( angle )
-        //                        + math::sinus_degree( angle ) * axisRotation };
+        //                        + math::sinus_degree( angle ) * axisRotation
+        //                        };
         // Vector3 const qInvertValue { math::power( qValue, -1 ) };
 
         // Return the quaternions rotation
@@ -23,25 +25,25 @@ namespace math
     ************************** VECTOR X VECTOR ********************************
     ************************************************************************ */
 
-    template < C_Primitive Type >
-    Vector3< Type > operator*( Vector3< Type > vectorLeft,
-                               Vector3< Type > vectorRight )
+    template< C_Primitive Type >
+    Vector3< Type > operator* (
+        Vector3< Type > vectorLeft, Vector3< Type > vectorRight )
     {
         Vector3< Type > result {};
 
         Matrix2 withoutX {
-            {vectorLeft.y,  vectorRight.y},
-            { vectorLeft.z, vectorRight.z}
+            {vectorLeft.y, vectorRight.y},
+            {vectorLeft.z, vectorRight.z}
         };
         result.x = withoutX.get_determining_factor();
         Matrix2 withoutY {
-            {vectorLeft.x,  vectorRight.x},
-            { vectorLeft.z, vectorRight.z}
+            {vectorLeft.x, vectorRight.x},
+            {vectorLeft.z, vectorRight.z}
         };
         result.y = -withoutY.get_determining_factor();
         Matrix2 withoutZ {
-            {vectorLeft.x,  vectorRight.x},
-            { vectorLeft.y, vectorRight.y}
+            {vectorLeft.x, vectorRight.x},
+            {vectorLeft.y, vectorRight.y}
         };
         result.z = withoutZ.get_determining_factor();
 
@@ -52,18 +54,20 @@ namespace math
     ************************** VECTOR X FACTOR ********************************
     ************************************************************************ */
 
-    template < C_Primitive Type >
-    Vector3< Type > operator*( Vector3< Type > vector, float factor )
+    template< C_Primitive Type >
+    Vector3< Type > operator* ( Vector3< Type > vector, float factor )
     {
         return { vector.x * factor, vector.y * factor, vector.z * factor };
     }
-    template < C_Primitive Type >
-    Vector3< Type > operator/( Vector3< Type > vector, float factor )
+
+    template< C_Primitive Type >
+    Vector3< Type > operator/ ( Vector3< Type > vector, float factor )
     {
         return { factor / vector.x, factor / vector.y, factor / vector.z };
     }
-    template < C_Primitive Type >
-    Vector3< Type > power( Vector3< Type > vector, int powerFactor )
+
+    template< C_Primitive Type >
+    Vector3< Type > power ( Vector3< Type > vector, int powerFactor )
     {
         if ( powerFactor == 0 )
         {
@@ -91,10 +95,10 @@ namespace math
     ************************** VECTOR X OTHERS ********************************
     ************************************************************************ */
 
-    template < C_Primitive Type >
-    std::ostream & operator<<( std::ostream & stream, Vector3< Type > vector )
+    template< C_Primitive Type >
+    std::ostream & operator<< ( std::ostream & stream, Vector3< Type > vector )
     {
         return stream << "( " << vector.x << ", " << vector.y << ", "
                       << vector.z << " )";
     }
-} // namespace math
+}  // namespace math

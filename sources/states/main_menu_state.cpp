@@ -1,19 +1,19 @@
 #include "main_menu_state.hpp"
 
-#include <string> // for string, allocator
+#include <string>  // for string, allocator
 
-#include <SFML/Graphics/Color.hpp>        // for Color, Color::Black
-#include <SFML/Graphics/RenderTarget.hpp> // for RenderTarget
-#include <SFML/System/Vector2.hpp>        // for Vector2f
-#include <SFML/Window/Mouse.hpp>          // for Mouse, Mouse::Button, Mous...
+#include <SFML/Graphics/Color.hpp>         // for Color, Color::Black
+#include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
+#include <SFML/System/Vector2.hpp>         // for Vector2f
+#include <SFML/Window/Mouse.hpp>           // for Mouse, Mouse::Button, Mous...
 
-#include "input/input.hpp"     // for get_mouse_position, is_pre...
-#include "main/render.hpp"     // for Render
-#include "main/resources.hpp"  // for get_font
-#include "main/window.hpp"     // for Window
-#include "maths/vector2.hpp"   // for Vector2, Vector2F, Vector2I
-#include "maths/vector2.tpp"   // for Vector2::operator Vector2<...
-#include "tools/singleton.tpp" // for Singleton::get_instance
+#include "input/input.hpp"      // for get_mouse_position, is_pre...
+#include "main/render.hpp"      // for Render
+#include "main/resources.hpp"   // for get_font
+#include "main/window.hpp"      // for Window
+#include "maths/vector2.hpp"    // for Vector2, Vector2F, Vector2I
+#include "maths/vector2.tpp"    // for Vector2::operator Vector2<...
+#include "tools/singleton.tpp"  // for Singleton::get_instance
 
 MainMenuState::MainMenuState()
   : State( State::E_List::MainMenu ), m_background(), m_text(), m_buttons()

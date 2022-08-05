@@ -1,29 +1,28 @@
 #include "tile.hpp"
 
-#include <sstream> // for operator<<, basic_ostream
+#include <sstream>  // for operator<<, basic_ostream
 
-#include <SFML/Graphics/Vertex.hpp>      // for Vertex
-#include <SFML/Graphics/VertexArray.hpp> // for VertexArray
+#include <SFML/Graphics/Vertex.hpp>       // for Vertex
+#include <SFML/Graphics/VertexArray.hpp>  // for VertexArray
 
-#include "graphics2D/sfml.hpp"          // for operator<<
-#include "graphics2D/tile_position.hpp" // for TilePosition, TilePosition:...
-#include "graphics2D/tile_selector.hpp" // for TileSelector
-#include "graphics2D/tilemap.hpp"       // for TileMap
-#include "graphics2D/tileset.hpp"       // for Tileset
-#include "maths/geometry/point.hpp"     // for Point
-#include "maths/geometry/point.tpp"     // for Point::Point<Type>
-#include "maths/geometry/rectangle.hpp" // for RectangleF
-#include "maths/vector2.hpp"            // for Vector2U, Vector2F, Vector2
-#include "maths/vector2.tpp"            // for Vector2::operator=, operator+
-#include "tools/global_variable.hpp"    // for TILE_PIXEL_SIZE_VECTOR
+#include "graphics2D/sfml.hpp"           // for operator<<
+#include "graphics2D/tile_position.hpp"  // for TilePosition, TilePosition:...
+#include "graphics2D/tile_selector.hpp"  // for TileSelector
+#include "graphics2D/tilemap.hpp"        // for TileMap
+#include "graphics2D/tileset.hpp"        // for Tileset
+#include "maths/geometry/point.hpp"      // for Point
+#include "maths/geometry/point.tpp"      // for Point::Point<Type>
+#include "maths/geometry/rectangle.hpp"  // for RectangleF
+#include "maths/vector2.hpp"             // for Vector2U, Vector2F, Vector2
+#include "maths/vector2.tpp"             // for Vector2::operator=, operator+
+#include "tools/global_variable.hpp"     // for TILE_PIXEL_SIZE_VECTOR
 
 Tile::Tile( TileMap const & tilemap, TileSelector const & tileSelector )
   : m_tilemap( tilemap ), m_tileSelector( tileSelector ), m_quadVertex()
 {
     this->set_positions(
         TilePosition {
-            0,
-            this->m_tileSelector.get_tileset().get_size_in_tile().x },
+            0, this->m_tileSelector.get_tileset().get_size_in_tile().x },
         TilePosition { 0, this->m_tilemap.get_tile_size().x } );
 }
 
@@ -39,16 +38,15 @@ TilePosition Tile::get_position_in_tilemap() const
           - math::Vector2F { this->m_tilemap.getPosition() } )
             .to_u_int(),
         this->m_tileSelector.get_tileset().get_size_in_tile().x,
-        TilePosition::Pixel
-    };
+        TilePosition::Pixel };
 }
+
 TilePosition Tile::get_position_in_tileset() const
 {
     return TilePosition {
         this->m_quadVertex.get_texture_position().to_u_int(),
         this->m_tileSelector.get_tileset().get_size_in_tile().x,
-        TilePosition::Pixel
-    };
+        TilePosition::Pixel };
 }
 
 std::string Tile::get_debug_info() const
@@ -68,8 +66,8 @@ std::string Tile::get_debug_info() const
     return outputStream.str();
 }
 
-void Tile::set_positions( TilePosition const & tileset,
-                          TilePosition const & tilemap )
+void Tile::set_positions(
+    TilePosition const & tileset, TilePosition const & tilemap )
 {
     this->set_position_in_tileset( tileset );
 
@@ -89,7 +87,7 @@ void Tile::set_position_in_tileset( TilePosition const & tileset )
     this->m_quadVertex.set_texture_coord( textureTileRectangle );
 }
 
-std::ostream & Tile::operator<<( std::ostream & stream ) const
+std::ostream & Tile::operator<< ( std::ostream & stream ) const
 {
     return stream << this->get_position_in_tileset().value();
 }

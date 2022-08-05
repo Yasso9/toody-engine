@@ -1,7 +1,7 @@
 #pragma once
 
-#include <chrono> // for steady_clock, steady_clock::time_point
-#include <string> // for string
+#include <chrono>  // for steady_clock, steady_clock::time_point
+#include <string>  // for string
 
 /**
  * @brief Create an instance of this class at the begginning
@@ -14,6 +14,6 @@ class Timer final
     ~Timer();
 
   private:
-    std::string const m_indication;
+    std::string const                           m_indication;
     std::chrono::steady_clock::time_point const m_beginTime;
 };

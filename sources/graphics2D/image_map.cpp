@@ -1,12 +1,13 @@
 #include "image_map.hpp"
 
-#include <SFML/Graphics/RenderTarget.hpp> // for RenderTarget
+#include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
 
-#include "main/render.hpp" // for Render
+#include "main/render.hpp"  // for Render
 
 ImageMap::ImageMap() : m_data()
 {
-    /// @todo load the the sprites path and the positions from the database from the database
+    /// @todo load the the sprites path and the positions from the database from
+    /// the database
 
     m_data = {
         /*

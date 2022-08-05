@@ -1,11 +1,11 @@
 #include "shape.hpp"
 
-#include <SFML/Graphics/RenderTarget.hpp> // for RenderTarget
+#include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
 
-#include "main/render.hpp"            // for Render
-#include "maths/geometry/point.tpp"   // for Point::Point<Type>
-#include "maths/geometry/polygon.tpp" // for Polygon::operator[], Polyg...
-#include "maths/vector2.tpp"          // for Vector2::Vector2<Type>
+#include "main/render.hpp"             // for Render
+#include "maths/geometry/point.tpp"    // for Point::Point<Type>
+#include "maths/geometry/polygon.tpp"  // for Polygon::operator[], Polyg...
+#include "maths/vector2.tpp"           // for Vector2::Vector2<Type>
 
 Shape2D::Shape2D( math::PolygonF polygon ) : m_polygon {}
 {
@@ -16,6 +16,7 @@ unsigned int Shape2D::get_point_count() const
 {
     return m_polygon.get_number_of_points();
 };
+
 math::Vector2F Shape2D::get_point( unsigned int index ) const
 {
     return m_polygon[index];
@@ -38,6 +39,7 @@ math::PolygonF Shape2D::get_polygon( bool isSizeAdded ) const
 
     return polygonToReturn;
 }
+
 void Shape2D::set_polygon( math::PolygonF polygon )
 {
     m_polygon = polygon;
@@ -48,14 +50,15 @@ void Shape2D::custom_draw( Render & render ) const
 {
     // auto renderStates = render.get_state();
     // renderStates.transform *= this->getTransform();
-    render.get_target().draw( *dynamic_cast< sf::Shape const * >( this ),
-                              render.get_state() );
+    render.get_target().draw(
+        *dynamic_cast< sf::Shape const * >( this ), render.get_state() );
 }
 
 std::size_t Shape2D::getPointCount() const
 {
     return static_cast< std::size_t >( this->get_point_count() );
 }
+
 sf::Vector2f Shape2D::getPoint( std::size_t index ) const
 {
     return this->get_point( static_cast< unsigned int >( index ) );
