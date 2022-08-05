@@ -32,13 +32,3 @@ void GameState::update_before( float deltaTime )
     // The view follow the player
     this->m_view.setCenter( this->m_player.getPosition() );
 }
-
-// void GameState::render( sf::RenderTarget & target ) const
-// {
-//     // Window::get_instance().setView( this->m_view );
-
-// target.draw( this->m_tilemap );
-
-// target.draw( this->m_player );
-
-// // Window::get_instance().reset_view();}

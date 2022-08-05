@@ -61,3 +61,5 @@ C'est quand on ferme la fenêtre ou quelque chose comme ça et qu'on a toujours 
 Test the code with valgrind
 
 Test the code with cpp checker
+
+Réarenger les fichier dans la racine du  projet pour qu'on en ai le moins possible

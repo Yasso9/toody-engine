@@ -2,12 +2,18 @@
     "configurations": [
         {
             "name": "MultiPlatform",
-            "cppStandard": "c++20",
+            "intelliSenseMode": "${default}",
             "includePath": [
                 "${default}",
                 "${workspaceRoot}/sources/",
                 "${workspaceRoot}/external/includes/"
-            ]
+            ],
+            "defines": [],
+            "forcedInclude": [],
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "c17",
+            "cppStandard": "c++20",
+            "compileCommands": "${workspaceRoot}/compile_commands.json"
         }
     ],
     "version": 4

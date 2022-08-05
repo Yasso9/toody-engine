@@ -1,6 +1,6 @@
 #include "editor_state.hpp"
 
-#include <algorithm>  // for max
+#include <algorithm>  // for max, copy
 #include <sstream>    // for operator<<, basic_ostream
 #include <stddef.h>   // for NULL
 #include <vector>     // for vector

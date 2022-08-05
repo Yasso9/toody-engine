@@ -9,7 +9,7 @@ SHOW := @
 
 # Know in what operating system we are
 ifeq ($(OS),Windows_NT)
-DETECTED_OS := Windowsq
+DETECTED_OS := Windows
 else
 DETECTED_OS := $(shell uname)
 endif
@@ -212,7 +212,7 @@ DEPENDENCIES := $(patsubst %.o,%.d,$(OBJECT_PROJECT))
 # These commands do not represent physical files
 .PHONY: buildrun build compile link run initialize_build \
 		clean_executable clean_project clean_libraries \
-		clean debug remake nothing valgrind release iwyu format cppclean compile_command
+		clean debug remake nothing valgrind release iwyu format cppclean compile_commands
 
 buildrun : build run
 
@@ -231,17 +231,23 @@ else
 	$(EXECUTABLE)
 endif
 
-compile_command :
+compile_commands : clean initialize_build
 	bear -- $(MAKE) compile
 
 iwyu : clean
-	CXX="include-what-you-use" CPP_FLAGS="-Xiwyu --update_comments -Xiwyu --mapping_file=iwyu_mapping.imp -std=c++20" $(MAKE) compile 2>iwyu_file.txt
+	CXX="include-what-you-use" \
+	CPP_FLAGS="-Xiwyu --update_comments -Xiwyu --mapping_file=iwyu_mapping.imp -std=c++20" \
+	$(MAKE) compile 2>iwyu_file.txt
+
 	sed -i '/.inl/d' ./iwyu_file.txt
+
 	python3 fix_includes.py --comments --update_comments --nosafe_headers < iwyu_file.txt
 	$(MAKE) format
 
 format:
-	clang-format -i --verbose -style=file:.clang-format $(wildcard $(FILES_DIRECTORY)/*.cpp) $(wildcard $(FILES_DIRECTORY)/**/*.cpp) $(wildcard $(FILES_DIRECTORY)/**/*.hpp) $(wildcard $(FILES_DIRECTORY)/**/*.tpp)
+	clang-format -i --verbose -style=file:.clang-format \
+	$(wildcard $(FILES_DIRECTORY)/*.cpp) $(wildcard $(FILES_DIRECTORY)/**/*.cpp) \
+	$(wildcard $(FILES_DIRECTORY)/**/*.hpp) $(wildcard $(FILES_DIRECTORY)/**/*.tpp)
 
 cppclean:
 	cppclean --verbose --include-path=sources --include-path=external/includes sources/**

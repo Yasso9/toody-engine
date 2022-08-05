@@ -4,3 +4,4 @@ imgui.ini
 Game
 valgrind-out.txt
 iwyu_file.txt
+compile_commands.json
