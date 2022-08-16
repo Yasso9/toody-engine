@@ -17,6 +17,7 @@ class Component
     std::vector< Component * > m_childs;
 
   protected:
+    // Virtual Class - Can only be called by child
     Component() : m_childs {} {};
 
   public:
@@ -37,17 +38,21 @@ class Component
   protected:
 
   private:
-    /// @brief custom update
+    /// @brief custom update - is the first function called
+    /// in the update procedure
     virtual void update_before ( float deltaTime );
-    /// @brief custom update
+    /// @brief custom update - is the last function called
+    /// in the update procedure
     virtual void update_after ( float deltaTime );
-    /// @brief custom render
+    /// @brief custom render - is the first function called
+    /// in the render procedure
     virtual void render_before ( Render & render ) const;
-    /// @brief custom render
+    /// @brief custom render - is the last function called
+    /// in the render procedure
     virtual void render_after ( Render & render ) const;
 };
 
-// A voir si on garde tous ça ?
+/// @todo A voir si on garde tous ça ?
 class Component2D : public Component
 {
   protected:

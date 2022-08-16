@@ -26,9 +26,12 @@ endif
 
 ifeq ($(CC),)
 C_COMMAND := gcc
+else ifeq ($(CC),cc)
+C_COMMAND := gcc
 else
 C_COMMAND := $(CC)
 endif
+
 ifeq ($(CXX),)
 CXX_COMMAND := g++
 else
@@ -349,7 +352,7 @@ LIBRARIES := -L"$(LIBRARIES_PATH)" $(LIBRARIES_FLAG)
 # Creating object files of the cpp libraries
 .SECONDEXPANSION:
 $(CPP_OBJECT_LIBRARIES) : $(LIBRARIES_OBJECT_DIRECTORY)/%.o : $(LIBRARIES_INCLUDE_PATH)/$$(subst ~,/,%).cpp
-	$(SHOW)echo "C++ Library Compile $(subst external/includes/,,$<)"
+	$(SHOW)echo "Library C++ Compile $(subst external/includes/,,$<)"
 #	compilatorCommand -c filename.cpp -o filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
@@ -358,7 +361,7 @@ $(CPP_OBJECT_LIBRARIES) : $(LIBRARIES_OBJECT_DIRECTORY)/%.o : $(LIBRARIES_INCLUD
 # Creating object files of the c libraries
 .SECONDEXPANSION:
 $(C_OBJECT_LIBRARIES) : $(LIBRARIES_OBJECT_DIRECTORY)/%.o : $(LIBRARIES_INCLUDE_PATH)/$$(subst ~,/,%).c
-	$(SHOW)echo "C Library Compile $(subst external/includes/,,$<)"
+	$(SHOW)echo "Library C Compile $(subst external/includes/,,$<)"
 #	compilatorCommand -c filename.cpp -o filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
@@ -371,7 +374,7 @@ $(C_OBJECT_LIBRARIES) : $(LIBRARIES_OBJECT_DIRECTORY)/%.o : $(LIBRARIES_INCLUDE_
 .SECONDEXPANSION:
 $(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%).cpp
 #	Nicer way to print the current file compiled
-	$(SHOW)echo "Project Compile $(subst sources/,,$<)"
+	$(SHOW)echo "Project C++ Compile $(subst sources/,,$<)"
 #	compilatorCommand -WarningFlags -compilerOptions -c sources/sub_directory/filename.cpp -o sub_directory_filename.o -I"/Path/To/Includes"
 #   -c => Doesn't create WinMain error if there is no main in the file
 #   -o => Create custom object
@@ -379,7 +382,7 @@ $(OBJECT_PROJECT) : $(OBJECT_DIRECTORY)/%.o : $(FILES_DIRECTORY)/$$(subst -,/,%)
 
 # Create the executable by Linking all the object files and the libraries together
 $(EXECUTABLE) : $(OBJECT_ALL)
-	$(SHOW)echo "Building $@"
+	$(SHOW)echo "Building and Linking $@"
 #	compilator++ -linkingOptions sub_directory_A_filename_A.o sub_directory_B_filename_B.o etc... -o executable -L"/Path/To/Library" -libraries_flags
 #   -o => choose custom object
 	$(SHOW)$(CXX_COMMAND) $(LINKING_FLAGS) $^ -o $@ $(LIBRARIES)

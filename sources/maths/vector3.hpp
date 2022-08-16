@@ -71,6 +71,26 @@ namespace math
             };
         }
 
+        /* ********************************************************************
+        ************************ ASSIGNEMENT OPERATOR *************************
+        ******************************************************************** */
+
+        Vector3< Type > operator-= ( Vector3< Type > lhs )
+        {
+            return *this = *this - lhs;
+        }
+
+        Vector3< Type > operator+= ( Vector3< Type > lhs )
+        {
+            return *this = *this + lhs;
+        }
+
+        template< C_Primitive OtherType >
+        Vector3< Type > operator*= ( OtherType factorLHS )
+        {
+            return *this = *this * factorLHS;
+        }
+
         float get_length () const
         {
             return std::sqrt(
@@ -92,6 +112,7 @@ namespace math
                 return this->z;
                 break;
             default :
+                /// @todo throw an exception
                 ASSERTION( false, "Vector3 index out of range" );
                 return 0.f;
                 break;
@@ -114,8 +135,11 @@ namespace math
     ************************************************************************ */
 
     template< C_Primitive Type >
-    Vector3< Type > operator* (
-        Vector3< Type > vectorLeft, Vector3< Type > vectorRight );
+    Vector3< Type > operator* ( Vector3< Type > lhs, Vector3< Type > rhs );
+    template< C_Primitive Type >
+    Vector3< Type > operator+ ( Vector3< Type > lhs, Vector3< Type > rhs );
+    template< C_Primitive Type >
+    Vector3< Type > operator- ( Vector3< Type > lhs, Vector3< Type > rhs );
 
     /* ************************************************************************
     ************************** VECTOR X FACTOR ********************************

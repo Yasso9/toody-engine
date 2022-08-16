@@ -5,6 +5,9 @@
 #include <GLM/ext/vector_float3.hpp>  // for vec3
 
 #include "graphics2D/component.tpp"  // for Component::add_childs
+#include "graphics2D/sfml.hpp"
+#include "input/input.hpp"
+#include "main/window.hpp"
 
 [[maybe_unused]] static Shape::S_Data get_sample_shape_data_A ();
 
@@ -13,8 +16,9 @@ GraphicState::GraphicState()
     m_camera {
 },
     m_shapes { Shape { get_sample_shape_data_A(), m_camera } },
-    m_models { /* Model { "backpack/backpack.obj"s, m_camera }  */ }
+    m_models { Model { "backpack/backpack.obj", m_camera } }
 {
+    this->add_child( m_camera );
     this->add_childs( m_shapes );
     this->add_childs( m_models );
 
@@ -31,9 +35,10 @@ GraphicState::GraphicState()
     }
 }
 
-void GraphicState::update_before( float deltaTime )
+void GraphicState::update_before( float /* deltaTime */ )
 {
-    m_camera.update_inputs( deltaTime );
+    this->update_camera_keyboard_inputs();
+    this->update_camera_mouse_inputs();
 }
 
 void GraphicState::mouse_scroll( float const & deltaScroll )
@@ -46,6 +51,78 @@ void GraphicState::mouse_scroll( float const & deltaScroll )
     }
     // else positiv scroll
     // m_camera.zoom( scrollSpeed, m_deltaTime );
+}
+
+void GraphicState::update_camera_keyboard_inputs()
+{
+    if ( input::is_pressed( sf::Keyboard::Z ) )
+    {
+        m_camera.move( Camera::E_Movement::Up );
+    }
+    if ( input::is_pressed( sf::Keyboard::S ) )
+    {
+        m_camera.move( Camera::E_Movement::Down );
+    }
+    if ( input::is_pressed( sf::Keyboard::Q ) )
+    {
+        m_camera.move( Camera::E_Movement::Left );
+    }
+    if ( input::is_pressed( sf::Keyboard::D ) )
+    {
+        m_camera.move( Camera::E_Movement::Right );
+    }
+
+    math::Vector3F rotation { 0.f, 0.f, 0.f };
+
+    if ( input::is_pressed( sf::Keyboard::Up ) )
+    {
+        rotation += { 1.f, 0.f, 0.f };
+    }
+    if ( input::is_pressed( sf::Keyboard::Down ) )
+    {
+        rotation += { -1.f, 0.f, 0.f };
+    }
+    if ( input::is_pressed( sf::Keyboard::Left ) )
+    {
+        rotation += { 0.f, 1.f, 0.f };
+    }
+    if ( input::is_pressed( sf::Keyboard::Right ) )
+    {
+        rotation += { 0.f, -1.f, 0.f };
+    }
+    if ( input::is_pressed( sf::Keyboard::B ) )
+    {
+        rotation += { 0.f, 0.f, -1.f };
+    }
+    if ( input::is_pressed( sf::Keyboard::N ) )
+    {
+        rotation += { 0.f, 0.f, 1.f };
+    }
+
+    m_camera.rotate( rotation * 20.f );
+}
+
+void GraphicState::update_camera_mouse_inputs()
+{
+    math::Vector2F const windowCenter {
+        Window::get_instance().get_center_position() };
+    math::Vector2F const mousePosition { input::get_mouse_position() };
+
+    if ( windowCenter == mousePosition )
+    {
+        return;
+    }
+
+    // Gap between mousePosition and windowCenter
+    glm::vec3 offset {};
+    offset.x = mousePosition.x - windowCenter.x;
+    offset.y = windowCenter.y - mousePosition.y;
+    offset.z = 0.f;
+
+    // Reset Mouse Position
+    input::set_mouse_position( windowCenter.to_int() );
+
+    m_camera.rotate( offset );
 }
 
 static Shape::S_Data get_sample_shape_data_A ()

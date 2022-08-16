@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "MultiPlatform",
+            "name": "Linux",
             "intelliSenseMode": "${default}",
             "includePath": [
                 "${default}",
@@ -14,6 +14,20 @@
             "cStandard": "c17",
             "cppStandard": "c++20",
             "compileCommands": "${workspaceRoot}/compile_commands.json"
+        },
+        {
+            "name": "Windows",
+            "intelliSenseMode": "${default}",
+            "includePath": [
+                "${default}",
+                "${workspaceRoot}/sources/",
+                "${workspaceRoot}/external/includes/"
+            ],
+            "defines": [],
+            "forcedInclude": [],
+            "compilerPath": "C:/Users/Turki/GoogleDrive/Programs/Programming/MINGW/bin/g++",
+            "cStandard": "c17",
+            "cppStandard": "c++20"
         }
     ],
     "version": 4

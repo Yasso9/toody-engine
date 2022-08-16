@@ -21,4 +21,7 @@ class GraphicState final : public State
 
   private:
     void mouse_scroll ( float const & deltaScroll ) override;
+
+    void update_camera_keyboard_inputs ();
+    void update_camera_mouse_inputs ();
 };

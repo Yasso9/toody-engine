@@ -50,18 +50,30 @@ namespace math
         return result;
     }
 
+    template< C_Primitive Type >
+    Vector3< Type > operator+ ( Vector3< Type > lhs, Vector3< Type > rhs )
+    {
+        return { lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z };
+    }
+
+    template< C_Primitive Type >
+    Vector3< Type > operator- ( Vector3< Type > lhs, Vector3< Type > rhs )
+    {
+        return { lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z };
+    }
+
     /* ************************************************************************
     ************************** VECTOR X FACTOR ********************************
     ************************************************************************ */
 
     template< C_Primitive Type >
-    Vector3< Type > operator* ( Vector3< Type > vector, float factor )
+    Vector3< Type > operator* ( Vector3< Type > vector, Type factor )
     {
         return { vector.x * factor, vector.y * factor, vector.z * factor };
     }
 
     template< C_Primitive Type >
-    Vector3< Type > operator/ ( Vector3< Type > vector, float factor )
+    Vector3< Type > operator/ ( Vector3< Type > vector, Type factor )
     {
         return { factor / vector.x, factor / vector.y, factor / vector.z };
     }

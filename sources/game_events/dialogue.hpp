@@ -13,7 +13,6 @@ class Render;
 
 class Dialogue : public Component2D
 {
-  private:
     sf::RectangleShape m_shape;
     sf::Text           m_text;
     bool               m_showCustomisation;
@@ -26,12 +25,19 @@ class Dialogue : public Component2D
     sf::Cursor m_moveCursor;
 
   public:
-    /// @ number of character that can be print on a single dialogue box
+    /// @todo Calculate that number automatically
+    /// @brief number of character that can be print on a single dialogue box
     unsigned int const CHARACTER_LIMIT { 150u };
 
     Dialogue();
     virtual ~Dialogue() = default;
 
+    void update_before ( float deltaTime ) override;
+
+  private:
+    void render_before ( Render & render ) const override;
+
+  public:
     /**
      * @brief go to the next dialogue section if available
      * @return true if there is something else to read
@@ -39,15 +45,13 @@ class Dialogue : public Component2D
      */
     bool next ();
 
+    void add_text ( std::string textToAdd );
+
     /// @todo create an inherited class DialogueCustmable that can have
     /// process_events_customisation and update_customisation and delete this
     /// two functions from this class
     void process_mouse_movement_customisation ( math::Vector2I mouseMovement );
 
-    void update_before ( float /* deltaTime */ ) override;
-
   private:
-    void render_before ( Render & render ) const override;
-
-    void set_text ( std::string const & text );
+    void set_current_text ( std::string const & text );
 };

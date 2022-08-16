@@ -9,6 +9,7 @@
 
 #include "input/input.hpp"           // for get_mouse_position, is_pre...
 #include "libraries/imgui.hpp"       // for P_ColorEditor, P_InputNumber
+#include "libraries/imgui.hpp"       // for P_Begin
 #include "main/render.hpp"           // for Render
 #include "main/resources.hpp"        // for get_font
 #include "main/window.hpp"           // for Window
@@ -19,12 +20,12 @@
 #include "tools/singleton.tpp"       // for Singleton::get_instance
 
 Dialogue::Dialogue()
-  : m_shape(),
-    m_text(),
-    m_showCustomisation( true ),
-    m_textRemaining( "" ),
-    m_regularCursor(),
-    m_moveCursor()
+  : m_shape {},
+    m_text {},
+    m_showCustomisation { true },
+    m_textRemaining { "" },
+    m_regularCursor {},
+    m_moveCursor {}
 {
     math::Vector2F const windowSizeF {
         Window::get_instance().get_size().to_float() };
@@ -41,9 +42,9 @@ Dialogue::Dialogue()
 
     m_text.setFont( resources::get_font( "arial.ttf" ) );
     m_text.setCharacterSize( 30u );
-    m_text.setFillColor( sf::Color::Black );
+    m_text.setFillColor( sf::Color::Red );
 
-    this->set_text( "" );
+    this->set_current_text( m_textRemaining );
 
     if ( ! m_regularCursor.loadFromSystem( sf::Cursor::Arrow ) )
     {
@@ -57,12 +58,27 @@ Dialogue::Dialogue()
 
 bool Dialogue::next()
 {
-    if ( ! m_textRemaining.empty() )
+    std::string currentText { "" };
+
+    if ( m_textRemaining.size() > CHARACTER_LIMIT )
     {
-        this->set_text( "" );
+        currentText     = m_textRemaining.substr( 0, CHARACTER_LIMIT );
+        m_textRemaining = m_textRemaining.substr(
+            CHARACTER_LIMIT + 1, m_textRemaining.size() );
+    }
+    else
+    {
+        currentText = m_textRemaining;
     }
 
-    return ! m_textRemaining.empty();
+    this->set_current_text( currentText );
+
+    return ! currentText.empty();
+}
+
+void Dialogue::add_text( std::string textToAdd )
+{
+    m_textRemaining += textToAdd;
 }
 
 void Dialogue::process_mouse_movement_customisation(
@@ -92,13 +108,7 @@ void Dialogue::process_mouse_movement_customisation(
 
 void Dialogue::update_before( float /* deltaTime */ )
 {
-    if ( ! m_showCustomisation )
-    {
-        return;
-    }
-
-    if ( ImGui::Begin( "Dialogue Editor", &m_showCustomisation ) )
-    {
+    ImGui::P_Begin( "Dialogue Editor", &m_showCustomisation, [&] {
         sf::Color background { m_shape.getFillColor() };
         sf::Color outline { m_shape.getOutlineColor() };
         float     outlineThickness { m_shape.getOutlineThickness() };
@@ -119,8 +129,13 @@ void Dialogue::update_before( float /* deltaTime */ )
 
         m_text.setCharacterSize( characterSize );
         m_text.setFillColor( characterColor );
-    }
-    ImGui::End();
+
+        std::stringstream stream {};
+        stream << "Text Remaining : '" << m_textRemaining << "'\n";
+        stream << "Current Text : '" << m_text.getString().toAnsiString()
+               << "'\n";
+        ImGui::Text( "%s", stream.str().c_str() );
+    } );
 }
 
 void Dialogue::render_before( Render & render ) const
@@ -129,23 +144,9 @@ void Dialogue::render_before( Render & render ) const
     render.get_target().draw( m_text, render.get_state() );
 }
 
-void Dialogue::set_text( std::string const & text )
+void Dialogue::set_current_text( std::string const & text )
 {
-    std::string currentDioalogueText { text };
-    if ( text.size() >= CHARACTER_LIMIT )
-    {
-        m_textRemaining += text.substr( CHARACTER_LIMIT + 1, text.size() - 1 );
-        currentDioalogueText = text.substr( 0, CHARACTER_LIMIT );
-    }
-    else
-    {
-        currentDioalogueText += m_textRemaining.substr(
-            0, CHARACTER_LIMIT - currentDioalogueText.size() );
-        m_textRemaining.erase(
-            0, CHARACTER_LIMIT - currentDioalogueText.size() );
-    }
-
-    m_text.setString( currentDioalogueText );
+    m_text.setString( text );
     // The origin has an offset (value of the left and top local bounds)
     m_text.setOrigin(
         m_text.getLocalBounds().left, m_text.getLocalBounds().top );

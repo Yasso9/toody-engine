@@ -44,12 +44,14 @@ EditorState::EditorState()
     m_greenEntity {
         math::RectangleF { 0.f, 0.f, 40.f, 40.f }, m_collisionList, m_view,
         input::ILKJ },
-    m_player {}
+    m_player {},
+    m_dialogue {}
 {
     this->add_child( m_tilemap );
     this->add_child( m_collisionList );
     this->add_child( m_greenEntity );
     this->add_child( m_player );
+    this->add_child( m_dialogue );
     // this->add_child( m_imageMap );
 
     m_tilemap.setPosition( 0.f, 0.f );
@@ -59,6 +61,17 @@ EditorState::EditorState()
     m_greenEntity.setFillColor( sf::Color::Green );
     m_greenEntity.setOutlineColor( sf::Color::Black );
     m_greenEntity.setOutlineThickness( 2.f );
+
+    m_dialogue.add_text(
+        "Lorem Ipsum is simply dummy text of the printing and typesetting "
+        "industry. Lorem Ipsum has been the industry's standard dummy text "
+        "ever since the 1500s, when an unknown printer took a galley of type "
+        "and scrambled it to make a type specimen book. It has survived not "
+        "only five centuries, but also the leap into electronic typesetting, "
+        "remaining essentially unchanged. It was popularised in the 1960s with "
+        "the release of Letraset sheets containing Lorem Ipsum passages, and "
+        "more recently with desktop publishing software like Aldus PageMaker "
+        "including versions of Lorem Ipsum." );
 }
 
 void EditorState::update_before( float deltaTime )
@@ -78,6 +91,11 @@ void EditorState::update_before( float deltaTime )
     if ( m_showWindow.at( "demo_window" ) )
     {
         ImGui::ShowDemoWindow( &m_showWindow.at( "demo_window" ) );
+    }
+
+    if ( input::is_pressed( sf::Keyboard::Space ) )
+    {
+        m_dialogue.next();
     }
 
     this->update_overlay();
@@ -114,8 +132,7 @@ void EditorState::update_view( float /* deltaTime */ )
             : math::Vector2F {0.f, 0.f}
     };
 
-    if ( ImGui::Begin( "View Options" ) )
-    {
+    ImGui::P_Begin( "View Options", &m_showWindow.at( "view" ), [=] () {
         std::stringstream output {};
         output << "Mouse Scroll : " << input::get_mouse_scroll() << "\n";
         output << "View Scroll Value : " << viewScrollValue << "\n";
@@ -123,8 +140,7 @@ void EditorState::update_view( float /* deltaTime */ )
         output << "View Movement Speed : " << viewMoveSpeed << "\n";
         output << "View Movement Value : " << viewMoveValue << "\n";
         ImGui::Text( "%s", output.str().c_str() );
-    }
-    ImGui::End();
+    } );
 
     m_view.zoom( viewScrollValue );
     m_view.move( viewMoveValue );
