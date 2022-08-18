@@ -26,25 +26,30 @@
 // const float ZOOM = 45.0f;
 
 Camera::Camera()
-  : m_pitch { -90.0f },
-    m_yaw { 2.5f },
-    m_roll { 0.f },
-    m_position { 0.0f, 0.0f, 3.0f },
-    m_movementSpeed { 2.5f },
+  : m_position { 0.0f, 0.0f, 5.0f },
+    m_direction { 0.f, 0.f, -1.f },
+    m_xAxis { 1.f, 0.f, 0.f },
+    m_yAxis { 0.f, 1.f, 0.f },
+    m_zAxis { 0.f, 0.f, 1.f },
+    m_movementSpeed { 0.f },
     m_fieldOfView { 45.f }
-{
-    this->set_target( { 0.f, 0.f, 0.f } );
-}
+{}
 
-void Camera::update_before( float /* deltaTime */ )
+void Camera::update_before( float deltaTime )
 {
+    m_movementSpeed = 2.5f * deltaTime;
+
     ImGui::P_Begin( "Camera", [*this] () {
         std::stringstream output {};
         output << "Position : " << m_position << "\n";
-        output << "Direction : " << this->get_direction() << "\n";
-        output << "Pitch : " << m_pitch << "\n";
-        output << "Yaw : " << m_yaw << "\n";
-        output << "Roll : " << m_roll << "\n";
+        output << "Direction : " << m_direction << "\n";
+        output << "Normalized Direction : " << math::normalize( m_direction )
+               << "\n";
+        output << "X Axis : " << m_xAxis << "\n";
+        output << "Y Axis : " << m_yAxis << "\n";
+        output << "Z Axis : " << m_zAxis << "\n";
+        output << "Movement Speed : " << m_movementSpeed << "\n";
+        output << "Field Of View : " << m_fieldOfView << "\n";
         ImGui::Text( "%s", output.str().c_str() );
     } );
 }
@@ -54,20 +59,9 @@ float Camera::get_field_of_view() const
     return m_fieldOfView;
 }
 
-math::Vector3F Camera::get_direction() const
+math::Vector3F Camera::get_target() const
 {
-    math::Vector3F direction { 0.f, 0.f, 0.f };
-
-    direction.y += math::cosinus_degree( m_pitch );
-    direction.z += math::sinus_degree( m_pitch );
-
-    direction.z += math::cosinus_degree( m_yaw );
-    direction.x += math::sinus_degree( m_yaw );
-
-    direction.x += math::cosinus_degree( m_roll );
-    direction.y += math::sinus_degree( m_roll );
-
-    return direction;
+    return m_position + m_direction;
 }
 
 glm::mat4 Camera::get_projection() const
@@ -84,38 +78,38 @@ glm::mat4 Camera::get_projection() const
 
 glm::mat4 Camera::get_view() const
 {
-    math::Vector3F const pureYAxis { 0.0f, 1.0f, 0.0f };
-
     return glm::lookAt(
-        m_position.to_glm(), this->get_direction().to_glm(),
-        pureYAxis.to_glm() );
-}
-
-void Camera::set_target( math::Vector3F /* targetPosition */ )
-{
-    // math::Vector3F direction = targetPosition - m_position;
+        m_position.to_glm(), this->get_target().to_glm(), m_yAxis.to_glm() );
 }
 
 void Camera::move( Camera::E_Movement direction )
 {
     switch ( direction )
     {
-    case Camera::E_Movement::Up :
-        m_position += this->get_y_axis() * m_movementSpeed;
-        break;
-    case Camera::E_Movement::Down :
-        m_position -= this->get_y_axis() * m_movementSpeed;
-        break;
     case Camera::E_Movement::Left :
-        m_position -= this->get_x_axis() * m_movementSpeed;
+        m_position -= m_xAxis * m_movementSpeed;
         break;
     case Camera::E_Movement::Right :
-        m_position += this->get_x_axis() * m_movementSpeed;
+        m_position += m_xAxis * m_movementSpeed;
+        break;
+
+    case Camera::E_Movement::Up :
+        m_position += m_yAxis * m_movementSpeed;
+        break;
+    case Camera::E_Movement::Down :
+        m_position -= m_yAxis * m_movementSpeed;
+        break;
+
+    case Camera::E_Movement::In :
+        m_position -= m_zAxis * m_movementSpeed;
+        break;
+    case Camera::E_Movement::Out :
+        m_position += m_zAxis * m_movementSpeed;
         break;
     }
 }
 
-static void reset_bounding ( float & angleValue )
+[[maybe_unused]] static void reset_bounding ( float & angleValue )
 {
     if ( angleValue > 180 )
     {
@@ -129,31 +123,64 @@ static void reset_bounding ( float & angleValue )
 
 void Camera::rotate( math::Vector3F angle )
 {
-    angle *= 0.05f;
+    angle *= m_movementSpeed;
 
-    m_pitch += angle.x;
-    m_yaw += angle.y;
-    m_roll += angle.z;
+    glm::mat3 const zMatrix {
+        math::cosinus_degree( angle.z ),
+        -math::sinus_degree( angle.z ),
+        0.f,
+        math::sinus_degree( angle.z ),
+        math::cosinus_degree( angle.z ),
+        0.f,
+        0.f,
+        0.f,
+        1.f };
 
-    reset_bounding( m_pitch );
-    reset_bounding( m_yaw );
-    reset_bounding( m_roll );
+    glm::mat3 const yMatrix {
+        math::cosinus_degree( angle.y ),
+        0.f,
+        math::sinus_degree( angle.y ),
+        0.f,
+        1.f,
+        0.f,
+        -math::sinus_degree( angle.y ),
+        0.f,
+        math::cosinus_degree( angle.y ),
+    };
+
+    glm::mat3 const xMatrix {
+        1.f,
+        0.f,
+        0.f,
+        0.f,
+        math::cosinus_degree( angle.x ),
+        -math::sinus_degree( angle.x ),
+        0.f,
+        math::sinus_degree( angle.x ),
+        math::cosinus_degree( angle.x ),
+    };
+
+    if ( angle.z != 0.f )
+    {
+        m_direction = zMatrix * m_direction.to_glm();
+        m_xAxis     = zMatrix * m_xAxis.to_glm();
+        m_yAxis     = zMatrix * m_yAxis.to_glm();
+    }
+    if ( angle.x != 0.f )
+    {
+        m_direction = xMatrix * m_direction.to_glm();
+        m_yAxis     = xMatrix * m_yAxis.to_glm();
+        m_zAxis     = xMatrix * m_zAxis.to_glm();
+    }
+    if ( angle.y != 0.f )
+    {
+        m_direction = yMatrix * m_direction.to_glm();
+        m_xAxis     = yMatrix * m_xAxis.to_glm();
+        m_zAxis     = yMatrix * m_zAxis.to_glm();
+    }
 }
 
 void Camera::zoom( float factor )
 {
-    m_position += this->get_direction() * m_movementSpeed * factor;
-}
-
-glm::vec3 Camera::get_x_axis() const
-{
-    constexpr glm::vec3 const pureYAxis { 0.0f, 1.0f, 0.0f };
-    return glm::normalize(
-        glm::cross( this->get_direction().to_glm(), pureYAxis ) );
-}
-
-glm::vec3 Camera::get_y_axis() const
-{
-    return glm::normalize(
-        glm::cross( this->get_x_axis(), this->get_direction().to_glm() ) );
+    m_position += m_direction * m_movementSpeed * factor;
 }

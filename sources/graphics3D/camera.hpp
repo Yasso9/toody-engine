@@ -10,25 +10,28 @@
 class Camera : public Component3D
 {
   public:
+    /// @todo replace that by a 3D vector with negatif or positiv values
     /// @brief Defines several possible options for camera movement.
     enum class E_Movement
     {
         Up = 0,
         Down,
         Left,
-        Right
+        Right,
+        In,
+        Out
     };
 
   private:
-    /// @brief X axis rotation angle
-    float m_pitch;
-    /// @brief Y axis rotation angle
-    float m_yaw;
-    /// @brief Z axis rotation angle
-    float m_roll;
-
     /// @brief Position of the camera in the space
     math::Vector3F m_position;
+    /// @brief Direction to where the camera is looking
+    /// @remark should be normalized
+    math::Vector3F m_direction;
+
+    math::Vector3F m_xAxis;
+    math::Vector3F m_yAxis;
+    math::Vector3F m_zAxis;
 
     float m_movementSpeed;
     float m_fieldOfView;
@@ -42,24 +45,16 @@ class Camera : public Component3D
   public:
     float get_field_of_view () const;
 
-    math::Vector3F get_direction () const;
     /// @brief return the position where the camera looks
     /// in the trigonometric circle
-    // math::Vector3F get_target () const;
+    math::Vector3F get_target () const;
 
     /// @brief Space transformation
     glm::mat4 get_projection () const;
     /// @brief View transformation
     glm::mat4 get_view () const;
 
-    /// @brief set the position where camera should look at
-    void set_target ( math::Vector3F targetPosition );
-
     void move ( Camera::E_Movement direction );
     void rotate ( math::Vector3F angleVector );
     void zoom ( float factor );
-
-  private:
-    glm::vec3 get_x_axis () const;
-    glm::vec3 get_y_axis () const;
 };

@@ -4,21 +4,18 @@
 
 namespace math
 {
+    /* ************************************************************************
+    ***************************** FUNCTIONS ***********************************
+    ************************************************************************ */
+
     template< C_Primitive Type >
-    void Vector3< Type >::rotate(
-        float angle, Vector3< Type > /* axisRotation */ )
+    Vector3< Type > normalize ( Vector3< Type > vector )
     {
-        ASSERTION(
-            angle >= -180.f && angle <= 180.f,
-            "An angle must have a value between 0 and 180" );
-
-        // Vector3 const qValue { math::cosinus_degree( angle )
-        //                        + math::sinus_degree( angle ) * axisRotation
-        //                        };
-        // Vector3 const qInvertValue { math::power( qValue, -1 ) };
-
-        // Return the quaternions rotation
-        // this->set_direction( qValue * this->get_direction() * qInvertValue );
+        float const length { vector.get_length() };
+        vector.x /= length;
+        vector.y /= length;
+        vector.z /= length;
+        return vector;
     }
 
     /* ************************************************************************

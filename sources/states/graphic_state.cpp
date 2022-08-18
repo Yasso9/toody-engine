@@ -12,20 +12,15 @@
 [[maybe_unused]] static Shape::S_Data get_sample_shape_data_A ();
 
 GraphicState::GraphicState()
-  : State( State::E_List::Graphics ),
-    m_camera {
-},
+  : State { State::E_List::Graphics },
+    m_camera {},
     m_shapes { Shape { get_sample_shape_data_A(), m_camera } },
-    m_models { Model { "backpack/backpack.obj", m_camera } }
+    m_models { Model { "backpack/backpack.obj", m_camera } },
+    m_captureMouse { false }
 {
     this->add_child( m_camera );
     this->add_childs( m_shapes );
     this->add_childs( m_models );
-
-    for ( Model & model : m_models )
-    {
-        model.move( glm::vec3 { 3.f, 3.f, 0.f } );
-    }
 
     for ( Shape & shape : m_shapes )
     {
@@ -33,10 +28,24 @@ GraphicState::GraphicState()
         shape.rotate( glm::vec3 { 1.f, 1.f, 1.f }, 0.f );
         shape.scale( glm::vec3 { 1.f, 1.f, 1.f } );
     }
+
+    for ( Model & model : m_models )
+    {
+        model.move( glm::vec3 { 0.f, 0.f, 0.f } );
+    }
 }
 
 void GraphicState::update_before( float /* deltaTime */ )
 {
+    if ( input::is_pressed( sf::Keyboard::Space ) )
+    {
+        m_captureMouse = ! m_captureMouse;
+    }
+
+    ImGui::P_Begin( "Graphic State", [this] () {
+        ImGui::Checkbox( "Mouse Captured ? (SPACE)", &m_captureMouse );
+    } );
+
     this->update_camera_keyboard_inputs();
     this->update_camera_mouse_inputs();
 }
@@ -71,6 +80,14 @@ void GraphicState::update_camera_keyboard_inputs()
     {
         m_camera.move( Camera::E_Movement::Right );
     }
+    if ( input::is_pressed( sf::Keyboard::A ) )
+    {
+        m_camera.move( Camera::E_Movement::In );
+    }
+    if ( input::is_pressed( sf::Keyboard::E ) )
+    {
+        m_camera.move( Camera::E_Movement::Out );
+    }
 
     math::Vector3F rotation { 0.f, 0.f, 0.f };
 
@@ -104,6 +121,11 @@ void GraphicState::update_camera_keyboard_inputs()
 
 void GraphicState::update_camera_mouse_inputs()
 {
+    if ( ! m_captureMouse )
+    {
+        return;
+    }
+
     math::Vector2F const windowCenter {
         Window::get_instance().get_center_position() };
     math::Vector2F const mousePosition { input::get_mouse_position() };
@@ -112,17 +134,13 @@ void GraphicState::update_camera_mouse_inputs()
     {
         return;
     }
-
     // Gap between mousePosition and windowCenter
-    glm::vec3 offset {};
-    offset.x = mousePosition.x - windowCenter.x;
-    offset.y = windowCenter.y - mousePosition.y;
-    offset.z = 0.f;
+    math::Vector2F offset { mousePosition - windowCenter };
 
     // Reset Mouse Position
     input::set_mouse_position( windowCenter.to_int() );
 
-    m_camera.rotate( offset );
+    m_camera.rotate( { offset.y, offset.x, 0.f } );
 }
 
 static Shape::S_Data get_sample_shape_data_A ()

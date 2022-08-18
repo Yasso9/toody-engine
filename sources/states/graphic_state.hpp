@@ -14,6 +14,8 @@ class GraphicState final : public State
     std::vector< Shape > m_shapes;
     std::vector< Model > m_models;
 
+    bool m_captureMouse;
+
   public:
     GraphicState();
 

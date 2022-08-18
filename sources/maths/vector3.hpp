@@ -118,17 +118,14 @@ namespace math
                 break;
             }
         }
-
-        void normalize ()
-        {
-            float const length { this->get_length() };
-            this->x /= length;
-            this->y /= length;
-            this->z /= length;
-        }
-
-        void rotate ( float angle, Vector3< Type > axisRotation );
     };
+
+    /* ************************************************************************
+    ***************************** FUNCTIONS ***********************************
+    ************************************************************************ */
+
+    template< C_Primitive Type >
+    Vector3< Type > normalize ( Vector3< Type > vector );
 
     /* ************************************************************************
     ************************** VECTOR X VECTOR ********************************
