@@ -3,8 +3,9 @@
 #include <iostream>
 #include <utility>
 
+#include <IMGUI/imgui.h>
+
 #include "graphics2D/sfml.hpp"
-#include "libraries/imgui.hpp"
 #include "tools/concepts.hpp"
 
 namespace math

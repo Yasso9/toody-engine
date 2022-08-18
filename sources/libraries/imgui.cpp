@@ -63,6 +63,25 @@ namespace ImGui
             "%u", flags );
     }
 
+    bool P_InputVector3F (
+        std::string const & label, math::Vector3F & vector,
+        std::function< void( math::Vector3F & ) > const & resultFonctor,
+        char const * format, ImGuiInputTextFlags flags )
+    {
+        float vectorTable[3] { vector.x, vector.y, vector.z };
+
+        bool returnValue =
+            InputFloat3( label.c_str(), vectorTable, format, flags );
+
+        vector.x = vectorTable[0];
+        vector.y = vectorTable[1];
+        vector.z = vectorTable[2];
+
+        resultFonctor( vector );
+
+        return returnValue;
+    }
+
     namespace color
     {
         uint32_t to_integer ( sf::Color color )

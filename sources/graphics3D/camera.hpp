@@ -43,18 +43,23 @@ class Camera : public Component3D
     void update_before ( float deltaTime ) override;
 
   public:
-    float get_field_of_view () const;
-
-    /// @brief return the position where the camera looks
-    /// in the trigonometric circle
-    math::Vector3F get_target () const;
-
     /// @brief Space transformation
     glm::mat4 get_projection () const;
     /// @brief View transformation
     glm::mat4 get_view () const;
 
+    void set_direction ( math::Vector3F direction );
+
+    /// @brief reset the direction and the position
+    void reset ();
+
     void move ( Camera::E_Movement direction );
     void rotate ( math::Vector3F angleVector );
-    void zoom ( float factor );
+
+  private:
+    float get_field_of_view () const;
+
+    /// @brief return the position where the camera looks
+    /// in the trigonometric circle
+    math::Vector3F get_target () const;
 };

@@ -7,6 +7,7 @@
 #include "graphics2D/component.tpp"  // for Component::add_childs
 #include "graphics2D/sfml.hpp"
 #include "input/input.hpp"
+#include "libraries/imgui.hpp"
 #include "main/window.hpp"
 
 [[maybe_unused]] static Shape::S_Data get_sample_shape_data_A ();
@@ -24,7 +25,7 @@ GraphicState::GraphicState()
 
     for ( Shape & shape : m_shapes )
     {
-        shape.move( glm::vec3 { 3.f, -2.f, -1.f } );
+        shape.move( glm::vec3 { 5.f, -3.f, -1.f } );
         shape.rotate( glm::vec3 { 1.f, 1.f, 1.f }, 0.f );
         shape.scale( glm::vec3 { 1.f, 1.f, 1.f } );
     }

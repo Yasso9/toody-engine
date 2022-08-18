@@ -8,7 +8,8 @@
 #include <GLM/gtc/matrix_transform.hpp>  // for perspective
 #include <SFML/Window/Keyboard.hpp>      // for Keyboard, Keyboard::B, Keyb...
 
-#include "input/input.hpp"           // for is_pressed, get_mouse_position
+#include "input/input.hpp"  // for is_pressed, get_mouse_position
+#include "libraries/imgui.hpp"
 #include "main/window.hpp"           // for Window
 #include "maths/geometry/point.tpp"  // for Point::Point<Type>
 #include "maths/vector2.hpp"         // for Vector2F, Vector2I, Vector2U
@@ -18,28 +19,33 @@
 #include "tools/assertion.hpp"       // for ASSERTION
 #include "tools/singleton.tpp"       // for Singleton::get_instance
 
-// Default camera values
-// const float YAW = -90.0f;
-// const float PITCH =  2.5f;
-// const float SPEED = 2.5f;
-// const float SENSITIVITY = 0.1f;
-// const float ZOOM = 45.0f;
-
 Camera::Camera()
-  : m_position { 0.0f, 0.0f, 5.0f },
-    m_direction { 0.f, 0.f, -1.f },
-    m_xAxis { 1.f, 0.f, 0.f },
-    m_yAxis { 0.f, 1.f, 0.f },
-    m_zAxis { 0.f, 0.f, 1.f },
+  : m_position {},
+    m_direction {},
+    m_xAxis {},
+    m_yAxis {},
+    m_zAxis {},
     m_movementSpeed { 0.f },
     m_fieldOfView { 45.f }
-{}
+{
+    this->reset();
+}
 
 void Camera::update_before( float deltaTime )
 {
     m_movementSpeed = 2.5f * deltaTime;
 
-    ImGui::P_Begin( "Camera", [*this] () {
+    ImGui::P_Begin( "Camera", [this] () {
+        if ( ImGui::Button( "Reset Camera" ) )
+        {
+            this->reset();
+        }
+
+        ImGui::P_InputVector3F(
+            "Direction", m_direction, [] ( math::Vector3F & directionChanged ) {
+                directionChanged = math::normalize( directionChanged );
+            } );
+
         std::stringstream output {};
         output << "Position : " << m_position << "\n";
         output << "Direction : " << m_direction << "\n";
@@ -52,16 +58,6 @@ void Camera::update_before( float deltaTime )
         output << "Field Of View : " << m_fieldOfView << "\n";
         ImGui::Text( "%s", output.str().c_str() );
     } );
-}
-
-float Camera::get_field_of_view() const
-{
-    return m_fieldOfView;
-}
-
-math::Vector3F Camera::get_target() const
-{
-    return m_position + m_direction;
 }
 
 glm::mat4 Camera::get_projection() const
@@ -79,7 +75,22 @@ glm::mat4 Camera::get_projection() const
 glm::mat4 Camera::get_view() const
 {
     return glm::lookAt(
-        m_position.to_glm(), this->get_target().to_glm(), m_yAxis.to_glm() );
+        m_position.to_glm(), this->get_target().to_glm(), { 0.f, 1.f, 0.f } );
+}
+
+void Camera::set_direction( math::Vector3F direction )
+{
+    m_direction = math::normalize( direction );
+
+    m_xAxis = { 1.f, 0.f, 0.f };
+    m_yAxis = { 0.f, 1.f, 0.f };
+    m_zAxis = { 0.f, 0.f, 1.f };
+}
+
+void Camera::reset()
+{
+    this->set_direction( { 0.f, 0.f, -1.f } );
+    m_position = { 0.0f, 0.0f, 5.0f };
 }
 
 void Camera::move( Camera::E_Movement direction )
@@ -109,23 +120,11 @@ void Camera::move( Camera::E_Movement direction )
     }
 }
 
-[[maybe_unused]] static void reset_bounding ( float & angleValue )
-{
-    if ( angleValue > 180 )
-    {
-        angleValue = -180;
-    }
-    if ( angleValue < -180 )
-    {
-        angleValue = 180;
-    }
-}
-
 void Camera::rotate( math::Vector3F angle )
 {
     angle *= m_movementSpeed;
 
-    glm::mat3 const zMatrix {
+    glm::mat3 const zMatrixRotation {
         math::cosinus_degree( angle.z ),
         -math::sinus_degree( angle.z ),
         0.f,
@@ -136,7 +135,7 @@ void Camera::rotate( math::Vector3F angle )
         0.f,
         1.f };
 
-    glm::mat3 const yMatrix {
+    glm::mat3 const yMatrixRotation {
         math::cosinus_degree( angle.y ),
         0.f,
         math::sinus_degree( angle.y ),
@@ -148,7 +147,7 @@ void Camera::rotate( math::Vector3F angle )
         math::cosinus_degree( angle.y ),
     };
 
-    glm::mat3 const xMatrix {
+    glm::mat3 const xMatrixRotation {
         1.f,
         0.f,
         0.f,
@@ -162,25 +161,36 @@ void Camera::rotate( math::Vector3F angle )
 
     if ( angle.z != 0.f )
     {
-        m_direction = zMatrix * m_direction.to_glm();
-        m_xAxis     = zMatrix * m_xAxis.to_glm();
-        m_yAxis     = zMatrix * m_yAxis.to_glm();
+        m_direction = zMatrixRotation * m_direction.to_glm();
+        m_xAxis     = zMatrixRotation * m_xAxis.to_glm();
+        m_yAxis     = zMatrixRotation * m_yAxis.to_glm();
+
+        m_direction = math::normalize( m_direction );
     }
     if ( angle.x != 0.f )
     {
-        m_direction = xMatrix * m_direction.to_glm();
-        m_yAxis     = xMatrix * m_yAxis.to_glm();
-        m_zAxis     = xMatrix * m_zAxis.to_glm();
+        m_direction = xMatrixRotation * m_direction.to_glm();
+        m_yAxis     = xMatrixRotation * m_yAxis.to_glm();
+        m_zAxis     = xMatrixRotation * m_zAxis.to_glm();
+
+        m_direction = math::normalize( m_direction );
     }
     if ( angle.y != 0.f )
     {
-        m_direction = yMatrix * m_direction.to_glm();
-        m_xAxis     = yMatrix * m_xAxis.to_glm();
-        m_zAxis     = yMatrix * m_zAxis.to_glm();
+        m_direction = yMatrixRotation * m_direction.to_glm();
+        m_xAxis     = yMatrixRotation * m_xAxis.to_glm();
+        m_zAxis     = yMatrixRotation * m_zAxis.to_glm();
+
+        m_direction = math::normalize( m_direction );
     }
 }
 
-void Camera::zoom( float factor )
+float Camera::get_field_of_view() const
 {
-    m_position += m_direction * m_movementSpeed * factor;
+    return m_fieldOfView;
+}
+
+math::Vector3F Camera::get_target() const
+{
+    return m_position + m_direction;
 }

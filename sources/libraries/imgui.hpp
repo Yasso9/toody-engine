@@ -7,6 +7,8 @@
 #include <IMGUI/imgui.h>            // for ImGuiColorEditFlags, ImGuiInputTe...
 #include <SFML/Graphics/Color.hpp>  // for Color
 
+#include "maths/vector3.hpp"
+
 // P stands for personnal fonctions (overloading ImGui)
 
 namespace ImGui
@@ -28,6 +30,12 @@ namespace ImGui
     bool P_InputNumber (
         std::string const & label, unsigned int & value, int step = 1,
         int step_fast = 100, ImGuiInputTextFlags flags = 0 );
+
+    bool P_InputVector3F (
+        std::string const & label, math::Vector3F & vector,
+        std::function< void( math::Vector3F & ) > const & resultFonctor =
+            [] ( math::Vector3F & /* vectorResult */ ) {},
+        char const * format = "%.3f", ImGuiInputTextFlags flags = 0 );
 
     namespace color
     {
