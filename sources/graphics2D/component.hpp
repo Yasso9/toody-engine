@@ -1,8 +1,11 @@
 #pragma once
 
+#include <optional>
 #include <vector>  // for vector
 
 #include <SFML/Graphics/Transformable.hpp>  // for Transformable
+
+#include "graphics2D/view.hpp"
 
 class Component;
 class Render;
@@ -15,17 +18,31 @@ class Component
 {
   private:
     std::vector< Component * > m_childs;
+    View const *               m_view;
 
   protected:
     // Virtual Class - Can only be called by child
-    Component() : m_childs {} {};
+    Component() : m_childs {}, m_view { nullptr } {};
 
   public:
     virtual ~Component() = default;
 
+    Component( Component const & component ) noexcept;
+    Component( Component && component ) noexcept;
+    Component & operator= ( Component const & component ) noexcept;
+    Component & operator= ( Component && component ) noexcept;
+
   protected:
     template< C_IsComponent ComponentClass >
     void add_child ( ComponentClass & component );
+    /// @brief Add a child to the component
+    /// @tparam ComponentClass Type of the component. only Class inherited from
+    /// Component are accepted
+    /// @param component Child of the component to add. Will call update and
+    /// render automatically
+    /// @param view View that the component will have when it's drawn
+    template< C_IsComponent ComponentClass >
+    void add_child ( ComponentClass & component, View const & view );
     template< C_IsComponent ComponentClass >
     void add_childs ( std::vector< ComponentClass > & components );
 
@@ -35,7 +52,7 @@ class Component
     /// @brief draw the component to the render
     virtual void render_all ( Render & render ) const final;
 
-  protected:
+    void set_view ( View const & view );
 
   private:
     /// @brief custom update - is the first function called

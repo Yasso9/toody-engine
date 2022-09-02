@@ -26,15 +26,15 @@
 #include "tools/singleton.tpp"           // for Singleton::get_instance
 
 EditorState::EditorState()
-  : State( State::E_List::Editor ),
+  : State { State::E_List::Editor },
+    m_view { Window::get_instance().getDefaultView() },
     m_showWindow {
         {    "demo_window", false},
         {  "debug_options", false},
         { "editor_overlay",  true},
         {      "collision",  true},
         {"player_handling", false},
-        {           "view", false},
-},
+        {           "view", false}, },
     m_tilemap { m_view },
     m_imageMap {},
     m_collisionList {
@@ -47,12 +47,12 @@ EditorState::EditorState()
     m_player {},
     m_dialogue {}
 {
-    this->add_child( m_tilemap );
-    this->add_child( m_collisionList );
-    this->add_child( m_greenEntity );
-    this->add_child( m_player );
+    this->add_child( m_tilemap, m_view );
+    this->add_child( m_collisionList, m_view );
+    this->add_child( m_greenEntity, m_view );
+    this->add_child( m_player, m_view );
     this->add_child( m_dialogue );
-    // this->add_child( m_imageMap );
+    this->add_child( m_imageMap );
 
     m_tilemap.setPosition( 0.f, 0.f );
 
@@ -132,8 +132,11 @@ void EditorState::update_view( float /* deltaTime */ )
             : math::Vector2F {0.f, 0.f}
     };
 
-    ImGui::P_Begin( "View Options", &m_showWindow.at( "view" ), [=] () {
+    ImGui::P_Begin( "View Options", &m_showWindow.at( "view" ), [&] () {
         std::stringstream output {};
+        output << "View Center : " << m_view.get_center() << "\n";
+        output << "View Position : " << m_view.get_position() << "\n";
+        output << "View Size : " << m_view.get_size() << "\n";
         output << "Mouse Scroll : " << input::get_mouse_scroll() << "\n";
         output << "View Scroll Value : " << viewScrollValue << "\n";
         output << "Mouse Movement : " << input::get_mouse_movement() << "\n";

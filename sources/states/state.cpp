@@ -6,16 +6,12 @@
 
 #include "graphics2D/view.hpp"  // for View
 #include "input/input.hpp"      // for set_mouse_movement, set_mo...
-#include "main/render.hpp"      // for Render
 #include "main/window.hpp"      // for Window
 #include "maths/vector2.hpp"    // for Vector2I
 #include "maths/vector2.tpp"    // for Vector2::to_float
 #include "tools/singleton.tpp"  // for Singleton::get_instance
 
-State::State( State::E_List const & stateName )
-  : m_stateName { stateName },
-    m_view { Window::get_instance().getDefaultView() }
-{}
+State::State( State::E_List const & stateName ) : m_stateName { stateName } {}
 
 State::E_List State::get_state_to_print() const
 {
@@ -65,18 +61,6 @@ void State::update_inputs( sf::Event const & event )
     default :
         break;
     }
-}
-
-void State::render_before( Render & render ) const
-{
-    /// @todo create method set view
-    render.get_target().setView( m_view );
-}
-
-void State::render_after( Render & render ) const
-{
-    /// @todo create method reset view
-    render.get_target().setView( render.get_target().getDefaultView() );
 }
 
 void State::keyboard_pressed( sf::Event /* event */ ) {}

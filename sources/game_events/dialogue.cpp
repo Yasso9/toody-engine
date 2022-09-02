@@ -7,6 +7,7 @@
 #include <SFML/System/Vector2.hpp>         // for Vector2f, Vector2
 #include <SFML/Window/Mouse.hpp>           // for Mouse, Mouse::Right
 
+#include "graphics2D/view.hpp"
 #include "input/input.hpp"           // for get_mouse_position, is_pre...
 #include "libraries/imgui.hpp"       // for P_ColorEditor, P_InputNumber
 #include "libraries/imgui.hpp"       // for P_Begin
@@ -36,6 +37,7 @@ Dialogue::Dialogue()
         ( windowSizeF.x - m_shape.getSize().x ) / 2.f,
         ( windowSizeF.y - m_shape.getSize().y ) * 0.8f,
     } );
+
     m_shape.setFillColor( sf::Color::White );
     m_shape.setOutlineThickness( 3.f );
     m_shape.setOutlineColor( sf::Color::Black );
@@ -131,6 +133,8 @@ void Dialogue::update_before( float /* deltaTime */ )
         m_text.setFillColor( characterColor );
 
         std::stringstream stream {};
+        stream << "Position : '" << m_shape.getPosition() << "'\n";
+        stream << "Size : '" << m_shape.getSize() << "'\n";
         stream << "Text Remaining : '" << m_textRemaining << "'\n";
         stream << "Current Text : '" << m_text.getString().toAnsiString()
                << "'\n";

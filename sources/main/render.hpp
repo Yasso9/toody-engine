@@ -1,10 +1,10 @@
 #pragma once
 
 #include <SFML/Graphics/RenderStates.hpp>  // for RenderStates, RenderStates...
+#include <SFML/Graphics/RenderTarget.hpp>
 
 namespace sf
 {
-    class RenderTarget;
     class Texture;
 }  // namespace sf
 

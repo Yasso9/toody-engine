@@ -9,6 +9,7 @@
 #include "graphics2D/component.hpp"  // for Component2D
 #include "maths/vector2.hpp"         // for Vector2I
 
+class View;
 class Render;
 
 class Dialogue : public Component2D

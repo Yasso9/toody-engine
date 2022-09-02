@@ -31,7 +31,6 @@ class State : public Component2D
   protected:
     /** @brief value corresponding of the state that the game should run */
     State::E_List m_stateName;
-    View          m_view;
 
     State( State::E_List const & stateName );
 
@@ -47,9 +46,6 @@ class State : public Component2D
     void update_inputs ( sf::Event const & event );
 
   private:
-    void render_before ( Render & render ) const override;
-    void render_after ( Render & render ) const override;
-
     virtual void keyboard_pressed ( sf::Event event );
     virtual void keyboard_released ( sf::Event event );
 

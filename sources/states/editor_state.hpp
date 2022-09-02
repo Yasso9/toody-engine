@@ -13,6 +13,8 @@
 
 class EditorState final : public State
 {
+    View m_view;
+
     std::map< std::string, bool > m_showWindow;
 
     TileMap  m_tilemap;
