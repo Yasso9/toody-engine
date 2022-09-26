@@ -26,4 +26,30 @@ namespace vector
     {
         a.insert( a.end(), b.begin(), b.end() );
     }
+
+    /// @brief Check if the all the size of the subvectors are equal
+    template< typename Type >
+    bool is_rectangle (
+        std::vector< std::vector< Type > > const & dimensionnalVector )
+    {
+        if ( dimensionnalVector.empty() )
+        {
+            // An empty table is considered like a rectangle table
+            return true;
+        }
+
+        bool        sameSizeForAllColumn { true };
+        std::size_t baseColumnSize { dimensionnalVector[0].size() };
+        for ( std::size_t i_subVector = 1;
+              i_subVector < dimensionnalVector.size(); ++i_subVector )
+        {
+            if ( baseColumnSize != dimensionnalVector[i_subVector].size() )
+            {
+                sameSizeForAllColumn = false;
+                break;
+            }
+        }
+
+        return sameSizeForAllColumn;
+    }
 }  // namespace vector

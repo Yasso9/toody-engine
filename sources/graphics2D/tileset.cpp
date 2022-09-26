@@ -9,7 +9,7 @@
 #include "tools/global_variable.hpp"  // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZ...
 
 Tileset::Tileset( sf::Texture const & texture, math::Vector2F const & position )
-  : m_texture( texture ), m_position( position )
+  : m_texture { texture }, m_position { position }
 {}
 
 sf::Texture const & Tileset::get_texture() const
@@ -37,7 +37,7 @@ math::Vector2U Tileset::get_size_in_tile() const
     return math::floor( this->get_size_in_pixel() ) / TILE_PIXEL_SIZE_U;
 }
 
-std::size_t Tileset::get_number_of_tile() const
+unsigned int Tileset::get_number_of_tile() const
 {
     return this->get_size_in_tile().x * this->get_size_in_tile().y;
 }

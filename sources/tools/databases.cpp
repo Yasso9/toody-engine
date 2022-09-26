@@ -67,6 +67,13 @@ namespace db
         return Unserializer { s_requestResult };
     }
 
+    void test_table ()
+    {
+        Table table { "tilemap" };
+
+        std::cout << table.select< std::string >( "tile_table" ) << std::endl;
+    }
+
     void test_database ()
     {
         // Initialisation de la database

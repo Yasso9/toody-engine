@@ -24,15 +24,15 @@ TileTable::TileTable( std::vector< Tiles > tiles, math::Vector2U size )
         "Size and Tile Table not comptatible" );
 }
 
-TileTable::TileTable(
-    std::vector< std::vector< Tiles > > tileDimensionnalVector )
+TileTable::TileTable( std::vector< std::vector< Tiles > > tiles )
   : m_matrix {}, m_size { 0, 0 }
 {
-    /// @todo Assert all tiles have the same size
-    m_size = {
-        tileDimensionnalVector.size(), tileDimensionnalVector[0].size() };
+    ASSERTION(
+        vector::is_rectangle( tiles ), "Each columns must have the same size" );
 
-    for ( std::vector< Tiles > const & subvector : tileDimensionnalVector )
+    m_size = { tiles[0].size(), tiles.size() };
+
+    for ( std::vector< Tiles > const & subvector : tiles )
     {
         vector::append( m_matrix, subvector );
     }

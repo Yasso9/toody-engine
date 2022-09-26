@@ -20,8 +20,6 @@ class TileMap : public TransformableComponent2D
     sf::RectangleShape                                m_cursor;
     /// @brief view of the component that call the tilemap
     View &                                            m_view;
-    /// @todo think of a better way to structur this variable :
-    /// https://stackoverflow.com/questions/2286991/c-two-dimensional-stdvector-best-practices
     /// @brief m_tileTable[line][column][depth]
     std::vector< std::vector< std::vector< Tile > > > m_tileTable;
     unsigned int                                      m_currentDepth;
@@ -63,7 +61,8 @@ class TileMap : public TransformableComponent2D
     void init_tile_table_from_database ();
 
     void change_tile (
-        math::Vector2U const & tilePositionInTile, int const & newTileValue );
+        math::Vector2U const & tilePositionInTile,
+        unsigned int const &   newTileValue );
 
     void update_selection ();
     void update_table_informations ();

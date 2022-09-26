@@ -23,7 +23,7 @@ class TileTable
 
   public:
     TileTable( std::vector< Tiles > tiles, math::Vector2U size );
-    TileTable( std::vector< std::vector< Tiles > > tile );
+    TileTable( std::vector< std::vector< Tiles > > tiles );
     ~TileTable() = default;
 
     Tiles get_element ( math::Vector2U position ) const;
