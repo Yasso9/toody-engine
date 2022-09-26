@@ -2,7 +2,6 @@
 
 #include "graphics2D/static_entity.hpp"
 
-/// @todo maybe create a base class for CollisionList and CustomCollisionLists
 class CollisionList : public Component2D
 {
     std::vector< StaticEntity2D > m_collisionArray;

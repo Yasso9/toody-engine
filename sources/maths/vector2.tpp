@@ -127,6 +127,12 @@ namespace math
     }
 
     template< C_Primitive Type >
+    Point< Type > Vector2< Type >::to_point() const
+    {
+        return Point< Type > { this->x, this->y };
+    }
+
+    template< C_Primitive Type >
     Type Vector2< Type >::operator[] ( std::size_t index ) const
     {
         switch ( index )

@@ -13,6 +13,7 @@
 
 class EditorState final : public State
 {
+    /// @brief 2D camera of the state
     View m_view;
 
     std::map< std::string, bool > m_showWindow;

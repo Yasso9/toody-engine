@@ -15,6 +15,9 @@ namespace math
     class Rectangle;
 
     template< C_Primitive Type >
+    class Point;
+
+    template< C_Primitive Type >
     class Vector2;
     using Vector2F = Vector2< float >;
     using Vector2I = Vector2< int >;
@@ -83,6 +86,8 @@ namespace math
             requires( not std::is_same_v< Type, int > );
         Vector2< std::size_t > to_size_t () const
             requires( not std::is_same_v< Type, std::size_t > );
+
+        Point< Type > to_point () const;
 
         /// @brief get the biggest value between x and y
         Type get_max () const { return std::max( this->x, this->y ); }
