@@ -142,7 +142,7 @@ void TileMap::save() const
     db::request(
         "INSERT INTO tilemap (tile_table)"
         "VALUES('"
-        + Serializer { m_tileTable }.to_string() + "');" );
+        + serialize( m_tileTable ).to_string() + "');" );
 }
 
 void TileMap::init_tile_table_from_database()

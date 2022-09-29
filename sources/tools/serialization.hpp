@@ -20,30 +20,21 @@ bool verify_next ( std::istream & stream, char const & character );
 
 [[maybe_unused]] void test_serializer ();
 
-/// @todo Serializer and Unserializer must be the same class
-
-/// @todo Type require that the type have operator << and copy contructor
-template< typename TypeToSerialize >
-class Serializer
+class Chunk
 {
-    TypeToSerialize m_valueToSerialize;
+    std::string m_serializedValue;
 
   public:
-    Serializer( TypeToSerialize const & valueToSerialize );
+    Chunk( std::string const & serializedValue );
 
+    /// @brief return a string of the serialized content
     std::string to_string () const;
+
+    template< typename Type >
+    Type to_value () const;
 };
 
-class Unserializer
-{
-    std::string m_stringToUnserialize;
-
-  public:
-    Unserializer( std::string const & stringToUnserialize );
-
-    /// @brief return the serialized content
-    std::string get_content () const;
-
-    template< typename TypeToUnserialize >
-    TypeToUnserialize to_value () const;
-};
+/// @todo Serializer and Unserializer must be the same class
+/// @todo Type require that the type have operator << and copy contructor
+template< typename Type >
+Chunk serialize ( Type const & valueToSerialize );

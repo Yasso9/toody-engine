@@ -36,7 +36,7 @@ static int callback (
 /// @todo create a singleton and initialize sqlite3_open
 namespace db
 {
-    Unserializer request ( std::string const & request )
+    Chunk request ( std::string const & request )
     {
         std::string const databasePath {
             path::get_file_str( path::E_File::Database ) };
@@ -64,12 +64,61 @@ namespace db
 
         sqlite3_close( database );
 
-        return Unserializer { s_requestResult };
+        return Chunk { s_requestResult };
     }
+
+    bool is_table_created ( std::string tableName )
+    {
+        std::ostringstream requestStream {};
+        requestStream
+            << "SELECT name FROM sqlite_master WHERE type = 'table' AND "
+               "name = '"
+            << tableName << "';";
+
+        // std::cout << "(Check creation)"
+        //           << db::request( requestStream.str() ).get_content()
+        //           << std::endl;
+
+        return db::request( requestStream.str() ).to_string() == tableName;
+    }
+
+    /* ********************************************************************
+    ***************************** TABLE CLASS *****************************
+    ******************************************************************** */
+
+    Table::Table( std::string name ) : m_name { name }
+    {
+        if ( ! is_table_created( name ) )
+        {
+            throw exception::Database {
+                path::get_file_str( path::E_File::Database ),
+                "Table " + name + " not found" };
+        }
+    }
+
+    bool Table::has_attribute( std::string attribute )
+    {
+        return this->select< std::string >( attribute ) != "";
+    }
+
+    /* ********************************************************************
+    ******************************** TESTS ********************************
+    ******************************************************************** */
 
     void test_table ()
     {
+        // std::cout << std::boolalpha;
+        std::cout << "Is 'tilemap' created ? " << is_table_created( "tilemap" )
+                  << std::endl;
+        std::cout << "Is 'dghsjkdh' created ? "
+                  << is_table_created( "dghsjkdh" ) << std::endl;
+
         Table table { "tilemap" };
+
+        std::cout << "Is 'tile_table' attribute of 'tilemap' ? "
+                  << table.has_attribute( "tile_table" ) << std::endl;
+        std::cout << "Is 'ozkeokd' attribute of 'tilemap' ? "
+                  << table.has_attribute( "ozkeokd" ) << std::endl;
 
         std::cout << table.select< std::string >( "tile_table" ) << std::endl;
     }
@@ -78,12 +127,12 @@ namespace db
     {
         // Initialisation de la database
 
-        Unserializer initRequest = db::request(
+        Chunk initRequest = db::request(
             "DROP TABLE IF EXISTS tilemap;"
             "CREATE TABLE tilemap ("
             "tile_table TEXT NOT NULL"
             ");" );
-        std::cout << "initRequest : |" << initRequest.get_content() << "|"
+        std::cout << "initRequest : |" << initRequest.to_string() << "|"
                   << std::endl;
 
         std::vector< std::vector< std::vector< unsigned int > > > tripleArray {
@@ -93,21 +142,21 @@ namespace db
 
         std::cout << "tripleArray : |" << tripleArray << "|" << std::endl;
         std::cout << "tripleArray serialized : |"
-                  << Serializer( tripleArray ).to_string() << "|" << std::endl;
+                  << serialize( tripleArray ).to_string() << "|" << std::endl;
 
-        Unserializer insertionRequest = db::request(
+        Chunk insertionRequest = db::request(
             "INSERT INTO tilemap (tile_table)"
             "VALUES('"
-            + Serializer { tripleArray }.to_string() + "');" );
+            + serialize( tripleArray ).to_string() + "');" );
 
-        std::cout << "insertionRequest : |" << insertionRequest.get_content()
+        std::cout << "insertionRequest : |" << insertionRequest.to_string()
                   << "|" << std::endl;
 
-        Unserializer selectionRequest {
+        Chunk selectionRequest {
             db::request( "SELECT tile_table FROM tilemap;" ) };
 
         std::cout << "selectionRequest content : |"
-                  << selectionRequest.get_content() << "|" << std::endl;
+                  << selectionRequest.to_string() << "|" << std::endl;
         std::cout << "selectionRequest unserialized: |"
                   << selectionRequest.to_value< decltype( tripleArray ) >()
                   << "|" << std::endl;

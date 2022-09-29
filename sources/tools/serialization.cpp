@@ -5,13 +5,13 @@
 
 #include "tools/serialization.tpp"  // for operator<<, operator>>
 
-Unserializer::Unserializer( std::string const & stringToUnserialize )
-  : m_stringToUnserialize( stringToUnserialize )
+Chunk::Chunk( std::string const & stringToUnserialize )
+  : m_serializedValue { stringToUnserialize }
 {}
 
-std::string Unserializer::get_content() const
+std::string Chunk::to_string() const
 {
-    return m_stringToUnserialize;
+    return m_serializedValue;
 }
 
 bool verify_next ( std::istream & stream, char const & character )
@@ -45,7 +45,7 @@ void test_serializer ()
     streamA >> newarrayA;
     std::cout << "newarrayA : " << newarrayA << std::endl;
 
-    std::cout << "\n\n\n" << std::endl;
+    std::cout << "\n" << std::endl;
 
     std::vector< std::vector< int > > arrayB {
         {745,   524,  879,   858},

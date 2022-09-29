@@ -5,11 +5,15 @@
 
 int main ()
 {
+    // Pretty print for boolean value
+    std::cout << std::boolalpha;
+
     // Game game {};
 
     // game.run();
 
     db::test_table();
+    // test_serializer();
 
     return EXIT_SUCCESS;
 }

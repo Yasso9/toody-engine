@@ -183,14 +183,15 @@ void EditorState::update_debug_window()
         windowTextOutput << "MousePos : " << input::get_mouse_position()
                          << "\n";
         windowTextOutput << "CursorPos : "
-                         << sf::Vector2f { ImGui::GetCursorPos() } << "\n";
+                         << math::Vector2F { ImGui::GetCursorPos() } << "\n";
         windowTextOutput << "CursorStartPos : "
-                         << sf::Vector2f { ImGui::GetCursorStartPos() } << "\n";
+                         << math::Vector2F { ImGui::GetCursorStartPos() }
+                         << "\n";
         windowTextOutput << "CursorScreenPos : "
-                         << sf::Vector2f { ImGui::GetCursorScreenPos() }
+                         << math::Vector2F { ImGui::GetCursorScreenPos() }
                          << "\n";
         windowTextOutput << "ContentRegionAvail : "
-                         << sf::Vector2f { ImGui::GetContentRegionAvail() }
+                         << math::Vector2F { ImGui::GetContentRegionAvail() }
                          << "\n";
 
         windowTextOutput << "\n";
