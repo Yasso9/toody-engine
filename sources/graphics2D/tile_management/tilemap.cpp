@@ -13,24 +13,24 @@
 #include <SFML/Window/Mouse.hpp>           // for Mouse, Mouse::Button, Mous...
 #include <ext/alloc_traits.h>              // for __alloc_traits<>::value_type
 
-#include "graphics2D/component.tpp"      // for Component::add_child
-#include "graphics2D/sfml.hpp"           // for operator<<
-#include "graphics2D/tile_position.hpp"  // for TilePosition, TilePosition...
-#include "graphics2D/tileset.hpp"        // for Tileset
-#include "graphics2D/view.hpp"           // for View
-#include "input/input.hpp"               // for get_mouse_position, is_pre...
-#include "main/render.hpp"               // for Render
-#include "maths/geometry/point.hpp"      // for PointF
-#include "maths/geometry/point.tpp"      // for Point::Point<Type>, Point:...
-#include "tools/assertion.hpp"           // for ASSERTION
-#include "tools/global_variable.hpp"     // for TILE_PIXEL_SIZE_I, TILE_PI...
-#include "tools/serialization.hpp"       // for Serializer, Unserializer
-#include "tools/serialization.tpp"       // for Serializer::Serializer<Typ...
-#include "tools/tools.tpp"               // for is_rectangle
+#include "graphics2D/component.tpp"  // for Component::add_child
+#include "graphics2D/sfml.hpp"       // for operator<<
+#include "graphics2D/tile_management/tile_position.hpp"  // for tile::Position, tile::Position...
+#include "graphics2D/tile_management/tileset.hpp"  // for Tileset
+#include "graphics2D/view.hpp"                     // for View
+#include "input/input.hpp"            // for get_mouse_position, is_pre...
+#include "main/render.hpp"            // for Render
+#include "maths/geometry/point.hpp"   // for PointF
+#include "maths/geometry/point.tpp"   // for Point::Point<Type>, Point:...
+#include "tools/assertion.hpp"        // for ASSERTION
+#include "tools/global_variable.hpp"  // for TILE_PIXEL_SIZE_I, TILE_PI...
+#include "tools/serialization.hpp"    // for Serializer, Unserializer
+#include "tools/serialization.tpp"    // for Serializer::Serializer<Typ...
+#include "tools/tools.tpp"            // for is_rectangle
 #include "tools/vector.hpp"
 
 /// @todo create a button reset database who call
-/// init_tile_table_from_database()
+/// load_from_database()
 /// @todo put a grid on the tilemap
 
 TileMap::TileMap( View & view )
@@ -41,35 +41,42 @@ TileMap::TileMap( View & view )
     m_tileTable {},
     m_currentDepth { 0u }
 {
-    this->init_tile_table_from_database();
-
-    // Tilemap Cursor Initialisation
-    m_cursor.setSize( TILE_PIXEL_SIZE_VECTOR );
-    m_cursor.setOutlineThickness( -3.f );
-    m_cursor.setOutlineColor( sf::Color::Transparent );
-    m_cursor.setFillColor( sf::Color::Transparent );
-    m_cursor.setPosition( 0.f, 0.f );
+    this->load_from_database();
 
     this->setPosition( 0.f, 0.f );
 
     this->add_child( m_tileSelector );
 }
 
-math::Vector2F TileMap::get_size() const
+tile::Position TileMap::get_size() const
 {
-    return this->get_tile_size().to_float() * TILE_PIXEL_SIZE_VECTOR;
+    return tile::Position {
+        math::Vector2 {m_tileTable[0].size(), m_tileTable.size()}
+         .to_u_int(),
+        static_cast< unsigned int >( m_tileTable[0].size() ),
+        tile::Position::Tile
+    };
 }
 
-math::Vector2U TileMap::get_tile_size() const
+math::Vector2F TileMap::get_center( bool isAbsolutePosition ) const
 {
-    return math::Vector2U {
-        static_cast< unsigned int >( m_tileTable[0].size() ),
-        static_cast< unsigned int >( m_tileTable.size() ) };
+    math::Vector2F centerPosition { this->get_size().pixel() / 2.f };
+    if ( isAbsolutePosition )
+    {
+        centerPosition += math::Vector2F { this->getPosition() };
+    }
+
+    return centerPosition;
 }
+
+Tileset const & TileMap::get_tileset() const
+{
+    return this->m_tileSelector.get_tileset();
+};
 
 void TileMap::set_tile_size( math::Vector2U const & tileSize )
 {
-    if ( this->get_tile_size() == tileSize )
+    if ( this->get_size().tile() == tileSize )
     {
         // same size nothing to do
         return;
@@ -97,17 +104,17 @@ void TileMap::set_tile_size( math::Vector2U const & tileSize )
         {
             // size too low, must append some element
             // the default value must set the tile at the correct position
-            Tile defaultValue { *this, m_tileSelector };
+            Tile defaultValue { *this, m_tileSelector.get_tileset() };
             defaultValue.set_positions(
-                TilePosition {
-                    0u, m_tileSelector.get_tileset().get_size_in_tile().x
+                tile::Position {
+                    0u, m_tileSelector.get_tileset().get_size().tile().x
             },
-                TilePosition {
+                tile::Position {
                     math::Vector2U {
                         static_cast< unsigned int >(
                             m_tileTable[i_line].size() ),
                         i_line },
-                    this->get_tile_size().x, TilePosition::Tile } );
+                    this->get_size().tile().x, tile::Position::Tile } );
 
             m_tileTable[i_line].push_back( { defaultValue } );
         }
@@ -142,16 +149,16 @@ void TileMap::save() const
     m_databaseTable.insert( "tile_table", m_tileTable );
 }
 
-void TileMap::init_tile_table_from_database()
+void TileMap::load_from_database()
 {
     auto const table =
         m_databaseTable
             .select< std::vector< std::vector< std::vector< int > > > >(
                 "tile_table" );
 
-    TilePosition positionInTileset {
-        0u, m_tileSelector.get_tileset().get_size_in_tile().x };
-    TilePosition positionInTilemap {
+    tile::Position positionInTileset {
+        0u, m_tileSelector.get_tileset().get_size().tile().x };
+    tile::Position positionInTilemap {
         0u, static_cast< unsigned int >( table[0].size() ) };
 
     // Parse all the line of the tilemap
@@ -169,12 +176,13 @@ void TileMap::init_tile_table_from_database()
             for ( unsigned int depth { 0u }; depth < table[line][column].size();
                   ++depth )
             {
-                Tile tile { *this, m_tileSelector };
+                Tile tile { *this, m_tileSelector.get_tileset() };
 
                 /// @todo correct this
-                // positionInTileset.set_value( table[line][column][depth] );
+                // positionInTileset.set_value( table[line][column][depth]
+                // );
                 positionInTilemap.set_value(
-                    math::Vector2U { column, line }, TilePosition::Tile );
+                    math::Vector2U { column, line }, tile::Position::Tile );
 
                 tile.set_positions( positionInTileset, positionInTilemap );
 
@@ -193,7 +201,8 @@ void TileMap::change_tile(
     math::Vector2U const & tilePositionInTile,
     unsigned int const &   newTileValue )
 {
-    ASSERTION( tilePositionInTile < this->get_tile_size(), "position too big" );
+    ASSERTION(
+        tilePositionInTile < this->get_size().tile(), "position too big" );
     ASSERTION(
         newTileValue < this->get_tileset().get_number_of_tile(),
         "Tileset value too big" );
@@ -201,8 +210,8 @@ void TileMap::change_tile(
     Tile & currentTile { m_tileTable[tilePositionInTile.y][tilePositionInTile.x]
                                     [m_currentDepth] };
 
-    currentTile.set_position_in_tileset( TilePosition {
-        newTileValue, this->get_tileset().get_size_in_tile().x } );
+    currentTile.set_position_in_tileset( tile::Position {
+        newTileValue, this->get_tileset().get_size().tile().x } );
 }
 
 void TileMap::update_selection()
@@ -213,12 +222,9 @@ void TileMap::update_selection()
                << m_tileSelector.get_tile_selected().value() << "\n";
 
     infoOutput << "Tilemap - Position : " << this->getPosition() << "\n";
-    infoOutput << "Tilemap - Size : " << this->get_size() << "\n";
-    /// @todo create a number of tile method
-    infoOutput << "Tilemap - Number of Tile A : "
-               << this->get_size() / TILE_PIXEL_SIZE << "\n";
-    infoOutput << "Tilemap - Number of Tile B (if same than A, remove A) : "
-               << this->get_tile_size() << "\n";
+    infoOutput << "Tilemap - Size : " << this->get_size().pixel() << "\n";
+    infoOutput << "Tilemap - Number of Tile : " << this->get_size().tile()
+               << "\n";
 
     infoOutput << "View - Center : " << m_view.get_center() << "\n";
     infoOutput << "View - Size : " << m_view.get_size() << "\n";
@@ -240,10 +246,11 @@ void TileMap::update_selection()
 
     if ( ImGui::IsWindowHovered( ImGuiHoveredFlags_AnyWindow )
          || ! mousePositionRelativToView.is_inside(
-             math::PointF { this->getPosition() }, this->get_size() ) )
+             math::PointF { this->getPosition() },
+             this->get_size().pixel().to_float() ) )
     {
         // The mouse is outside the tilemap
-        m_cursor.setOutlineColor( sf::Color::Transparent );
+        m_cursor.m_shape.setOutlineColor( sf::Color::Transparent );
         return;
     }
 
@@ -276,8 +283,8 @@ void TileMap::update_selection()
     }
 
     // The mouse is inside the tilemap, we show the cursor
-    m_cursor.setOutlineColor( sf::Color::Black );
-    m_cursor.setPosition( tileSelectedPositionInPixel.to_float() );
+    m_cursor.m_shape.setOutlineColor( sf::Color::Black );
+    m_cursor.m_shape.setPosition( tileSelectedPositionInPixel.to_float() );
 }
 
 void TileMap::update_table_informations()
@@ -285,13 +292,15 @@ void TileMap::update_table_informations()
     static std::stringstream tileValueStream {};
 
     if ( ImGui::BeginTable(
-             "table_padding", static_cast< int >( this->get_tile_size().x ) ) )
+             "table_padding",
+             static_cast< int >( this->get_size().tile().x ) ) )
     {
-        for ( unsigned int line { 0u }; line < this->get_tile_size().y; ++line )
+        for ( unsigned int line { 0u }; line < this->get_size().tile().y;
+              ++line )
         {
             ImGui::TableNextRow();
-            for ( unsigned int column { 0u }; column < this->get_tile_size().x;
-                  ++column )
+            for ( unsigned int column { 0u };
+                  column < this->get_size().tile().x; ++column )
             {
                 ImGui::TableSetColumnIndex( static_cast< int >( column ) );
 
@@ -328,9 +337,9 @@ void TileMap::update_tile_size_button()
     constexpr unsigned int const MAX_STRING_SIZE { 10u };
 
     static std::string tileNumberX {
-        std::to_string( this->get_tile_size().x ) };
+        std::to_string( this->get_size().tile().x ) };
     static std::string tileNumberY {
-        std::to_string( this->get_tile_size().y ) };
+        std::to_string( this->get_size().tile().y ) };
 
     ImGui::InputText(
         "Number of Tile X :", tileNumberX.data(), MAX_STRING_SIZE,
@@ -344,9 +353,10 @@ void TileMap::update_tile_size_button()
         /// @todo useful to have this pointers ?
         char * tileNumberXEnd;
         char * tileNumberYEnd;
-        this->set_tile_size( math::Vector2U {
+        this->set_tile_size( math::Vector2 {
             std::strtoul( tileNumberX.c_str(), &tileNumberXEnd, 10 ),
-            std::strtoul( tileNumberY.c_str(), &tileNumberYEnd, 10 ) } );
+            std::strtoul( tileNumberY.c_str(), &tileNumberYEnd, 10 ) }
+                                 .to_u_int() );
     }
 }
 
@@ -366,5 +376,6 @@ void TileMap::render_before( Render & render ) const
         }
     }
 
-    render.get_target().draw( m_cursor, render.get_state() );
+    /// @todo Create a method cursor.draw
+    render.get_target().draw( m_cursor.m_shape, render.get_state() );
 }

@@ -25,12 +25,12 @@ TileTable::TileTable( std::vector< Tiles > tiles, math::Vector2U size )
 }
 
 TileTable::TileTable( std::vector< std::vector< Tiles > > tiles )
-  : m_matrix {}, m_size { 0, 0 }
+  : m_matrix {}, m_size { 0u, 0u }
 {
     ASSERTION(
         vector::is_rectangle( tiles ), "Each columns must have the same size" );
 
-    m_size = { tiles[0].size(), tiles.size() };
+    m_size = math::Vector2 { tiles[0].size(), tiles.size() }.to_u_int();
 
     for ( std::vector< Tiles > const & subvector : tiles )
     {

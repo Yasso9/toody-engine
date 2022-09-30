@@ -2,8 +2,8 @@
 
 #include <optional>
 
-#include "graphics2D/component.hpp"  // for Component2D
-#include "graphics2D/tileset.hpp"    // for Tileset
+#include "graphics2D/component.hpp"                // for Component2D
+#include "graphics2D/tile_management/tileset.hpp"  // for Tileset
 
 struct ImDrawList;
 

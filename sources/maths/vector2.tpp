@@ -133,6 +133,30 @@ namespace math
     }
 
     template< C_Primitive Type >
+    Type Vector2< Type >::get_max() const
+    {
+        return std::max( this->x, this->y );
+    }
+
+    template< C_Primitive Type >
+    Type Vector2< Type >::get_min() const
+    {
+        return std::min( this->x, this->y );
+    }
+
+    template< C_Primitive Type >
+    Vector2< Type > Vector2< Type >::get_x_axis() const
+    {
+        return Vector2< Type > { this->x, 0 };
+    }
+
+    template< C_Primitive Type >
+    Vector2< Type > Vector2< Type >::get_y_axis() const
+    {
+        return Vector2< Type > { 0, this->y };
+    }
+
+    template< C_Primitive Type >
     Type Vector2< Type >::operator[] ( std::size_t index ) const
     {
         switch ( index )

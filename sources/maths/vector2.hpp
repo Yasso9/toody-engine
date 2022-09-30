@@ -36,15 +36,6 @@ namespace math
           : x( xAxisValue ), y( yAxisValue )
         {}
 
-        /// @brief We can construct an unsigned int vector with size_t variables
-        Vector2( std::size_t const & xAxisValue, std::size_t yAxisValue ) requires(
-            std::is_same_v<
-                Type,
-                unsigned int > && not std::is_same_v< std::size_t, unsigned int > )
-          : x( static_cast< unsigned int >( xAxisValue ) ),
-            y( static_cast< unsigned int >( yAxisValue ) )
-        {}
-
         Vector2( sf::Vector2< Type > const & sfmlVector );
         Vector2( ImVec2 const & imGuiVector );
         constexpr virtual ~Vector2() = default;
@@ -90,20 +81,12 @@ namespace math
         Point< Type > to_point () const;
 
         /// @brief get the biggest value between x and y
-        Type get_max () const { return std::max( this->x, this->y ); }
-
+        Type get_max () const;
         /// @brief get the lowest value between x and y
-        Type get_min () const { return std::min( this->x, this->y ); }
+        Type get_min () const;
 
-        Vector2< Type > get_x_axis () const
-        {
-            return Vector2< Type > { this->x, 0 };
-        }
-
-        Vector2< Type > get_y_axis () const
-        {
-            return Vector2< Type > { 0, this->y };
-        }
+        Vector2< Type > get_x_axis () const;
+        Vector2< Type > get_y_axis () const;
 
         Vector2< Type > floor ();
         Vector2< Type > round ();

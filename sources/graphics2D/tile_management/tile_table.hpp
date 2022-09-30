@@ -3,7 +3,7 @@
 #include <sstream>
 #include <vector>
 
-#include "graphics2D/tile.hpp"
+#include "graphics2D/tile_management/tile.hpp"
 #include "maths/vector2.hpp"
 
 class Tiles

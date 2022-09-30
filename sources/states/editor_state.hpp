@@ -6,10 +6,10 @@
 #include "collision2D/collision_list.hpp"  // for CollisionList
 #include "entity/player.hpp"               // for Player
 #include "game_events/dialogue.hpp"
-#include "graphics2D/image_map.hpp"        // for ImageMap
-#include "graphics2D/moveable_entity.hpp"  // for MoveableEntity2D
-#include "graphics2D/tilemap.hpp"          // for TileMap
-#include "states/state.hpp"                // for State
+#include "graphics2D/image_map.hpp"                // for ImageMap
+#include "graphics2D/moveable_entity.hpp"          // for MoveableEntity2D
+#include "graphics2D/tile_management/tilemap.hpp"  // for TileMap
+#include "states/state.hpp"                        // for State
 
 class EditorState final : public State
 {
