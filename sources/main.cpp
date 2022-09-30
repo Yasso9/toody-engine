@@ -5,14 +5,15 @@
 
 int main ()
 {
+    /// @todo remove all std::boolalpha ref in the project
     // Pretty print for boolean value
     std::cout << std::boolalpha;
 
-    // Game game {};
+    Game game {};
 
-    // game.run();
+    game.run();
 
-    db::test_table();
+    // db::test_table();
     // test_serializer();
 
     return EXIT_SUCCESS;

@@ -36,7 +36,7 @@ static int callback (
 /// @todo create a singleton and initialize sqlite3_open
 namespace db
 {
-    Chunk request ( std::string const & request )
+    Chunk request ( std::string const & request, bool checkError )
     {
         std::string const databasePath {
             path::get_file_str( path::E_File::Database ) };
@@ -59,7 +59,11 @@ namespace db
         if ( result != 0 )
         {
             sqlite3_free( requestErrorMessage );
-            throw exception::Database { databasePath, requestErrorMessage };
+            if ( checkError )
+            {
+                std::cerr << "ERROR Database - file " << databasePath << " - "
+                          << requestErrorMessage << std::endl;
+            }
         }
 
         sqlite3_close( database );
@@ -74,10 +78,6 @@ namespace db
             << "SELECT name FROM sqlite_master WHERE type = 'table' AND "
                "name = '"
             << tableName << "';";
-
-        // std::cout << "(Check creation)"
-        //           << db::request( requestStream.str() ).get_content()
-        //           << std::endl;
 
         return db::request( requestStream.str() ).to_string() == tableName;
     }
@@ -98,7 +98,7 @@ namespace db
 
     bool Table::has_attribute( std::string attribute )
     {
-        return this->select< std::string >( attribute ) != "";
+        return this->select< std::string >( attribute, false ) != "";
     }
 
     /* ********************************************************************
@@ -108,19 +108,24 @@ namespace db
     void test_table ()
     {
         // std::cout << std::boolalpha;
-        std::cout << "Is 'tilemap' created ? " << is_table_created( "tilemap" )
-                  << std::endl;
-        std::cout << "Is 'dghsjkdh' created ? "
+        std::cout << "Is Table 'tilemap' created ? "
+                  << is_table_created( "tilemap" ) << std::endl;
+        std::cout << "Is Table 'dghsjkdh' created ? "
                   << is_table_created( "dghsjkdh" ) << std::endl;
 
         Table table { "tilemap" };
+
+        std::cout << "Attribut 'tile_table' content : '"
+                  << table.select< std::string >( "tile_table" ) << "'"
+                  << std::endl;
+        std::cout << "Attribut 'ozkeokd' content : '"
+                  << table.select< std::string >( "ozkeokd", false ) << "'"
+                  << std::endl;
 
         std::cout << "Is 'tile_table' attribute of 'tilemap' ? "
                   << table.has_attribute( "tile_table" ) << std::endl;
         std::cout << "Is 'ozkeokd' attribute of 'tilemap' ? "
                   << table.has_attribute( "ozkeokd" ) << std::endl;
-
-        std::cout << table.select< std::string >( "tile_table" ) << std::endl;
     }
 
     void test_database ()

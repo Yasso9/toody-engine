@@ -11,7 +11,7 @@ namespace db
 {
     /// @todo don't take a string but take parameter containing the tablename,
     /// array of arguments, etc ...
-    Chunk request ( std::string const & request );
+    Chunk request ( std::string const & request, bool checkError = true );
 
     bool is_table_created ( std::string tableName );
 
@@ -26,18 +26,19 @@ namespace db
         bool has_attribute ( std::string attribute );
 
         template< typename Type >
-        Type select ( std::string attribute );
+        Type select ( std::string attribute, bool checkError = true );
 
         template< typename Type >
         void insert ( std::string variableName, Type const & value );
     };
 
     template< typename Type >
-    Type Table::select( std::string attribute )
+    Type Table::select( std::string attribute, bool checkError )
     {
         std::ostringstream requestStream {};
         requestStream << "SELECT " << attribute << " FROM " << m_name << ";";
-        return db::request( requestStream.str() ).to_value< Type >();
+        return db::request( requestStream.str(), checkError )
+            .to_value< Type >();
     }
 
     template< typename Type >
