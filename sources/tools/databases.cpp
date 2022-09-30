@@ -96,7 +96,7 @@ namespace db
         }
     }
 
-    bool Table::has_attribute( std::string attribute )
+    bool Table::has_attribute( std::string attribute ) const
     {
         return this->select< std::string >( attribute, false ) != "";
     }

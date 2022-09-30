@@ -9,6 +9,7 @@
 #include "graphics2D/tile_selector.hpp"  // for TileSelector
 #include "maths/vector2.hpp"             // for Vector2F, Vector2U
 #include "maths/vector2.tpp"             // for operator/, Vector2::oper...
+#include "tools/databases.hpp"
 
 class Render;
 class Tileset;
@@ -16,6 +17,7 @@ class View;
 
 class TileMap : public TransformableComponent2D
 {
+    db::Table                                         m_databaseTable;
     TileSelector                                      m_tileSelector;
     sf::RectangleShape                                m_cursor;
     /// @brief view of the component that call the tilemap

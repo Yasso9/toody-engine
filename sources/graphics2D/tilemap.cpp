@@ -23,7 +23,6 @@
 #include "maths/geometry/point.hpp"      // for PointF
 #include "maths/geometry/point.tpp"      // for Point::Point<Type>, Point:...
 #include "tools/assertion.hpp"           // for ASSERTION
-#include "tools/databases.hpp"           // for request
 #include "tools/global_variable.hpp"     // for TILE_PIXEL_SIZE_I, TILE_PI...
 #include "tools/serialization.hpp"       // for Serializer, Unserializer
 #include "tools/serialization.tpp"       // for Serializer::Serializer<Typ...
@@ -35,7 +34,8 @@
 /// @todo put a grid on the tilemap
 
 TileMap::TileMap( View & view )
-  : m_tileSelector {},
+  : m_databaseTable { "tilemap" },
+    m_tileSelector {},
     m_cursor {},
     m_view { view },
     m_tileTable {},
@@ -96,7 +96,7 @@ void TileMap::set_tile_size( math::Vector2U const & tileSize )
         while ( m_tileTable[i_line].size() < tileSize.x )
         {
             // size too low, must append some element
-            // the defualt value must set the tile at the correct position
+            // the default value must set the tile at the correct position
             Tile defaultValue { *this, m_tileSelector };
             defaultValue.set_positions(
                 TilePosition {
@@ -115,7 +115,7 @@ void TileMap::set_tile_size( math::Vector2U const & tileSize )
 
     ASSERTION(
         vector::is_rectangle( m_tileTable ),
-        "columns of the table haven't the same size" );
+        "columns of the table must have the same size" );
 }
 
 void TileMap::update_before( float /* deltaTime */ )
@@ -139,17 +139,15 @@ void TileMap::update_before( float /* deltaTime */ )
 
 void TileMap::save() const
 {
-    db::request(
-        "INSERT INTO tilemap (tile_table)"
-        "VALUES('"
-        + serialize( m_tileTable ).to_string() + "');" );
+    m_databaseTable.insert( "tile_table", m_tileTable );
 }
 
 void TileMap::init_tile_table_from_database()
 {
-    std::vector< std::vector< std::vector< int > > > const table =
-        db::request( "SELECT tile_table FROM tilemap;" )
-            .to_value< std::vector< std::vector< std::vector< int > > > >();
+    auto const table =
+        m_databaseTable
+            .select< std::vector< std::vector< std::vector< int > > > >(
+                "tile_table" );
 
     TilePosition positionInTileset {
         0u, m_tileSelector.get_tileset().get_size_in_tile().x };
