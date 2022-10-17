@@ -40,7 +40,7 @@ namespace tile
     {
         if ( ImGui::Begin( "Tile Selector" ) )
         {
-            ImGui::Checkbox( "Enable grid", &m_isGridEnabled );
+            ImGui::Checkbox( "Enable grid ?", &m_isGridEnabled );
             ImGui::ColorEdit4( "Color Edit", m_gridColor.to_table() );
 
             m_tileset.set_position( ImGui::GetCursorScreenPos() );
@@ -48,31 +48,28 @@ namespace tile
 
             if ( m_isGridEnabled )
             {
-                this->update_grid( *ImGui::GetWindowDrawList() );
+                this->draw_grid( *ImGui::GetWindowDrawList() );
             }
+
             this->update_selection( *ImGui::GetWindowDrawList() );
         }
         ImGui::End();
     }
 
-    void Selector::update_grid( ImDrawList & drawList )
+    void Selector::draw_grid( ImDrawList & drawList )
     {
-        math::Vector2F const scrolling { 0.f, 0.f };
-
         // Tilemap Border
         drawList.AddRect(
             m_tileset.get_position(), m_tileset.get_end_position(),
             m_gridColor.to_integer() );
 
         // Horizontal lines of the grid
-        for ( unsigned int x {
-                  math::division_reminder_u( scrolling.x, TILE_PIXEL_SIZE ) };
-              x < m_tileset.get_size().pixel().x; x += TILE_PIXEL_SIZE_U )
+        for ( unsigned int x = 0u; x < m_tileset.get_size().pixel().x;
+              x += TILE_PIXEL_SIZE_U )
         {
             math::Vector2F const pointA {
-                m_tileset.get_position()
-                + math::Vector2F {static_cast< float >( x ), 0.f}
-            };
+                m_tileset.get_position().x + static_cast< float >( x ),
+                m_tileset.get_position().y };
             math::Vector2F const pointB {
                 m_tileset.get_position().x + static_cast< float >( x ),
                 m_tileset.get_end_position().y };
@@ -80,9 +77,8 @@ namespace tile
             drawList.AddLine( pointA, pointB, m_gridColor.to_integer() );
         }
         // Vertical lines of the grid
-        for ( unsigned int y {
-                  math::division_reminder_u( scrolling.y, TILE_PIXEL_SIZE ) };
-              y < m_tileset.get_size().pixel().y; y += TILE_PIXEL_SIZE_U )
+        for ( unsigned int y = 0u; y < m_tileset.get_size().pixel().y;
+              y += TILE_PIXEL_SIZE_U )
         {
             math::Vector2F const pointA {
                 m_tileset.get_position().x,
