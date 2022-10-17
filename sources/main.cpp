@@ -5,7 +5,6 @@
 
 int main ()
 {
-    /// @todo remove all std::boolalpha ref in the project
     // Pretty print for boolean value
     std::cout << std::boolalpha;
 

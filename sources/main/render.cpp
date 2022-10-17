@@ -1,5 +1,7 @@
 #include "render.hpp"
 
+#include "graphics2D/view.hpp"
+
 namespace sf
 {
     class RenderTarget;
@@ -23,4 +25,14 @@ sf::RenderTarget & Render::get_target()
 void Render::set_texture( sf::Texture const & texture )
 {
     m_states.texture = &texture;
+}
+
+void Render::set_view( View const & view )
+{
+    this->get_target().setView( view );
+}
+
+void Render::reset_view()
+{
+    this->set_view( this->get_target().getDefaultView() );
 }

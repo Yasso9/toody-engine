@@ -3,9 +3,9 @@
 // Put this line in all derived class :
 // friend DerivedClass & Singleton< DerivedClass >::get_instance();
 
-/// @todo put a concept to force the fact that DerivedClass is a class or a
-/// struct, and not an other thing
 template< typename SingletonClass >
+    requires( std::is_class_v< SingletonClass > )
+
 class Singleton
 {
   public:

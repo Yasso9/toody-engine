@@ -47,8 +47,7 @@ void Component::render_all( Render & render ) const
 {
     if ( m_view != nullptr )
     {
-        /// @todo create method set view
-        render.get_target().setView( *m_view );
+        render.set_view( *m_view );
     }
 
     this->render_before( render );
@@ -62,8 +61,7 @@ void Component::render_all( Render & render ) const
 
     if ( m_view != nullptr )
     {
-        /// @todo create method reset view
-        render.get_target().setView( render.get_target().getDefaultView() );
+        render.reset_view();
     }
 }
 

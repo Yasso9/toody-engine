@@ -18,6 +18,7 @@ class Component
 {
   private:
     std::vector< Component * > m_childs;
+    /// @todo have an optionnal view
     View const *               m_view;
 
   protected:

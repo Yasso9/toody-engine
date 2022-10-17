@@ -7,6 +7,7 @@ namespace sf
 {
     class Texture;
 }  // namespace sf
+class View;
 
 class Render
 {
@@ -20,11 +21,8 @@ class Render
 
     sf::RenderTarget & get_target ();
     sf::RenderStates   get_state () const;
-    void               set_texture ( sf::Texture const & texture );
-};
 
-// template < C_IsDrawable DrawableClass >
-// void Render::draw( DrawableClass const & sfmlDrawable ) const
-// {
-//     m_target.draw( sfmlDrawable, m_states );
-// }
+    void set_texture ( sf::Texture const & texture );
+    void set_view ( View const & view );
+    void reset_view ();
+};

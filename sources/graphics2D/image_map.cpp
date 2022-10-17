@@ -6,8 +6,7 @@
 
 ImageMap::ImageMap() : m_data()
 {
-    /// @todo load the the sprites path and the positions from the database from
-    /// the database
+    /// @todo load the the sprites path and the positions from the database
 
     m_data = {
         /*

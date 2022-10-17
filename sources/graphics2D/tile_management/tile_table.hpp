@@ -18,7 +18,6 @@ class Tiles
 class TileTable
 {
     std::vector< Tiles > m_matrix;
-    /// @todo only have the number of column, get the size by a method
     math::Vector2U       m_size;
 
   public:
