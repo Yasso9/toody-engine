@@ -101,10 +101,10 @@ namespace ImGui
                     && ( sfmlColor.a >= 0 && sfmlColor.a <= 255 ),
                 "SFML colors value must be between 0 and 255" );
 
-            tableColor[0] = static_cast< float >( sfmlColor.r ) / COLOR_RANGE;
-            tableColor[1] = static_cast< float >( sfmlColor.g ) / COLOR_RANGE;
-            tableColor[2] = static_cast< float >( sfmlColor.b ) / COLOR_RANGE;
-            tableColor[3] = static_cast< float >( sfmlColor.a ) / COLOR_RANGE;
+            tableColor[0] = static_cast< float >( sfmlColor.r ) / COLOR_RANGE_U;
+            tableColor[1] = static_cast< float >( sfmlColor.g ) / COLOR_RANGE_U;
+            tableColor[2] = static_cast< float >( sfmlColor.b ) / COLOR_RANGE_U;
+            tableColor[3] = static_cast< float >( sfmlColor.a ) / COLOR_RANGE_U;
 
             ASSERTION(
                 ( tableColor[0] >= 0.f && tableColor[0] <= 1.f )
@@ -124,10 +124,10 @@ namespace ImGui
                 "Table colors value must be between 0 and 1" );
 
             return {
-                static_cast< sf::Uint8 >( tableColor[0] * COLOR_RANGE ),
-                static_cast< sf::Uint8 >( tableColor[1] * COLOR_RANGE ),
-                static_cast< sf::Uint8 >( tableColor[2] * COLOR_RANGE ),
-                static_cast< sf::Uint8 >( tableColor[3] * COLOR_RANGE ) };
+                static_cast< sf::Uint8 >( tableColor[0] * COLOR_RANGE_U ),
+                static_cast< sf::Uint8 >( tableColor[1] * COLOR_RANGE_U ),
+                static_cast< sf::Uint8 >( tableColor[2] * COLOR_RANGE_U ),
+                static_cast< sf::Uint8 >( tableColor[3] * COLOR_RANGE_U ) };
         }
     };  // namespace color
 }  // namespace ImGui

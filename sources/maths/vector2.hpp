@@ -30,6 +30,10 @@ namespace math
         Type x;
         Type y;
 
+        /* ********************************************************************
+        **************************** CONSTRUCTORS *****************************
+        ******************************************************************** */
+
         constexpr Vector2() noexcept : x( 0 ), y( 0 ) {}
 
         constexpr Vector2( Type xAxisValue, Type yAxisValue ) noexcept
@@ -39,6 +43,10 @@ namespace math
         Vector2( sf::Vector2< Type > const & sfmlVector );
         Vector2( ImVec2 const & imGuiVector );
         constexpr virtual ~Vector2() = default;
+
+        /* ********************************************************************
+        ******************************** COPY *********************************
+        ******************************************************************** */
 
         /// @brief Copy Constructor
         Vector2( Vector2< Type > const & vector2D ) noexcept;
@@ -56,10 +64,15 @@ namespace math
         ************************ ASSIGNEMENT OPERATOR *************************
         ******************************************************************** */
 
-        Vector2< Type > operator-= ( Vector2< Type > vector2D );
-        Vector2< Type > operator+= ( Vector2< Type > vector2D );
-        Vector2< Type > operator/= ( Vector2< Type > vector2D );
+        Vector2< Type > operator-= ( Vector2< Type > rhs );
+        Vector2< Type > operator+= ( Vector2< Type > rhs );
+        Vector2< Type > operator*= ( Vector2< Type > rhs );
+        Vector2< Type > operator/= ( Vector2< Type > rhs );
         Vector2< Type > operator/= ( float factor );
+
+        /* ********************************************************************
+        ******************************* CAST **********************************
+        ******************************************************************** */
 
         operator sf::Vector2< Type > () const;
         /// @brief conversion to ImVec2 must be possible only if the same type
@@ -79,6 +92,16 @@ namespace math
             requires( not std::is_same_v< Type, std::size_t > );
 
         Point< Type > to_point () const;
+
+        /* ********************************************************************
+        **************************** METHODS **********************************
+        ******************************************************************** */
+
+        /// @brief Check if the vector's values represent a whole number
+        /// @tparam Type type of the vector
+        /// @return true if the vector's values represent a whole number, false
+        /// otherwise
+        bool is_whole () const;
 
         /// @brief get the biggest value between x and y
         Type get_max () const;
@@ -148,7 +171,7 @@ namespace math
         Vector2< Type > const & vector2D, unsigned int const & modulo );
 
     /* ************************************************************************
-    **************************** SIGN OPERATOR ********************************
+    ****************************** COMPARISON *********************************
     ************************************************************************ */
 
     template< C_Primitive TypeLeft, C_Primitive TypeRight >
@@ -162,7 +185,7 @@ namespace math
         Vector2< TypeRight > const & vector2DRight );
 
     /* ************************************************************************
-    ************************** UNARY VECTOR ********************************
+    ********************************** UNARY **********************************
     ************************************************************************ */
 
     template< C_RelativePrimitive Type >

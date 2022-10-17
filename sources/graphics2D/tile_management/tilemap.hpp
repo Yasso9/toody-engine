@@ -17,7 +17,7 @@ class View;
 class TileMap : public TransformableComponent2D
 {
     db::Table                                         m_databaseTable;
-    TileSelector                                      m_tileSelector;
+    tile::Selector                                    m_tileSelector;
     tile::Cursor                                      m_cursor;
     /// @brief view of the component that call the tilemap
     View &                                            m_view;
@@ -31,7 +31,7 @@ class TileMap : public TransformableComponent2D
     virtual ~TileMap() = default;
 
     /// @brief size of the tilemap
-    tile::Position get_size () const;
+    tile::Size get_size () const;
 
     math::Vector2F  get_center ( bool isAbsolutePosition = true ) const;
     Tileset const & get_tileset () const;

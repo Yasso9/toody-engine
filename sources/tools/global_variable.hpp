@@ -2,7 +2,8 @@
 
 #include "maths/maths.hpp"
 
-constexpr unsigned int const COLOR_RANGE { 255u };
+constexpr unsigned int const COLOR_RANGE_U { 255u };
+constexpr float const COLOR_RANGE_F { static_cast< float >( COLOR_RANGE_U ) };
 
 constexpr unsigned int const TILE_PIXEL_SIZE_U { 32u };
 constexpr float const        TILE_PIXEL_SIZE {

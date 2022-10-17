@@ -48,13 +48,12 @@ TileMap::TileMap( View & view )
     this->add_child( m_tileSelector );
 }
 
-tile::Position TileMap::get_size() const
+tile::Size TileMap::get_size() const
 {
-    return tile::Position {
+    return tile::Size {
         math::Vector2 {m_tileTable[0].size(), m_tileTable.size()}
          .to_u_int(),
-        static_cast< unsigned int >( m_tileTable[0].size() ),
-        tile::Position::Tile
+        tile::Size::Tile
     };
 }
 
@@ -105,16 +104,16 @@ void TileMap::set_tile_size( math::Vector2U const & tileSize )
             // size too low, must append some element
             // the default value must set the tile at the correct position
             Tile defaultValue { *this, m_tileSelector.get_tileset() };
-            defaultValue.set_positions(
-                tile::Position {
-                    0u, m_tileSelector.get_tileset().get_size().tile().x
-            },
-                tile::Position {
-                    math::Vector2U {
-                        static_cast< unsigned int >(
-                            m_tileTable[i_line].size() ),
-                        i_line },
-                    this->get_size().tile().x, tile::Position::Tile } );
+
+            defaultValue.set_tileset_position( tile::Position {
+                0u, m_tileSelector.get_tileset().get_size() } );
+
+            defaultValue.set_tilemap_position( tile::Position {
+                math::Vector2U {
+                                static_cast< unsigned int >( m_tileTable[i_line].size() ),
+                                i_line},
+                this->get_size(), tile::Position::Tile
+            } );
 
             m_tileTable[i_line].push_back( { defaultValue } );
         }
@@ -178,13 +177,14 @@ void TileMap::load_from_database()
             {
                 Tile tile { *this, m_tileSelector.get_tileset() };
 
-                /// @todo correct this
-                // positionInTileset.set_value( table[line][column][depth]
-                // );
+                /// @todo find a way to remove the cast
+                positionInTileset.set_value(
+                    static_cast< unsigned int >( table[line][column][depth] ) );
                 positionInTilemap.set_value(
                     math::Vector2U { column, line }, tile::Position::Tile );
 
-                tile.set_positions( positionInTileset, positionInTilemap );
+                tile.set_tilemap_position( positionInTilemap );
+                tile.set_tileset_position( positionInTileset );
 
                 // We add the element to the tile table
                 m_tileTable[line][column].push_back( tile );
@@ -210,7 +210,7 @@ void TileMap::change_tile(
     Tile & currentTile { m_tileTable[tilePositionInTile.y][tilePositionInTile.x]
                                     [m_currentDepth] };
 
-    currentTile.set_position_in_tileset( tile::Position {
+    currentTile.set_tileset_position( tile::Position {
         newTileValue, this->get_tileset().get_size().tile().x } );
 }
 
@@ -219,7 +219,7 @@ void TileMap::update_selection()
     std::stringstream infoOutput {};
 
     infoOutput << "Tileset - Tile Selected : "
-               << m_tileSelector.get_tile_selected().value() << "\n";
+               << m_tileSelector.get_tile_selected().value_or( -1 ) << "\n";
 
     infoOutput << "Tilemap - Position : " << this->getPosition() << "\n";
     infoOutput << "Tilemap - Size : " << this->get_size().pixel() << "\n";
@@ -307,7 +307,7 @@ void TileMap::update_table_informations()
                 std::stringstream buttonStream {};
                 buttonStream << math::Vector2U { column, line } << " -> "
                              << m_tileTable[line][column][m_currentDepth]
-                                    .get_position_in_tileset()
+                                    .get_tileset_position()
                                     .value();
 
                 if ( ImGui::Button( buttonStream.str().c_str() ) )

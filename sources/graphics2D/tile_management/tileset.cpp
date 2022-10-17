@@ -27,10 +27,9 @@ math::Vector2F Tileset::get_end_position() const
     return this->get_position() + this->get_size().pixel();
 }
 
-tile::Position Tileset::get_size() const
+tile::Size Tileset::get_size() const
 {
-    return this->get_position(
-        math::PointU { m_texture.getSize() }.to_float() );
+    return tile::Size { m_texture.getSize(), tile::Size::Pixel };
 }
 
 unsigned int Tileset::get_number_of_tile() const
@@ -46,7 +45,7 @@ unsigned int Tileset::get_number_of_columns() const
            / TILE_PIXEL_SIZE_U;
 }
 
-tile::Position Tileset::get_position( math::PointF point ) const
+tile::Position Tileset::get_tile_position( math::PointF point ) const
 {
     return tile::Position {
         point.to_vector().to_u_int(), this->get_number_of_columns(),

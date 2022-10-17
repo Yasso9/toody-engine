@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 
+#include "maths/numerics.hpp"
 #include "tools/assertion.hpp"
 #include "vector2.hpp"
 
@@ -50,21 +51,27 @@ namespace math
     ************************************************************************ */
 
     template< C_Primitive Type >
-    Vector2< Type > Vector2< Type >::operator-= ( Vector2< Type > vector2D )
+    Vector2< Type > Vector2< Type >::operator-= ( Vector2< Type > rhs )
     {
-        return *this = *this - vector2D;
+        return *this = *this - rhs;
     }
 
     template< C_Primitive Type >
-    Vector2< Type > Vector2< Type >::operator+= ( Vector2< Type > vector2D )
+    Vector2< Type > Vector2< Type >::operator+= ( Vector2< Type > rhs )
     {
-        return *this = *this + vector2D;
+        return *this = *this + rhs;
     }
 
     template< C_Primitive Type >
-    Vector2< Type > Vector2< Type >::operator/= ( Vector2< Type > vector2D )
+    Vector2< Type > Vector2< Type >::operator*= ( Vector2< Type > rhs )
     {
-        return *this = *this / vector2D;
+        return *this = *this * rhs;
+    }
+
+    template< C_Primitive Type >
+    Vector2< Type > Vector2< Type >::operator/= ( Vector2< Type > rhs )
+    {
+        return *this = *this / rhs;
     }
 
     template< C_Primitive Type >
@@ -130,6 +137,17 @@ namespace math
     Point< Type > Vector2< Type >::to_point() const
     {
         return Point< Type > { this->x, this->y };
+    }
+
+    /* ********************************************************************
+     **************************** METHODS *********************************
+     ******************************************************************* */
+
+    template< C_Primitive Type >
+    bool Vector2< Type >::is_whole() const
+    {
+        return math::is_whole_number( this->x )
+               && math::is_whole_number( this->y );
     }
 
     template< C_Primitive Type >

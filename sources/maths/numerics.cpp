@@ -5,11 +5,29 @@
 
 #include <bits/std_abs.h>  // for abs
 
+#include "maths/vector2.hpp"
+
 namespace math
 {
     bool are_equal ( float leftValue, float rightValue, float precision )
     {
         return std::abs( leftValue - rightValue ) < precision;
+    }
+
+    float whole_part ( float number )
+    {
+        return std::floor( number );
+    }
+
+    math::Vector2F whole_part ( math::Vector2F vector )
+    {
+        return math::Vector2F {
+            whole_part( vector.x ), whole_part( vector.y ) };
+    }
+
+    bool is_whole_number ( float number )
+    {
+        return std::floor( number ) == number;
     }
 
     std::string get_full_value ( float value )

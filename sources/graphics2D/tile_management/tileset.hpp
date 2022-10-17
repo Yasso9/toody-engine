@@ -19,18 +19,18 @@ class Tileset
     /// @param position Position in pixel
     explicit Tileset(
         sf::Texture const & texture,
-        math::Vector2F      position = math::Vector2F {} );
+        math::Vector2F      position = math::Vector2F { 0.f, 0.f } );
     virtual ~Tileset() = default;
 
     sf::Texture const & get_texture () const;
     math::Vector2F      get_position () const;
     math::Vector2F      get_end_position () const;
 
-    tile::Position get_size () const;
-    unsigned int   get_number_of_tile () const;
-    unsigned int   get_number_of_columns () const;
+    tile::Size   get_size () const;
+    unsigned int get_number_of_tile () const;
+    unsigned int get_number_of_columns () const;
 
-    tile::Position get_position ( math::PointF point ) const;
+    tile::Position get_tile_position ( math::PointF point ) const;
     void           set_position ( math::Vector2F const & position );
 
     bool contain ( math::PointF const & point ) const;

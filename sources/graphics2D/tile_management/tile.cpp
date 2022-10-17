@@ -20,9 +20,15 @@
 Tile::Tile( TileMap const & tilemap, Tileset const & tileset )
   : m_tilemap { tilemap }, m_tileset { tileset }, m_quadVertex {}
 {
-    this->set_positions(
-        tile::Position { 0, this->m_tileset.get_size().tile().x },
-        tile::Position { 0, this->m_tilemap.get_size().tile().x } );
+    this->set_tileset_position( tile::Position {
+        {0u, 0u},
+        m_tileset.get_size(), tile::Position::Tile
+    } );
+
+    this->set_tilemap_position( tile::Position {
+        {0u, 0u},
+        tilemap.get_size(), tile::Position::Tile
+    } );
 }
 
 Tile::Tile( Tile const & tile ) noexcept
@@ -50,64 +56,64 @@ Tile & Tile::operator= ( Tile && tile ) noexcept
 
 sf::VertexArray const & Tile::get_vertex_array() const
 {
-    return this->m_quadVertex.array;
+    return m_quadVertex.array;
 }
 
-tile::Position Tile::get_position_in_tilemap() const
+tile::Position Tile::get_tilemap_position() const
 {
     return tile::Position {
-        ( this->m_quadVertex.get_position()
-          - math::Vector2F { this->m_tilemap.getPosition() } )
+        ( m_quadVertex.get_position()
+          - math::Vector2F { m_tilemap.getPosition() } )
             .to_u_int(),
-        this->m_tileset.get_size().tile().x, tile::Position::Pixel };
+        m_tileset.get_size().tile().x, tile::Position::Pixel };
 }
 
-tile::Position Tile::get_position_in_tileset() const
+tile::Position Tile::get_tileset_position() const
 {
     return tile::Position {
-        this->m_quadVertex.get_texture_position().to_u_int(),
-        this->m_tileset.get_size().tile().x, tile::Position::Pixel };
+        m_quadVertex.get_texture_position().to_u_int(),
+        m_tileset.get_size().tile().x, tile::Position::Pixel };
 }
 
 std::string Tile::get_debug_info() const
 {
     std::ostringstream outputStream {};
-    outputStream << "Tile : " << this->get_position_in_tileset().value() << "\n"
-                 << "Position ( " << this->m_quadVertex.array[0].position
-                 << ", " << this->m_quadVertex.array[1].position << ", "
-                 << this->m_quadVertex.array[2].position << ", "
-                 << this->m_quadVertex.array[3].position << " )"
+    outputStream << "Tile : " << this->get_tileset_position().value() << "\n"
+                 << "Position ( " << m_quadVertex.array[0].position << ", "
+                 << m_quadVertex.array[1].position << ", "
+                 << m_quadVertex.array[2].position << ", "
+                 << m_quadVertex.array[3].position << " )"
                  << "\n"
-                 << "TextCoord ( " << this->m_quadVertex.array[0].texCoords
-                 << ", " << this->m_quadVertex.array[1].texCoords << ", "
-                 << this->m_quadVertex.array[2].texCoords << ", "
-                 << this->m_quadVertex.array[3].texCoords << " )";
+                 << "TextCoord ( " << m_quadVertex.array[0].texCoords << ", "
+                 << m_quadVertex.array[1].texCoords << ", "
+                 << m_quadVertex.array[2].texCoords << ", "
+                 << m_quadVertex.array[3].texCoords << " )";
 
     return outputStream.str();
 }
 
-void Tile::set_positions(
-    tile::Position const & tileset, tile::Position const & tilemap )
+void Tile::set_tilemap_position( tile::Position const & position )
 {
-    this->set_position_in_tileset( tileset );
-
     math::RectangleF positionRectangle {};
-    positionRectangle.position =
-        math::Vector2F { this->m_tilemap.getPosition() }
-        + tilemap.pixel().to_float();
+
+    positionRectangle.position = math::Vector2F { m_tilemap.getPosition() }
+                                 + position.pixel().to_float();
     positionRectangle.size = TILE_PIXEL_SIZE_VECTOR;
-    this->m_quadVertex.set_position( positionRectangle );
+
+    m_quadVertex.set_position( positionRectangle );
 }
 
-void Tile::set_position_in_tileset( tile::Position const & tileset )
+void Tile::set_tileset_position( tile::Position const & position )
 {
     math::RectangleF textureTileRectangle {};
-    textureTileRectangle.position = tileset.pixel().to_float();
+
+    textureTileRectangle.position = position.pixel().to_float();
     textureTileRectangle.size     = TILE_PIXEL_SIZE_VECTOR;
-    this->m_quadVertex.set_texture_coord( textureTileRectangle );
+
+    m_quadVertex.set_texture_coord( textureTileRectangle );
 }
 
 std::ostream & Tile::operator<< ( std::ostream & stream ) const
 {
-    return stream << this->get_position_in_tileset().value();
+    return stream << this->get_tileset_position().value();
 }

@@ -19,7 +19,6 @@ math::Vector2F QuadVertex::get_texture_position() const
     return { this->array[0].texCoords };
 }
 
-/// @brief set vertex array position and size
 void QuadVertex::set_position( math::RectangleF const & rectangle )
 {
     this->array[0].position = rectangle.position;

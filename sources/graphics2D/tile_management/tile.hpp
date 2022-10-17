@@ -23,11 +23,11 @@ class Tile
     TileMap const & m_tilemap;
     /// @brief The Tilemap where the Tile is based/retrieved
     Tileset const & m_tileset;
-
-    QuadVertex m_quadVertex;
+    /// @brief Tile Data for drawing
+    QuadVertex      m_quadVertex;
 
   public:
-    Tile( TileMap const & tilemap, Tileset const & tileSelector );
+    Tile( TileMap const & tilemap, Tileset const & tileset );
 
     Tile( Tile const & tile ) noexcept;
     Tile( Tile && tile ) noexcept;
@@ -35,13 +35,17 @@ class Tile
     Tile & operator= ( Tile && tile ) noexcept;
 
     sf::VertexArray const & get_vertex_array () const;
-    tile::Position          get_position_in_tilemap () const;
-    tile::Position          get_position_in_tileset () const;
+    tile::Position          get_tilemap_position () const;
+    tile::Position          get_tileset_position () const;
 
-    void set_positions (
-        tile::Position const & tileset, tile::Position const & tilemap );
-    void set_position_in_tileset ( tile::Position const & tileset );
+    void set_tileset_position ( tile::Position const & position );
+    void set_tilemap_position ( tile::Position const & position );
 
+    /// @brief Get all the current data of the tile
+    /// @return String containing the current data of the tile
     std::string    get_debug_info () const;
+    /// @brief Stream to output the value of the Tile in the Tileset
+    /// @param stream Stream where the data is written
+    /// @return
     std::ostream & operator<< ( std::ostream & stream ) const;
 };

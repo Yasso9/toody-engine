@@ -9,64 +9,129 @@
 
 namespace tile
 {
+    static math::Vector2U pixel_to_tile_position (
+        math::Vector2U pixel_position );
+    static math::Vector2U tile_to_pixel_position (
+        math::Vector2U tile_position );
+
+    /* ********************************************************************
+     ***************************** POSITION *******************************
+     ******************************************************************* */
+
     Position::Position( unsigned int value, unsigned int numberOfColumns )
-      : m_value(), m_numberOfColumns( numberOfColumns )
+      : m_position {}, m_numberOfColumns { numberOfColumns }
     {
         this->set_value( value );
     }
 
+    Position::Position( unsigned int value, tile::Size mapSize )
+      : Position { value, mapSize.tile().x }
+    {}
+
     Position::Position(
         math::Vector2U position, unsigned int numberOfColumns, Type type )
-      : Position { 0u, numberOfColumns }
+      : m_position {}, m_numberOfColumns { numberOfColumns }
     {
         this->set_value( position, type );
     }
 
+    Position::Position( math::Vector2U position, tile::Size mapSize, Type type )
+      : Position { position, mapSize.tile().x, type }
+    {}
+
     unsigned int Position::value() const
     {
-        return this->m_value;
+        return m_position.x * m_numberOfColumns + m_position.y;
     }
 
-    /// @brief convert the value to a tile position
     math::Vector2U Position::tile() const
     {
-        if ( m_numberOfColumns == 0u )
-        {
-            throw std::logic_error { "Division by zero" };
-        }
-
-        std::div_t divisionValue { std::div(
-            static_cast< int >( this->m_value ),
-            static_cast< int >( this->m_numberOfColumns ) ) };
-        return math::Vector2I { divisionValue.rem, divisionValue.quot }
-            .to_u_int();
+        return m_position;
     }
 
-    /// @brief convert the value to a pixel position
     math::Vector2U Position::pixel() const
     {
-        return this->tile() * TILE_PIXEL_SIZE_VECTOR;
+        return tile_to_pixel_position( this->tile() );
     }
 
-    void Position::set_value( unsigned int newValue )
+    void Position::set_value( unsigned int value )
     {
-        this->m_value = newValue;
+        // Cast the tile value to a vector position
+        m_position.x = value % m_numberOfColumns;
+        m_position.y = static_cast< unsigned int >( math::whole_part(
+            static_cast< float >( value )
+            / static_cast< float >( m_numberOfColumns ) ) );
+
+        /// @remark We don't know if value is too big for the grid
     }
 
     void Position::set_value( math::Vector2U position, Type type )
     {
-        ASSERTION( type == Tile || type == Pixel, "Enum not handled" );
+        m_position = position;
 
-        math::Vector2U tilePosition { position };
-
-        if ( type == Pixel )
+        if ( type == Type::Pixel )
         {
-            // Convert the pixel position to tile position
-            tilePosition =
-                math::floor( position.to_float() / TILE_PIXEL_SIZE_VECTOR )
-                    .to_u_int();
+            m_position = pixel_to_tile_position( position );
         }
 
-        this->m_value = tilePosition.x + ( tilePosition.y * m_numberOfColumns );
+        // Position too big for the current grid
+        if ( m_position.x >= m_numberOfColumns )
+        {
+            throw std::out_of_range {
+                "The position in the X axis can not be superior to the number "
+                " of column " };
+        }
+    }
+
+    /* ********************************************************************
+     ***************************** POSITION *******************************
+     ******************************************************************* */
+
+    Size::Size( math::Vector2U size, Type type ) : m_size {}
+    {
+        this->set_value( size, type );
+    }
+
+    unsigned int Size::value() const
+    {
+        return m_size.x * m_size.x + m_size.y;
+    }
+
+    math::Vector2U Size::tile() const
+    {
+        return m_size;
+    }
+
+    math::Vector2U Size::pixel() const
+    {
+        return tile_to_pixel_position( this->tile() );
+    }
+
+    void Size::set_value( math::Vector2U position, Type type )
+    {
+        m_size = position;
+
+        if ( type == Type::Pixel )
+        {
+            m_size = pixel_to_tile_position( position );
+        }
+    }
+
+    /* ********************************************************************
+     ***************************** STATICS ********************************
+     ******************************************************************* */
+
+    [[maybe_unused]] static math::Vector2U pixel_to_tile_position (
+        math::Vector2U pixel_position )
+    {
+        return math::whole_part(
+                   pixel_position.to_float() / TILE_PIXEL_SIZE_VECTOR )
+            .to_u_int();
+    }
+
+    [[maybe_unused]] static math::Vector2U tile_to_pixel_position (
+        math::Vector2U tile_position )
+    {
+        return tile_position * TILE_PIXEL_SIZE_VECTOR;
     }
 }  // namespace tile
