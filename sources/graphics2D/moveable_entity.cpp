@@ -49,7 +49,7 @@ void MoveableEntity2D::update_before( float deltaTime )
     math::Vector2F moveDirection {
         input::get_movement_vector( m_movementKey ) };
 
-    // ImGui::P_Begin( "Entity Update Extra",
+    // ImGui::P_Show( "Entity Update Extra",
     //                 [moveDirection]()
     //                 {
     //                     std::stringstream output {};

@@ -77,7 +77,7 @@ void StaticEntity2D::update_before( float /* deltaTime */ )
         return;
     }
 
-    ImGui::P_Begin( "Customise Entity", &m_isCustomisable, [&] () {
+    ImGui::P_Show( "Customise Entity", &m_isCustomisable, [&] () {
         customisation::circle_shape( "Customise Entity", m_ID, m_pointShape );
         ImGui::Checkbox( "Edit Points ?", &m_editPoint );
     } );

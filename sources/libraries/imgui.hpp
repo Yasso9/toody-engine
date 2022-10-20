@@ -13,11 +13,11 @@
 
 namespace ImGui
 {
-    void P_Begin ( std::string name, std::function< void() > const & lambda );
-    void P_Begin (
+    void P_Show ( std::string name, std::function< void() > const & lambda );
+    void P_Show (
         std::string name, bool * isWindowOpen,
         std::function< void() > const & lambda );
-    void P_Begin (
+    void P_Show (
         std::string name, bool * isWindowOpen, ImGuiWindowFlags flags,
         std::function< void() > const & lambda );
 

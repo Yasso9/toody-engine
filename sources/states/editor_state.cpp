@@ -113,8 +113,8 @@ void EditorState::update_view( float /* deltaTime */ )
     static float viewScrollSpeed { 0.2f };
     static float viewMoveSpeedBase { 1.f };
 
-    ///@todo use this function for all Imgui::P_Begin
-    ImGui::P_Begin( "View Options", &m_showWindow.at( "view" ), [] () {
+    ///@todo use this function for all Imgui::P_Show
+    ImGui::P_Show( "View Options", &m_showWindow.at( "view" ), [] () {
         ImGui::SliderFloat(
             "View Scroll Speed", &viewScrollSpeed, 0.f, 5.f, "%.2f" );
         ImGui::SliderFloat(
@@ -132,7 +132,7 @@ void EditorState::update_view( float /* deltaTime */ )
             : math::Vector2F {0.f, 0.f}
     };
 
-    ImGui::P_Begin( "View Options", &m_showWindow.at( "view" ), [&] () {
+    ImGui::P_Show( "View Options", &m_showWindow.at( "view" ), [&] () {
         std::stringstream output {};
         output << "View Center : " << m_view.get_center() << "\n";
         output << "View Position : " << m_view.get_position() << "\n";

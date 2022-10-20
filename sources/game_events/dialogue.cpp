@@ -110,7 +110,7 @@ void Dialogue::process_mouse_movement_customisation(
 
 void Dialogue::update_before( float /* deltaTime */ )
 {
-    ImGui::P_Begin( "Dialogue Editor", &m_showCustomisation, [&] {
+    ImGui::P_Show( "Dialogue Editor", &m_showCustomisation, [&] {
         sf::Color background { m_shape.getFillColor() };
         sf::Color outline { m_shape.getOutlineColor() };
         float     outlineThickness { m_shape.getOutlineThickness() };

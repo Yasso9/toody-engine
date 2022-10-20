@@ -10,19 +10,19 @@
 
 namespace ImGui
 {
-    void P_Begin ( std::string name, std::function< void() > const & lambda )
+    void P_Show ( std::string name, std::function< void() > const & lambda )
     {
-        P_Begin( name, NULL, lambda );
+        P_Show( name, NULL, lambda );
     }
 
-    void P_Begin (
+    void P_Show (
         std::string name, bool * isWindowOpen,
         std::function< void() > const & lambda )
     {
-        P_Begin( name, isWindowOpen, 0, lambda );
+        P_Show( name, isWindowOpen, 0, lambda );
     }
 
-    void P_Begin (
+    void P_Show (
         std::string name, bool * isWindowOpen, ImGuiWindowFlags flags,
         std::function< void() > const & lambda )
     {

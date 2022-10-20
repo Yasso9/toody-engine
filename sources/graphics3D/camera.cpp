@@ -35,7 +35,7 @@ void Camera::update_before( float deltaTime )
 {
     m_movementSpeed = 2.5f * deltaTime;
 
-    ImGui::P_Begin( "Camera", [this] () {
+    ImGui::P_Show( "Camera", [this] () {
         if ( ImGui::Button( "Reset Camera" ) )
         {
             this->reset();

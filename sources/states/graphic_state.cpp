@@ -43,7 +43,7 @@ void GraphicState::update_before( float /* deltaTime */ )
         m_captureMouse = ! m_captureMouse;
     }
 
-    ImGui::P_Begin( "Graphic State", [this] () {
+    ImGui::P_Show( "Graphic State", [this] () {
         ImGui::Checkbox( "Mouse Captured ? (SPACE)", &m_captureMouse );
     } );
 
