@@ -112,9 +112,7 @@ namespace math
                 return this->z;
                 break;
             default :
-                /// @todo throw an exception
-                ASSERTION( false, "Vector3 index out of range" );
-                return 0.f;
+                throw std::out_of_range { "Vector3 index out of range" };
                 break;
             }
         }
