@@ -226,10 +226,11 @@ compile_libraries : $(OBJECT_LIBRARIES)
 link : $(EXECUTABLE)
 
 run :
+	$(SHOW)echo "Running $(EXECUTABLE)"
 ifeq ($(DETECTED_OS),Linux)
-	LD_LIBRARY_PATH="$(LIBRARIES_PATH)" $(EXECUTABLE)
+	$(SHOW)LD_LIBRARY_PATH="$(LIBRARIES_PATH)" $(EXECUTABLE)
 else
-	$(EXECUTABLE)
+	$(SHOW)$(EXECUTABLE)
 endif
 
 compile_commands : clean initialize_build
@@ -282,8 +283,7 @@ clean : clean_project clean_libraries
 
 debug :
 ifeq ($(DETECTED_OS),Linux)
-	$(SHOW)export LD_LIBRARY_PATH="$(LIBRARIES_PATH)" && gdb -quiet $(EXECUTABLE)
-	$(SHOW)echo "Running $(EXECUTABLE)"
+	export LD_LIBRARY_PATH="$(LIBRARIES_PATH)" && gdb -quiet $(EXECUTABLE)
 else
 	gdb -quiet $(EXECUTABLE)
 endif

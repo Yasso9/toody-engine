@@ -48,7 +48,7 @@ namespace tile
     {
         ImGui::P_Show( "Tile Selector", [&] () {
             ImGui::Checkbox( "Enable grid ?", &m_isGridEnabled );
-            ImGui::ColorEdit4( "Color Edit", m_gridColor.to_table() );
+            ImGui::ColorEdit4( "Grid Color", m_gridColor.to_table() );
 
             m_tileset.set_position( ImGui::GetCursorScreenPos() );
             ImGui::Image( m_tileset.get_texture() );

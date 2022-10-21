@@ -31,7 +31,7 @@ class EditorState final : public State
   public:
     EditorState();
 
-    void update_before ( float deltaTime ) override;
+    void update ( float deltaTime ) override;
 
   private:
     void reset_view ();

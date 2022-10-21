@@ -31,9 +31,9 @@ EditorState::EditorState()
     m_showWindow {
         {    "demo_window", false},
         {  "debug_options", false},
-        { "editor_overlay",  true},
         {      "collision",  true},
         {"player_handling", false},
+        {       "dialogue", false},
         {           "view", false}, },
     m_tilemap { m_view },
     m_imageMap {},
@@ -74,7 +74,7 @@ EditorState::EditorState()
         "including versions of Lorem Ipsum." );
 }
 
-void EditorState::update_before( float deltaTime )
+void EditorState::update( float deltaTime )
 {
     this->update_toolbar();
 
@@ -93,7 +93,8 @@ void EditorState::update_before( float deltaTime )
         ImGui::ShowDemoWindow( &m_showWindow.at( "demo_window" ) );
     }
 
-    if ( input::is_pressed( sf::Keyboard::Space ) )
+    if ( m_showWindow.at( "dialogue" )
+         && input::is_pressed( sf::Keyboard::Space ) )
     {
         m_dialogue.next();
     }
@@ -155,18 +156,10 @@ void EditorState::update_toolbar()
     {
         if ( ImGui::BeginMenu( "Options" ) )
         {
-            ImGui::MenuItem(
-                "Show Editor Overlay Options", NULL,
-                &m_showWindow.at( "editor_overlay" ) );
-            ImGui::MenuItem(
-                "Show ImGui Demo Window", NULL,
-                &m_showWindow.at( "demo_window" ) );
-            ImGui::MenuItem(
-                "Show Debug Options", NULL,
-                &m_showWindow.at( "debug_options" ) );
-            ImGui::MenuItem(
-                "Show View Options", NULL, &m_showWindow.at( "view" ) );
-            ImGui::EndMenu();
+            // ImGui::MenuItem(
+            //     "Show Editor Overlay Options", NULL,
+            //     &m_showWindow.at( "editor_overlay" ) );
+            // ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
     }
@@ -236,48 +229,48 @@ void EditorState::update_collision_window()
 
 void EditorState::update_overlay()
 {
-    if ( m_showWindow.at( "editor_overlay" ) )
+    ImGuiWindowFlags const window_flags =
+        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize
+        | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing
+        | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove;
+
+    constexpr math::Vector2F const PADDINGS { 10.f, 10.f };
+    math::Vector2F const           overlayPosition {
+        math::Vector2F { ImGui::GetMainViewport()->WorkPos } + PADDINGS };
+
+    ImGui::SetNextWindowPos( overlayPosition, ImGuiCond_Always );
+    ImGui::SetNextWindowBgAlpha( 0.8f );
+    if ( ImGui::Begin( "Editor Main", NULL, window_flags ) )
     {
-        ImGuiWindowFlags const window_flags =
-            ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize
-            | ImGuiWindowFlags_NoSavedSettings
-            | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav
-            | ImGuiWindowFlags_NoMove;
+        static bool customizeCollision { false };
+        ImGui::Checkbox( "Customize Collisions ?", &customizeCollision );
+        m_collisionList.set_customisation( customizeCollision );
 
-        constexpr math::Vector2F const PADDINGS { 10.f, 10.f };
-        math::Vector2F const           overlayPosition {
-            math::Vector2F { ImGui::GetMainViewport()->WorkPos } + PADDINGS };
-        ImGui::SetNextWindowPos( overlayPosition, ImGuiCond_Always );
-        ImGui::SetNextWindowBgAlpha( 0.5f );
-        if ( ImGui::Begin(
-                 "Editor Main", &m_showWindow.at( "editor_overlay" ),
-                 window_flags ) )
+        static bool showDebug { false };
+        ImGui::Checkbox( "Show Debug", &showDebug );
+        if ( showDebug )
         {
-            static bool customizeCollision { false };
-            ImGui::Checkbox( "Customize Collisions ?", &customizeCollision );
-            m_collisionList.set_customisation( customizeCollision );
-
-            ImGui::Checkbox(
-                "Handle Player ?", &m_showWindow.at( "player_handling" ) );
-
-            static bool showDebug { false };
-            ImGui::Checkbox( "Show Debug", &showDebug );
-            if ( showDebug )
-            {
-                std::stringstream overlayOutput {};
-                overlayOutput << "Window Position : " << overlayPosition
-                              << "\n";
-                overlayOutput
-                    << "Is Any Window Focused ? " << std::boolalpha
-                    << ImGui::IsWindowFocused( ImGuiFocusedFlags_AnyWindow )
-                    << "\n";
-                overlayOutput
-                    << "Is Any Window Hovered ? : "
-                    << ImGui::IsWindowFocused( ImGuiHoveredFlags_AnyWindow )
-                    << "\n";
-                ImGui::Text( "%s", overlayOutput.str().c_str() );
-            }
+            std::stringstream overlayOutput {};
+            overlayOutput << "Window Position : " << overlayPosition << "\n";
+            overlayOutput << "Is Any Window Focused ? " << std::boolalpha
+                          << ImGui::IsWindowFocused(
+                                 ImGuiFocusedFlags_AnyWindow )
+                          << "\n";
+            overlayOutput << "Is Any Window Hovered ? : "
+                          << ImGui::IsWindowFocused(
+                                 ImGuiHoveredFlags_AnyWindow )
+                          << "\n";
+            ImGui::Text( "%s", overlayOutput.str().c_str() );
         }
-        ImGui::End();
+
+        if ( ImGui::TreeNode( "Show Tools" ) )
+        {
+            for ( auto & element : m_showWindow )
+            {
+                ImGui::Checkbox( element.first.c_str(), &element.second );
+            }
+            ImGui::TreePop();
+        }
     }
+    ImGui::End();
 }

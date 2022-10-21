@@ -33,10 +33,10 @@ class Dialogue : public Component2D
     Dialogue();
     virtual ~Dialogue() = default;
 
-    void update_before ( float deltaTime ) override;
+    void update ( float deltaTime ) override;
 
   private:
-    void render_before ( Render & render ) const override;
+    void render ( Render & render ) const override;
 
   public:
     /**

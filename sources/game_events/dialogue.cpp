@@ -108,7 +108,7 @@ void Dialogue::process_mouse_movement_customisation(
     }
 }
 
-void Dialogue::update_before( float /* deltaTime */ )
+void Dialogue::update( float /* deltaTime */ )
 {
     ImGui::P_Show( "Dialogue Editor", &m_showCustomisation, [&] {
         sf::Color background { m_shape.getFillColor() };
@@ -142,7 +142,7 @@ void Dialogue::update_before( float /* deltaTime */ )
     } );
 }
 
-void Dialogue::render_before( Render & render ) const
+void Dialogue::render( Render & render ) const
 {
     render.get_target().draw( m_shape, render.get_state() );
     render.get_target().draw( m_text, render.get_state() );
