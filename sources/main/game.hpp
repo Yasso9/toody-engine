@@ -11,6 +11,10 @@ namespace sf
 
 class Game final
 {
+  private:
+    std::shared_ptr< State > m_state;
+    bool                     m_shouldRun;
+
   public:
     Game();
     virtual ~Game();
@@ -18,9 +22,6 @@ class Game final
     void run ();
 
   private:
-    std::shared_ptr< State > m_state;
-    bool                     m_shouldRun;
-
     /// @brief To know where do we start the game
     void init_state ();
 

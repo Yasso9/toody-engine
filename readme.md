@@ -55,15 +55,10 @@ MacOs : Not taken in charge.
 
 # todo
 
-Fix Error of failed request:  BadCursor (invalid Cursor parameter)
-C'est quand on ferme la fenêtre ou quelque chose comme ça et qu'on a toujours les truc de la souris qui se mettent en place.
-
 Test the code with valgrind
 
 Test the code with cpp checker
 
 Réarenger les fichier dans la racine du projet pour qu'on en ai le moins possible
-
-Changer les updates before et render_before de component pour un nom plus claire
 
 Add Google Test to the project

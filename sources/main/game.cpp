@@ -40,6 +40,7 @@ Game::Game() : m_state( nullptr ), m_shouldRun( true )
     {
         throw exception::System { "Shader's not available"s };
     }
+
     // Disable use of imgui.ini file
     // ImGui::GetIO().IniFilename = nullptr;
 
@@ -78,6 +79,8 @@ void Game::run()
             clock.restart();
         }
     }
+
+    Window::get_instance().close();
 }
 
 void Game::init_state()
