@@ -41,7 +41,7 @@ namespace tile
 
     unsigned int Position::value() const
     {
-        return m_position.x * m_numberOfColumns + m_position.y;
+        return m_position.y * m_numberOfColumns + m_position.x;
     }
 
     math::Vector2U Position::tile() const
