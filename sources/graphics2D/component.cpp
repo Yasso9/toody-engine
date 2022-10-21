@@ -23,13 +23,15 @@ Component & Component::operator= ( Component && component ) noexcept
     return *this;
 }
 
-void Component::update( float deltaTime )
+void Component::update_all( float deltaTime )
 {
     this->update_before( deltaTime );
 
+    this->update( deltaTime );
+
     for ( Component * component : m_childs )
     {
-        component->update( deltaTime );
+        component->update_all( deltaTime );
     }
 
     this->update_after( deltaTime );
@@ -37,9 +39,13 @@ void Component::update( float deltaTime )
 
 void Component::update_before( float /* deltaTime */ ) {}
 
+void Component::update( float /* deltaTime */ ) {}
+
 void Component::update_after( float /* deltaTime */ ) {}
 
 void Component::render_before( Render & /* render */ ) const {}
+
+void Component::render( Render & /* render */ ) const {}
 
 void Component::render_after( Render & /* render */ ) const {}
 
@@ -51,6 +57,8 @@ void Component::render_all( Render & render ) const
     }
 
     this->render_before( render );
+
+    this->render( render );
 
     for ( Component const * component : m_childs )
     {

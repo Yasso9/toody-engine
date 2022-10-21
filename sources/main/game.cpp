@@ -116,7 +116,7 @@ void Game::update_state( sf::Time const & deltaTime )
 
     static State::E_List lastState { this->m_state->get_state_to_print() };
 
-    this->m_state->update( deltaTime.asSeconds() );
+    this->m_state->update_all( deltaTime.asSeconds() );
 
     State::E_List const newState { this->m_state->get_state_to_print() };
     if ( lastState != newState )

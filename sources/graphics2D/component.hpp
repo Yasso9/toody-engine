@@ -48,24 +48,31 @@ class Component
     void add_childs ( std::vector< ComponentClass > & components );
 
   public:
-    /// @brief update the component
-    virtual void update ( float deltaTime ) final;
+    /// @brief update the component. Must not be called manually if it's a child
+    virtual void update_all ( float deltaTime ) final;
     /// @brief draw the component to the render
     virtual void render_all ( Render & render ) const final;
 
     void set_view ( View const & view );
 
   private:
-    /// @brief custom update - is the first function called
+    /// @brief custom update - is the first method called
     /// in the update procedure
     virtual void update_before ( float deltaTime );
-    /// @brief custom update - is the last function called
+    /// @brief custom update - this method is called after update_before and
+    /// before update_after
+    virtual void update ( float deltaTime );
+    /// @brief custom update - is the last method called
     /// in the update procedure
     virtual void update_after ( float deltaTime );
-    /// @brief custom render - is the first function called
+
+    /// @brief custom render - is the first method called
     /// in the render procedure
     virtual void render_before ( Render & render ) const;
-    /// @brief custom render - is the last function called
+    /// @brief custom render - this method is called after render_before and
+    /// before render_after
+    virtual void render ( Render & render ) const;
+    /// @brief custom render - is the last method called
     /// in the render procedure
     virtual void render_after ( Render & render ) const;
 };

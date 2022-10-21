@@ -6,6 +6,8 @@
 #include "maths/vector2.tpp"    // for operator/, operator-, Vector2::operat...
 #include "tools/singleton.tpp"  // for Singleton::get_instance
 
+/// @todo rework or remove this file
+
 GameState::GameState()
   : State( State::E_List::Game ), m_view(), m_tilemap( m_view ), m_player()
 {
@@ -29,7 +31,7 @@ void GameState::init_map()
 
 void GameState::update_before( float deltaTime )
 {
-    this->m_player.update( deltaTime );
+    this->m_player.update_all( deltaTime );
     // The view follow the player
     this->m_view.setCenter( this->m_player.getPosition() );
 }
