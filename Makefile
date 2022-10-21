@@ -282,7 +282,8 @@ clean : clean_project clean_libraries
 
 debug :
 ifeq ($(DETECTED_OS),Linux)
-	export LD_LIBRARY_PATH="$(LIBRARIES_PATH)" && gdb -quiet $(EXECUTABLE)
+	$(SHOW)export LD_LIBRARY_PATH="$(LIBRARIES_PATH)" && gdb -quiet $(EXECUTABLE)
+	$(SHOW)echo "Running $(EXECUTABLE)"
 else
 	gdb -quiet $(EXECUTABLE)
 endif

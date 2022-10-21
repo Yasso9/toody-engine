@@ -70,7 +70,6 @@ void Game::run()
 
         if ( deltaTime.asSeconds() > refreshRate )
         {
-            // std::cout << "Loop Start" << std::endl;
             this->update_events();
             this->update_state( deltaTime );
             this->render();
