@@ -77,9 +77,9 @@ namespace tile
         // Position too big for the current grid
         if ( m_position.x >= m_numberOfColumns )
         {
-            throw std::out_of_range {
-                "The position in the X axis can not be superior to the number "
-                " of column " };
+            // throw std::out_of_range {
+            //     "The position in the X axis can not be superior to the number
+            //     " " of column " };
         }
     }
 

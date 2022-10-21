@@ -30,7 +30,7 @@ namespace tile
         Tileset const &               get_tileset () const;
         std::optional< unsigned int > get_tile_selected () const;
 
-        void update_before ( float deltaTime ) override;
+        void update ( float deltaTime ) override;
 
       private:
         void update_selection ( ImDrawList & drawList );

@@ -44,10 +44,9 @@ namespace tile
         return m_tileSelected;
     }
 
-    void Selector::update_before( float /* deltaTime */ )
+    void Selector::update( float /* deltaTime */ )
     {
-        if ( ImGui::Begin( "Tile Selector" ) )
-        {
+        ImGui::P_Show( "Tile Selector", [&] () {
             ImGui::Checkbox( "Enable grid ?", &m_isGridEnabled );
             ImGui::ColorEdit4( "Color Edit", m_gridColor.to_table() );
 
@@ -61,8 +60,7 @@ namespace tile
             }
 
             this->update_selection( *ImGui::GetWindowDrawList() );
-        }
-        ImGui::End();
+        } );
     }
 
     void Selector::update_selection( ImDrawList & drawList )
@@ -75,51 +73,57 @@ namespace tile
 
         if ( isInSelection )
         {
-            // Calculate the position of the selection rectangle
-            math::Vector2F const selectionPosition {
-                m_tileset.get_tile_position( mousePosition ).pixel() };
+            // Position of the selection rectangle depending of the
+            // tileset position
+            tile::Position const selectionPosition {
+                m_tileset.get_tile_position(
+                    mousePosition - m_tileset.get_position() ) };
 
             // Selection Rectangle
             drawList.AddRectFilled(
-                selectionPosition, selectionPosition + TILE_PIXEL_SIZE_VECTOR,
+                selectionPosition.pixel().to_float() + m_tileset.get_position(),
+                selectionPosition.pixel().to_float() + TILE_PIXEL_SIZE_VECTOR
+                    + m_tileset.get_position(),
                 m_gridColor.to_integer() );
 
             std::stringstream outputSelection {};
             outputSelection
-                << "Selection pixel position : " << selectionPosition << "\n";
+                << "Selection pixel position : " << selectionPosition.pixel()
+                << "\n";
             outputSelection
-                << "Selection tile position : "
-                << m_tileset.get_tile_position( mousePosition ).tile() << "\n";
-            outputSelection << "Tileset Size : " << m_tileset.get_size().tile()
-                            << "\n";
-            unsigned int const tileHovered {
-                m_tileset.get_tile_position( mousePosition ).value() };
-            outputSelection << "Tile Hovered : " << tileHovered << "\n";
+                << "Selection tile position : " << selectionPosition.tile()
+                << "\n";
+            outputSelection
+                << "Selection Tile Value : " << selectionPosition.value()
+                << "\n";
+
             if ( input::is_pressed( sf::Mouse::Button::Left ) )
             {
-                outputSelection << "Button Pressed"
+                // There's a click, the tile selected change value
+                outputSelection << "Button Pressed !"
                                 << "\n";
-                m_tileSelected = tileHovered;
+                m_tileSelected = selectionPosition.value();
             }
-            outputSelection << "Tile Position : "
-                            << selectionPosition - m_tileset.get_position()
-                            << "\n";
             ImGui::Text( "%s", outputSelection.str().c_str() );
         }
 
         std::stringstream output {};
         output << "Mouse Position : " << mousePosition << "\n";
-        output << "Tilemap Position : " << m_tileset.get_position() << "\n";
-        output << "Tilemap Size : " << m_tileset.get_size().pixel() << "\n";
+        output << "Tileset Position : " << m_tileset.get_position() << "\n";
+        output << "Tileset Size (Pixel) : " << m_tileset.get_size().pixel()
+               << "\n";
+        output << "Tileset Size (Tile): " << m_tileset.get_size().tile()
+               << "\n";
         output << "Is In Selection ? : " << std::boolalpha << isInSelection
                << "\n";
+        output << "Current Tile Selected : ";
         if ( m_tileSelected.has_value() )
         {
-            output << "TILE SELECTED : " << m_tileSelected.value() << "\n";
+            output << m_tileSelected.value() << "\n";
         }
         else
         {
-            output << "TILE SELECTED : None"
+            output << "None"
                    << "\n";
         }
         ImGui::Text( "%s", output.str().c_str() );
