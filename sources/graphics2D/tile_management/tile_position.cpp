@@ -71,7 +71,7 @@ namespace tile
 
         if ( type == Type::Pixel )
         {
-            m_position = pixel_to_tile_position( position );
+            m_position = pixel_to_tile_position( m_position );
         }
 
         // Position too big for the current grid

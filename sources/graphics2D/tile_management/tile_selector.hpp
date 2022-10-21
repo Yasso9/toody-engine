@@ -33,7 +33,6 @@ namespace tile
         void update_before ( float deltaTime ) override;
 
       private:
-        void draw_grid ( ImDrawList & drawList );
         void update_selection ( ImDrawList & drawList );
     };
 

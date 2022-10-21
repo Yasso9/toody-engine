@@ -17,6 +17,14 @@
 #include "maths/vector2.tpp"          // for operator<<, operator+, Vector2:...
 #include "tools/global_variable.hpp"  // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZE_U
 
+/// @todo put theses functions on the ImGUI::grid namespace
+static void draw_grid (
+    ImDrawList & drawList, Tileset const & tileset, Color gridColor );
+static void draw_horizontal_lines_grid (
+    ImDrawList & drawList, Tileset const & tileset, Color lineColor );
+static void draw_vertical_lines_grid (
+    ImDrawList & drawList, Tileset const & tileset, Color lineColor );
+
 namespace tile
 {
     Selector::Selector()
@@ -48,47 +56,13 @@ namespace tile
 
             if ( m_isGridEnabled )
             {
-                this->draw_grid( *ImGui::GetWindowDrawList() );
+                draw_grid(
+                    *ImGui::GetWindowDrawList(), m_tileset, m_gridColor );
             }
 
             this->update_selection( *ImGui::GetWindowDrawList() );
         }
         ImGui::End();
-    }
-
-    void Selector::draw_grid( ImDrawList & drawList )
-    {
-        // Tilemap Border
-        drawList.AddRect(
-            m_tileset.get_position(), m_tileset.get_end_position(),
-            m_gridColor.to_integer() );
-
-        // Horizontal lines of the grid
-        for ( unsigned int x = 0u; x < m_tileset.get_size().pixel().x;
-              x += TILE_PIXEL_SIZE_U )
-        {
-            math::Vector2F const pointA {
-                m_tileset.get_position().x + static_cast< float >( x ),
-                m_tileset.get_position().y };
-            math::Vector2F const pointB {
-                m_tileset.get_position().x + static_cast< float >( x ),
-                m_tileset.get_end_position().y };
-
-            drawList.AddLine( pointA, pointB, m_gridColor.to_integer() );
-        }
-        // Vertical lines of the grid
-        for ( unsigned int y = 0u; y < m_tileset.get_size().pixel().y;
-              y += TILE_PIXEL_SIZE_U )
-        {
-            math::Vector2F const pointA {
-                m_tileset.get_position().x,
-                m_tileset.get_position().y + static_cast< float >( y ) };
-            math::Vector2F const pointB {
-                m_tileset.get_end_position().x,
-                m_tileset.get_position().y + static_cast< float >( y ) };
-
-            drawList.AddLine( pointA, pointB, m_gridColor.to_integer() );
-        }
     }
 
     void Selector::update_selection( ImDrawList & drawList )
@@ -151,3 +125,49 @@ namespace tile
         ImGui::Text( "%s", output.str().c_str() );
     }
 }  // namespace tile
+
+static void draw_grid (
+    ImDrawList & drawList, Tileset const & tileset, Color gridColor )
+{
+    // Tilemap Border
+    drawList.AddRect(
+        tileset.get_position(), tileset.get_end_position(),
+        gridColor.to_integer() );
+
+    draw_horizontal_lines_grid( drawList, tileset, gridColor );
+    draw_vertical_lines_grid( drawList, tileset, gridColor );
+}
+
+static void draw_horizontal_lines_grid (
+    ImDrawList & drawList, Tileset const & tileset, Color lineColor )
+{
+    for ( unsigned int x = 0u; x < tileset.get_size().pixel().x;
+          x += TILE_PIXEL_SIZE_U )
+    {
+        math::Vector2F const pointA {
+            tileset.get_position().x + static_cast< float >( x ),
+            tileset.get_position().y };
+        math::Vector2F const pointB {
+            tileset.get_position().x + static_cast< float >( x ),
+            tileset.get_end_position().y };
+
+        drawList.AddLine( pointA, pointB, lineColor.to_integer() );
+    }
+}
+
+static void draw_vertical_lines_grid (
+    ImDrawList & drawList, Tileset const & tileset, Color lineColor )
+{
+    for ( unsigned int y = 0u; y < tileset.get_size().pixel().y;
+          y += TILE_PIXEL_SIZE_U )
+    {
+        math::Vector2F const pointA {
+            tileset.get_position().x,
+            tileset.get_position().y + static_cast< float >( y ) };
+        math::Vector2F const pointB {
+            tileset.get_end_position().x,
+            tileset.get_position().y + static_cast< float >( y ) };
+
+        drawList.AddLine( pointA, pointB, lineColor.to_integer() );
+    }
+}
