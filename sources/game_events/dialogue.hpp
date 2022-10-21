@@ -16,6 +16,8 @@ class Dialogue : public Component2D
 {
     sf::RectangleShape m_shape;
     sf::Text           m_text;
+    /// @brief true if we show the dialogue, false otherwise
+    bool               m_isEnabled;
     bool               m_showCustomisation;
 
     std::string m_textRemaining;
@@ -39,6 +41,10 @@ class Dialogue : public Component2D
     void render ( Render & render ) const override;
 
   public:
+    void enable ();
+    void disable ();
+    bool is_enabled () const;
+
     /**
      * @brief go to the next dialogue section if available
      * @return true if there is something else to read

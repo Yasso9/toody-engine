@@ -23,6 +23,7 @@
 Dialogue::Dialogue()
   : m_shape {},
     m_text {},
+    m_isEnabled { true },
     m_showCustomisation { true },
     m_textRemaining { "" },
     m_regularCursor {},
@@ -60,6 +61,11 @@ Dialogue::Dialogue()
 
 bool Dialogue::next()
 {
+    if ( ! this->is_enabled() )
+    {
+        return false;
+    }
+
     std::string currentText { "" };
 
     if ( m_textRemaining.size() > CHARACTER_LIMIT )
@@ -86,6 +92,11 @@ void Dialogue::add_text( std::string textToAdd )
 void Dialogue::process_mouse_movement_customisation(
     math::Vector2I mouseMovement )
 {
+    if ( ! this->is_enabled() )
+    {
+        return;
+    }
+
     static bool mouseIsInsideBox = false;
 
     // If the mouse was already inside and we have clicked in the right button
@@ -110,6 +121,11 @@ void Dialogue::process_mouse_movement_customisation(
 
 void Dialogue::update( float /* deltaTime */ )
 {
+    if ( ! this->is_enabled() )
+    {
+        return;
+    }
+
     ImGui::P_Show( "Dialogue Editor", &m_showCustomisation, [&] {
         sf::Color background { m_shape.getFillColor() };
         sf::Color outline { m_shape.getOutlineColor() };
@@ -144,6 +160,11 @@ void Dialogue::update( float /* deltaTime */ )
 
 void Dialogue::render( Render & render ) const
 {
+    if ( ! this->is_enabled() )
+    {
+        return;
+    }
+
     render.get_target().draw( m_shape, render.get_state() );
     render.get_target().draw( m_text, render.get_state() );
 }
@@ -160,4 +181,19 @@ void Dialogue::set_current_text( std::string const & text )
     // The position of the text must be at the middle of the button shape
     m_text.setPosition(
         m_shape.getPosition() + ( ( m_shape.getSize() - textSize ) / 2.f ) );
+}
+
+void Dialogue::enable()
+{
+    m_isEnabled = true;
+}
+
+void Dialogue::disable()
+{
+    m_isEnabled = false;
+}
+
+bool Dialogue::is_enabled() const
+{
+    return m_isEnabled;
 }
