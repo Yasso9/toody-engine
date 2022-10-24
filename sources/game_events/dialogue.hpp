@@ -43,6 +43,7 @@ class Dialogue : public Component2D
   public:
     void enable ();
     void disable ();
+    void set_enabled ( bool isEnabled );
     bool is_enabled () const;
 
     /**

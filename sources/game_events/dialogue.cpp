@@ -185,12 +185,17 @@ void Dialogue::set_current_text( std::string const & text )
 
 void Dialogue::enable()
 {
-    m_isEnabled = true;
+    this->set_enabled( true );
 }
 
 void Dialogue::disable()
 {
-    m_isEnabled = false;
+    this->set_enabled( false );
+}
+
+void Dialogue::set_enabled( bool isEnabled )
+{
+    m_isEnabled = isEnabled;
 }
 
 bool Dialogue::is_enabled() const

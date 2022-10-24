@@ -39,8 +39,7 @@ EditorState::EditorState()
     m_imageMap {},
     m_collisionList {
         { StaticEntity2D { math::RectangleF { 100.f, 100.f, 50.f, 50.f } },
-          StaticEntity2D { math::RectangleF { -300.f, 0.f, 200.f, 200.f } },
-          StaticEntity2D { math::RectangleF { 0.f, 500.f, 100.f, 50.f } } } },
+          StaticEntity2D { math::RectangleF { -300.f, 0.f, 200.f, 200.f } } } },
     m_greenEntity {
         math::RectangleF { 0.f, 0.f, 40.f, 40.f }, m_collisionList, m_view,
         input::ILKJ },
@@ -273,6 +272,8 @@ void EditorState::update_overlay()
             }
             ImGui::TreePop();
         }
+
+        m_dialogue.set_enabled( m_showWindow.at( "dialogue" ) );
     }
     ImGui::End();
 }

@@ -23,8 +23,7 @@ class EditorState final : public State
 
     CollisionList    m_collisionList;
     MoveableEntity2D m_greenEntity;
-
-    Player m_player;
+    Player           m_player;
 
     Dialogue m_dialogue;
 
