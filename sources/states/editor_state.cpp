@@ -28,10 +28,11 @@
 EditorState::EditorState()
   : State { State::E_List::Editor },
     m_view { Window::get_instance().getDefaultView() },
+    /// @todo know if the values are true or false with database
     m_showWindow {
         {    "demo_window", false},
         {  "debug_options", false},
-        {      "collision",  true},
+        {      "collision", false},
         {"player_handling", false},
         {       "dialogue", false},
         {           "view", false}, },
@@ -39,7 +40,7 @@ EditorState::EditorState()
     m_imageMap {},
     m_collisionList {
         { StaticEntity2D { math::RectangleF { 100.f, 100.f, 50.f, 50.f } },
-          StaticEntity2D { math::RectangleF { -300.f, 0.f, 200.f, 200.f } } } },
+          StaticEntity2D { math::RectangleF { -200.f, -50.f, 100.f, 100.f } } } },
     m_greenEntity {
         math::RectangleF { 0.f, 0.f, 40.f, 40.f }, m_collisionList, m_view,
         input::ILKJ },
@@ -72,7 +73,7 @@ EditorState::EditorState()
         "more recently with desktop publishing software like Aldus PageMaker "
         "including versions of Lorem Ipsum." );
 
-    m_dialogue.disable();
+    m_dialogue.set_enabled( m_showWindow.at( "dialogue" ) );
 }
 
 void EditorState::update( float deltaTime )
@@ -115,7 +116,6 @@ void EditorState::update_view( float /* deltaTime */ )
     static float viewScrollSpeed { 0.2f };
     static float viewMoveSpeedBase { 1.f };
 
-    ///@todo use this function for all Imgui::P_Show
     ImGui::P_Show( "View Options", &m_showWindow.at( "view" ), [] () {
         ImGui::SliderFloat(
             "View Scroll Speed", &viewScrollSpeed, 0.f, 5.f, "%.2f" );

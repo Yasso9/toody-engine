@@ -274,7 +274,8 @@ void TileMap::update_selection()
 
     ImGui::Text( "%s", selectionOutput.str().c_str() );
 
-    if ( input::is_pressed( sf::Mouse::Button::Left ) )
+    if ( input::is_pressed( sf::Mouse::Button::Left )
+         && m_tileSelector.get_tile_selected().has_value() )
     {
         // There's a left click and the mouse is inside the tilemap
         this->change_tile(
