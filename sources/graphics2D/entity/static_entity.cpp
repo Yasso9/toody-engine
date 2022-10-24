@@ -70,7 +70,7 @@ StaticEntity2D::StaticEntity2D( math::PolygonF polygon )
     this->setFillColor( sf::Color::Red );
 }
 
-void StaticEntity2D::update_before( float /* deltaTime */ )
+void StaticEntity2D::update( float /* deltaTime */ )
 {
     if ( ! m_isCustomisable )
     {
@@ -83,7 +83,7 @@ void StaticEntity2D::update_before( float /* deltaTime */ )
     } );
 }
 
-void StaticEntity2D::render_before( Render & render ) const
+void StaticEntity2D::render( Render & render ) const
 {
     this->custom_draw( render );
 

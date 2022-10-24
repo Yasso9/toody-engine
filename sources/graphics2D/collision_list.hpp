@@ -1,6 +1,6 @@
 #pragma once
 
-#include "graphics2D/static_entity.hpp"
+#include "graphics2D/entity/static_entity.hpp"
 
 class CollisionList : public Component2D
 {

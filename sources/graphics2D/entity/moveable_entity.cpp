@@ -23,12 +23,12 @@ math::Vector2F MoveableEntity2D::get_speed() const
 
 void MoveableEntity2D::set_speed( float speed )
 {
-    this->m_speed = { speed, speed };
+    this->set_speed( { speed, speed } );
 }
 
 void MoveableEntity2D::set_speed( math::Vector2F speed )
 {
-    this->m_speed = speed;
+    m_speed = speed;
 }
 
 bool MoveableEntity2D::is_collision_detected() const

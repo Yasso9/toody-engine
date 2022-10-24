@@ -20,7 +20,6 @@ class State : public Component2D
     enum class E_List
     {
         MainMenu = 0,
-        Game,
         Editor,
         Graphics,
         Test,

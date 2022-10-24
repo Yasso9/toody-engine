@@ -62,19 +62,12 @@ void Window::clear_all( sf::Color const & backgroundColor )
     this->clear( backgroundColor );
 }
 
-// void Window::draw( Component3D const & component, sf::RenderTarget & target,
-//                    sf::RenderStates const & states ) const
-// {
-//     /// @todo imporve that
-//     Render render { *this, target, states };
-//     component.render_all( render );
-// }
-
 void Window::creation()
 {
     std::string const gameTitle { "Toody Engine (In Developpement)" };
 
-    unsigned int const windowStyle { sf::Style::Default };
+    unsigned int const windowStyle {
+        sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close };
 
     sf::ContextSettings contextSettings {};
     contextSettings.depthBits         = 24;
@@ -92,7 +85,7 @@ void Window::creation()
 void Window::initialize()
 {
     this->setVisible( true );
-    // this->requestFocus();
+    this->requestFocus();
     this->setKeyRepeatEnabled( false );
     this->setVerticalSyncEnabled(
         Settings::get_instance().get_vertical_sync() );

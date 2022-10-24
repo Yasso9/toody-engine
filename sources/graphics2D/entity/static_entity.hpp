@@ -20,10 +20,10 @@ class StaticEntity2D : public Component2D,
     explicit StaticEntity2D( math::PolygonF polygon );
     ~StaticEntity2D() = default;
 
-    void update_before ( float deltaTime ) override;
+    void update ( float deltaTime ) override;
 
   protected:
-    void render_before ( Render & render ) const override;
+    void render ( Render & render ) const override;
 
   public:
     void set_customisation ( bool isCustomisable );

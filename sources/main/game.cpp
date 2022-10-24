@@ -17,7 +17,6 @@
 #include "main/settings.hpp"           // for Settings
 #include "main/window.hpp"             // for Window
 #include "states/editor_state.hpp"     // for EditorState
-#include "states/game_state.hpp"       // for GameState
 #include "states/graphic_state.hpp"    // for GraphicState
 #include "states/main_menu_state.hpp"  // for MainMenuState
 #include "states/test.hpp"             // for TestState
@@ -156,9 +155,6 @@ void Game::change_state( State::E_List const & newState )
     {
     case State::E_List::MainMenu :
         this->m_state = std::make_shared< MainMenuState >();
-        break;
-    case State::E_List::Game :
-        this->m_state = std::make_shared< GameState >();
         break;
     case State::E_List::Editor :
         this->m_state = std::make_shared< EditorState >();

@@ -10,10 +10,10 @@
 #include <SFML/System/Vector2.hpp>  // for Vector2f
 #include <SFML/Window/Mouse.hpp>    // for Mouse, Mouse::Right
 
-#include "graphics2D/component.tpp"      // for Component::add_child
-#include "graphics2D/sfml.hpp"           // for operator<<
-#include "graphics2D/static_entity.hpp"  // for StaticEntity2D
-#include "graphics2D/view.hpp"           // for View
+#include "graphics2D/component.tpp"             // for Component::add_child
+#include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
+#include "graphics2D/sfml.hpp"                  // for operator<<
+#include "graphics2D/view.hpp"                  // for View
 #include "input/input.hpp"               // for get_mouse_movement, get_mous...
 #include "libraries/imgui.hpp"           // for P_Begin
 #include "main/window.hpp"               // for Window
