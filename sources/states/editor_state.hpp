@@ -39,5 +39,5 @@ class EditorState final : public State
     void update_toolbar ();
     void update_debug_window ();
     void update_collision_window ();
-    void update_overlay ();
+    void update_overlay ( float deltaTime );
 };
