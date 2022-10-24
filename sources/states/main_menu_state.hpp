@@ -10,20 +10,12 @@ class Render;
 
 class MainMenuState final : public State
 {
+    std::vector< sf::Text > m_texts;
+
   public:
     MainMenuState();
     virtual ~MainMenuState() = default;
 
-    void update_before ( float deltaTime ) override;
-    void render_before ( Render & render ) const override;
-
-  private:
-    sf::RectangleShape m_background;
-    sf::Text           m_text;
-
-    ButtonArray m_buttons;
-
-    void init_background ();
-    void init_text ();
-    void init_buttons ();
+    void update ( float deltaTime ) override;
+    void render ( Render & render ) const override;
 };

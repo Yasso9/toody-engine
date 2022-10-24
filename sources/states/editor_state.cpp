@@ -41,8 +41,7 @@ EditorState::EditorState()
     m_imageMap {},
     m_collisionList {
         { StaticEntity2D { math::RectangleF { 100.f, 100.f, 50.f, 50.f } },
-          StaticEntity2D { math::RectangleF { -200.f, -50.f, 100.f, 100.f } },
-          StaticEntity2D { resources::get_texture( "logo.png" ) } } },
+          StaticEntity2D { math::RectangleF { -200.f, -50.f, 100.f, 100.f } } } },
     m_greenEntity {
         math::RectangleF { 0.f, 0.f, 40.f, 40.f }, m_collisionList, m_view,
         input::ILKJ },
