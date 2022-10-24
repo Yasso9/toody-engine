@@ -7,7 +7,7 @@
 #include "maths/geometry/polygon.hpp"           // for PolygonF
 #include "maths/vector2.hpp"                    // for Vector2F
 
-class MoveableEntity2D : public StaticEntity2D
+class ControllableEntity2D : public StaticEntity2D
 {
     CollisionList const & m_collisionList;
     View const &          m_view;
@@ -15,7 +15,7 @@ class MoveableEntity2D : public StaticEntity2D
     math::Vector2F        m_speed;
 
   public:
-    MoveableEntity2D(
+    ControllableEntity2D(
         math::PolygonF quadrangle, CollisionList const & collisionList,
         View const & view, input::S_KeyboardMove movementKey );
 
@@ -25,5 +25,5 @@ class MoveableEntity2D : public StaticEntity2D
 
     bool is_collision_detected () const;
 
-    virtual void update_before ( float deltaTime ) override;
+    virtual void update ( float deltaTime ) override;
 };

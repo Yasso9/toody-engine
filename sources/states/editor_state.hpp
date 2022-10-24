@@ -4,12 +4,12 @@
 #include <string>  // for string
 
 #include "game_events/dialogue.hpp"
-#include "graphics2D/collision_list.hpp"           // for CollisionList
-#include "graphics2D/entity/moveable_entity.hpp"   // for MoveableEntity2D
-#include "graphics2D/entity/player.hpp"            // for Player
-#include "graphics2D/image_map.hpp"                // for ImageMap
-#include "graphics2D/tile_management/tilemap.hpp"  // for TileMap
-#include "states/state.hpp"                        // for State
+#include "graphics2D/collision_list.hpp"              // for CollisionList
+#include "graphics2D/entity/controllable_entity.hpp"  // for MoveableEntity2D
+#include "graphics2D/entity/player.hpp"               // for Player
+#include "graphics2D/image_map.hpp"                   // for ImageMap
+#include "graphics2D/tile_management/tilemap.hpp"     // for TileMap
+#include "states/state.hpp"                           // for State
 
 class EditorState final : public State
 {
@@ -21,9 +21,9 @@ class EditorState final : public State
     TileMap  m_tilemap;
     ImageMap m_imageMap;
 
-    CollisionList    m_collisionList;
-    MoveableEntity2D m_greenEntity;
-    Player           m_player;
+    CollisionList        m_collisionList;
+    ControllableEntity2D m_greenEntity;
+    Player               m_player;
 
     Dialogue m_dialogue;
 

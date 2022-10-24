@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics/CircleShape.hpp>  // for CircleShape
+#include <SFML/Graphics/Texture.hpp>
 
 #include "graphics2D/component.hpp"    // for Component2D
 #include "graphics2D/shape.hpp"        // for Shape2D
@@ -18,6 +19,7 @@ class StaticEntity2D : public Component2D,
 
   public:
     explicit StaticEntity2D( math::PolygonF polygon );
+    explicit StaticEntity2D( sf::Texture const & texture );
     ~StaticEntity2D() = default;
 
     void update ( float deltaTime ) override;

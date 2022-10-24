@@ -14,8 +14,9 @@
 #include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
 #include "graphics2D/sfml.hpp"                  // for operator<<
 #include "graphics2D/view.hpp"                  // for View
-#include "input/input.hpp"               // for get_mouse_movement, get_mous...
-#include "libraries/imgui.hpp"           // for P_Begin
+#include "input/input.hpp"      // for get_mouse_movement, get_mous...
+#include "libraries/imgui.hpp"  // for P_Begin
+#include "main/resources.hpp"
 #include "main/window.hpp"               // for Window
 #include "maths/geometry/point.hpp"      // for PointF
 #include "maths/geometry/polygon.hpp"    // for PolygonF
@@ -40,7 +41,8 @@ EditorState::EditorState()
     m_imageMap {},
     m_collisionList {
         { StaticEntity2D { math::RectangleF { 100.f, 100.f, 50.f, 50.f } },
-          StaticEntity2D { math::RectangleF { -200.f, -50.f, 100.f, 100.f } } } },
+          StaticEntity2D { math::RectangleF { -200.f, -50.f, 100.f, 100.f } },
+          StaticEntity2D { resources::get_texture( "logo.png" ) } } },
     m_greenEntity {
         math::RectangleF { 0.f, 0.f, 40.f, 40.f }, m_collisionList, m_view,
         input::ILKJ },
@@ -214,7 +216,7 @@ void EditorState::update_collision_window()
         output << "Green Polygon : " << m_greenEntity.get_polygon().print()
                << "\n";
 
-        for ( StaticEntity2D const & entity : m_collisionList.get_array() )
+        for ( StaticEntity2D const & entity : m_collisionList.get_entities() )
         {
             output << "Intersection with " << entity.get_position() << " ? "
                    << std::boolalpha

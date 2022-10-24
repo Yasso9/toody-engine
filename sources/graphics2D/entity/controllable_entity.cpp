@@ -1,10 +1,10 @@
-#include "moveable_entity.hpp"
+#include "controllable_entity.hpp"
 
 #include <vector>  // for vector
 
 #include "maths/vector2.tpp"  // for operator*, Vector2::operator=, operator/
 
-MoveableEntity2D::MoveableEntity2D(
+ControllableEntity2D::ControllableEntity2D(
     math::PolygonF quadrangle, CollisionList const & collisionList,
     View const & view, input::S_KeyboardMove movementKey )
   : StaticEntity2D( quadrangle ),
@@ -16,24 +16,24 @@ MoveableEntity2D::MoveableEntity2D(
     this->set_speed( 500.f );
 }
 
-math::Vector2F MoveableEntity2D::get_speed() const
+math::Vector2F ControllableEntity2D::get_speed() const
 {
     return m_speed;
 }
 
-void MoveableEntity2D::set_speed( float speed )
+void ControllableEntity2D::set_speed( float speed )
 {
     this->set_speed( { speed, speed } );
 }
 
-void MoveableEntity2D::set_speed( math::Vector2F speed )
+void ControllableEntity2D::set_speed( math::Vector2F speed )
 {
     m_speed = speed;
 }
 
-bool MoveableEntity2D::is_collision_detected() const
+bool ControllableEntity2D::is_collision_detected() const
 {
-    for ( StaticEntity2D const & entity : m_collisionList.get_array() )
+    for ( StaticEntity2D const & entity : m_collisionList.get_entities() )
     {
         if ( this->is_intersected_by( entity ) )
         {
@@ -43,7 +43,7 @@ bool MoveableEntity2D::is_collision_detected() const
     return false;
 }
 
-void MoveableEntity2D::update_before( float deltaTime )
+void ControllableEntity2D::update( float deltaTime )
 {
     math::Vector2F moveSpeed { ( m_speed / m_view.get_zoom() ) * deltaTime };
     math::Vector2F moveDirection {

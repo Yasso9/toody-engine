@@ -9,50 +9,48 @@
 #include <SFML/Graphics/Color.hpp>         // for Color, Color::Red
 #include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
 
-#include "libraries/imgui.hpp"         // for P_ColorEditor, P_Begin
-#include "main/render.hpp"             // for Render
-#include "maths/geometry/point.hpp"    // for PointF
-#include "maths/geometry/point.tpp"    // for Point::is_inside
-#include "maths/geometry/polygon.tpp"  // for is_intersection, Polygon::...
-#include "maths/geometry/segment.tpp"  // for Segment::is_intersected_by
+#include "libraries/imgui.hpp"           // for P_ColorEditor, P_Begin
+#include "main/render.hpp"               // for Render
+#include "maths/geometry/point.hpp"      // for PointF
+#include "maths/geometry/point.hpp"      // for Point::is_inside
+#include "maths/geometry/polygon.hpp"    // for is_intersection, Polygon::...
+#include "maths/geometry/rectangle.hpp"  // for Segment::is_intersected_by
+#include "maths/geometry/segment.hpp"    // for Segment::is_intersected_by
 
 namespace customisation
 {
-    namespace
+    static void circle_shape (
+        std::string windowName, int shapeID, sf::CircleShape & circleShape )
     {
-        static void circle_shape (
-            std::string windowName, int shapeID, sf::CircleShape & circleShape )
+        if ( ImGui::Begin( windowName.c_str() ) )
         {
-            if ( ImGui::Begin( windowName.c_str() ) )
-            {
-                ImGui::PushID( shapeID );
+            ImGui::PushID( shapeID );
 
-                sf::Color background { circleShape.getFillColor() };
-                sf::Color outline { circleShape.getOutlineColor() };
-                float outlineThickness { circleShape.getOutlineThickness() };
-                float radius { circleShape.getRadius() };
-                unsigned int numberOfPoint { static_cast< unsigned int >(
-                    circleShape.getPointCount() ) };
+            sf::Color    background { circleShape.getFillColor() };
+            sf::Color    outline { circleShape.getOutlineColor() };
+            float        outlineThickness { circleShape.getOutlineThickness() };
+            float        radius { circleShape.getRadius() };
+            unsigned int numberOfPoint {
+                static_cast< unsigned int >( circleShape.getPointCount() ) };
 
-                std::stringstream output {};
-                output << "Shape n" << shapeID << "\n";
-                ImGui::Text( "%s", output.str().c_str() );
-                ImGui::P_ColorEditor( "Background Color", background );
-                ImGui::P_ColorEditor( "Outline Color", outline );
-                ImGui::InputFloat( "Outline Thickness", &outlineThickness );
-                ImGui::InputFloat( "Radius", &radius );
-                ImGui::P_InputNumber( "Number of Point", numberOfPoint );
+            std::stringstream output {};
+            output << "Shape n" << shapeID << "\n";
+            ImGui::Text( "%s", output.str().c_str() );
+            ImGui::P_ColorEditor( "Background Color", background );
+            ImGui::P_ColorEditor( "Outline Color", outline );
+            ImGui::InputFloat( "Outline Thickness", &outlineThickness );
+            ImGui::InputFloat( "Radius", &radius );
+            ImGui::P_InputNumber( "Number of Point", numberOfPoint );
 
-                circleShape.setFillColor( background );
-                circleShape.setOutlineColor( outline );
-                circleShape.setOutlineThickness( outlineThickness );
-                circleShape.setRadius( radius );
-                circleShape.setPointCount( numberOfPoint );
+            circleShape.setFillColor( background );
+            circleShape.setOutlineColor( outline );
+            circleShape.setOutlineThickness( outlineThickness );
+            circleShape.setRadius( radius );
+            circleShape.setPointCount( numberOfPoint );
 
-                ImGui::PopID();
-            }
-            ImGui::End();
+            ImGui::PopID();
         }
+        ImGui::End();
     }  // namespace
 }  // namespace customisation
 
@@ -68,6 +66,13 @@ StaticEntity2D::StaticEntity2D( math::PolygonF polygon )
     ++instanceCount;
 
     this->setFillColor( sf::Color::Red );
+}
+
+StaticEntity2D::StaticEntity2D( sf::Texture const & texture )
+  : StaticEntity2D { math::PolygonF { math::RectangleF {
+      math::PointF { 0.f, 0.f }, math::Vector2F { texture.getSize() } } } }
+{
+    this->setTexture( &texture );
 }
 
 void StaticEntity2D::update( float /* deltaTime */ )

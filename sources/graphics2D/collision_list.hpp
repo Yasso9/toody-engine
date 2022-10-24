@@ -13,7 +13,7 @@ class CollisionList : public Component2D
         this->add_childs( m_collisionArray );
     }
 
-    std::vector< StaticEntity2D > const & get_array () const
+    std::vector< StaticEntity2D > const & get_entities () const
     {
         return m_collisionArray;
     }
