@@ -1,5 +1,8 @@
 #pragma once
 
+#include <map>
+
+#include "SFML/Window/Mouse.hpp"
 #include "graphics2D/component.hpp"  // for Component2D
 #include "graphics2D/view.hpp"       // for View
 
@@ -27,10 +30,22 @@ class State : public Component2D
         EnumLast,
     };
 
-  protected:
-    /** @brief value corresponding of the state that the game should run */
-    State::E_List m_stateName;
+  private:
+    static std::map< std::string, E_List > const m_enumStateListMaps;
 
+  public:
+    static E_List                     get_enum_state ( std::string string );
+    static std::vector< std::string > get_state_list ();
+
+  private:
+    /** @brief value corresponding of the state that the game should run */
+    State::E_List                    m_stateName;
+    /// @brief List of buttons that have just been pressed
+    std::vector< sf::Mouse::Button > m_mouseButtonsPressed;
+    /// @brief List of buttons that have just been released
+    std::vector< sf::Mouse::Button > m_mouseButtonsReleased;
+
+  protected:
     State( State::E_List const & stateName );
 
   public:
@@ -40,9 +55,26 @@ class State : public Component2D
      */
     State::E_List get_state_to_print () const;
 
-    /// @brief Update any change that can happen by an event. Must be called in
-    /// the pollevent function
+    void clear_buttons ();
+    /// @brief Check if a button has been pressed in the current iteration of
+    /// the loop
+    /// @param mouseButton Code of the button that have been pressed
+    /// @return true if the button has been pressed in the current iteration of
+    /// the loop, false otherwise
+    bool is_pressed ( sf::Mouse::Button mouseButton ) const;
+    /// @brief Check if a button has been released in the current iteration of
+    /// the loop
+    /// @param mouseButton Code of the button that have been released
+    /// @return true if the button has been released in the current iteration of
+    /// the loop, false otherwise
+    bool is_released ( sf::Mouse::Button mouseButton ) const;
+
+    /// @brief Update any change that can happen by an event. Must be called
+    /// in the pollevent function
     void update_inputs ( sf::Event const & event );
+
+  protected:
+    void set_new_state ( State::E_List state );
 
   private:
     virtual void keyboard_pressed ( sf::Event event );

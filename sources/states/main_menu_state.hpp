@@ -11,6 +11,8 @@ class Render;
 class MainMenuState final : public State
 {
     std::vector< sf::Text > m_texts;
+    sf::RectangleShape      m_background;
+    sf::RectangleShape      m_menuBackground;
 
   public:
     MainMenuState();

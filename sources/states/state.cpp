@@ -10,8 +10,37 @@
 #include "maths/vector2.hpp"    // for Vector2I
 #include "maths/vector2.tpp"    // for Vector2::to_float
 #include "tools/singleton.tpp"  // for Singleton::get_instance
+#include "tools/vector.hpp"
 
-State::State( State::E_List const & stateName ) : m_stateName { stateName } {}
+State::State( State::E_List const & stateName )
+  : m_stateName { stateName },
+    m_mouseButtonsPressed {},
+    m_mouseButtonsReleased {}
+{}
+
+std::map< std::string, State::E_List > const State::m_enumStateListMaps = {
+    {"Main Menu", E_List::MainMenu},
+    {   "Editor",   E_List::Editor},
+    { "Graphics", E_List::Graphics},
+    {     "Test",     E_List::Test},
+    {     "Quit",     E_List::Quit},
+};
+
+State::E_List State::get_enum_state( std::string string )
+{
+    return m_enumStateListMaps.at( string );
+}
+
+std::vector< std::string > State::get_state_list()
+{
+    std::vector< std::string > stateList {};
+    for ( auto state : m_enumStateListMaps )
+    {
+        stateList.push_back( state.first );
+    }
+
+    return stateList;
+}
 
 State::E_List State::get_state_to_print() const
 {
@@ -43,9 +72,11 @@ void State::update_inputs( sf::Event const & event )
         this->keyboard_released( event );
         break;
     case sf::Event::MouseButtonPressed :
+        m_mouseButtonsPressed.push_back( event.mouseButton.button );
         this->mouse_pressed( event );
         break;
     case sf::Event::MouseButtonReleased :
+        m_mouseButtonsReleased.push_back( event.mouseButton.button );
         this->mouse_released( event );
         break;
     case sf::Event::MouseMoved :
@@ -61,6 +92,27 @@ void State::update_inputs( sf::Event const & event )
     default :
         break;
     }
+}
+
+void State::clear_buttons()
+{
+    m_mouseButtonsPressed.clear();
+    m_mouseButtonsReleased.clear();
+}
+
+bool State::is_pressed( sf::Mouse::Button mouseButton ) const
+{
+    return vector::contains( m_mouseButtonsPressed, mouseButton );
+}
+
+bool State::is_released( sf::Mouse::Button mouseButton ) const
+{
+    return vector::contains( m_mouseButtonsReleased, mouseButton );
+}
+
+void State::set_new_state( State::E_List newState )
+{
+    m_stateName = newState;
 }
 
 void State::keyboard_pressed( sf::Event /* event */ ) {}

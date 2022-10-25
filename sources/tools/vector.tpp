@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sstream>
+
 #include "vector.hpp"
 
 namespace vector
@@ -19,6 +21,14 @@ namespace vector
 
         return std::vector< Type > {
             vector.begin() + begin, vector.begin() + end };
+    }
+
+    template< typename Type >
+    bool contains (
+        std::vector< Type > const & vector, Type const & elementToSearch )
+    {
+        return std::find( vector.begin(), vector.end(), elementToSearch )
+               != vector.end();
     }
 
     template< typename Type >

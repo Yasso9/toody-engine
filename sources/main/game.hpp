@@ -30,7 +30,7 @@ class Game final
     /// @brief Update all the things that can happen in the state
     void update_state ( sf::Time const & deltaTime );
 
-    /// @render the game
+    /// @brief render the game
     void render ();
 
     /**

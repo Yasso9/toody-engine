@@ -3,7 +3,7 @@
 #include <map>     // for map
 #include <string>  // for string
 
-#include "game_events/dialogue.hpp"
+#include "events/dialogue.hpp"
 #include "graphics2D/collision_list.hpp"              // for CollisionList
 #include "graphics2D/entity/controllable_entity.hpp"  // for MoveableEntity2D
 #include "graphics2D/entity/player.hpp"               // for Player

@@ -40,16 +40,33 @@ static void reset_text_color ( std::vector< sf::Text > & texts )
     }
 }
 
-MainMenuState::MainMenuState() : State { State::E_List::MainMenu },
-    m_texts { sf::Text {"Editor", resources::get_font( "arial.ttf" ) },
-              sf::Text {"Graphics", resources::get_font( "arial.ttf" ) },
-              sf::Text {"Quit", resources::get_font( "arial.ttf" ) } }
+MainMenuState::MainMenuState()
+  : State { State::E_List::MainMenu },
+    m_texts {},
+    m_background {},
+    m_menuBackground {}
 {
-    math::Vector2F position { 100.f, 300.f };
+    math::Vector2F windowSize { Window::get_instance().get_size() };
+
+    m_background.setTexture( &resources::get_texture( "main_menu.jpg" ) );
+    m_background.setPosition( 0.f, 0.f );
+    m_background.setSize( windowSize );
+
+    m_menuBackground.setFillColor( sf::Color { 40, 40, 40, 180 } );
+    m_menuBackground.setPosition( 50.f, 0.f );
+    m_menuBackground.setSize( { windowSize.x / 5, windowSize.y } );
+
+    for ( std::string stateName : State::get_state_list() )
+    {
+        m_texts.push_back(
+            sf::Text { stateName, resources::get_font( "arial.ttf" ), 27u } );
+    }
+
+    math::Vector2F position { 150.f, 250.f };
     for ( sf::Text & text : m_texts )
     {
         text.setPosition( position );
-        position.y += 100.f;
+        position.y += 60.f;
     }
 
     reset_text_color( m_texts );
@@ -63,6 +80,7 @@ void MainMenuState::update( float /* deltaTime */ )
     //            << "\n";
     //     ImGui::Text( "%s", output.str().c_str() );
     // } );
+    static bool buttonHasBeenPressed { false };
 
     reset_text_color( m_texts );
 
@@ -71,13 +89,35 @@ void MainMenuState::update( float /* deltaTime */ )
         if ( input::get_mouse_position_point().to_float().is_inside(
                  get_rectangle( text ) ) )
         {
+            // Color on hover
             text.setFillColor( sf::Color { 227, 139, 89 } );
+
+            // There is a press on the button
+            if ( this->is_pressed( sf::Mouse::Button::Left )
+                 || ( buttonHasBeenPressed
+                      && input::is_pressed( sf::Mouse::Button::Left ) ) )
+            {
+                buttonHasBeenPressed = true;
+                // Color on pressed
+                text.setFillColor( sf::Color { 217, 68, 35 } );
+            }
+
+            if ( this->is_released( sf::Mouse::Button::Left ) )
+            {
+                // Color when choosing
+                text.setFillColor( sf::Color { 242, 255, 54 } );
+                this->set_new_state(
+                    State::get_enum_state( text.getString() ) );
+            }
         }
     }
 }
 
 void MainMenuState::render( Render & render ) const
 {
+    render.get_target().draw( m_background );
+    render.get_target().draw( m_menuBackground );
+
     for ( sf::Text const & text : m_texts )
     {
         render.get_target().draw( text );

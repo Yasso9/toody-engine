@@ -95,6 +95,7 @@ void Game::update_events()
     input::reset_mouse_movement();
 
     sf::Event event {};
+    m_state->clear_buttons();
     // The event loop must always be part of the main loop,
     // otherwise bug and crash could happen
     while ( Window::get_instance().pollEvent( event ) )
@@ -106,7 +107,7 @@ void Game::update_events()
         else if ( Window::get_instance().has_absolute_focus() )
         {
             ImGui::SFML::ProcessEvent( Window::get_instance(), event );
-            this->m_state->update_inputs( event );
+            m_state->update_inputs( event );
         }
     }
 }
@@ -115,11 +116,13 @@ void Game::update_state( sf::Time const & deltaTime )
 {
     ImGui::SFML::Update( Window::get_instance(), deltaTime );
 
-    static State::E_List lastState { this->m_state->get_state_to_print() };
+    /// @todo use something like signal to change state
 
-    this->m_state->update_all( deltaTime.asSeconds() );
+    static State::E_List lastState { m_state->get_state_to_print() };
 
-    State::E_List const newState { this->m_state->get_state_to_print() };
+    m_state->update_all( deltaTime.asSeconds() );
+
+    State::E_List const newState { m_state->get_state_to_print() };
     if ( lastState != newState )
     {
         lastState = newState;
@@ -154,18 +157,18 @@ void Game::change_state( State::E_List const & newState )
     switch ( newState )
     {
     case State::E_List::MainMenu :
-        this->m_state = std::make_shared< MainMenuState >();
+        m_state = std::make_shared< MainMenuState >();
         break;
     case State::E_List::Editor :
-        this->m_state = std::make_shared< EditorState >();
+        m_state = std::make_shared< EditorState >();
         break;
     case State::E_List::Graphics :
         // Window::get_instance().setMouseCursorVisible( false );
         // Window::get_instance().setMouseCursorGrabbed( true );
-        this->m_state = std::make_shared< GraphicState >();
+        m_state = std::make_shared< GraphicState >();
         break;
     case State::E_List::Test :
-        this->m_state = std::make_shared< TestState >();
+        m_state = std::make_shared< TestState >();
         break;
 
     case State::E_List::Quit :
