@@ -26,6 +26,8 @@
 #include "maths/vector2.tpp"             // for operator<<, operator*, opera...
 #include "tools/singleton.tpp"           // for Singleton::get_instance
 
+static void update_debug_window ( bool & showWindow );
+
 EditorState::EditorState()
   : State { State::E_List::Editor },
     m_view { Window::get_instance().getDefaultView() },
@@ -79,30 +81,23 @@ EditorState::EditorState()
 
 void EditorState::update( float deltaTime )
 {
-    this->update_toolbar();
-
     this->update_view( deltaTime );
 
-    if ( m_showWindow.at( "debug_options" ) )
-    {
-        this->update_debug_window();
-    }
-    if ( m_showWindow.at( "collision" ) )
-    {
-        this->update_collision_window();
-    }
+    this->update_toolbar();
+    this->update_overlay( deltaTime );
+
     if ( m_showWindow.at( "demo_window" ) )
-    {
         ImGui::ShowDemoWindow( &m_showWindow.at( "demo_window" ) );
-    }
+    if ( m_showWindow.at( "debug_options" ) )
+        update_debug_window( m_showWindow.at( "debug_options" ) );
+    if ( m_showWindow.at( "collision" ) )
+        this->update_collision_window();
 
     if ( m_showWindow.at( "dialogue" )
          && input::is_pressed( sf::Keyboard::Space ) )
     {
         m_dialogue.next();
     }
-
-    this->update_overlay( deltaTime );
 }
 
 void EditorState::reset_view()
@@ -158,54 +153,18 @@ void EditorState::update_toolbar()
     {
         if ( ImGui::BeginMenu( "Options" ) )
         {
-            // ImGui::MenuItem(
-            //     "Show Editor Overlay Options", NULL,
-            //     &m_showWindow.at( "editor_overlay" ) );
-            // ImGui::EndMenu();
+            bool quitEditor { false };
+
+            ImGui::MenuItem( "Quit Editor", "Escape", &quitEditor );
+            ImGui::EndMenu();
+
+            if ( quitEditor )
+            {
+                this->set_new_state( State::E_List::MainMenu );
+            }
         }
         ImGui::EndMainMenuBar();
     }
-}
-
-void EditorState::update_debug_window()
-{
-    ImGui::P_Show(
-        "Debug Options", &m_showWindow.at( "debug_options" ), [&] () {
-            std::string testBuffer { "testvalue" };
-            ImGui::InputText( "Test", testBuffer.data(), 20 );
-
-            std::stringstream windowTextOutput {};
-            windowTextOutput << std::boolalpha;
-            windowTextOutput << "MousePos : " << input::get_mouse_position()
-                             << "\n";
-            windowTextOutput
-                << "CursorPos : " << math::Vector2F { ImGui::GetCursorPos() }
-                << "\n";
-            windowTextOutput << "CursorStartPos : "
-                             << math::Vector2F { ImGui::GetCursorStartPos() }
-                             << "\n";
-            windowTextOutput << "CursorScreenPos : "
-                             << math::Vector2F { ImGui::GetCursorScreenPos() }
-                             << "\n";
-            windowTextOutput
-                << "ContentRegionAvail : "
-                << math::Vector2F { ImGui::GetContentRegionAvail() } << "\n";
-
-            windowTextOutput << "\n";
-
-            windowTextOutput << "IsWindowFocused : " << ImGui::IsWindowFocused()
-                             << "\n";
-            windowTextOutput << "IsWindowHovered : " << ImGui::IsWindowHovered()
-                             << "\n";
-
-            windowTextOutput << "\n";
-
-            windowTextOutput << "IsAnyItemActive : " << ImGui::IsAnyItemActive()
-                             << "\n";
-            windowTextOutput
-                << "IsAnyItemHovered : " << ImGui::IsAnyItemHovered() << "\n";
-            ImGui::Text( "%s", windowTextOutput.str().c_str() );
-        } );
 }
 
 void EditorState::update_collision_window()
@@ -281,4 +240,43 @@ void EditorState::update_overlay( float deltaTime )
 
             m_dialogue.set_enabled( m_showWindow.at( "dialogue" ) );
         } );
+}
+
+static void update_debug_window ( bool & showWindow )
+{
+    ImGui::P_Show( "Debug Options", &showWindow, [&] () {
+        std::string testBuffer { "testvalue" };
+        ImGui::InputText( "Test", testBuffer.data(), 20 );
+
+        std::stringstream windowTextOutput {};
+        windowTextOutput << std::boolalpha;
+        windowTextOutput << "MousePos : " << input::get_mouse_position()
+                         << "\n";
+        windowTextOutput << "CursorPos : "
+                         << math::Vector2F { ImGui::GetCursorPos() } << "\n";
+        windowTextOutput << "CursorStartPos : "
+                         << math::Vector2F { ImGui::GetCursorStartPos() }
+                         << "\n";
+        windowTextOutput << "CursorScreenPos : "
+                         << math::Vector2F { ImGui::GetCursorScreenPos() }
+                         << "\n";
+        windowTextOutput << "ContentRegionAvail : "
+                         << math::Vector2F { ImGui::GetContentRegionAvail() }
+                         << "\n";
+
+        windowTextOutput << "\n";
+
+        windowTextOutput << "IsWindowFocused : " << ImGui::IsWindowFocused()
+                         << "\n";
+        windowTextOutput << "IsWindowHovered : " << ImGui::IsWindowHovered()
+                         << "\n";
+
+        windowTextOutput << "\n";
+
+        windowTextOutput << "IsAnyItemActive : " << ImGui::IsAnyItemActive()
+                         << "\n";
+        windowTextOutput << "IsAnyItemHovered : " << ImGui::IsAnyItemHovered()
+                         << "\n";
+        ImGui::Text( "%s", windowTextOutput.str().c_str() );
+    } );
 }
