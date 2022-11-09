@@ -36,3 +36,8 @@ void Render::reset_view()
 {
     this->set_view( this->get_target().getDefaultView() );
 }
+
+void Render::draw( sf::Drawable const & drawable ) const
+{
+    m_target.draw( drawable, m_states );
+}

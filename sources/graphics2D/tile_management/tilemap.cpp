@@ -13,7 +13,7 @@
 #include <SFML/Window/Mouse.hpp>           // for Mouse, Mouse::Button, Mous...
 #include <ext/alloc_traits.h>              // for __alloc_traits<>::value_type
 
-#include "graphics2D/component.tpp"  // for Component::add_child
+#include "graphics2D/component.hpp"  // for Component::add_child
 #include "graphics2D/sfml.hpp"       // for operator<<
 #include "graphics2D/tile_management/tile_position.hpp"  // for tile::Position, tile::Position...
 #include "graphics2D/tile_management/tileset.hpp"  // for Tileset

@@ -77,7 +77,7 @@ class Component
     virtual void render_after ( Render & render ) const;
 };
 
-/// @todo A voir si on garde tous ça ?
+/// @todo A supprimer
 class Component2D : public Component
 {
   protected:
@@ -99,3 +99,5 @@ class TransformableComponent2D : public Component2D,
     TransformableComponent2D()          = default;
     virtual ~TransformableComponent2D() = default;
 };
+
+#include "component.tpp"

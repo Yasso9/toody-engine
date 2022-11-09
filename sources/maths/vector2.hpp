@@ -184,6 +184,11 @@ namespace math
         Vector2< TypeLeft > const &  vector2DLeft,
         Vector2< TypeRight > const & vector2DRight );
 
+    template< C_Primitive Type >
+    bool operator> (
+        Vector2< Type > const & vector2DLeft,
+        Vector2< Type > const & vector2DRight );
+
     /* ************************************************************************
     ********************************** UNARY **********************************
     ************************************************************************ */

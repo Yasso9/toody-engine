@@ -1,17 +1,20 @@
 #pragma once
 
-#include <SFML/Graphics/Sprite.hpp>  // for Sprite
-
+#include "graphics2D/component.hpp"
+#include "graphics2D/drawable/sprite.hpp"
 #include "graphics2D/entity/controllable_entity.hpp"
 
-class CharacterEntity : public Component2D,
+class CharacterEntity : public Component,
                         public sf::Transformable
 {
-    sf::Texture const & m_texture;
-    sf::Sprite          m_sprite;
+    Sprite m_sprite;
+
+    Control m_control;
+
+    float m_speed;
 
   public:
-    CharacterEntity( sf::Texture const & texture );
+    CharacterEntity( sf::Texture const & texture, Control control );
     virtual ~CharacterEntity() = default;
 
   private:

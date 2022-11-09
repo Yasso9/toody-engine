@@ -4,7 +4,7 @@
 
 #include <GLM/ext/vector_float3.hpp>  // for vec3
 
-#include "graphics2D/component.tpp"  // for Component::add_childs
+#include "graphics2D/component.hpp"  // for Component::add_childs
 #include "graphics2D/sfml.hpp"
 #include "input/input.hpp"
 #include "libraries/imgui.hpp"

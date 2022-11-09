@@ -25,4 +25,6 @@ class Render
     void set_texture ( sf::Texture const & texture );
     void set_view ( View const & view );
     void reset_view ();
+
+    void draw ( sf::Drawable const & drawable ) const;
 };

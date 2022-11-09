@@ -10,7 +10,7 @@
 #include <SFML/System/Vector2.hpp>  // for Vector2f
 #include <SFML/Window/Mouse.hpp>    // for Mouse, Mouse::Right
 
-#include "graphics2D/component.tpp"             // for Component::add_child
+#include "graphics2D/component.hpp"             // for Component::add_child
 #include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
 #include "graphics2D/sfml.hpp"                  // for operator<<
 #include "graphics2D/view.hpp"                  // for View
@@ -47,7 +47,8 @@ EditorState::EditorState()
     m_greenEntity {
         math::RectangleF { 0.f, 0.f, 40.f, 40.f },
         { m_collisionList, m_view, input::ILKJ } },
-    m_character { resources::get_texture( "gold_sprite.png" ) },
+    m_character { resources::get_texture( "gold_sprite.png" ) ,
+                  { m_collisionList, m_view, input::ARROW } },
     m_dialogue {}
 {
     this->add_child( m_tilemap, m_view );

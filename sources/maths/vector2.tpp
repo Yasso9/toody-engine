@@ -1,10 +1,11 @@
 #pragma once
+#include "vector2.hpp"
+
 #include <cmath>
 #include <iostream>
 
 #include "maths/numerics.hpp"
 #include "tools/assertion.hpp"
-#include "vector2.hpp"
 
 namespace math
 {
@@ -365,6 +366,15 @@ namespace math
     {
         return vector2DLeft.x < static_cast< TypeLeft >( vector2DRight.x )
                && vector2DLeft.y < static_cast< TypeLeft >( vector2DRight.y );
+    }
+
+    template< C_Primitive Type >
+    bool operator> (
+        Vector2< Type > const & vector2DLeft,
+        Vector2< Type > const & vector2DRight )
+    {
+        return vector2DLeft.x < vector2DRight.x
+               && vector2DLeft.y < vector2DRight.y;
     }
 
     /* ************************************************************************
