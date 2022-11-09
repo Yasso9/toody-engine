@@ -5,18 +5,18 @@
 
 namespace math
 {
-    template < C_Primitive Type >
+    template< C_Primitive Type >
     Polygon< Type >::Polygon() : m_points()
     {}
 
-    template < C_Primitive Type >
+    template< C_Primitive Type >
     Polygon< Type >::Polygon( Rectangle< Type > rectangle ) : Polygon {}
     {
         this->set_rectangle( rectangle );
     }
 
-    template < C_Primitive Type >
-    Point< Type > const & Polygon< Type >::operator[](
+    template< C_Primitive Type >
+    Point< Type > const & Polygon< Type >::operator[] (
         unsigned int index ) const
     {
         if ( index >= this->get_number_of_points() )
@@ -27,21 +27,21 @@ namespace math
         return m_points[index];
     }
 
-    template < C_Primitive Type >
-    Point< Type > & Polygon< Type >::operator[]( unsigned int index )
+    template< C_Primitive Type >
+    Point< Type > & Polygon< Type >::operator[] ( unsigned int index )
     {
         return const_cast< Point< Type > & >(
-            const_cast< const Polygon< Type > * >( *this )->operator[](
+            const_cast< Polygon< Type > const * >( *this )->operator[] (
                 index ) );
     }
 
-    template < C_Primitive Type >
+    template< C_Primitive Type >
     unsigned int Polygon< Type >::get_number_of_points() const
     {
         return static_cast< unsigned int >( m_points.size() );
     }
 
-    template < C_Primitive Type >
+    template< C_Primitive Type >
     void Polygon< Type >::set_rectangle( Rectangle< Type > rectangle )
     {
         m_points.resize( 4 );
@@ -52,7 +52,7 @@ namespace math
         m_points[3] = rectangle.position + rectangle.size.get_y_axis();
     }
 
-    template < C_Primitive Type >
+    template< C_Primitive Type >
     std::string Polygon< Type >::print() const
     {
         std::stringstream stream {};
@@ -68,7 +68,7 @@ namespace math
         return stream.str();
     }
 
-    template < C_Primitive Type >
+    template< C_Primitive Type >
     std::vector< Segment< Type > > Polygon< Type >::get_segments() const
     {
         std::vector< Segment< Type > > segments {};
@@ -78,24 +78,24 @@ namespace math
         for ( unsigned int i_point = 0u; i_point < this->get_number_of_points();
               ++i_point )
         {
-            unsigned int i_pointNext { ( i_point + 1 )
-                                       % this->get_number_of_points() };
-            segments[i_point] =
-                math::Segment< Type > { ( *this )[i_point],
-                                        ( *this )[i_pointNext] };
+            unsigned int i_pointNext {
+                ( i_point + 1 ) % this->get_number_of_points() };
+            segments[i_point] = math::Segment< Type > {
+                ( *this )[i_point], ( *this )[i_pointNext] };
         }
 
         return segments;
     }
-    template < C_Primitive Type >
+
+    template< C_Primitive Type >
     std::vector< Point< Type > > Polygon< Type >::get_points() const
     {
         return m_points;
     }
 
-    template < C_Primitive Type >
-    bool is_intersection( Polygon< Type > polygonLeft,
-                          Polygon< Type > polygonRight )
+    template< C_Primitive Type >
+    bool is_intersection (
+        Polygon< Type > polygonLeft, Polygon< Type > polygonRight )
     {
         for ( Point< Type > pointPolygonLeft : polygonLeft.get_points() )
         {
@@ -114,4 +114,4 @@ namespace math
 
         return false;
     }
-} // namespace math
+}  // namespace math

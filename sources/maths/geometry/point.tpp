@@ -2,6 +2,8 @@
 
 #include "point.hpp"
 
+#include "maths/geometry/segment.hpp"
+
 namespace math
 {
     /* ************************************************************************
@@ -99,7 +101,7 @@ namespace math
         Segment< Type > segmentToCheck { *this, extremePoint };
 
         unsigned int numberOfIntersection { 0u };
-        for ( Segment< Type > segment : polygon.get_segments() )
+        for ( auto segment : polygon.get_segments() )
         {
             if ( segmentToCheck.is_intersected_by( segment ) )
             {

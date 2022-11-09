@@ -4,7 +4,8 @@
 #include <string>  // for string
 
 #include "events/dialogue.hpp"
-#include "graphics2D/collision_list.hpp"              // for CollisionList
+#include "graphics2D/collision_list.hpp"  // for CollisionList
+#include "graphics2D/entity/character_entity.hpp"
 #include "graphics2D/entity/controllable_entity.hpp"  // for MoveableEntity2D
 #include "graphics2D/entity/player.hpp"               // for Player
 #include "graphics2D/image_map.hpp"                   // for ImageMap
@@ -23,7 +24,8 @@ class EditorState final : public State
 
     CollisionList        m_collisionList;
     ControllableEntity2D m_greenEntity;
-    Player               m_player;
+    // Player               m_player;
+    CharacterEntity      m_character;
 
     Dialogue m_dialogue;
 

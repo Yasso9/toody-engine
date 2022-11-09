@@ -45,15 +45,15 @@ EditorState::EditorState()
         { StaticEntity2D { math::RectangleF { 100.f, 100.f, 50.f, 50.f } },
           StaticEntity2D { math::RectangleF { -200.f, -50.f, 100.f, 100.f } } } },
     m_greenEntity {
-        math::RectangleF { 0.f, 0.f, 40.f, 40.f }, m_collisionList, m_view,
-        input::ILKJ },
-    m_player {},
+        math::RectangleF { 0.f, 0.f, 40.f, 40.f },
+        { m_collisionList, m_view, input::ILKJ } },
+    m_character { resources::get_texture( "gold_sprite.png" ) },
     m_dialogue {}
 {
     this->add_child( m_tilemap, m_view );
     this->add_child( m_collisionList, m_view );
     this->add_child( m_greenEntity, m_view );
-    this->add_child( m_player, m_view );
+    this->add_child( m_character, m_view );
     this->add_child( m_dialogue );
     this->add_child( m_imageMap );
 
@@ -104,7 +104,7 @@ void EditorState::reset_view()
 {
     m_view.setCenter( m_tilemap.get_center() );
     m_view.setSize( Window::get_instance().get_size().to_float() );
-    m_player.setPosition( m_view.get_center() );
+    m_character.setPosition( m_view.get_center() );
 }
 
 void EditorState::update_view( float /* deltaTime */ )
@@ -180,8 +180,8 @@ void EditorState::update_collision_window()
                    << std::boolalpha
                    << m_greenEntity.is_intersected_by( entity ) << "\n";
         }
-        output << "Is collision detected : "
-               << m_greenEntity.is_collision_detected() << "\n";
+        // output << "Is collision detected : "
+        //        << m_greenEntity.is_collision_detected() << "\n";
 
         ImGui::Text( "%s", output.str().c_str() );
     } );

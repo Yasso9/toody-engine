@@ -67,9 +67,15 @@ IncludeBlocks: Regroup
 IncludeCategories:
 # Libraries
   - Regex:           '<.*\/.*>'
-    Priority:        2
+    Priority:        3
 # STD includes
   - Regex:           '<.*>'
+    Priority:        2
+# Project Files
+  - Regex:           '".*\/.*"'
+    Priority:        4
+# Header
+  - Regex:           '".*"'
     Priority:        1
 IndentAccessModifiers: false
 IndentCaseBlocks: true

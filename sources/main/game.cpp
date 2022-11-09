@@ -83,8 +83,8 @@ void Game::run()
 
 void Game::init_state()
 {
-    this->change_state( State::E_List::MainMenu );
-    // this->change_state( State::E_List::Editor );
+    // this->change_state( State::E_List::MainMenu );
+    this->change_state( State::E_List::Editor );
     // this->change_state( State::E_List::Test );
     // this->change_state( State::E_List::Graphics );
 }
