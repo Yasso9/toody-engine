@@ -6,7 +6,7 @@
 #include <SFML/Graphics/Text.hpp>            // for Text
 #include <SFML/System/Vector2.hpp>           // for Vector2f
 
-#include "graphics2D/component.hpp"  // for TransformableComponent2D
+#include "component/transformable2D.hpp"  // for TransformableComponent
 
 class Render;
 
@@ -15,7 +15,7 @@ namespace sf
     class Font;
 }  // namespace sf
 
-class Button final : public TransformableComponent2D
+class Button final : public Transformable2D
 {
   public:
     Button( sf::Font const & font, std::string const & string = "Button" );

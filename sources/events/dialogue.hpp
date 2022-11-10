@@ -6,13 +6,13 @@
 #include <SFML/Graphics/Text.hpp>            // for Text
 #include <SFML/Window/Cursor.hpp>            // for Cursor
 
-#include "graphics2D/component.hpp"  // for Component2D
-#include "maths/vector2.hpp"         // for Vector2I
+#include "component/component.hpp"  // for Component
+#include "maths/vector2.hpp"        // for Vector2I
 
 class View;
 class Render;
 
-class Dialogue : public Component2D
+class Dialogue : public Component
 {
     sf::RectangleShape m_shape;
     sf::Text           m_text;

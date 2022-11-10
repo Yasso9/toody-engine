@@ -1,11 +1,10 @@
 #pragma once
 
-#include "graphics2D/component.hpp"
+#include "component/transformable2D.hpp"
 #include "graphics2D/drawable/sprite.hpp"
 #include "graphics2D/entity/controllable_entity.hpp"
 
-class CharacterEntity : public Component,
-                        public sf::Transformable
+class CharacterEntity : public Transformable2D
 {
     Sprite m_sprite;
 
@@ -19,5 +18,4 @@ class CharacterEntity : public Component,
 
   private:
     void update ( float deltaTime ) override;
-    void render ( Render & render ) const override;
 };

@@ -10,7 +10,7 @@
 #include <SFML/System/Vector2.hpp>  // for Vector2f
 #include <SFML/Window/Mouse.hpp>    // for Mouse, Mouse::Right
 
-#include "graphics2D/component.hpp"             // for Component::add_child
+#include "component/component.hpp"              // for Component::add_child
 #include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
 #include "graphics2D/sfml.hpp"                  // for operator<<
 #include "graphics2D/view.hpp"                  // for View

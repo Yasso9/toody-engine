@@ -101,7 +101,7 @@ void StaticEntity2D::render( Render & render ) const
     for ( math::PointF const & point : this->get_polygon().get_points() )
     {
         pointShape.setPosition( point.x, point.y );
-        render.get_target().draw( pointShape, render.get_state() );
+        render.get_target().draw( pointShape, render.get_render_states() );
     }
 }
 

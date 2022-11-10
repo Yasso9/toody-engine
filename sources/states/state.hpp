@@ -3,8 +3,8 @@
 #include <map>
 
 #include "SFML/Window/Mouse.hpp"
-#include "graphics2D/component.hpp"  // for Component2D
-#include "graphics2D/view.hpp"       // for View
+#include "component/component.hpp"  // for Component
+#include "graphics2D/view.hpp"      // for View
 
 class Render;
 
@@ -13,7 +13,7 @@ namespace sf
     class Event;
 }  // namespace sf
 
-class State : public Component2D
+class State : public Component
 {
   public:
     /**

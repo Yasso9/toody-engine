@@ -4,10 +4,10 @@
 #include <GLM/fwd.hpp>                // for mat4
 #include <SFML/System/Vector2.hpp>    // for Vector2f
 
-#include "graphics2D/component.hpp"
+#include "component/component.hpp"
 #include "maths/maths.hpp"
 
-class Camera : public Component3D
+class Camera : public Component
 {
   public:
     /// @todo replace that by a 3D vector with negatif or positiv values

@@ -13,8 +13,8 @@
 #include <SFML/Window/Mouse.hpp>           // for Mouse, Mouse::Button, Mous...
 #include <ext/alloc_traits.h>              // for __alloc_traits<>::value_type
 
-#include "graphics2D/component.hpp"  // for Component::add_child
-#include "graphics2D/sfml.hpp"       // for operator<<
+#include "component/component.hpp"  // for Component::add_child
+#include "graphics2D/sfml.hpp"      // for operator<<
 #include "graphics2D/tile_management/tile_position.hpp"  // for tile::Position, tile::Position...
 #include "graphics2D/tile_management/tileset.hpp"  // for Tileset
 #include "graphics2D/view.hpp"                     // for View
@@ -372,11 +372,11 @@ void TileMap::render_before( Render & render ) const
             for ( Tile const & cell : tile )
             {
                 render.get_target().draw(
-                    cell.get_vertex_array(), render.get_state() );
+                    cell.get_vertex_array(), render.get_render_states() );
             }
         }
     }
 
     /// @todo Create a method cursor.draw
-    render.get_target().draw( m_cursor.m_shape, render.get_state() );
+    render.get_target().draw( m_cursor.m_shape, render.get_render_states() );
 }

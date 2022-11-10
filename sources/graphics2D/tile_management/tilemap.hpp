@@ -2,7 +2,7 @@
 
 #include <vector>  // for vector
 
-#include "graphics2D/component.hpp"  // for TransformableComponent2D
+#include "component/transformable2D.hpp"  // for TransformableComponent
 #include "graphics2D/tile_management/cursor.hpp"
 #include "graphics2D/tile_management/tile.hpp"           // for Tile
 #include "graphics2D/tile_management/tile_selector.hpp"  // for TileSelector
@@ -14,7 +14,7 @@ class Render;
 class Tileset;
 class View;
 
-class TileMap : public TransformableComponent2D
+class TileMap : public Transformable2D
 {
     db::Table                                         m_databaseTable;
     tile::Selector                                    m_tileSelector;

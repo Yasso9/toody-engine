@@ -2,9 +2,9 @@
 
 #include <GLM/ext/matrix_float4x4.hpp>  // for mat4
 
-#include "graphics2D/component.hpp"  // for Component3D
-#include "graphics3D/openGL.hpp"     // for S_SpaceMatrix
-#include "maths/vector3.hpp"         // for Vector3F
+#include "component/component.hpp"  // for Component
+#include "graphics3D/openGL.hpp"    // for S_SpaceMatrix
+#include "maths/vector3.hpp"        // for Vector3F
 
 class Camera;
 class Render;
@@ -14,7 +14,7 @@ namespace sf
     class Shader;
 }  // namespace sf
 
-class Transformable : public Component3D
+class Transformable : public Component
 {
     Camera const & m_camera;
     sf::Shader &   m_shader;

@@ -121,7 +121,7 @@ void Player::update_before( float deltaTime )
 
 void Player::render_before( Render & render ) const
 {
-    render.get_target().draw( m_sprite, render.get_state() );
+    render.get_target().draw( m_sprite, render.get_render_states() );
 }
 
 void Player::update_delta_time( float const & deltaTime )

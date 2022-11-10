@@ -25,6 +25,6 @@ void CharacterEntity::update( float deltaTime )
     {
         this->move( -movementValue );
     }
-}
 
-void CharacterEntity::render( Render & /* render */ ) const {}
+    this->set_next_transformation( this->getTransform() );
+}

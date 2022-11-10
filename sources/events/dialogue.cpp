@@ -165,8 +165,8 @@ void Dialogue::render( Render & render ) const
         return;
     }
 
-    render.get_target().draw( m_shape, render.get_state() );
-    render.get_target().draw( m_text, render.get_state() );
+    render.get_target().draw( m_shape, render.get_render_states() );
+    render.get_target().draw( m_text, render.get_render_states() );
 }
 
 void Dialogue::set_current_text( std::string const & text )

@@ -3,13 +3,13 @@
 #include <SFML/Graphics/CircleShape.hpp>  // for CircleShape
 #include <SFML/Graphics/Texture.hpp>
 
-#include "graphics2D/component.hpp"    // for Component2D
+#include "component/component.hpp"     // for Component
 #include "graphics2D/shape.hpp"        // for Shape2D
 #include "maths/geometry/polygon.hpp"  // for PolygonF
 
 class Render;
 
-class StaticEntity2D : public Component2D,
+class StaticEntity2D : public Component,
                        public Shape2D
 {
     int             m_ID;

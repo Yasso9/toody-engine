@@ -12,7 +12,7 @@ class View;
 class Render
 {
     sf::RenderTarget & m_target;
-    sf::RenderStates   m_states;
+    sf::RenderStates   m_renderStates;
 
   public:
     Render(
@@ -20,9 +20,10 @@ class Render
         sf::RenderStates   states = sf::RenderStates::Default );
 
     sf::RenderTarget & get_target ();
-    sf::RenderStates   get_state () const;
+    sf::RenderStates   get_render_states () const;
 
     void set_texture ( sf::Texture const & texture );
+    void set_transformation ( sf::Transform transformation );
     void set_view ( View const & view );
     void reset_view ();
 

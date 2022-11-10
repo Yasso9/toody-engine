@@ -5,7 +5,7 @@
 
 Sprite::Sprite( sf::Texture const & texture ) : sf::Sprite { texture }
 {
-    this->select( 0 );
+    this->select_animation( 0 );
 }
 
 void Sprite::render( Render & render ) const
@@ -27,7 +27,7 @@ math::PolygonF Sprite::get_polygon() const
     return spriteRectangle;
 }
 
-void Sprite::select( unsigned int index )
+void Sprite::select_animation( unsigned int index )
 {
     sf::IntRect textureRect {};
     textureRect.left   = static_cast< int >( index ) * TILE_PIXEL_SIZE_I;

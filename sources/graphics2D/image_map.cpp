@@ -28,6 +28,6 @@ void ImageMap::render_before( Render & render ) const
 {
     for ( S_Image const & image : m_data )
     {
-        render.get_target().draw( image.sprite, render.get_state() );
+        render.get_target().draw( image.sprite, render.get_render_states() );
     }
 }

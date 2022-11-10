@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics/Sprite.hpp>  // for Sprite
 
-#include "graphics2D/component.hpp"
+#include "component/component.hpp"
 #include "maths/geometry/polygon.hpp"
 
 class Sprite : public sf::Sprite,
@@ -16,7 +16,7 @@ class Sprite : public sf::Sprite,
 
     math::PolygonF get_polygon () const;
 
-    void select ( unsigned int index );
+    void select_animation ( unsigned int index );
 
   private:
 };

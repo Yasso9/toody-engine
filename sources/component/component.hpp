@@ -50,8 +50,9 @@ class Component
   public:
     /// @brief update the component. Must not be called manually if it's a child
     virtual void update_all ( float deltaTime ) final;
-    /// @brief draw the component to the render
-    virtual void render_all ( Render & render ) const final;
+    /// @brief draw the component to the render. Must not be called manually if
+    /// it's a child
+    virtual void render_all ( Render & render ) const;
 
     void set_view ( View const & view );
 
@@ -75,29 +76,6 @@ class Component
     /// @brief custom render - is the last method called
     /// in the render procedure
     virtual void render_after ( Render & render ) const;
-};
-
-/// @todo A supprimer
-class Component2D : public Component
-{
-  protected:
-    Component2D()          = default;
-    virtual ~Component2D() = default;
-};
-
-class Component3D : public Component
-{
-  protected:
-    Component3D()          = default;
-    virtual ~Component3D() = default;
-};
-
-class TransformableComponent2D : public Component2D,
-                                 public sf::Transformable
-{
-  protected:
-    TransformableComponent2D()          = default;
-    virtual ~TransformableComponent2D() = default;
 };
 
 #include "component.tpp"

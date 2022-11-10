@@ -2,7 +2,7 @@
 
 #include "graphics2D/entity/static_entity.hpp"
 
-class CollisionList : public Component2D
+class CollisionList : public Component
 {
     std::vector< StaticEntity2D > m_collisionArray;
 

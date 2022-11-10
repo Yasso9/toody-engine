@@ -4,7 +4,7 @@
 
 #include <SFML/Graphics/Sprite.hpp>  // for Sprite
 
-#include "graphics2D/component.hpp"  // for Component2D
+#include "component/component.hpp"   // for Component
 #include "maths/geometry/point.hpp"  // for PointU, Point
 
 class Render;
@@ -19,7 +19,7 @@ struct S_Image
     {}
 };
 
-class ImageMap : public Component2D
+class ImageMap : public Component
 {
     std::vector< S_Image > m_data;
 

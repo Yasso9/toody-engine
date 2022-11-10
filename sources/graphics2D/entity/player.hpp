@@ -8,8 +8,8 @@
 #include <SFML/Graphics/Sprite.hpp>  // for Sprite
 #include <SFML/System/Vector2.hpp>   // for Vector2f, Vector2u
 
-#include "graphics2D/component.hpp"  // for TransformableComponent2D
-#include "tools/tools.hpp"           // for E_Direction
+#include "component/transformable2D.hpp"  // for TransformableComponent
+#include "tools/tools.hpp"                // for E_Direction
 
 class Render;
 
@@ -18,7 +18,7 @@ namespace sf
     class Texture;
 }  // namespace sf
 
-class Player : public TransformableComponent2D
+class Player : public Transformable2D
 {
   public:
     /// @todo create the state in the gui

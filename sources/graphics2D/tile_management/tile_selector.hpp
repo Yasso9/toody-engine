@@ -2,15 +2,15 @@
 
 #include <optional>
 
+#include "component/component.hpp"  // for Component
 #include "graphics2D/color.hpp"
-#include "graphics2D/component.hpp"                // for Component2D
 #include "graphics2D/tile_management/tileset.hpp"  // for Tileset
 
 struct ImDrawList;
 
 namespace tile
 {
-    class Selector : public Component2D
+    class Selector : public Component
     {
         /// @brief Table of tiles where we can select our tile
         Tileset                       m_tileset;

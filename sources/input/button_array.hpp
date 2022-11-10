@@ -6,12 +6,12 @@
 #include <SFML/Graphics/Font.hpp>   // for Font
 #include <SFML/System/Vector2.hpp>  // for Vector2f
 
-#include "graphics2D/component.hpp"  // for TransformableComponent2D
-#include "input/button.hpp"          // for Button
+#include "component/component.hpp"  // for TransformableComponent
+#include "input/button.hpp"         // for Button
 
 class Render;
 
-class ButtonArray final : public TransformableComponent2D
+class ButtonArray final : public Transformable2D
 {
   public:
     enum class E_Direction
