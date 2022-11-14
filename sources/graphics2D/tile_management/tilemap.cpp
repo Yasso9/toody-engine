@@ -218,8 +218,15 @@ void TileMap::update_selection()
 {
     std::stringstream infoOutput {};
 
-    infoOutput << "Tileset - Tile Selected : "
-               << m_tileSelector.get_tile_selected().value_or( -1 ) << "\n";
+    if ( m_tileSelector.get_tile_selected().has_value() )
+    {
+        infoOutput << "Tileset - Tile Selected : "
+                   << m_tileSelector.get_tile_selected().value() << "\n";
+    }
+    else
+    {
+        infoOutput << "Tileset - Tile Selected : None\n";
+    }
 
     infoOutput << "Tilemap - Position : " << this->getPosition() << "\n";
     infoOutput << "Tilemap - Size : " << this->get_size().pixel() << "\n";
