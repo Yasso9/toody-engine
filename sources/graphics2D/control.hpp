@@ -17,8 +17,9 @@ class Control
         CollisionList const & collisionList, View const & view,
         input::S_KeyboardMove movementKey );
 
-    View const &   get_view () const;
-    math::Vector2F get_input_movement () const;
+    CollisionList const & get_collisions () const;
+    View const &          get_view () const;
+    math::Vector2F        get_input_movement () const;
 
     bool is_collision_detected ( math::PolygonF entityPolygon ) const;
 };

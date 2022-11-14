@@ -35,5 +35,6 @@ class Color
     sf::Color to_sfml () const;
     RGBA      to_rgba () const;
 
+    /// @todo remplacer par l'operateur operator=
     void set ( RGBA rgbaColor );
 };

@@ -90,7 +90,37 @@ namespace math
     template< C_Primitive Type >
     std::vector< Point< Type > > Polygon< Type >::get_points() const
     {
+        return const_cast< Polygon * >( this )->get_points();
+    }
+
+    template< C_Primitive Type >
+    std::vector< Point< Type > > & Polygon< Type >::get_points()
+    {
         return m_points;
+    }
+
+    template< C_Primitive Type >
+    Polygon< Type > Polygon< Type >::operator+ ( math::Vector2< Type > vector )
+    {
+        Polygon< Type > newPolygon { *this };
+
+        for ( math::Point< Type > & point : newPolygon.get_points() )
+        {
+            point += vector;
+        }
+
+        return newPolygon;
+    }
+
+    template< C_Primitive Type >
+    void Polygon< Type >::print_to_stream( std::ostream & stream ) const
+    {
+        stream << "{ ";
+        for ( Point< Type > point : m_points )
+        {
+            stream << point << "; ";
+        }
+        stream << "}";
     }
 
     template< C_Primitive Type >
@@ -114,4 +144,5 @@ namespace math
 
         return false;
     }
+
 }  // namespace math

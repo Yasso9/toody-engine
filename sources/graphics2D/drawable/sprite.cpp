@@ -15,23 +15,30 @@ void Sprite::render( Render & render ) const
     render.draw( *this );
 }
 
+math::PointF Sprite::get_position() const
+{
+    return math::PointF { this->getPosition() };
+}
+
+math::Vector2F Sprite::get_size() const
+{
+    return math::Vector2F {
+        static_cast< float >( this->getTextureRect().width ),
+        static_cast< float >( this->getTextureRect().height ) };
+}
+
 math::PolygonF Sprite::get_polygon() const
 {
-    math::RectangleF spriteRectangle { 0.f, 0.f, 0.f, 0.f };
+    math::RectangleF spriteRectangle {};
 
-    spriteRectangle.position = math::PointF { this->getPosition() };
-    spriteRectangle.size.x =
-        static_cast< float >( this->getTextureRect().width );
-    spriteRectangle.size.y =
-        static_cast< float >( this->getTextureRect().height );
+    spriteRectangle.position = this->get_position();
+    spriteRectangle.size     = this->get_size();
 
     return spriteRectangle;
 }
 
 void Sprite::select_animation( unsigned int index )
 {
-    // std::cout << "Selecting " << index << std::endl;
-
     sf::IntRect textureRect {};
     textureRect.left =
         static_cast< int >( index ) * static_cast< int >( m_size.x );
@@ -41,8 +48,7 @@ void Sprite::select_animation( unsigned int index )
 
     if ( math::Vector2I { textureRect.left, textureRect.top }
              + math::Vector2I { textureRect.width, textureRect.height }
-         > math::Vector2I {
-             this->getTextureRect().width, this->getTextureRect().height } )
+         > this->get_size().to_int() )
     {
         std::cerr << "Cannot select sprite " << index << ". Texture too small"
                   << std::endl;

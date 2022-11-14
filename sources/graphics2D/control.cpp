@@ -8,6 +8,11 @@ Control::Control(
     m_movementKey { movementKey }
 {}
 
+CollisionList const & Control::get_collisions() const
+{
+    return m_collisionList;
+}
+
 View const & Control::get_view() const
 {
     return m_view;
