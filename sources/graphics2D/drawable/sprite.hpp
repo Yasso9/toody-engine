@@ -8,8 +8,10 @@
 class Sprite : public sf::Sprite,
                public Component
 {
+    math::Vector2F m_size;
+
   public:
-    Sprite( sf::Texture const & texture );
+    Sprite( sf::Texture const & texture, math::Vector2F size );
     virtual ~Sprite() = default;
 
     void render ( Render & render ) const override;

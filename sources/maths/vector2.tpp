@@ -212,16 +212,22 @@ namespace math
     }
 
     template< C_Primitive Type >
-    Vector2< Type > Vector2< Type >::normalize()
+    Vector2< Type > Vector2< Type >::get_norm() const
     {
-        float const vectorLength { this->get_length() };
+        float vectorLength { this->get_length() };
 
-        if ( vectorLength != 0 )
+        if ( vectorLength == 0 )
         {
-            *this /= vectorLength;
+            return *this;
         }
 
-        return *this;
+        return *this / vectorLength;
+    }
+
+    template< C_Primitive Type >
+    Vector2< Type > Vector2< Type >::normalize()
+    {
+        return *this = this->get_norm();
     }
 
     /* ************************************************************************

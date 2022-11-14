@@ -34,8 +34,8 @@ namespace ImGui
         if ( ImGui::Begin( name.c_str(), isWindowOpen, flags ) )
         {
             lambda();
-            ImGui::End();
         }
+        ImGui::End();
     }
 
     bool P_ColorEditor (
@@ -131,3 +131,16 @@ namespace ImGui
         }
     };  // namespace color
 }  // namespace ImGui
+
+namespace ImGui_P
+{
+    void Text ( std::string string )
+    {
+        ImGui::Text( "%s", string.c_str() );
+    }
+
+    void Text ( std::ostringstream const & stream )
+    {
+        ImGui_P::Text( stream.str() );
+    }
+}  // namespace ImGui_P

@@ -19,13 +19,3 @@ namespace tools
     template< typename Type >
     Type const * to_c_style_array ( std::vector< Type > const & array );
 }  // namespace tools
-
-/// @brief Cardinal Directions
-enum class E_Direction
-{
-    Up = 0,
-    Down,
-    Right,
-    Left,
-    EnumLast,
-};

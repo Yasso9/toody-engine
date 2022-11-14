@@ -9,7 +9,6 @@ Transformable2D::Transformable2D()
 void Transformable2D::render_all( Render & render ) const
 {
     render.set_transformation( m_currentTransformation );
-
     Component::render_all( render );
 }
 

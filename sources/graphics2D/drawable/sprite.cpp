@@ -3,7 +3,8 @@
 #include "main/render.hpp"
 #include "tools/global_variable.hpp"
 
-Sprite::Sprite( sf::Texture const & texture ) : sf::Sprite { texture }
+Sprite::Sprite( sf::Texture const & texture, math::Vector2F size )
+  : sf::Sprite { texture }, m_size { size }
 {
     this->select_animation( 0 );
 }
@@ -29,8 +30,11 @@ math::PolygonF Sprite::get_polygon() const
 
 void Sprite::select_animation( unsigned int index )
 {
+    // std::cout << "Selecting " << index << std::endl;
+
     sf::IntRect textureRect {};
-    textureRect.left   = static_cast< int >( index ) * TILE_PIXEL_SIZE_I;
+    textureRect.left =
+        static_cast< int >( index ) * static_cast< int >( m_size.x );
     textureRect.top    = 0;
     textureRect.width  = TILE_PIXEL_SIZE_I;
     textureRect.height = TILE_PIXEL_SIZE_I;

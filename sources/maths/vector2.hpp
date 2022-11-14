@@ -115,6 +115,7 @@ namespace math
         Vector2< Type > round ();
 
         float           get_length () const;
+        Vector2< Type > get_norm () const;
         Vector2< Type > normalize ();
     };
 

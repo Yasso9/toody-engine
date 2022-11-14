@@ -8,8 +8,8 @@
 #include <SFML/Graphics/Sprite.hpp>  // for Sprite
 #include <SFML/System/Vector2.hpp>   // for Vector2f, Vector2u
 
-#include "component/transformable2D.hpp"  // for TransformableComponent
-#include "tools/tools.hpp"                // for E_Direction
+#include "component/transformable2D.hpp"      // for TransformableComponent
+#include "graphics2D/cardinal_direction.hpp"  // for E_Direction
 
 class Render;
 
