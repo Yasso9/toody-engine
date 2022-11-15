@@ -16,44 +16,57 @@ class View;
 
 class TileMap : public Transformable2D
 {
-    db::Table                                         m_databaseTable;
+    database::Table                                   m_databaseTable;
     tile::Selector                                    m_tileSelector;
+    /// @todo set it as a component
     tile::Cursor                                      m_cursor;
     /// @brief view of the component that call the tilemap
     View &                                            m_view;
-    /// @todo use TileTable
+    /// @todo use TileTable instead
     /// @brief m_tileTable[line][column][depth]
     std::vector< std::vector< std::vector< Tile > > > m_tileTable;
+    /// @todo maybe rework that
     unsigned int                                      m_currentDepth;
 
   public:
-    TileMap( View & view );
+    explicit TileMap( View & view );
     virtual ~TileMap() = default;
 
-    /// @brief size of the tilemap
-    tile::Size get_size () const;
+    void update ( float deltaTime ) override;
 
-    math::Vector2F  get_center ( bool isAbsolutePosition = true ) const;
+  private:
+    void render ( Render & render ) const override;
+
+  public:
+    /// @brief Reference to the tileset that the tilemap use
     Tileset const & get_tileset () const;
+    /// @brief Size of the tilemap
+    tile::Size      get_size () const;
+    /// @brief Absolute position of the center of the tilemap in pixel
+    math::Vector2F  get_center_absolute () const;
+    /// @brief Relative position of the center of the tilemap in pixel
+    math::Vector2F  get_center_relative () const;
 
-    /// @brief resize
-    void set_tile_size ( math::Vector2U const & tileSize );
+    /// @brief Get the tile position of a point in the tilemap
+    /// @return optionnal tile position if the point is in the tilemap
+    std::optional< tile::Position > get_tile_position (
+        math::PointF point ) const;
 
+    bool contain ( math::PointF point ) const;
+
+    /// @brief Change the size of the tilemap
+    /// @param tileSize New size of the tilemap
+    void resize ( tile::Size tileSize );
     /// @brief save the tilemap table into the database
     void save () const;
-
-    void update_before ( float deltaTime ) override;
 
   private:
     void load_from_database ();
 
     void change_tile (
-        math::Vector2U const & tilePositionInTile,
-        unsigned int const &   newTileValue );
+        tile::Position tilemapPosition, tile::Position tilesetPosition );
 
     void update_selection ();
     void update_table_informations ();
     void update_tile_size_button ();
-
-    void render_before ( Render & render ) const override;
 };

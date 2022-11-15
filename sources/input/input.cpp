@@ -49,15 +49,13 @@ namespace input
         return currentPosition;
     }
 
-    math::PointI get_mouse_position_point ()
+    math::Vector2F get_mouse_position_relative ( View view )
     {
-        return math::PointI { get_mouse_position() };
+        return ( input::get_mouse_position().to_float() / view.get_zoom() )
+               + view.get_position();
     }
 
-    namespace
-    {
-        math::Vector2F g_mouseMovement { 0.f, 0.f };
-    }  // namespace
+    static math::Vector2F g_mouseMovement { 0.f, 0.f };
 
     void reset_mouse_movement ()
     {

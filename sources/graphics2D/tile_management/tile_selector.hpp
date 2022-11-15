@@ -13,13 +13,11 @@ namespace tile
     class Selector : public Component
     {
         /// @brief Table of tiles where we can select our tile
-        Tileset                       m_tileset;
-        /// @brief index of the tile chosen. Is optional because at the
+        Tileset                         m_tileset;
+        /// @brief posisition of the tile chosen. Is optional because at the
         /// beginning we can have no tile choose
-        std::optional< unsigned int > m_tileSelected;
+        std::optional< tile::Position > m_tileSelected;
 
-        /// @brief Should we show the grid on the tileset
-        bool  m_isGridEnabled;
         /// @brief Color of the grid
         Color m_gridColor;
 
@@ -27,13 +25,12 @@ namespace tile
         Selector();
         virtual ~Selector() = default;
 
-        Tileset const &               get_tileset () const;
-        std::optional< unsigned int > get_tile_selected () const;
-
         void update ( float deltaTime ) override;
+
+        Tileset const &                 get_tileset () const;
+        std::optional< tile::Position > get_tile_selected () const;
 
       private:
         void update_selection ( ImDrawList & drawList );
     };
-
 }  // namespace tile

@@ -34,7 +34,7 @@ static int callback (
 }
 
 /// @todo create a singleton and initialize sqlite3_open
-namespace db
+namespace database
 {
     Chunk request ( std::string const & request, bool checkError )
     {
@@ -79,7 +79,8 @@ namespace db
                "name = '"
             << tableName << "';";
 
-        return db::request( requestStream.str() ).to_string() == tableName;
+        return database::request( requestStream.str() ).to_string()
+               == tableName;
     }
 
     /* ********************************************************************
@@ -132,7 +133,7 @@ namespace db
     {
         // Initialisation de la database
 
-        Chunk initRequest = db::request(
+        Chunk initRequest = database::request(
             "DROP TABLE IF EXISTS tilemap;"
             "CREATE TABLE tilemap ("
             "tile_table TEXT NOT NULL"
@@ -149,7 +150,7 @@ namespace db
         std::cout << "tripleArray serialized : |"
                   << serialize( tripleArray ).to_string() << "|" << std::endl;
 
-        Chunk insertionRequest = db::request(
+        Chunk insertionRequest = database::request(
             "INSERT INTO tilemap (tile_table)"
             "VALUES('"
             + serialize( tripleArray ).to_string() + "');" );
@@ -158,7 +159,7 @@ namespace db
                   << "|" << std::endl;
 
         Chunk selectionRequest {
-            db::request( "SELECT tile_table FROM tilemap;" ) };
+            database::request( "SELECT tile_table FROM tilemap;" ) };
 
         std::cout << "selectionRequest content : |"
                   << selectionRequest.to_string() << "|" << std::endl;
@@ -166,4 +167,4 @@ namespace db
                   << selectionRequest.to_value< decltype( tripleArray ) >()
                   << "|" << std::endl;
     }
-}  // namespace db
+}  // namespace database

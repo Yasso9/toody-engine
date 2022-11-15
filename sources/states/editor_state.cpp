@@ -103,7 +103,7 @@ void EditorState::update( float deltaTime )
 
 void EditorState::reset_view()
 {
-    m_view.setCenter( m_tilemap.get_center() );
+    m_view.setCenter( m_tilemap.get_center_absolute() );
     m_view.setSize( Window::get_instance().get_size().to_float() );
     m_character.setPosition( m_view.get_center() );
 }

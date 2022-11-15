@@ -86,7 +86,7 @@ void MainMenuState::update( float /* deltaTime */ )
 
     for ( sf::Text & text : m_texts )
     {
-        if ( input::get_mouse_position_point().to_float().is_inside(
+        if ( input::get_mouse_position().to_point().to_float().is_inside(
                  get_rectangle( text ) ) )
         {
             // Color on hover

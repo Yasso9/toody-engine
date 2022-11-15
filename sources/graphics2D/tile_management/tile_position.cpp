@@ -77,14 +77,48 @@ namespace tile
         // Position too big for the current grid
         if ( m_position.x >= m_numberOfColumns )
         {
-            // throw std::out_of_range {
-            //     "The position in the X axis can not be superior to the number
-            //     " " of column " };
+            std::cerr << "The position in the X axis can not be superior to "
+                         "the number of column"
+                      << std::endl;
         }
     }
 
+    bool Position::operator<( tile::Size size ) const
+    {
+        return this->tile() < size.tile();
+    }
+
+    bool Position::operator>= ( tile::Size size ) const
+    {
+        return ! ( *this < size );
+    }
+
+    bool Position::operator<( tile::Position position ) const
+    {
+        return this->tile() < position.tile();
+    }
+
+    bool Position::operator>= ( tile::Position position ) const
+    {
+        return ! ( *this < position );
+    }
+
+    std::string Position::debug_string( std::string name ) const
+    {
+        if ( name != "" )
+        {
+            name += " ";
+        }
+
+        std::ostringstream stream {};
+        stream << name << "pixel position : " << this->pixel() << "\n";
+        stream << name << "tile position : " << this->tile() << "\n";
+        stream << name << "tile value : " << this->value() << "\n";
+        return stream.str().c_str();
+    }
+
     /* ********************************************************************
-     ***************************** POSITION *******************************
+     ******************************* SIZE *********************************
      ******************************************************************* */
 
     Size::Size( math::Vector2U size, Type type ) : m_size {}

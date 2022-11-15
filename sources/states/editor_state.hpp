@@ -4,7 +4,7 @@
 #include <string>  // for string
 
 #include "events/dialogue.hpp"
-#include "graphics2D/collision_list.hpp"  // for CollisionList
+#include "graphics2D/collision/collision_list.hpp"  // for CollisionList
 #include "graphics2D/entity/character_entity.hpp"
 #include "graphics2D/entity/controllable_entity.hpp"  // for MoveableEntity2D
 #include "graphics2D/entity/player.hpp"               // for Player

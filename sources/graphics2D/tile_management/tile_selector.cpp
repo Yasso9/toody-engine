@@ -30,7 +30,6 @@ namespace tile
     Selector::Selector()
       : m_tileset { resources::get_texture( "ground.png" ) },
         m_tileSelected { std::nullopt },
-        m_isGridEnabled { true },
         m_gridColor { Color::RGBA { 118, 118, 118, 255 } }
     {}
 
@@ -39,21 +38,22 @@ namespace tile
         return m_tileset;
     }
 
-    std::optional< unsigned int > Selector::get_tile_selected() const
+    std::optional< tile::Position > Selector::get_tile_selected() const
     {
         return m_tileSelected;
     }
 
     void Selector::update( float /* deltaTime */ )
     {
+        static bool isGridEnabled { true };
         ImGui::P_Show( "Tile Selector", [&] () {
-            ImGui::Checkbox( "Enable grid ?", &m_isGridEnabled );
+            ImGui::Checkbox( "Enable grid ?", &isGridEnabled );
             ImGui::ColorEdit4( "Grid Color", m_gridColor.to_table() );
 
             m_tileset.set_position( ImGui::GetCursorScreenPos() );
             ImGui::Image( m_tileset.get_texture() );
 
-            if ( m_isGridEnabled )
+            if ( isGridEnabled )
             {
                 draw_grid(
                     *ImGui::GetWindowDrawList(), m_tileset, m_gridColor );
@@ -86,28 +86,21 @@ namespace tile
                     + m_tileset.get_position(),
                 m_gridColor.to_integer() );
 
-            std::stringstream outputSelection {};
-            outputSelection
-                << "Selection pixel position : " << selectionPosition.pixel()
-                << "\n";
-            outputSelection
-                << "Selection tile position : " << selectionPosition.tile()
-                << "\n";
-            outputSelection
-                << "Selection Tile Value : " << selectionPosition.value()
-                << "\n";
+            std::ostringstream outputSelection {};
+            outputSelection << selectionPosition.debug_string( "Selection" )
+                            << "\n";
 
             if ( input::is_pressed( sf::Mouse::Button::Left ) )
             {
                 // There's a click, the tile selected change value
                 outputSelection << "Button Pressed !"
                                 << "\n";
-                m_tileSelected = selectionPosition.value();
+                m_tileSelected = selectionPosition;
             }
             ImGui::Text( "%s", outputSelection.str().c_str() );
         }
 
-        std::stringstream output {};
+        std::ostringstream output {};
         output << "Mouse Position : " << mousePosition << "\n";
         output << "Tileset Position : " << m_tileset.get_position() << "\n";
         output << "Tileset Size (Pixel) : " << m_tileset.get_size().pixel()
@@ -119,7 +112,7 @@ namespace tile
         output << "Current Tile Selected : ";
         if ( m_tileSelected.has_value() )
         {
-            output << m_tileSelected.value() << "\n";
+            output << m_tileSelected.value().value() << "\n";
         }
         else
         {

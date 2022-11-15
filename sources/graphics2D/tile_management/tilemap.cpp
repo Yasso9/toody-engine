@@ -41,12 +41,55 @@ TileMap::TileMap( View & view )
     m_tileTable {},
     m_currentDepth { 0u }
 {
+    this->add_child( m_tileSelector );
+
     this->load_from_database();
 
     this->setPosition( 0.f, 0.f );
-
-    this->add_child( m_tileSelector );
 }
+
+void TileMap::update( float /* deltaTime */ )
+{
+    ImGui::SetNextWindowBgAlpha( 0.5f );
+    if ( ImGui::Begin( "Tilemap Information" ) )
+    {
+        this->update_selection();
+
+        this->update_table_informations();
+
+        this->update_tile_size_button();
+
+        if ( ImGui::Button( "Save Tilemap" ) )
+        {
+            this->save();
+        }
+    }
+    ImGui::End();
+}
+
+void TileMap::render( Render & render ) const
+{
+    render.set_texture( this->get_tileset().get_texture() );
+
+    for ( auto const & column : m_tileTable )
+    {
+        for ( auto const & tile : column )
+        {
+            for ( Tile const & cell : tile )
+            {
+                render.draw( cell.get_vertex_array() );
+            }
+        }
+    }
+
+    /// @todo Create a method cursor.draw
+    render.draw( m_cursor.shape );
+}
+
+Tileset const & TileMap::get_tileset() const
+{
+    return this->m_tileSelector.get_tileset();
+};
 
 tile::Size TileMap::get_size() const
 {
@@ -57,49 +100,71 @@ tile::Size TileMap::get_size() const
     };
 }
 
-math::Vector2F TileMap::get_center( bool isAbsolutePosition ) const
+math::Vector2F TileMap::get_center_absolute() const
 {
-    math::Vector2F centerPosition { this->get_size().pixel() / 2.f };
-    if ( isAbsolutePosition )
-    {
-        centerPosition += math::Vector2F { this->getPosition() };
-    }
-
-    return centerPosition;
+    return this->get_center_relative() + math::Vector2F { this->getPosition() };
 }
 
-Tileset const & TileMap::get_tileset() const
+math::Vector2F TileMap::get_center_relative() const
 {
-    return this->m_tileSelector.get_tileset();
-};
+    return math::Vector2F { this->get_size().pixel().to_float() / 2.f };
+}
 
-void TileMap::set_tile_size( math::Vector2U const & tileSize )
+std::optional< tile::Position > TileMap::get_tile_position(
+    math::PointF point ) const
 {
-    if ( this->get_size().tile() == tileSize )
+    if ( ! this->contain( point ) )
+    {
+        return std::nullopt;
+    }
+
+    math::Vector2U pointRelative {
+        point - math::Vector2F { this->getPosition() } };
+
+    return tile::Position {
+        pointRelative, this->get_size(), tile::Position::Pixel };
+}
+
+bool TileMap::contain( math::PointF point ) const
+{
+    if ( ! m_view.contain( point ) )
+    {
+        std::cerr << "The point isn't inside the view" << std::endl;
+        return false;
+    }
+
+    return point.is_inside(
+        math::PointF { this->getPosition() },
+        this->get_size().pixel().to_float() );
+}
+
+void TileMap::resize( tile::Size tileSize )
+{
+    if ( this->get_size().tile() == tileSize.tile() )
     {
         // same size nothing to do
         return;
     }
 
     // resize the number of line
-    m_tileTable.resize( tileSize.y );
+    m_tileTable.resize( tileSize.tile().y );
 
     // resize each column
-    for ( unsigned int i_line { 0u }; i_line < tileSize.y; ++i_line )
+    for ( unsigned int i_line { 0u }; i_line < tileSize.tile().y; ++i_line )
     {
-        if ( m_tileTable[i_line].size() == tileSize.x )
+        if ( m_tileTable[i_line].size() == tileSize.tile().x )
         {
             // same size nothing to do
             continue;
         }
 
-        while ( m_tileTable[i_line].size() > tileSize.x )
+        while ( m_tileTable[i_line].size() > tileSize.tile().x )
         {
             // size too big, must remove some elements
             m_tileTable[i_line].pop_back();
         }
 
-        while ( m_tileTable[i_line].size() < tileSize.x )
+        while ( m_tileTable[i_line].size() < tileSize.tile().x )
         {
             // size too low, must append some element
             // the default value must set the tile at the correct position
@@ -124,28 +189,9 @@ void TileMap::set_tile_size( math::Vector2U const & tileSize )
         "columns of the table must have the same size" );
 }
 
-void TileMap::update_before( float /* deltaTime */ )
-{
-    ImGui::SetNextWindowBgAlpha( 0.5f );
-    if ( ImGui::Begin( "Tilemap Information" ) )
-    {
-        this->update_selection();
-
-        this->update_table_informations();
-
-        this->update_tile_size_button();
-
-        if ( ImGui::Button( "Save Tilemap" ) )
-        {
-            this->save();
-        }
-    }
-    ImGui::End();
-}
-
 void TileMap::save() const
 {
-    m_databaseTable.insert( "tile_table", m_tileTable );
+    m_databaseTable.insert( database::TILEMAP, m_tileTable );
 }
 
 void TileMap::load_from_database()
@@ -153,7 +199,7 @@ void TileMap::load_from_database()
     auto const table =
         m_databaseTable
             .select< std::vector< std::vector< std::vector< int > > > >(
-                "tile_table" );
+                database::TILEMAP );
 
     tile::Position positionInTileset {
         0u, m_tileSelector.get_tileset().get_size().tile().x };
@@ -198,101 +244,88 @@ void TileMap::load_from_database()
 }
 
 void TileMap::change_tile(
-    math::Vector2U const & tilePositionInTile,
-    unsigned int const &   newTileValue )
+    tile::Position tilemapPosition, tile::Position tilesetPosition )
 {
-    ASSERTION(
-        tilePositionInTile < this->get_size().tile(), "position too big" );
-    ASSERTION(
-        newTileValue < this->get_tileset().get_number_of_tile(),
-        "Tileset value too big" );
+    if ( tilemapPosition >= this->get_size() )
+    {
+        std::cerr << "Tilemap position not comptatible with current tilemap"
+                  << std::endl;
+    }
+    if ( tilesetPosition >= this->get_tileset().get_size() )
+    {
+        std::cerr << "Tileset position not comptatible with current tileset"
+                  << std::endl;
+    }
 
-    Tile & currentTile { m_tileTable[tilePositionInTile.y][tilePositionInTile.x]
-                                    [m_currentDepth] };
+    Tile & currentTile {
+        m_tileTable[tilemapPosition.tile().y][tilemapPosition.tile().x]
+                   [m_currentDepth] };
 
-    currentTile.set_tileset_position( tile::Position {
-        newTileValue, this->get_tileset().get_size().tile().x } );
+    currentTile.set_tileset_position( tilesetPosition );
 }
 
 void TileMap::update_selection()
 {
-    std::stringstream infoOutput {};
-
-    if ( m_tileSelector.get_tile_selected().has_value() )
+    static bool showDebug { true };
+    ImGui::Checkbox( "Show debug informations ?", &showDebug );
+    if ( showDebug )
     {
-        infoOutput << "Tileset - Tile Selected : "
-                   << m_tileSelector.get_tile_selected().value() << "\n";
+        std::stringstream infoOutput {};
+
+        if ( m_tileSelector.get_tile_selected().has_value() )
+        {
+            infoOutput << "Tileset - Tile Selected : "
+                       << m_tileSelector.get_tile_selected().value().value()
+                       << "\n";
+        }
+        else
+        {
+            infoOutput << "Tileset - Tile Selected : None\n";
+        }
+
+        infoOutput << "Tilemap - Position : " << this->getPosition() << "\n";
+        infoOutput << "Tilemap - Size : " << this->get_size().pixel() << "\n";
+        infoOutput << "Tilemap - Number of Tile : " << this->get_size().tile()
+                   << "\n";
+
+        infoOutput << "View - Center : " << m_view.get_center() << "\n";
+        infoOutput << "View - Size : " << m_view.get_size() << "\n";
+        infoOutput << "View - Position : " << m_view.get_position() << "\n";
+        infoOutput << "View - Zoom : " << m_view.get_zoom() << "\n";
+
+        infoOutput << "Mouse Position - Absolute : "
+                   << input::get_mouse_position() << "\n";
+        infoOutput << "Mouse Position - Relativ to View : "
+                   << input::get_mouse_position_relative( m_view ) << "\n";
+
+        ImGui::Text( "%s", infoOutput.str().c_str() );
     }
-    else
-    {
-        infoOutput << "Tileset - Tile Selected : None\n";
-    }
 
-    infoOutput << "Tilemap - Position : " << this->getPosition() << "\n";
-    infoOutput << "Tilemap - Size : " << this->get_size().pixel() << "\n";
-    infoOutput << "Tilemap - Number of Tile : " << this->get_size().tile()
-               << "\n";
+    math::PointF mousePosition {
+        input::get_mouse_position_relative( m_view ).to_point() };
 
-    infoOutput << "View - Center : " << m_view.get_center() << "\n";
-    infoOutput << "View - Size : " << m_view.get_size() << "\n";
-    infoOutput << "View - Position : " << m_view.get_position() << "\n";
-    infoOutput << "View - Zoom : " << m_view.get_zoom() << "\n";
-
-    math::Vector2F const mousePositionViewZoom {
-        input::get_mouse_position().to_float() / m_view.get_zoom() };
-    math::PointF const mousePositionRelativToView {
-        math::floor( mousePositionViewZoom + m_view.get_position() ) };
-    infoOutput << "Mouse Position - Absolute : " << input::get_mouse_position()
-               << "\n";
-    infoOutput << "Mouse Position - View Zoom : " << mousePositionViewZoom
-               << "\n";
-    infoOutput << "Mouse Position - Relativ to View : "
-               << mousePositionRelativToView << "\n";
-
-    ImGui::Text( "%s", infoOutput.str().c_str() );
-
-    if ( ImGui::IsWindowHovered( ImGuiHoveredFlags_AnyWindow )
-         || ! mousePositionRelativToView.is_inside(
-             math::PointF { this->getPosition() },
-             this->get_size().pixel().to_float() ) )
+    if ( ! this->get_tile_position( mousePosition ).has_value()
+         || ImGui::IsWindowHovered( ImGuiHoveredFlags_AnyWindow ) )
     {
         // The mouse is outside the tilemap
-        m_cursor.m_shape.setOutlineColor( sf::Color::Transparent );
+        m_cursor.shape.setOutlineColor( sf::Color::Transparent );
         return;
     }
 
-    std::stringstream selectionOutput {};
-
-    math::Vector2F const mousePositionRelativToTilemap {
-        mousePositionRelativToView - math::Vector2F { this->getPosition() } };
-    selectionOutput << "Mouse Position - Relativ to Tilemap : "
-                    << mousePositionRelativToTilemap << "\n";
-
-    math::Vector2I const tileSelectedPositionInPixel {
-        mousePositionRelativToTilemap.to_int()
-        - ( mousePositionRelativToTilemap.to_int() % TILE_PIXEL_SIZE_I ) };
-    selectionOutput << "Tile Position - in Pixel : "
-                    << tileSelectedPositionInPixel << "\n";
-
-    math::Vector2U const tileSelectedPositionInTile {
-        tileSelectedPositionInPixel / TILE_PIXEL_SIZE_I };
-    selectionOutput << "Tile Position - in Tile : "
-                    << tileSelectedPositionInTile << "\n";
-
-    ImGui::Text( "%s", selectionOutput.str().c_str() );
+    tile::Position tilePosition {
+        this->get_tile_position( mousePosition ).value() };
 
     if ( input::is_pressed( sf::Mouse::Button::Left )
          && m_tileSelector.get_tile_selected().has_value() )
     {
         // There's a left click and the mouse is inside the tilemap
         this->change_tile(
-            tileSelectedPositionInTile,
-            m_tileSelector.get_tile_selected().value() );
+            tilePosition, m_tileSelector.get_tile_selected().value() );
     }
 
     // The mouse is inside the tilemap, we show the cursor
-    m_cursor.m_shape.setOutlineColor( sf::Color::Black );
-    m_cursor.m_shape.setPosition( tileSelectedPositionInPixel.to_float() );
+    m_cursor.shape.setOutlineColor( sf::Color { 48, 48, 48, 128 } );
+    m_cursor.shape.setPosition( tilePosition.pixel().to_float() );
 }
 
 void TileMap::update_table_informations()
@@ -342,48 +375,38 @@ void TileMap::update_table_informations()
 
 void TileMap::update_tile_size_button()
 {
-    constexpr unsigned int const MAX_STRING_SIZE { 10u };
+    std::array< int, 2 > tileNumbers {
+        this->get_size().tile().to_int().x,
+        this->get_size().tile().to_int().y };
 
-    static std::string tileNumberX {
-        std::to_string( this->get_size().tile().x ) };
-    static std::string tileNumberY {
-        std::to_string( this->get_size().tile().y ) };
+    std::string newSize { "" };
 
-    ImGui::InputText(
-        "Number of Tile X :", tileNumberX.data(), MAX_STRING_SIZE,
-        ImGuiInputTextFlags_CharsDecimal );
-    ImGui::InputText(
-        "Number of Tile Y :", tileNumberY.data(), MAX_STRING_SIZE,
-        ImGuiInputTextFlags_CharsDecimal );
+    if ( tileNumbers[0] != this->get_size().tile().to_int().x
+         || tileNumbers[1] != this->get_size().tile().to_int().y )
+    {
+        std::stringstream stream {};
+        stream << "Current tilemap size : " << this->getPosition() << "\n";
+        ImGui::Text( "%s", stream.str().c_str() );
+
+        newSize = "New ";
+    }
+
+    ImGui::InputInt2(
+        "Tilemap Size :", &tileNumbers[0], ImGuiInputTextFlags_CharsDecimal );
 
     if ( ImGui::Button( "Update Size" ) )
     {
-        /// @todo useful to have this pointers ?
-        char * tileNumberXEnd;
-        char * tileNumberYEnd;
-        this->set_tile_size( math::Vector2 {
-            std::strtoul( tileNumberX.c_str(), &tileNumberXEnd, 10 ),
-            std::strtoul( tileNumberY.c_str(), &tileNumberYEnd, 10 ) }
-                                 .to_u_int() );
+        this->resize( tile::Size {
+            math::Vector2I {tileNumbers[0], tileNumbers[1]}
+             .to_u_int(),
+            tile::Size::Tile
+        } );
+
+        ASSERTION(
+            tileNumbers[0] == this->get_size().tile().to_int().x
+                && tileNumbers[1] == this->get_size().tile().to_int().y,
+            "Issue with tilemap resize" );
+
+        newSize = "";
     }
-}
-
-void TileMap::render_before( Render & render ) const
-{
-    render.set_texture( m_tileSelector.get_tileset().get_texture() );
-
-    for ( auto const & column : m_tileTable )
-    {
-        for ( auto const & tile : column )
-        {
-            for ( Tile const & cell : tile )
-            {
-                render.get_target().draw(
-                    cell.get_vertex_array(), render.get_render_states() );
-            }
-        }
-    }
-
-    /// @todo Create a method cursor.draw
-    render.get_target().draw( m_cursor.m_shape, render.get_render_states() );
 }

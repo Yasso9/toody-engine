@@ -7,8 +7,10 @@
 #include "tools/path.hpp"
 #include "tools/serialization.hpp"  // for Unserializer
 
-namespace db
+namespace database
 {
+    std::string const TILEMAP { "tile_table" };
+
     Chunk request ( std::string const & request, bool checkError = true );
 
     bool is_table_created ( std::string tableName );
@@ -35,7 +37,7 @@ namespace db
     {
         std::ostringstream requestStream {};
         requestStream << "SELECT " << attribute << " FROM " << m_name << ";";
-        return db::request( requestStream.str(), checkError )
+        return database::request( requestStream.str(), checkError )
             .to_value< Type >();
     }
 
@@ -49,4 +51,4 @@ namespace db
 
     [[maybe_unused]] void test_table ();
     [[maybe_unused]] void test_database ();
-}  // namespace db
+}  // namespace database

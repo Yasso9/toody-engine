@@ -15,6 +15,7 @@ class Tiles
     ~Tiles() = default;
 };
 
+/// @todo use that class in tilemap
 class TileTable
 {
     std::vector< Tiles > m_matrix;

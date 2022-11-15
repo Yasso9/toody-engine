@@ -28,6 +28,7 @@ void View::zoom( float factor )
 {
     sf::View::zoom( 1.f - factor );
 
+    /// @todo have MAXIMUM_ZOOM and MINIMUM_ZOOM as member of View class
     // Check if the zoom doesn't go too far
     constexpr float MAXIMUM_ZOOM { 15.f };
     constexpr float MINIMUM_ZOOM { 0.7f };
@@ -51,8 +52,17 @@ math::Vector2F View::get_center() const
     return this->getCenter();
 }
 
-/// @brief position where the view rectangle begin
-math::Vector2F View::get_position() const
+math::PointF View::get_position() const
 {
     return this->get_center() - ( this->get_size() / 2.f );
+}
+
+math::RectangleF View::get_rectangle() const
+{
+    return math::RectangleF { this->get_position(), this->get_size() };
+}
+
+bool View::contain( math::PointF point ) const
+{
+    return point.is_inside( this->get_rectangle() );
 }

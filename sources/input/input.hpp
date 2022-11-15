@@ -3,6 +3,7 @@
 #include <SFML/Window/Keyboard.hpp>  // for Keyboard, Keyboard::Key, Keyboar...
 #include <SFML/Window/Mouse.hpp>     // for Mouse, Mouse::Button
 
+#include "graphics2D/view.hpp"
 #include "maths/geometry/point.hpp"  // for PointI
 #include "maths/vector2.hpp"         // for Vector2F, Vector2I
 
@@ -39,14 +40,17 @@ namespace input
     bool is_pressed ( sf::Mouse::Button mouseButton );
 
     math::Vector2I get_mouse_position ();
-    math::PointI   get_mouse_position_point ();
-    void           reset_mouse_movement ();
-    void           set_mouse_position ( math::PointI newMousePosition );
+    /// @brief Mouse position relative to view
+    math::Vector2F get_mouse_position_relative ( View view );
     math::Vector2F get_mouse_movement ();
     void           set_mouse_movement ( math::Vector2F mouseMovement );
     float          get_mouse_scroll ();
+
+    void reset_mouse_movement ();
+    void set_mouse_position ( math::PointI newMousePosition );
+
     /// @remark must be used only by the pollevent MouseScroll event
-    void           set_mouse_scroll ( float mouseScrollDelta );
+    void set_mouse_scroll ( float mouseScrollDelta );
 
     math::Vector2F get_movement_vector (
         S_KeyboardMove movementKey, bool invertMovement = false );

@@ -29,13 +29,20 @@ namespace tile
         Position( math::Vector2U position, tile::Size mapSize, Type type );
 
         unsigned int   value () const;
-        /// @brief get size in tile value
+        /// @brief get position in tile value
         math::Vector2U tile () const;
-        /// @brief get size in pixel value
+        /// @brief get position in pixel value
         math::Vector2U pixel () const;
 
         void set_value ( unsigned int newValue );
         void set_value ( math::Vector2U position, Type type );
+
+        bool operator<( tile::Size size ) const;
+        bool operator>= ( tile::Size size ) const;
+        bool operator<( tile::Position position ) const;
+        bool operator>= ( tile::Position position ) const;
+
+        std::string debug_string ( std::string name = "" ) const;
     };
 
     class Size
@@ -53,7 +60,9 @@ namespace tile
         Size( math::Vector2U size, Type type );
 
         unsigned int   value () const;
+        /// @brief get size in tile value
         math::Vector2U tile () const;
+        /// @brief get size in pixel value
         math::Vector2U pixel () const;
 
         void set_value ( math::Vector2U position, Type type );

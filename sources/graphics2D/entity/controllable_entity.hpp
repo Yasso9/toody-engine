@@ -1,6 +1,6 @@
 #pragma once
 
-#include "graphics2D/collision_list.hpp"  // for CollisionList
+#include "graphics2D/collision/collision_list.hpp"  // for CollisionList
 #include "graphics2D/control.hpp"
 #include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
 #include "graphics2D/view.hpp"                  // for View

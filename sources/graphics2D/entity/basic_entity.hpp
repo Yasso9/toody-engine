@@ -1,11 +1,11 @@
 #pragma once
 
-#include "graphics2D/collision_list.hpp"        // for CollisionList
-#include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
-#include "graphics2D/view.hpp"                  // for View
-#include "input/input.hpp"                      // for S_KeyboardMove
-#include "maths/geometry/polygon.hpp"           // for PolygonF
-#include "maths/vector2.hpp"                    // for Vector2F
+#include "graphics2D/collision/collision_list.hpp"  // for CollisionList
+#include "graphics2D/entity/static_entity.hpp"      // for StaticEntity2D
+#include "graphics2D/view.hpp"                      // for View
+#include "input/input.hpp"                          // for S_KeyboardMove
+#include "maths/geometry/polygon.hpp"               // for PolygonF
+#include "maths/vector2.hpp"                        // for Vector2F
 
 class BasicEntity2D : public StaticEntity2D
 {
