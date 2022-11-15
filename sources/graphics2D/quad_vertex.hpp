@@ -10,6 +10,7 @@ struct QuadVertex
     sf::VertexArray array;
 
     QuadVertex();
+    virtual ~QuadVertex() = default;
 
     math::Vector2F get_position () const;
     math::Vector2F get_texture_position () const;

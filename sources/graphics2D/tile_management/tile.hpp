@@ -12,11 +12,6 @@ namespace tile
 class TileMap;
 class Tileset;
 
-namespace sf
-{
-    class VertexArray;
-}  // namespace sf
-
 class Tile
 {
     /// @brief The Tilemap where the Tile is drawed
@@ -43,7 +38,7 @@ class Tile
 
     /// @brief Get all the current data of the tile
     /// @return String containing the current data of the tile
-    std::string    get_debug_info () const;
+    std::string    get_debug () const;
     /// @brief Stream to output the value of the Tile in the Tileset
     /// @param stream Stream where the data is written
     /// @return

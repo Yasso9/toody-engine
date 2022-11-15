@@ -41,6 +41,8 @@ namespace tile
         bool operator>= ( tile::Size size ) const;
         bool operator<( tile::Position position ) const;
         bool operator>= ( tile::Position position ) const;
+        /// @brief Compare position AND numberOfColumns
+        bool operator== ( tile::Position position ) const;
 
         std::string debug_string ( std::string name = "" ) const;
     };

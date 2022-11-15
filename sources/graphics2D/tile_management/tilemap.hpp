@@ -16,17 +16,20 @@ class View;
 
 class TileMap : public Transformable2D
 {
-    database::Table                                   m_databaseTable;
-    tile::Selector                                    m_tileSelector;
-    /// @todo set it as a component
-    tile::Cursor                                      m_cursor;
-    /// @brief view of the component that call the tilemap
-    View &                                            m_view;
     /// @todo use TileTable instead
     /// @brief m_tileTable[line][column][depth]
     std::vector< std::vector< std::vector< Tile > > > m_tileTable;
+
+    database::Table m_databaseTable;
+    tile::Selector  m_tileSelector;
+
+    /// @todo set it as a component
+    tile::Cursor m_cursor;
+    /// @brief view of the component that call the tilemap
+    View &       m_view;
+
     /// @todo maybe rework that
-    unsigned int                                      m_currentDepth;
+    unsigned int m_currentDepth;
 
   public:
     explicit TileMap( View & view );
@@ -66,7 +69,8 @@ class TileMap : public Transformable2D
     void change_tile (
         tile::Position tilemapPosition, tile::Position tilesetPosition );
 
-    void update_selection ();
-    void update_table_informations ();
+    void update_cursor ();
     void update_tile_size_button ();
+    void update_debug ();
+    void update_table_debug ();
 };

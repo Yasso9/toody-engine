@@ -103,6 +103,12 @@ namespace tile
         return ! ( *this < position );
     }
 
+    bool Position::operator== ( tile::Position position ) const
+    {
+        return this->m_position == position.m_position
+               && this->m_numberOfColumns == position.m_numberOfColumns;
+    }
+
     std::string Position::debug_string( std::string name ) const
     {
         if ( name != "" )

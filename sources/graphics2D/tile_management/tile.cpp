@@ -6,11 +6,9 @@
 #include <SFML/Graphics/VertexArray.hpp>  // for VertexArray
 
 #include "graphics2D/sfml.hpp"                           // for operator<<
-#include "graphics2D/tile_management/tile_position.hpp"  // for tile::Position, tile::Position:...
 #include "graphics2D/tile_management/tile_selector.hpp"  // for TileSelector
-#include "graphics2D/tile_management/tilemap.hpp"        // for TileMap
-#include "graphics2D/tile_management/tileset.hpp"        // for Tileset
-#include "maths/geometry/point.hpp"                      // for Point
+#include "graphics2D/tile_management/tilemap.hpp"
+#include "maths/geometry/point.hpp"      // for Point
 #include "maths/geometry/point.tpp"      // for Point::Point<Type>
 #include "maths/geometry/rectangle.hpp"  // for RectangleF
 #include "maths/vector2.hpp"             // for Vector2U, Vector2F, Vector2
@@ -75,7 +73,7 @@ tile::Position Tile::get_tileset_position() const
         m_tileset.get_size().tile().x, tile::Position::Pixel };
 }
 
-std::string Tile::get_debug_info() const
+std::string Tile::get_debug() const
 {
     std::ostringstream outputStream {};
     outputStream << "Tile : " << this->get_tileset_position().value() << "\n"
