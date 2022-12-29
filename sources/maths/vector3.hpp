@@ -32,14 +32,14 @@ namespace math
           : x { xAxisValue }, y( yAxisValue ), z( zAxisValue )
         {}
 
-        Vector3( glm::vec3 const & glmVector ) requires(
-            std::is_same_v< Type, float > )
+        Vector3( glm::vec3 const & glmVector )
+            requires ( std::is_same_v< Type, float > )
           : Vector3( glmVector.x, glmVector.y, glmVector.z )
         {}
 
         virtual ~Vector3() = default;
 
-        glm::vec3 to_glm () const requires( std::is_same_v< Type, float > )
+        glm::vec3 to_glm () const requires ( std::is_same_v< Type, float > )
         {
             return glm::vec3 { this->x, this->y, this->z };
         }
@@ -93,9 +93,8 @@ namespace math
 
         float get_length () const
         {
-            return std::sqrt(
-                ( this->x * this->x ) + ( this->y * this->y )
-                + ( this->z * this->z ) );
+            return std::sqrt( ( this->x * this->x ) + ( this->y * this->y )
+                              + ( this->z * this->z ) );
         }
 
         virtual float operator[] ( unsigned int index ) const

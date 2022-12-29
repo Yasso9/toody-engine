@@ -5,9 +5,6 @@
 
 int main ()
 {
-    // Pretty print for boolean value
-    std::cout << std::boolalpha;
-
     Game game {};
 
     game.run();

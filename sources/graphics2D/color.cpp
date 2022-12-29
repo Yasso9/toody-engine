@@ -5,9 +5,8 @@
 
 Color::RGBA::RGBA() : RGBA { 0u, 0u, 0u, 0u } {}
 
-Color::RGBA::RGBA(
-    unsigned int red, unsigned int green, unsigned int blue,
-    unsigned int opacity )
+Color::RGBA::RGBA( unsigned int red, unsigned int green, unsigned int blue,
+                   unsigned int opacity )
   : r { red }, g { green }, b { blue }, a { opacity }
 {}
 
@@ -37,11 +36,10 @@ sf::Color Color::to_sfml() const
 {
     Color::RGBA rgbaColor { this->to_rgba() };
 
-    return {
-        static_cast< sf::Uint8 >( rgbaColor.r ),
-        static_cast< sf::Uint8 >( rgbaColor.g ),
-        static_cast< sf::Uint8 >( rgbaColor.b ),
-        static_cast< sf::Uint8 >( rgbaColor.a ) };
+    return { static_cast< sf::Uint8 >( rgbaColor.r ),
+             static_cast< sf::Uint8 >( rgbaColor.g ),
+             static_cast< sf::Uint8 >( rgbaColor.b ),
+             static_cast< sf::Uint8 >( rgbaColor.a ) };
 }
 
 Color::RGBA Color::to_rgba() const

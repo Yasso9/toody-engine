@@ -5,10 +5,10 @@
 
 namespace too
 {
-    void assertion (
-        bool const & expression, std::string const & fileName, int const & line,
-        std::string const & functionName, std::string const & expressionString,
-        std::string const & message )
+    void assertion ( bool const & expression, std::string const & fileName,
+                     int const & line, std::string const & functionName,
+                     std::string const & expressionString,
+                     std::string const & message )
     {
         if ( ! expression )
         {

@@ -1,8 +1,7 @@
 #include "control.hpp"
 
-Control::Control(
-    CollisionList const & collisionList, View const & view,
-    input::S_KeyboardMove movementKey )
+Control::Control( CollisionList const & collisionList, View const & view,
+                  input::S_KeyboardMove movementKey )
   : m_collisionList { collisionList },
     m_view { view },
     m_movementKey { movementKey }

@@ -83,10 +83,10 @@ void Player::init_sprite_number_of_cells()
     sf::Vector2u const textureSize { this->m_texture.getSize() };
 
     // Get the number of sprite that the texture have
-    float const numberOfRow {
-        static_cast< float >( textureSize.x ) / this->m_spritePixelSize.x };
-    float const numberOfLine {
-        static_cast< float >( textureSize.y ) / this->m_spritePixelSize.y };
+    float const numberOfRow { static_cast< float >( textureSize.x )
+                              / this->m_spritePixelSize.x };
+    float const numberOfLine { static_cast< float >( textureSize.y )
+                               / this->m_spritePixelSize.y };
 
     if ( tools::is_integer( numberOfRow ) && tools::is_integer( numberOfLine ) )
     {
@@ -95,9 +95,9 @@ void Player::init_sprite_number_of_cells()
             "sprite does not correspond to the size that the texture have" };
     }
 
-    this->m_spriteNumberOfCells = sf::Vector2u {
-        static_cast< unsigned int >( numberOfRow ),
-        static_cast< unsigned int >( numberOfLine ) };
+    this->m_spriteNumberOfCells =
+        sf::Vector2u { static_cast< unsigned int >( numberOfRow ),
+                       static_cast< unsigned int >( numberOfLine ) };
 }
 
 void Player::set_direction( E_Direction const & direction )
@@ -145,9 +145,8 @@ void Player::update_movement()
         break;
     }
 
-    this->move(
-        this->get_movement() * this->m_speed * speedVariation
-        * this->m_deltaTime );
+    this->move( this->get_movement() * this->m_speed * speedVariation
+                * this->m_deltaTime );
 }
 
 void Player::update_texture_rect()
@@ -243,11 +242,10 @@ unsigned int Player::get_current_sprite_number()
         this->m_timeElapsed = 0.f;
     }
 
-    ASSERTION(
-        ! spriteNumbers.empty(), "No information about what sprite to print" );
-    ASSERTION(
-        this->m_lastSpriteIndex < spriteNumbers.size(),
-        "Issues with sprites numbers" );
+    ASSERTION( ! spriteNumbers.empty(),
+               "No information about what sprite to print" );
+    ASSERTION( this->m_lastSpriteIndex < spriteNumbers.size(),
+               "Issues with sprites numbers" );
 
     return spriteNumbers[this->m_lastSpriteIndex];
 }

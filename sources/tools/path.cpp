@@ -1,5 +1,7 @@
 #include "path.hpp"
 
+#include <iostream>
+
 #include "tools/assertion.hpp"   // for ASSERTION
 #include "tools/exceptions.hpp"  // for FileIssue
 
@@ -22,7 +24,8 @@ namespace path
 
         if ( ! std::filesystem::is_regular_file( fileRelativPath ) )
         {
-            throw exception::FileIssue { fileRelativPath };
+            std::cerr << "The file '" << fileRelativPath << "' does not exist"
+                      << std::endl;
         }
 
         return fileRelativPath;

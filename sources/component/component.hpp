@@ -17,6 +17,7 @@ concept C_IsComponent = std::derived_from< Type, Component >;
 class Component
 {
   private:
+    /// @brief Vector of pointer to child component
     std::vector< Component * > m_childs;
     /// @todo have an optionnal view
     View const *               m_view;

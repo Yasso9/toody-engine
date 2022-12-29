@@ -29,26 +29,23 @@ namespace gl
         };
     }  // namespace
 
-    void draw_elements (
-        unsigned int vertexArrayObject, GLenum primitiveType, GLenum dataType,
-        std::size_t elementsSize )
+    void draw_elements ( unsigned int vertexArrayObject, GLenum primitiveType,
+                         GLenum dataType, std::size_t elementsSize )
     {
         BindVertexArray VAOBinding { vertexArrayObject };
 
-        glDrawElements(
-            primitiveType, static_cast< int >( elementsSize ), dataType, 0 );
+        glDrawElements( primitiveType, static_cast< int >( elementsSize ),
+                        dataType, 0 );
     }
 
-    void draw_arrays (
-        unsigned int vertexArrayObject, GLenum primitiveType,
-        unsigned int arraySize )
+    void draw_arrays ( unsigned int vertexArrayObject, GLenum primitiveType,
+                       unsigned int arraySize )
     {
         BindVertexArray VAOBinding { vertexArrayObject };
 
         int const verticesBeginPosition { 0 };
-        glDrawArrays(
-            primitiveType, verticesBeginPosition,
-            static_cast< int >( arraySize ) );
+        glDrawArrays( primitiveType, verticesBeginPosition,
+                      static_cast< int >( arraySize ) );
     }
 
     void initialize ( unsigned int const & width, unsigned int const & height )
@@ -69,15 +66,14 @@ namespace gl
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
         // Je ne sais pas ce que c'est ?
-        glViewport(
-            0, 0, static_cast< int >( width ), static_cast< int >( height ) );
+        glViewport( 0, 0, static_cast< int >( width ),
+                    static_cast< int >( height ) );
     }
 
     void clear_window ( sf::Color const & backgroundColor )
     {
-        glClearColor(
-            backgroundColor.r, backgroundColor.g, backgroundColor.b,
-            backgroundColor.a );
+        glClearColor( backgroundColor.r, backgroundColor.g, backgroundColor.b,
+                      backgroundColor.a );
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     }
 

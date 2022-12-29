@@ -3,6 +3,10 @@
 # Put @ if we should not show the command, put nothing otherwise
 SHOW := @
 
+# Function to get all files in subdirectories
+define GET_FILES
+	$(shell find $(1) -type f -name '$(2)')
+endef
 
 
 ############################## OS detection ##############################
@@ -25,7 +29,7 @@ endif
 ############################## COMPILER SETUP ##############################
 
 ifeq ($(CC),)
-C_COMMAND := gcc
+C_COMMAND := clang
 else ifeq ($(CC),cc)
 C_COMMAND := gcc
 else
@@ -33,7 +37,7 @@ C_COMMAND := $(CC)
 endif
 
 ifeq ($(CXX),)
-CXX_COMMAND := g++
+CXX_COMMAND := clang++
 else
 CXX_COMMAND := $(CXX)
 endif
@@ -247,9 +251,10 @@ iwyu : clean
 	$(MAKE) format
 
 format:
-	clang-format -i --verbose -style=file:.clang-format \
-	$(wildcard $(FILES_DIRECTORY)/*.cpp) $(wildcard $(FILES_DIRECTORY)/**/*.cpp) \
-	$(wildcard $(FILES_DIRECTORY)/**/*.hpp) $(wildcard $(FILES_DIRECTORY)/**/*.tpp)
+	$(SHOW)clang-format -i --verbose -style=file:.clang-format \
+	$(call GET_FILES,$(FILES_DIRECTORY),*.cpp) \
+	$(call GET_FILES,$(FILES_DIRECTORY),*.hpp) \
+	$(call GET_FILES,$(FILES_DIRECTORY),*.tpp)
 
 cppclean:
 	cppclean --verbose --include-path=sources --include-path=external/includes sources/**
@@ -316,6 +321,7 @@ endif
 	cp -r data $(RELEASE_DIRECTORY)
 
 nothing:
+	$(call GET_FILES,./sources,*.cpp)
 
 
 

@@ -71,8 +71,8 @@ bool Dialogue::next()
     if ( m_textRemaining.size() > CHARACTER_LIMIT )
     {
         currentText     = m_textRemaining.substr( 0, CHARACTER_LIMIT );
-        m_textRemaining = m_textRemaining.substr(
-            CHARACTER_LIMIT + 1, m_textRemaining.size() );
+        m_textRemaining = m_textRemaining.substr( CHARACTER_LIMIT + 1,
+                                                  m_textRemaining.size() );
     }
     else
     {
@@ -173,14 +173,14 @@ void Dialogue::set_current_text( std::string const & text )
 {
     m_text.setString( text );
     // The origin has an offset (value of the left and top local bounds)
-    m_text.setOrigin(
-        m_text.getLocalBounds().left, m_text.getLocalBounds().top );
+    m_text.setOrigin( m_text.getLocalBounds().left,
+                      m_text.getLocalBounds().top );
 
-    sf::Vector2f const textSize {
-        m_text.getLocalBounds().width, m_text.getLocalBounds().height };
+    sf::Vector2f const textSize { m_text.getLocalBounds().width,
+                                  m_text.getLocalBounds().height };
     // The position of the text must be at the middle of the button shape
-    m_text.setPosition(
-        m_shape.getPosition() + ( ( m_shape.getSize() - textSize ) / 2.f ) );
+    m_text.setPosition( m_shape.getPosition()
+                        + ( ( m_shape.getSize() - textSize ) / 2.f ) );
 }
 
 void Dialogue::enable()

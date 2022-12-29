@@ -1,4 +1,4 @@
-#include "tile_selector.hpp"
+#include "selector.hpp"
 
 #include <sstream>  // for operator<<, basic_ostream, stri...
 #include <string>   // for char_traits, allocator, basic_s...
@@ -18,12 +18,14 @@
 #include "tools/global_variable.hpp"  // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZE_U
 
 /// @todo put theses functions on the ImGUI::grid namespace
-static void draw_grid (
-    ImDrawList & drawList, Tileset const & tileset, Color gridColor );
-static void draw_horizontal_lines_grid (
-    ImDrawList & drawList, Tileset const & tileset, Color lineColor );
-static void draw_vertical_lines_grid (
-    ImDrawList & drawList, Tileset const & tileset, Color lineColor );
+static void draw_grid ( ImDrawList & drawList, tile::Set const & tileset,
+                        Color gridColor );
+static void draw_horizontal_lines_grid ( ImDrawList &      drawList,
+                                         tile::Set const & tileset,
+                                         Color             lineColor );
+static void draw_vertical_lines_grid ( ImDrawList &      drawList,
+                                       tile::Set const & tileset,
+                                       Color             lineColor );
 
 namespace tile
 {
@@ -33,7 +35,7 @@ namespace tile
         m_gridColor { Color::RGBA { 118, 118, 118, 255 } }
     {}
 
-    Tileset const & Selector::get_tileset() const
+    tile::Set const & Selector::get_tileset() const
     {
         return m_tileset;
     }
@@ -55,8 +57,8 @@ namespace tile
 
             if ( isGridEnabled )
             {
-                draw_grid(
-                    *ImGui::GetWindowDrawList(), m_tileset, m_gridColor );
+                draw_grid( *ImGui::GetWindowDrawList(), m_tileset,
+                           m_gridColor );
             }
 
             this->update_selection( *ImGui::GetWindowDrawList() );
@@ -68,16 +70,16 @@ namespace tile
         math::Vector2F const mousePosition { input::get_mouse_position() };
 
         /// @brief Check if the mouse is inside the tileset grid
-        bool const isInSelection {
-            ImGui::IsWindowHovered() && m_tileset.contain( mousePosition ) };
+        bool const isInSelection { ImGui::IsWindowHovered()
+                                   && m_tileset.contain( mousePosition ) };
 
         if ( isInSelection )
         {
             // Position of the selection rectangle depending of the
             // tileset position
             tile::Position const selectionPosition {
-                m_tileset.get_tile_position(
-                    mousePosition - m_tileset.get_position() ) };
+                m_tileset.get_tile_position( mousePosition
+                                             - m_tileset.get_position() ) };
 
             // Selection Rectangle
             drawList.AddRectFilled(
@@ -123,20 +125,20 @@ namespace tile
     }
 }  // namespace tile
 
-static void draw_grid (
-    ImDrawList & drawList, Tileset const & tileset, Color gridColor )
+static void draw_grid ( ImDrawList & drawList, tile::Set const & tileset,
+                        Color gridColor )
 {
     // Tilemap Border
-    drawList.AddRect(
-        tileset.get_position(), tileset.get_end_position(),
-        gridColor.to_integer() );
+    drawList.AddRect( tileset.get_position(), tileset.get_end_position(),
+                      gridColor.to_integer() );
 
     draw_horizontal_lines_grid( drawList, tileset, gridColor );
     draw_vertical_lines_grid( drawList, tileset, gridColor );
 }
 
-static void draw_horizontal_lines_grid (
-    ImDrawList & drawList, Tileset const & tileset, Color lineColor )
+static void draw_horizontal_lines_grid ( ImDrawList &      drawList,
+                                         tile::Set const & tileset,
+                                         Color             lineColor )
 {
     for ( unsigned int x = 0u; x < tileset.get_size().pixel().x;
           x += TILE_PIXEL_SIZE_U )
@@ -152,8 +154,9 @@ static void draw_horizontal_lines_grid (
     }
 }
 
-static void draw_vertical_lines_grid (
-    ImDrawList & drawList, Tileset const & tileset, Color lineColor )
+static void draw_vertical_lines_grid ( ImDrawList &      drawList,
+                                       tile::Set const & tileset,
+                                       Color             lineColor )
 {
     for ( unsigned int y = 0u; y < tileset.get_size().pixel().y;
           y += TILE_PIXEL_SIZE_U )

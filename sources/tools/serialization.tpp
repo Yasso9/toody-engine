@@ -1,45 +1,9 @@
 #pragma once
 
 #include "serialization.hpp"
+
 #include "tools/assertion.hpp"
-#include "tools/print.hpp"
-
-template< typename Type >
-std::ostream & operator<< (
-    std::ostream & stream, std::vector< Type > const & array )
-{
-    stream << '[';
-    stream << ' ';
-    for ( Type const & element : array )
-    {
-        stream << element;
-        stream << ' ';
-    }
-    stream << ']';
-
-    return stream;
-}
-
-template< typename Type >
-std::istream & operator>> ( std::istream & stream, std::vector< Type > & array )
-{
-    array = std::vector< Type > {};
-
-    verify_next( stream, '[' );
-    verify_next( stream, ' ' );
-    while ( ! stream.fail() && stream.peek() != ']' && stream.peek() != EOF )
-    {
-        Type element;
-        stream >> element;
-
-        array.push_back( element );
-
-        verify_next( stream, ' ' );
-    }
-    verify_next( stream, ']' );
-
-    return stream;
-}
+#include "tools/stream/stream.hpp"
 
 template< typename Type >
 Chunk serialize ( Type const & valueToSerialize )
@@ -64,7 +28,8 @@ static Type unstream ( std::stringstream & stream )
 }
 
 template< typename Type >
-static Type unstream ( std::stringstream & stream ) requires( C_String< Type > )
+static Type unstream ( std::stringstream & stream )
+    requires ( C_String< Type > )
 {
     return stream.str();
 }
@@ -77,9 +42,8 @@ Type Chunk::to_value() const
 
     Type value { unstream< Type >( stream ) };
 
-    ASSERTION(
-        serialize( value ).to_string() == this->to_string(),
-        "Unserialized value must be equal to the serialised value "
-        "unserialised" );
+    ASSERTION( serialize( value ).to_string() == this->to_string(),
+               "Unserialized value must be equal to the serialised value "
+               "unserialised" );
     return value;
 }

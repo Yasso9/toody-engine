@@ -22,9 +22,8 @@ int Shaders::get_uniform_location( std::string const & variableName ) const
     return glGetUniformLocation( this->m_id, variableName.c_str() );
 }
 
-void Shaders::load(
-    std::string const & vertexShaderPath,
-    std::string const & fragmentShaderPath )
+void Shaders::load( std::string const & vertexShaderPath,
+                    std::string const & fragmentShaderPath )
 {
     unsigned int const vertexShader {
         this->compile( GL_VERTEX_SHADER, vertexShaderPath ) };
@@ -40,8 +39,8 @@ void Shaders::use() const
 }
 
 // check for shader compile errors
-bool Shaders::check_error(
-    unsigned int const & shaderValue, unsigned int const & type )
+bool Shaders::check_error( unsigned int const & shaderValue,
+                           unsigned int const & type )
 {
     int success;
     glGetProgramiv( shaderValue, type, &success );
@@ -55,8 +54,8 @@ bool Shaders::check_error(
     return success;
 }
 
-unsigned int Shaders::compile(
-    unsigned int const & shaderType, std::string const & fileName )
+unsigned int Shaders::compile( unsigned int const & shaderType,
+                               std::string const &  fileName )
 {
     unsigned int shader { glCreateShader( shaderType ) };
 
@@ -71,8 +70,8 @@ unsigned int Shaders::compile(
     return shader;
 }
 
-unsigned int Shaders::link(
-    unsigned int const & vertexShader, unsigned int const & fragmentShader )
+unsigned int Shaders::link( unsigned int const & vertexShader,
+                            unsigned int const & fragmentShader )
 {
     unsigned int const shaderProgram { glCreateProgram() };
     glAttachShader( shaderProgram, vertexShader );

@@ -2,9 +2,8 @@
 
 namespace exception
 {
-    Database::Database(
-        std::string const & databasePath,
-        std::string const & errorMessage /* = ""s */ )
+    Database::Database( std::string const & databasePath,
+                        std::string const & errorMessage /* = ""s */ )
       : m_databasePath( databasePath ), m_errorMessage( errorMessage )
     {}
 
@@ -25,8 +24,8 @@ namespace exception
     char const * FileNotFound::what() const noexcept
     {
         // Static is used to not return the adress of a local variable
-        static std::string const errorInfo {
-            "\nFile not found : "s + this->m_fileName + "\n\n"s };
+        static std::string const errorInfo { "\nFile not found : "s
+                                             + this->m_fileName + "\n\n"s };
 
         return errorInfo.c_str();
     }

@@ -5,9 +5,8 @@
 
 namespace math
 {
-    Matrix2::Matrix2(
-        Vector2< float > const & vectorLine1,
-        Vector2< float > const & vectorLine2 )
+    Matrix2::Matrix2( Vector2< float > const & vectorLine1,
+                      Vector2< float > const & vectorLine2 )
       : m_vectorArray( { vectorLine1, vectorLine2 } )
     {}
 

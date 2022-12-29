@@ -31,8 +31,8 @@ class ButtonArray final : public Transformable2D
     void set_strings ( std::vector< std::string > const & buttonStrings );
     void set_direction ( ButtonArray::E_Direction const & buttonsDirection );
 
-    int update_button_array (
-        sf::Vector2f const & position, bool const & click );
+    int update_button_array ( sf::Vector2f const & position,
+                              bool const &         click );
 
   private:
     void render_before ( Render & render ) const override;

@@ -14,24 +14,6 @@ std::string Chunk::to_string() const
     return m_serializedValue;
 }
 
-bool verify_next ( std::istream & stream, char const & character )
-{
-    if ( stream.peek() != character )
-    {
-        std::stringstream streamError {};
-        streamError << "We should have the character : '" << character
-                    << "' and not '" << stream.peek() << "'\n";
-        throw std::runtime_error { streamError.str() };
-
-        return false;
-    }
-
-    // Advence of one character
-    stream.seekg( 1 + stream.tellg() );
-
-    return true;
-}
-
 void test_serializer ()
 {
     std::vector< int > arrayA { 714545, 4524, 9, 10002 };

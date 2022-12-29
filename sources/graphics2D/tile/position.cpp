@@ -1,23 +1,16 @@
-#include "tile_position.hpp"
+#include "position.hpp"
 
 #include <cstdlib>  // for div, (anonymous), div_t
 #include <memory>   // for allocator
+#include <sstream>
 
-#include "maths/vector2.tpp"          // for Vector2::operator=, floor, oper...
-#include "tools/assertion.hpp"        // for ASSERTION
-#include "tools/global_variable.hpp"  // for TILE_PIXEL_SIZE_VECTOR
+#include "graphics2D/tile/tools.hpp"
+#include "maths/geometry/point.hpp"
+#include "maths/vector2.tpp"    // for Vector2::operator=, floor, oper...
+#include "tools/assertion.hpp"  // for ASSERTION
 
 namespace tile
 {
-    static math::Vector2U pixel_to_tile_position (
-        math::Vector2U pixel_position );
-    static math::Vector2U tile_to_pixel_position (
-        math::Vector2U tile_position );
-
-    /* ********************************************************************
-     ***************************** POSITION *******************************
-     ******************************************************************* */
-
     Position::Position( unsigned int value, unsigned int numberOfColumns )
       : m_position {}, m_numberOfColumns { numberOfColumns }
     {
@@ -28,8 +21,8 @@ namespace tile
       : Position { value, mapSize.tile().x }
     {}
 
-    Position::Position(
-        math::Vector2U position, unsigned int numberOfColumns, Type type )
+    Position::Position( math::Vector2U position, unsigned int numberOfColumns,
+                        Type type )
       : m_position {}, m_numberOfColumns { numberOfColumns }
     {
         this->set_value( position, type );
@@ -54,13 +47,18 @@ namespace tile
         return tile_to_pixel_position( this->tile() );
     }
 
+    unsigned int Position::get_number_of_columns() const
+    {
+        return m_numberOfColumns;
+    }
+
     void Position::set_value( unsigned int value )
     {
         // Cast the tile value to a vector position
         m_position.x = value % m_numberOfColumns;
-        m_position.y = static_cast< unsigned int >( math::whole_part(
-            static_cast< float >( value )
-            / static_cast< float >( m_numberOfColumns ) ) );
+        m_position.y = static_cast< unsigned int >(
+            math::whole_part( static_cast< float >( value )
+                              / static_cast< float >( m_numberOfColumns ) ) );
 
         /// @remark We don't know if value is too big for the grid
     }
@@ -81,6 +79,11 @@ namespace tile
                          "the number of column"
                       << std::endl;
         }
+    }
+
+    bool Position::is_inside( tile::Size size ) const
+    {
+        return this->tile().to_point().is_inside( { 0u, 0u }, size.tile() );
     }
 
     bool Position::operator<( tile::Size size ) const
@@ -121,57 +124,5 @@ namespace tile
         stream << name << "tile position : " << this->tile() << "\n";
         stream << name << "tile value : " << this->value() << "\n";
         return stream.str().c_str();
-    }
-
-    /* ********************************************************************
-     ******************************* SIZE *********************************
-     ******************************************************************* */
-
-    Size::Size( math::Vector2U size, Type type ) : m_size {}
-    {
-        this->set_value( size, type );
-    }
-
-    unsigned int Size::value() const
-    {
-        return m_size.x * m_size.x + m_size.y;
-    }
-
-    math::Vector2U Size::tile() const
-    {
-        return m_size;
-    }
-
-    math::Vector2U Size::pixel() const
-    {
-        return tile_to_pixel_position( this->tile() );
-    }
-
-    void Size::set_value( math::Vector2U position, Type type )
-    {
-        m_size = position;
-
-        if ( type == Type::Pixel )
-        {
-            m_size = pixel_to_tile_position( position );
-        }
-    }
-
-    /* ********************************************************************
-     ***************************** STATICS ********************************
-     ******************************************************************* */
-
-    [[maybe_unused]] static math::Vector2U pixel_to_tile_position (
-        math::Vector2U pixel_position )
-    {
-        return math::whole_part(
-                   pixel_position.to_float() / TILE_PIXEL_SIZE_VECTOR )
-            .to_u_int();
-    }
-
-    [[maybe_unused]] static math::Vector2U tile_to_pixel_position (
-        math::Vector2U tile_position )
-    {
-        return tile_position * TILE_PIXEL_SIZE_VECTOR;
     }
 }  // namespace tile

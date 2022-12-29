@@ -23,13 +23,12 @@ namespace math
 
     template< C_Primitive Type >
     template< C_Primitive OtherType >
-        requires( not std::is_same_v< Type, OtherType > )
+    requires ( not std::is_same_v< Type, OtherType > )
 
     Point< Type >::operator Point< OtherType > () const
     {
-        return {
-            static_cast< OtherType >( this->x ),
-            static_cast< OtherType >( this->y ) };
+        return { static_cast< OtherType >( this->x ),
+                 static_cast< OtherType >( this->y ) };
     }
 
     template< C_Primitive Type >
@@ -40,28 +39,28 @@ namespace math
 
     template< C_Primitive Type >
     Point< float > Point< Type >::to_float() const
-        requires( not std::is_same_v< Type, float > )
+        requires ( not std::is_same_v< Type, float > )
     {
         return static_cast< Point< float > >( *this );
     }
 
     template< C_Primitive Type >
     Point< unsigned int > Point< Type >::to_u_int() const
-        requires( not std::is_same_v< Type, unsigned int > )
+        requires ( not std::is_same_v< Type, unsigned int > )
     {
         return static_cast< Point< unsigned int > >( *this );
     }
 
     template< C_Primitive Type >
     Point< int > Point< Type >::to_int() const
-        requires( not std::is_same_v< Type, int > )
+        requires ( not std::is_same_v< Type, int > )
     {
         return static_cast< Point< int > >( *this );
     }
 
     template< C_Primitive Type >
     Point< std::size_t > Point< Type >::to_size_t() const
-        requires( not std::is_same_v< Type, std::size_t > )
+        requires ( not std::is_same_v< Type, std::size_t > )
     {
         return static_cast< Point< std::size_t > >( *this );
     }
@@ -76,12 +75,11 @@ namespace math
     }
 
     template< C_Primitive Type >
-    bool Point< Type >::is_inside(
-        Point< Type > position, Vector2< Type > size ) const
+    bool Point< Type >::is_inside( Point< Type >   position,
+                                   Vector2< Type > size ) const
     {
-        return (
-            this->x >= position.x && this->x < position.x + size.x
-            && this->y >= position.y && this->y < position.y + size.y );
+        return ( this->x >= position.x && this->x < position.x + size.x
+                 && this->y >= position.y && this->y < position.y + size.y );
     }
 
     template< C_Primitive Type >
@@ -117,8 +115,8 @@ namespace math
     ************************************************************************ */
 
     template< C_Primitive Type >
-    E_Orientation get_orientation (
-        Point< Type > pointA, Point< Type > pointB, Point< Type > pointC )
+    E_Orientation get_orientation ( Point< Type > pointA, Point< Type > pointB,
+                                    Point< Type > pointC )
     {
         float value = ( ( pointB.y - pointA.y ) * ( pointC.x - pointB.x ) )
                       - ( ( pointB.x - pointA.x ) * ( pointC.y - pointB.y ) );
@@ -141,8 +139,8 @@ namespace math
     }
 
     template< C_Primitive Type >
-    bool are_collinear (
-        Point< Type > pointA, Point< Type > pointB, Point< Type > pointC )
+    bool are_collinear ( Point< Type > pointA, Point< Type > pointB,
+                         Point< Type > pointC )
     {
         return E_Orientation::Collinear
                == get_orientation( pointA, pointB, pointC );

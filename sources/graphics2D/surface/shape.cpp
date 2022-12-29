@@ -50,9 +50,8 @@ void Shape2D::custom_draw( Render & render ) const
 {
     // auto renderStates = render.get_state();
     // renderStates.transform *= this->getTransform();
-    render.get_target().draw(
-        *dynamic_cast< sf::Shape const * >( this ),
-        render.get_render_states() );
+    render.get_target().draw( *dynamic_cast< sf::Shape const * >( this ),
+                              render.get_render_states() );
 }
 
 std::size_t Shape2D::getPointCount() const

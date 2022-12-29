@@ -15,5 +15,6 @@ class Transformable2D : public Component,
     virtual void render_all ( Render & render ) const override;
 
   protected:
+    /// @todo se demander si on ne supprimer pas cette fonction
     void set_next_transformation ( sf::Transform transformation );
 };

@@ -21,8 +21,8 @@ namespace math
 
     math::Vector2F whole_part ( math::Vector2F vector )
     {
-        return math::Vector2F {
-            whole_part( vector.x ), whole_part( vector.y ) };
+        return math::Vector2F { whole_part( vector.x ),
+                                whole_part( vector.y ) };
     }
 
     bool is_whole_number ( float number )

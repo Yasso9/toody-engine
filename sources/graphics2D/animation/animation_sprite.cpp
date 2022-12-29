@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-AnimationSprite::AnimationSprite(
-    T_StateMap animations, std::string state, E_Direction direction )
+AnimationSprite::AnimationSprite( T_StateMap animations, std::string state,
+                                  E_Direction direction )
   : m_animations { animations },
     m_isRunning { false },
     m_state { state },
@@ -99,8 +99,8 @@ void AnimationSprite::set_state( std::string state )
     this->reset_animation();
 }
 
-void AnimationSprite::add_state(
-    std::string state, T_DirectionMap directionAnimation )
+void AnimationSprite::add_state( std::string    state,
+                                 T_DirectionMap directionAnimation )
 {
     m_animations.insert( { state, directionAnimation } );
 }

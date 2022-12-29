@@ -82,12 +82,11 @@ math::PolygonF CharacterEntity::get_polygon() const
 
 math::Vector2F CharacterEntity::get_movement( float deltaTime ) const
 {
-    math::Vector2F const moveSpeed {
-        ( math::Vector2F { m_speed, m_speed }
-          / m_control.get_view().get_zoom() ) };
+    math::Vector2F const moveSpeed { ( math::Vector2F { m_speed, m_speed }
+                                       / m_control.get_view().get_zoom() ) };
 
-    math::Vector2F const movementValue {
-        m_control.get_input_movement() * moveSpeed * deltaTime };
+    math::Vector2F const movementValue { m_control.get_input_movement()
+                                         * moveSpeed * deltaTime };
 
     return movementValue.get_norm();
 }

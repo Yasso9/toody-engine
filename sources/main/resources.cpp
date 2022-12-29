@@ -93,9 +93,8 @@ namespace resources
         }
     };
 
-    sf::Shader & get_shader (
-        std::string const & vertexShaderFile,
-        std::string const & fragmentShaderFile )
+    sf::Shader & get_shader ( std::string const & vertexShaderFile,
+                              std::string const & fragmentShaderFile )
     {
         static std::map< S_ShaderFiles, std::unique_ptr< sf::Shader > >
             shaders {};
@@ -107,25 +106,24 @@ namespace resources
         {
             /// @todo mettre une excption plus valable (spécialisé pour les
             /// shaders)
-            throw exception::FileLoadingIssue {
-                shaderFiles.vertexPath, "Shaders" };
+            throw exception::FileLoadingIssue { shaderFiles.vertexPath,
+                                                "Shaders" };
         }
         if ( ! is_file_suitable( shaderFiles.fragmentPath, { ".frag" } ) )
         {
-            throw exception::FileLoadingIssue {
-                shaderFiles.fragmentPath, "Shaders" };
+            throw exception::FileLoadingIssue { shaderFiles.fragmentPath,
+                                                "Shaders" };
         }
 
         if ( ! shaders.contains( shaderFiles ) )
         {  // The texture is new, we load it
             std::unique_ptr< sf::Shader > shader {
                 std::make_unique< sf::Shader >() };
-            if ( ! shader->loadFromFile(
-                     shaderFiles.vertexPath.string(),
-                     shaderFiles.fragmentPath.string() ) )
+            if ( ! shader->loadFromFile( shaderFiles.vertexPath.string(),
+                                         shaderFiles.fragmentPath.string() ) )
             {
-                throw exception::FileLoadingIssue {
-                    shaderFiles.vertexPath, "Font" };
+                throw exception::FileLoadingIssue { shaderFiles.vertexPath,
+                                                    "Font" };
             }
 
             shaders.insert( { shaderFiles, std::move( shader ) } );
@@ -139,9 +137,9 @@ namespace resources
     {
         // The path should exist and the extension must tell us that is an image
         return std::filesystem::exists( path )
-               && std::find(
-                      imageExtensionHandled.begin(),
-                      imageExtensionHandled.end(), path.extension().string() )
+               && std::find( imageExtensionHandled.begin(),
+                             imageExtensionHandled.end(),
+                             path.extension().string() )
                       != imageExtensionHandled.end();
     }
 }  // namespace resources

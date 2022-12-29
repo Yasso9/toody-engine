@@ -39,14 +39,12 @@ struct S_Vertex
 class Mesh
 {
   public:
-    Mesh(
-        std::vector< S_Vertex > const &     vertices,
-        std::vector< unsigned int > const & indices,
-        std::vector< std::string > const &  textures );
+    Mesh( std::vector< S_Vertex > const &     vertices,
+          std::vector< unsigned int > const & indices,
+          std::vector< std::string > const &  textures );
 
-    void update (
-        sf::Shader &                             shader,
-        std::map< std::string, Texture > const & textureLoaded );
+    void update ( sf::Shader &                             shader,
+                  std::map< std::string, Texture > const & textureLoaded );
 
     void draw () const;
 

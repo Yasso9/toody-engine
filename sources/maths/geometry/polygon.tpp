@@ -1,7 +1,10 @@
 #pragma once
+
 #include "polygon.hpp"
 
 #include <sstream>
+
+#include "tools/stream/stream.hpp"
 
 namespace math
 {
@@ -55,11 +58,11 @@ namespace math
     template< C_Primitive Type >
     std::string Polygon< Type >::print() const
     {
-        std::stringstream stream {};
+        std::ostringstream stream {};
 
         stream << this->get_number_of_points() << " points ["
                << "\n";
-        for ( auto point : m_points )
+        for ( math::Point< Type > point : m_points )
         {
             stream << "\t" << point << ",\n";
         }
@@ -78,8 +81,8 @@ namespace math
         for ( unsigned int i_point = 0u; i_point < this->get_number_of_points();
               ++i_point )
         {
-            unsigned int i_pointNext {
-                ( i_point + 1 ) % this->get_number_of_points() };
+            unsigned int i_pointNext { ( i_point + 1 )
+                                       % this->get_number_of_points() };
             segments[i_point] = math::Segment< Type > {
                 ( *this )[i_point], ( *this )[i_pointNext] };
         }
@@ -113,19 +116,22 @@ namespace math
     }
 
     template< C_Primitive Type >
-    void Polygon< Type >::print_to_stream( std::ostream & stream ) const
+    std::ostream & operator<< ( std::ostream &          stream,
+                                Polygon< Type > const & polygon )
     {
         stream << "{ ";
-        for ( Point< Type > point : m_points )
+        for ( Point< Type > point : polygon.get_points() )
         {
             stream << point << "; ";
         }
         stream << "}";
+
+        return stream;
     }
 
     template< C_Primitive Type >
-    bool is_intersection (
-        Polygon< Type > polygonLeft, Polygon< Type > polygonRight )
+    bool is_intersection ( Polygon< Type > polygonLeft,
+                           Polygon< Type > polygonRight )
     {
         for ( Point< Type > pointPolygonLeft : polygonLeft.get_points() )
         {

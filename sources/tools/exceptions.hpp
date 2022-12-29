@@ -33,9 +33,8 @@ namespace exception
         std::string const           m_message;
 
       public:
-        FileIssue(
-            std::filesystem::path const & filePath,
-            std::string const &           message = "" )
+        FileIssue( std::filesystem::path const & filePath,
+                   std::string const &           message = "" )
           : m_filePath( filePath ), m_message( message )
         {}
 
@@ -59,9 +58,9 @@ namespace exception
         std::string const m_fileType;
 
       public:
-        FileLoadingIssue(
-            std::filesystem::path const & filePath,
-            std::string const & fileType, std::string const & message = "" )
+        FileLoadingIssue( std::filesystem::path const & filePath,
+                          std::string const &           fileType,
+                          std::string const &           message = "" )
           : FileIssue( filePath, message ), m_fileType( fileType )
         {}
 
@@ -96,9 +95,8 @@ namespace exception
     class Database final : public std::exception
     {
       public:
-        Database(
-            std::string const & databasePath,
-            std::string const & errorMessage = ""s );
+        Database( std::string const & databasePath,
+                  std::string const & errorMessage = ""s );
         virtual ~Database() = default;
 
         virtual char const * what () const noexcept override;

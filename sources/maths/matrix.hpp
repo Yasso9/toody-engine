@@ -1,9 +1,9 @@
 #pragma once
 
+#include "vector2.hpp"  // for Vector2
+
 #include <array>    // for array
 #include <cstddef>  // for size_t
-
-#include "vector2.hpp"  // for Vector2
 
 namespace math
 {
@@ -12,9 +12,8 @@ namespace math
         std::array< Vector2< float >, 2 > m_vectorArray;
 
       public:
-        Matrix2(
-            Vector2< float > const & vectorLine1,
-            Vector2< float > const & vectorLine2 );
+        Matrix2( Vector2< float > const & vectorLine1,
+                 Vector2< float > const & vectorLine2 );
         virtual ~Matrix2() = default;
 
         Vector2< float > operator[] ( std::size_t index ) const;

@@ -9,7 +9,7 @@
 #include "graphics2D/entity/controllable_entity.hpp"  // for MoveableEntity2D
 #include "graphics2D/entity/player.hpp"               // for Player
 #include "graphics2D/image_map.hpp"                   // for ImageMap
-#include "graphics2D/tile_management/tilemap.hpp"     // for TileMap
+#include "graphics2D/tile/map.hpp"                    // for TileMap
 #include "states/state.hpp"                           // for State
 
 class EditorState final : public State
@@ -19,13 +19,13 @@ class EditorState final : public State
 
     std::map< std::string, bool > m_showWindow;
 
-    TileMap  m_tilemap;
-    ImageMap m_imageMap;
+    tile::Map m_tilemap;
+    ImageMap  m_imageMap;
 
-    CollisionList        m_collisionList;
-    ControllableEntity2D m_greenEntity;
+    CollisionList   m_collisionList;
+    // ControllableEntity2D m_greenEntity;
     // Player               m_player;
-    CharacterEntity      m_character;
+    CharacterEntity m_character;
 
     Dialogue m_dialogue;
 
@@ -36,9 +36,4 @@ class EditorState final : public State
 
   private:
     void reset_view ();
-    void update_view ( float deltaTime );
-
-    void update_toolbar ();
-    void update_collision_window ();
-    void update_overlay ( float deltaTime );
 };

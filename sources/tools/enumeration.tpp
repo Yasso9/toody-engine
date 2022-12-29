@@ -58,8 +58,8 @@ Type Enum< Type >::get_value() const
 }
 
 template< EnumType Type >
-std::ostream & operator<< (
-    std::ostream & output, Enum< Type > const & enumValue )
+std::ostream & operator<< ( std::ostream &       output,
+                            Enum< Type > const & enumValue )
 {
     output << static_cast< int >( enumValue.get_value() );
     return output;

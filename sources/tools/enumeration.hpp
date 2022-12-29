@@ -2,8 +2,7 @@
 
 #include <ostream>
 
-template< typename E >
-concept EnumType = std::is_enum_v< E >;
+template< typename E > concept EnumType = std::is_enum_v< E >;
 
 /// @brief When needed to do operation on enum
 template< EnumType Type >
@@ -32,7 +31,7 @@ class Enum
 };
 
 template< EnumType Type >
-std::ostream & operator<< (
-    std::ostream & output, Enum< Type > const & enumValue );
+std::ostream & operator<< ( std::ostream &       output,
+                            Enum< Type > const & enumValue );
 
 #include "tools/enumeration.tpp"

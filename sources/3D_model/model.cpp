@@ -25,8 +25,8 @@ static glm::vec3 to_vector3 ( aiVector3D const & assimpVector3D );
 static glm::vec2 to_vector2 ( aiVector3D const & assimpVector3D );
 
 Model::Model( std::string const & filePathModel, Camera const & camera )
-  : Transformable(
-      camera, resources::get_shader( "shader.vert"s, "shader.frag"s ) ),
+  : Transformable( camera,
+                   resources::get_shader( "shader.vert"s, "shader.frag"s ) ),
     m_texturesLoaded(),
     m_meshes(),
     m_filePath( path::get_folder( path::E_Folder::Resources ) / filePathModel )
@@ -66,8 +66,8 @@ void Model::load_model()
     if ( ! scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE
          || ! scene->mRootNode )
     {
-        throw exception::FileLoadingIssue {
-            m_filePath, "Assimp", importer.GetErrorString() };
+        throw exception::FileLoadingIssue { m_filePath, "Assimp",
+                                            importer.GetErrorString() };
     }
 
     // process ASSIMP's root node recursively
@@ -132,7 +132,7 @@ std::vector< std::string > Model::load_material_textures(
 {
     std::vector< std::string > textures {};
     std::string const          directory { this->m_filePath.string().substr(
-                 0, this->m_filePath.string().find_last_of( '/' ) + 1 ) };
+        0, this->m_filePath.string().find_last_of( '/' ) + 1 ) };
 
     for ( unsigned int i_textureToLoad { 0u };
           i_textureToLoad
@@ -141,9 +141,8 @@ std::vector< std::string > Model::load_material_textures(
     {
         // Getting the texture name
         aiString textureFileName;
-        material.GetTexture(
-            Texture::to_assimp_type( textureType ), i_textureToLoad,
-            &textureFileName );
+        material.GetTexture( Texture::to_assimp_type( textureType ),
+                             i_textureToLoad, &textureFileName );
         // std::cout << "Loading texture : "s << textureFileName.C_Str()
         //           << std::endl;
         std::string const texturePath { directory + textureFileName.C_Str() };

@@ -104,8 +104,8 @@ void ButtonArray::set_direction(
     this->set_strings( this->m_strings );
 }
 
-int ButtonArray::update_button_array(
-    sf::Vector2f const & position, bool const & click )
+int ButtonArray::update_button_array( sf::Vector2f const & position,
+                                      bool const &         click )
 {
     for ( std::size_t i_buttonNummber { 0 };
           i_buttonNummber < this->m_buttons.size(); ++i_buttonNummber )

@@ -16,7 +16,7 @@ class Sprite : public sf::Sprite,
 
     void render ( Render & render ) const override;
 
-    math::PointF get_position () const;
+    math::PointF   get_position () const;
     math::Vector2F get_size () const;
     math::PolygonF get_polygon () const;
 

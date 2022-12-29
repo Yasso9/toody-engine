@@ -21,12 +21,10 @@ namespace gl
         glm::mat4 model { 1.f };
     };
 
-    void draw_elements (
-        unsigned int vertexArrayObject, GLenum primitiveType, GLenum dataType,
-        std::size_t elementsSize );
-    void draw_arrays (
-        unsigned int vertexArrayObject, GLenum primitiveType,
-        unsigned int arraySize );
+    void draw_elements ( unsigned int vertexArrayObject, GLenum primitiveType,
+                         GLenum dataType, std::size_t elementsSize );
+    void draw_arrays ( unsigned int vertexArrayObject, GLenum primitiveType,
+                       unsigned int arraySize );
 
     /// @brief Initialize the OpenGL context and functions
     void initialize ( unsigned int const & width, unsigned int const & height );

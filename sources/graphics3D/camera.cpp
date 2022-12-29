@@ -67,15 +67,14 @@ glm::mat4 Camera::get_projection() const
     float const nearDistanceFromCamera { 0.1f };
     float const farDistanceFromCamera { 100.f };
 
-    return glm::perspective(
-        fieldOfView, screenRatio, nearDistanceFromCamera,
-        farDistanceFromCamera );
+    return glm::perspective( fieldOfView, screenRatio, nearDistanceFromCamera,
+                             farDistanceFromCamera );
 }
 
 glm::mat4 Camera::get_view() const
 {
-    return glm::lookAt(
-        m_position.to_glm(), this->get_target().to_glm(), { 0.f, 1.f, 0.f } );
+    return glm::lookAt( m_position.to_glm(), this->get_target().to_glm(),
+                        { 0.f, 1.f, 0.f } );
 }
 
 void Camera::set_direction( math::Vector3F direction )
@@ -124,16 +123,15 @@ void Camera::rotate( math::Vector3F angle )
 {
     angle *= m_movementSpeed;
 
-    glm::mat3 const zMatrixRotation {
-        math::cosinus_degree( angle.z ),
-        -math::sinus_degree( angle.z ),
-        0.f,
-        math::sinus_degree( angle.z ),
-        math::cosinus_degree( angle.z ),
-        0.f,
-        0.f,
-        0.f,
-        1.f };
+    glm::mat3 const zMatrixRotation { math::cosinus_degree( angle.z ),
+                                      -math::sinus_degree( angle.z ),
+                                      0.f,
+                                      math::sinus_degree( angle.z ),
+                                      math::cosinus_degree( angle.z ),
+                                      0.f,
+                                      0.f,
+                                      0.f,
+                                      1.f };
 
     glm::mat3 const yMatrixRotation {
         math::cosinus_degree( angle.y ),

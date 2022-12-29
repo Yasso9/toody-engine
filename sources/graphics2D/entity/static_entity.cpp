@@ -19,8 +19,8 @@
 
 namespace customisation
 {
-    static void circle_shape (
-        std::string windowName, int shapeID, sf::CircleShape & circleShape )
+    static void circle_shape ( std::string windowName, int shapeID,
+                               sf::CircleShape & circleShape )
     {
         if ( ImGui::Begin( windowName.c_str() ) )
         {
@@ -113,6 +113,6 @@ void StaticEntity2D::set_customisation( bool isCustomisable )
 bool StaticEntity2D::is_intersected_by(
     StaticEntity2D const & otherEntity ) const
 {
-    return math::is_intersection(
-        this->get_polygon(), otherEntity.get_polygon() );
+    return math::is_intersection( this->get_polygon(),
+                                  otherEntity.get_polygon() );
 }

@@ -22,8 +22,8 @@ class AnimationSprite : public Component
     float        m_elapsedTime;
 
   public:
-    AnimationSprite(
-        T_StateMap animations, std::string state, E_Direction direction );
+    AnimationSprite( T_StateMap animations, std::string state,
+                     E_Direction direction );
 
   private:
     void update ( float deltaTime ) override;

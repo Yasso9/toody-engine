@@ -7,12 +7,11 @@
 #include "maths/geometry/point.hpp"
 #include "maths/geometry/rectangle.hpp"
 #include "tools/concepts.hpp"
-#include "tools/printable.hpp"
 
 namespace math
 {
     template< C_Primitive Type >
-    class Polygon : public Printable
+    class Polygon
     {
         std::vector< Point< Type > > m_points;
 
@@ -47,17 +46,19 @@ namespace math
         std::vector< Point< Type > > & get_points ();
 
         Polygon< Type > operator+ ( math::Vector2< Type > vector );
-
-        void print_to_stream ( std::ostream & stream ) const override;
     };
+
+    template< C_Primitive Type >
+    std::ostream & operator<< ( std::ostream &          stream,
+                                Polygon< Type > const & polygon );
 
     using PolygonF = Polygon< float >;
     using PolygonI = Polygon< int >;
     using PolygonU = Polygon< unsigned int >;
 
     template< C_Primitive Type >
-    bool is_intersection (
-        Polygon< Type > polygonLeft, Polygon< Type > polygonRight );
+    bool is_intersection ( Polygon< Type > polygonLeft,
+                           Polygon< Type > polygonRight );
 
 }  // namespace math
 

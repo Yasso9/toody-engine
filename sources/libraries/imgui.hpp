@@ -15,22 +15,19 @@
 namespace ImGui
 {
     void P_Show ( std::string name, std::function< void() > const & lambda );
-    void P_Show (
-        std::string name, bool * isWindowOpen,
-        std::function< void() > const & lambda );
-    void P_Show (
-        std::string name, bool * isWindowOpen, ImGuiWindowFlags flags,
-        std::function< void() > const & lambda );
+    void P_Show ( std::string name, bool * isWindowOpen,
+                  std::function< void() > const & lambda );
+    void P_Show ( std::string name, bool * isWindowOpen, ImGuiWindowFlags flags,
+                  std::function< void() > const & lambda );
 
     /// @brief bindings for sfml colors
-    bool P_ColorEditor (
-        std::string const & label, sf::Color & color,
-        ImGuiColorEditFlags flags = 0 );
+    bool P_ColorEditor ( std::string const & label, sf::Color & color,
+                         ImGuiColorEditFlags flags = 0 );
 
     /// @brief unsigned int
-    bool P_InputNumber (
-        std::string const & label, unsigned int & value, int step = 1,
-        int step_fast = 100, ImGuiInputTextFlags flags = 0 );
+    bool P_InputNumber ( std::string const & label, unsigned int & value,
+                         int step = 1, int step_fast = 100,
+                         ImGuiInputTextFlags flags = 0 );
 
     bool P_InputVector3F (
         std::string const & label, math::Vector3F & vector,

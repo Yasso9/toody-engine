@@ -34,14 +34,14 @@ namespace sfpp
     }
 }  // namespace sfpp
 
-sf::Vector2f operator/ (
-    sf::Vector2f const & vectorA, sf::Vector2f const & vectorB )
+sf::Vector2f operator/ ( sf::Vector2f const & vectorA,
+                         sf::Vector2f const & vectorB )
 {
     return sf::Vector2f { vectorA.x / vectorB.x, vectorA.y / vectorB.y };
 }
 
-sf::Vector2f operator* (
-    sf::Vector2f const & vectorA, sf::Vector2f const & vectorB )
+sf::Vector2f operator* ( sf::Vector2f const & vectorA,
+                         sf::Vector2f const & vectorB )
 {
     return sf::Vector2f { vectorA.x * vectorB.x, vectorA.y * vectorB.y };
 }
@@ -50,14 +50,14 @@ sf::Vector2f operator% ( sf::Vector2f const & vector, int const & modulo )
 {
     sf::Vector2i const integerVector { static_cast< sf::Vector2i >( vector ) };
 
-    sf::Vector2i const integerVectorResult {
-        integerVector.x % modulo, integerVector.y % modulo };
+    sf::Vector2i const integerVectorResult { integerVector.x % modulo,
+                                             integerVector.y % modulo };
 
     return static_cast< sf::Vector2f >( integerVectorResult );
 }
 
-std::ostream & operator<< (
-    std::ostream & stream, sf::ContextSettings const & settings )
+std::ostream & operator<< ( std::ostream &              stream,
+                            sf::ContextSettings const & settings )
 {
     stream << "{  depth bits : " << settings.depthBits << " , ";
     stream << "stencil bits : " << settings.stencilBits << " , ";
@@ -79,16 +79,16 @@ std::ostream & operator<< ( std::ostream & stream, sf::Color const & color )
     return stream;
 }
 
-template< typename T >
-std::ostream & operator<< (
-    std::ostream & stream, sf::Vector2< T > const & vector )
-{
-    return stream << "( " << vector.x << ", " << vector.y << " )";
-}
+// template< typename T >
+// std::ostream & operator<< (
+//     std::ostream & stream, sf::Vector2< T > const & vector )
+// {
+//     return stream << "( " << vector.x << ", " << vector.y << " )";
+// }
 
-template std::ostream & operator<< (
-    std::ostream & stream, sf::Vector2< float > const & vector );
-template std::ostream & operator<< (
-    std::ostream & stream, sf::Vector2< unsigned int > const & vector );
-template std::ostream & operator<< (
-    std::ostream & stream, sf::Vector2< int > const & vector );
+// template std::ostream & operator<< (
+//     std::ostream & stream, sf::Vector2< float > const & vector );
+// template std::ostream & operator<< (
+//     std::ostream & stream, sf::Vector2< unsigned int > const & vector );
+// template std::ostream & operator<< (
+//     std::ostream & stream, sf::Vector2< int > const & vector );

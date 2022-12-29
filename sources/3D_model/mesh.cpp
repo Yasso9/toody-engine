@@ -8,10 +8,9 @@
 #include "graphics3D/openGL.hpp"   // for draw_elements
 #include "graphics3D/texture.hpp"  // for Texture, Texture::E_Type, Textur...
 
-Mesh::Mesh(
-    std::vector< S_Vertex > const &     vertices,
-    std::vector< unsigned int > const & indices,
-    std::vector< std::string > const &  textures )
+Mesh::Mesh( std::vector< S_Vertex > const &     vertices,
+            std::vector< unsigned int > const & indices,
+            std::vector< std::string > const &  textures )
   : m_vertices( vertices ),
     m_indices( indices ),
     m_textures( textures ),
@@ -24,9 +23,8 @@ Mesh::Mesh(
     this->generate();
 }
 
-void Mesh::update(
-    sf::Shader &                             shader,
-    std::map< std::string, Texture > const & textureLoaded )
+void Mesh::update( sf::Shader &                             shader,
+                   std::map< std::string, Texture > const & textureLoaded )
 {
     // bind appropriate textures
     unsigned int diffuseNr { 1u };
@@ -58,16 +56,16 @@ void Mesh::update(
         std::string const uniformVariableName {
             textureLoaded.at( texturePath ).get_type_name() + number };
 
-        shader.setUniform(
-            uniformVariableName, textureLoaded.at( texturePath ) );
+        shader.setUniform( uniformVariableName,
+                           textureLoaded.at( texturePath ) );
     }
 }
 
 void Mesh::draw() const
 {
     // draw mesh
-    gl::draw_elements(
-        this->VAO, GL_TRIANGLES, GL_UNSIGNED_INT, this->m_indices.size() );
+    gl::draw_elements( this->VAO, GL_TRIANGLES, GL_UNSIGNED_INT,
+                       this->m_indices.size() );
 }
 
 void Mesh::generate()

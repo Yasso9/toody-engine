@@ -1,31 +1,29 @@
 #pragma once
 
-#include <sstream>
-
 #include "vector.hpp"
+
+#include <sstream>
 
 namespace vector
 {
     template< typename Type >
-    std::vector< Type > extract (
-        std::vector< Type > vector, unsigned int begin, unsigned int end )
+    std::vector< Type > extract ( std::vector< Type > vector,
+                                  unsigned int begin, unsigned int end )
     {
         if ( begin >= vector.size() || end >= vector.size() )
         {
-            std::ostringstream exceptionStream {};
-            exceptionStream << "Range [ " << begin << ", " << end << " ]"
-                            << " not comptatible with vector of size : '"
-                            << vector.size() << "'";
-            throw std::out_of_range { exceptionStream.str() };
+            std::cerr << "Range [ " << begin << ", " << end << " ]"
+                      << " not comptatible with vector of size : '"
+                      << vector.size() << "'" << std::endl;
         }
 
-        return std::vector< Type > {
-            vector.begin() + begin, vector.begin() + end };
+        return std::vector< Type > { vector.begin() + begin,
+                                     vector.begin() + end };
     }
 
     template< typename Type >
-    bool contains (
-        std::vector< Type > const & vector, Type const & elementToSearch )
+    bool contains ( std::vector< Type > const & vector,
+                    Type const &                elementToSearch )
     {
         return std::find( vector.begin(), vector.end(), elementToSearch )
                != vector.end();
@@ -37,7 +35,6 @@ namespace vector
         a.insert( a.end(), b.begin(), b.end() );
     }
 
-    /// @brief Check if the all the size of the subvectors are equal
     template< typename Type >
     bool is_rectangle (
         std::vector< std::vector< Type > > const & dimensionnalVector )

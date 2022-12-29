@@ -9,8 +9,8 @@
 #include "main/window.hpp"      // for Window
 #include "maths/vector2.hpp"    // for Vector2I
 #include "maths/vector2.tpp"    // for Vector2::to_float
+#include "tools/array/vector.hpp"
 #include "tools/singleton.tpp"  // for Singleton::get_instance
-#include "tools/vector.hpp"
 
 State::State( State::E_List const & stateName )
   : m_stateName { stateName },

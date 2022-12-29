@@ -33,9 +33,8 @@ math::Vector2U Window::get_size() const
 
 float Window::get_aspect_ratio() const
 {
-    return static_cast< float >(
-        Window::get_instance().get_size().x
-        / Window::get_instance().get_size().y );
+    return static_cast< float >( Window::get_instance().get_size().x
+                                 / Window::get_instance().get_size().y );
 }
 
 math::Vector2U Window::get_center_position() const
@@ -47,8 +46,8 @@ bool Window::is_hovered() const
 {
     math::PointI const mousePosition { sf::Mouse::getPosition( *this ) };
 
-    return mousePosition.is_inside(
-        math::PointI { 0, 0 }, math::Vector2I { this->getSize() } );
+    return mousePosition.is_inside( math::PointI { 0, 0 },
+                                    math::Vector2I { this->getSize() } );
 }
 
 bool Window::has_absolute_focus() const
@@ -66,8 +65,8 @@ void Window::creation()
 {
     std::string const gameTitle { "Toody Engine (In Developpement)" };
 
-    unsigned int const windowStyle {
-        sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close };
+    unsigned int const windowStyle { sf::Style::Titlebar | sf::Style::Resize
+                                     | sf::Style::Close };
 
     sf::ContextSettings contextSettings {};
     contextSettings.depthBits         = 24;
@@ -77,9 +76,8 @@ void Window::creation()
     contextSettings.majorVersion      = 4;
     contextSettings.minorVersion      = 6;
 
-    this->sf::RenderWindow::create(
-        Settings::get_instance().get_video_mode(), gameTitle, windowStyle,
-        contextSettings );
+    this->sf::RenderWindow::create( Settings::get_instance().get_video_mode(),
+                                    gameTitle, windowStyle, contextSettings );
 }
 
 void Window::initialize()

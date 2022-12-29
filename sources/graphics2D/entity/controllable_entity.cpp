@@ -4,8 +4,8 @@
 
 #include "maths/vector2.tpp"  // for operator*, Vector2::operator=, operator/
 
-ControllableEntity2D::ControllableEntity2D(
-    math::PolygonF quadrangle, Control control )
+ControllableEntity2D::ControllableEntity2D( math::PolygonF quadrangle,
+                                            Control        control )
   : StaticEntity2D { quadrangle }, m_control { control }, m_speed {}
 
 {
@@ -29,8 +29,8 @@ void ControllableEntity2D::set_speed( math::Vector2F speed )
 
 void ControllableEntity2D::update( float deltaTime )
 {
-    math::Vector2F moveSpeed {
-        ( m_speed / m_control.get_view().get_zoom() ) * deltaTime };
+    math::Vector2F moveSpeed { ( m_speed / m_control.get_view().get_zoom() )
+                               * deltaTime };
     math::Vector2F moveDirection { m_control.get_input_movement() };
 
     // ImGui::P_Show( "Entity Update Extra",

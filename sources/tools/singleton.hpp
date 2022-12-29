@@ -4,7 +4,7 @@
 // friend DerivedClass & Singleton< DerivedClass >::get_instance();
 
 template< typename SingletonClass >
-    requires( std::is_class_v< SingletonClass > )
+requires ( std::is_class_v< SingletonClass > )
 
 class Singleton
 {

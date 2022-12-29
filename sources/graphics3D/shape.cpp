@@ -15,8 +15,8 @@ class Render;
 
 unsigned int Shape::S_Data::get_data_per_point_sum() const
 {
-    return std::accumulate(
-        this->dataPerPoint.begin(), this->dataPerPoint.end(), 0u );
+    return std::accumulate( this->dataPerPoint.begin(),
+                            this->dataPerPoint.end(), 0u );
 }
 
 unsigned int Shape::S_Data::get_number_of_element() const
@@ -26,9 +26,8 @@ unsigned int Shape::S_Data::get_number_of_element() const
 }
 
 Shape::Shape( S_Data const & data, Camera const & camera )
-  : Transformable { camera,
-                    resources::get_shader( "shape_shader.vert",
-                                           "shape_shader.frag" ) },
+  : Transformable { camera, resources::get_shader( "shape_shader.vert",
+                                                   "shape_shader.frag" ) },
     m_textures { resources::get_texture( "wall.jpg" ),
                  resources::get_texture( "town_hall.png" ) },
     m_vertexArrayObject {},
@@ -55,8 +54,8 @@ void Shape::update_custom( float /* deltaTime */ )
 {
     for ( unsigned int i = 0u; i < m_textures.size(); ++i )
     {
-        this->get_shader().setUniform(
-            "my_texture" + std::to_string( i ), m_textures[i] );
+        this->get_shader().setUniform( "my_texture" + std::to_string( i ),
+                                       m_textures[i] );
     }
 }
 
@@ -68,15 +67,13 @@ void Shape::render_custom( Render & /* Render */ ) const
     {
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_elementBufferObject );
         GLenum const dataType { GL_UNSIGNED_INT };
-        gl::draw_elements(
-            m_vertexArrayObject, primitiveType, dataType,
-            m_data.vertices.size() );
+        gl::draw_elements( m_vertexArrayObject, primitiveType, dataType,
+                           m_data.vertices.size() );
     }
     else
     {
-        gl::draw_arrays(
-            m_vertexArrayObject, primitiveType,
-            m_data.get_number_of_element() );
+        gl::draw_arrays( m_vertexArrayObject, primitiveType,
+                         m_data.get_number_of_element() );
     }
 }
 

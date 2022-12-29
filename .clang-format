@@ -1,6 +1,6 @@
 BasedOnStyle: Google
 AccessModifierOffset: -2
-AlignAfterOpenBracket: AlwaysBreak
+AlignAfterOpenBracket: Align
 AlignArrayOfStructures: Right
 AlignConsecutiveAssignments: Consecutive # cannot put custom fields ?
 AlignConsecutiveBitFields: Consecutive # cannot put custom fields ?
@@ -45,7 +45,7 @@ BraceWrapping:
   SplitEmptyNamespace: false
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Custom
-# BreakBeforeConceptDeclarations: Never # Doesn't work
+BreakBeforeConceptDeclarations: Allowed # Doesn't work
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
 BreakInheritanceList: AfterComma
@@ -65,6 +65,7 @@ FixNamespaceComments: true
 # IfMacros: ['IF']
 IncludeBlocks: Regroup
 IncludeCategories:
+# Note : don't change the order
 # Libraries
   - Regex:           '<.*\/.*>'
     Priority:        3
@@ -84,10 +85,10 @@ IndentCaseLabels: false
 IndentGotoLabels: false
 IndentPPDirectives: AfterHash
 IndentRequires: true
-# IndentRequiresClause: true # clang 15
+IndentRequiresClause: true # clang 15
 IndentWidth: 4
 IndentWrappedFunctionNames: true
-# InsertBraces: true # clang 15
+InsertBraces: true # clang 15
 InsertTrailingCommas: None # Cannot use that if BinPackArguments is set to true
 JavaScriptQuotes: Single
 JavaScriptWrapImports: false
@@ -108,12 +109,12 @@ PackConstructorInitializers: NextLine # clang 14
 # PenaltyIndentedWhitespace: 150
 # PenaltyReturnTypeOnItsOwnLine: 150
 PointerAlignment: Middle
-QualifierAlignment: Custom
-QualifierOrder: ['inline', 'constexpr', 'static', 'type', 'const' ]
+# QualifierAlignment: Custom
+# QualifierOrder: ['inline', 'constexpr', 'static', 'type', 'const' ] # Still buggy ex : 'std::vector< Type > const Array2D< Type >::operator[] (unsigned int line ) const'
 ReferenceAlignment: Middle
 ReflowComments: true
-RemoveBracesLLVM: false
-# RequiresClausePosition: WithPreceding # clang 15
+# RemoveBracesLLVM: false # Useless
+RequiresClausePosition: WithPreceding # clang 15
 SeparateDefinitionBlocks: Always
 ShortNamespaceLines: 0
 SortIncludes: CaseSensitive
@@ -135,8 +136,8 @@ SpaceBeforeParensOptions:
   AfterFunctionDefinitionName: true
   AfterIfMacros: true
   AfterOverloadedOperator: true
-  # AfterRequiresInClause: true # clang 15
-  # AfterRequiresInExpression: true # clang 15
+  AfterRequiresInClause: true # clang 15
+  AfterRequiresInExpression: true # clang 15
   BeforeNonEmptyParentheses: false
 SpaceBeforeRangeBasedForLoopColon: true
 SpaceBeforeSquareBrackets: false

@@ -4,19 +4,7 @@
 #include <string>   // for string
 #include <vector>   // for vector
 
-/// @todo differences between typename or class in template ?
-/// @todo Type require that the type have operator <<
-template< typename Type >
-std::ostream & operator<< (
-    std::ostream & stream, std::vector< Type > const & array );
-
-template< typename Type >
-std::istream & operator>> (
-    std::istream & stream, std::vector< Type > & array );
-
-/// @todo improve this function either by taking into account the return value
-/// or launch an exception or an assertion
-bool verify_next ( std::istream & stream, char const & character );
+#include "tools/stream/stream.hpp"
 
 [[maybe_unused]] void test_serializer ();
 

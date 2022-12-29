@@ -2,17 +2,15 @@
     "configurations": [
         {
             "name": "Linux",
-            "intelliSenseMode": "${default}",
             "includePath": [
                 "${default}",
                 "${workspaceRoot}/sources/",
                 "${workspaceRoot}/external/includes/"
             ],
-            "defines": [],
-            "forcedInclude": [],
-            "compilerPath": "/usr/bin/g++",
             "cStandard": "c17",
-            "cppStandard": "c++20"
+            "cppStandard": "c++20",
+            "compilerPath": "/usr/bin/clang++",
+            "intelliSenseMode": "linux-clang-x64"
             // ,"compileCommands": "${workspaceRoot}/compile_commands.json"
         },
         {

@@ -26,16 +26,14 @@
 #include "maths/vector2.tpp"             // for operator<<, operator*, opera...
 #include "tools/singleton.tpp"           // for Singleton::get_instance
 
-static void update_debug_window ( bool & showWindow );
-
 EditorState::EditorState()
   : State { State::E_List::Editor },
     m_view { Window::get_instance().getDefaultView() },
     /// @todo know if the values are true or false with database
     m_showWindow {
-        {    "demo_window", false},
-        {  "debug_options", false},
-        {      "collision", false},
+            {    "demo_window", false},
+            {  "debug_options", false},
+            {      "collision", false},
         {"player_handling", false},
         {       "dialogue", false},
         {           "view", false}, },
@@ -44,16 +42,16 @@ EditorState::EditorState()
     m_collisionList {
         { StaticEntity2D { math::RectangleF { 100.f, 100.f, 50.f, 50.f } },
           StaticEntity2D { math::RectangleF { -200.f, -50.f, 100.f, 100.f } } } },
-    m_greenEntity {
-        math::RectangleF { 0.f, 0.f, 40.f, 40.f },
-        { m_collisionList, m_view, input::ILKJ } },
+    // m_greenEntity {
+    //     math::RectangleF { 0.f, 0.f, 40.f, 40.f },
+    //     { m_collisionList, m_view, input::ILKJ } },
     m_character { resources::get_texture( "gold_sprite.png" ) ,
                   { m_collisionList, m_view, input::ARROW } },
     m_dialogue {}
 {
     this->add_child( m_tilemap, m_view );
     this->add_child( m_collisionList, m_view );
-    this->add_child( m_greenEntity, m_view );
+    // this->add_child( m_greenEntity, m_view );
     this->add_child( m_character, m_view );
     this->add_child( m_dialogue );
     this->add_child( m_imageMap );
@@ -62,96 +60,58 @@ EditorState::EditorState()
 
     this->reset_view();
 
-    m_greenEntity.setFillColor( sf::Color::Green );
-    m_greenEntity.setOutlineColor( sf::Color::Black );
-    m_greenEntity.setOutlineThickness( 2.f );
-
-    m_dialogue.add_text(
-        "Lorem Ipsum is simply dummy text of the printing and typesetting "
-        "industry. Lorem Ipsum has been the industry's standard dummy text "
-        "ever since the 1500s, when an unknown printer took a galley of type "
-        "and scrambled it to make a type specimen book. It has survived not "
-        "only five centuries, but also the leap into electronic typesetting, "
-        "remaining essentially unchanged. It was popularised in the 1960s with "
-        "the release of Letraset sheets containing Lorem Ipsum passages, and "
-        "more recently with desktop publishing software like Aldus PageMaker "
-        "including versions of Lorem Ipsum." );
+    // m_greenEntity.setFillColor( sf::Color::Green );
+    // m_greenEntity.setOutlineColor( sf::Color::Black );
+    // m_greenEntity.setOutlineThickness( 2.f );
 
     m_dialogue.set_enabled( m_showWindow.at( "dialogue" ) );
 }
 
 void EditorState::update( float deltaTime )
 {
-    this->update_view( deltaTime );
+    {  // UPDATE VIEW
+        static float viewScrollSpeed { 0.2f };
+        static float viewMoveSpeedBase { 1.f };
 
-    this->update_toolbar();
-    this->update_overlay( deltaTime );
+        ImGui::P_Show( "View Options", &m_showWindow.at( "view" ), [] () {
+            ImGui::SliderFloat( "View Scroll Speed", &viewScrollSpeed, 0.f, 5.f,
+                                "%.2f" );
+            ImGui::SliderFloat( "View Movement Speed", &viewMoveSpeedBase, 0.f,
+                                50.f, "%.0f" );
+        } );
 
-    if ( m_showWindow.at( "demo_window" ) )
-        ImGui::ShowDemoWindow( &m_showWindow.at( "demo_window" ) );
-    if ( m_showWindow.at( "debug_options" ) )
-        update_debug_window( m_showWindow.at( "debug_options" ) );
-    if ( m_showWindow.at( "collision" ) )
-        this->update_collision_window();
+        float const          viewScrollValue { input::get_mouse_scroll()
+                                      * viewScrollSpeed };
+        math::Vector2F const viewMoveSpeed {
+            math::Vector2F {viewMoveSpeedBase, viewMoveSpeedBase}
+            / m_view.get_zoom()
+        };
+        math::Vector2F const viewMoveValue {
+            input::is_pressed( sf::Mouse::Right )
+                ? input::get_mouse_movement() * viewMoveSpeed
+                : math::Vector2F {0.f, 0.f}
+        };
 
-    if ( m_showWindow.at( "dialogue" )
-         && input::is_pressed( sf::Keyboard::Space ) )
-    {
-        m_dialogue.next();
+        ImGui::P_Show( "View Options", &m_showWindow.at( "view" ), [&] () {
+            std::stringstream output {};
+            output << "View Center : " << m_view.get_center() << "\n";
+            output << "View Position : " << m_view.get_position() << "\n";
+            output << "View Size : " << m_view.get_size() << "\n";
+            output << "Mouse Scroll : " << input::get_mouse_scroll() << "\n";
+            output << "View Scroll Value : " << viewScrollValue << "\n";
+            output << "Mouse Movement : " << input::get_mouse_movement()
+                   << "\n";
+            output << "View Movement Speed : " << viewMoveSpeed << "\n";
+            output << "View Movement Value : " << viewMoveValue << "\n";
+            ImGui::Text( "%s", output.str().c_str() );
+        } );
+
+        m_view.zoom( viewScrollValue );
+        m_view.move( viewMoveValue );
     }
-}
 
-void EditorState::reset_view()
-{
-    m_view.setCenter( m_tilemap.get_center_absolute() );
-    m_view.setSize( Window::get_instance().get_size().to_float() );
-    m_character.setPosition( m_view.get_center() );
-}
-
-void EditorState::update_view( float /* deltaTime */ )
-{
-    static float viewScrollSpeed { 0.2f };
-    static float viewMoveSpeedBase { 1.f };
-
-    ImGui::P_Show( "View Options", &m_showWindow.at( "view" ), [] () {
-        ImGui::SliderFloat(
-            "View Scroll Speed", &viewScrollSpeed, 0.f, 5.f, "%.2f" );
-        ImGui::SliderFloat(
-            "View Movement Speed", &viewMoveSpeedBase, 0.f, 50.f, "%.0f" );
-    } );
-
-    float const viewScrollValue { input::get_mouse_scroll() * viewScrollSpeed };
-    math::Vector2F const viewMoveSpeed {
-        math::Vector2F {viewMoveSpeedBase, viewMoveSpeedBase}
-        / m_view.get_zoom()
-    };
-    math::Vector2F const viewMoveValue {
-        input::is_pressed( sf::Mouse::Right )
-            ? input::get_mouse_movement() * viewMoveSpeed
-            : math::Vector2F {0.f, 0.f}
-    };
-
-    ImGui::P_Show( "View Options", &m_showWindow.at( "view" ), [&] () {
-        std::stringstream output {};
-        output << "View Center : " << m_view.get_center() << "\n";
-        output << "View Position : " << m_view.get_position() << "\n";
-        output << "View Size : " << m_view.get_size() << "\n";
-        output << "Mouse Scroll : " << input::get_mouse_scroll() << "\n";
-        output << "View Scroll Value : " << viewScrollValue << "\n";
-        output << "Mouse Movement : " << input::get_mouse_movement() << "\n";
-        output << "View Movement Speed : " << viewMoveSpeed << "\n";
-        output << "View Movement Value : " << viewMoveValue << "\n";
-        ImGui::Text( "%s", output.str().c_str() );
-    } );
-
-    m_view.zoom( viewScrollValue );
-    m_view.move( viewMoveValue );
-}
-
-void EditorState::update_toolbar()
-{
     if ( ImGui::BeginMainMenuBar() )
-    {
+    {  // UPDATE TOOLBAR
         if ( ImGui::BeginMenu( "Options" ) )
         {
             bool quitEditor { false };
@@ -166,43 +126,21 @@ void EditorState::update_toolbar()
         }
         ImGui::EndMainMenuBar();
     }
-}
 
-void EditorState::update_collision_window()
-{
-    ImGui::P_Show( "Collisions", &m_showWindow.at( "collision" ), [&] () {
-        std::stringstream output {};
-        output << "Green Polygon : " << m_greenEntity.get_polygon().print()
-               << "\n";
+    {  // UPDATE OVERLAY
+        ImGuiWindowFlags const window_flags =
+            ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize
+            | ImGuiWindowFlags_NoSavedSettings
+            | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav
+            | ImGuiWindowFlags_NoMove;
 
-        for ( StaticEntity2D const & entity : m_collisionList.get_entities() )
-        {
-            output << "Intersection with " << entity.get_position() << " ? "
-                   << std::boolalpha
-                   << m_greenEntity.is_intersected_by( entity ) << "\n";
-        }
-        // output << "Is collision detected : "
-        //        << m_greenEntity.is_collision_detected() << "\n";
+        constexpr math::Vector2F PADDINGS { 10.f, 10.f };
+        math::Vector2F const     overlayPosition {
+            math::Vector2F { ImGui::GetMainViewport()->WorkPos } + PADDINGS };
 
-        ImGui::Text( "%s", output.str().c_str() );
-    } );
-}
-
-void EditorState::update_overlay( float deltaTime )
-{
-    ImGuiWindowFlags const window_flags =
-        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize
-        | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing
-        | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove;
-
-    constexpr math::Vector2F PADDINGS { 10.f, 10.f };
-    math::Vector2F const     overlayPosition {
-        math::Vector2F { ImGui::GetMainViewport()->WorkPos } + PADDINGS };
-
-    ImGui::SetNextWindowPos( overlayPosition, ImGuiCond_Always );
-    ImGui::SetNextWindowBgAlpha( 0.8f );
-    ImGui::P_Show(
-        "Editor Main", NULL, window_flags, [&] () {
+        ImGui::SetNextWindowPos( overlayPosition, ImGuiCond_Always );
+        ImGui::SetNextWindowBgAlpha( 0.8f );
+        ImGui::P_Show( "Editor Main", NULL, window_flags, [&] () {
             static bool customizeCollision { false };
             ImGui::Checkbox( "Customize Collisions ?", &customizeCollision );
             m_collisionList.set_customisation( customizeCollision );
@@ -241,43 +179,77 @@ void EditorState::update_overlay( float deltaTime )
 
             m_dialogue.set_enabled( m_showWindow.at( "dialogue" ) );
         } );
+    }
+
+    if ( m_showWindow.at( "demo_window" ) )
+    {
+        ImGui::ShowDemoWindow( &m_showWindow.at( "demo_window" ) );
+    }
+
+    if ( m_showWindow.at( "debug_options" ) )
+    {  // UPDATE DEBUG
+        ImGui::P_Show(
+            "Debug Options", &m_showWindow.at( "debug_options" ), [&] () {
+                std::stringstream windowTextOutput {};
+                windowTextOutput << std::boolalpha;
+                windowTextOutput << "MousePos : " << input::get_mouse_position()
+                                 << "\n";
+                windowTextOutput << "CursorPos : "
+                                 << math::Vector2F { ImGui::GetCursorPos() }
+                                 << "\n";
+                windowTextOutput
+                    << "CursorStartPos : "
+                    << math::Vector2F { ImGui::GetCursorStartPos() } << "\n";
+                windowTextOutput
+                    << "CursorScreenPos : "
+                    << math::Vector2F { ImGui::GetCursorScreenPos() } << "\n";
+                windowTextOutput
+                    << "ContentRegionAvail : "
+                    << math::Vector2F { ImGui::GetContentRegionAvail() }
+                    << "\n";
+
+                windowTextOutput << "\n";
+
+                windowTextOutput
+                    << "IsWindowFocused : " << ImGui::IsWindowFocused() << "\n";
+                windowTextOutput
+                    << "IsWindowHovered : " << ImGui::IsWindowHovered() << "\n";
+
+                windowTextOutput << "\n";
+
+                windowTextOutput
+                    << "IsAnyItemActive : " << ImGui::IsAnyItemActive() << "\n";
+                windowTextOutput
+                    << "IsAnyItemHovered : " << ImGui::IsAnyItemHovered()
+                    << "\n";
+                ImGui::Text( "%s", windowTextOutput.str().c_str() );
+            } );
+    }
 }
 
-static void update_debug_window ( bool & showWindow )
+void EditorState::reset_view()
 {
-    ImGui::P_Show( "Debug Options", &showWindow, [&] () {
-        std::string testBuffer { "testvalue" };
-        ImGui::InputText( "Test", testBuffer.data(), 20 );
-
-        std::stringstream windowTextOutput {};
-        windowTextOutput << std::boolalpha;
-        windowTextOutput << "MousePos : " << input::get_mouse_position()
-                         << "\n";
-        windowTextOutput << "CursorPos : "
-                         << math::Vector2F { ImGui::GetCursorPos() } << "\n";
-        windowTextOutput << "CursorStartPos : "
-                         << math::Vector2F { ImGui::GetCursorStartPos() }
-                         << "\n";
-        windowTextOutput << "CursorScreenPos : "
-                         << math::Vector2F { ImGui::GetCursorScreenPos() }
-                         << "\n";
-        windowTextOutput << "ContentRegionAvail : "
-                         << math::Vector2F { ImGui::GetContentRegionAvail() }
-                         << "\n";
-
-        windowTextOutput << "\n";
-
-        windowTextOutput << "IsWindowFocused : " << ImGui::IsWindowFocused()
-                         << "\n";
-        windowTextOutput << "IsWindowHovered : " << ImGui::IsWindowHovered()
-                         << "\n";
-
-        windowTextOutput << "\n";
-
-        windowTextOutput << "IsAnyItemActive : " << ImGui::IsAnyItemActive()
-                         << "\n";
-        windowTextOutput << "IsAnyItemHovered : " << ImGui::IsAnyItemHovered()
-                         << "\n";
-        ImGui::Text( "%s", windowTextOutput.str().c_str() );
-    } );
+    m_view.setCenter( m_tilemap.get_center_absolute() );
+    m_view.setSize( Window::get_instance().get_size().to_float() );
+    m_character.setPosition( m_view.get_center() );
 }
+
+// void EditorState::update_collision_window()
+// {
+// ImGui::P_Show( "Collisions", &m_showWindow.at( "collision" ), [&] () {
+//     std::stringstream output {};
+//     output << "Green Polygon : " << m_greenEntity.get_polygon().print()
+//            << "\n";
+
+// for ( StaticEntity2D const & entity : m_collisionList.get_entities() )
+// {
+//     output << "Intersection with " << entity.get_position() << " ? "
+//            << std::boolalpha
+//            << m_greenEntity.is_intersected_by( entity ) << "\n";
+// }
+// output << "Is collision detected : "
+//        << m_greenEntity.is_collision_detected() << "\n";
+
+// ImGui::Text( "%s", output.str().c_str() );
+// } );
+// }

@@ -44,15 +44,14 @@ namespace load_gl_shape
         glBindVertexArray( shape.get_VAO() );
 
         GLenum const bufferTarget { GL_ARRAY_BUFFER };
-        bind_buffer_object(
-            shape.get_VBO(), bufferTarget, shape.get_data().vertices );
+        bind_buffer_object( shape.get_VBO(), bufferTarget,
+                            shape.get_data().vertices );
 
         if ( shape.is_EBO_handled() )
         {
             GLenum const elementTarget { GL_ELEMENT_ARRAY_BUFFER };
-            bind_buffer_object(
-                shape.get_EBO(), elementTarget,
-                shape.get_data().indices.value() );
+            bind_buffer_object( shape.get_EBO(), elementTarget,
+                                shape.get_data().indices.value() );
         }
     }
 
@@ -105,9 +104,8 @@ namespace load_gl_shape
         int const dataExpectedUsage { GL_STATIC_DRAW };
 
         glBindBuffer( target, bufferObjectID );
-        glBufferData(
-            target, static_cast< int >( tools::size_of( dataArray ) ),
-            tools::to_c_style_array( dataArray ), dataExpectedUsage );
+        glBufferData( target, static_cast< int >( tools::size_of( dataArray ) ),
+                      tools::to_c_style_array( dataArray ), dataExpectedUsage );
     }
 
 }  // namespace load_gl_shape

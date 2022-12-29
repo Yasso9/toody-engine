@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include <SFML/Graphics/RenderStates.hpp>  // for RenderStates, RenderStates...
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -15,9 +17,8 @@ class Render
     sf::RenderStates   m_renderStates;
 
   public:
-    Render(
-        sf::RenderTarget & target,
-        sf::RenderStates   states = sf::RenderStates::Default );
+    Render( sf::RenderTarget & target,
+            sf::RenderStates   states = sf::RenderStates::Default );
 
     sf::RenderTarget & get_target ();
     sf::RenderStates   get_render_states () const;
@@ -28,4 +29,6 @@ class Render
     void reset_view ();
 
     void draw ( sf::Drawable const & drawable ) const;
+    void draw ( std::vector< sf::Vertex > const & vertices,
+                sf::PrimitiveType                 primitive ) const;
 };

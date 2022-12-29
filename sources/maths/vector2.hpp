@@ -7,6 +7,7 @@
 
 #include "graphics2D/sfml.hpp"
 #include "tools/concepts.hpp"
+#include "tools/stream/stream.hpp"
 
 namespace math
 {
@@ -61,6 +62,17 @@ namespace math
         Type              operator[] ( std::size_t index ) const;
 
         /* ********************************************************************
+         *************************** STREAM OPERATOR **************************
+         ******************************************************************* */
+
+        template< C_Primitive TypeStream >
+        friend std::ostream & operator<< ( std::ostream &          stream,
+                                           Vector2< Type > const & vector );
+        template< C_Primitive TypeStream >
+        friend std::istream & operator>> ( std::istream &    stream,
+                                           Vector2< Type > & vector );
+
+        /* ********************************************************************
         ************************ ASSIGNEMENT OPERATOR *************************
         ******************************************************************** */
 
@@ -77,19 +89,19 @@ namespace math
         operator sf::Vector2< Type > () const;
         /// @brief conversion to ImVec2 must be possible only if the same type
         operator ImVec2 () const
-            requires( std::is_same_v< Type, decltype( ImVec2::x ) > );
+            requires ( std::is_same_v< Type, decltype( ImVec2::x ) > );
         template< C_Primitive OtherType >
-            requires( not std::is_same_v< Type, OtherType > )
+        requires ( not std::is_same_v< Type, OtherType > )
         explicit operator Vector2< OtherType > () const;
 
         Vector2< float > to_float () const
-            requires( not std::is_same_v< Type, float > );
+            requires ( not std::is_same_v< Type, float > );
         Vector2< unsigned int > to_u_int () const
-            requires( not std::is_same_v< Type, unsigned int > );
+            requires ( not std::is_same_v< Type, unsigned int > );
         Vector2< int > to_int () const
-            requires( not std::is_same_v< Type, int > );
+            requires ( not std::is_same_v< Type, int > );
         Vector2< std::size_t > to_size_t () const
-            requires( not std::is_same_v< Type, std::size_t > );
+            requires ( not std::is_same_v< Type, std::size_t > );
 
         Point< Type > to_point () const;
 
@@ -128,10 +140,6 @@ namespace math
     template< C_Primitive Type >
     Vector2< Type > round ( Vector2< Type > const & vector2D );
 
-    template< C_Primitive Type >
-    std::ostream & operator<< (
-        std::ostream & stream, Vector2< Type > const & vector2D );
-
     /* ************************************************************************
     ************************** VECTOR VECTOR ********************************
     ************************************************************************ */
@@ -158,37 +166,34 @@ namespace math
     ************************************************************************ */
 
     template< C_Primitive VectorType, C_Primitive FactorType >
-    Vector2< VectorType > operator* (
-        Vector2< VectorType > const & vector2D, FactorType const & factor );
+    Vector2< VectorType > operator* ( Vector2< VectorType > const & vector2D,
+                                      FactorType const &            factor );
     template< C_Primitive VectorType, C_Primitive FactorType >
-    Vector2< VectorType > operator/ (
-        Vector2< VectorType > const & vector2D, FactorType const & factor );
+    Vector2< VectorType > operator/ ( Vector2< VectorType > const & vector2D,
+                                      FactorType const &            factor );
 
     template< C_Primitive Type >
-    Vector2< Type > operator% (
-        Vector2< Type > const & vector2D, int const & modulo );
+    Vector2< Type > operator% ( Vector2< Type > const & vector2D,
+                                int const &             modulo );
     template< C_Primitive Type >
-    Vector2< Type > operator% (
-        Vector2< Type > const & vector2D, unsigned int const & modulo );
+    Vector2< Type > operator% ( Vector2< Type > const & vector2D,
+                                unsigned int const &    modulo );
 
     /* ************************************************************************
     ****************************** COMPARISON *********************************
     ************************************************************************ */
 
     template< C_Primitive TypeLeft, C_Primitive TypeRight >
-    bool operator== (
-        Vector2< TypeLeft > const &  vector2DLeft,
-        Vector2< TypeRight > const & vector2DRight );
+    bool operator== ( Vector2< TypeLeft > const &  vector2DLeft,
+                      Vector2< TypeRight > const & vector2DRight );
 
     template< C_Primitive TypeLeft, C_Primitive TypeRight >
-    bool operator<(
-        Vector2< TypeLeft > const &  vector2DLeft,
-        Vector2< TypeRight > const & vector2DRight );
+    bool operator<( Vector2< TypeLeft > const &  vector2DLeft,
+                    Vector2< TypeRight > const & vector2DRight );
 
     template< C_Primitive Type >
-    bool operator> (
-        Vector2< Type > const & vector2DLeft,
-        Vector2< Type > const & vector2DRight );
+    bool operator> ( Vector2< Type > const & vector2DLeft,
+                     Vector2< Type > const & vector2DRight );
 
     /* ************************************************************************
     ********************************** UNARY **********************************

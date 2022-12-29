@@ -15,7 +15,9 @@ namespace input
     bool is_pressed ( sf::Keyboard::Key key )
     {
         if ( ! handle_input() )
+        {
             return false;
+        }
 
         return sf::Keyboard::isKeyPressed( key );
     }
@@ -23,7 +25,9 @@ namespace input
     bool is_pressed ( sf::Mouse::Button mouseButton )
     {
         if ( ! handle_input() )
+        {
             return false;
+        }
 
         return sf::Mouse::isButtonPressed( mouseButton );
     }
@@ -33,7 +37,9 @@ namespace input
         bool s_programBeginWithoutInpuHandled { true };
 
         if ( ! handle_input() && s_programBeginWithoutInpuHandled )
+        {
             return MOUSE_DEFAULT_POSITION;
+        }
 
         s_programBeginWithoutInpuHandled = false;
 
@@ -42,7 +48,9 @@ namespace input
         static math::Vector2I s_lastPosition { currentPosition };
 
         if ( ! handle_input() )
+        {
             return s_lastPosition;
+        }
 
         s_lastPosition = currentPosition;
 
@@ -75,7 +83,9 @@ namespace input
     math::Vector2F get_mouse_movement ()
     {
         if ( ! handle_input() )
+        {
             return { 0.f, 0.f };
+        }
 
         return g_mouseMovement;
     }
@@ -98,16 +108,20 @@ namespace input
     void set_mouse_position ( math::PointI newMousePosition )
     {
         if ( ! handle_input() )
+        {
             return;
+        }
 
         sf::Mouse::setPosition( newMousePosition, Window::get_instance() );
     }
 
-    math::Vector2F get_movement_vector (
-        S_KeyboardMove movementKey, bool invertMovement )
+    math::Vector2F get_movement_vector ( S_KeyboardMove movementKey,
+                                         bool           invertMovement )
     {
         if ( ! handle_input() )
+        {
             return { 0.f, 0.f };
+        }
 
         math::Vector2F moveDirection { 0.f, 0.f };
         if ( input::is_pressed( movementKey.up ) )

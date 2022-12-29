@@ -1,5 +1,8 @@
 #pragma once
 
+#include <istream>
+#include <ostream>
+
 #include "maths/vector2.hpp"
 
 namespace math
@@ -34,7 +37,7 @@ namespace math
 
         explicit operator Vector2< Type > () const;
         template< C_Primitive OtherType >
-            requires( not std::is_same_v< Type, OtherType > )
+        requires ( not std::is_same_v< Type, OtherType > )
         explicit operator Point< OtherType > () const;
 
         Vector2< float >        to_float () const  = delete;
@@ -45,13 +48,13 @@ namespace math
         Vector2< Type > to_vector () const;
 
         Point< float > to_float () const
-            requires( not std::is_same_v< Type, float > );
+            requires ( not std::is_same_v< Type, float > );
         Point< unsigned int > to_u_int () const
-            requires( not std::is_same_v< Type, unsigned int > );
+            requires ( not std::is_same_v< Type, unsigned int > );
         Point< int > to_int () const
-            requires( not std::is_same_v< Type, int > );
+            requires ( not std::is_same_v< Type, int > );
         Point< std::size_t > to_size_t () const
-            requires( not std::is_same_v< Type, std::size_t > );
+            requires ( not std::is_same_v< Type, std::size_t > );
 
         bool is_inside ( Segment< Type > segment ) const;
         bool is_inside ( Point< Type > position, Vector2< Type > size ) const;
@@ -64,12 +67,12 @@ namespace math
     using PointU = Point< unsigned int >;
 
     template< C_Primitive Type >
-    E_Orientation get_orientation (
-        Point< Type > pointA, Point< Type > pointB, Point< Type > pointC );
+    E_Orientation get_orientation ( Point< Type > pointA, Point< Type > pointB,
+                                    Point< Type > pointC );
 
     template< C_Primitive Type >
-    bool are_collinear (
-        Point< Type > pointA, Point< Type > pointB, Point< Type > pointC );
+    bool are_collinear ( Point< Type > pointA, Point< Type > pointB,
+                         Point< Type > pointC );
 }  // namespace math
 
 #include "point.tpp"

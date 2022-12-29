@@ -1,6 +1,6 @@
 #pragma once
 
-#include <iosfwd>  // for ostream
+#include <ostream>  // for ostream
 
 #include <SFML/System/Vector2.hpp>    // for Vector2f, Vector2u, Vector2 (pt...
 #include <SFML/Window/VideoMode.hpp>  // for VideoMode
@@ -28,18 +28,46 @@ namespace sfpp
 }  // namespace sfpp
 
 /** @brief Allow to divide 2 vector */
-sf::Vector2f operator/ (
-    sf::Vector2f const & vectorA, sf::Vector2f const & vectorB );
+sf::Vector2f operator/ ( sf::Vector2f const & vectorA,
+                         sf::Vector2f const & vectorB );
 /** @brief Allow to multiply 2 vector */
-sf::Vector2f operator* (
-    sf::Vector2f const & vectorA, sf::Vector2f const & vectorB );
+sf::Vector2f operator* ( sf::Vector2f const & vectorA,
+                         sf::Vector2f const & vectorB );
 
 sf::Vector2f operator% ( sf::Vector2f const & vector, int const & modulo );
 
-std::ostream & operator<< (
-    std::ostream & stream, sf::ContextSettings const & settings );
+std::ostream & operator<< ( std::ostream &              stream,
+                            sf::ContextSettings const & settings );
 std::ostream & operator<< ( std::ostream & stream, sf::Color const & color );
 
 template< typename T >
-std::ostream & operator<< (
-    std::ostream & stream, sf::Vector2< T > const & vector );
+std::ostream & operator<< ( std::ostream &           stream,
+                            sf::Vector2< T > const & vector )
+{
+    return stream << "( " << vector.x << ", " << vector.y << " )";
+}
+
+// std::ostream & operator<< ( std::ostream & stream, sf::Vector2f const &
+// vector )
+// {
+//     return stream << "( " << vector.x << ", " << vector.y << " )";
+// }
+
+// std::ostream & operator<< ( std::ostream & stream, sf::Vector2u const &
+// vector )
+// {
+//     return stream << "( " << vector.x << ", " << vector.y << " )";
+// }
+
+// std::ostream & operator<< ( std::ostream & stream, sf::Vector2i const &
+// vector )
+// {
+//     return stream << "( " << vector.x << ", " << vector.y << " )";
+// }
+
+// template std::ostream & operator<< (
+//     std::ostream & stream, sf::Vector2< float > const & vector );
+// template std::ostream & operator<< (
+//     std::ostream & stream, sf::Vector2< unsigned int > const & vector );
+// template std::ostream & operator<< (
+//     std::ostream & stream, sf::Vector2< int > const & vector );

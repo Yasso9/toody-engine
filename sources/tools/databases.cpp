@@ -12,11 +12,12 @@ extern "C"
 #include "tools/path.hpp"           // for get_file_str, E_File, E_File::Dat...
 #include "tools/serialization.hpp"  // for Unserializer, Serializer
 #include "tools/serialization.tpp"  // for operator<<, Serializer::Serialize...
+#include "tools/stream/stream.hpp"
 
 static std::string s_requestResult {};
 
-static int callback (
-    void * /* data */, int argc, char ** argv, char ** azColName )
+static int callback ( void * /* data */, int argc, char ** argv,
+                      char ** azColName )
 {
     for ( unsigned int i { 0u }; i < static_cast< unsigned int >( argc ); ++i )
     {
@@ -38,23 +39,22 @@ namespace database
 {
     Chunk request ( std::string const & request, bool checkError )
     {
-        std::string const databasePath {
+        std::string databasePath {
             path::get_file_str( path::E_File::Database ) };
 
         sqlite3 * database { nullptr };
         if ( sqlite3_open( databasePath.c_str(), &database ) )
         {
-            throw exception::Database {
-                databasePath,
-                "Can't open database - "s + sqlite3_errmsg( database ) };
+            std::cerr << "Can't open database - " << databasePath << "\n"
+                      << sqlite3_errmsg( database ) << std::endl;
         }
 
-        // Reset before every request
+        // Reset string before every request
         s_requestResult.clear();
 
         char * requestErrorMessage { const_cast< char * >( "" ) };
-        int    result = sqlite3_exec(
-               database, request.c_str(), callback, 0, &requestErrorMessage );
+        int    result = sqlite3_exec( database, request.c_str(), callback, 0,
+                                      &requestErrorMessage );
 
         if ( result != 0 )
         {
@@ -73,14 +73,12 @@ namespace database
 
     bool is_table_created ( std::string tableName )
     {
-        std::ostringstream requestStream {};
-        requestStream
-            << "SELECT name FROM sqlite_master WHERE type = 'table' AND "
-               "name = '"
-            << tableName << "';";
+        std::ostringstream request {};
+        request << "SELECT name FROM sqlite_master WHERE type = 'table' AND "
+                   "name = '"
+                << tableName << "';";
 
-        return database::request( requestStream.str() ).to_string()
-               == tableName;
+        return database::request( request.str() ).to_string() == tableName;
     }
 
     /* ********************************************************************
@@ -91,9 +89,7 @@ namespace database
     {
         if ( ! is_table_created( name ) )
         {
-            throw exception::Database {
-                path::get_file_str( path::E_File::Database ),
-                "Table " + name + " not found" };
+            database::request( "CREATE TABLE " + name );
         }
     }
 

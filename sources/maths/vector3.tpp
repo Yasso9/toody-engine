@@ -23,8 +23,8 @@ namespace math
     ************************************************************************ */
 
     template< C_Primitive Type >
-    Vector3< Type > operator* (
-        Vector3< Type > vectorLeft, Vector3< Type > vectorRight )
+    Vector3< Type > operator* ( Vector3< Type > vectorLeft,
+                                Vector3< Type > vectorRight )
     {
         Vector3< Type > result {};
 
