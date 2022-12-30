@@ -1,5 +1,7 @@
 #include "collision_list.hpp"
 
+CollisionList::CollisionList() : m_collisionArray {} {}
+
 CollisionList::CollisionList(
     std::vector< StaticEntity2D > const & entityArray )
   : m_collisionArray { entityArray }

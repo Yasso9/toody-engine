@@ -19,14 +19,19 @@ class Array2D
     Array2D( std::vector< std::vector< Type > > array );
     virtual ~Array2D() = default;
 
+    /// @brief Get the number of column (x) and lines (y) of the array
     math::Vector2U              get_size () const;
     std::vector< Type > const & get_raw_array () const;
     Type const & get_element ( unsigned int column, unsigned int line ) const;
     Type &       get_element ( unsigned int column, unsigned int line );
-    unsigned int get_index ( unsigned int column, unsigned int line );
+
+    math::Vector2U get_position ( unsigned int index ) const;
+    unsigned int   get_index ( unsigned int column, unsigned int line ) const;
+    unsigned int   get_last_index () const;
+
     std::vector< Type > const operator[] ( unsigned int line ) const;
 
-    void set_size ( math::Vector2U size, Type defaultValue );
+    void set_size ( math::Vector2U size, Type defaultValue = Type {} );
 
     template< typename TypeBis >
     friend std::ostream & operator<< ( std::ostream &             stream,

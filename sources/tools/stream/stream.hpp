@@ -18,7 +18,7 @@ namespace stream
 template< typename Type >
 std::ostream & operator<< ( std::ostream &              stream,
                             std::vector< Type > const & array );
-/// @brief Writing C_Printable
+
 template< typename Type >
 std::istream & operator>> ( std::istream &        stream,
                             std::vector< Type > & array );

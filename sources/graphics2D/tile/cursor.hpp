@@ -2,17 +2,35 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
+#include "component/component.hpp"
+
 namespace tile
 {
-    /// @todo Set it as a component
-    class Cursor
+    /// @todo have rounded corner
+    class Cursor : public Component
     {
       public:
-        sf::RectangleShape shape;
+        enum Type
+        {
+            Outline,
+            Full
+        };
 
-        Cursor();
+        sf::RectangleShape m_shape;
+        Type               m_type;
+
+      public:
+        Cursor( Type type );
         virtual ~Cursor() = default;
 
       private:
+        void render ( Render & render ) const override;
+
+      public:
+        void hide ();
+        void show_at_position ( math::Vector2F position );
+
+      private:
+        void set_color ( sf::Color color );
     };
 }  // namespace tile

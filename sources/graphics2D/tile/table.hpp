@@ -24,8 +24,6 @@ namespace tile
 
       public:
         Table( sf::Texture const & m_texture );
-        // Table( std::vector< Tile > tiles, tile::Size size );
-        // Table( std::vector< std::vector< Tile > > tiles );
         ~Table() = default;
 
       private:
@@ -42,5 +40,8 @@ namespace tile
       private:
         using Array2D< Tile >::get_size;
         using Array2D< Tile >::set_size;
+
+        /// @brief Update all the tiles position as they should be
+        void update_tiles_position ();
     };
 }  // namespace tile

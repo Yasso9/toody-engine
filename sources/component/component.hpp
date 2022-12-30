@@ -6,9 +6,9 @@
 #include <SFML/Graphics/Transformable.hpp>  // for Transformable
 
 #include "graphics2D/view.hpp"
+#include "main/render.hpp"
 
 class Component;
-class Render;
 
 /// @brief check if the Type is derived from Component
 template< typename Type >

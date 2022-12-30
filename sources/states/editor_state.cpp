@@ -31,17 +31,15 @@ EditorState::EditorState()
     m_view { Window::get_instance().getDefaultView() },
     /// @todo know if the values are true or false with database
     m_showWindow {
-            {    "demo_window", false},
-            {  "debug_options", false},
-            {      "collision", false},
+        {    "demo_window", false},
+        {  "debug_options", false},
+        {      "collision", false},
         {"player_handling", false},
         {       "dialogue", false},
         {           "view", false}, },
     m_tilemap { m_view },
     m_imageMap {},
-    m_collisionList {
-        { StaticEntity2D { math::RectangleF { 100.f, 100.f, 50.f, 50.f } },
-          StaticEntity2D { math::RectangleF { -200.f, -50.f, 100.f, 100.f } } } },
+    m_collisionList {},
     // m_greenEntity {
     //     math::RectangleF { 0.f, 0.f, 40.f, 40.f },
     //     { m_collisionList, m_view, input::ILKJ } },
@@ -114,14 +112,21 @@ void EditorState::update( float deltaTime )
     {  // UPDATE TOOLBAR
         if ( ImGui::BeginMenu( "Options" ) )
         {
-            bool quitEditor { false };
+            bool        quitEditor { false };
+            static bool resetView { false };
 
             ImGui::MenuItem( "Quit Editor", "Escape", &quitEditor );
+            ImGui::MenuItem( "Reset View", "Ctrl + C", &resetView );
             ImGui::EndMenu();
 
             if ( quitEditor )
             {
                 this->set_new_state( State::E_List::MainMenu );
+            }
+            if ( resetView )
+            {
+                this->reset_view();
+                resetView = false;
             }
         }
         ImGui::EndMainMenuBar();

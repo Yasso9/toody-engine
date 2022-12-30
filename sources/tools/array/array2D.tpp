@@ -70,80 +70,105 @@ std::vector< Type > const Array2D< Type >::operator[] (
 }
 
 template< typename Type >
-Type const & Array2D< Type >::get_element( unsigned int line,
-                                           unsigned int column ) const
+Type const & Array2D< Type >::get_element( unsigned int column,
+                                           unsigned int line ) const
 {
-    return const_cast< Array2D< Type > * >( this )->get_element( line, column );
+    return const_cast< Array2D< Type > * >( this )->get_element( column, line );
 }
 
 template< typename Type >
-Type & Array2D< Type >::get_element( unsigned int line, unsigned int column )
+Type & Array2D< Type >::get_element( unsigned int column, unsigned int line )
 {
-    return m_array2D[this->get_index( line, column )];
+    if ( column >= m_size.x || line >= m_size.y )
+    {
+        std::cerr << "Element " << math::Vector2 { column, line }
+                  << " too big for array of size " << m_size << std::endl;
+    }
+
+    return m_array2D[this->get_index( column, line )];
+}
+
+template< typename Type >
+math::Vector2U Array2D< Type >::get_position( unsigned int index ) const
+{
+    return math::Vector2U { static_cast< unsigned int >(
+        index % m_size.x, std::floor( index / m_size.x ) ) };
 }
 
 template< typename Type >
 unsigned int Array2D< Type >::get_index( unsigned int column,
-                                         unsigned int line )
+                                         unsigned int line ) const
 {
     return column + line * m_size.x;
 }
 
 template< typename Type >
+unsigned int Array2D< Type >::get_last_index() const
+{
+    return m_size.x * m_size.y - 1;
+}
+
+template< typename Type >
 void Array2D< Type >::set_size( math::Vector2U size, Type defaultValue )
 {
-    std::cout << "Array base " << m_array2D << std::endl;
-
-    // Changment in columns
-    if ( this->get_size().x < size.x )
+    // Changment in lines, we add element in columns
+    if ( m_size.y < size.y )
     {
-        unsigned int diff = size.x - this->get_size().x;
+        // Differences between the 2 sizes
+        unsigned int diff = size.y - m_size.y;
 
-        for ( unsigned int index = size.x; index < size.x * this->get_size().y;
+        // We add lines at the end of the array so we can just append a vector
+        // of the desized size
+        std::vector< Type > newVector {};
+        newVector.assign( diff * m_size.x, defaultValue );
+
+        vector::append( m_array2D, newVector );
+
+        // Update the size
+        m_size.y = size.y;
+    }
+    else if ( m_size.y > size.y )
+    {
+        m_size.y = size.y;
+
+        // We remove lines at the end of the array so we erase element to the
+        // specified index
+        m_array2D.erase( m_array2D.begin() + this->get_last_index() + 1,
+                         m_array2D.end() );
+    }
+
+    // Changment in columns, we add element in lines
+    if ( m_size.x < size.x )
+    {
+        // Number of element to add in each lines
+        unsigned int diff = size.x - m_size.x;
+
+        for ( unsigned int index = m_size.x; index <= size.x * m_size.y;
               index += size.x )
         {
             m_array2D.insert( m_array2D.begin() + index, diff, defaultValue );
         }
     }
-    else if ( this->get_size().x > size.x )
+    else if ( m_size.x > size.x )
     {
-        unsigned int diff = this->get_size().x - size.x;
+        int diff = static_cast< int >( m_size.x - size.x );
 
-        for ( unsigned int index = size.x; index < size.x * this->get_size().y;
-              index += this->get_size().x )
+        for ( int index = static_cast< int >( this->get_last_index() ) + 1;
+              index >= diff; index -= static_cast< int >( m_size.x ) )
         {
-            m_array2D.erase( m_array2D.begin() + index,
-                             m_array2D.begin() + index + diff );
+            m_array2D.erase( m_array2D.begin() + index - diff,
+                             m_array2D.begin() + index );
         }
     }
 
-    std::cout << "Array X " << m_array2D << std::endl;
-
     m_size.x = size.x;
 
-    // Changment in lines
-    if ( this->get_size().y < size.y )
+    if ( m_size.x * m_size.y != m_array2D.size() )
     {
-        unsigned int diff = size.y - this->get_size().y;
-
-        std::vector< Type > newVector {};
-        newVector.assign( diff * this->get_size().x, defaultValue );
-
-        std::cout << "New Vector " << newVector << std::endl;
-
-        vector::append( m_array2D, newVector );
+        std::cerr << "Size " << m_size
+                  << " isn't comptatible with an vector of size "
+                  << m_array2D.size() << std::endl;
     }
-    else if ( this->get_size().y > size.y )
-    {
-        // Index
-        unsigned int lastElement = this->get_size().x * size.y;
-
-        m_array2D.erase( m_array2D.begin() + lastElement, m_array2D.end() );
-    }
-
-    std::cout << "Array Y " << m_array2D << std::endl;
-
-    m_size.y = size.y;
 }
 
 template< typename Type >
@@ -161,5 +186,8 @@ std::istream & operator>> ( std::istream & stream, Array2D< Type > & array )
     stream::ignore_next( stream, '|' );
     stream >> array.m_array2D;
     stream::ignore_next( stream, '}' );
+
+    ASSERTION( array.m_size.x * array.m_size.y == array.m_array2D.size(), "" );
+
     return stream;
 }

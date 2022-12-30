@@ -7,6 +7,7 @@ class CollisionList : public Component
     std::vector< StaticEntity2D > m_collisionArray;
 
   public:
+    CollisionList();
     CollisionList( std::vector< StaticEntity2D > const & entityArray );
 
     std::vector< StaticEntity2D > const & get_entities () const;

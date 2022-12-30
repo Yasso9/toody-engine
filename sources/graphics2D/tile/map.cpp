@@ -73,19 +73,19 @@ namespace tile
     Map::Map( View & view )
       : m_tileSelector {},
         m_table { m_tileSelector.get_tileset().get_texture() },
-        m_cursor {},
+        m_cursor { Cursor::Outline },
         m_view { view },
-        m_currentDepth { 0u },
         m_saveFile { path::get_folder( path::E_Folder::Data ) / "tilemap.txt" }
     {
-        this->add_child( m_table );
         this->add_child( m_tileSelector );
+        this->add_child( m_table );
+        this->add_child( m_cursor );
 
         {  // Load table from file
             std::string content { get_file_content( m_saveFile ) };
             if ( content == "" )
             {
-                content = "{ ( 0, 0 ) | [] }";
+                content = "{ ( 1, 1 ) | [ (0, 0) ] }";
             }
             std::stringstream stream {};
             stream << content;
@@ -108,7 +108,7 @@ namespace tile
                      || ImGui::IsWindowHovered( ImGuiHoveredFlags_AnyWindow ) )
                 {
                     // The mouse is outside the tilemap
-                    m_cursor.shape.setOutlineColor( sf::Color::Transparent );
+                    m_cursor.hide();
                 }
                 else
                 {
@@ -123,10 +123,8 @@ namespace tile
                             tilePosition,
                             m_tileSelector.get_tile_selected().value() );
                     }
-                    // The mouse is inside the tilemap, we show the cursor
-                    m_cursor.shape.setOutlineColor(
-                        sf::Color { 48, 48, 48, 128 } );
-                    m_cursor.shape.setPosition(
+
+                    m_cursor.show_at_position(
                         tilePosition.pixel().to_float() );
                 }
             }
@@ -266,12 +264,6 @@ namespace tile
         ImGui::End();
     }
 
-    void Map::render( Render & render ) const
-    {
-        /// @todo Create a method cursor.draw
-        render.draw( m_cursor.shape );
-    }
-
     tile::Set const & Map::get_tileset() const
     {
         return this->m_tileSelector.get_tileset();
@@ -334,22 +326,21 @@ namespace tile
         stream.close();
     }
 
-    void Map::change_tile( tile::Position tilemapPosition,
-                           tile::Position tilesetPosition )
+    void Map::change_tile( tile::Position position, tile::Position value )
     {
-        if ( tilemapPosition >= this->get_size() )
+        /// @todo make a is_comptatible method
+        if ( position >= this->get_size() )
         {
             std::cerr << "Tilemap position not comptatible with current tilemap"
                       << std::endl;
         }
-        if ( tilesetPosition >= this->get_tileset().get_size() )
+        if ( value >= this->get_tileset().get_size() )
         {
             std::cerr << "Tileset position not comptatible with current tileset"
                       << std::endl;
         }
 
-        m_table
-            .get_element( tilemapPosition.tile().x, tilemapPosition.tile().y )
-            .set_value( tilesetPosition );
+        m_table.get_element( position.tile().x, position.tile().y )
+            .set_value( value );
     }
 }  // namespace tile

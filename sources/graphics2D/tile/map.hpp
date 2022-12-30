@@ -23,18 +23,11 @@ namespace tile
     class Map : public Transformable2D
     {
         tile::Selector m_tileSelector;
+        tile::Table    m_table;
 
-        tile::Table m_table;
-
-        // database::Table m_databaseTable;
-
-        /// @todo set it as a component
         tile::Cursor m_cursor;
         /// @brief view of the component that call the tilemap
         View &       m_view;
-
-        /// @todo maybe rework that
-        unsigned int m_currentDepth;
 
         std::filesystem::path m_saveFile;
 
@@ -44,7 +37,6 @@ namespace tile
 
       private:
         void update ( float deltaTime ) override;
-        void render ( Render & render ) const override;
 
       public:
         /// @brief Reference to the tileset that the tilemap use
@@ -68,7 +60,7 @@ namespace tile
         void save () const;
 
       private:
-        void change_tile ( tile::Position tilemapPosition,
-                           tile::Position tilesetPosition );
+        void change_tile ( tile::Position position,
+                           tile::Position value );
     };
 }  // namespace tile

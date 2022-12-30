@@ -4,11 +4,8 @@
 
 #include <SFML/Graphics/RenderStates.hpp>  // for RenderStates, RenderStates...
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/Texture.hpp>
 
-namespace sf
-{
-    class Texture;
-}  // namespace sf
 class View;
 
 class Render
