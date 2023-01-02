@@ -72,9 +72,9 @@ namespace math
     }
 
     template< C_Primitive Type >
-    std::vector< Segment< Type > > Polygon< Type >::get_segments() const
+    std::vector< Line< Type > > Polygon< Type >::get_segments() const
     {
-        std::vector< Segment< Type > > segments {};
+        std::vector< Line< Type > > segments {};
         // Set the number of elements that the vector should contain
         segments.resize( this->get_number_of_points() );
 
@@ -83,8 +83,8 @@ namespace math
         {
             unsigned int i_pointNext { ( i_point + 1 )
                                        % this->get_number_of_points() };
-            segments[i_point] = math::Segment< Type > {
-                ( *this )[i_point], ( *this )[i_pointNext] };
+            segments[i_point] = math::Line< Type > { ( *this )[i_point],
+                                                     ( *this )[i_pointNext] };
         }
 
         return segments;

@@ -29,12 +29,10 @@ void test_serializer ()
 
     std::cout << "\n" << std::endl;
 
-    std::vector< std::vector< int > > arrayB {
-        {745,   524,  879,   858},
-        {745,   454,  879, 45714},
-        {745, 45474, 4141,   858},
-        {474,   454,  879,   858}
-    };
+    std::vector< std::vector< int > > arrayB { { 745, 524, 879, 858 },
+                                               { 745, 454, 879, 45714 },
+                                               { 745, 45474, 4141, 858 },
+                                               { 474, 454, 879, 858 } };
     std::cout << "arrayB : " << arrayB << std::endl;
 
     std::stringstream streamB {};

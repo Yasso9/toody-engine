@@ -18,12 +18,7 @@
 
 namespace tile
 {
-    Tile::Tile()
-      : Tile {
-          math::Vector2F {0, 0},
-           math::Vector2F {0, 0}
-    }
-    {}
+    Tile::Tile() : Tile { math::Vector2F { 0, 0 }, math::Vector2F { 0, 0 } } {}
 
     Tile::Tile( tile::Position position, tile::Position value )
       : Tile { position.pixel().to_float(), value.pixel().to_float() }

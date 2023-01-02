@@ -48,10 +48,8 @@ namespace tile
 
     void Table::update_tiles_position()
     {
-        tile::Position i_position {
-            math::Vector2U {0u, 0u},
-             m_size.x, tile::Position::Tile
-        };
+        tile::Position i_position { math::Vector2U { 0u, 0u }, m_size.x,
+                                    tile::Position::Tile };
 
         for ( Tile & tile : m_array2D )
         {

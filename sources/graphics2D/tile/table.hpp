@@ -35,7 +35,7 @@ namespace tile
         void       set_size ( tile::Size size );
 
         friend std::istream & operator>> ( std::istream & stream,
-                                           Table &        table );
+                                           Table &        table );  // override
 
       private:
         using Array2D< Tile >::get_size;

@@ -2,11 +2,10 @@
 
 #include <optional>
 
+#include "SFML/Graphics/Sprite.hpp"
 #include "component/component.hpp"  // for Component
 #include "graphics2D/color.hpp"
 #include "graphics2D/tile/set.hpp"  // for Tileset
-
-struct ImDrawList;
 
 namespace tile
 {
@@ -29,8 +28,5 @@ namespace tile
 
         tile::Set const &               get_tileset () const;
         std::optional< tile::Position > get_tile_selected () const;
-
-      private:
-        void update_selection ( ImDrawList & drawList );
     };
 }  // namespace tile

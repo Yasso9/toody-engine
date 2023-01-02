@@ -28,20 +28,14 @@ namespace math
     {
         Vector3< Type > result {};
 
-        Matrix2 withoutX {
-            {vectorLeft.y, vectorRight.y},
-            {vectorLeft.z, vectorRight.z}
-        };
+        Matrix2 withoutX { { vectorLeft.y, vectorRight.y },
+                           { vectorLeft.z, vectorRight.z } };
         result.x = withoutX.get_determining_factor();
-        Matrix2 withoutY {
-            {vectorLeft.x, vectorRight.x},
-            {vectorLeft.z, vectorRight.z}
-        };
+        Matrix2 withoutY { { vectorLeft.x, vectorRight.x },
+                           { vectorLeft.z, vectorRight.z } };
         result.y = -withoutY.get_determining_factor();
-        Matrix2 withoutZ {
-            {vectorLeft.x, vectorRight.x},
-            {vectorLeft.y, vectorRight.y}
-        };
+        Matrix2 withoutZ { { vectorLeft.x, vectorRight.x },
+                           { vectorLeft.y, vectorRight.y } };
         result.z = withoutZ.get_determining_factor();
 
         return result;

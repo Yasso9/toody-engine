@@ -163,9 +163,8 @@ std::vector< std::string > Model::load_material_textures(
         if ( ! this->m_texturesLoaded.contains( texturePath ) )
         {
             // We save it in the loaded texture
-            this->m_texturesLoaded.insert( {
-                texturePath, Texture {texturePath, textureType}
-            } );
+            this->m_texturesLoaded.insert(
+                { texturePath, Texture { texturePath, textureType } } );
         }
     }
 

@@ -41,7 +41,7 @@ namespace math
 
         std::string print () const;
 
-        std::vector< Segment< Type > > get_segments () const;
+        std::vector< Line< Type > >    get_segments () const;
         std::vector< Point< Type > >   get_points () const;
         std::vector< Point< Type > > & get_points ();
 

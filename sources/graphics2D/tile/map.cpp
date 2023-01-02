@@ -149,16 +149,9 @@ namespace tile
                 if ( ImGui::Button( "Update Size" ) )
                 {
                     m_table.set_size( tile::Size {
-                        math::Vector2I {tileNumbers[0], tileNumbers[1]}
+                        math::Vector2I { tileNumbers[0], tileNumbers[1] }
                             .to_u_int(),
-                        tile::Size::Tile
-                    } );
-
-                    // ASSERTION(
-                    //     tileNumbers[0] == this->get_size().tile().to_int().x
-                    //         && tileNumbers[1] ==
-                    //         this->get_size().tile().to_int().y,
-                    //     "Issue with tilemap resize" );
+                        tile::Size::Tile } );
                 }
             }
 

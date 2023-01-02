@@ -2,7 +2,7 @@
 
 #include "point.hpp"
 
-#include "maths/geometry/segment.hpp"
+#include "maths/geometry/line.hpp"
 
 namespace math
 {
@@ -66,7 +66,7 @@ namespace math
     }
 
     template< C_Primitive Type >
-    bool Point< Type >::is_inside( Segment< Type > segment ) const
+    bool Point< Type >::is_inside( Line< Type > segment ) const
     {
         return this->x <= std::max( segment.pointA.x, segment.pointB.x )
                && this->x >= std::min( segment.pointA.x, segment.pointB.x )
@@ -95,8 +95,8 @@ namespace math
         constexpr float LIMIT_ZONE { 10000.f };
 
         // Create a point for line segment from p to infinite
-        Point< Type >   extremePoint { LIMIT_ZONE, this->y };
-        Segment< Type > segmentToCheck { *this, extremePoint };
+        Point< Type > extremePoint { LIMIT_ZONE, this->y };
+        Line< Type >  segmentToCheck { *this, extremePoint };
 
         unsigned int numberOfIntersection { 0u };
         for ( auto segment : polygon.get_segments() )

@@ -16,7 +16,7 @@ namespace math
     };
 
     template< C_Primitive Type >
-    class Segment;
+    class Line;
     template< C_Primitive Type >
     class Rectangle;
     template< C_Primitive Type >
@@ -56,7 +56,7 @@ namespace math
         Point< std::size_t > to_size_t () const
             requires ( not std::is_same_v< Type, std::size_t > );
 
-        bool is_inside ( Segment< Type > segment ) const;
+        bool is_inside ( Line< Type > segment ) const;
         bool is_inside ( Point< Type > position, Vector2< Type > size ) const;
         bool is_inside ( Rectangle< Type > rectangle ) const;
         bool is_inside ( Polygon< Type > polygon ) const;

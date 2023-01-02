@@ -1,7 +1,7 @@
 BasedOnStyle: Google
 AccessModifierOffset: -2
 AlignAfterOpenBracket: Align
-AlignArrayOfStructures: Right
+# AlignArrayOfStructures: Right # Buggy on some cases
 AlignConsecutiveAssignments: Consecutive # cannot put custom fields ?
 AlignConsecutiveBitFields: Consecutive # cannot put custom fields ?
 AlignConsecutiveDeclarations: AcrossComments # cannot put custom fields ?

@@ -19,11 +19,9 @@ State::State( State::E_List const & stateName )
 {}
 
 std::map< std::string, State::E_List > const State::m_enumStateListMaps = {
-    {"Main Menu", E_List::MainMenu},
-    {   "Editor",   E_List::Editor},
-    { "Graphics", E_List::Graphics},
-    {     "Test",     E_List::Test},
-    {     "Quit",     E_List::Quit},
+    { "Main Menu", E_List::MainMenu }, { "Editor", E_List::Editor },
+    { "Graphics", E_List::Graphics },  { "Test", E_List::Test },
+    { "Quit", E_List::Quit },
 };
 
 State::E_List State::get_enum_state( std::string string )
@@ -86,8 +84,11 @@ void State::update_inputs( sf::Event const & event )
         this->mouse_moved( event );
         break;
     case sf::Event::MouseWheelScrolled :
-        input::set_mouse_scroll( event.mouseWheelScroll.delta );
-        this->mouse_scroll( event.mouseWheelScroll.delta );
+        if ( ! ImGui::IsWindowHovered( ImGuiHoveredFlags_AnyWindow ) )
+        {  // No ImGui Window should be hovered for the scroll to be taken
+            input::set_mouse_scroll( event.mouseWheelScroll.delta );
+            this->mouse_scroll( event.mouseWheelScroll.delta );
+        }
         break;
     default :
         break;

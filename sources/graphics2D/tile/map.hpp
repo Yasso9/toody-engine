@@ -18,8 +18,6 @@ class View;
 
 namespace tile
 {
-    /// @todo have a Map and Set that are dependant. Maybe create an abstract
-    /// class.
     class Map : public Transformable2D
     {
         tile::Selector m_tileSelector;
@@ -60,7 +58,6 @@ namespace tile
         void save () const;
 
       private:
-        void change_tile ( tile::Position position,
-                           tile::Position value );
+        void change_tile ( tile::Position position, tile::Position value );
     };
 }  // namespace tile

@@ -138,9 +138,7 @@ namespace database
                   << std::endl;
 
         std::vector< std::vector< std::vector< unsigned int > > > tripleArray {
-            {{ 0 }, { 2 }},
-            {{ 2 }, { 0 }}
-        };
+            { { 0 }, { 2 } }, { { 2 }, { 0 } } };
 
         std::cout << "tripleArray : |" << tripleArray << "|" << std::endl;
         std::cout << "tripleArray serialized : |"

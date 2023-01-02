@@ -1,17 +1,17 @@
 #pragma once
 
-#include "segment.hpp"
+#include "line.hpp"
 
 namespace math
 {
     template< C_Primitive Type >
-    bool Segment< Type >::is_intersected_by( Segment< Type > segment ) const
+    bool Line< Type >::is_intersected_by( Line< Type > segment ) const
     {
         return is_intersection( *this, segment );
     }
 
     template< C_Primitive Type >
-    bool is_intersection ( Segment< Type > segment1, Segment< Type > segment2 )
+    bool is_intersection ( Line< Type > segment1, Line< Type > segment2 )
     {
         // Find the four orientations needed for general and
         // special cases
@@ -64,6 +64,11 @@ namespace math
 
         return false;  // Doesn't fall in any of the above cases
     }
-}  // namespace math
 
-#include "segment.tpp"
+    template< typename Type >
+    std::ostream & operator<< ( std::ostream &       stream,
+                                Line< Type > const & line )
+    {
+        return stream << "{ A:" << line.pointA << " B:" << line.pointB << " }";
+    }
+}  // namespace math

@@ -29,21 +29,18 @@
 EditorState::EditorState()
   : State { State::E_List::Editor },
     m_view { Window::get_instance().getDefaultView() },
-    /// @todo know if the values are true or false with database
     m_showWindow {
-        {    "demo_window", false},
-        {  "debug_options", false},
-        {      "collision", false},
-        {"player_handling", false},
-        {       "dialogue", false},
-        {           "view", false}, },
+        { "demo_window", false }, { "debug_options", false },
+        { "collision", false },   { "player_handling", false },
+        { "dialogue", false },    { "view", false },
+    },
     m_tilemap { m_view },
     m_imageMap {},
     m_collisionList {},
     // m_greenEntity {
     //     math::RectangleF { 0.f, 0.f, 40.f, 40.f },
     //     { m_collisionList, m_view, input::ILKJ } },
-    m_character { resources::get_texture( "gold_sprite.png" ) ,
+    m_character { resources::get_texture( "gold_sprite.png" ),
                   { m_collisionList, m_view, input::ARROW } },
     m_dialogue {}
 {
@@ -81,14 +78,12 @@ void EditorState::update( float deltaTime )
         float const          viewScrollValue { input::get_mouse_scroll()
                                       * viewScrollSpeed };
         math::Vector2F const viewMoveSpeed {
-            math::Vector2F {viewMoveSpeedBase, viewMoveSpeedBase}
-            / m_view.get_zoom()
-        };
+            math::Vector2F { viewMoveSpeedBase, viewMoveSpeedBase }
+            / m_view.get_zoom() };
         math::Vector2F const viewMoveValue {
             input::is_pressed( sf::Mouse::Right )
                 ? input::get_mouse_movement() * viewMoveSpeed
-                : math::Vector2F {0.f, 0.f}
-        };
+                : math::Vector2F { 0.f, 0.f } };
 
         ImGui::P_Show( "View Options", &m_showWindow.at( "view" ), [&] () {
             std::stringstream output {};
@@ -108,28 +103,36 @@ void EditorState::update( float deltaTime )
         m_view.move( viewMoveValue );
     }
 
-    if ( ImGui::BeginMainMenuBar() )
     {  // UPDATE TOOLBAR
-        if ( ImGui::BeginMenu( "Options" ) )
-        {
-            bool        quitEditor { false };
-            static bool resetView { false };
+        bool        quitEditor { false };
+        static bool resetView { false };
+        static bool showDemo { false };
 
-            ImGui::MenuItem( "Quit Editor", "Escape", &quitEditor );
-            ImGui::MenuItem( "Reset View", "Ctrl + C", &resetView );
-            ImGui::EndMenu();
-
-            if ( quitEditor )
+        if ( ImGui::BeginMainMenuBar() )
+        {  // UPDATE TOOLBAR
+            if ( ImGui::BeginMenu( "Options" ) )
             {
-                this->set_new_state( State::E_List::MainMenu );
+                ImGui::MenuItem( "Quit Editor", "Escape", &quitEditor );
+                ImGui::MenuItem( "Reset View", "Ctrl + C", &resetView );
+                ImGui::MenuItem( "Show Demo Window", "", &showDemo );
+                ImGui::EndMenu();
             }
-            if ( resetView )
-            {
-                this->reset_view();
-                resetView = false;
-            }
+            ImGui::EndMainMenuBar();
         }
-        ImGui::EndMainMenuBar();
+
+        if ( quitEditor )
+        {
+            this->set_new_state( State::E_List::MainMenu );
+        }
+        if ( resetView )
+        {
+            this->reset_view();
+            resetView = false;
+        }
+        if ( showDemo )
+        {
+            ImGui::ShowDemoWindow( &showDemo );
+        }
     }
 
     {  // UPDATE OVERLAY
@@ -146,14 +149,14 @@ void EditorState::update( float deltaTime )
         ImGui::SetNextWindowPos( overlayPosition, ImGuiCond_Always );
         ImGui::SetNextWindowBgAlpha( 0.8f );
         ImGui::P_Show( "Editor Main", NULL, window_flags, [&] () {
-            static bool customizeCollision { false };
-            ImGui::Checkbox( "Customize Collisions ?", &customizeCollision );
-            m_collisionList.set_customisation( customizeCollision );
-
             std::stringstream frameRateStream {};
             frameRateStream << "Frame Rate : " << std::round( 1.f / deltaTime )
                             << "\n";
             ImGui::Text( "%s", frameRateStream.str().c_str() );
+
+            static bool customizeCollision { false };
+            ImGui::Checkbox( "Customize Collisions ?", &customizeCollision );
+            m_collisionList.set_customisation( customizeCollision );
 
             static bool showDebug { false };
             ImGui::Checkbox( "Show Debug", &showDebug );
@@ -168,7 +171,7 @@ void EditorState::update( float deltaTime )
                     << "\n";
                 overlayOutput
                     << "Is Any Window Hovered ? : "
-                    << ImGui::IsWindowFocused( ImGuiHoveredFlags_AnyWindow )
+                    << ImGui::IsWindowHovered( ImGuiHoveredFlags_AnyWindow )
                     << "\n";
                 ImGui::Text( "%s", overlayOutput.str().c_str() );
             }
@@ -184,11 +187,6 @@ void EditorState::update( float deltaTime )
 
             m_dialogue.set_enabled( m_showWindow.at( "dialogue" ) );
         } );
-    }
-
-    if ( m_showWindow.at( "demo_window" ) )
-    {
-        ImGui::ShowDemoWindow( &m_showWindow.at( "demo_window" ) );
     }
 
     if ( m_showWindow.at( "debug_options" ) )
