@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <iostream>  // for ostream
 #include <vector>    // for vector
 
@@ -10,7 +11,6 @@
 #include "graphics2D/tile/tile.hpp"      // for Tile
 #include "maths/vector2.hpp"             // for Vector2F, Vector2U
 #include "maths/vector2.tpp"             // for operator/, Vector2::oper...
-#include "tools/databases.hpp"
 
 class Render;
 class Set;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <string>  // for string
 
 namespace sf
@@ -11,8 +12,8 @@ namespace sf
 
 namespace resources
 {
-    sf::Texture const & get_texture ( std::string const & file );
-    sf::Font const &    get_font ( std::string const & file );
+    sf::Texture const & get_texture ( std::filesystem::path const & file );
+    sf::Font const &    get_font ( std::filesystem::path const & file );
     /// @todo because of the deletion of the copy operator, we cannot return
     /// const for a modified shader, so replace shf::Shader by a custom created
     /// shader

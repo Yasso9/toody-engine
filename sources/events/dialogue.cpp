@@ -18,7 +18,8 @@
 #include "maths/geometry/point.tpp"  // for Point::Point<Type>, Point:...
 #include "maths/vector2.tpp"         // for Vector2::to_float, Vector2...
 #include "tools/exceptions.hpp"      // for System
-#include "tools/singleton.tpp"       // for Singleton::get_instance
+#include "tools/path.hpp"
+#include "tools/singleton.tpp"  // for Singleton::get_instance
 
 Dialogue::Dialogue()
   : m_shape {},
@@ -43,7 +44,8 @@ Dialogue::Dialogue()
     m_shape.setOutlineThickness( 3.f );
     m_shape.setOutlineColor( sf::Color::Black );
 
-    m_text.setFont( resources::get_font( "arial.ttf" ) );
+    m_text.setFont(
+        resources::get_font( path::get_folder( path::Fonts ) / "arial.ttf" ) );
     m_text.setCharacterSize( 30u );
     m_text.setFillColor( sf::Color::Red );
 

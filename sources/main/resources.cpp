@@ -3,10 +3,11 @@
 #include <algorithm>   // for find
 #include <compare>     // for operator<, strong_ordering
 #include <filesystem>  // for path, operator/, operator<=>
-#include <map>         // for map
-#include <memory>      // for unique_ptr, make_unique
-#include <utility>     // for move
-#include <vector>      // for vector
+#include <iostream>
+#include <map>      // for map
+#include <memory>   // for unique_ptr, make_unique
+#include <utility>  // for move
+#include <vector>   // for vector
 
 #include <SFML/Graphics/Font.hpp>     // for Font
 #include <SFML/Graphics/Shader.hpp>   // for Shader
@@ -21,64 +22,59 @@ namespace resources
         std::filesystem::path      path,
         std::vector< std::string > imageExtensionHandled );
 
-    sf::Texture const & get_texture ( std::string const & file )
+    sf::Texture const & get_texture ( std::filesystem::path const & file )
     {
         static std::map< std::filesystem::path, sf::Texture > textures {};
 
-        std::filesystem::path const texturePath {
-            path::get_folder( path::E_Folder::Resources ) / file };
-        if ( ! is_file_suitable( texturePath, { ".jpg", ".png" } ) )
+        if ( ! is_file_suitable( file, { ".jpg", ".png" } ) )
         {
-            /// @todo mettre une exception plus valable
-            throw exception::FileLoadingIssue { texturePath, "Texture" };
+            std::cerr << "File : " << file << " isn't suitable for texture"
+                      << std::endl;
         }
 
-        if ( ! textures.contains( texturePath ) )
+        if ( ! textures.contains( file ) )
         {  // The texture is new, we load it
             bool textureLoad { true };
 
             sf::Texture texture {};
 
-            textureLoad &= texture.loadFromFile( texturePath.string() );
+            textureLoad &= texture.loadFromFile( file.string() );
             textureLoad &= texture.generateMipmap();
 
             if ( ! textureLoad )
             {
-                throw exception::FileLoadingIssue { texturePath, "Texture" };
+                std::cerr << "Impossible to load file " << file
+                          << " for texture";
             }
 
-            textures.insert( { texturePath, texture } );
+            textures.insert( { file, texture } );
         }
 
-        return textures.at( texturePath );
+        return textures.at( file );
     }
 
-    sf::Font const & get_font ( std::string const & file )
+    sf::Font const & get_font ( std::filesystem::path const & file )
     {
         static std::map< std::filesystem::path, sf::Font > fonts {};
 
-        std::filesystem::path const path {
-            path::get_folder( path::E_Folder::Resources ) / file };
-        if ( ! is_file_suitable( path, { ".ttf" } ) )
+        if ( ! is_file_suitable( file, { ".ttf" } ) )
         {
-            /// @todo mettre une excption plus valable
-            throw exception::FileLoadingIssue { path, "Font" };
+            std::cerr << "File : " << file << " isn't suitable for font"
+                      << std::endl;
         }
 
-        if ( ! fonts.contains( path ) )
+        if ( ! fonts.contains( file ) )
         {  // The texture is new, we load it
             sf::Font font {};
-            if ( ! font.loadFromFile( path.string() ) )
+            if ( ! font.loadFromFile( file.string() ) )
             {
-                throw exception::FileLoadingIssue { path, "Font" };
+                std::cerr << "Impossible to load file " << file << " for font";
             }
 
-            /// @todo verify that the texture loaded and the texture insert
-            /// hhave the same adress
-            fonts.insert( { path, font } );
+            fonts.insert( { file, font } );
         }
 
-        return fonts.at( path );
+        return fonts.at( file );
     }
 
     struct S_ShaderFiles

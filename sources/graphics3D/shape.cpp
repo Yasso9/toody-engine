@@ -9,6 +9,7 @@
 #include "graphics3D/load_shape.hpp"  // for complete
 #include "graphics3D/openGL.hpp"      // for draw_arrays, draw_elements
 #include "main/resources.hpp"         // for get_texture, get_shader
+#include "tools/path.hpp"
 
 class Camera;
 class Render;
@@ -28,8 +29,10 @@ unsigned int Shape::S_Data::get_number_of_element() const
 Shape::Shape( S_Data const & data, Camera const & camera )
   : Transformable { camera, resources::get_shader( "shape_shader.vert",
                                                    "shape_shader.frag" ) },
-    m_textures { resources::get_texture( "wall.jpg" ),
-                 resources::get_texture( "town_hall.png" ) },
+    m_textures { resources::get_texture( path::get_folder( path::Samples )
+                                         / "wall.jpg" ),
+                 resources::get_texture( path::get_folder( path::Samples )
+                                         / "town_hall.png" ) },
     m_vertexArrayObject {},
     m_vertexBufferObject {},
     m_elementBufferObject {},

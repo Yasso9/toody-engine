@@ -24,7 +24,8 @@
 #include "maths/geometry/rectangle.hpp"  // for RectangleF
 #include "maths/vector2.hpp"             // for Vector2F, Vector2, Vector2U
 #include "maths/vector2.tpp"             // for operator<<, operator*, opera...
-#include "tools/singleton.tpp"           // for Singleton::get_instance
+#include "tools/path.hpp"
+#include "tools/singleton.tpp"  // for Singleton::get_instance
 
 EditorState::EditorState()
   : State { State::E_List::Editor },
@@ -40,7 +41,8 @@ EditorState::EditorState()
     // m_greenEntity {
     //     math::RectangleF { 0.f, 0.f, 40.f, 40.f },
     //     { m_collisionList, m_view, input::ILKJ } },
-    m_character { resources::get_texture( "gold_sprite.png" ),
+    m_character { resources::get_texture( path::get_folder( path::Character )
+                                          / "gold_sprite.png" ),
                   { m_collisionList, m_view, input::ARROW } },
     m_dialogue {}
 {

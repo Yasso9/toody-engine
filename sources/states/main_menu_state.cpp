@@ -14,8 +14,9 @@
 #include "main/resources.hpp"  // for get_font
 #include "main/window.hpp"     // for Window
 #include "maths/geometry/rectangle.hpp"
-#include "maths/vector2.hpp"    // for Vector2, Vector2F, Vector2I
-#include "maths/vector2.tpp"    // for Vector2::operator Vector2<...
+#include "maths/vector2.hpp"  // for Vector2, Vector2F, Vector2I
+#include "maths/vector2.tpp"  // for Vector2::operator Vector2<...
+#include "tools/path.hpp"
 #include "tools/singleton.tpp"  // for Singleton::get_instance
 
 static math::RectangleF get_rectangle ( sf::Text text )
@@ -59,7 +60,10 @@ MainMenuState::MainMenuState()
     for ( std::string stateName : State::get_state_list() )
     {
         m_texts.push_back(
-            sf::Text { stateName, resources::get_font( "arial.ttf" ), 27u } );
+            sf::Text { stateName,
+                       resources::get_font( path::get_folder( path::Fonts )
+                                            / "arial.ttf" ),
+                       27u } );
     }
 
     math::Vector2F position { 150.f, 250.f };

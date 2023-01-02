@@ -26,9 +26,10 @@
 #include "tools/array/vector.hpp"
 #include "tools/assertion.hpp"        // for ASSERTION
 #include "tools/global_variable.hpp"  // for TILE_PIXEL_SIZE_I, TILE_PI...
-#include "tools/serialization.hpp"    // for Serializer, Unserializer
-#include "tools/serialization.tpp"    // for Serializer::Serializer<Typ...
-#include "tools/tools.tpp"            // for is_rectangle
+#include "tools/path.hpp"
+#include "tools/serialization.hpp"  // for Serializer, Unserializer
+#include "tools/serialization.tpp"  // for Serializer::Serializer<Typ...
+#include "tools/tools.tpp"          // for is_rectangle
 
 /// @todo put a grid on the tilemap
 
@@ -75,7 +76,7 @@ namespace tile
         m_table { m_tileSelector.get_tileset().get_texture() },
         m_cursor { Cursor::Outline },
         m_view { view },
-        m_saveFile { path::get_folder( path::E_Folder::Data ) / "tilemap.txt" }
+        m_saveFile { path::get_folder( path::Data ) / "tilemap.txt" }
     {
         this->add_child( m_tileSelector );
         this->add_child( m_table );

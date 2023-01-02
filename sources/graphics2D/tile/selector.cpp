@@ -17,11 +17,13 @@
 #include "maths/vector2.hpp"          // for Vector2F, Vector2, Vector2I
 #include "maths/vector2.tpp"          // for operator<<, operator+, Vector2:...
 #include "tools/global_variable.hpp"  // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZE_U
+#include "tools/path.hpp"
 
 namespace tile
 {
     Selector::Selector()
-      : m_tileset { resources::get_texture( "tilemap.png" ) },
+      : m_tileset { resources::get_texture( path::get_folder( path::Tilesets )
+                                            / "tilemap.png" ) },
         m_tileSelected { std::nullopt },
         m_gridColor { Color::RGBA { 118, 118, 118, 255 } }
     {}
