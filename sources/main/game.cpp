@@ -23,8 +23,8 @@
 #include "tools/assertion.hpp"         // for ASSERTION
 #include "tools/enumeration.hpp"       // for Enum
 #include "tools/enumeration.tpp"       // for operator<<, Enum::Enum<Type>
-#include "tools/exceptions.hpp"        // for System
 #include "tools/singleton.tpp"         // for Singleton::get_instance
+#include "tools/traces.hpp"
 
 Game::Game() : m_state( nullptr ), m_shouldRun( true )
 {
@@ -32,12 +32,11 @@ Game::Game() : m_state( nullptr ), m_shouldRun( true )
 
     if ( ! ImGui::SFML::Init( Window::get_instance() ) )
     {
-        throw exception::System { "Cannot init ImGui"s };
+        Trace::Error( "Cannot init ImGui" );
     }
-
     if ( ! sf::Shader::isAvailable() )
     {
-        throw exception::System { "Shader's not available"s };
+        Trace::Error( "Shader's not available" );
     }
 
     // Disable use of imgui.ini file
@@ -177,8 +176,8 @@ void Game::change_state( State::E_List const & newState )
 
     default :
         std::stringstream debugMessage {};
-        debugMessage << "State::E_List "s << Enum< State::E_List > { newState }
-                     << " unsupported"s;
+        debugMessage << "State::E_List " << Enum< State::E_List > { newState }
+                     << " unsupported";
         ASSERTION( false, debugMessage.str() );
         break;
     }

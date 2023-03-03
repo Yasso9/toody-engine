@@ -2,11 +2,12 @@
 
 #include <iostream>
 
-#include "tools/assertion.hpp"   // for ASSERTION
-#include "tools/exceptions.hpp"  // for FileIssue
+#include "tools/assertion.hpp"  // for ASSERTION
+#include "tools/traces.hpp"
 
 namespace path
 {
+    // @todo voir pourquoi la suite est mise sous commentaire
     // std::filesystem::path get_file ( E_File const & filePath )
     // {
     //     std::filesystem::path fileRelativPath {};
@@ -71,7 +72,7 @@ namespace path
 
         if ( ! std::filesystem::is_directory( folderRelativPath ) )
         {
-            throw exception::FileIssue { folderRelativPath };
+            Trace::FileIssue( folderRelativPath );
         }
 
         return folderRelativPath;

@@ -16,22 +16,22 @@
 #include <assimp/types.h>             // for aiString
 #include <assimp/vector3.h>           // for aiVector3D
 
-#include "main/resources.hpp"    // for get_shader
-#include "tools/exceptions.hpp"  // for FileLoadingIssue
-#include "tools/path.hpp"        // for get_folder, E_Folder, E_Folder:...
-#include "tools/timer.hpp"       // for Timer
+#include "main/resources.hpp"  // for get_shader
+#include "tools/path.hpp"      // for get_folder, E_Folder, E_Folder:...
+#include "tools/timer.hpp"     // for Timer
+#include "tools/traces.hpp"
 
 static glm::vec3 to_vector3 ( aiVector3D const & assimpVector3D );
 static glm::vec2 to_vector2 ( aiVector3D const & assimpVector3D );
 
 Model::Model( std::string const & filePathModel, Camera const & camera )
   : Transformable( camera,
-                   resources::get_shader( "shader.vert"s, "shader.frag"s ) ),
+                   resources::get_shader( "shader.vert", "shader.frag" ) ),
     m_texturesLoaded(),
     m_meshes(),
     m_filePath( path::get_folder( path::E_Folder::Resources ) / filePathModel )
 {
-    Timer timer { "Model creation ("s + filePathModel + ')' };
+    Timer timer { "Model creation (" + filePathModel + ')' };
     std::cout << "Loading Model : " << filePathModel << std::endl;
 
     this->load_model();
@@ -66,8 +66,8 @@ void Model::load_model()
     if ( ! scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE
          || ! scene->mRootNode )
     {
-        throw exception::FileLoadingIssue { m_filePath, "Assimp",
-                                            importer.GetErrorString() };
+        Trace::FileIssue(
+            m_filePath, std::string { "Assimp" } + importer.GetErrorString() );
     }
 
     // process ASSIMP's root node recursively
@@ -113,6 +113,7 @@ Mesh Model::process_mesh( aiMesh const & mesh, aiScene const & scene )
 std::optional< Texture > Model::get_texture_loaded(
     std::string const & /* texturePath */ ) const
 {
+    // @todo Regarder pourquoi c'est en commentaire
     // for ( Texture const & existingTexture : this->m_texturesLoaded )
     // {
     //     if ( existingTexture.get_path() == texturePath )

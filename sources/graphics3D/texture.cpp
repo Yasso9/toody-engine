@@ -3,18 +3,18 @@
 #include <filesystem>  // for path
 #include <iostream>    // for operator<<, basic_ostream, endl, cout
 
-#include "tools/exceptions.hpp"  // for EnumUnexcpected, FileIssue, FileLoad...
+#include "tools/traces.hpp"
 
 Texture::Texture( std::string const & filePath, Texture::E_Type const & type )
   : m_type( type ), m_path( filePath )
 {
     if ( ! this->loadFromFile( filePath ) )
     {
-        throw exception::FileIssue { filePath };
+        Trace::FileIssue( filePath, "Texture" );
     }
     if ( ! this->generateMipmap() )
     {
-        throw exception::FileIssue { filePath };
+        Trace::FileIssue( filePath, "Texture" );
     }
 
     std::cout << "Texture Loaded : " << filePath << std::endl;
@@ -36,16 +36,17 @@ std::string Texture::get_type_name() const
     {
     /// @todo pourquoi c'est que des texture_diffuse ?
     case Texture::E_Type::Diffuse :
-        return "texture_diffuse"s;
+        return "texture_diffuse";
     case Texture::E_Type::Specular :
-        return "texture_diffuse"s;
+        return "texture_diffuse";
     case Texture::E_Type::Normal :
-        return "texture_diffuse"s;
+        return "texture_diffuse";
     case Texture::E_Type::Height :
-        return "texture_diffuse"s;
+        return "texture_diffuse";
+    default :
+        Trace::Warning( "Unexcpected texture" );
+        return "";
     }
-
-    throw exception::EnumUnexcpected {};
 }
 
 aiTextureType Texture::to_assimp_type( Texture::E_Type const & type )
@@ -60,9 +61,10 @@ aiTextureType Texture::to_assimp_type( Texture::E_Type const & type )
         return aiTextureType::aiTextureType_NORMALS;
     case Texture::E_Type::Height :
         return aiTextureType::aiTextureType_HEIGHT;
+    default :
+        Trace::Warning( "Unexcpected texture" );
+        return aiTextureType::aiTextureType_UNKNOWN;
     }
-
-    throw exception::EnumUnexcpected {};
 }
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -88,8 +90,8 @@ namespace GLTexture
             stbi_load( filePath.c_str(), &width, &height, &nrComponents, 3 ) };
         if ( data == NULL )
         {
-            stbi_image_free( data );
-            throw exception::FileLoadingIssue { filePath, "Texture" };
+            Trace::FileIssue( filePath, "Texture" );
+            return 0;
         }
 
         GLenum format;

@@ -13,8 +13,8 @@
 #include <SFML/Graphics/Shader.hpp>   // for Shader
 #include <SFML/Graphics/Texture.hpp>  // for Texture
 
-#include "tools/exceptions.hpp"  // for FileLoadingIssue
-#include "tools/path.hpp"        // for get_folder, E_Folder, E_Folder:...
+#include "tools/path.hpp"  // for get_folder, E_Folder, E_Folder:...
+#include "tools/traces.hpp"
 
 namespace resources
 {
@@ -100,15 +100,11 @@ namespace resources
             path::get_folder( path::E_Folder::Shaders ) / fragmentShaderFile };
         if ( ! is_file_suitable( shaderFiles.vertexPath, { ".vert" } ) )
         {
-            /// @todo mettre une excption plus valable (spécialisé pour les
-            /// shaders)
-            throw exception::FileLoadingIssue { shaderFiles.vertexPath,
-                                                "Shaders" };
-        }
+            Trace::FileIssue( shaderFiles.vertexPath, "Shaders extension" );
+        };
         if ( ! is_file_suitable( shaderFiles.fragmentPath, { ".frag" } ) )
         {
-            throw exception::FileLoadingIssue { shaderFiles.fragmentPath,
-                                                "Shaders" };
+            Trace::FileIssue( shaderFiles.vertexPath, "Shaders extension" );
         }
 
         if ( ! shaders.contains( shaderFiles ) )
@@ -118,8 +114,8 @@ namespace resources
             if ( ! shader->loadFromFile( shaderFiles.vertexPath.string(),
                                          shaderFiles.fragmentPath.string() ) )
             {
-                throw exception::FileLoadingIssue { shaderFiles.vertexPath,
-                                                    "Font" };
+                Trace::FileIssue( shaderFiles.vertexPath, "Shaders" );
+                Trace::FileIssue( shaderFiles.fragmentPath, "Shaders" );
             }
 
             shaders.insert( { shaderFiles, std::move( shader ) } );

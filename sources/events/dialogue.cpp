@@ -17,9 +17,9 @@
 #include "maths/geometry/point.hpp"  // for PointI, Point, PointF
 #include "maths/geometry/point.tpp"  // for Point::Point<Type>, Point:...
 #include "maths/vector2.tpp"         // for Vector2::to_float, Vector2...
-#include "tools/exceptions.hpp"      // for System
 #include "tools/path.hpp"
 #include "tools/singleton.tpp"  // for Singleton::get_instance
+#include "tools/traces.hpp"
 
 Dialogue::Dialogue()
   : m_shape {},
@@ -53,11 +53,11 @@ Dialogue::Dialogue()
 
     if ( ! m_regularCursor.loadFromSystem( sf::Cursor::Arrow ) )
     {
-        throw exception::System { "Cannot load regular Cursor" };
+        Trace::Warning( "Cannot load regular Cursor" );
     }
     if ( ! m_moveCursor.loadFromSystem( sf::Cursor::SizeAll ) )
     {
-        throw exception::System { "Cannot load move Cursor" };
+        Trace::Warning( "Cannot load move Cursor" );
     }
 }
 

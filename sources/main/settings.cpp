@@ -4,21 +4,21 @@
 #include <fstream>     // for basic_istream<>::__istream_type, ifs...
 #include <string>      // for string, operator""s
 
-#include "tools/exceptions.hpp"  // for FileIssue
-#include "tools/path.hpp"        // for get_folder, E_Folder, E_Folder::Data
+#include "tools/path.hpp"  // for get_folder, E_Folder, E_Folder::Data
+#include "tools/traces.hpp"
 
 Settings::Settings() : m_windowSize(), m_refreshRate(), m_verticalSync()
 {
     /// @todo Récupéré les settings à partir de la base de données
     std::string const configLocation {
-        ( path::get_folder( path::E_Folder::Data ) / "window.txt"s ).string() };
+        ( path::get_folder( path::E_Folder::Data ) / "window.txt" ).string() };
 
     std::ifstream file { configLocation, std::ios::in };
     /// @todo if we don't find the file, we must create it and load default
     /// ressources
     if ( ! file )
     {
-        throw exception::FileIssue { configLocation };
+        Trace::FileIssue( configLocation, "Can't open the file" );
     }
 
     unsigned int framePerSecond;
