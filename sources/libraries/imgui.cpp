@@ -5,8 +5,8 @@
 
 #include <SFML/Config.hpp>  // for Uint8
 
-#include "tools/assertion.hpp"        // for ASSERTION
-#include "tools/global_variable.hpp"  // for COLOR_RANGE
+#include "graphics2D/constants.hpp"  // for COLOR_RANGE
+#include "tools/assertion.hpp"       // for ASSERTION
 
 namespace ImGui
 {

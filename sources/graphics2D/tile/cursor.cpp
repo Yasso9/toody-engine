@@ -1,6 +1,6 @@
 #include "cursor.hpp"
 
-#include "tools/global_variable.hpp"
+#include "graphics2D/constants.hpp"
 
 namespace tile
 {

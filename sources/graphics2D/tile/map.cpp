@@ -15,6 +15,7 @@
 #include <ext/alloc_traits.h>              // for __alloc_traits<>::value_type
 
 #include "component/component.hpp"       // for Component::add_child
+#include "graphics2D/constants.hpp"      // for TILE_PIXEL_SIZE_I, TILE_PI...
 #include "graphics2D/sfml.hpp"           // for operator<<
 #include "graphics2D/tile/position.hpp"  // for tile::Position, tile::Position...
 #include "graphics2D/tile/set.hpp"       // for Tileset
@@ -24,8 +25,7 @@
 #include "maths/geometry/point.hpp"      // for PointF
 #include "maths/geometry/point.tpp"      // for Point::Point<Type>, Point:...
 #include "tools/array/vector.hpp"
-#include "tools/assertion.hpp"        // for ASSERTION
-#include "tools/global_variable.hpp"  // for TILE_PIXEL_SIZE_I, TILE_PI...
+#include "tools/assertion.hpp"  // for ASSERTION
 #include "tools/path.hpp"
 #include "tools/serialization.hpp"  // for Serializer, Unserializer
 #include "tools/serialization.tpp"  // for Serializer::Serializer<Typ...

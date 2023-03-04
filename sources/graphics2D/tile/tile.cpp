@@ -5,7 +5,8 @@
 #include <SFML/Graphics/Vertex.hpp>       // for Vertex
 #include <SFML/Graphics/VertexArray.hpp>  // for VertexArray
 
-#include "graphics2D/sfml.hpp"  // for operator<<
+#include "graphics2D/constants.hpp"  // for TILE_PIXEL_SIZE_VECTOR
+#include "graphics2D/sfml.hpp"       // for operator<<
 #include "graphics2D/tile/map.hpp"
 #include "graphics2D/tile/selector.hpp"  // for TileSelector
 #include "main/render.hpp"
@@ -14,7 +15,6 @@
 #include "maths/geometry/rectangle.hpp"  // for RectangleF
 #include "maths/vector2.hpp"             // for Vector2U, Vector2F, Vector2
 #include "maths/vector2.tpp"             // for Vector2::operator=, operator+
-#include "tools/global_variable.hpp"     // for TILE_PIXEL_SIZE_VECTOR
 
 namespace tile
 {

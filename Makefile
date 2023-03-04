@@ -95,7 +95,7 @@ WARNINGS := $(WARNINGS) \
 			-Wno-undef
 endif
 
-COMPILER_FLAGS := $(WARNINGS) -std=c++20 -O0 -g -MMD -MP
+CPP_FLAGS := $(WARNINGS) -std=c++20 -O0 -g -MMD -MP
 # -g => Generate debug information
 # -O0 => No optmization, faster compilation time, better for debugging builds
 # -MMD => Create .d files for dependencies of users files only (not system files)
@@ -228,8 +228,7 @@ $(SFML_REQUIREMENTS) :
 	-D SFML_INSTALL_PKGCONFIG_FILES=0 \
 	-D SFML_OPENGL_ES=0 \
 	-D SFML_USE_SYSTEM_DEPS=0
-	$(SHOW)CC=$(C_COMMAND) && CXX=$(CXX_COMMAND) && \
-	make --build $(SFML_BUILD_DIR)/build/
+	$(SHOW)cmake --build $(SFML_BUILD_DIR)/build/
 # Copy the shared object to the shared object directory
 	$(SHOW)cp -r $(SFML_BUILD_DIR)/build/lib/libsfml*.so* $(SHARED_OBJECT_DIR)
 # Copy the include files of SFML to the include directory
@@ -246,7 +245,8 @@ $(ASSIMP_REQUIREMENTS) :
 	$(SHOW)wget --quiet -P $(TMP_BUILD_DIR) https://github.com/assimp/assimp/archive/refs/tags/v5.2.5.tar.gz
 	$(SHOW)tar -xzf $(TMP_BUILD_DIR)/v5.2.5.tar.gz -C $(TMP_BUILD_DIR)
 # Build Assimp
-	$(SHOW)cmake -S $(ASSIMP_BUILD_DIR) -B $(ASSIMP_BUILD_DIR)/build -Wno-dev \
+	$(SHOW)CC=$(C_COMMAND) && CXX=$(CXX_COMMAND) && \
+	cmake -S $(ASSIMP_BUILD_DIR) -B $(ASSIMP_BUILD_DIR)/build -Wno-dev \
 	-D ASSIMP_BUILD_TESTS=0 \
 	-D ASSIMP_INSTALL=0 \
 	-D ASSIMP_WARNINGS_AS_ERRORS=0 \

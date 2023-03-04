@@ -1,7 +1,7 @@
 #include "sprite.hpp"
 
+#include "graphics2D/constants.hpp"
 #include "main/render.hpp"
-#include "tools/global_variable.hpp"
 
 Sprite::Sprite( sf::Texture const & texture, math::Vector2F size )
   : sf::Sprite { texture }, m_size { size }

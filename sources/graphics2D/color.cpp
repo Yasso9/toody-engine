@@ -1,7 +1,7 @@
 #include "color.hpp"
 
-#include "tools/assertion.hpp"        // for ASSERTION
-#include "tools/global_variable.hpp"  // for COLOR_RANGE
+#include "graphics2D/constants.hpp"  // for COLOR_RANGE
+#include "tools/assertion.hpp"       // for ASSERTION
 
 Color::RGBA::RGBA() : RGBA { 0u, 0u, 0u, 0u } {}
 

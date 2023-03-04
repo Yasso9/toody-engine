@@ -4,6 +4,7 @@
 #include <ostream>
 
 #include "maths/vector2.hpp"
+#include "tools/concepts.hpp"
 
 namespace math
 {
