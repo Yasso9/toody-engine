@@ -1,8 +1,10 @@
-.DS_Store
+# Build related
 build
+
+# Application related
 imgui.ini
-Game
-valgrind-out.txt
-iwyu_file.txt
-compile_commands.json
+application
 data
+
+# Miscallenous
+.DS_Store

@@ -3,11 +3,8 @@
     "files.exclude": {
         "**/.git": true,
         "**/.DS_Store": true,
-        "external": true,
     },
-    "search.exclude": {
-        "data/resources": true,
-    },
+    "search.exclude": {},
     "files.associations": {
         "*.txt": "plaintext",
         "*.imp": "json",
