@@ -66,8 +66,8 @@ void Model::load_model()
     if ( ! scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE
          || ! scene->mRootNode )
     {
-        Trace::FileIssue(
-            m_filePath, std::string { "Assimp" } + importer.GetErrorString() );
+        Trace::FileIssue( m_filePath, std::string { "Assimp - " }
+                                          + importer.GetErrorString() );
     }
 
     // process ASSIMP's root node recursively

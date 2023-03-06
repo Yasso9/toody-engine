@@ -19,7 +19,7 @@ class GraphicState final : public State
   public:
     GraphicState();
 
-    void update_before ( float deltaTime ) override;
+    void update ( float deltaTime ) override;
 
   private:
     void mouse_scroll ( float const & deltaScroll ) override;

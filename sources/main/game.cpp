@@ -11,19 +11,19 @@
 #include <SFML/System/Time.hpp>      // for Time
 #include <SFML/Window/Event.hpp>     // for Event, Event::Closed
 
-#include "graphics3D/openGL.hpp"       // for check_error
-#include "input/input.hpp"             // for reset_mouse_movement, set_mous...
-#include "main/render.hpp"             // for Render
-#include "main/settings.hpp"           // for Settings
-#include "main/window.hpp"             // for Window
-#include "states/editor_state.hpp"     // for EditorState
-#include "states/graphic_state.hpp"    // for GraphicState
-#include "states/main_menu_state.hpp"  // for MainMenuState
-#include "states/test.hpp"             // for TestState
-#include "tools/assertion.hpp"         // for ASSERTION
-#include "tools/enumeration.hpp"       // for Enum
-#include "tools/enumeration.tpp"       // for operator<<, Enum::Enum<Type>
-#include "tools/singleton.tpp"         // for Singleton::get_instance
+#include "graphics3D/openGL.hpp"  // for check_error
+#include "input/input.hpp"        // for reset_mouse_movement, set_mous...
+#include "main/render.hpp"        // for Render
+#include "main/settings.hpp"      // for Settings
+#include "main/window.hpp"        // for Window
+#include "states/editor.hpp"      // for EditorState
+#include "states/graphic.hpp"     // for GraphicState
+#include "states/main_menu.hpp"   // for MainMenuState
+#include "states/test.hpp"        // for TestState
+#include "tools/assertion.hpp"    // for ASSERTION
+#include "tools/enumeration.hpp"  // for Enum
+#include "tools/enumeration.tpp"  // for operator<<, Enum::Enum<Type>
+#include "tools/singleton.tpp"    // for Singleton::get_instance
 #include "tools/traces.hpp"
 
 Game::Game() : m_state( nullptr ), m_shouldRun( true )

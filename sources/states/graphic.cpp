@@ -1,4 +1,4 @@
-#include "graphic_state.hpp"
+#include "graphic.hpp"
 
 #include <algorithm>  // for max
 
@@ -36,17 +36,20 @@ GraphicState::GraphicState()
     }
 }
 
-void GraphicState::update_before( float /* deltaTime */ )
+void GraphicState::update( float /* deltaTime */ )
 {
     if ( input::is_pressed( sf::Keyboard::Space ) )
     {
         m_captureMouse = ! m_captureMouse;
     }
 
-    ImGui::P_Show( "Graphic State", [this] () {
+    if ( ImGui::Begin( "Graphic State" ) )
+    {
         ImGui::Checkbox( "Mouse Captured ? (SPACE)", &m_captureMouse );
-    } );
+    }
+    ImGui::End();
 
+    /// @todo Do that in the camera class
     this->update_camera_keyboard_inputs();
     this->update_camera_mouse_inputs();
 }
@@ -59,7 +62,7 @@ void GraphicState::mouse_scroll( float const & deltaScroll )
     {
         scrollSpeed = -scrollSpeed;
     }
-    // else positiv scroll
+
     // m_camera.zoom( scrollSpeed, m_deltaTime );
 }
 
@@ -147,6 +150,7 @@ void GraphicState::update_camera_mouse_inputs()
 static Shape::S_Data get_sample_shape_data_A ()
 {
     std::vector< float > const vertices {
+        // positions          // colors         // texture coords   // normals
         -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f,  -0.5f, -0.5f, 1.0f, 0.0f,
         0.5f,  0.5f,  -0.5f, 1.0f, 1.0f, 0.5f,  0.5f,  -0.5f, 1.0f, 1.0f,
         -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f, -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,

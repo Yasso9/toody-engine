@@ -58,24 +58,18 @@ class Component
     void set_view ( View const & view );
 
   private:
-    /// @brief custom update - is the first method called
-    /// in the update procedure
+    /// @brief custom update - called before children update
     virtual void update_before ( float deltaTime );
-    /// @brief custom update - this method is called after update_before and
-    /// before update_after
+    /// @brief custom update - order doesn't matter
     virtual void update ( float deltaTime );
-    /// @brief custom update - is the last method called
-    /// in the update procedure
+    /// @brief custom update - called after children update
     virtual void update_after ( float deltaTime );
 
-    /// @brief custom render - is the first method called
-    /// in the render procedure
+    /// @brief custom render - called before children render
     virtual void render_before ( Render & render ) const;
-    /// @brief custom render - this method is called after render_before and
-    /// before render_after
+    /// @brief custom render - order doesn't matter
     virtual void render ( Render & render ) const;
-    /// @brief custom render - is the last method called
-    /// in the render procedure
+    /// @brief custom render - called after children render
     virtual void render_after ( Render & render ) const;
 };
 

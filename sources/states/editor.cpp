@@ -1,4 +1,4 @@
-#include "editor_state.hpp"
+#include "editor.hpp"
 
 #include <algorithm>  // for max, copy
 #include <sstream>    // for operator<<, basic_ostream
