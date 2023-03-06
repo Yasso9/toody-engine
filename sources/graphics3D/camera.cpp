@@ -26,16 +26,109 @@ Camera::Camera()
     m_yAxis {},
     m_zAxis {},
     m_movementSpeed { 0.f },
-    m_fieldOfView { 45.f }
+    m_fieldOfView { 45.f },
+    m_captureMouse { false }
 {
     this->reset();
 }
 
-void Camera::update_before( float deltaTime )
+void Camera::update( float deltaTime )
 {
     m_movementSpeed = 2.5f * deltaTime;
 
-    ImGui::P_Show( "Camera", [this] () {
+    {  // Camera configuration
+        if ( input::is_pressed( sf::Keyboard::Space ) )
+        {
+            m_captureMouse = ! m_captureMouse;
+        }
+        if ( ImGui::Begin( "Camera" ) )
+        {
+            ImGui::Checkbox( "Mouse Captured ? (SPACE)", &m_captureMouse );
+        }
+        ImGui::End();
+    }
+
+    {  // Update the camera position
+        if ( input::is_pressed( sf::Keyboard::Z ) )
+        {
+            this->move( Camera::E_Movement::Up );
+        }
+        if ( input::is_pressed( sf::Keyboard::S ) )
+        {
+            this->move( Camera::E_Movement::Down );
+        }
+        if ( input::is_pressed( sf::Keyboard::Q ) )
+        {
+            this->move( Camera::E_Movement::Left );
+        }
+        if ( input::is_pressed( sf::Keyboard::D ) )
+        {
+            this->move( Camera::E_Movement::Right );
+        }
+        if ( input::is_pressed( sf::Keyboard::A ) )
+        {
+            this->move( Camera::E_Movement::In );
+        }
+        if ( input::is_pressed( sf::Keyboard::E ) )
+        {
+            this->move( Camera::E_Movement::Out );
+        }
+    }
+
+    {  // Update the camera direction
+        math::Vector3F rotation { 0.f, 0.f, 0.f };
+
+        if ( input::is_pressed( sf::Keyboard::Up ) )
+        {
+            rotation += { 1.f, 0.f, 0.f };
+        }
+        if ( input::is_pressed( sf::Keyboard::Down ) )
+        {
+            rotation += { -1.f, 0.f, 0.f };
+        }
+        if ( input::is_pressed( sf::Keyboard::Left ) )
+        {
+            rotation += { 0.f, 1.f, 0.f };
+        }
+        if ( input::is_pressed( sf::Keyboard::Right ) )
+        {
+            rotation += { 0.f, -1.f, 0.f };
+        }
+        if ( input::is_pressed( sf::Keyboard::B ) )
+        {
+            rotation += { 0.f, 0.f, -1.f };
+        }
+        if ( input::is_pressed( sf::Keyboard::N ) )
+        {
+            rotation += { 0.f, 0.f, 1.f };
+        }
+
+        this->rotate( rotation * 20.f );
+    }
+
+    {  // Update the camera direction with the mouse
+        if ( m_captureMouse )
+        {
+            math::Vector2F const windowCenter {
+                Window::get_instance().get_center_position() };
+            math::Vector2F const mousePosition { input::get_mouse_position() };
+
+            if ( windowCenter == mousePosition )
+            {
+                return;
+            }
+            // Gap between mousePosition and windowCenter
+            math::Vector2F offset { mousePosition - windowCenter };
+
+            // Reset Mouse Position
+            input::set_mouse_position( windowCenter.to_int() );
+
+            this->rotate( { offset.y, offset.x, 0.f } );
+        }
+    }
+
+    if ( ImGui::Begin( "Camera" ) )
+    {
         if ( ImGui::Button( "Reset Camera" ) )
         {
             this->reset();
@@ -57,7 +150,8 @@ void Camera::update_before( float deltaTime )
         output << "Movement Speed : " << m_movementSpeed << "\n";
         output << "Field Of View : " << m_fieldOfView << "\n";
         ImGui::Text( "%s", output.str().c_str() );
-    } );
+    }
+    ImGui::End();
 }
 
 glm::mat4 Camera::get_projection() const

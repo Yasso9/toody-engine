@@ -14,16 +14,8 @@ class GraphicState final : public State
     std::vector< Shape > m_shapes;
     std::vector< Model > m_models;
 
-    bool m_captureMouse;
-
   public:
     GraphicState();
 
     void update ( float deltaTime ) override;
-
-  private:
-    void mouse_scroll ( float const & deltaScroll ) override;
-
-    void update_camera_keyboard_inputs ();
-    void update_camera_mouse_inputs ();
 };

@@ -26,7 +26,7 @@ class Camera : public Component
     /// @brief Position of the camera in the space
     math::Vector3F m_position;
     /// @brief Direction to where the camera is looking
-    /// @remark should be normalized
+    /// @todo should always be normalized -> have a set and a get
     math::Vector3F m_direction;
 
     math::Vector3F m_xAxis;
@@ -36,11 +36,13 @@ class Camera : public Component
     float m_movementSpeed;
     float m_fieldOfView;
 
+    bool m_captureMouse;
+
   public:
     Camera();
 
   private:
-    void update_before ( float deltaTime ) override;
+    void update ( float deltaTime ) override;
 
   public:
     /// @brief Space transformation

@@ -14,6 +14,7 @@ namespace sf
     class Shader;
 }  // namespace sf
 
+/// @todo revoir ça c'est pas très propre
 class Transformable : public Component
 {
     Camera const & m_camera;
