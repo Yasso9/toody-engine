@@ -19,7 +19,6 @@ class Shape final : public Transformable
         /// @brief Array of all the attributes of the shape
         std::vector< float >                         vertices {};
         /// @brief Array of all the indices of the shape
-        ///        If empty, we don't create an element buffer object
         std::optional< std::vector< unsigned int > > indices {};
 
         /// @brief Array of the vector's size contained in each point
@@ -45,16 +44,14 @@ class Shape final : public Transformable
     S_Data m_data;
 
   public:
-    /**
-     * @brief Create the shape. If the indices is empty,
-     *        we don't create an element buffer object
-     */
-    explicit Shape( S_Data const & data, Camera const & camera );
+    /// @brief Create the shape. If the indices is empty, we don't create an
+    /// element buffer object
+    explicit Shape( Camera const & camera, S_Data const & data );
     virtual ~Shape();
 
   private:
-    virtual void update_custom ( float deltaTime ) override final;
-    virtual void render_custom ( Render & Render ) const override final;
+    virtual void update ( float deltaTime ) override;
+    virtual void render ( Render & Render ) const override;
 
   public:
     unsigned int   get_VAO () const;
@@ -65,8 +62,9 @@ class Shape final : public Transformable
     unsigned int & get_EBO ();
     S_Data const & get_data () const;
 
+    void set_texture ( sf::Texture const & texture );
+
     /// @brief Return true if we need an element buffer object for the actual
-    /// shape,
-    ///        false otherwise
+    /// shape, false otherwise
     bool is_EBO_handled () const;
 };

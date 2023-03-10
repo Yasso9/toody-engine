@@ -16,10 +16,8 @@ namespace sf
 class State : public Component
 {
   public:
-    /**
-     * @brief List of all States that the game can have
-     *        (equal to the number of child to this class)
-     */
+    /// @brief List of all States that the game can have (equal to the number of
+    /// child to this class)
     enum class E_List
     {
         MainMenu = 0,
@@ -38,7 +36,7 @@ class State : public Component
     static std::vector< std::string > get_state_list ();
 
   private:
-    /** @brief value corresponding of the state that the game should run */
+    /// @brief value corresponding of the state that the game should run
     State::E_List                    m_stateName;
     /// @brief List of buttons that have just been pressed
     std::vector< sf::Mouse::Button > m_mouseButtonsPressed;
@@ -49,10 +47,8 @@ class State : public Component
     State( State::E_List const & stateName );
 
   public:
-    /**
-     * @brief Know the next state to render after the input update.
-     * @returns State::E_List value of the next state to print
-     */
+    /// @brief Know the next state to render after the input update.
+    /// @returns State::E_List value of the next state to print
     State::E_List get_state_to_print () const;
 
     void clear_buttons ();

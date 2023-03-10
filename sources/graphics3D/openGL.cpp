@@ -7,6 +7,8 @@
 #include <SFML/Graphics/Color.hpp>   // for Color
 #include <SFML/Window/Context.hpp>   // for Context
 
+#include "tools/traces.hpp"
+
 namespace gl
 {
     namespace
@@ -87,16 +89,14 @@ namespace gl
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     }
 
-    void check_error ()
+    bool check_error ()
     {
-        GLenum       errorCode;
-        std::string  errorMessage { "" };
-        unsigned int numberOfError { 0u };
+        GLenum      errorCode { glGetError() };
+        std::string errorMessage { "" };
 
-        if ( ( errorCode = glGetError() ) != GL_NO_ERROR )
+        if ( errorCode != GL_NO_ERROR )
         {
-            errorMessage +=
-                "OpenGL Error " + std::to_string( ++numberOfError ) + " : ";
+            errorMessage += "OpenGL - ";
 
             switch ( errorCode )
             {
@@ -125,10 +125,12 @@ namespace gl
                 errorMessage += "Unkown GL Error";
                 break;
             }
-            errorMessage += " | ";
+
+            Trace::Error( errorMessage );
+            return false;
         }
 
-        // ASSERTION( numberOfError == 0u, errorMessage );
+        return true;
     }
 }  // namespace gl
 

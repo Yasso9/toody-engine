@@ -31,7 +31,7 @@ namespace gl
     void clear_window ( sf::Color const & backgroundColor );
     void set_wireframe ();
     void remove_wireframe ();
-    void check_error ();
+    bool check_error ();
 }  // namespace gl
 
 std::ostream & operator<< ( std::ostream & stream, glm::vec3 const & vector3 );

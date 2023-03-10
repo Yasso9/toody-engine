@@ -26,18 +26,17 @@ unsigned int Shape::S_Data::get_number_of_element() const
            / this->get_data_per_point_sum();
 }
 
-Shape::Shape( S_Data const & data, Camera const & camera )
+Shape::Shape( Camera const & camera, S_Data const & data )
   : Transformable { camera, resources::get_shader( "shape_shader.vert",
                                                    "shape_shader.frag" ) },
-    m_textures { resources::get_texture( path::get_folder( path::Samples )
-                                         / "wall.jpg" ),
-                 resources::get_texture( path::get_folder( path::Samples )
-                                         / "town_hall.png" ) },
+    m_textures {},
     m_vertexArrayObject {},
     m_vertexBufferObject {},
     m_elementBufferObject {},
     m_data { data }
 {
+    /// @todo appeler cette fonction compètement et pas de façon cachée
+    /// @todo use the builder design pattern
     load_gl_shape::complete( *this );
 }
 
@@ -53,7 +52,7 @@ Shape::~Shape()
     }
 }
 
-void Shape::update_custom( float /* deltaTime */ )
+void Shape::update( float /* deltaTime */ )
 {
     for ( unsigned int i = 0u; i < m_textures.size(); ++i )
     {
@@ -62,7 +61,7 @@ void Shape::update_custom( float /* deltaTime */ )
     }
 }
 
-void Shape::render_custom( Render & /* Render */ ) const
+void Shape::render( Render & /* Render */ ) const
 {
     GLenum const primitiveType { GL_TRIANGLES };
 
@@ -118,4 +117,9 @@ Shape::S_Data const & Shape::get_data() const
 bool Shape::is_EBO_handled() const
 {
     return this->m_data.indices.has_value();
+}
+
+void Shape::set_texture( sf::Texture const & texture )
+{
+    m_textures.push_back( texture );
 }

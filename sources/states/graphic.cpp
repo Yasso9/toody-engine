@@ -15,8 +15,8 @@
 GraphicState::GraphicState()
   : State { State::E_List::Graphics },
     m_camera {},
-    m_shapes { Shape { get_sample_shape_data_A(), m_camera } },
-    m_models { Model { "backpack/backpack.obj", m_camera } }
+    m_shapes { Shape { m_camera, get_sample_shape_data_A() } },
+    m_models { Model { m_camera, "backpack/backpack.obj" } }
 {
     this->add_child( m_camera );
     this->add_childs( m_shapes );

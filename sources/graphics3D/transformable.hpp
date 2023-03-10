@@ -29,10 +29,8 @@ class Transformable : public Component
     virtual ~Transformable() = default;
 
   private:
-    virtual void update_before ( float deltaTime ) override final;
-    virtual void update_custom ( float deltaTime );
-    virtual void render_before ( Render & render ) const override final;
-    virtual void render_custom ( Render & render ) const;
+    virtual void update_all ( float deltaTime ) override;
+    virtual void render_all ( Render & render ) const override;
 
   public:
     void move ( math::Vector3F tranlationVector );

@@ -7,8 +7,6 @@
 #include <IMGUI/imgui-SFML.h>        // for Init, ProcessEvent, Render
 #include <SFML/Graphics/Color.hpp>   // for Color
 #include <SFML/Graphics/Shader.hpp>  // for Shader
-#include <SFML/System/Clock.hpp>     // for Clock
-#include <SFML/System/Time.hpp>      // for Time
 #include <SFML/Window/Event.hpp>     // for Event, Event::Closed
 
 #include "graphics3D/openGL.hpp"  // for check_error
@@ -26,7 +24,7 @@
 #include "tools/singleton.tpp"    // for Singleton::get_instance
 #include "tools/traces.hpp"
 
-Game::Game() : m_state( nullptr ), m_shouldRun( true )
+Game::Game() : m_state { nullptr }, m_shouldRun { true }
 {
     std::cout << "Game Started" << std::endl;
 
@@ -39,61 +37,30 @@ Game::Game() : m_state( nullptr ), m_shouldRun( true )
         Trace::Error( "Shader's not available" );
     }
 
-    // Disable use of imgui.ini file
+    // To disable the use of imgui.ini file
     // ImGui::GetIO().IniFilename = nullptr;
 
-    this->init_state();
+    this->change_state( State::E_List::MainMenu );
 }
 
 Game::~Game()
 {
     ImGui::SFML::Shutdown();
     // Must be made before closing the window
-    gl::check_error();
+    ASSERTION( gl::check_error(), "OpenGL error" );
 
     std::cout << "Game Ended" << std::endl;
 }
 
-void Game::run()
+void Game::update( float deltaTime )
 {
-    sf::Clock clock {};
-    // Reset the clock juste before the game run
-    clock.restart();
-
-    double const refreshRate { Settings::get_instance().get_refresh_rate() };
-
-    while ( m_shouldRun )
-    {
-        sf::Time const deltaTime { clock.getElapsedTime() };
-
-        if ( deltaTime.asSeconds() > refreshRate )
-        {
-            this->update_events();
-            this->update_state( deltaTime );
-            this->render();
-
-            // reset the counter
-            clock.restart();
-        }
-    }
-
-    Window::get_instance().close();
-}
-
-void Game::init_state()
-{
-    // this->change_state( State::E_List::MainMenu );
-    this->change_state( State::E_List::Editor );
-    // this->change_state( State::E_List::Test );
-    // this->change_state( State::E_List::Graphics );
-}
-
-void Game::update_events()
-{
+    /// @todo Mettre ces reset autre part ou changer de method pour les reset
+    // Reset mouse scroll
     input::set_mouse_scroll( 0.f );
     input::reset_mouse_movement();
 
     sf::Event event {};
+    /// @todo c'est quoi ce truc !?
     m_state->clear_buttons();
     // The event loop must always be part of the main loop,
     // otherwise bug and crash could happen
@@ -106,34 +73,35 @@ void Game::update_events()
         else if ( Window::get_instance().has_absolute_focus() )
         {
             ImGui::SFML::ProcessEvent( Window::get_instance(), event );
+            /// @todo supprimer la fonction update_inputs. Doit etre dans le
+            /// update
             m_state->update_inputs( event );
+        }
+    }
+
+    // ImGui update and render
+    ImGui::SFML::Update( Window::get_instance(), sf::seconds( deltaTime ) );
+
+    {  // Update the current state to show
+        /// @todo use something like signal to change state
+        static State::E_List lastState { m_state->get_state_to_print() };
+
+        m_state->update_all( deltaTime );
+
+        State::E_List const newState { m_state->get_state_to_print() };
+        if ( lastState != newState )
+        {
+            lastState = newState;
+            this->change_state( newState );
         }
     }
 }
 
-void Game::update_state( sf::Time const & deltaTime )
+void Game::render( Render & render ) const
 {
-    ImGui::SFML::Update( Window::get_instance(), deltaTime );
-
-    /// @todo use something like signal to change state
-
-    static State::E_List lastState { m_state->get_state_to_print() };
-
-    m_state->update_all( deltaTime.asSeconds() );
-
-    State::E_List const newState { m_state->get_state_to_print() };
-    if ( lastState != newState )
-    {
-        lastState = newState;
-        this->change_state( newState );
-    }
-}
-
-void Game::render()
-{
+    /// @todo utiliser render à la place de Window::get_instance()
     Window::get_instance().clear_all( sf::Color { 0, 0, 0 } );
 
-    Render render { Window::get_instance() };
     m_state->render_all( render );
 
     // We render after our state render, so the imGui's windows
@@ -141,9 +109,14 @@ void Game::render()
     ImGui::SFML::Render( Window::get_instance() );
 
     // Each draw is a chance that we have an error with OpenGL
-    gl::check_error();
+    ASSERTION( gl::check_error(), "OpenGL error" );
 
     Window::get_instance().display();
+}
+
+bool Game::should_run() const
+{
+    return m_shouldRun;
 }
 
 void Game::change_state( State::E_List const & newState )
@@ -178,7 +151,7 @@ void Game::change_state( State::E_List const & newState )
         std::stringstream debugMessage {};
         debugMessage << "State::E_List " << Enum< State::E_List > { newState }
                      << " unsupported";
-        ASSERTION( false, debugMessage.str() );
+        Trace::Error( debugMessage.str() );
         break;
     }
 }

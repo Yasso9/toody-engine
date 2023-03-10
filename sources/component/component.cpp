@@ -37,18 +37,6 @@ void Component::update_all( float deltaTime )
     this->update_after( deltaTime );
 }
 
-void Component::update_before( float /* deltaTime */ ) {}
-
-void Component::update( float /* deltaTime */ ) {}
-
-void Component::update_after( float /* deltaTime */ ) {}
-
-void Component::render_before( Render & /* render */ ) const {}
-
-void Component::render( Render & /* render */ ) const {}
-
-void Component::render_after( Render & /* render */ ) const {}
-
 void Component::render_all( Render & render ) const
 {
     if ( m_view != nullptr )
@@ -77,3 +65,15 @@ void Component::set_view( View const & view )
 {
     m_view = &view;
 }
+
+void Component::update_before( float /* deltaTime */ ) {}
+
+void Component::update( float /* deltaTime */ ) {}
+
+void Component::update_after( float /* deltaTime */ ) {}
+
+void Component::render_before( Render & /* render */ ) const {}
+
+void Component::render( Render & /* render */ ) const {}
+
+void Component::render_after( Render & /* render */ ) const {}

@@ -24,11 +24,11 @@
 static glm::vec3 to_vector3 ( aiVector3D const & assimpVector3D );
 static glm::vec2 to_vector2 ( aiVector3D const & assimpVector3D );
 
-Model::Model( std::string const & filePathModel, Camera const & camera )
+Model::Model( Camera const & camera, std::string const & filePathModel )
   : Transformable( camera,
                    resources::get_shader( "shader.vert", "shader.frag" ) ),
-    m_texturesLoaded(),
-    m_meshes(),
+    m_texturesLoaded{},
+    m_meshes{},
     m_filePath( path::get_folder( path::E_Folder::Resources ) / filePathModel )
 {
     Timer timer { "Model creation (" + filePathModel + ')' };
@@ -37,7 +37,7 @@ Model::Model( std::string const & filePathModel, Camera const & camera )
     this->load_model();
 }
 
-void Model::update_custom( float /* deltaTime */ )
+void Model::update( float /* deltaTime */ )
 {
     for ( Mesh & mesh : this->m_meshes )
     {
@@ -45,7 +45,7 @@ void Model::update_custom( float /* deltaTime */ )
     }
 }
 
-void Model::render_custom( Render & /* render */ ) const
+void Model::render( Render & /* render */ ) const
 {
     for ( Mesh const & mesh : this->m_meshes )
     {

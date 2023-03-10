@@ -17,10 +17,12 @@ Transformable::Transformable( Camera const & camera, sf::Shader & shader )
   : m_camera { camera }, m_shader { shader }, m_spaceModel { 1.f }
 {}
 
-void Transformable::update_before( float deltaTime )
+void Transformable::update_all( float deltaTime )
 {
-    gl::S_SpaceMatrix const spaceMatrix { this->get_space_matrix() };
+    Component::update_all( deltaTime );
 
+    // Update the shader
+    gl::S_SpaceMatrix spaceMatrix { this->get_space_matrix() };
     m_shader.setUniform(
         "model", sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.model ) } );
     m_shader.setUniform(
@@ -28,23 +30,16 @@ void Transformable::update_before( float deltaTime )
     m_shader.setUniform(
         "projection",
         sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.projection ) } );
-
-    this->update_custom( deltaTime );
 }
 
-void Transformable::update_custom( float /* deltaTime */ ) {}
-
-// draws the model, and thus all its meshes
-void Transformable::render_before( Render & render ) const
+void Transformable::render_all( Render & render ) const
 {
     sf::Shader::bind( &m_shader );
 
-    this->render_custom( render );
+    Component::render_all( render );
 
     sf::Shader::bind( NULL );
 }
-
-void Transformable::render_custom( Render & /* render */ ) const {}
 
 void Transformable::move( math::Vector3F tranlationVector )
 {

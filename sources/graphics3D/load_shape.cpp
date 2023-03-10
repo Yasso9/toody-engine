@@ -10,6 +10,7 @@
 #include "tools/assertion.hpp"   // for ASSERTION
 #include "tools/tools.tpp"       // for size_of, to_c_style_array
 
+/// @todo mettre ça autre part
 namespace load_gl_shape
 {
     static void objects_generation ( Shape & shape );

@@ -50,7 +50,7 @@ class Component
 
   public:
     /// @brief update the component. Must not be called manually if it's a child
-    virtual void update_all ( float deltaTime ) final;
+    virtual void update_all ( float deltaTime );
     /// @brief draw the component to the render. Must not be called manually if
     /// it's a child
     virtual void render_all ( Render & render ) const;

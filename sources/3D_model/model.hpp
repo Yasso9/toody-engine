@@ -31,11 +31,11 @@ class Model final : public Transformable
     std::filesystem::path const      m_filePath;
 
   public:
-    explicit Model( std::string const & filePathModel, Camera const & camera );
+    explicit Model( Camera const & camera, std::string const & filePathModel );
 
   private:
-    virtual void update_custom ( float deltaTime ) override final;
-    virtual void render_custom ( Render & render ) const override final;
+    virtual void update ( float deltaTime ) override;
+    virtual void render ( Render & render ) const override;
 
     /**
      * @brief Loads a model with supported ASSIMP extensions from file
