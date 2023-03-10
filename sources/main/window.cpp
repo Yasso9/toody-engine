@@ -76,8 +76,8 @@ void Window::creation()
     contextSettings.majorVersion      = 4;
     contextSettings.minorVersion      = 6;
 
-    this->sf::RenderWindow::create( Settings::get_instance().get_video_mode(),
-                                    gameTitle, windowStyle, contextSettings );
+    this->sf::RenderWindow::create( Settings {}.get_video_mode(), gameTitle,
+                                    windowStyle, contextSettings );
 }
 
 void Window::initialize()
@@ -85,8 +85,7 @@ void Window::initialize()
     this->setVisible( true );
     this->requestFocus();
     this->setKeyRepeatEnabled( false );
-    this->setVerticalSyncEnabled(
-        Settings::get_instance().get_vertical_sync() );
+    this->setVerticalSyncEnabled( true );
 
     if ( ! this->setActive( true ) )
     {

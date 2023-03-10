@@ -7,6 +7,38 @@
 #include "tools/path.hpp"  // for get_folder, E_Folder, E_Folder::Data
 #include "tools/traces.hpp"
 
+static void print ( Settings const & settings )
+{
+    std::cout << "{";
+
+    bool first = true;
+
+    boost::mp11::mp_for_each< boost::describe::describe_bases<
+        Settings, boost::describe::mod_any_access > >( [&] ( auto D ) {
+        if ( ! first )
+        {
+            std::cout << ", ";
+        }
+        first = false;
+
+        using B = typename decltype( D )::type;
+        std::cout << static_cast< B const & >( settings );
+    } );
+
+    boost::mp11::mp_for_each< boost::describe::describe_members<
+        Settings, boost::describe::mod_any_access > >( [&] ( auto D ) {
+        if ( ! first )
+        {
+            std::cout << ", ";
+        }
+        first = false;
+
+        std::cout << "." << D.name << " = " << settings.*D.pointer;
+    } );
+
+    std::cout << "}";
+}
+
 Settings::Settings() : m_windowSize(), m_refreshRate(), m_verticalSync()
 {
     /// @todo Récupéré les settings à partir de la base de données
@@ -26,6 +58,8 @@ Settings::Settings() : m_windowSize(), m_refreshRate(), m_verticalSync()
         >> framePerSecond;
 
     this->m_refreshRate = 1. / framePerSecond;
+
+    print( *this );
 }
 
 sf::VideoMode Settings::get_video_mode() const

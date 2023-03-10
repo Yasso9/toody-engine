@@ -216,8 +216,9 @@ $(SFML_REQUIREMENTS) :
 	$(SHOW)wget --quiet -P $(TMP_BUILD_DIR) https://github.com/SFML/SFML/archive/refs/tags/2.5.1.tar.gz
 	$(SHOW)tar -xzf $(TMP_BUILD_DIR)/2.5.1.tar.gz -C $(TMP_BUILD_DIR)
 # Build SFML
-	$(SHOW)CC=$(C_COMMAND) && CXX=$(CXX_COMMAND) && \
-	cmake -S $(SFML_BUILD_DIR) -B $(SFML_BUILD_DIR)/build -Wno-dev \
+	$(SHOW)cmake -S $(SFML_BUILD_DIR) -B $(SFML_BUILD_DIR)/build -Wno-dev \
+	-D CMAKE_C_COMPILER=$(C_COMMAND)
+	-D CMAKE_CXX_COMPILER=$(CXX_COMMAND)
 	-D BUILD_SHARED_LIBS=1 \
 	-D SFML_BUILD_AUDIO=1 \
 	-D SFML_BUILD_DOC=0 \
@@ -245,8 +246,9 @@ $(ASSIMP_REQUIREMENTS) :
 	$(SHOW)wget --quiet -P $(TMP_BUILD_DIR) https://github.com/assimp/assimp/archive/refs/tags/v5.2.5.tar.gz
 	$(SHOW)tar -xzf $(TMP_BUILD_DIR)/v5.2.5.tar.gz -C $(TMP_BUILD_DIR)
 # Build Assimp
-	$(SHOW)CC=$(C_COMMAND) && CXX=$(CXX_COMMAND) && \
-	cmake -S $(ASSIMP_BUILD_DIR) -B $(ASSIMP_BUILD_DIR)/build -Wno-dev \
+	$(SHOW)cmake -S $(ASSIMP_BUILD_DIR) -B $(ASSIMP_BUILD_DIR)/build -Wno-dev \
+	-D CMAKE_C_COMPILER=$(C_COMMAND)
+	-D CMAKE_CXX_COMPILER=$(CXX_COMMAND)
 	-D ASSIMP_BUILD_TESTS=0 \
 	-D ASSIMP_INSTALL=0 \
 	-D ASSIMP_WARNINGS_AS_ERRORS=0 \
@@ -333,7 +335,9 @@ nothing:
 ############################## include and libraries ##############################
 
 INCLUDES := -I"$(FILES_DIRECTORY)" -isystem"$(LIBRARIES_INCLUDE_PATH)"
-LIBRARIES := -L"$(SHARED_OBJECT_DIR)" -lsfml-graphics -lsfml-system -lsfml-window -lGL -ldl -lassimp
+LIBRARIES := -L"$(SHARED_OBJECT_DIR)" \
+	-lsfml-graphics -lsfml-system -lsfml-window \
+	-lGL -ldl -lassimp
 
 
 

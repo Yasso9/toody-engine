@@ -19,7 +19,9 @@ int main ()
     // // Reset the clock juste before the game run
     // clock.restart();
 
-    double const refreshRate { Settings::get_instance().get_refresh_rate() };
+    /// @todo revoir settings pour qu'il soit utilisable partout sans avoir un
+    /// singleton
+    double const refreshRate { Settings {}.get_refresh_rate() };
 
     while ( game.should_run() )
     {

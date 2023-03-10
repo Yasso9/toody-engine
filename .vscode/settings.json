@@ -8,6 +8,7 @@
     "files.associations": {
         "*.txt": "plaintext",
         "*.imp": "json",
+        "*.qss": "css",
         "algorithm": "cpp",
         "array": "cpp",
         "atomic": "cpp",
@@ -107,6 +108,7 @@
         "climits": "cpp",
         "queue": "cpp",
         "cstdbool": "cpp",
-        "semaphore": "cpp"
+        "semaphore": "cpp",
+        "span": "cpp"
     }
 }
