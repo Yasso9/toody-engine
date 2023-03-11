@@ -4,77 +4,93 @@
 #include <fstream>     // for basic_istream<>::__istream_type, ifs...
 #include <string>      // for string, operator""s
 
-#include "tools/path.hpp"  // for get_folder, E_Folder, E_Folder::Data
-#include "tools/traces.hpp"
+#include "tools/path.hpp"    // for get_folder, E_Folder, E_Folder::Data
+#include "tools/traces.hpp"  // for FileIssue
 
-static void print ( Settings const & settings )
+template< typename T,
+          class Bd = boost::describe::describe_bases<
+              T, boost::describe::mod_any_access >,
+          class Md = boost::describe::describe_members<
+              T, boost::describe::mod_any_access > >
+std::string get_description ( T const & value, char separator = '\n' )
 {
-    std::cout << "{";
+    std::ostringstream os;
 
-    bool first = true;
-
-    boost::mp11::mp_for_each< boost::describe::describe_bases<
-        Settings, boost::describe::mod_any_access > >( [&] ( auto D ) {
-        if ( ! first )
-        {
-            std::cout << ", ";
-        }
-        first = false;
-
+    boost::mp11::mp_for_each< Bd >( [&] ( auto D ) {
         using B = typename decltype( D )::type;
-        std::cout << static_cast< B const & >( settings );
+        os << static_cast< B const & >( value ) << "\n";
+    } );
+    boost::mp11::mp_for_each< Md >( [&] ( auto D ) {
+        os << "." << D.name << " = " << value.*D.pointer << separator;
     } );
 
-    boost::mp11::mp_for_each< boost::describe::describe_members<
-        Settings, boost::describe::mod_any_access > >( [&] ( auto D ) {
-        if ( ! first )
-        {
-            std::cout << ", ";
-        }
-        first = false;
-
-        std::cout << "." << D.name << " = " << settings.*D.pointer;
-    } );
-
-    std::cout << "}";
+    return os.str();
 }
 
-Settings::Settings() : m_windowSize(), m_refreshRate(), m_verticalSync()
+Settings::Settings()
+  : m_filePath { path::get_folder( path::Data ) / "settings.txt" },
+    m_windowSize {},
+    m_nbFramePerSecond {},
+    m_verticalSync {}
 {
-    /// @todo Récupéré les settings à partir de la base de données
-    std::string const configLocation {
-        ( path::get_folder( path::E_Folder::Data ) / "window.txt" ).string() };
+    this->load();
+}
 
-    std::ifstream file { configLocation, std::ios::in };
-    /// @todo if we don't find the file, we must create it and load default
-    /// ressources
-    if ( ! file )
-    {
-        Trace::FileIssue( configLocation, "Can't open the file" );
-    }
-
-    unsigned int framePerSecond;
-    file >> this->m_windowSize.x >> this->m_windowSize.y >> this->m_verticalSync
-        >> framePerSecond;
-
-    this->m_refreshRate = 1. / framePerSecond;
-
-    print( *this );
+math::Vector2F Settings::get_window_size() const
+{
+    return m_windowSize;
 }
 
 sf::VideoMode Settings::get_video_mode() const
 {
-    return sf::VideoMode {
-        static_cast< unsigned int >( this->m_windowSize.x ),
-        static_cast< unsigned int >( this->m_windowSize.y ) };
+    math::Vector2U windowSizeUInt { m_windowSize.to_u_int() };
+    return sf::VideoMode { windowSizeUInt.x, windowSizeUInt.y };
 }
 
-double Settings::get_refresh_rate() const
+float Settings::get_refresh_rate() const
 {
-    return this->m_refreshRate;
+    return 1.f / m_nbFramePerSecond;
 }
 
 bool Settings::get_vertical_sync() const
 {
-    return this->m_verticalSync;
+    return m_verticalSync;
+}
+
+void Settings::load_default()
+{
+    m_windowSize       = { 800.f, 600.f };
+    m_nbFramePerSecond = 60.f;
+    m_verticalSync     = true;
+
+    this->save();
+}
+
+void Settings::load()
+{
+    std::ifstream file { m_filePath, std::ios::in };
+    if ( ! file )
+    {
+        this->load_default();
+        return;
+    }
+
+    // List of all members of Settings
+    boost::mp11::mp_for_each< boost::describe::describe_members<
+        Settings, boost::describe::mod_any_access > >(
+        [&, this] ( auto D ) { file >> this->*D.pointer; } );
+}
+
+void Settings::save() const
+{
+    std::ofstream file { m_filePath, std::ios::out | std::ios::trunc };
+    if ( ! file )
+    {
+        Trace::FileIssue( m_filePath, "Can't write settings to file" );
+    }
+
+    // List of all members of Settings
+    boost::mp11::mp_for_each< boost::describe::describe_members<
+        Settings, boost::describe::mod_any_access > >(
+        [&, this] ( auto D ) { file << this->*D.pointer << "\n"; } );
 }

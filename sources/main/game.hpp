@@ -5,11 +5,6 @@
 #include "component/component.hpp"
 #include "states/state.hpp"  // for State, State::E_List
 
-namespace sf
-{
-    class Time;
-}  // namespace sf
-
 class Game : public Component
 {
   private:
@@ -20,9 +15,11 @@ class Game : public Component
     Game();
     virtual ~Game();
 
+  private:
     virtual void update ( float deltaTime ) override;
     virtual void render ( Render & render ) const override;
 
+  public:
     bool should_run () const;
 
   private:

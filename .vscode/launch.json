@@ -8,14 +8,14 @@
             "name": "Debug Program",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/build/application/application",
+            "program": "${workspaceRoot}/application",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [
                 {
                     "name": "LD_LIBRARY_PATH",
-                    "value": "${workspaceFolder}/external/libraries/Linux",
+                    "value": "${workspaceFolder}/build/shared_object",
                 }
             ],
             "externalConsole": true,

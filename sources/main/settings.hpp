@@ -1,5 +1,7 @@
 #pragma once
 
+#include <filesystem>
+
 #include <SFML/Window/VideoMode.hpp>  // for VideoMode
 #include <boost/describe.hpp>
 #include <boost/mp11.hpp>
@@ -9,19 +11,29 @@
 
 class Settings
 {
+    std::filesystem::path m_filePath;
+
+    math::Vector2F m_windowSize;
+    float          m_nbFramePerSecond;
+    bool           m_verticalSync;
+
   public:
     Settings();
     virtual ~Settings() = default;
 
-    sf::VideoMode get_video_mode () const;
-    double        get_refresh_rate () const;
-    bool          get_vertical_sync () const;
+    math::Vector2F get_window_size () const;
+    sf::VideoMode  get_video_mode () const;
+    float          get_refresh_rate () const;
+    bool           get_vertical_sync () const;
 
   private:
-    math::Vector2F m_windowSize;
-    double         m_refreshRate;
-    bool           m_verticalSync;
+    /// @brief load a default configuration
+    void load_default ();
+    /// @brief load settings from file
+    void load ();
+    /// @brief save settings to file
+    void save () const;
 
     BOOST_DESCRIBE_CLASS( Settings, (), (), (),
-                          ( m_windowSize, m_refreshRate, m_verticalSync ) )
+                          ( m_windowSize, m_nbFramePerSecond, m_verticalSync ) )
 };
