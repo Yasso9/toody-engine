@@ -8,23 +8,32 @@ using namespace std::string_literals;
 #include "maths/vector2.tpp"    // for operator/, Vector2::Vector2<Type>
 #include "tools/singleton.tpp"  // for Singleton::get_instance
 
-math::Vector2F View::get_zoom() const
+math::Vector2F View::get_zoom( math::Vector2F windowSize ) const
 {
-    return Window::get_instance().get_size().to_float()
-           / math::Vector2F { this->getSize() };
+    return windowSize / math::Vector2F { this->getSize() };
 }
 
-void View::set_zoom( float newZoom )
+math::Vector2F View::get_zoom( Window const & window ) const
+{
+    return this->get_zoom( window.get_size().to_float() );
+}
+
+void View::set_zoom( float newZoom, math::Vector2F windowSize )
 {
     if ( newZoom == 0 )
     {
         throw std::logic_error { "Division by Zero" };
     }
 
-    this->setSize( Window::get_instance().get_size().to_float() / newZoom );
+    this->setSize( windowSize / newZoom );
 }
 
-void View::zoom( float factor )
+void View::set_zoom( float newZoom, Window const & window )
+{
+    this->set_zoom( newZoom, window.get_size().to_float() );
+}
+
+void View::zoom( float factor, math::Vector2F windowSize )
 {
     sf::View::zoom( 1.f - factor );
 
@@ -32,14 +41,19 @@ void View::zoom( float factor )
     // Check if the zoom doesn't go too far
     constexpr float MAXIMUM_ZOOM { 15.f };
     constexpr float MINIMUM_ZOOM { 0.7f };
-    if ( this->get_zoom().get_max() > MAXIMUM_ZOOM )
+    if ( this->get_zoom( windowSize ).get_max() > MAXIMUM_ZOOM )
     {
-        this->set_zoom( MAXIMUM_ZOOM );
+        this->set_zoom( MAXIMUM_ZOOM, windowSize );
     }
-    if ( this->get_zoom().get_min() < MINIMUM_ZOOM )
+    if ( this->get_zoom( windowSize ).get_min() < MINIMUM_ZOOM )
     {
-        this->set_zoom( MINIMUM_ZOOM );
+        this->set_zoom( MINIMUM_ZOOM, windowSize );
     }
+}
+
+void View::zoom( float factor, Window const & window )
+{
+    this->zoom( factor, window.get_size().to_float() );
 }
 
 math::Vector2F View::get_size() const

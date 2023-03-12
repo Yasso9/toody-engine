@@ -42,11 +42,11 @@ class Camera : public Component
     Camera();
 
   private:
-    void update ( float deltaTime ) override;
+    void update ( UpdateContext context ) override;
 
   public:
     /// @brief Space transformation
-    glm::mat4 get_projection () const;
+    glm::mat4 get_projection ( float aspectRatio ) const;
     /// @brief View transformation
     glm::mat4 get_view () const;
 

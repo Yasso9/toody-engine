@@ -17,5 +17,5 @@ class GraphicState final : public State
   public:
     GraphicState();
 
-    void update ( float deltaTime ) override;
+    void update ( UpdateContext context ) override;
 };

@@ -50,8 +50,8 @@ class Shape final : public Transformable
     virtual ~Shape();
 
   private:
-    virtual void update ( float deltaTime ) override;
-    virtual void render ( Render & Render ) const override;
+    virtual void update ( UpdateContext context ) override;
+    virtual void render ( RenderContext & context ) const override;
 
   public:
     unsigned int   get_VAO () const;

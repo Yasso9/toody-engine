@@ -14,23 +14,19 @@ namespace sf
 }  // namespace sf
 
 /// @brief check if the class can be drawn
-template< typename Type >
-concept C_IsDrawable = std::is_base_of< sf::Drawable, Type >::value;
+template< typename T >
+concept C_IsDrawable = std::is_base_of< sf::Drawable, T >::value;
 
-/// @todo maybe think to remove the singleton pattern for this class
-class Window final : public sf::RenderWindow,
-                     public Singleton< Window >
+class Window : public sf::RenderWindow
 {
-    // We must have the constuctor so the singleton can call it
-    friend Window & Singleton< Window >::get_instance();
+    friend class RenderContext;
 
   public:
-    virtual ~Window() = default;
+    Window( std::string const & title );
+    virtual ~Window();
 
     math::Vector2U get_size () const;
-
-    float get_aspect_ratio () const;
-
+    float          get_aspect_ratio () const;
     math::Vector2U get_center_position () const;
 
     bool is_hovered () const;
@@ -38,11 +34,12 @@ class Window final : public sf::RenderWindow,
     /// windows
     bool has_absolute_focus () const;
 
-    void clear_all ( sf::Color const & backgroundColor );
+    void reset_view ();
+
+    void clear ( sf::Color const & backgroundColor = sf::Color( 0, 0, 0,
+                                                                255 ) );
 
   private:
-    Window();
-
-    void creation ();
-    void initialize ();
+    using sf::RenderWindow::clear;
+    using sf::RenderWindow::draw;
 };

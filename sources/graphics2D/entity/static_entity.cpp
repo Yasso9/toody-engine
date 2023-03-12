@@ -9,6 +9,7 @@
 #include <SFML/Graphics/Color.hpp>         // for Color, Color::Red
 #include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
 
+#include "component/contexts.hpp"        // for RenderContext
 #include "libraries/imgui.hpp"           // for P_ColorEditor, P_Begin
 #include "main/render.hpp"               // for Render
 #include "maths/geometry/line.hpp"       // for Segment::is_intersected_by
@@ -75,7 +76,7 @@ StaticEntity2D::StaticEntity2D( sf::Texture const & texture )
     this->setTexture( &texture );
 }
 
-void StaticEntity2D::update( float /* deltaTime */ )
+void StaticEntity2D::update( UpdateContext /* context */ )
 {
     if ( ! m_isCustomisable )
     {
@@ -88,9 +89,9 @@ void StaticEntity2D::update( float /* deltaTime */ )
     } );
 }
 
-void StaticEntity2D::render( Render & render ) const
+void StaticEntity2D::render( RenderContext & context ) const
 {
-    this->custom_draw( render );
+    this->custom_draw( context );
 
     if ( ! m_isCustomisable )
     {
@@ -101,7 +102,7 @@ void StaticEntity2D::render( Render & render ) const
     for ( math::PointF const & point : this->get_polygon().get_points() )
     {
         pointShape.setPosition( point.x, point.y );
-        render.get_target().draw( pointShape, render.get_render_states() );
+        context.draw( pointShape );
     }
 }
 

@@ -12,5 +12,5 @@ class CollisionHandler : public Component
     virtual ~CollisionHandler() = default;
 
   private:
-    void update ( float deltaTime ) override;
+    void update ( UpdateContext context ) override;
 };

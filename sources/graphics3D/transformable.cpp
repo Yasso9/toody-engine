@@ -17,12 +17,13 @@ Transformable::Transformable( Camera const & camera, sf::Shader & shader )
   : m_camera { camera }, m_shader { shader }, m_spaceModel { 1.f }
 {}
 
-void Transformable::update_all( float deltaTime )
+void Transformable::update_all( UpdateContext context )
 {
-    Component::update_all( deltaTime );
+    this->Component::update_all( context );
 
     // Update the shader
-    gl::S_SpaceMatrix spaceMatrix { this->get_space_matrix() };
+    gl::S_SpaceMatrix spaceMatrix {
+        this->get_space_matrix( context.window.get_aspect_ratio() ) };
     m_shader.setUniform(
         "model", sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.model ) } );
     m_shader.setUniform(
@@ -32,11 +33,11 @@ void Transformable::update_all( float deltaTime )
         sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.projection ) } );
 }
 
-void Transformable::render_all( Render & render ) const
+void Transformable::render_all( RenderContext & context ) const
 {
     sf::Shader::bind( &m_shader );
 
-    Component::render_all( render );
+    this->Component::render_all( context );
 
     sf::Shader::bind( NULL );
 }
@@ -64,9 +65,10 @@ void Transformable::scale( math::Vector3F scaleVector )
     m_spaceModel *= scaleMatrix;
 }
 
-gl::S_SpaceMatrix Transformable::get_space_matrix() const
+gl::S_SpaceMatrix Transformable::get_space_matrix( float aspectRatio ) const
 {
-    return { m_camera.get_projection(), m_camera.get_view(), m_spaceModel };
+    return { m_camera.get_projection( aspectRatio ), m_camera.get_view(),
+             m_spaceModel };
 }
 
 sf::Shader & Transformable::get_shader()

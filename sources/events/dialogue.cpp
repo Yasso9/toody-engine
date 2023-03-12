@@ -30,15 +30,15 @@ Dialogue::Dialogue()
     m_regularCursor {},
     m_moveCursor {}
 {
-    math::Vector2F const windowSizeF {
-        Window::get_instance().get_size().to_float() };
+    // math::Vector2F const windowSizeF {
+    //     Window::get_instance().get_size().to_float() };
 
-    m_shape.setSize(
-        { windowSizeF.x * ( 4.f / 5.f ), windowSizeF.y * ( 1.f / 5.f ) } );
-    m_shape.setPosition( sf::Vector2f {
-        ( windowSizeF.x - m_shape.getSize().x ) / 2.f,
-        ( windowSizeF.y - m_shape.getSize().y ) * 0.8f,
-    } );
+    // m_shape.setSize(
+    //     { windowSizeF.x * ( 4.f / 5.f ), windowSizeF.y * ( 1.f / 5.f ) } );
+    // m_shape.setPosition( sf::Vector2f {
+    //     ( windowSizeF.x - m_shape.getSize().x ) / 2.f,
+    //     ( windowSizeF.y - m_shape.getSize().y ) * 0.8f,
+    // } );
 
     m_shape.setFillColor( sf::Color::White );
     m_shape.setOutlineThickness( 3.f );
@@ -91,37 +91,37 @@ void Dialogue::add_text( std::string textToAdd )
     m_textRemaining += textToAdd;
 }
 
-void Dialogue::process_mouse_movement_customisation(
-    math::Vector2I mouseMovement )
-{
-    if ( ! this->is_enabled() )
-    {
-        return;
-    }
+// void Dialogue::process_mouse_movement_customisation(
+//     math::Vector2I mouseMovement )
+// {
+//     if ( ! this->is_enabled() )
+//     {
+//         return;
+//     }
 
-    static bool mouseIsInsideBox = false;
+// static bool mouseIsInsideBox = false;
 
-    // If the mouse was already inside and we have clicked in the right button
-    if ( mouseIsInsideBox && input::is_pressed( sf::Mouse::Right ) )
-    {
-        this->m_shape.move( mouseMovement.to_float() );
-    }
+// // If the mouse was already inside and we have clicked in the right button
+// if ( mouseIsInsideBox && input::is_pressed( sf::Mouse::Right ) )
+// {
+//     this->m_shape.move( mouseMovement.to_float() );
+// }
 
-    math::PointI mousePosition { input::get_mouse_position() };
-    mouseIsInsideBox = mousePosition.to_float().is_inside(
-        math::PointF { this->m_shape.getPosition() }, this->m_shape.getSize() );
+// math::PointI mousePosition { input::get_mouse_position() };
+// mouseIsInsideBox = mousePosition.to_float().is_inside(
+//     math::PointF { this->m_shape.getPosition() }, this->m_shape.getSize() );
 
-    if ( mouseIsInsideBox )
-    {
-        Window::get_instance().setMouseCursor( m_moveCursor );
-    }
-    else
-    {
-        Window::get_instance().setMouseCursor( m_regularCursor );
-    }
-}
+// if ( mouseIsInsideBox )
+// {
+//     Window::get_instance().setMouseCursor( m_moveCursor );
+// }
+// else
+// {
+//     Window::get_instance().setMouseCursor( m_regularCursor );
+// }
+// }
 
-void Dialogue::update( float /* deltaTime */ )
+void Dialogue::update( UpdateContext /* context */ )
 {
     if ( ! this->is_enabled() )
     {
@@ -160,15 +160,15 @@ void Dialogue::update( float /* deltaTime */ )
     } );
 }
 
-void Dialogue::render( Render & render ) const
+void Dialogue::render( RenderContext & context ) const
 {
     if ( ! this->is_enabled() )
     {
         return;
     }
 
-    render.get_target().draw( m_shape, render.get_render_states() );
-    render.get_target().draw( m_text, render.get_render_states() );
+    context.draw( m_shape );
+    context.draw( m_text );
 }
 
 void Dialogue::set_current_text( std::string const & text )

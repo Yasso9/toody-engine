@@ -26,11 +26,11 @@ class CharacterEntity : public Transformable2D
     virtual ~CharacterEntity() = default;
 
   private:
-    void update ( float deltaTime ) override;
+    void update ( UpdateContext context ) override;
 
   public:
     math::PolygonF get_polygon () const;
 
   private:
-    math::Vector2F get_movement ( float deltaTime ) const;
+    math::Vector2F get_movement ( UpdateContext context ) const;
 };

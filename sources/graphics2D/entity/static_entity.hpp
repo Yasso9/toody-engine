@@ -22,10 +22,9 @@ class StaticEntity2D : public Component,
     explicit StaticEntity2D( sf::Texture const & texture );
     ~StaticEntity2D() = default;
 
-    void update ( float deltaTime ) override;
-
   protected:
-    void render ( Render & render ) const override;
+    void update ( UpdateContext context ) override;
+    void render ( RenderContext & context ) const override;
 
   public:
     void set_customisation ( bool isCustomisable );

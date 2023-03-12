@@ -18,7 +18,7 @@ class Control
 
     CollisionList const & get_collisions () const;
     View const &          get_view () const;
-    math::Vector2F        get_input_movement () const;
+    math::Vector2F        get_input_movement ( Window const & window ) const;
 
     bool is_collision_detected ( math::PolygonF entityPolygon ) const;
 };

@@ -32,12 +32,12 @@ Camera::Camera()
     this->reset();
 }
 
-void Camera::update( float deltaTime )
+void Camera::update( UpdateContext context )
 {
-    m_movementSpeed = 2.5f * deltaTime;
+    m_movementSpeed = 2.5f * context.deltaTime;
 
     {  // Camera configuration
-        if ( input::is_pressed( sf::Keyboard::Space ) )
+        if ( input::is_pressed( context.window, sf::Keyboard::Space ) )
         {
             m_captureMouse = ! m_captureMouse;
         }
@@ -49,27 +49,27 @@ void Camera::update( float deltaTime )
     }
 
     {  // Update the camera position
-        if ( input::is_pressed( sf::Keyboard::Z ) )
+        if ( input::is_pressed( context.window, sf::Keyboard::Z ) )
         {
             this->move( Camera::E_Movement::Up );
         }
-        if ( input::is_pressed( sf::Keyboard::S ) )
+        if ( input::is_pressed( context.window, sf::Keyboard::S ) )
         {
             this->move( Camera::E_Movement::Down );
         }
-        if ( input::is_pressed( sf::Keyboard::Q ) )
+        if ( input::is_pressed( context.window, sf::Keyboard::Q ) )
         {
             this->move( Camera::E_Movement::Left );
         }
-        if ( input::is_pressed( sf::Keyboard::D ) )
+        if ( input::is_pressed( context.window, sf::Keyboard::D ) )
         {
             this->move( Camera::E_Movement::Right );
         }
-        if ( input::is_pressed( sf::Keyboard::A ) )
+        if ( input::is_pressed( context.window, sf::Keyboard::A ) )
         {
             this->move( Camera::E_Movement::In );
         }
-        if ( input::is_pressed( sf::Keyboard::E ) )
+        if ( input::is_pressed( context.window, sf::Keyboard::E ) )
         {
             this->move( Camera::E_Movement::Out );
         }
@@ -78,27 +78,27 @@ void Camera::update( float deltaTime )
     {  // Update the camera direction
         math::Vector3F rotation { 0.f, 0.f, 0.f };
 
-        if ( input::is_pressed( sf::Keyboard::Up ) )
+        if ( input::is_pressed( context.window, sf::Keyboard::Up ) )
         {
             rotation += { 1.f, 0.f, 0.f };
         }
-        if ( input::is_pressed( sf::Keyboard::Down ) )
+        if ( input::is_pressed( context.window, sf::Keyboard::Down ) )
         {
             rotation += { -1.f, 0.f, 0.f };
         }
-        if ( input::is_pressed( sf::Keyboard::Left ) )
+        if ( input::is_pressed( context.window, sf::Keyboard::Left ) )
         {
             rotation += { 0.f, 1.f, 0.f };
         }
-        if ( input::is_pressed( sf::Keyboard::Right ) )
+        if ( input::is_pressed( context.window, sf::Keyboard::Right ) )
         {
             rotation += { 0.f, -1.f, 0.f };
         }
-        if ( input::is_pressed( sf::Keyboard::B ) )
+        if ( input::is_pressed( context.window, sf::Keyboard::B ) )
         {
             rotation += { 0.f, 0.f, -1.f };
         }
-        if ( input::is_pressed( sf::Keyboard::N ) )
+        if ( input::is_pressed( context.window, sf::Keyboard::N ) )
         {
             rotation += { 0.f, 0.f, 1.f };
         }
@@ -110,8 +110,9 @@ void Camera::update( float deltaTime )
         if ( m_captureMouse )
         {
             math::Vector2F const windowCenter {
-                Window::get_instance().get_center_position() };
-            math::Vector2F const mousePosition { input::get_mouse_position() };
+                context.window.get_center_position() };
+            math::Vector2F const mousePosition {
+                input::get_mouse_position( context.window ) };
 
             if ( windowCenter == mousePosition )
             {
@@ -121,7 +122,7 @@ void Camera::update( float deltaTime )
             math::Vector2F offset { mousePosition - windowCenter };
 
             // Reset Mouse Position
-            input::set_mouse_position( windowCenter.to_int() );
+            input::set_mouse_position( context.window, windowCenter.to_int() );
 
             this->rotate( { offset.y, offset.x, 0.f } );
         }
@@ -154,14 +155,13 @@ void Camera::update( float deltaTime )
     ImGui::End();
 }
 
-glm::mat4 Camera::get_projection() const
+glm::mat4 Camera::get_projection( float aspectRatio ) const
 {
     float const fieldOfView { glm::radians( this->get_field_of_view() ) };
-    float const screenRatio { Window::get_instance().get_aspect_ratio() };
     float const nearDistanceFromCamera { 0.1f };
     float const farDistanceFromCamera { 100.f };
 
-    return glm::perspective( fieldOfView, screenRatio, nearDistanceFromCamera,
+    return glm::perspective( fieldOfView, aspectRatio, nearDistanceFromCamera,
                              farDistanceFromCamera );
 }
 

@@ -34,7 +34,7 @@ namespace tile
         virtual ~Map() = default;
 
       private:
-        void update ( float deltaTime ) override;
+        void update ( UpdateContext context ) override;
 
       public:
         /// @brief Reference to the tileset that the tilemap use

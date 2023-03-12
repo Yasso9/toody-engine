@@ -97,14 +97,15 @@ namespace tile
         this->setPosition( 0.f, 0.f );
     }
 
-    void Map::update( float /* deltaTime */ )
+    void Map::update( UpdateContext context )
     {
         ImGui::SetNextWindowBgAlpha( 0.5f );
         if ( ImGui::Begin( "Tilemap Information" ) )
         {
             { /* UPDATE CURSOR */
                 math::PointF mousePosition {
-                    input::get_mouse_position_relative( m_view ).to_point() };
+                    input::get_mouse_position_relative( context.window, m_view )
+                        .to_point() };
                 if ( ! this->get_tile_position( mousePosition ).has_value()
                      || ImGui::IsWindowHovered( ImGuiHoveredFlags_AnyWindow ) )
                 {
@@ -115,7 +116,8 @@ namespace tile
                 {
                     tile::Position tilePosition {
                         this->get_tile_position( mousePosition ).value() };
-                    if ( input::is_pressed( sf::Mouse::Button::Left )
+                    if ( input::is_pressed( context.window,
+                                            sf::Mouse::Button::Left )
                          && m_tileSelector.get_tile_selected().has_value() )
                     {
                         // There's a left click and the mouse is inside the
@@ -189,12 +191,16 @@ namespace tile
                     infoOutput << "View - Size : " << m_view.get_size() << "\n";
                     infoOutput << "View - Position : " << m_view.get_position()
                                << "\n";
-                    infoOutput << "View - Zoom : " << m_view.get_zoom() << "\n";
+                    infoOutput
+                        << "View - Zoom : " << m_view.get_zoom( context.window )
+                        << "\n";
 
                     infoOutput << "Mouse Position - Absolute : "
-                               << input::get_mouse_position() << "\n";
+                               << input::get_mouse_position( context.window )
+                               << "\n";
                     infoOutput << "Mouse Position - Relativ to View : "
-                               << input::get_mouse_position_relative( m_view )
+                               << input::get_mouse_position_relative(
+                                      context.window, m_view )
                                << "\n";
 
                     ImGui::Text( "%s", infoOutput.str().c_str() );

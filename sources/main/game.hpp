@@ -7,7 +7,6 @@
 
 class Game : public Component
 {
-  private:
     std::shared_ptr< State > m_state;
     bool                     m_shouldRun;
 
@@ -15,15 +14,13 @@ class Game : public Component
     Game();
     virtual ~Game();
 
-  private:
-    virtual void update ( float deltaTime ) override;
-    virtual void render ( Render & render ) const override;
+    virtual void update_all ( UpdateContext context ) override;
+    virtual void render_all ( RenderContext & context ) const override;
 
-  public:
+    void update_inputs ( Window & window );
+
     bool should_run () const;
 
   private:
-    /// @brief change the state to a new state
-    /// @param newState the new state to be printed
     void change_state ( State::E_List const & newState );
 };

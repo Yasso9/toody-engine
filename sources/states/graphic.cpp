@@ -35,7 +35,7 @@ GraphicState::GraphicState()
     }
 }
 
-void GraphicState::update( float /* deltaTime */ ) {}
+void GraphicState::update( UpdateContext /* context */ ) {}
 
 static Shape::S_Data get_sample_shape_data_A ()
 {

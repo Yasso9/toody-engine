@@ -4,6 +4,7 @@
 #include <SFML/Window/Mouse.hpp>     // for Mouse, Mouse::Button
 
 #include "graphics2D/view.hpp"
+#include "main/window.hpp"
 #include "maths/geometry/point.hpp"  // for PointI
 #include "maths/vector2.hpp"         // for Vector2F, Vector2I
 
@@ -36,22 +37,25 @@ namespace input
     constexpr S_KeyboardMove ARROW { sf::Keyboard::Up, sf::Keyboard::Right,
                                      sf::Keyboard::Down, sf::Keyboard::Left };
 
-    bool is_pressed ( sf::Keyboard::Key key );
-    bool is_pressed ( sf::Mouse::Button mouseButton );
+    bool is_pressed ( Window const & window, sf::Keyboard::Key key );
+    bool is_pressed ( Window const & window, sf::Mouse::Button mouseButton );
 
-    math::Vector2I get_mouse_position ();
+    math::Vector2I get_mouse_position ( Window const & window );
     /// @brief Mouse position relative to view
-    math::Vector2F get_mouse_position_relative ( View view );
-    math::Vector2F get_mouse_movement ();
+    math::Vector2F get_mouse_position_relative ( Window const & window,
+                                                 View           view );
+    math::Vector2F get_mouse_movement ( Window const & window );
     void           set_mouse_movement ( math::Vector2F mouseMovement );
     float          get_mouse_scroll ();
 
     void reset_mouse_movement ();
-    void set_mouse_position ( math::PointI newMousePosition );
+    void set_mouse_position ( Window const & window,
+                              math::PointI   newMousePosition );
 
     /// @remark must be used only by the pollevent MouseScroll event
     void set_mouse_scroll ( float mouseScrollDelta );
 
-    math::Vector2F get_movement_vector ( S_KeyboardMove movementKey,
+    math::Vector2F get_movement_vector ( Window const & window,
+                                         S_KeyboardMove movementKey,
                                          bool invertMovement = false );
 };  // namespace input

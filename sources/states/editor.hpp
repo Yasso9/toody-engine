@@ -32,8 +32,8 @@ class EditorState final : public State
   public:
     EditorState();
 
-    void update ( float deltaTime ) override;
+    void update ( UpdateContext context ) override;
 
   private:
-    void reset_view ();
+    void reset_view ( math::Vector2F const & windowSize );
 };

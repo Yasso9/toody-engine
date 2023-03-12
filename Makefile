@@ -217,8 +217,8 @@ $(SFML_REQUIREMENTS) :
 	$(SHOW)tar -xzf $(TMP_BUILD_DIR)/2.5.1.tar.gz -C $(TMP_BUILD_DIR)
 # Build SFML
 	$(SHOW)cmake -S $(SFML_BUILD_DIR) -B $(SFML_BUILD_DIR)/build -Wno-dev \
-	-D CMAKE_C_COMPILER=$(C_COMMAND)
-	-D CMAKE_CXX_COMPILER=$(CXX_COMMAND)
+	-D CMAKE_C_COMPILER=$(C_COMMAND) \
+	-D CMAKE_CXX_COMPILER=$(CXX_COMMAND) \
 	-D BUILD_SHARED_LIBS=1 \
 	-D SFML_BUILD_AUDIO=1 \
 	-D SFML_BUILD_DOC=0 \
@@ -247,8 +247,8 @@ $(ASSIMP_REQUIREMENTS) :
 	$(SHOW)tar -xzf $(TMP_BUILD_DIR)/v5.2.5.tar.gz -C $(TMP_BUILD_DIR)
 # Build Assimp
 	$(SHOW)cmake -S $(ASSIMP_BUILD_DIR) -B $(ASSIMP_BUILD_DIR)/build -Wno-dev \
-	-D CMAKE_C_COMPILER=$(C_COMMAND)
-	-D CMAKE_CXX_COMPILER=$(CXX_COMMAND)
+	-D CMAKE_C_COMPILER=$(C_COMMAND) \
+	-D CMAKE_CXX_COMPILER=$(CXX_COMMAND) \
 	-D ASSIMP_BUILD_TESTS=0 \
 	-D ASSIMP_INSTALL=0 \
 	-D ASSIMP_WARNINGS_AS_ERRORS=0 \
@@ -296,7 +296,7 @@ format:
 cppclean:
 	cppclean --verbose --include-path=sources --include-path=external/includes sources/**
 
-initialize_build: clean_executable
+initialize_build:
 	$(SHOW)echo "Create Build Directories"
 	$(SHOW)mkdir -p $(BUILD_DIRECTORY)
 	$(SHOW)mkdir -p $(OBJECT_DIRECTORY)

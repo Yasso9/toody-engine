@@ -27,11 +27,13 @@ void ControllableEntity2D::set_speed( math::Vector2F speed )
     m_speed = speed;
 }
 
-void ControllableEntity2D::update( float deltaTime )
+void ControllableEntity2D::update( UpdateContext context )
 {
-    math::Vector2F moveSpeed { ( m_speed / m_control.get_view().get_zoom() )
-                               * deltaTime };
-    math::Vector2F moveDirection { m_control.get_input_movement() };
+    math::Vector2F moveSpeed {
+        ( m_speed / m_control.get_view().get_zoom( context.window ) )
+        * context.deltaTime };
+    math::Vector2F moveDirection {
+        m_control.get_input_movement( context.window ) };
 
     // ImGui::P_Show( "Entity Update Extra",
     //                 [moveDirection]()

@@ -7,8 +7,9 @@
 
 int main ()
 {
-    Game  game {};
-    Clock clock {};
+    Window window { "Toody Engine (Developpement)" };
+    Game   game {};
+    Clock  clock {};
 
     float const refreshRate { Settings::get_instance().get_refresh_rate() };
 
@@ -18,19 +19,17 @@ int main ()
 
         if ( deltaTime > refreshRate )
         {
-            game.update_all( deltaTime );
+            game.update_inputs( window );
 
-            /// @todo améliorer ça : window ne doit plus etre un singleton + on
-            /// doit passer directement window a la fonction render
-            Render render { Window::get_instance() };
-            game.render_all( render );
+            game.update_all( UpdateContext { window, deltaTime } );
+            /// @todo voir si c'est utile de faire un renderContext & et pas
+            /// seulement un renderContext
+            RenderContext renderContext { window };
+            game.render_all( renderContext );
 
             clock.reset();
         }
     }
-
-    /// @todo améliorer ça : window ne doit plus etre un singleton
-    Window::get_instance().close();
 
     return EXIT_SUCCESS;
 }

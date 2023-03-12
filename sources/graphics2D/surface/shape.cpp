@@ -46,12 +46,11 @@ void Shape2D::set_polygon( math::PolygonF polygon )
     this->update();
 }
 
-void Shape2D::custom_draw( Render & render ) const
+void Shape2D::custom_draw( RenderContext & context ) const
 {
     // auto renderStates = render.get_state();
     // renderStates.transform *= this->getTransform();
-    render.get_target().draw( *dynamic_cast< sf::Shape const * >( this ),
-                              render.get_render_states() );
+    context.draw( *dynamic_cast< sf::Shape const * >( this ) );
 }
 
 std::size_t Shape2D::getPointCount() const

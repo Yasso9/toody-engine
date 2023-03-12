@@ -24,7 +24,7 @@ namespace tile
         Tile( math::Vector2F pixelPosition, math::Vector2F pixelValue );
 
       private:
-        void render ( Render & render ) const override;
+        void render ( RenderContext & context ) const override;
 
       public:
         math::Vector2F get_value () const;

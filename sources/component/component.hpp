@@ -5,6 +5,7 @@
 
 #include <SFML/Graphics/Transformable.hpp>  // for Transformable
 
+#include "component/contexts.hpp"
 #include "graphics2D/view.hpp"
 #include "main/render.hpp"
 
@@ -50,27 +51,27 @@ class Component
 
   public:
     /// @brief update the component. Must not be called manually if it's a child
-    virtual void update_all ( float deltaTime );
+    virtual void update_all ( UpdateContext context );
     /// @brief draw the component to the render. Must not be called manually if
     /// it's a child
-    virtual void render_all ( Render & render ) const;
+    virtual void render_all ( RenderContext & context ) const;
 
     void set_view ( View const & view );
 
   private:
     /// @brief custom update - called before children update
-    virtual void update_before ( float deltaTime );
+    virtual void update_before ( UpdateContext context );
     /// @brief custom update - order doesn't matter
-    virtual void update ( float deltaTime );
+    virtual void update ( UpdateContext context );
     /// @brief custom update - called after children update
-    virtual void update_after ( float deltaTime );
+    virtual void update_after ( UpdateContext context );
 
     /// @brief custom render - called before children render
-    virtual void render_before ( Render & render ) const;
+    virtual void render_before ( RenderContext & context ) const;
     /// @brief custom render - order doesn't matter
-    virtual void render ( Render & render ) const;
+    virtual void render ( RenderContext & context ) const;
     /// @brief custom render - called after children render
-    virtual void render_after ( Render & render ) const;
+    virtual void render_after ( RenderContext & context ) const;
 };
 
 #include "component.tpp"

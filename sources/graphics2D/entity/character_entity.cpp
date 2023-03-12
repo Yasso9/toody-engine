@@ -25,9 +25,9 @@ CharacterEntity::CharacterEntity( sf::Texture const & texture, Control control )
     this->add_child( m_animation );
 }
 
-void CharacterEntity::update( float deltaTime )
+void CharacterEntity::update( UpdateContext context )
 {
-    math::Vector2F movement { this->get_movement( deltaTime ) };
+    math::Vector2F movement { this->get_movement( context ) };
 
     this->move( movement );
 
@@ -82,13 +82,15 @@ math::PolygonF CharacterEntity::get_polygon() const
     return m_sprite.get_polygon() + this->getPosition();
 }
 
-math::Vector2F CharacterEntity::get_movement( float deltaTime ) const
+math::Vector2F CharacterEntity::get_movement( UpdateContext context ) const
 {
-    math::Vector2F const moveSpeed { ( math::Vector2F { m_speed, m_speed }
-                                       / m_control.get_view().get_zoom() ) };
+    math::Vector2F const moveSpeed {
+        ( math::Vector2F { m_speed, m_speed }
+          / m_control.get_view().get_zoom( context.window ) ) };
 
-    math::Vector2F const movementValue { m_control.get_input_movement()
-                                         * moveSpeed * deltaTime };
+    math::Vector2F const movementValue {
+        m_control.get_input_movement( context.window ) * moveSpeed
+        * context.deltaTime };
 
     return movementValue.get_norm();
 }

@@ -35,10 +35,9 @@ class Dialogue : public Component
     Dialogue();
     virtual ~Dialogue() = default;
 
-    void update ( float deltaTime ) override;
-
   private:
-    void render ( Render & render ) const override;
+    void update ( UpdateContext context ) override;
+    void render ( RenderContext & context ) const override;
 
   public:
     void enable ();

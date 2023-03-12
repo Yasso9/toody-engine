@@ -7,7 +7,6 @@
 ImageMap::ImageMap() : m_data()
 {
     /// @todo load the the sprites path and the positions from the database
-
     m_data = {
         /*
             {sf::Sprite { resources::get_texture( "happy_square.png"s ) },
@@ -24,10 +23,10 @@ std::vector< S_Image > const & ImageMap::get_data() const
     return m_data;
 }
 
-void ImageMap::render_before( Render & render ) const
+void ImageMap::render_before( RenderContext & context ) const
 {
     for ( S_Image const & image : m_data )
     {
-        render.get_target().draw( image.sprite, render.get_render_states() );
+        context.draw( image.sprite );
     }
 }

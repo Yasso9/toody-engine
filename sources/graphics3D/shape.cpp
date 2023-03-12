@@ -52,7 +52,7 @@ Shape::~Shape()
     }
 }
 
-void Shape::update( float /* deltaTime */ )
+void Shape::update( UpdateContext /* context */ )
 {
     for ( unsigned int i = 0u; i < m_textures.size(); ++i )
     {
@@ -61,7 +61,7 @@ void Shape::update( float /* deltaTime */ )
     }
 }
 
-void Shape::render( Render & /* Render */ ) const
+void Shape::render( RenderContext & /* context */ ) const
 {
     GLenum const primitiveType { GL_TRIANGLES };
 

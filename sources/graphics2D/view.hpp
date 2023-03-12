@@ -2,20 +2,25 @@
 
 #include <SFML/Graphics/View.hpp>  // for View
 
-#include "maths/geometry/point.hpp"
-#include "maths/geometry/rectangle.hpp"
-#include "maths/vector2.hpp"  // for Vector2F
+#include "main/window.hpp"               // for Window
+#include "maths/geometry/point.hpp"      // for PointF
+#include "maths/geometry/rectangle.hpp"  // for RectangleF
+#include "maths/vector2.hpp"             // for Vector2F
 
 class View : public sf::View
 {
   public:
     View() : sf::View {} {}
 
+    /// @todo pourquoi on a pas const & ici ?
     View( sf::View view ) noexcept : sf::View { view } {}
 
-    math::Vector2F get_zoom () const;
-    void           set_zoom ( float newZoom );
-    void           zoom ( float factor );
+    math::Vector2F get_zoom ( math::Vector2F windowSize ) const;
+    math::Vector2F get_zoom ( Window const & window ) const;
+    void           set_zoom ( float newZoom, math::Vector2F windowSize );
+    void           set_zoom ( float newZoom, Window const & window );
+    void           zoom ( float factor, math::Vector2F windowSize );
+    void           zoom ( float factor, Window const & window );
 
     /// @brief Size of the view
     math::Vector2F   get_size () const;

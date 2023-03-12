@@ -3,6 +3,8 @@
 #include <iostream>  // for operator<<, endl, basic_o...
 #include <string>    // for allocator, string
 
+#include <IMGUI/imgui-SFML.h>               // for Init, ProcessEvent, Render
+#include <SFML/Graphics/Shader.hpp>         // for Shader
 #include <SFML/System/Vector2.hpp>          // for Vector2u
 #include <SFML/Window/ContextSettings.hpp>  // for ContextSettings
 #include <SFML/Window/Mouse.hpp>            // for Mouse
@@ -14,16 +16,70 @@
 #include "maths/geometry/point.tpp"  // for Point::Point<Type>, Point...
 #include "maths/vector2.tpp"         // for Vector2::Vector2<Type>
 #include "tools/singleton.tpp"       // for Singleton::get_instance
+#include "tools/traces.hpp"          // for Trace
 
 namespace sf
 {
     class Color;
 }  // namespace sf
 
-Window::Window()
+Window::Window( std::string const & title )
 {
-    this->creation();
-    this->initialize();
+    {  // Window creation
+        // unsigned int const windowStyle { sf::Style::Titlebar |
+        // sf::Style::Resize
+        //  | sf::Style::Close };
+
+        sf::ContextSettings contextSettings {};
+        contextSettings.depthBits         = 24;
+        contextSettings.sRgbCapable       = false;
+        contextSettings.stencilBits       = 8;
+        contextSettings.antialiasingLevel = 4;
+        contextSettings.majorVersion      = 4;
+        contextSettings.minorVersion      = 6;
+
+        this->sf::RenderWindow::create(
+            Settings::get_instance().get_video_mode(), title, sf::Style::None,
+            contextSettings );
+    }
+
+    {  // SFML Configuration
+        this->setVisible( true );
+        this->requestFocus();
+        this->setKeyRepeatEnabled( false );
+        this->setVerticalSyncEnabled(
+            Settings::get_instance().get_vertical_sync() );
+
+        if ( ! this->setActive( true ) )
+        {
+            Trace::Error(
+                "Cannot put the window active state for OpenGL calls" );
+        }
+        if ( ! sf::Shader::isAvailable() )
+        {
+            Trace::Error( "Shader's not available" );
+        }
+
+        gl::initialize( this->getSize().x, this->getSize().y );
+    }
+
+    {  // ImGui Configuration
+        if ( ! ImGui::SFML::Init( *this ) )
+        {
+            Trace::Error( "Cannot init ImGui" );
+        }
+
+        // To disable the use of imgui.ini file
+        // ImGui::GetIO().IniFilename = nullptr;
+    }
+}
+
+Window::~Window()
+{
+    ImGui::SFML::Shutdown();
+    // Must be made before closing the window
+    ASSERTION( gl::check_error(), "OpenGL error" );
+    this->close();
 }
 
 math::Vector2U Window::get_size() const
@@ -33,8 +89,7 @@ math::Vector2U Window::get_size() const
 
 float Window::get_aspect_ratio() const
 {
-    return static_cast< float >( Window::get_instance().get_size().x
-                                 / Window::get_instance().get_size().y );
+    return static_cast< float >( this->get_size().x / this->get_size().y );
 }
 
 math::Vector2U Window::get_center_position() const
@@ -55,44 +110,13 @@ bool Window::has_absolute_focus() const
     return this->hasFocus() && this->is_hovered();
 }
 
-void Window::clear_all( sf::Color const & backgroundColor )
+void Window::reset_view()
+{
+    this->setView( this->getDefaultView() );
+}
+
+void Window::clear( sf::Color const & backgroundColor )
 {
     gl::clear_window( backgroundColor );
-    this->clear( backgroundColor );
-}
-
-void Window::creation()
-{
-    std::string const gameTitle { "Toody Engine (In Developpement)" };
-
-    unsigned int const windowStyle { sf::Style::Titlebar | sf::Style::Resize
-                                     | sf::Style::Close };
-
-    sf::ContextSettings contextSettings {};
-    contextSettings.depthBits         = 24;
-    contextSettings.sRgbCapable       = false;
-    contextSettings.stencilBits       = 8;
-    contextSettings.antialiasingLevel = 4;
-    contextSettings.majorVersion      = 4;
-    contextSettings.minorVersion      = 6;
-
-    this->sf::RenderWindow::create( Settings::get_instance().get_video_mode(),
-                                    gameTitle, windowStyle, contextSettings );
-}
-
-void Window::initialize()
-{
-    this->setVisible( true );
-    this->requestFocus();
-    this->setKeyRepeatEnabled( false );
-    this->setVerticalSyncEnabled(
-        Settings::get_instance().get_vertical_sync() );
-
-    if ( ! this->setActive( true ) )
-    {
-        std::cerr << "Cannot put the window active state for OpenGL calls"
-                  << std::endl;
-    }
-
-    gl::initialize( this->getSize().x, this->getSize().y );
+    this->sf::RenderWindow::clear( backgroundColor );
 }

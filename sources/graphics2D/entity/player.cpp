@@ -105,18 +105,18 @@ void Player::set_state( Player::E_State const & playerState )
     this->m_state = playerState;
 }
 
-void Player::update_before( float deltaTime )
+void Player::update_before( UpdateContext context )
 {
-    this->update_delta_time( deltaTime );
+    this->update_delta_time( context.deltaTime );
     this->update_movement();
     this->update_texture_rect();
 
     this->m_lastState = { this->m_state, this->m_direction };
 }
 
-void Player::render_before( Render & render ) const
+void Player::render_before( RenderContext & context ) const
 {
-    render.get_target().draw( m_sprite, render.get_render_states() );
+    context.draw( m_sprite );
 }
 
 void Player::update_delta_time( float const & deltaTime )
@@ -152,33 +152,35 @@ void Player::update_texture_rect()
 
 void Player::update_events()
 {
+    std::cout << "CALLLEEEDDDD" << std::endl;
+
     this->set_state( Player::E_State::Normal );
 
-    if ( input::is_pressed( sf::Keyboard::Z ) )
-    {
-        this->set_state( Player::E_State::Walking );
-        this->set_direction( E_Direction::Up );
-    }
-    if ( input::is_pressed( sf::Keyboard::S ) )
-    {
-        this->set_state( Player::E_State::Walking );
-        this->set_direction( E_Direction::Down );
-    }
-    if ( input::is_pressed( sf::Keyboard::Q ) )
-    {
-        this->set_state( Player::E_State::Walking );
-        this->set_direction( E_Direction::Left );
-    }
-    if ( input::is_pressed( sf::Keyboard::D ) )
-    {
-        this->set_state( Player::E_State::Walking );
-        this->set_direction( E_Direction::Right );
-    }
+    // if ( input::is_pressed( sf::Keyboard::Z ) )
+    // {
+    //     this->set_state( Player::E_State::Walking );
+    //     this->set_direction( E_Direction::Up );
+    // }
+    // if ( input::is_pressed( sf::Keyboard::S ) )
+    // {
+    //     this->set_state( Player::E_State::Walking );
+    //     this->set_direction( E_Direction::Down );
+    // }
+    // if ( input::is_pressed( sf::Keyboard::Q ) )
+    // {
+    //     this->set_state( Player::E_State::Walking );
+    //     this->set_direction( E_Direction::Left );
+    // }
+    // if ( input::is_pressed( sf::Keyboard::D ) )
+    // {
+    //     this->set_state( Player::E_State::Walking );
+    //     this->set_direction( E_Direction::Right );
+    // }
 
-    if ( input::is_pressed( sf::Keyboard::Z ) )
-    {
-        this->set_state( Player::E_State::Running );
-    }
+    // if ( input::is_pressed( sf::Keyboard::Z ) )
+    // {
+    //     this->set_state( Player::E_State::Running );
+    // }
 }
 
 sf::Vector2f Player::get_movement() const

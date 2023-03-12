@@ -8,6 +8,6 @@ class TestState final : public State
     TestState();
     virtual ~TestState() = default;
 
-    void update_before ( float deltaTime ) override;
+    void update_before ( UpdateContext context ) override;
     // void render( sf::RenderTarget & target ) const override;
 };

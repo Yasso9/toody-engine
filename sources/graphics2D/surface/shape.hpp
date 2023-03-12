@@ -5,6 +5,7 @@
 #include <SFML/Graphics/Shape.hpp>  // for Shape
 #include <SFML/System/Vector2.hpp>  // for Vector2f
 
+#include "component/contexts.hpp"
 #include "maths/geometry/point.hpp"    // for PointF
 #include "maths/geometry/polygon.hpp"  // for PolygonF
 #include "maths/vector2.hpp"           // for Vector2F
@@ -27,7 +28,7 @@ class Shape2D : public sf::Shape
     void           set_polygon ( math::PolygonF polygon );
 
   protected:
-    void custom_draw ( Render & render ) const;
+    void custom_draw ( RenderContext & context ) const;
 
   private:
     std::size_t  getPointCount () const override;

@@ -19,5 +19,5 @@ class BasicEntity2D : public StaticEntity2D
     void           set_speed ( float speed );
     void           set_speed ( math::Vector2F speed );
 
-    virtual void update ( float deltaTime ) override;
+    virtual void update ( UpdateContext context ) override;
 };

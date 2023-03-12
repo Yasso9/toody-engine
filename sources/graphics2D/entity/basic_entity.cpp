@@ -21,4 +21,4 @@ void BasicEntity2D::set_speed( math::Vector2F speed )
     m_speed = speed;
 }
 
-void BasicEntity2D::update( float /* deltaTime */ ) {}
+void BasicEntity2D::update( UpdateContext /* context */ ) {}

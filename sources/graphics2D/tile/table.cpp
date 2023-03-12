@@ -14,21 +14,21 @@ namespace tile
 {
     Table::Table( sf::Texture const & texture ) : m_texture { texture } {}
 
-    void Table::update( float deltaTime )
+    void Table::update( UpdateContext context )
     {
         for ( Tile tile : m_array2D )
         {
-            tile.update_all( deltaTime );
+            tile.update_all( context );
         }
     }
 
-    void Table::render( Render & render ) const
+    void Table::render( RenderContext & context ) const
     {
-        render.set_texture( m_texture );
+        context.set_texture( m_texture );
 
         for ( Tile tile : m_array2D )
         {
-            tile.render_all( render );
+            tile.render_all( context );
         }
     }
 

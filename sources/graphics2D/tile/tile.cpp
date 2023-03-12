@@ -31,11 +31,11 @@ namespace tile
         this->set_value( pixelValue );
     }
 
-    void Tile::render( Render & render ) const
+    void Tile::render( RenderContext & context ) const
     {
-        render.draw( std::vector< sf::Vertex > { m_quad.vertices.begin(),
-                                                 m_quad.vertices.end() },
-                     sf::Quads );
+        context.draw( std::vector< sf::Vertex > { m_quad.vertices.begin(),
+                                                  m_quad.vertices.end() },
+                      sf::Quads );
     }
 
     math::Vector2F Tile::get_value() const
@@ -154,7 +154,7 @@ namespace tile
     //     return *this;
     // }
 
-    // void Tile::render( Render & render ) const
+    // void Tile::render( RenderContext & context ) const
     // {
     //     render.set_texture( mp_tileset->get_texture() );
     //     render.draw( this->get_vertex_array() );

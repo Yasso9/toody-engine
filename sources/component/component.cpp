@@ -23,41 +23,41 @@ Component & Component::operator= ( Component && component ) noexcept
     return *this;
 }
 
-void Component::update_all( float deltaTime )
+void Component::update_all( UpdateContext context )
 {
-    this->update_before( deltaTime );
+    this->update_before( context );
 
-    this->update( deltaTime );
+    this->update( context );
 
     for ( Component * component : m_childs )
     {
-        component->update_all( deltaTime );
+        component->update_all( context );
     }
 
-    this->update_after( deltaTime );
+    this->update_after( context );
 }
 
-void Component::render_all( Render & render ) const
+void Component::render_all( RenderContext & context ) const
 {
     if ( m_view != nullptr )
     {
-        render.set_view( *m_view );
+        context.window.setView( *m_view );
     }
 
-    this->render_before( render );
+    this->render_before( context );
 
-    this->render( render );
+    this->render( context );
 
     for ( Component const * component : m_childs )
     {
-        component->render_all( render );
+        component->render_all( context );
     }
 
-    this->render_after( render );
+    this->render_after( context );
 
     if ( m_view != nullptr )
     {
-        render.reset_view();
+        context.window.reset_view();
     }
 }
 
@@ -66,14 +66,14 @@ void Component::set_view( View const & view )
     m_view = &view;
 }
 
-void Component::update_before( float /* deltaTime */ ) {}
+void Component::update_before( UpdateContext /* context */ ) {}
 
-void Component::update( float /* deltaTime */ ) {}
+void Component::update( UpdateContext /* context */ ) {}
 
-void Component::update_after( float /* deltaTime */ ) {}
+void Component::update_after( UpdateContext /* context */ ) {}
 
-void Component::render_before( Render & /* render */ ) const {}
+void Component::render_before( RenderContext & /* context */ ) const {}
 
-void Component::render( Render & /* render */ ) const {}
+void Component::render( RenderContext & /* context */ ) const {}
 
-void Component::render_after( Render & /* render */ ) const {}
+void Component::render_after( RenderContext & /* context */ ) const {}

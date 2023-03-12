@@ -127,8 +127,8 @@ bool Button::update_button( sf::Vector2f const & position, bool const & click )
     return false;
 }
 
-void Button::render_before( Render & render ) const
+void Button::render_before( RenderContext & context ) const
 {
-    render.get_target().draw( m_shape, render.get_render_states() );
-    render.get_target().draw( m_text, render.get_render_states() );
+    context.draw( m_shape );
+    context.draw( m_text );
 }

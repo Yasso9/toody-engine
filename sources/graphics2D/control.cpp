@@ -17,9 +17,9 @@ View const & Control::get_view() const
     return m_view;
 }
 
-math::Vector2F Control::get_input_movement() const
+math::Vector2F Control::get_input_movement( Window const & window ) const
 {
-    return input::get_movement_vector( m_movementKey );
+    return input::get_movement_vector( window, m_movementKey );
 }
 
 bool Control::is_collision_detected( math::PolygonF entityPolygon ) const

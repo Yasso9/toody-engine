@@ -14,12 +14,12 @@
 #include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
 #include "graphics2D/sfml.hpp"                  // for operator<<
 #include "graphics2D/view.hpp"                  // for View
-#include "input/input.hpp"      // for get_mouse_movement, get_mous...
-#include "libraries/imgui.hpp"  // for P_Begin
-#include "main/resources.hpp"
+#include "input/input.hpp"               // for get_mouse_movement, get_mous...
+#include "libraries/imgui.hpp"           // for P_Begin
+#include "main/resources.hpp"            // for get_texture
+#include "main/settings.hpp"             // for Settings
 #include "main/window.hpp"               // for Window
 #include "maths/geometry/point.hpp"      // for PointF
-#include "maths/geometry/polygon.hpp"    // for PolygonF
 #include "maths/geometry/polygon.tpp"    // for Polygon::Polygon<Type>, Poly...
 #include "maths/geometry/rectangle.hpp"  // for RectangleF
 #include "maths/vector2.hpp"             // for Vector2F, Vector2, Vector2U
@@ -29,7 +29,7 @@
 
 EditorState::EditorState()
   : State { State::E_List::Editor },
-    m_view { Window::get_instance().getDefaultView() },
+    m_view {},
     m_showWindow {
         { "demo_window", false }, { "debug_options", false },
         { "collision", false },   { "player_handling", false },
@@ -55,7 +55,7 @@ EditorState::EditorState()
 
     m_tilemap.setPosition( 0.f, 0.f );
 
-    this->reset_view();
+    this->reset_view( Settings::get_instance().get_window_size() );
 
     // m_greenEntity.setFillColor( sf::Color::Green );
     // m_greenEntity.setOutlineColor( sf::Color::Black );
@@ -64,7 +64,7 @@ EditorState::EditorState()
     m_dialogue.set_enabled( m_showWindow.at( "dialogue" ) );
 }
 
-void EditorState::update( float deltaTime )
+void EditorState::update( UpdateContext context )
 {
     {  // UPDATE VIEW
         static float viewScrollSpeed { 0.2f };
@@ -81,10 +81,10 @@ void EditorState::update( float deltaTime )
                                       * viewScrollSpeed };
         math::Vector2F const viewMoveSpeed {
             math::Vector2F { viewMoveSpeedBase, viewMoveSpeedBase }
-            / m_view.get_zoom() };
+            / m_view.get_zoom( context.window ) };
         math::Vector2F const viewMoveValue {
-            input::is_pressed( sf::Mouse::Right )
-                ? input::get_mouse_movement() * viewMoveSpeed
+            input::is_pressed( context.window, sf::Mouse::Right )
+                ? input::get_mouse_movement( context.window ) * viewMoveSpeed
                 : math::Vector2F { 0.f, 0.f } };
 
         ImGui::P_Show( "View Options", &m_showWindow.at( "view" ), [&] () {
@@ -94,14 +94,14 @@ void EditorState::update( float deltaTime )
             output << "View Size : " << m_view.get_size() << "\n";
             output << "Mouse Scroll : " << input::get_mouse_scroll() << "\n";
             output << "View Scroll Value : " << viewScrollValue << "\n";
-            output << "Mouse Movement : " << input::get_mouse_movement()
-                   << "\n";
+            output << "Mouse Movement : "
+                   << input::get_mouse_movement( context.window ) << "\n";
             output << "View Movement Speed : " << viewMoveSpeed << "\n";
             output << "View Movement Value : " << viewMoveValue << "\n";
             ImGui::Text( "%s", output.str().c_str() );
         } );
 
-        m_view.zoom( viewScrollValue );
+        m_view.zoom( viewScrollValue, context.window );
         m_view.move( viewMoveValue );
     }
 
@@ -128,7 +128,7 @@ void EditorState::update( float deltaTime )
         }
         if ( resetView )
         {
-            this->reset_view();
+            this->reset_view( context.window.get_size().to_float() );
             resetView = false;
         }
         if ( showDemo )
@@ -152,8 +152,9 @@ void EditorState::update( float deltaTime )
         ImGui::SetNextWindowBgAlpha( 0.8f );
         ImGui::P_Show( "Editor Main", NULL, window_flags, [&] () {
             std::stringstream frameRateStream {};
-            frameRateStream << "Frame Rate : " << std::round( 1.f / deltaTime )
-                            << "\n";
+            frameRateStream
+                << "Frame Rate : " << std::round( 1.f / context.deltaTime )
+                << "\n";
             ImGui::Text( "%s", frameRateStream.str().c_str() );
 
             static bool customizeCollision { false };
@@ -197,7 +198,8 @@ void EditorState::update( float deltaTime )
             "Debug Options", &m_showWindow.at( "debug_options" ), [&] () {
                 std::stringstream windowTextOutput {};
                 windowTextOutput << std::boolalpha;
-                windowTextOutput << "MousePos : " << input::get_mouse_position()
+                windowTextOutput << "MousePos : "
+                                 << input::get_mouse_position( context.window )
                                  << "\n";
                 windowTextOutput << "CursorPos : "
                                  << math::Vector2F { ImGui::GetCursorPos() }
@@ -232,10 +234,10 @@ void EditorState::update( float deltaTime )
     }
 }
 
-void EditorState::reset_view()
+void EditorState::reset_view( math::Vector2F const & windowSize )
 {
     m_view.setCenter( m_tilemap.get_center_absolute() );
-    m_view.setSize( Window::get_instance().get_size().to_float() );
+    m_view.setSize( windowSize );
     m_character.setPosition( m_view.get_center() );
 }
 

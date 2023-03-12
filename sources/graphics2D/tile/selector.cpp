@@ -38,7 +38,7 @@ namespace tile
         return m_tileSelected;
     }
 
-    void Selector::update( float /* deltaTime */ )
+    void Selector::update( UpdateContext context )
     {
         ImGui::P_Show(
             "Tile Selector", NULL, ImGuiWindowFlags_AlwaysAutoResize, [&] () {
@@ -165,7 +165,7 @@ namespace tile
 
                         {  // UPDATE SELECTION RECT
                             math::Vector2F mousePosition {
-                                input::get_mouse_position() };
+                                input::get_mouse_position( context.window ) };
 
                             if ( ImGui::IsWindowHovered()
                                  && gridBorder.contain(
@@ -187,6 +187,7 @@ namespace tile
                                     m_gridColor.to_integer() );
 
                                 if ( input::is_pressed(
+                                         context.window,
                                          sf::Mouse::Button::Left ) )
                                 {
                                     // There's a click, the tile selected change
@@ -210,7 +211,8 @@ namespace tile
                     {
                         std::ostringstream output {};
                         output << "Mouse Position : "
-                               << input::get_mouse_position() << "\n";
+                               << input::get_mouse_position( context.window )
+                               << "\n";
                         output << "Grid : " << gridBorder << "\n";
                         output << "Grid Scroll : " << scroll << "\n";
                         output << "Grid Max Scroll : " << maxScrollGrid << "\n";

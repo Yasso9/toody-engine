@@ -12,7 +12,8 @@
 #include "libraries/imgui.hpp"
 #include "main/render.hpp"     // for Render
 #include "main/resources.hpp"  // for get_font
-#include "main/window.hpp"     // for Window
+#include "main/settings.hpp"
+#include "main/window.hpp"  // for Window
 #include "maths/geometry/rectangle.hpp"
 #include "maths/vector2.hpp"  // for Vector2, Vector2F, Vector2I
 #include "maths/vector2.tpp"  // for Vector2::operator Vector2<...
@@ -47,7 +48,7 @@ MainMenuState::MainMenuState()
     m_background {},
     m_menuBackground {}
 {
-    math::Vector2F windowSize { Window::get_instance().get_size() };
+    math::Vector2F windowSize { Settings::get_instance().get_window_size() };
 
     m_background.setTexture( &resources::get_texture( "main_menu.jpg" ) );
     m_background.setPosition( 0.f, 0.f );
@@ -76,7 +77,7 @@ MainMenuState::MainMenuState()
     reset_text_color( m_texts );
 }
 
-void MainMenuState::update( float /* deltaTime */ )
+void MainMenuState::update( UpdateContext context )
 {
     // ImGui::P_Show( "Main Menu Debug", [&] () {
     //     std::stringstream output {};
@@ -90,8 +91,10 @@ void MainMenuState::update( float /* deltaTime */ )
 
     for ( sf::Text & text : m_texts )
     {
-        if ( input::get_mouse_position().to_point().to_float().is_inside(
-                 get_rectangle( text ) ) )
+        if ( input::get_mouse_position( context.window )
+                 .to_point()
+                 .to_float()
+                 .is_inside( get_rectangle( text ) ) )
         {
             // Color on hover
             text.setFillColor( sf::Color { 227, 139, 89 } );
@@ -99,7 +102,8 @@ void MainMenuState::update( float /* deltaTime */ )
             // There is a press on the button
             if ( this->is_pressed( sf::Mouse::Button::Left )
                  || ( buttonHasBeenPressed
-                      && input::is_pressed( sf::Mouse::Button::Left ) ) )
+                      && input::is_pressed( context.window,
+                                            sf::Mouse::Button::Left ) ) )
             {
                 buttonHasBeenPressed = true;
                 // Color on pressed
@@ -117,13 +121,13 @@ void MainMenuState::update( float /* deltaTime */ )
     }
 }
 
-void MainMenuState::render( Render & render ) const
+void MainMenuState::render( RenderContext & context ) const
 {
-    render.get_target().draw( m_background );
-    render.get_target().draw( m_menuBackground );
+    context.draw( m_background );
+    context.draw( m_menuBackground );
 
     for ( sf::Text const & text : m_texts )
     {
-        render.get_target().draw( text );
+        context.draw( text );
     }
 }

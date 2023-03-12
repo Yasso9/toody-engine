@@ -18,6 +18,6 @@ class MainMenuState final : public State
     MainMenuState();
     virtual ~MainMenuState() = default;
 
-    void update ( float deltaTime ) override;
-    void render ( Render & render ) const override;
+    void update ( UpdateContext context ) override;
+    void render ( RenderContext & context ) const override;
 };
