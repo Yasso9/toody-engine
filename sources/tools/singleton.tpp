@@ -2,9 +2,9 @@
 
 #include "singleton.hpp"
 
-template< typename SingletonClass >
-SingletonClass & Singleton< SingletonClass >::get_instance()
+template< typename T >
+T & Singleton< T >::get_instance()
 {
-    static SingletonClass instance {};
+    static T instance {};
     return instance;
 }

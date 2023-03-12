@@ -10,13 +10,10 @@ int main ()
     Game  game {};
     Clock clock {};
 
-    /// @todo revoir settings pour qu'il soit utilisable partout sans avoir un
-    /// singleton
-    float const refreshRate { Settings {}.get_refresh_rate() };
+    float const refreshRate { Settings::get_instance().get_refresh_rate() };
 
     while ( game.should_run() )
     {
-        // 
         float const deltaTime { clock.get_elapsed_time() };
 
         if ( deltaTime > refreshRate )

@@ -9,16 +9,19 @@
 #include "maths/vector2.hpp"    // for Vector2F
 #include "tools/singleton.hpp"  // for Singleton
 
-class Settings
+class Settings : public Singleton< Settings >
 {
+    ENABLE_SINGLETON( Settings );
+
     std::filesystem::path m_filePath;
 
     math::Vector2F m_windowSize;
     float          m_nbFramePerSecond;
     bool           m_verticalSync;
 
-  public:
     Settings();
+
+  public:
     virtual ~Settings() = default;
 
     math::Vector2F get_window_size () const;
