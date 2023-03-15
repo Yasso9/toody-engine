@@ -19,5 +19,5 @@ class MainMenuState final : public State
     virtual ~MainMenuState() = default;
 
     void update ( UpdateContext context ) override;
-    void render ( RenderContext & context ) const override;
+    void render ( RenderContext context ) const override;
 };

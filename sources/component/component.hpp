@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>  // for shared_ptr
 #include <optional>
 #include <vector>  // for vector
 
@@ -11,9 +12,9 @@
 
 class Component;
 
-/// @brief check if the Type is derived from Component
-template< typename Type >
-concept C_IsComponent = std::derived_from< Type, Component >;
+/// @brief check if the T is derived from Component
+template< typename T >
+concept C_IsComponent = std::derived_from< T, Component >;
 
 class Component
 {
@@ -24,8 +25,7 @@ class Component
     View const *               m_view;
 
   protected:
-    // Virtual Class - Can only be called by child
-    Component() : m_childs {}, m_view { nullptr } {};
+    Component();
 
   public:
     virtual ~Component() = default;
@@ -37,6 +37,8 @@ class Component
 
   protected:
     template< C_IsComponent ComponentClass >
+    void add_child ( ComponentClass * component );
+    template< C_IsComponent ComponentClass >
     void add_child ( ComponentClass & component );
     /// @brief Add a child to the component
     /// @tparam ComponentClass Type of the component. only Class inherited from
@@ -44,17 +46,26 @@ class Component
     /// @param component Child of the component to add. Will call update and
     /// render automatically
     /// @param view View that the component will have when it's drawn
+    /// @todo voir si c'est utile d'ajouter view
     template< C_IsComponent ComponentClass >
     void add_child ( ComponentClass & component, View const & view );
     template< C_IsComponent ComponentClass >
     void add_childs ( std::vector< ComponentClass > & components );
 
+    template< C_IsComponent ComponentClass >
+    void remove_child ( ComponentClass * component );
+    template< C_IsComponent ComponentClass >
+    void remove_child ( ComponentClass & component );
+
   public:
+    std::vector< Component const * > get_childs () const;
+    std::vector< Component * >       get_childs ();
+
     /// @brief update the component. Must not be called manually if it's a child
     virtual void update_all ( UpdateContext context );
     /// @brief draw the component to the render. Must not be called manually if
     /// it's a child
-    virtual void render_all ( RenderContext & context ) const;
+    virtual void render_all ( RenderContext context ) const;
 
     void set_view ( View const & view );
 
@@ -67,11 +78,11 @@ class Component
     virtual void update_after ( UpdateContext context );
 
     /// @brief custom render - called before children render
-    virtual void render_before ( RenderContext & context ) const;
+    virtual void render_before ( RenderContext context ) const;
     /// @brief custom render - order doesn't matter
-    virtual void render ( RenderContext & context ) const;
+    virtual void render ( RenderContext context ) const;
     /// @brief custom render - called after children render
-    virtual void render_after ( RenderContext & context ) const;
+    virtual void render_after ( RenderContext context ) const;
 };
 
 #include "component.tpp"

@@ -33,7 +33,7 @@ void Transformable::update_all( UpdateContext context )
         sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.projection ) } );
 }
 
-void Transformable::render_all( RenderContext & context ) const
+void Transformable::render_all( RenderContext context ) const
 {
     sf::Shader::bind( &m_shader );
 

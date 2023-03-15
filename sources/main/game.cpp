@@ -21,18 +21,18 @@
 #include "tools/enumeration.hpp"  // for Enum
 #include "tools/enumeration.tpp"  // for operator<<, Enum::Enum<Type>
 #include "tools/singleton.tpp"    // for Singleton::get_instance
-#include "tools/traces.hpp"
+#include "tools/traces.hpp"       // for Trace::Info, Trace::Error, Trace::Debug
 
 Game::Game() : m_state { nullptr }, m_shouldRun { true }
 {
-    std::cout << "Game Started" << std::endl;
-
     this->change_state( State::E_List::MainMenu );
+
+    Trace::Info( "Game Started" );
 }
 
 Game::~Game()
 {
-    std::cout << "Game Ended" << std::endl;
+    Trace::Info( "Game Ended" );
 }
 
 void Game::update_all( UpdateContext context )
@@ -41,31 +41,24 @@ void Game::update_all( UpdateContext context )
                          context.window.get_size().to_float(),
                          sf::seconds( context.deltaTime ) );
 
+    /// @todo use something like signal to change state
+    static State::E_List lastState { m_state->get_state_to_print() };
+
     this->Component::update_all( context );
 
-    {  // Update the current state to show
-        /// @todo use something like signal to change state
-        static State::E_List lastState { m_state->get_state_to_print() };
-
-        m_state->update_all( context );
-
-        State::E_List const newState { m_state->get_state_to_print() };
-        if ( lastState != newState )
-        {
-            lastState = newState;
-            this->change_state( newState );
-        }
+    State::E_List const newState { m_state->get_state_to_print() };
+    if ( lastState != newState )
+    {
+        lastState = newState;
+        this->change_state( newState );
     }
 }
 
-void Game::render_all( RenderContext & context ) const
+void Game::render_all( RenderContext context ) const
 {
-    /// @todo utiliser render à la place de m_window
     context.window.clear();
 
     this->Component::render_all( context );
-    m_state->render_all( context );
-
     // We render after our state render, so the imGui's windows
     // will be drawn if we have a background
     ImGui::SFML::Render( context.window );
@@ -116,6 +109,8 @@ void Game::change_state( State::E_List const & newState )
     // m_window.setMouseCursorVisible( true );
     // m_window.setMouseCursorGrabbed( false );
 
+    this->remove_child( m_state.get() );
+
     switch ( newState )
     {
     case State::E_List::MainMenu :
@@ -144,4 +139,6 @@ void Game::change_state( State::E_List const & newState )
         Trace::Error( debugMessage.str() );
         break;
     }
+
+    this->add_child( m_state.get() );
 }

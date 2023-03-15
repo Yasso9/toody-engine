@@ -122,7 +122,7 @@ int ButtonArray::update_button_array( sf::Vector2f const & position,
     return -1;
 }
 
-void ButtonArray::render_before( RenderContext & context ) const
+void ButtonArray::render_before( RenderContext context ) const
 {
     for ( Button const & button : this->m_buttons )
     {

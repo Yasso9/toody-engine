@@ -46,7 +46,7 @@ void Shape2D::set_polygon( math::PolygonF polygon )
     this->update();
 }
 
-void Shape2D::custom_draw( RenderContext & context ) const
+void Shape2D::custom_draw( RenderContext context ) const
 {
     // auto renderStates = render.get_state();
     // renderStates.transform *= this->getTransform();

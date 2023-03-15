@@ -15,7 +15,7 @@ class Game : public Component
     virtual ~Game();
 
     virtual void update_all ( UpdateContext context ) override;
-    virtual void render_all ( RenderContext & context ) const override;
+    virtual void render_all ( RenderContext context ) const override;
 
     void update_inputs ( Window & window );
 

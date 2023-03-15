@@ -6,7 +6,7 @@ Transformable2D::Transformable2D()
   : m_currentTransformation { sf::Transform::Identity }
 {}
 
-void Transformable2D::render_all( RenderContext & context ) const
+void Transformable2D::render_all( RenderContext context ) const
 {
     /// @todo review this
     // context.set_transformation( m_currentTransformation );

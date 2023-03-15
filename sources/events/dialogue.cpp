@@ -160,7 +160,7 @@ void Dialogue::update( UpdateContext /* context */ )
     } );
 }
 
-void Dialogue::render( RenderContext & context ) const
+void Dialogue::render( RenderContext context ) const
 {
     if ( ! this->is_enabled() )
     {

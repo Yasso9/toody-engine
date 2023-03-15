@@ -2,6 +2,8 @@
 
 #include <map>
 
+#include <boost/describe.hpp>
+
 #include "SFML/Window/Mouse.hpp"
 #include "component/component.hpp"  // for Component
 #include "graphics2D/view.hpp"      // for View
@@ -18,7 +20,7 @@ class State : public Component
   public:
     /// @brief List of all States that the game can have (equal to the number of
     /// child to this class)
-    enum class E_List
+    enum E_List
     {
         MainMenu = 0,
         Editor,
@@ -28,8 +30,8 @@ class State : public Component
         EnumLast,
     };
 
-  private:
-    static std::map< std::string, E_List > const m_enumStateListMaps;
+    BOOST_DESCRIBE_NESTED_ENUM( E_List, MainMenu, Editor, Graphics, Test, Quit,
+                                EnumLast );
 
   public:
     static E_List                     get_enum_state ( std::string string );

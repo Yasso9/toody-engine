@@ -45,7 +45,7 @@ void Model::update( UpdateContext /* context */ )
     }
 }
 
-void Model::render( RenderContext & /* context */ ) const
+void Model::render( RenderContext /* context */ ) const
 {
     for ( Mesh const & mesh : this->m_meshes )
     {

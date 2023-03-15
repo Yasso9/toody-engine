@@ -35,7 +35,7 @@ class Model final : public Transformable
 
   private:
     virtual void update ( UpdateContext context ) override;
-    virtual void render ( RenderContext & context ) const override;
+    virtual void render ( RenderContext context ) const override;
 
     /**
      * @brief Loads a model with supported ASSIMP extensions from file

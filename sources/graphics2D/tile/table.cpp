@@ -22,7 +22,7 @@ namespace tile
         }
     }
 
-    void Table::render( RenderContext & context ) const
+    void Table::render( RenderContext context ) const
     {
         context.set_texture( m_texture );
 

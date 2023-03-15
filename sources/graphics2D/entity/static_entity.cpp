@@ -89,7 +89,7 @@ void StaticEntity2D::update( UpdateContext /* context */ )
     } );
 }
 
-void StaticEntity2D::render( RenderContext & context ) const
+void StaticEntity2D::render( RenderContext context ) const
 {
     this->custom_draw( context );
 

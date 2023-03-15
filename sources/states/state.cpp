@@ -18,24 +18,28 @@ State::State( State::E_List const & stateName )
     m_mouseButtonsReleased {}
 {}
 
-std::map< std::string, State::E_List > const State::m_enumStateListMaps = {
-    { "Main Menu", E_List::MainMenu }, { "Editor", E_List::Editor },
-    { "Graphics", E_List::Graphics },  { "Test", E_List::Test },
-    { "Quit", E_List::Quit },
-};
-
-State::E_List State::get_enum_state( std::string string )
+State::E_List State::get_enum_state( std::string enumString )
 {
-    return m_enumStateListMaps.at( string );
+    State::E_List enumValue {};
+    boost::mp11::mp_for_each<
+        boost::describe::describe_enumerators< State::E_List > >(
+        [&] ( auto D ) {
+            if ( enumString == D.name )
+            {
+                enumValue = State::E_List { D.value };
+                return;
+            }
+        } );
+    return enumValue;
 }
 
 std::vector< std::string > State::get_state_list()
 {
     std::vector< std::string > stateList {};
-    for ( auto state : m_enumStateListMaps )
-    {
-        stateList.push_back( state.first );
-    }
+
+    boost::mp11::mp_for_each<
+        boost::describe::describe_enumerators< State::E_List > >(
+        [&] ( auto D ) { stateList.push_back( D.name ); } );
 
     return stateList;
 }

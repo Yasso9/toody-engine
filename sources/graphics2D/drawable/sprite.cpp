@@ -9,7 +9,7 @@ Sprite::Sprite( sf::Texture const & texture, math::Vector2F size )
     this->select_animation( 0 );
 }
 
-void Sprite::render( RenderContext & context ) const
+void Sprite::render( RenderContext context ) const
 {
     context.draw( *this );
 }

@@ -37,7 +37,7 @@ class Dialogue : public Component
 
   private:
     void update ( UpdateContext context ) override;
-    void render ( RenderContext & context ) const override;
+    void render ( RenderContext context ) const override;
 
   public:
     void enable ();

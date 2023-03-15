@@ -26,9 +26,8 @@ namespace sf
 Window::Window( std::string const & title )
 {
     {  // Window creation
-        // unsigned int const windowStyle { sf::Style::Titlebar |
-        // sf::Style::Resize
-        //  | sf::Style::Close };
+        unsigned int const windowStyle { sf::Style::Titlebar | sf::Style::Resize
+                                         | sf::Style::Close };
 
         sf::ContextSettings contextSettings {};
         contextSettings.depthBits         = 24;
@@ -39,7 +38,7 @@ Window::Window( std::string const & title )
         contextSettings.minorVersion      = 6;
 
         this->sf::RenderWindow::create(
-            Settings::get_instance().get_video_mode(), title, sf::Style::None,
+            Settings::get_instance().get_video_mode(), title, windowStyle,
             contextSettings );
     }
 

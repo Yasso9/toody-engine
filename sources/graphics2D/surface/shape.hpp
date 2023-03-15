@@ -28,7 +28,7 @@ class Shape2D : public sf::Shape
     void           set_polygon ( math::PolygonF polygon );
 
   protected:
-    void custom_draw ( RenderContext & context ) const;
+    void custom_draw ( RenderContext context ) const;
 
   private:
     std::size_t  getPointCount () const override;

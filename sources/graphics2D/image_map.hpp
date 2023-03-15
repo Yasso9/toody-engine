@@ -31,5 +31,5 @@ class ImageMap : public Component
     std::vector< S_Image > const & get_data () const;
 
   private:
-    void render_before ( RenderContext & context ) const override;
+    void render_before ( RenderContext context ) const override;
 };

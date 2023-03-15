@@ -2,13 +2,15 @@
 
 #include "main/render.hpp"  // for Render
 
+Component::Component() : m_childs {}, m_view { nullptr } {};
+
 Component::Component( Component const & component ) noexcept
   : m_childs { component.m_childs }, m_view { component.m_view }
 {}
 
 Component::Component( Component && component ) noexcept
-  : m_childs( std::exchange( component.m_childs, {} ) ),
-    m_view( std::exchange( component.m_view, {} ) )
+  : m_childs { std::exchange( component.m_childs, {} ) },
+    m_view { std::exchange( component.m_view, {} ) }
 {}
 
 Component & Component::operator= ( Component const & component ) noexcept
@@ -23,13 +25,34 @@ Component & Component::operator= ( Component && component ) noexcept
     return *this;
 }
 
+std::vector< Component const * > Component::get_childs() const
+{
+    std::vector< Component const * > childs {};
+    for ( Component * component : m_childs )
+    {
+        childs.push_back( component );
+    }
+    return childs;
+}
+
+/// @todo ne pas copier la même fonction que plus haut
+std::vector< Component * > Component::get_childs()
+{
+    std::vector< Component * > childs {};
+    for ( Component * component : m_childs )
+    {
+        childs.push_back( component );
+    }
+    return childs;
+}
+
 void Component::update_all( UpdateContext context )
 {
     this->update_before( context );
 
     this->update( context );
 
-    for ( Component * component : m_childs )
+    for ( Component * component : this->get_childs() )
     {
         component->update_all( context );
     }
@@ -37,7 +60,7 @@ void Component::update_all( UpdateContext context )
     this->update_after( context );
 }
 
-void Component::render_all( RenderContext & context ) const
+void Component::render_all( RenderContext context ) const
 {
     if ( m_view != nullptr )
     {
@@ -48,7 +71,7 @@ void Component::render_all( RenderContext & context ) const
 
     this->render( context );
 
-    for ( Component const * component : m_childs )
+    for ( Component const * component : this->get_childs() )
     {
         component->render_all( context );
     }
@@ -72,8 +95,8 @@ void Component::update( UpdateContext /* context */ ) {}
 
 void Component::update_after( UpdateContext /* context */ ) {}
 
-void Component::render_before( RenderContext & /* context */ ) const {}
+void Component::render_before( RenderContext /* context */ ) const {}
 
-void Component::render( RenderContext & /* context */ ) const {}
+void Component::render( RenderContext /* context */ ) const {}
 
-void Component::render_after( RenderContext & /* context */ ) const {}
+void Component::render_after( RenderContext /* context */ ) const {}

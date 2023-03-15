@@ -114,7 +114,7 @@ void Player::update_before( UpdateContext context )
     this->m_lastState = { this->m_state, this->m_direction };
 }
 
-void Player::render_before( RenderContext & context ) const
+void Player::render_before( RenderContext context ) const
 {
     context.draw( m_sprite );
 }

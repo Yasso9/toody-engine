@@ -51,7 +51,7 @@ class Shape final : public Transformable
 
   private:
     virtual void update ( UpdateContext context ) override;
-    virtual void render ( RenderContext & context ) const override;
+    virtual void render ( RenderContext context ) const override;
 
   public:
     unsigned int   get_VAO () const;

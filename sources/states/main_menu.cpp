@@ -50,7 +50,8 @@ MainMenuState::MainMenuState()
 {
     math::Vector2F windowSize { Settings::get_instance().get_window_size() };
 
-    m_background.setTexture( &resources::get_texture( "main_menu.jpg" ) );
+    m_background.setTexture( &resources::get_texture(
+        path::get_folder( path::Resources ) / "images/main_menu.jpg" ) );
     m_background.setPosition( 0.f, 0.f );
     m_background.setSize( windowSize );
 
@@ -121,7 +122,7 @@ void MainMenuState::update( UpdateContext context )
     }
 }
 
-void MainMenuState::render( RenderContext & context ) const
+void MainMenuState::render( RenderContext context ) const
 {
     context.draw( m_background );
     context.draw( m_menuBackground );

@@ -28,7 +28,7 @@ namespace tile
 
       private:
         void update ( UpdateContext context ) override;
-        void render ( RenderContext & context ) const override;
+        void render ( RenderContext context ) const override;
 
       public:
         tile::Size get_size () const;

@@ -16,16 +16,12 @@ int main ()
     while ( game.should_run() )
     {
         float const deltaTime { clock.get_elapsed_time() };
-
         if ( deltaTime > refreshRate )
         {
             game.update_inputs( window );
 
             game.update_all( UpdateContext { window, deltaTime } );
-            /// @todo voir si c'est utile de faire un renderContext & et pas
-            /// seulement un renderContext
-            RenderContext renderContext { window };
-            game.render_all( renderContext );
+            game.render_all( RenderContext { window } );
 
             clock.reset();
         }

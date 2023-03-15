@@ -61,7 +61,7 @@ void Shape::update( UpdateContext /* context */ )
     }
 }
 
-void Shape::render( RenderContext & /* context */ ) const
+void Shape::render( RenderContext /* context */ ) const
 {
     GLenum const primitiveType { GL_TRIANGLES };
 

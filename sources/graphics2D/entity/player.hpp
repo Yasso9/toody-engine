@@ -74,7 +74,7 @@ class Player : public Transformable2D
     void update_before ( UpdateContext context ) override;
 
   private:
-    void render_before ( RenderContext & context ) const override;
+    void render_before ( RenderContext context ) const override;
 
     void init_sprite_value ();
     void init_sprite_number_of_cells ();

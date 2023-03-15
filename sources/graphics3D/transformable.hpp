@@ -30,13 +30,13 @@ class Transformable : public Component
 
   private:
     virtual void update_all ( UpdateContext context ) override;
-    virtual void render_all ( RenderContext & context ) const override;
+    virtual void render_all ( RenderContext context ) const override;
 
   public:
     void move ( math::Vector3F tranlationVector );
     void rotate ( math::Vector3F rotationVector, float angle );
     void scale ( math::Vector3F scaleVector );
 
-    gl::S_SpaceMatrix get_space_matrix (float aspectRatio) const;
+    gl::S_SpaceMatrix get_space_matrix ( float aspectRatio ) const;
     sf::Shader &      get_shader ();
 };

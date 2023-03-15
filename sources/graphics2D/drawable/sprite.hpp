@@ -14,7 +14,7 @@ class Sprite : public sf::Sprite,
     Sprite( sf::Texture const & texture, math::Vector2F size );
     virtual ~Sprite() = default;
 
-    void render ( RenderContext & context ) const override;
+    void render ( RenderContext context ) const override;
 
     math::PointF   get_position () const;
     math::Vector2F get_size () const;
