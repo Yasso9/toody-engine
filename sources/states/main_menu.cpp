@@ -10,6 +10,7 @@
 
 #include "input/input.hpp"  // for get_mouse_position, is_pre...
 #include "libraries/imgui.hpp"
+#include "main/game.hpp"
 #include "main/render.hpp"     // for Render
 #include "main/resources.hpp"  // for get_font
 #include "main/settings.hpp"
@@ -42,11 +43,8 @@ static void reset_text_color ( std::vector< sf::Text > & texts )
     }
 }
 
-MainMenuState::MainMenuState()
-  : State { State::E_List::MainMenu },
-    m_texts {},
-    m_background {},
-    m_menuBackground {}
+MainMenuState::MainMenuState( GameContext & gameContext )
+  : State { gameContext }, m_texts {}, m_background {}, m_menuBackground {}
 {
     math::Vector2F windowSize { Settings::get_instance().get_window_size() };
 
@@ -101,7 +99,7 @@ void MainMenuState::update( UpdateContext context )
             text.setFillColor( sf::Color { 227, 139, 89 } );
 
             // There is a press on the button
-            if ( this->is_pressed( sf::Mouse::Button::Left )
+            if ( m_inputs.is_pressed( sf::Mouse::Button::Left )
                  || ( buttonHasBeenPressed
                       && input::is_pressed( context.window,
                                             sf::Mouse::Button::Left ) ) )
@@ -111,11 +109,11 @@ void MainMenuState::update( UpdateContext context )
                 text.setFillColor( sf::Color { 217, 68, 35 } );
             }
 
-            if ( this->is_released( sf::Mouse::Button::Left ) )
+            if ( m_inputs.is_released( sf::Mouse::Button::Left ) )
             {
                 // Color when choosing
                 text.setFillColor( sf::Color { 242, 255, 54 } );
-                this->set_new_state(
+                m_gameContext.transition_to(
                     State::get_enum_state( text.getString() ) );
             }
         }

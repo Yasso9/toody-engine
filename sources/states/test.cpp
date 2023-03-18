@@ -2,7 +2,7 @@
 
 #include <IMGUI/imgui.h>  // for ShowDemoWindow
 
-TestState::TestState() : State( State::E_List::Test ) {}
+TestState::TestState( GameContext & gameContext ) : State { gameContext } {}
 
 void TestState::update_before( UpdateContext /* context */ )
 {

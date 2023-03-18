@@ -5,7 +5,7 @@
 class TestState final : public State
 {
   public:
-    TestState();
+    TestState( GameContext & gameContext );
     virtual ~TestState() = default;
 
     void update_before ( UpdateContext context ) override;

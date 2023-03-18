@@ -1,6 +1,6 @@
 #include "contexts.hpp"
 
-UpdateContext::UpdateContext( Window const & aWindow, float aDeltaTime )
+UpdateContext::UpdateContext( Window & aWindow, float aDeltaTime )
   : window { aWindow }, deltaTime { aDeltaTime }
 {}
 

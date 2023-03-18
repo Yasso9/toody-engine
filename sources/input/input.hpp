@@ -22,7 +22,7 @@ namespace input
                                   sf::Keyboard::Key aRight,
                                   sf::Keyboard::Key aDown,
                                   sf::Keyboard::Key aLeft )
-          : up( aUp ), right( aRight ), down( aDown ), left( aLeft )
+          : up { aUp }, right { aRight }, down { aDown }, left { aLeft }
         {}
     };
 

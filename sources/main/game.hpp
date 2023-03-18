@@ -2,25 +2,24 @@
 
 #include <memory>  // for shared_ptr
 
-#include "component/component.hpp"
 #include "states/state.hpp"  // for State, State::E_List
+#include "tools/traces.hpp"  // for Traces
 
-class Game : public Component
+class GameContext
 {
     std::shared_ptr< State > m_state;
     bool                     m_shouldRun;
 
   public:
-    Game();
-    virtual ~Game();
+    GameContext();
+    virtual ~GameContext();
 
-    virtual void update_all ( UpdateContext context ) override;
-    virtual void render_all ( RenderContext context ) const override;
-
-    void update_inputs ( Window & window );
+    void transition_to ( std::shared_ptr< State > state );
+    void transition_to ( State::E_List state );
 
     bool should_run () const;
+    void should_run ( bool shouldRun );
 
-  private:
-    void change_state ( State::E_List const & newState );
+    State &       get_state ();
+    State const & get_state () const;
 };

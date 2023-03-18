@@ -12,8 +12,8 @@
 
 [[maybe_unused]] static Shape::S_Data get_sample_shape_data_A ();
 
-GraphicState::GraphicState()
-  : State { State::E_List::Graphics },
+GraphicState::GraphicState( GameContext & gameContext )
+  : State { gameContext },
     m_camera {},
     m_shapes { Shape { m_camera, get_sample_shape_data_A() } },
     m_models { Model { m_camera, "backpack/backpack.obj" } }

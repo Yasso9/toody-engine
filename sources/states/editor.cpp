@@ -14,8 +14,9 @@
 #include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
 #include "graphics2D/sfml.hpp"                  // for operator<<
 #include "graphics2D/view.hpp"                  // for View
-#include "input/input.hpp"               // for get_mouse_movement, get_mous...
-#include "libraries/imgui.hpp"           // for P_Begin
+#include "input/input.hpp"      // for get_mouse_movement, get_mous...
+#include "libraries/imgui.hpp"  // for P_Begin
+#include "main/game.hpp"
 #include "main/resources.hpp"            // for get_texture
 #include "main/settings.hpp"             // for Settings
 #include "main/window.hpp"               // for Window
@@ -27,8 +28,8 @@
 #include "tools/path.hpp"
 #include "tools/singleton.tpp"  // for Singleton::get_instance
 
-EditorState::EditorState()
-  : State { State::E_List::Editor },
+EditorState::EditorState( GameContext & gameContext )
+  : State { gameContext },
     m_view {},
     m_showWindow {
         { "demo_window", false }, { "debug_options", false },
@@ -124,7 +125,7 @@ void EditorState::update( UpdateContext context )
 
         if ( quitEditor )
         {
-            this->set_new_state( State::E_List::MainMenu );
+            m_gameContext.transition_to( State::E_List::MainMenu );
         }
         if ( resetView )
         {

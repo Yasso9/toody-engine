@@ -15,7 +15,7 @@ class MainMenuState final : public State
     sf::RectangleShape      m_menuBackground;
 
   public:
-    MainMenuState();
+    MainMenuState( GameContext & gameContext );
     virtual ~MainMenuState() = default;
 
     void update ( UpdateContext context ) override;

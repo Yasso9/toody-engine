@@ -5,10 +5,11 @@
 class UpdateContext
 {
   public:
-    Window const & window;
-    float const    deltaTime;
+    /// @todo window should be const
+    Window &    window;
+    float const deltaTime;
 
-    UpdateContext( Window const & window, float deltaTime );
+    UpdateContext( Window & window, float deltaTime );
 };
 
 class RenderContext

@@ -7,9 +7,9 @@
 
 int main ()
 {
-    Window window { "Toody Engine (Developpement)" };
-    Game   game {};
-    Clock  clock {};
+    Window      window { "Toody Engine (Developpement)" };
+    GameContext game {};
+    Clock       clock {};
 
     float const refreshRate { Settings::get_instance().get_refresh_rate() };
 
@@ -18,10 +18,8 @@ int main ()
         float const deltaTime { clock.get_elapsed_time() };
         if ( deltaTime > refreshRate )
         {
-            game.update_inputs( window );
-
-            game.update_all( UpdateContext { window, deltaTime } );
-            game.render_all( RenderContext { window } );
+            game.get_state().update_all( UpdateContext { window, deltaTime } );
+            game.get_state().render_all( RenderContext { window } );
 
             clock.reset();
         }

@@ -30,7 +30,7 @@ class EditorState final : public State
     Dialogue m_dialogue;
 
   public:
-    EditorState();
+    EditorState( GameContext & gameContext );
 
     void update ( UpdateContext context ) override;
 
