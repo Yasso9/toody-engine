@@ -7,15 +7,15 @@
 #include <SFML/System/Vector2.hpp>         // for Vector2f, Vector2
 #include <SFML/Window/Mouse.hpp>           // for Mouse, Mouse::Right
 
+#include "game/resources.hpp"  // for get_font
 #include "graphics2D/view.hpp"
-#include "input/input.hpp"           // for get_mouse_position, is_pre...
+#include "interface/window.hpp"      // for Window
 #include "libraries/imgui.hpp"       // for P_ColorEditor, P_InputNumber
 #include "libraries/imgui.hpp"       // for P_Begin
-#include "main/resources.hpp"        // for get_font
-#include "main/window.hpp"           // for Window
 #include "maths/geometry/point.hpp"  // for PointI, Point, PointF
 #include "maths/geometry/point.tpp"  // for Point::Point<Type>, Point:...
 #include "maths/vector2.tpp"         // for Vector2::to_float, Vector2...
+#include "states/input.hpp"          // for get_mouse_position, is_pre...
 #include "tools/path.hpp"
 #include "tools/singleton.tpp"  // for Singleton::get_instance
 #include "tools/traces.hpp"

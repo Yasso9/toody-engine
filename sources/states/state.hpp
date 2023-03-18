@@ -2,8 +2,8 @@
 
 #include <boost/describe.hpp>  // for BOOST_DESCRIBE_NESTED_ENUM
 
-#include "component/component.hpp"  // for Component
-#include "interface/inputs.hpp"     // for Inputs
+#include "components/component.hpp"  // for Component
+#include "interface/inputs.hpp"      // for Inputs
 
 class GameContext;
 

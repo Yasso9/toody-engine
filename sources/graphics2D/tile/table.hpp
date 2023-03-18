@@ -4,7 +4,7 @@
 #include <sstream>
 #include <vector>
 
-#include "component/component.hpp"
+#include "components/component.hpp"
 #include "graphics2D/tile/position.hpp"
 #include "graphics2D/tile/tile.hpp"
 #include "maths/vector2.hpp"

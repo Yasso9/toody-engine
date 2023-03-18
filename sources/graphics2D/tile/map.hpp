@@ -4,7 +4,7 @@
 #include <iostream>  // for ostream
 #include <vector>    // for vector
 
-#include "component/transformable2D.hpp"  // for TransformableComponent
+#include "components/transformable2D.hpp"  // for TransformableComponent
 #include "graphics2D/tile/cursor.hpp"
 #include "graphics2D/tile/selector.hpp"  // for TileSelector
 #include "graphics2D/tile/table.hpp"     // for Tile

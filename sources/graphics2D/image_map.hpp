@@ -4,7 +4,7 @@
 
 #include <SFML/Graphics/Sprite.hpp>  // for Sprite
 
-#include "component/component.hpp"   // for Component
+#include "components/component.hpp"  // for Component
 #include "maths/geometry/point.hpp"  // for PointU, Point
 
 class Render;

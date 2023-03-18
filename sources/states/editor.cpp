@@ -10,21 +10,21 @@
 #include <SFML/System/Vector2.hpp>  // for Vector2f
 #include <SFML/Window/Mouse.hpp>    // for Mouse, Mouse::Right
 
-#include "component/component.hpp"              // for Component::add_child
+#include "components/component.hpp"  // for Component::add_child
+#include "game/game.hpp"
+#include "game/resources.hpp"                   // for get_texture
+#include "game/settings.hpp"                    // for Settings
 #include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
 #include "graphics2D/sfml.hpp"                  // for operator<<
 #include "graphics2D/view.hpp"                  // for View
-#include "input/input.hpp"      // for get_mouse_movement, get_mous...
-#include "libraries/imgui.hpp"  // for P_Begin
-#include "main/game.hpp"
-#include "main/resources.hpp"            // for get_texture
-#include "main/settings.hpp"             // for Settings
-#include "main/window.hpp"               // for Window
-#include "maths/geometry/point.hpp"      // for PointF
+#include "interface/window.hpp"                 // for Window
+#include "libraries/imgui.hpp"                  // for P_Begin
+#include "maths/geometry/point.hpp"             // for PointF
 #include "maths/geometry/polygon.tpp"    // for Polygon::Polygon<Type>, Poly...
 #include "maths/geometry/rectangle.hpp"  // for RectangleF
 #include "maths/vector2.hpp"             // for Vector2F, Vector2, Vector2U
 #include "maths/vector2.tpp"             // for operator<<, operator*, opera...
+#include "states/input.hpp"              // for get_mouse_movement, get_mous...
 #include "tools/path.hpp"
 #include "tools/singleton.tpp"  // for Singleton::get_instance
 

@@ -20,8 +20,6 @@ GameContext::~GameContext()
 void GameContext::transition_to( std::shared_ptr< State > state )
 {
     m_state = state;
-    Trace::Info( "Context: Transition to "
-                 + std::string { typeid( m_state ).name() } );
 }
 
 void GameContext::transition_to( State::E_List state )
@@ -45,7 +43,7 @@ void GameContext::transition_to( State::E_List state )
         this->should_run( false );
         break;
     default :
-        Trace::Error( "Context: Transition to unknown state." );
+        Trace::Error( "Context - Transition to unknown state." );
         break;
     }
 }

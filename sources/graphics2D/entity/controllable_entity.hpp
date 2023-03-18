@@ -4,9 +4,9 @@
 #include "graphics2D/control.hpp"
 #include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
 #include "graphics2D/view.hpp"                  // for View
-#include "input/input.hpp"                      // for S_KeyboardMove
 #include "maths/geometry/polygon.hpp"           // for PolygonF
 #include "maths/vector2.hpp"                    // for Vector2F
+#include "states/input.hpp"                     // for S_KeyboardMove
 
 class ControllableEntity2D : public StaticEntity2D
 {

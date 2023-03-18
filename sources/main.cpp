@@ -1,8 +1,8 @@
 #include <cstdlib>  // for EXIT_SUCCESS
 
-#include "main/game.hpp"           // for Game
-#include "main/settings.hpp"       // for Window
-#include "main/window.hpp"         // for Settings
+#include "game/game.hpp"           // for Game
+#include "game/settings.hpp"       // for Window
+#include "interface/window.hpp"    // for Settings
 #include "tools/system/clock.hpp"  // for Clock
 
 int main ()

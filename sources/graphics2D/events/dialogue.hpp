@@ -6,8 +6,8 @@
 #include <SFML/Graphics/Text.hpp>            // for Text
 #include <SFML/Window/Cursor.hpp>            // for Cursor
 
-#include "component/component.hpp"  // for Component
-#include "maths/vector2.hpp"        // for Vector2I
+#include "components/component.hpp"  // for Component
+#include "maths/vector2.hpp"         // for Vector2I
 
 class View;
 class Render;

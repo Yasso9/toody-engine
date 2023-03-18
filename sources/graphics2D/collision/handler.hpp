@@ -1,6 +1,6 @@
 #pragma once
 
-#include "component/component.hpp"
+#include "components/component.hpp"
 #include "graphics2D/collision/collision_list.hpp"
 
 class CollisionHandler : public Component

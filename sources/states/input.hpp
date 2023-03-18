@@ -4,7 +4,7 @@
 #include <SFML/Window/Mouse.hpp>     // for Mouse, Mouse::Button
 
 #include "graphics2D/view.hpp"
-#include "main/window.hpp"
+#include "interface/window.hpp"
 #include "maths/geometry/point.hpp"  // for PointI
 #include "maths/vector2.hpp"         // for Vector2F, Vector2I
 

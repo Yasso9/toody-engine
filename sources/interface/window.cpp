@@ -10,8 +10,8 @@
 #include <SFML/Window/Mouse.hpp>            // for Mouse
 #include <SFML/Window/WindowStyle.hpp>      // for Default
 
+#include "game/settings.hpp"         // for Settings
 #include "graphics3D/openGL.hpp"     // for clear_window, initialize
-#include "main/settings.hpp"         // for Settings
 #include "maths/geometry/point.hpp"  // for PointI
 #include "maths/geometry/point.tpp"  // for Point::Point<Type>, Point...
 #include "maths/vector2.tpp"         // for Vector2::Vector2<Type>

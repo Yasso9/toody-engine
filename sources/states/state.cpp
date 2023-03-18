@@ -3,8 +3,8 @@
 #include <IMGUI/imgui-SFML.h>     // for Update, ProcessEvent
 #include <SFML/Window/Event.hpp>  // for Event, Event::Closed, Event::...
 
+#include "game/game.hpp"          // for GameContext
 #include "graphics3D/openGL.hpp"  // for check_error
-#include "main/game.hpp"          // for GameContext
 
 /* static */ State::E_List State::get_enum_state( std::string enumString )
 {

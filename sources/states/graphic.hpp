@@ -2,10 +2,10 @@
 
 #include <vector>  // for vector
 
-#include "3D_model/model.hpp"     // for Model
-#include "graphics3D/camera.hpp"  // for Camera
-#include "graphics3D/shape.hpp"   // for Shape
-#include "states/state.hpp"       // for State
+#include "graphics3D/3D_model/model.hpp"  // for Model
+#include "graphics3D/camera.hpp"          // for Camera
+#include "graphics3D/shape.hpp"           // for Shape
+#include "states/state.hpp"               // for State
 
 class GraphicState final : public State
 {

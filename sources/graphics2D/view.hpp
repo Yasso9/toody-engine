@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics/View.hpp>  // for View
 
-#include "main/window.hpp"               // for Window
+#include "interface/window.hpp"          // for Window
 #include "maths/geometry/point.hpp"      // for PointF
 #include "maths/geometry/rectangle.hpp"  // for RectangleF
 #include "maths/vector2.hpp"             // for Vector2F

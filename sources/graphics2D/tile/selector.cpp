@@ -8,15 +8,15 @@
 #include <SFML/Graphics/Color.hpp>  // for Color
 #include <SFML/Window/Mouse.hpp>    // for Mouse, Mouse::Button, Mouse::Left
 
+#include "game/resources.hpp"        // for get_texture
 #include "graphics2D/constants.hpp"  // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZE_U
-#include "input/input.hpp"           // for get_mouse_position, is_pressed
 #include "libraries/imgui.hpp"       // for table_to_sfml, to_integer, to_t...
-#include "main/resources.hpp"        // for get_texture
 #include "maths/geometry/line.hpp"
 #include "maths/geometry/point.tpp"  // for Point::Point<Type>
 #include "maths/numerics.hpp"        // for division_reminder_u
 #include "maths/vector2.hpp"         // for Vector2F, Vector2, Vector2I
 #include "maths/vector2.tpp"         // for operator<<, operator+, Vector2:...
+#include "states/input.hpp"          // for get_mouse_position, is_pressed
 #include "tools/path.hpp"
 
 namespace tile

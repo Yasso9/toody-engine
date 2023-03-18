@@ -6,8 +6,8 @@
 #include <SFML/Graphics/Texture.hpp>       // for Texture
 #include <SFML/Window/Keyboard.hpp>        // for Keyboard, Keyboard::Z, Key...
 
-#include "input/input.hpp"      // for is_pressed
-#include "main/resources.hpp"   // for get_texture
+#include "game/resources.hpp"   // for get_texture
+#include "states/input.hpp"     // for is_pressed
 #include "tools/assertion.hpp"  // for ASSERTION
 #include "tools/tools.hpp"      // for E_Direction, E_Direction::...
 

@@ -2,7 +2,7 @@
 
 #include <functional>  // for function
 
-#include "main/window.hpp"  // for Window
+#include "interface/window.hpp"  // for Window
 
 class UpdateContext
 {

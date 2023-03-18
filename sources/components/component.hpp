@@ -2,8 +2,8 @@
 
 #include <vector>  // for vector
 
-#include "component/contexts.hpp"  // for UpdateContext, RenderContext
-#include "graphics2D/view.hpp"     // for View
+#include "components/contexts.hpp"  // for UpdateContext, RenderContext
+#include "graphics2D/view.hpp"      // for View
 
 class Component;
 

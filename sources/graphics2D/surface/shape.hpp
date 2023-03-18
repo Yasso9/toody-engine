@@ -5,7 +5,7 @@
 #include <SFML/Graphics/Shape.hpp>  // for Shape
 #include <SFML/System/Vector2.hpp>  // for Vector2f
 
-#include "component/contexts.hpp"
+#include "components/contexts.hpp"
 #include "maths/geometry/point.hpp"    // for PointF
 #include "maths/geometry/polygon.hpp"  // for PolygonF
 #include "maths/vector2.hpp"           // for Vector2F

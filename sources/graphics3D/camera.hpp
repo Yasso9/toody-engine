@@ -4,7 +4,7 @@
 #include <GLM/fwd.hpp>                // for mat4
 #include <SFML/System/Vector2.hpp>    // for Vector2f
 
-#include "component/component.hpp"
+#include "components/component.hpp"
 #include "maths/maths.hpp"
 
 class Camera : public Component

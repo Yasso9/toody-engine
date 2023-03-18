@@ -6,7 +6,7 @@
 #include <SFML/Graphics/Text.hpp>            // for Text
 #include <SFML/System/Vector2.hpp>           // for Vector2f
 
-#include "component/transformable2D.hpp"  // for TransformableComponent
+#include "components/transformable2D.hpp"  // for TransformableComponent
 
 class Render;
 

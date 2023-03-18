@@ -3,8 +3,8 @@
 #include <SFML/Graphics/RectangleShape.hpp>  // for RectangleShape
 #include <SFML/Graphics/Text.hpp>            // for Text
 
-#include "input/button_array.hpp"  // for ButtonArray
-#include "states/state.hpp"        // for State
+#include "graphics2D/button_array.hpp"  // for ButtonArray
+#include "states/state.hpp"             // for State
 
 class Render;
 

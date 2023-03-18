@@ -2,7 +2,7 @@
 
 #include <string>  // for string
 
-#include "component/component.hpp"
+#include "components/component.hpp"
 #include "graphics2D/surface/quad_vertex.hpp"  // for QuadVertex
 
 namespace tile

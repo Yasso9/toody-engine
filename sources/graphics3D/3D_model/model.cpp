@@ -16,7 +16,7 @@
 #include <assimp/types.h>             // for aiString
 #include <assimp/vector3.h>           // for aiVector3D
 
-#include "main/resources.hpp"  // for get_shader
+#include "game/resources.hpp"  // for get_shader
 #include "tools/path.hpp"      // for get_folder, E_Folder, E_Folder:...
 #include "tools/timer.hpp"     // for Timer
 #include "tools/traces.hpp"

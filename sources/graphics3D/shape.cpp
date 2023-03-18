@@ -6,9 +6,9 @@
 #include <GLAD/glad.h>               // for GLenum, glDeleteBuffers, GL_ELE...
 #include <SFML/Graphics/Shader.hpp>  // for Shader
 
+#include "game/resources.hpp"         // for get_texture, get_shader
 #include "graphics3D/load_shape.hpp"  // for complete
 #include "graphics3D/openGL.hpp"      // for draw_arrays, draw_elements
-#include "main/resources.hpp"         // for get_texture, get_shader
 #include "tools/path.hpp"
 
 class Camera;

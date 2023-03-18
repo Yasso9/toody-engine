@@ -8,14 +8,14 @@
 #include <GLM/gtc/matrix_transform.hpp>  // for perspective
 #include <SFML/Window/Keyboard.hpp>      // for Keyboard, Keyboard::B, Keyb...
 
-#include "input/input.hpp"  // for is_pressed, get_mouse_position
+#include "interface/window.hpp"  // for Window
 #include "libraries/imgui.hpp"
-#include "main/window.hpp"           // for Window
 #include "maths/geometry/point.tpp"  // for Point::Point<Type>
 #include "maths/vector2.hpp"         // for Vector2F, Vector2I, Vector2U
 #include "maths/vector2.tpp"         // for operator==, Vector2::operat...
 #include "maths/vector3.hpp"         // for Vector3F
 #include "maths/vector3.tpp"         // for Vector3::rotate
+#include "states/input.hpp"          // for is_pressed, get_mouse_position
 #include "tools/assertion.hpp"       // for ASSERTION
 #include "tools/singleton.tpp"       // for Singleton::get_instance
 

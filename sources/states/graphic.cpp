@@ -4,11 +4,11 @@
 
 #include <GLM/ext/vector_float3.hpp>  // for vec3
 
-#include "component/component.hpp"  // for Component::add_childs
+#include "components/component.hpp"  // for Component::add_childs
 #include "graphics2D/sfml.hpp"
-#include "input/input.hpp"
+#include "interface/window.hpp"
 #include "libraries/imgui.hpp"
-#include "main/window.hpp"
+#include "states/input.hpp"
 
 [[maybe_unused]] static Shape::S_Data get_sample_shape_data_A ();
 

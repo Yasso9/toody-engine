@@ -9,7 +9,7 @@
 #include <SFML/Graphics/Color.hpp>         // for Color, Color::Red
 #include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
 
-#include "component/contexts.hpp"        // for RenderContext
+#include "components/contexts.hpp"       // for RenderContext
 #include "libraries/imgui.hpp"           // for P_ColorEditor, P_Begin
 #include "maths/geometry/line.hpp"       // for Segment::is_intersected_by
 #include "maths/geometry/point.hpp"      // for PointF

@@ -6,8 +6,8 @@
 #include <SFML/Graphics/Font.hpp>   // for Font
 #include <SFML/System/Vector2.hpp>  // for Vector2f
 
-#include "component/component.hpp"  // for TransformableComponent
-#include "input/button.hpp"         // for Button
+#include "components/component.hpp"  // for TransformableComponent
+#include "graphics2D/button.hpp"     // for Button
 
 class Render;
 

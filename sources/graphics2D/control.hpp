@@ -2,9 +2,9 @@
 
 #include "graphics2D/collision/collision_list.hpp"  // for CollisionList
 #include "graphics2D/view.hpp"                      // for View
-#include "input/input.hpp"
-#include "maths/geometry/polygon.hpp"  // for PolygonF
-#include "maths/vector2.hpp"           // for Vector2F
+#include "maths/geometry/polygon.hpp"               // for PolygonF
+#include "maths/vector2.hpp"                        // for Vector2F
+#include "states/input.hpp"
 
 class Control
 {

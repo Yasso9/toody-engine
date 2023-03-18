@@ -8,15 +8,15 @@
 #include <SFML/System/Vector2.hpp>         // for Vector2f
 #include <SFML/Window/Mouse.hpp>           // for Mouse, Mouse::Button, Mous...
 
-#include "input/input.hpp"  // for get_mouse_position, is_pre...
+#include "game/game.hpp"
+#include "game/resources.hpp"  // for get_font
+#include "game/settings.hpp"
+#include "interface/window.hpp"  // for Window
 #include "libraries/imgui.hpp"
-#include "main/game.hpp"
-#include "main/resources.hpp"  // for get_font
-#include "main/settings.hpp"
-#include "main/window.hpp"  // for Window
 #include "maths/geometry/rectangle.hpp"
 #include "maths/vector2.hpp"  // for Vector2, Vector2F, Vector2I
 #include "maths/vector2.tpp"  // for Vector2::operator Vector2<...
+#include "states/input.hpp"   // for get_mouse_position, is_pre...
 #include "tools/path.hpp"
 #include "tools/singleton.tpp"  // for Singleton::get_instance
 
