@@ -7,7 +7,6 @@
 #include <SFML/Window/Keyboard.hpp>        // for Keyboard, Keyboard::Z, Key...
 
 #include "input/input.hpp"      // for is_pressed
-#include "main/render.hpp"      // for Render
 #include "main/resources.hpp"   // for get_texture
 #include "tools/assertion.hpp"  // for ASSERTION
 #include "tools/tools.hpp"      // for E_Direction, E_Direction::...

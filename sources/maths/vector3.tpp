@@ -8,7 +8,7 @@ namespace math
     ***************************** FUNCTIONS ***********************************
     ************************************************************************ */
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector3< Type > normalize ( Vector3< Type > vector )
     {
         float const length { vector.get_length() };
@@ -22,7 +22,7 @@ namespace math
     ************************** VECTOR X VECTOR ********************************
     ************************************************************************ */
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector3< Type > operator* ( Vector3< Type > vectorLeft,
                                 Vector3< Type > vectorRight )
     {
@@ -41,13 +41,13 @@ namespace math
         return result;
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector3< Type > operator+ ( Vector3< Type > lhs, Vector3< Type > rhs )
     {
         return { lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z };
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector3< Type > operator- ( Vector3< Type > lhs, Vector3< Type > rhs )
     {
         return { lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z };
@@ -57,19 +57,19 @@ namespace math
     ************************** VECTOR X FACTOR ********************************
     ************************************************************************ */
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector3< Type > operator* ( Vector3< Type > vector, Type factor )
     {
         return { vector.x * factor, vector.y * factor, vector.z * factor };
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector3< Type > operator/ ( Vector3< Type > vector, Type factor )
     {
         return { factor / vector.x, factor / vector.y, factor / vector.z };
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector3< Type > power ( Vector3< Type > vector, int powerFactor )
     {
         if ( powerFactor == 0 )
@@ -98,7 +98,7 @@ namespace math
     ************************** VECTOR X OTHERS ********************************
     ************************************************************************ */
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     std::ostream & operator<< ( std::ostream & stream, Vector3< Type > vector )
     {
         return stream << "( " << vector.x << ", " << vector.y << ", "

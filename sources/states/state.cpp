@@ -14,7 +14,7 @@
         [&] ( auto D ) {
             if ( enumString == D.name )
             {
-                enumValue = State::E_List { D.value };
+                enumValue = D.value;
                 return;
             }
         } );

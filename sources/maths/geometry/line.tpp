@@ -4,13 +4,13 @@
 
 namespace math
 {
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     bool Line< Type >::is_intersected_by( Line< Type > segment ) const
     {
         return is_intersection( *this, segment );
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     bool is_intersection ( Line< Type > segment1, Line< Type > segment2 )
     {
         // Find the four orientations needed for general and

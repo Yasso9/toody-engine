@@ -9,7 +9,6 @@
 #include "graphics2D/sfml.hpp"       // for operator<<
 #include "graphics2D/tile/map.hpp"
 #include "graphics2D/tile/selector.hpp"  // for TileSelector
-#include "main/render.hpp"
 #include "maths/geometry/point.hpp"      // for Point
 #include "maths/geometry/point.tpp"      // for Point::Point<Type>
 #include "maths/geometry/rectangle.hpp"  // for RectangleF

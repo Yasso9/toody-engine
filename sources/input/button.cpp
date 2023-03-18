@@ -4,8 +4,6 @@
 #include <SFML/Graphics/Rect.hpp>          // for FloatRect
 #include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
 
-#include "main/render.hpp"  // for Render
-
 namespace sf
 {
 

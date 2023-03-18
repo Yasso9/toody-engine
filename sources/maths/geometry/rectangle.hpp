@@ -7,7 +7,7 @@
 
 namespace math
 {
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     class Rectangle
     {
       public:

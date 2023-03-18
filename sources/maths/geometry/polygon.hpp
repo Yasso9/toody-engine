@@ -10,7 +10,7 @@
 
 namespace math
 {
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     class Polygon
     {
         std::vector< Point< Type > > m_points;
@@ -48,7 +48,7 @@ namespace math
         Polygon< Type > operator+ ( math::Vector2< Type > vector );
     };
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     std::ostream & operator<< ( std::ostream &          stream,
                                 Polygon< Type > const & polygon );
 
@@ -56,7 +56,7 @@ namespace math
     using PolygonI = Polygon< int >;
     using PolygonU = Polygon< unsigned int >;
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     bool is_intersection ( Polygon< Type > polygonLeft,
                            Polygon< Type > polygonRight );
 

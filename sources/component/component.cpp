@@ -1,7 +1,5 @@
 #include "component.hpp"
 
-#include "main/render.hpp"  // for Render
-
 Component::Component() : m_childs {}, m_view { nullptr } {};
 
 Component::Component( Component const & component ) noexcept
@@ -35,7 +33,6 @@ std::vector< Component const * > Component::get_childs() const
     return childs;
 }
 
-/// @todo ne pas copier la même fonction que plus haut
 std::vector< Component * > Component::get_childs()
 {
     std::vector< Component * > childs {};

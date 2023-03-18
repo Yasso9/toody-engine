@@ -12,19 +12,19 @@
 namespace math
 {
     // Vector2 is used in Rectangle, we need to forward declare
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     class Rectangle;
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     class Point;
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     class Vector2;
     using Vector2F = Vector2< float >;
     using Vector2I = Vector2< int >;
     using Vector2U = Vector2< unsigned int >;
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     class Vector2
     {
       public:
@@ -65,10 +65,10 @@ namespace math
          *************************** STREAM OPERATOR **************************
          ******************************************************************* */
 
-        template< C_Primitive TypeStream >
+        template< cPrimitive TypeStream >
         friend std::ostream & operator<< ( std::ostream &          stream,
                                            Vector2< Type > const & vector );
-        template< C_Primitive TypeStream >
+        template< cPrimitive TypeStream >
         friend std::istream & operator>> ( std::istream &    stream,
                                            Vector2< Type > & vector );
 
@@ -90,7 +90,7 @@ namespace math
         /// @brief conversion to ImVec2 must be possible only if the same type
         operator ImVec2 () const
             requires ( std::is_same_v< Type, decltype( ImVec2::x ) > );
-        template< C_Primitive OtherType >
+        template< cPrimitive OtherType >
         requires ( not std::is_same_v< Type, OtherType > )
         explicit operator Vector2< OtherType > () const;
 
@@ -135,28 +135,28 @@ namespace math
     ************************** VECTOR FUNCTIONS *******************************
     ************************************************************************ */
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > floor ( Vector2< Type > const & vector2D );
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > round ( Vector2< Type > const & vector2D );
 
     /* ************************************************************************
     ************************** VECTOR VECTOR ********************************
     ************************************************************************ */
 
-    template< C_Primitive TypeLeft, C_Primitive TypeRight >
+    template< cPrimitive TypeLeft, cPrimitive TypeRight >
     Vector2< TypeLeft > operator* (
         Vector2< TypeLeft > const &  vector2DLeft,
         Vector2< TypeRight > const & vector2DRight );
-    template< C_Primitive TypeLeft, C_Primitive TypeRight >
+    template< cPrimitive TypeLeft, cPrimitive TypeRight >
     Vector2< TypeLeft > operator/ (
         Vector2< TypeLeft > const &  vector2DLeft,
         Vector2< TypeRight > const & vector2DRight );
-    template< C_Primitive TypeLeft, C_Primitive TypeRight >
+    template< cPrimitive TypeLeft, cPrimitive TypeRight >
     Vector2< TypeLeft > operator+ (
         Vector2< TypeLeft > const &  vector2DLeft,
         Vector2< TypeRight > const & vector2DRight );
-    template< C_Primitive TypeLeft, C_Primitive TypeRight >
+    template< cPrimitive TypeLeft, cPrimitive TypeRight >
     Vector2< TypeLeft > operator- (
         Vector2< TypeLeft > const &  vector2DLeft,
         Vector2< TypeRight > const & vector2DRight );
@@ -165,17 +165,17 @@ namespace math
     ************************** VECTOR * FACTOR ********************************
     ************************************************************************ */
 
-    template< C_Primitive VectorType, C_Primitive FactorType >
+    template< cPrimitive VectorType, cPrimitive FactorType >
     Vector2< VectorType > operator* ( Vector2< VectorType > const & vector2D,
                                       FactorType const &            factor );
-    template< C_Primitive VectorType, C_Primitive FactorType >
+    template< cPrimitive VectorType, cPrimitive FactorType >
     Vector2< VectorType > operator/ ( Vector2< VectorType > const & vector2D,
                                       FactorType const &            factor );
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > operator% ( Vector2< Type > const & vector2D,
                                 int const &             modulo );
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > operator% ( Vector2< Type > const & vector2D,
                                 unsigned int const &    modulo );
 
@@ -183,15 +183,15 @@ namespace math
     ****************************** COMPARISON *********************************
     ************************************************************************ */
 
-    template< C_Primitive TypeLeft, C_Primitive TypeRight >
+    template< cPrimitive TypeLeft, cPrimitive TypeRight >
     bool operator== ( Vector2< TypeLeft > const &  vector2DLeft,
                       Vector2< TypeRight > const & vector2DRight );
 
-    template< C_Primitive TypeLeft, C_Primitive TypeRight >
+    template< cPrimitive TypeLeft, cPrimitive TypeRight >
     bool operator<( Vector2< TypeLeft > const &  vector2DLeft,
                     Vector2< TypeRight > const & vector2DRight );
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     bool operator> ( Vector2< Type > const & vector2DLeft,
                      Vector2< Type > const & vector2DRight );
 
@@ -199,7 +199,7 @@ namespace math
     ********************************** UNARY **********************************
     ************************************************************************ */
 
-    template< C_RelativePrimitive Type >
+    template< cRelativePrimitive Type >
     Vector2< Type > operator- ( Vector2< Type > const & vector2D );
 }  // namespace math
 

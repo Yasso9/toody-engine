@@ -11,7 +11,6 @@
 
 #include "component/contexts.hpp"        // for RenderContext
 #include "libraries/imgui.hpp"           // for P_ColorEditor, P_Begin
-#include "main/render.hpp"               // for Render
 #include "maths/geometry/line.hpp"       // for Segment::is_intersected_by
 #include "maths/geometry/point.hpp"      // for PointF
 #include "maths/geometry/point.hpp"      // for Point::is_inside

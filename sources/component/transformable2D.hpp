@@ -1,6 +1,8 @@
 #pragma once
 
-#include "component/component.hpp"
+#include <SFML/Graphics/Transformable.hpp>  // for Transformable
+
+#include "component/component.hpp"  // for Component
 
 class Transformable2D : public Component,
                         public sf::Transformable

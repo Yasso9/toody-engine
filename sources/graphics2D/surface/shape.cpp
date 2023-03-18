@@ -2,7 +2,6 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
 
-#include "main/render.hpp"             // for Render
 #include "maths/geometry/point.tpp"    // for Point::Point<Type>
 #include "maths/geometry/polygon.tpp"  // for Polygon::operator[], Polyg...
 #include "maths/vector2.tpp"           // for Vector2::Vector2<Type>

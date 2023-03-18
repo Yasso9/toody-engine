@@ -1,7 +1,5 @@
 #include "transformable2D.hpp"
 
-#include "main/render.hpp"
-
 Transformable2D::Transformable2D()
   : m_currentTransformation { sf::Transform::Identity }
 {}

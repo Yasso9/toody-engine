@@ -16,14 +16,14 @@ namespace math
         Unkown
     };
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     class Line;
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     class Rectangle;
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     class Polygon;
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     class Point : public Vector2< Type >
     {
       public:
@@ -37,7 +37,7 @@ namespace math
         Point( Vector2< Type > const & vector2D ) noexcept;
 
         explicit operator Vector2< Type > () const;
-        template< C_Primitive OtherType >
+        template< cPrimitive OtherType >
         requires ( not std::is_same_v< Type, OtherType > )
         explicit operator Point< OtherType > () const;
 
@@ -67,11 +67,11 @@ namespace math
     using PointI = Point< int >;
     using PointU = Point< unsigned int >;
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     E_Orientation get_orientation ( Point< Type > pointA, Point< Type > pointB,
                                     Point< Type > pointC );
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     bool are_collinear ( Point< Type > pointA, Point< Type > pointB,
                          Point< Type > pointC );
 }  // namespace math

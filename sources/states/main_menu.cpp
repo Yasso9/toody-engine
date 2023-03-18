@@ -11,7 +11,6 @@
 #include "input/input.hpp"  // for get_mouse_position, is_pre...
 #include "libraries/imgui.hpp"
 #include "main/game.hpp"
-#include "main/render.hpp"     // for Render
 #include "main/resources.hpp"  // for get_font
 #include "main/settings.hpp"
 #include "main/window.hpp"  // for Window

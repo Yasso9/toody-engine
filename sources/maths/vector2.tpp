@@ -10,36 +10,36 @@
 
 namespace math
 {
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type >::Vector2( sf::Vector2< Type > const & sfmlVector )
       : x( sfmlVector.x ), y( sfmlVector.y )
     {}
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type >::Vector2( ImVec2 const & imGuiVector )
       : x( static_cast< Type >( imGuiVector.x ) ),
         y( static_cast< Type >( imGuiVector.y ) )
     {}
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type >::Vector2( Vector2< Type > const & vector2D ) noexcept
       : x( vector2D.x ), y( vector2D.y )
     {}
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type >::Vector2( Vector2< Type > && vector2D ) noexcept
       : x( std::exchange( vector2D.x, {} ) ),
         y( std::exchange( vector2D.y, {} ) )
     {}
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > & Vector2< Type >::operator= (
         Vector2< Type > const & vector2D ) noexcept
     {
         return *this = Vector2< Type > { vector2D };
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > & Vector2< Type >::operator= (
         Vector2< Type > && vector2D ) noexcept
     {
@@ -52,37 +52,37 @@ namespace math
     *********************** ASSIGNEMENT OPERATOR ******************************
     ************************************************************************ */
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > Vector2< Type >::operator-= ( Vector2< Type > rhs )
     {
         return *this = *this - rhs;
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > Vector2< Type >::operator+= ( Vector2< Type > rhs )
     {
         return *this = *this + rhs;
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > Vector2< Type >::operator*= ( Vector2< Type > rhs )
     {
         return *this = *this * rhs;
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > Vector2< Type >::operator/= ( Vector2< Type > rhs )
     {
         return *this = *this / rhs;
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > Vector2< Type >::operator/= ( float factor )
     {
         return *this = *this / factor;
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type >::operator sf::Vector2< Type > () const
     {
         return sf::Vector2< Type > { this->x, this->y };
@@ -92,7 +92,7 @@ namespace math
     ******************************* CAST **********************************
     ******************************************************************** */
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type >::operator ImVec2 () const
         requires ( std::is_same_v< Type, decltype( ImVec2::x ) > )
     {
@@ -100,8 +100,8 @@ namespace math
                         static_cast< float >( this->y ) };
     }
 
-    template< C_Primitive Type >
-    template< C_Primitive OtherType >
+    template< cPrimitive Type >
+    template< cPrimitive OtherType >
     requires ( not std::is_same_v< Type, OtherType > )
 
     Vector2< Type >::operator Vector2< OtherType > () const
@@ -110,35 +110,35 @@ namespace math
                  static_cast< OtherType >( this->y ) };
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< float > Vector2< Type >::to_float() const
         requires ( not std::is_same_v< Type, float > )
     {
         return static_cast< Vector2< float > >( *this );
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< unsigned int > Vector2< Type >::to_u_int() const
         requires ( not std::is_same_v< Type, unsigned int > )
     {
         return static_cast< Vector2< unsigned int > >( *this );
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< int > Vector2< Type >::to_int() const
         requires ( not std::is_same_v< Type, int > )
     {
         return static_cast< Vector2< int > >( *this );
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< std::size_t > Vector2< Type >::to_size_t() const
         requires ( not std::is_same_v< Type, std::size_t > )
     {
         return static_cast< Vector2< std::size_t > >( *this );
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Point< Type > Vector2< Type >::to_point() const
     {
         return Point< Type > { this->x, this->y };
@@ -148,38 +148,38 @@ namespace math
      **************************** METHODS *********************************
      ******************************************************************* */
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     bool Vector2< Type >::is_whole() const
     {
         return math::is_whole_number( this->x )
                && math::is_whole_number( this->y );
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Type Vector2< Type >::get_max() const
     {
         return std::max( this->x, this->y );
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Type Vector2< Type >::get_min() const
     {
         return std::min( this->x, this->y );
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > Vector2< Type >::get_x_axis() const
     {
         return Vector2< Type > { this->x, 0 };
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > Vector2< Type >::get_y_axis() const
     {
         return Vector2< Type > { 0, this->y };
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Type Vector2< Type >::operator[] ( std::size_t index ) const
     {
         switch ( index )
@@ -197,25 +197,25 @@ namespace math
         return 0.f;
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > Vector2< Type >::floor()
     {
         return *this = math::floor( *this );
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > Vector2< Type >::round()
     {
         return *this = math::round( *this );
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     float Vector2< Type >::get_length() const
     {
         return std::sqrt( ( this->x * this->x ) + ( this->y * this->y ) );
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > Vector2< Type >::get_norm() const
     {
         float vectorLength { this->get_length() };
@@ -228,7 +228,7 @@ namespace math
         return *this / vectorLength;
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > Vector2< Type >::normalize()
     {
         return *this = this->get_norm();
@@ -238,14 +238,14 @@ namespace math
      *************************** STREAM OPERATOR **************************
      ******************************************************************* */
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     std::ostream & operator<< ( std::ostream &          stream,
                                 Vector2< Type > const & vector )
     {
         return stream << "( " << vector.x << ", " << vector.y << " )";
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     std::istream & operator>> ( std::istream &    stream,
                                 Vector2< Type > & vector )
     {
@@ -262,7 +262,7 @@ namespace math
     ************************** VECTOR FUNCTIONS *******************************
     ************************************************************************ */
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     bool is_inside ( Vector2< Type > const & value,
                      Vector2< Type > const & position,
                      Vector2< Type > const & size )
@@ -271,7 +271,7 @@ namespace math
                  && value.y >= position.y && value.y < position.y + size.y );
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > floor ( Vector2< Type > const & vector2D )
     {
         return Vector2< Type > {
@@ -279,7 +279,7 @@ namespace math
             static_cast< Type >( std::floor( vector2D.y ) ) };
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > round ( Vector2< Type > const & vector2D )
     {
         return Vector2< Type > {
@@ -291,7 +291,7 @@ namespace math
     ************************** VECTOR VECTOR ********************************
     ************************************************************************ */
 
-    template< C_Primitive TypeLeft, C_Primitive TypeRight >
+    template< cPrimitive TypeLeft, cPrimitive TypeRight >
     Vector2< TypeLeft > operator* ( Vector2< TypeLeft > const &  vector2DLeft,
                                     Vector2< TypeRight > const & vector2DRight )
     {
@@ -299,7 +299,7 @@ namespace math
                  vector2DLeft.y * static_cast< TypeLeft >( vector2DRight.y ) };
     }
 
-    template< C_Primitive TypeLeft, C_Primitive TypeRight >
+    template< cPrimitive TypeLeft, cPrimitive TypeRight >
     Vector2< TypeLeft > operator/ ( Vector2< TypeLeft > const &  vector2DLeft,
                                     Vector2< TypeRight > const & vector2DRight )
     {
@@ -314,7 +314,7 @@ namespace math
                  vector2DLeft.y / vector2DRightCast.y };
     }
 
-    template< C_Primitive TypeLeft, C_Primitive TypeRight >
+    template< cPrimitive TypeLeft, cPrimitive TypeRight >
     Vector2< TypeLeft > operator+ ( Vector2< TypeLeft > const &  vector2DLeft,
                                     Vector2< TypeRight > const & vector2DRight )
     {
@@ -322,7 +322,7 @@ namespace math
                  vector2DLeft.y + static_cast< TypeLeft >( vector2DRight.y ) };
     }
 
-    template< C_Primitive TypeLeft, C_Primitive TypeRight >
+    template< cPrimitive TypeLeft, cPrimitive TypeRight >
     Vector2< TypeLeft > operator- ( Vector2< TypeLeft > const &  vector2DLeft,
                                     Vector2< TypeRight > const & vector2DRight )
     {
@@ -333,21 +333,21 @@ namespace math
     ************************** VECTOR * FACTOR ********************************
     ************************************************************************ */
 
-    template< C_Primitive VectorType, C_Primitive FactorType >
+    template< cPrimitive VectorType, cPrimitive FactorType >
     Vector2< VectorType > operator* ( Vector2< VectorType > const & vector2D,
                                       FactorType const &            factor )
     {
         return vector2D * Vector2< FactorType > { factor, factor };
     }
 
-    template< C_Primitive VectorType, C_Primitive FactorType >
+    template< cPrimitive VectorType, cPrimitive FactorType >
     Vector2< VectorType > operator/ ( Vector2< VectorType > const & vector2D,
                                       FactorType const &            factor )
     {
         return vector2D / Vector2< FactorType > { factor, factor };
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > operator% ( Vector2< Type > const & vector2D,
                                 int const &             modulo )
     {
@@ -358,7 +358,7 @@ namespace math
             vector2DCastToInt.x % modulo, vector2DCastToInt.y % modulo } );
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector2< Type > operator% ( Vector2< Type > const & vector2D,
                                 unsigned int const &    modulo )
     {
@@ -369,7 +369,7 @@ namespace math
     **************************** SIGN OPERATOR ********************************
     ************************************************************************ */
 
-    template< C_Primitive TypeLeft, C_Primitive TypeRight >
+    template< cPrimitive TypeLeft, cPrimitive TypeRight >
     bool operator== ( Vector2< TypeLeft > const &  vector2DLeft,
                       Vector2< TypeRight > const & vector2DRight )
     {
@@ -377,7 +377,7 @@ namespace math
                && vector2DLeft.y == static_cast< TypeLeft >( vector2DRight.y );
     }
 
-    template< C_Primitive TypeLeft, C_Primitive TypeRight >
+    template< cPrimitive TypeLeft, cPrimitive TypeRight >
     bool operator<( Vector2< TypeLeft > const &  vector2DLeft,
                     Vector2< TypeRight > const & vector2DRight )
     {
@@ -385,7 +385,7 @@ namespace math
                && vector2DLeft.y < static_cast< TypeLeft >( vector2DRight.y );
     }
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     bool operator> ( Vector2< Type > const & vector2DLeft,
                      Vector2< Type > const & vector2DRight )
     {
@@ -397,7 +397,7 @@ namespace math
     ************************** UNARY VECTOR ********************************
     ************************************************************************ */
 
-    template< C_RelativePrimitive Type >
+    template< cRelativePrimitive Type >
     Vector2< Type > operator- ( Vector2< Type > const & vector2D )
     {
         return Vector2< Type > { -vector2D.x, -vector2D.y };

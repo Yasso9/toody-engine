@@ -12,13 +12,13 @@
 
 namespace math
 {
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     class Vector3;
     using Vector3F = Vector3< float >;
     using Vector3I = Vector3< int >;
     using Vector3U = Vector3< unsigned int >;
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     class Vector3
     {
       public:
@@ -85,7 +85,7 @@ namespace math
             return *this = *this + lhs;
         }
 
-        template< C_Primitive OtherType >
+        template< cPrimitive OtherType >
         Vector3< Type > operator*= ( OtherType factorLHS )
         {
             return *this = *this * factorLHS;
@@ -121,36 +121,36 @@ namespace math
     ***************************** FUNCTIONS ***********************************
     ************************************************************************ */
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector3< Type > normalize ( Vector3< Type > vector );
 
     /* ************************************************************************
     ************************** VECTOR X VECTOR ********************************
     ************************************************************************ */
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector3< Type > operator* ( Vector3< Type > lhs, Vector3< Type > rhs );
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector3< Type > operator+ ( Vector3< Type > lhs, Vector3< Type > rhs );
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector3< Type > operator- ( Vector3< Type > lhs, Vector3< Type > rhs );
 
     /* ************************************************************************
     ************************** VECTOR X FACTOR ********************************
     ************************************************************************ */
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector3< Type > operator* ( Vector3< Type > vector, Type factor );
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector3< Type > operator/ ( Vector3< Type > vector, Type factor );
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     Vector3< Type > power ( Vector3< Type > vector, int powerFactor );
 
     /* ************************************************************************
     ************************** VECTOR X OTHERS ********************************
     ************************************************************************ */
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     std::ostream & operator<< ( std::ostream & stream, Vector3< Type > vector );
 }  // namespace math
 

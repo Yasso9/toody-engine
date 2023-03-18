@@ -1,15 +1,16 @@
 #pragma once
 
-#include "main/window.hpp"
+#include <functional>  // for function
+
+#include "main/window.hpp"  // for Window
 
 class UpdateContext
 {
   public:
-    /// @todo window should be const
     Window &    window;
     float const deltaTime;
 
-    UpdateContext( Window & window, float deltaTime );
+    UpdateContext( Window & aWindow, float aDeltaTime );
 };
 
 class RenderContext

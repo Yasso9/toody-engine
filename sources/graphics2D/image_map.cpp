@@ -2,8 +2,6 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
 
-#include "main/render.hpp"  // for Render
-
 ImageMap::ImageMap() : m_data()
 {
     /// @todo load the the sprites path and the positions from the database

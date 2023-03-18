@@ -7,7 +7,6 @@
 #include "component/component.hpp"
 #include "graphics2D/tile/position.hpp"
 #include "graphics2D/tile/tile.hpp"
-#include "main/render.hpp"
 #include "maths/vector2.hpp"
 #include "tools/array/array2D.hpp"
 #include "tools/stream/stream.hpp"

@@ -21,7 +21,6 @@
 #include "graphics2D/tile/set.hpp"       // for Tileset
 #include "graphics2D/view.hpp"           // for View
 #include "input/input.hpp"               // for get_mouse_position, is_pre...
-#include "main/render.hpp"               // for Render
 #include "maths/geometry/point.hpp"      // for PointF
 #include "maths/geometry/point.tpp"      // for Point::Point<Type>, Point:...
 #include "tools/array/vector.hpp"

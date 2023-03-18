@@ -4,7 +4,7 @@
 
 namespace math
 {
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     class Line
     {
       public:
@@ -28,7 +28,7 @@ namespace math
     using LineI = Line< int >;
     using LineU = Line< unsigned int >;
 
-    template< C_Primitive Type >
+    template< cPrimitive Type >
     bool is_intersection ( Line< Type > segment1, Line< Type > segment2 );
 }  // namespace math
 

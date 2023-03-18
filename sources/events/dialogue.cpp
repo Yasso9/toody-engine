@@ -11,7 +11,6 @@
 #include "input/input.hpp"           // for get_mouse_position, is_pre...
 #include "libraries/imgui.hpp"       // for P_ColorEditor, P_InputNumber
 #include "libraries/imgui.hpp"       // for P_Begin
-#include "main/render.hpp"           // for Render
 #include "main/resources.hpp"        // for get_font
 #include "main/window.hpp"           // for Window
 #include "maths/geometry/point.hpp"  // for PointI, Point, PointF
