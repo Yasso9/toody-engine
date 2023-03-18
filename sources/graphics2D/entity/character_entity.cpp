@@ -44,16 +44,12 @@ void CharacterEntity::update( UpdateContext context )
     m_sprite.select_animation( m_animation.get_current_sprite() );
 
     bool isCollisionDetected { false };
-    /// @todo ne pas revenir complètement, mais revenir à l'endroit juste
-    /// avant la collision. Trouver une idée pour avoir cela
     if ( m_control.is_collision_detected( this->get_polygon() ) )
     {
         this->move( -movement );
         isCollisionDetected = true;
     }
 
-    /// @todo What's the use of this ? Try to use it on the render method or add
-    /// comments
     this->set_next_transformation( this->getTransform() );
 
     ImGui::P_Show( "Character", &m_isWindowShowed, [=, *this] () {

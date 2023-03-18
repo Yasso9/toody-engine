@@ -49,7 +49,6 @@ void Model::render( RenderContext /* context */ ) const
 {
     for ( Mesh const & mesh : this->m_meshes )
     {
-        /// @todo make mesh inherit from componentn to have a nice synthax here
         mesh.draw();
     }
 }
@@ -113,7 +112,6 @@ Mesh Model::process_mesh( aiMesh const & mesh, aiScene const & scene )
 std::optional< Texture > Model::get_texture_loaded(
     std::string const & /* texturePath */ ) const
 {
-    // @todo Regarder pourquoi c'est en commentaire
     // for ( Texture const & existingTexture : this->m_texturesLoaded )
     // {
     //     if ( existingTexture.get_path() == texturePath )
@@ -193,7 +191,7 @@ std::vector< S_Vertex > Model::load_vertices( aiMesh const & mesh )
         // Does the mesh contain texture coordinates?
         if ( mesh.mTextureCoords[0] )
         {
-            /// @todo a vertex can contain up to 8 different texture
+            /// @remarks a vertex can contain up to 8 different texture
             /// coordinates.
             // We thus make the assumption that we won't
             // use models where a vertex can have multiple texture coordinates

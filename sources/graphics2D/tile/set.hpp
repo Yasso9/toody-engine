@@ -10,7 +10,6 @@
 
 namespace tile
 {
-    /// @todo make this as a componenent
     class Set
     {
         sf::Texture const & m_texture;

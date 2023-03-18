@@ -11,7 +11,6 @@
 
 // P stands for personnal fonctions (overloading ImGui)
 
-/// @todo rename the namespace to ImGui_P and remove P_ on all functions
 namespace ImGui
 {
     void P_Show ( std::string name, std::function< void() > const & lambda );

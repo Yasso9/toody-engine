@@ -12,7 +12,6 @@ class View : public sf::View
   public:
     View() : sf::View {} {}
 
-    /// @todo pourquoi on a pas const & ici ?
     View( sf::View view ) noexcept : sf::View { view } {}
 
     math::Vector2F get_zoom ( math::Vector2F windowSize ) const;

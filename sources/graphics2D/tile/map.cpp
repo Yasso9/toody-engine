@@ -30,8 +30,6 @@
 #include "tools/serialization.tpp"  // for Serializer::Serializer<Typ...
 #include "tools/tools.tpp"          // for is_rectangle
 
-/// @todo put a grid on the tilemap
-
 /// @brief Stream to string
 static std::string get_string ( std::ifstream & stream )
 {
@@ -327,7 +325,6 @@ namespace tile
 
     void Map::change_tile( tile::Position position, tile::Position value )
     {
-        /// @todo make a is_comptatible method
         if ( position >= this->get_size() )
         {
             std::cerr << "Tilemap position not comptatible with current tilemap"

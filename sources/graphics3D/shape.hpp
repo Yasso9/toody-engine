@@ -24,9 +24,6 @@ class Shape final : public Transformable
         /// @brief Array of the vector's size contained in each point
         std::vector< unsigned int > dataPerPoint {};
 
-        /// @todo assert que dataperpoint est cohérent et que si on le divise
-        /// par vertices ça donne bien un entier
-
         /// @brief Array size of each point
         unsigned int get_data_per_point_sum () const;
 

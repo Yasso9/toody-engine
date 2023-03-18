@@ -2,7 +2,8 @@
 
 #include "array2D.hpp"
 
-#include "tools/array/vector.hpp"
+#include "tools/array/vector.hpp"  // for vector::append, vector::is_rectangle
+#include "tools/traces.hpp"        // for Trace
 
 template< typename Type >
 Array2D< Type >::Array2D() : m_array2D {}, m_size { 0u, 0u }
@@ -27,11 +28,9 @@ Array2D< Type >::Array2D( std::vector< std::vector< Type > > array )
         return;
     }
 
-    /// @todo don't check that and add default value of all missing value in
-    /// rectangle if the default contructor exist
     if ( ! vector::is_rectangle( array ) )
     {
-        std::cerr << "Each columns must have the same size" << std::endl;
+        Trace::Error( "Each columns must have the same size" );
     }
 
     m_size = math::Vector2U { array[0].size(), array.size() };

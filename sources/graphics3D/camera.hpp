@@ -10,7 +10,6 @@
 class Camera : public Component
 {
   public:
-    /// @todo replace that by a 3D vector with negatif or positiv values
     /// @brief Defines several possible options for camera movement.
     enum class E_Movement
     {
@@ -26,7 +25,6 @@ class Camera : public Component
     /// @brief Position of the camera in the space
     math::Vector3F m_position;
     /// @brief Direction to where the camera is looking
-    /// @todo should always be normalized -> have a set and a get
     math::Vector3F m_direction;
 
     math::Vector3F m_xAxis;

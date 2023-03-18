@@ -7,36 +7,6 @@
 
 namespace path
 {
-    // @todo voir pourquoi la suite est mise sous commentaire
-    // std::filesystem::path get_file ( E_File const & filePath )
-    // {
-    //     std::filesystem::path fileRelativPath {};
-
-    // switch ( filePath )
-    // {
-    // case E_File::Database :
-    //     fileRelativPath =
-    //         get_folder( E_Folder::Data ) / "databases/game.db";
-    //     break;
-    // default :
-    //     ASSERTION( false, "Enum not handled in switch operation" );
-    //     break;
-    // }
-
-    // if ( ! std::filesystem::is_regular_file( fileRelativPath ) )
-    // {
-    //     std::cerr << "The file '" << fileRelativPath << "' does not exist"
-    //               << std::endl;
-    // }
-
-    // return fileRelativPath;
-    // }
-
-    // std::string get_file_str ( E_File const & filePath )
-    // {
-    //     return get_file( filePath ).string();
-    // }
-
     std::filesystem::path get_folder ( E_Folder const & folderPath )
     {
         std::filesystem::path folderRelativPath {};

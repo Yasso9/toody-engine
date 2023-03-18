@@ -6,8 +6,7 @@ Transformable2D::Transformable2D()
 
 void Transformable2D::render_all( RenderContext context ) const
 {
-    /// @todo review this
-    // context.set_transformation( m_currentTransformation );
+    context.set_transformation( m_currentTransformation );
     Component::render_all( context );
 }
 

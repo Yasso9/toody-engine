@@ -21,7 +21,6 @@ namespace sf
 class Player : public Transformable2D
 {
   public:
-    /// @todo create the state in the gui
     /// @brief States that the player can have
     enum class E_State
     {
@@ -93,8 +92,6 @@ class Player : public Transformable2D
     ///        sprite number of the player
     sf::IntRect get_current_texture_rect ();
 
-    /// @todo trouver un moyen soit d'avoir la ref du delta time, soit
-    /// d'enelever la variable mambre deltatime
     void update_delta_time ( float const & deltaTime );
     void update_movement ();
     void update_texture_rect ();

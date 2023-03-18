@@ -45,7 +45,6 @@ sf::Color Color::to_sfml() const
 Color::RGBA Color::to_rgba() const
 {
     RGBA rgbaColor {
-        /// @todo maybe use round or floor
         static_cast< unsigned int >( m_table[0] * COLOR_RANGE_F ),
         static_cast< unsigned int >( m_table[1] * COLOR_RANGE_F ),
         static_cast< unsigned int >( m_table[2] * COLOR_RANGE_F ),

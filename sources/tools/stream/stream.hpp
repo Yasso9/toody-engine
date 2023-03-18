@@ -12,8 +12,6 @@ namespace stream
     char peek_next ( std::istream & stream );
 }  // namespace stream
 
-/// @todo differences between typename or class in template ?
-/// @todo Type require that the type have operator <<
 /// @brief Reading vector
 template< typename Type >
 std::ostream & operator<< ( std::ostream &              stream,

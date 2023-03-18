@@ -13,7 +13,6 @@ namespace stream
             stream.seekg( 1 + stream.tellg() );
         }
 
-        /// @todo check also for stream.bad() and stream.fail()
         if ( stream.eof() )
         {
             std::cerr << "End of file could not read character '" << character
@@ -47,7 +46,6 @@ namespace stream
             stream.seekg( 1 + stream.tellg() );
         }
 
-        /// @todo check also for stream.bad() and stream.fail()
         if ( stream.eof() )
         {
             return '\0';

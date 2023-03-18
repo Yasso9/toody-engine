@@ -22,7 +22,5 @@ class Chunk
     Type to_value () const;
 };
 
-/// @todo Serializer and Unserializer must be the same class
-/// @todo Type require that the type have operator << and copy contructor
 template< typename Type >
 Chunk serialize ( Type const & valueToSerialize );

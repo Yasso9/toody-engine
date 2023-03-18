@@ -4,7 +4,6 @@
 
 ImageMap::ImageMap() : m_data()
 {
-    /// @todo load the the sprites path and the positions from the database
     m_data = {
         /*
             {sf::Sprite { resources::get_texture( "happy_square.png"s ) },

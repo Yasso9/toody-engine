@@ -17,7 +17,6 @@ struct aiMesh;
 struct aiNode;
 struct aiScene;
 
-/// @todo rework all this class
 class Model final : public Transformable
 {
     /** @brief Model data.

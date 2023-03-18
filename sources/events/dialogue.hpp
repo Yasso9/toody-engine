@@ -22,13 +22,10 @@ class Dialogue : public Component
 
     std::string m_textRemaining;
 
-    /// @todo create a singleton class where we can access all type of cursor
-    /// (or set all type of cursor)
     sf::Cursor m_regularCursor;
     sf::Cursor m_moveCursor;
 
   public:
-    /// @todo Calculate that number automatically
     /// @brief number of character that can be print on a single dialogue box
     unsigned int const CHARACTER_LIMIT { 150u };
 
@@ -54,9 +51,6 @@ class Dialogue : public Component
 
     void add_text ( std::string textToAdd );
 
-    /// @todo create an inherited class DialogueCustmable that can have
-    /// process_events_customisation and update_customisation and delete this
-    /// two functions from this class
     void process_mouse_movement_customisation ( math::Vector2I mouseMovement );
 
   private:

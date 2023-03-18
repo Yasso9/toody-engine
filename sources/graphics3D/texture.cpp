@@ -34,7 +34,7 @@ std::string Texture::get_type_name() const
 {
     switch ( this->m_type )
     {
-    /// @todo pourquoi c'est que des texture_diffuse ?
+    /// @remarks pourquoi c'est que des texture_diffuse ?
     case Texture::E_Type::Diffuse :
         return "texture_diffuse";
     case Texture::E_Type::Specular :
@@ -71,9 +71,7 @@ aiTextureType Texture::to_assimp_type( Texture::E_Type const & type )
 #define STBI_NO_THREAD_LOCALS
 #include <stddef.h>  // for NULL
 
-#include <GLAD/glad.h>  // for GL_TEXTURE_2D, glPixelStorei, glTexP...
-/// @todo remove OTHERS folder and put stb_image.h directly in the include
-/// folder
+#include <GLAD/glad.h>         // for GL_TEXTURE_2D, glPixelStorei, glTexP...
 #include <OTHERS/stb_image.h>  // for stbi_image_free, stbi_load, stbi_set...
 
 namespace GLTexture

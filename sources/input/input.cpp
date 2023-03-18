@@ -60,8 +60,6 @@ namespace input
                + view.get_position();
     }
 
-    /// @todo mouse movement should take the fact that a we can have multiple
-    /// window or multiple mouse.
     static math::Vector2F g_mouseMovement { 0.f, 0.f };
 
     void reset_mouse_movement ()

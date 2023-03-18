@@ -6,7 +6,6 @@
 
 namespace tile
 {
-    /// @todo have rounded corner
     class Cursor : public Component
     {
       public:

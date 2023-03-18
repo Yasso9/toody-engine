@@ -55,7 +55,6 @@ namespace tile
         {
             tile.set_position( i_position );
 
-            /// @todo Have a ++position instead
             i_position.set_value( i_position.value() + 1 );
         }
     }

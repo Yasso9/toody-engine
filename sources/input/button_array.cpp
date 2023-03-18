@@ -126,7 +126,6 @@ void ButtonArray::render_before( RenderContext context ) const
 {
     for ( Button const & button : this->m_buttons )
     {
-        /// @todo have button as child of button array
         button.render_all( context );
     }
 }

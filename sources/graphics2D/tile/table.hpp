@@ -13,9 +13,6 @@
 
 namespace tile
 {
-    /// @todo maybe set it as a transfomable component
-    /// @todo create a base class DimensionnalVector that have operator[]
-    /// that return a vector instead of get line
     class Table : public Component,
                   public Array2D< Tile >
     {

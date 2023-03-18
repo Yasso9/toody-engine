@@ -37,8 +37,6 @@ void View::zoom( float factor, math::Vector2F windowSize )
 {
     sf::View::zoom( 1.f - factor );
 
-    /// @todo have MAXIMUM_ZOOM and MINIMUM_ZOOM as member of View class
-    // Check if the zoom doesn't go too far
     constexpr float MAXIMUM_ZOOM { 15.f };
     constexpr float MINIMUM_ZOOM { 0.7f };
     if ( this->get_zoom( windowSize ).get_max() > MAXIMUM_ZOOM )

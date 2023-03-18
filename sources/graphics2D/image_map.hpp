@@ -19,7 +19,6 @@ struct S_Image
     {}
 };
 
-/// @todo Enable and use this class
 class ImageMap : public Component
 {
     std::vector< S_Image > m_data;

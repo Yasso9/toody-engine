@@ -91,7 +91,6 @@ namespace math
     template< cPrimitive Type >
     bool Point< Type >::is_inside( Polygon< Type > polygon ) const
     {
-        /// @todo recuperer ça dynamiquement
         constexpr float LIMIT_ZONE { 10000.f };
 
         // Create a point for line segment from p to infinite

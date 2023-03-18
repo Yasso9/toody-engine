@@ -45,8 +45,6 @@ void ControllableEntity2D::update( UpdateContext context )
 
     this->move( moveSpeed * moveDirection );
 
-    /// @todo ne pas revenir complètement, mais revenir à l'endroit juste avant
-    /// la collision
     if ( m_control.is_collision_detected( this->get_polygon() ) )
     {
         this->move( -( moveSpeed * moveDirection ) );

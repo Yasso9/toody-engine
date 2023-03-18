@@ -35,8 +35,6 @@ Shape::Shape( Camera const & camera, S_Data const & data )
     m_elementBufferObject {},
     m_data { data }
 {
-    /// @todo appeler cette fonction compètement et pas de façon cachée
-    /// @todo use the builder design pattern
     load_gl_shape::complete( *this );
 }
 
