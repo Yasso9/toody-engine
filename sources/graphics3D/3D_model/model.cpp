@@ -32,8 +32,8 @@ Model::Model( Camera const & camera, std::string const & filePathModel )
     m_filePath( path::get_folder( path::E_Folder::Resources ) / filePathModel )
 {
     Timer timer { "Model creation (" + filePathModel + ')' };
-    std::cout << "Loading Model : " << filePathModel << std::endl;
 
+    Trace::Info( "Loading Model - " + filePathModel );
     this->load_model();
 }
 

@@ -15,7 +15,9 @@ Inputs::Inputs()
     m_windowClosed {},
     m_windowResized {},
     m_textEntered {}
-{}
+{
+    this->clear();
+}
 
 void Inputs::update( sf::Event event )
 {

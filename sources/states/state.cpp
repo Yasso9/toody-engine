@@ -49,11 +49,14 @@ void State::update_all( UpdateContext context )
     // otherwise bug and crash could happen
     while ( context.window.pollEvent( event ) )
     {
-        if ( context.window.has_absolute_focus() )
-        {
-            ImGui::SFML::ProcessEvent( context.window, event );
-            m_inputs.update( event );
-        }
+        ImGui::SFML::ProcessEvent( context.window, event );
+        m_inputs.update( event );
+    }
+
+    // Checking general inputs
+    if ( m_inputs.is_window_closed() )
+    {
+        m_gameContext.should_run( false );
     }
 
     this->Component::update_all( context );
