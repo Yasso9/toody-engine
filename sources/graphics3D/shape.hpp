@@ -6,6 +6,7 @@
 
 #include <SFML/Graphics/Texture.hpp>  // for Texture
 
+#include "SFML/Graphics/Shader.hpp"      // for Shader
 #include "graphics3D/transformable.hpp"  // for Transformable
 
 class Camera;
@@ -16,13 +17,17 @@ class Shape final : public Transformable
   public:
     struct S_Data
     {
-        /// @brief Array of all the attributes of the shape
+        // Attributes of the shape
         std::vector< float >                         vertices {};
-        /// @brief Array of all the indices of the shape
+        // Indices of the shape
         std::optional< std::vector< unsigned int > > indices {};
 
-        /// @brief Array of the vector's size contained in each point
+        // Vector's size contained in each point
         std::vector< unsigned int > dataPerPoint {};
+
+        std::string  get_vertex_shader () const;
+        std::string  get_fragment_shader () const;
+        sf::Shader & get_shader () const;
 
         /// @brief Array size of each point
         unsigned int get_data_per_point_sum () const;
@@ -35,14 +40,14 @@ class Shape final : public Transformable
 
     unsigned int m_vertexArrayObject;
     unsigned int m_vertexBufferObject;
-    /// @brief To simplify the point for the vertices
+    // Used to simplify vertices
     unsigned int m_elementBufferObject;
 
     S_Data m_data;
 
   public:
-    /// @brief Create the shape. If the indices is empty, we don't create an
-    /// element buffer object
+    // Create the shape. If the indices is empty, we don't create an
+    // element buffer object
     explicit Shape( Camera const & camera, S_Data const & data );
     virtual ~Shape();
 
@@ -61,7 +66,7 @@ class Shape final : public Transformable
 
     void set_texture ( sf::Texture const & texture );
 
-    /// @brief Return true if we need an element buffer object for the actual
-    /// shape, false otherwise
+    // Return true if we need an element buffer object for the actual
+    // shape, false otherwise
     bool is_EBO_handled () const;
 };

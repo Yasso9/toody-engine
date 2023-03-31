@@ -6,13 +6,10 @@
 #include <GLAD/glad.h>               // for GLenum, glDeleteBuffers, GL_ELE...
 #include <SFML/Graphics/Shader.hpp>  // for Shader
 
-#include "game/resources.hpp"         // for get_texture, get_shader
-#include "graphics3D/load_shape.hpp"  // for complete
-#include "graphics3D/openGL.hpp"      // for draw_arrays, draw_elements
+#include "game/resources.hpp"            // for get_texture, get_shader
+#include "graphics3D/openGL.hpp"         // for draw_arrays, draw_elements
+#include "graphics3D/shape_builder.hpp"  // for ShapeBuilder
 #include "tools/path.hpp"
-
-class Camera;
-class Render;
 
 unsigned int Shape::S_Data::get_data_per_point_sum() const
 {
@@ -26,28 +23,86 @@ unsigned int Shape::S_Data::get_number_of_element() const
            / this->get_data_per_point_sum();
 }
 
+std::string Shape::S_Data::get_vertex_shader() const
+{
+    return R"(
+        #version 330 core
+
+        layout (location = 0) in vec3 aPosition;
+        layout (location = 1) in vec3 aColor;
+        layout (location = 2) in vec3 aTexCoord;
+        layout (location = 3) in vec3 aNormal;
+
+        out vec3 fragmentColor;
+        out vec3 fragmentTexCoord;
+        out vec3 fragmentNormal;
+
+        uniform mat4 model;
+        uniform mat4 view;
+        uniform mat4 projection;
+
+        void main()
+        {
+            fragmentColor = color;
+            fragmentTexCoord = texCoord;
+            fragmentNormal = normal;
+
+            gl_Position = projection * view * model * vec4(aPosition, 1.0);
+        }
+    )";
+}
+
+std::string Shape::S_Data::get_fragment_shader() const
+{
+    return R"(
+        #version 330 core
+
+        in vec3 fragmentColor;
+        in vec3 fragmentTexCoord;
+        in vec3 fragmentNormal;
+
+        out vec4 FragColor;
+
+        uniform sampler2D texture1;
+
+        void main()
+        {
+            vec3 lightPos = vec3(1.0, 1.0, 1.0);
+            vec3 lightColor = vec3(1.0, 1.0, 1.0);
+            float ambientStrength = 0.2;
+            float diffuseStrength = 0.5;
+            float specularStrength = 0.2;
+            float shininess = 64.0;
+
+            vec3 ambient = ambientStrength * lightColor;
+            vec3 norm = normalize(Normal);
+            vec3 lightDir = normalize(lightPos - FragPos);
+            float diff = max(dot(norm, lightDir), 0.0);
+            vec3 diffuse = diff * diffuseStrength * lightColor;
+            vec3 viewDir = normalize(-FragPos);
+            vec3 reflectDir = reflect(-lightDir, norm);
+            float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+            vec3 specular = specularStrength * spec * lightColor;
+
+            FragColor = texture(texture1, TexCoord) * vec4(ambient + diffuse + specular, 1.0);
+        }
+    )";
+}
+
 Shape::Shape( Camera const & camera, S_Data const & data )
-  : Transformable { camera, resources::get_shader( "shape_shader.vert",
-                                                   "shape_shader.frag" ) },
+  : Transformable { camera, data.get_shader() },
     m_textures {},
     m_vertexArrayObject {},
     m_vertexBufferObject {},
     m_elementBufferObject {},
     m_data { data }
 {
-    load_gl_shape::complete( *this );
+    ShapeBuilder { *this }.construct();
 }
 
 Shape::~Shape()
 {
-    // We delete all the buffers and the objects generated
-    glDeleteVertexArrays( 1, &this->m_vertexArrayObject );
-    glDeleteBuffers( 1, &this->m_vertexBufferObject );
-
-    if ( this->is_EBO_handled() )
-    {
-        glDeleteBuffers( 1, &this->m_elementBufferObject );
-    }
+    ShapeBuilder { *this }.destroy();
 }
 
 void Shape::update( UpdateContext /* context */ )
@@ -69,6 +124,7 @@ void Shape::render( RenderContext /* context */ ) const
         GLenum const dataType { GL_UNSIGNED_INT };
         gl::draw_elements( m_vertexArrayObject, primitiveType, dataType,
                            m_data.vertices.size() );
+        glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0u );
     }
     else
     {

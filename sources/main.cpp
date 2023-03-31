@@ -7,7 +7,7 @@
 
 int main ()
 {
-    Window      window { "Toody Engine (Developpement)" };
+    Window      window { "Toody Engine (Dev)" };
     GameContext game {};
     Clock       clock {};
 

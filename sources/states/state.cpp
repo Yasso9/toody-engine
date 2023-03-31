@@ -53,7 +53,6 @@ void State::update_all( UpdateContext context )
         m_inputs.update( event );
     }
 
-    // Checking general inputs
     if ( m_inputs.is_window_closed() )
     {
         m_gameContext.should_run( false );
@@ -72,7 +71,7 @@ void State::render_all( RenderContext context ) const
     ImGui::SFML::Render( context.window );
 
     // Each draw is a chance that we have an error with OpenGL
-    ASSERTION( gl::check_error(), "OpenGL error" );
+    gl::check_error();
 
     context.window.display();
 }

@@ -77,7 +77,7 @@ Window::~Window()
 {
     ImGui::SFML::Shutdown();
     // Must be made before closing the window
-    ASSERTION( gl::check_error(), "OpenGL error" );
+    gl::check_error();
     this->close();
 }
 

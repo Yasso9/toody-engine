@@ -6,7 +6,7 @@
 #include <string>      // for string
 #include <vector>      // for vector
 
-#include "graphics3D/3D_model/mesh.hpp"  // for Mesh, S_Vertex (ptr only)
+#include "graphics3D/model/mesh.hpp"     // for Mesh, S_Vertex (ptr only)
 #include "graphics3D/texture.hpp"        // for Texture, Texture::E_Type
 #include "graphics3D/transformable.hpp"  // for Transformable
 
