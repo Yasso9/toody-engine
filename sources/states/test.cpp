@@ -1,6 +1,6 @@
 #include "test.hpp"
 
-#include <IMGUI/imgui.h>  // for ShowDemoWindow
+#include <imgui/imgui.h>  // for ShowDemoWindow
 
 TestState::TestState( GameContext & gameContext ) : State { gameContext } {}
 

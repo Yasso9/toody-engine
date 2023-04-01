@@ -3,11 +3,6 @@
 #include <algorithm>  // for max
 #include <iostream>   // for operator<<, basic_ostream, endl
 
-#include <GLM/detail/type_vec2.hpp>   // for vec<>::(anonymous)
-#include <GLM/detail/type_vec3.hpp>   // for vec<>::(anonymous)
-#include <GLM/ext/vector_float2.hpp>  // for vec2
-#include <GLM/ext/vector_float3.hpp>  // for vec3
-#include <GLM/fwd.hpp>                // for vec2
 #include <assimp/Importer.hpp>        // for Importer
 #include <assimp/material.h>          // for aiMaterial
 #include <assimp/mesh.h>              // for aiMesh, aiFace
@@ -15,6 +10,11 @@
 #include <assimp/scene.h>             // for aiScene, aiNode, AI_SCENE_FLAGS...
 #include <assimp/types.h>             // for aiString
 #include <assimp/vector3.h>           // for aiVector3D
+#include <glm/detail/type_vec2.hpp>   // for vec<>::(anonymous)
+#include <glm/detail/type_vec3.hpp>   // for vec<>::(anonymous)
+#include <glm/ext/vector_float2.hpp>  // for vec2
+#include <glm/ext/vector_float3.hpp>  // for vec3
+#include <glm/fwd.hpp>                // for vec2
 
 #include "game/resources.hpp"  // for get_shader
 #include "tools/path.hpp"      // for get_folder, E_Folder, E_Folder:...

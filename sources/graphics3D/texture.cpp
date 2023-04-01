@@ -67,12 +67,14 @@ aiTextureType Texture::to_assimp_type( Texture::E_Type const & type )
     }
 }
 
-#define STB_IMAGE_IMPLEMENTATION
 #define STBI_NO_THREAD_LOCALS
 #include <stddef.h>  // for NULL
 
-#include <GLAD/glad.h>         // for GL_TEXTURE_2D, glPixelStorei, glTexP...
-#include <OTHERS/stb_image.h>  // for stbi_image_free, stbi_load, stbi_set...
+#include <glad/glad.h>  // for GL_TEXTURE_2D, glPixelStorei, glTexP...
+
+#define STB_IMAGE_STATIC
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>  // for stbi_image_free, stbi_load, stbi_set...
 
 namespace GLTexture
 {

@@ -5,10 +5,10 @@
 #include <stddef.h>   // for NULL
 #include <vector>     // for vector
 
-#include <IMGUI/imgui.h>            // for Begin, End, MenuItem, Text
 #include <SFML/Graphics/Color.hpp>  // for Color, Color::Black, Color::...
 #include <SFML/System/Vector2.hpp>  // for Vector2f
 #include <SFML/Window/Mouse.hpp>    // for Mouse, Mouse::Right
+#include <imgui/imgui.h>            // for Begin, End, MenuItem, Text
 
 #include "components/component.hpp"  // for Component::add_child
 #include "game/game.hpp"

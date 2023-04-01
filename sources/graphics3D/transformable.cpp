@@ -3,11 +3,11 @@
 #include <stddef.h>  // for NULL
 #include <string>    // for allocator
 
-#include <GLM/fwd.hpp>               // for mat4
-#include <GLM/glm.hpp>               // for radians
-#include <GLM/gtc/type_ptr.hpp>      // for value_ptr
 #include <SFML/Graphics/Glsl.hpp>    // for Mat4
 #include <SFML/Graphics/Shader.hpp>  // for Shader
+#include <glm/fwd.hpp>               // for mat4
+#include <glm/glm.hpp>               // for radians
+#include <glm/gtc/type_ptr.hpp>      // for value_ptr
 
 #include "graphics3D/camera.hpp"  // for Camera
 

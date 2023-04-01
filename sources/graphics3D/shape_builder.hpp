@@ -2,7 +2,7 @@
 
 #include <vector>  // for vector
 
-#include <GLAD/glad.h>  // for GLenum
+#include <glad/glad.h>  // for GLenum
 
 class Shape;
 

@@ -3,9 +3,9 @@
 #include <cstddef>  // for size_t
 #include <ostream>  // for ostream
 
-#include <GLAD/glad.h>                  // for GLenum
-#include <GLM/ext/matrix_float4x4.hpp>  // for mat4
-#include <GLM/ext/vector_float3.hpp>    // for vec3
+#include <glad/glad.h>                  // for GLenum
+#include <glm/ext/matrix_float4x4.hpp>  // for mat4
+#include <glm/ext/vector_float3.hpp>    // for vec3
 
 namespace sf
 {

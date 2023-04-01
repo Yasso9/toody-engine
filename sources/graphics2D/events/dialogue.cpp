@@ -1,11 +1,11 @@
 #include "dialogue.hpp"
 
-#include <IMGUI/imgui.h>                   // for Begin, End, InputFloat
 #include <SFML/Graphics/Color.hpp>         // for Color, Color::Black, Color...
 #include <SFML/Graphics/Rect.hpp>          // for FloatRect
 #include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
 #include <SFML/System/Vector2.hpp>         // for Vector2f, Vector2
 #include <SFML/Window/Mouse.hpp>           // for Mouse, Mouse::Right
+#include <imgui/imgui.h>                   // for Begin, End, InputFloat
 
 #include "game/resources.hpp"  // for get_font
 #include "graphics2D/view.hpp"

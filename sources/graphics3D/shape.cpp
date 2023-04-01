@@ -3,8 +3,9 @@
 #include <numeric>  // for accumulate
 #include <string>   // for operator+, to_string
 
-#include <GLAD/glad.h>               // for GLenum, glDeleteBuffers, GL_ELE...
 #include <SFML/Graphics/Shader.hpp>  // for Shader
+#include <fmt/core.h>                // for format
+#include <glad/glad.h>               // for GLenum, glDeleteBuffers, GL_ELE...
 
 #include "game/resources.hpp"            // for get_texture, get_shader
 #include "graphics3D/openGL.hpp"         // for draw_arrays, draw_elements
@@ -25,6 +26,7 @@ unsigned int Shape::S_Data::get_number_of_element() const
 
 std::string Shape::S_Data::get_vertex_shader() const
 {
+    fmt::print( "Hello, world!\n" );
     return R"(
         #version 330 core
 
@@ -87,6 +89,14 @@ std::string Shape::S_Data::get_fragment_shader() const
             FragColor = texture(texture1, TexCoord) * vec4(ambient + diffuse + specular, 1.0);
         }
     )";
+}
+
+sf::Shader & Shape::S_Data::get_shader() const
+{
+    static sf::Shader shader {};
+    shader.loadFromMemory( this->get_vertex_shader(),
+                           this->get_fragment_shader() );
+    return shader;
 }
 
 Shape::Shape( Camera const & camera, S_Data const & data )

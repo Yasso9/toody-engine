@@ -3,10 +3,10 @@
 #include <cmath>   // for floor
 #include <memory>  // for allocator
 
-#include "maths/geometry/point.tpp"   // for Point::Point<Type>, Point::is_i...
-#include "maths/vector2.tpp"          // for operator+, Vector2::Vector2<Type>
-#include "tools/assertion.hpp"        // for ASSERTION
 #include "graphics2D/constants.hpp"  // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZ...
+#include "maths/geometry/point.tpp"  // for Point::Point<Type>, Point::is_i...
+#include "maths/vector2.tpp"         // for operator+, Vector2::Vector2<Type>
+#include "tools/assertion.hpp"       // for ASSERTION
 
 namespace tile
 {

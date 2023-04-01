@@ -1,5 +1,6 @@
 #include "color.hpp"
 
+#include "SFML/Graphics/Color.hpp"   // for Color
 #include "graphics2D/constants.hpp"  // for COLOR_RANGE
 #include "tools/assertion.hpp"       // for ASSERTION
 

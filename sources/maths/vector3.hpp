@@ -3,7 +3,7 @@
 #include <cmath>
 #include <ostream>
 
-#include <GLM/vec3.hpp>
+#include <glm/vec3.hpp>
 
 #include "maths/matrix.hpp"
 #include "maths/trigonometry.hpp"

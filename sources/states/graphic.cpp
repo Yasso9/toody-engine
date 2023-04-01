@@ -2,7 +2,7 @@
 
 #include <algorithm>  // for max
 
-#include <GLM/ext/vector_float3.hpp>  // for vec3
+#include <glm/ext/vector_float3.hpp>  // for vec3
 
 #include "components/component.hpp"  // for Component::add_childs
 #include "graphics2D/sfml.hpp"

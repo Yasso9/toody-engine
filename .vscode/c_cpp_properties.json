@@ -5,12 +5,12 @@
             "includePath": [
                 "${default}",
                 "${workspaceRoot}/sources/",
-                "${workspaceRoot}/libHeaders/"
+                "${workspaceRoot}/submodules/includes/"
             ],
             "cStandard": "c17",
             "cppStandard": "c++20",
             "compilerPath": "/usr/bin/g++",
-            "intelliSenseMode": "linux-gcc-x64"
+            "intelliSenseMode": "${default}"
         }
     ],
     "version": 4

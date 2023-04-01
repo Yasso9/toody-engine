@@ -5,9 +5,9 @@
 #include <string>     // for allocator, string, basic_s...
 #include <vector>     // for vector
 
-#include <IMGUI/imgui.h>                   // for InputFloat, Begin, Checkbox
 #include <SFML/Graphics/Color.hpp>         // for Color, Color::Red
 #include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
+#include <imgui/imgui.h>                   // for InputFloat, Begin, Checkbox
 
 #include "components/contexts.hpp"       // for RenderContext
 #include "libraries/imgui.hpp"           // for P_ColorEditor, P_Begin
@@ -69,8 +69,9 @@ StaticEntity2D::StaticEntity2D( math::PolygonF polygon )
 }
 
 StaticEntity2D::StaticEntity2D( sf::Texture const & texture )
-  : StaticEntity2D { math::PolygonF { math::RectangleF {
-      math::PointF { 0.f, 0.f }, math::Vector2F { texture.getSize() } } } }
+  : StaticEntity2D { math::PolygonF {
+      math::RectangleF { math::PointF { 0.f, 0.f },
+                         math::Vector2U { texture.getSize() }.to_float() } } }
 {
     this->setTexture( &texture );
 }

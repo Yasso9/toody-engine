@@ -3,7 +3,7 @@
 #include <cstdlib>    // for NULL
 #include <stdexcept>  // for runtime_error
 
-#include <GLAD/glad.h>  // for glAttachShader, glDeleteShader, GL_COMPIL...
+#include <glad/glad.h>  // for glAttachShader, glDeleteShader, GL_COMPIL...
 
 #include "tools/tools.hpp"  // for read_file
 

@@ -62,3 +62,19 @@ Test the code with cpp checker
 Réarenger les fichier dans la racine du projet pour qu'on en ai le moins possible
 
 Add Google Test to the project
+
+git submodule update --init --recursive
+
+- library format
+- utiliser CMake
+- Revoir input.cpp
+- descriptor de settings dispo dans tt le programme
+- avoir des subdirectories pour assimp, sfml, glm, etc ...
+
+
+git submodule add https://github.com/fmtlib/fmt.git submodules/fmt
+
+git submodule update --init --recursive
+
+cd deps/tinyxml2
+git checkout 6.2.0

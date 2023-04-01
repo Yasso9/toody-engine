@@ -3,7 +3,7 @@
 #include <iostream>
 #include <utility>
 
-#include <IMGUI/imgui.h>
+#include <imgui/imgui.h>
 
 #include "graphics2D/sfml.hpp"
 #include "tools/concepts.hpp"

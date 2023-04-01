@@ -3,9 +3,9 @@
 #include <stdexcept>  // for runtime_error
 #include <string>     // for allocator, string, operator+
 
-#include <GLM/detail/type_vec3.hpp>  // for vec<>::(anonymous)
 #include <SFML/Graphics/Color.hpp>   // for Color
 #include <SFML/Window/Context.hpp>   // for Context
+#include <glm/detail/type_vec3.hpp>  // for vec<>::(anonymous)
 
 #include "tools/traces.hpp"
 

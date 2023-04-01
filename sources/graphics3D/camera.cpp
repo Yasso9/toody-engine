@@ -2,11 +2,11 @@
 
 #include <string>  // for allocator
 
-#include <GLM/detail/type_vec3.hpp>      // for vec<>::(anonymous), vec
-#include <GLM/ext/matrix_float4x4.hpp>   // for mat4
-#include <GLM/glm.hpp>                   // for radians
-#include <GLM/gtc/matrix_transform.hpp>  // for perspective
 #include <SFML/Window/Keyboard.hpp>      // for Keyboard, Keyboard::B, Keyb...
+#include <glm/detail/type_vec3.hpp>      // for vec<>::(anonymous), vec
+#include <glm/ext/matrix_float4x4.hpp>   // for mat4
+#include <glm/glm.hpp>                   // for radians
+#include <glm/gtc/matrix_transform.hpp>  // for perspective
 
 #include "interface/window.hpp"  // for Window
 #include "libraries/imgui.hpp"

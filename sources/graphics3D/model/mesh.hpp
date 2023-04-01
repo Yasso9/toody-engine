@@ -4,10 +4,10 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
-#include <GLM/detail/type_vec2.hpp>   // for vec
-#include <GLM/detail/type_vec3.hpp>   // for vec
-#include <GLM/ext/vector_float2.hpp>  // for vec2
-#include <GLM/ext/vector_float3.hpp>  // for vec3
+#include <glm/detail/type_vec2.hpp>   // for vec
+#include <glm/detail/type_vec3.hpp>   // for vec
+#include <glm/ext/vector_float2.hpp>  // for vec2
+#include <glm/ext/vector_float3.hpp>  // for vec3
 
 class Texture;
 

@@ -2,8 +2,8 @@
 
 #include <stdint.h>  // for intptr_t
 
-#include <GLAD/glad.h>               // for GL_ARRAY_BUFFER, GL_ELEMENT_ARRA...
 #include <SFML/Graphics/Shader.hpp>  // for Shader
+#include <glad/glad.h>               // for GL_ARRAY_BUFFER, GL_ELEMENT_ARRA...
 
 #include "graphics3D/openGL.hpp"   // for draw_elements
 #include "graphics3D/texture.hpp"  // for Texture, Texture::E_Type, Textur...

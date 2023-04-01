@@ -1,7 +1,7 @@
 #include "state.hpp"
 
-#include <IMGUI/imgui-SFML.h>     // for Update, ProcessEvent
 #include <SFML/Window/Event.hpp>  // for Event, Event::Closed, Event::...
+#include <imgui/imgui-SFML.h>     // for Update, ProcessEvent
 
 #include "game/game.hpp"          // for GameContext
 #include "graphics3D/openGL.hpp"  // for check_error

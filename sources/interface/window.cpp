@@ -3,12 +3,12 @@
 #include <iostream>  // for operator<<, endl, basic_o...
 #include <string>    // for allocator, string
 
-#include <IMGUI/imgui-SFML.h>               // for Init, ProcessEvent, Render
 #include <SFML/Graphics/Shader.hpp>         // for Shader
 #include <SFML/System/Vector2.hpp>          // for Vector2u
 #include <SFML/Window/ContextSettings.hpp>  // for ContextSettings
 #include <SFML/Window/Mouse.hpp>            // for Mouse
 #include <SFML/Window/WindowStyle.hpp>      // for Default
+#include <imgui/imgui-SFML.h>               // for Init, ProcessEvent, Render
 
 #include "game/settings.hpp"         // for Settings
 #include "graphics3D/openGL.hpp"     // for clear_window, initialize
@@ -63,10 +63,7 @@ Window::Window( std::string const & title )
     }
 
     {  // ImGui Configuration
-        if ( ! ImGui::SFML::Init( *this ) )
-        {
-            Trace::Error( "Cannot init ImGui" );
-        }
+        ImGui::SFML::Init( *this );
 
         // To disable the use of imgui.ini file
         // ImGui::GetIO().IniFilename = nullptr;
@@ -100,8 +97,8 @@ bool Window::is_hovered() const
 {
     math::PointI const mousePosition { sf::Mouse::getPosition( *this ) };
 
-    return mousePosition.is_inside( math::PointI { 0, 0 },
-                                    math::Vector2I { this->getSize() } );
+    return mousePosition.is_inside(
+        math::PointI { 0, 0 }, math::Vector2U { this->getSize() }.to_int() );
 }
 
 bool Window::has_absolute_focus() const

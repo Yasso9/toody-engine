@@ -4,8 +4,8 @@
 #include <stdint.h>    // for uint32_t
 #include <string>      // for string
 
-#include <IMGUI/imgui.h>            // for ImGuiColorEditFlags, ImGuiInputTe...
 #include <SFML/Graphics/Color.hpp>  // for Color
+#include <imgui/imgui.h>            // for ImGuiColorEditFlags, ImGuiInputTe...
 
 #include "maths/vector3.hpp"
 

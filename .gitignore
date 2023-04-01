@@ -1,5 +1,7 @@
 # Build related
 build
+CMakeFiles
+CMakeCache.txt
 
 # Application related
 imgui.ini

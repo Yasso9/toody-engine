@@ -3,10 +3,10 @@
 #include <sstream>  // for operator<<, basic_ostream, stri...
 #include <string>   // for char_traits, allocator, basic_s...
 
-#include <IMGUI/imgui-SFML.h>       // for Image
-#include <IMGUI/imgui.h>            // for GetWindowDrawList, IsWindowHovered
 #include <SFML/Graphics/Color.hpp>  // for Color
 #include <SFML/Window/Mouse.hpp>    // for Mouse, Mouse::Button, Mouse::Left
+#include <imgui/imgui-SFML.h>       // for Image
+#include <imgui/imgui.h>            // for GetWindowDrawList, IsWindowHovered
 
 #include "game/resources.hpp"        // for get_texture
 #include "graphics2D/constants.hpp"  // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZE_U
