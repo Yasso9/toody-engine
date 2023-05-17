@@ -34,8 +34,8 @@ namespace tile
                                            Table &        table );  // override
 
       private:
-        using Array2D< Tile >::get_size;
-        using Array2D< Tile >::set_size;
+        using Array2D< Tile >::size;
+        using Array2D< Tile >::resize;
 
         /// @brief Update all the tiles position as they should be
         void update_tiles_position ();

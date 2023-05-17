@@ -34,13 +34,13 @@ namespace tile
 
     tile::Size Table::get_size() const
     {
-        return tile::Size { this->Array2D< Tile >::get_size(),
+        return tile::Size { this->Array2D< Tile >::size(),
                             tile::Size::Tile };
     }
 
     void Table::set_size( tile::Size size )
     {
-        this->Array2D< Tile >::set_size( size.tile() );
+        this->Array2D< Tile >::resize( size.tile() );
 
         // If new tiles are added, we update there positions
         this->update_tiles_position();
