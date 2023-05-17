@@ -23,16 +23,16 @@ class Array2D
     math::Vector2U size () const;
     void           resize ( math::Vector2U size, T defaultValue = T {} );
 
-    std::vector< T > const & get_raw_array () const;
+    std::vector< T > const & raw_array () const;
     T const & operator() ( unsigned int col, unsigned int row ) const;
     T &       operator() ( unsigned int col, unsigned int row );
 
-    std::vector< T > const operator[] ( unsigned int row ) const;
-    std::vector< T > const get_row ( unsigned int row ) const;
-    std::vector< T > const get_col ( unsigned int col ) const;
+    // std::vector< T > const operator[] ( unsigned int row ) const;
+    // std::vector< T > const get_row ( unsigned int row ) const;
+    // std::vector< T > const get_col ( unsigned int col ) const;
 
     math::Vector2U get_position ( unsigned int index ) const;
-    unsigned int   get_index ( unsigned int column, unsigned int line ) const;
+    unsigned int   get_index ( unsigned int col, unsigned int row ) const;
     unsigned int   get_last_index () const;
 
     template< typename T2 >

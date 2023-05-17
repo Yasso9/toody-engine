@@ -15,7 +15,7 @@ Array2D< T >::Array2D( std::vector< T > const & array, math::Vector2U size )
 {
     if ( array.size() != size.x * size.y )
     {
-        std::cerr << "Size and Array not comptatible" << std::endl;
+        Trace::Warning( "Size and Array not comptatible" );
     }
 }
 
@@ -49,106 +49,59 @@ math::Vector2U Array2D< T >::size() const
 }
 
 template< typename T >
-void Array2D< T >::set_size( math::Vector2U size, T defaultValue )
+void Array2D< T >::resize( math::Vector2U size, T defaultValue )
 {
-    // Changment in lines, we add element in columns
-    if ( m_size.y < size.y )
+    std::vector< T > newArray {};
+    newArray.assign( size.x * size.y, defaultValue );
+
+    unsigned int minRows = std::min( m_size.y, size.y );
+    unsigned int minCols = std::min( m_size.x, size.x );
+    for ( unsigned int i = 0u; i < minCols; ++i )
     {
-        // Differences between the 2 sizes
-        unsigned int diff = size.y - m_size.y;
-
-        // We add lines at the end of the array so we can just append a vector
-        // of the desized size
-        std::vector< T > newVector {};
-        newVector.assign( diff * m_size.x, defaultValue );
-
-        vector::append( m_array2D, newVector );
-
-        // Update the size
-        m_size.y = size.y;
-    }
-    else if ( m_size.y > size.y )
-    {
-        m_size.y = size.y;
-
-        // We remove lines at the end of the array so we erase element to the
-        // specified index
-        m_array2D.erase( m_array2D.begin() + this->get_last_index() + 1,
-                         m_array2D.end() );
-    }
-
-    // Changment in columns, we add element in lines
-    if ( m_size.x < size.x )
-    {
-        // Number of element to add in each lines
-        unsigned int diff = size.x - m_size.x;
-
-        for ( unsigned int index = m_size.x; index <= size.x * m_size.y;
-              index += size.x )
+        for ( unsigned int j = 0u; j < minRows; ++j )
         {
-            m_array2D.insert( m_array2D.begin() + index, diff, defaultValue );
-        }
-    }
-    else if ( m_size.x > size.x )
-    {
-        int diff = static_cast< int >( m_size.x - size.x );
-
-        for ( int index = static_cast< int >( this->get_last_index() ) + 1;
-              index >= diff; index -= static_cast< int >( m_size.x ) )
-        {
-            m_array2D.erase( m_array2D.begin() + index - diff,
-                             m_array2D.begin() + index );
+            newArray[j * size.x + i] = m_array2D[j * m_size.x + i];
         }
     }
 
-    m_size.x = size.x;
-
-    if ( m_size.x * m_size.y != m_array2D.size() )
-    {
-        std::cerr << "Size " << m_size
-                  << " isn't comptatible with an vector of size "
-                  << m_array2D.size() << std::endl;
-    }
+    m_size    = size;
+    m_array2D = std::move( newArray );
 }
 
 template< typename T >
-std::vector< T > const & Array2D< T >::get_raw_array() const
+std::vector< T > const & Array2D< T >::raw_array() const
 {
     return m_array2D;
 }
 
 template< typename T >
-std::vector< T > const Array2D< T >::operator[] ( unsigned int line ) const
+T const & Array2D< T >::operator() ( unsigned int col, unsigned int row ) const
 {
-    if ( line >= m_size.y )
-    {
-        std::cerr << "Line " << line << " out of range for 2D array of size "
-                  << m_size << std::endl;
-        return {};
-    }
-
-    return vector::extract( m_array2D, line * m_size.x,
-                            line * ( m_size.x + 1 ) );
+    return const_cast< Array2D< T > * >( this )->operator() ( col, row );
 }
 
 template< typename T >
-T const & Array2D< T >::get_element( unsigned int column,
-                                     unsigned int line ) const
+T & Array2D< T >::operator() ( unsigned int col, unsigned int row )
 {
-    return const_cast< Array2D< T > * >( this )->get_element( column, line );
-}
-
-template< typename T >
-T & Array2D< T >::get_element( unsigned int column, unsigned int line )
-{
-    if ( column >= m_size.x || line >= m_size.y )
+    if ( col >= m_size.x || row >= m_size.y )
     {
-        std::cerr << "Element " << math::Vector2 { column, line }
-                  << " too big for array of size " << m_size << std::endl;
+        Trace::Error( "Out of range" );
     }
 
-    return m_array2D[this->get_index( column, line )];
+    return m_array2D[this->get_index( col, row )];
 }
+
+// template< typename T >
+// std::vector< T > const Array2D< T >::operator[] ( unsigned int line ) const
+// {
+//     if ( line >= m_size.y )
+//     {
+//         Trace::Error( "Line  out of range for 2D array of size " );
+//     }
+
+// return vector::extract( m_array2D, line * m_size.x,
+//                         line * ( m_size.x + 1 ) );
+// }
 
 template< typename T >
 math::Vector2U Array2D< T >::get_position( unsigned int index ) const
@@ -158,10 +111,9 @@ math::Vector2U Array2D< T >::get_position( unsigned int index ) const
 }
 
 template< typename T >
-unsigned int Array2D< T >::get_index( unsigned int column,
-                                      unsigned int line ) const
+unsigned int Array2D< T >::get_index( unsigned int col, unsigned int row ) const
 {
-    return column + line * m_size.x;
+    return col + row * m_size.x;
 }
 
 template< typename T >

@@ -220,8 +220,7 @@ namespace tile
                                 std::stringstream buttonStream {};
                                 buttonStream
                                     << math::Vector2 { column, line } << " | "
-                                    << m_table.get_element( column, line )
-                                           .get_value();
+                                    << m_table( column, line ).get_value();
 
                                 if ( ImGui::Button(
                                          buttonStream.str().c_str() ) )
@@ -232,8 +231,7 @@ namespace tile
                                         << "{ " << column << " - " << line
                                         << " } Informations :"
                                         << "\n"
-                                        << m_table.get_element( column, line )
-                                               .get_debug()
+                                        << m_table( column, line ).get_debug()
                                         << "\n";
                                 }
                             }
@@ -336,7 +334,6 @@ namespace tile
                       << std::endl;
         }
 
-        m_table.get_element( position.tile().x, position.tile().y )
-            .set_value( value );
+        m_table( position.tile().x, position.tile().y ).set_value( value );
     }
 }  // namespace tile

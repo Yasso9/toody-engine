@@ -1,7 +1,7 @@
 #include "window.hpp"
 
-#include <iostream>  // for operator<<, endl, basic_o...
-#include <string>    // for allocator, string
+#include <iostream>                         // for operator<<, endl, basic_o...
+#include <string>                           // for allocator, string
 
 #include <SFML/Graphics/Shader.hpp>         // for Shader
 #include <SFML/System/Vector2.hpp>          // for Vector2u
@@ -10,13 +10,13 @@
 #include <SFML/Window/WindowStyle.hpp>      // for Default
 #include <imgui/imgui-SFML.h>               // for Init, ProcessEvent, Render
 
-#include "game/settings.hpp"         // for Settings
-#include "graphics3D/openGL.hpp"     // for clear_window, initialize
-#include "maths/geometry/point.hpp"  // for PointI
-#include "maths/geometry/point.tpp"  // for Point::Point<Type>, Point...
-#include "maths/vector2.tpp"         // for Vector2::Vector2<Type>
-#include "tools/singleton.tpp"       // for Singleton::get_instance
-#include "tools/traces.hpp"          // for Trace
+#include "game/settings.hpp"                // for Settings
+#include "graphics3D/openGL.hpp"            // for clear_window, initialize
+#include "maths/geometry/point.hpp"         // for PointI
+#include "maths/geometry/point.tpp"         // for Point::Point<Type>, Point...
+#include "maths/vector2.tpp"                // for Vector2::Vector2<Type>
+#include "tools/singleton.tpp"              // for Singleton::get_instance
+#include "tools/traces.hpp"                 // for Trace
 
 namespace sf
 {
@@ -63,7 +63,10 @@ Window::Window( std::string const & title )
     }
 
     {  // ImGui Configuration
-        ImGui::SFML::Init( *this );
+        if ( ! ImGui::SFML::Init( *this ) )
+        {
+            Trace::Error( "ImGui initialization failed" );
+        }
 
         // To disable the use of imgui.ini file
         // ImGui::GetIO().IniFilename = nullptr;
