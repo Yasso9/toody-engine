@@ -1,14 +1,14 @@
 [*]
 charset = utf-8
-end_of_line = crlf
+end_of_line = lf
 trim_trailing_whitespace = true
 indent_size = 4
-
-[*.{cpp,hpp,json,imp}]
 indent_style = space
+
+[*.{cpp,hpp,tpp}]
+insert_final_newline = true
 
 [.clang-format]
-indent_style = space
 indent_size = 2
 
 [Makefile]

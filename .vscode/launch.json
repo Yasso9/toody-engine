@@ -8,17 +8,18 @@
             "name": "Debug Program",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/application",
+            "program": "${workspaceRoot}/app.out",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [
                 {
                     "name": "LD_LIBRARY_PATH",
-                    "value": "${workspaceFolder}/build/shared_object",
+                    "value": "${workspaceFolder}/build/libs/",
                 }
             ],
-            "externalConsole": true,
+            "externalConsole": false,
+            "MIMode": "gdb",
             // "setupCommands": [
             //     {
             //         "description": "Enable pretty-printing for gdb",

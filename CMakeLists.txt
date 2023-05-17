@@ -1,80 +1,65 @@
-# Setting the minimum version of CMake
-cmake_minimum_required(VERSION 3.7...3.26)
+cmake_minimum_required(VERSION 3.10...3.26)
 if(${CMAKE_VERSION} VERSION_LESS 3.12)
     cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif()
 
-project(ToodyEngine VERSION 0.1
-                    DESCRIPTION "C++ Game Engine"
-                    LANGUAGES CXX)
 
-option(MY_OPTION "This is settable from the command line" OFF)
 
-set(SOURCES
-    src/Hello.cpp
-    src/main.cpp
+##################### Project Setup #####################
+
+project(ToodyEngine DESCRIPTION "C++ Game Engine"
+                    LANGUAGES C CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(SUBMODULES_DIR "${PROJECT_SOURCE_DIR}/submodules")
+
+set(SRC_DIR "${PROJECT_SOURCE_DIR}/sources")
+file(GLOB_RECURSE SOURCES "${SRC_DIR}/*.cpp" "${SRC_DIR}/*.hpp")
+
+
+
+##################### Submodules #####################
+
+find_package(Boost REQUIRED)
+add_subdirectory(${SUBMODULES_DIR}/fmt)
+add_subdirectory(${SUBMODULES_DIR}/SFML)
+add_subdirectory(${SUBMODULES_DIR}/assimp)
+add_subdirectory(${SUBMODULES_DIR}/glm)
+# add_subdirectory(${SUBMODULES_DIR}/imgui-sfml)
+
+add_library(glad STATIC ${SUBMODULES_DIR}/glad/glad.c)
+target_include_directories(glad PUBLIC ${SUBMODULES_DIR}/includes/glad)
+add_library(imgui STATIC
+	${SUBMODULES_DIR}/imgui/imgui.cpp
+	${SUBMODULES_DIR}/imgui/imgui.h
+	${SUBMODULES_DIR}/imgui/imstb_rectpack.h
+	${SUBMODULES_DIR}/imgui/imstb_textedit.h
+	${SUBMODULES_DIR}/imgui/imstb_truetype.h
+    ${SUBMODULES_DIR}/imgui/imgui_demo.cpp
+    ${SUBMODULES_DIR}/imgui/imgui_draw.cpp
+    ${SUBMODULES_DIR}/imgui/imgui_internal.h
+    ${SUBMODULES_DIR}/imgui/imgui_tables.cpp
+    ${SUBMODULES_DIR}/imgui/imgui_widgets.cpp
+    ${SUBMODULES_DIR}/imgui/backends/imgui_impl_opengl3.cpp
+    ${SUBMODULES_DIR}/imgui/misc/cpp/imgui_stdlib.h
+    ${SUBMODULES_DIR}/imgui/misc/cpp/imgui_stdlib.cpp
+)
+target_include_directories(imgui PUBLIC
+    ${SUBMODULES_DIR}/includes/imgui/
 )
 
-# Set SOURCES recursivly to cpp files inside sources folder without using GLOB_RECURSE
-# file(GLOB_RECURSE SOURCES "sources/*.cpp")
 
 
-add_library(glad STATIC
-    ${PROJECT_SOURCE_DIR}/libHeaders/GLAD/glad.c
+##################### target #####################
+
+add_executable(ToodyEngine ${SOURCES} ${TPP_FILES})
+
+target_compile_options(ToodyEngine PRIVATE -Wall -Wextra -Wpedantic)
+target_link_libraries(ToodyEngine PRIVATE fmt SFML assimp glm glad imgui-sfml imgui)
+
+target_include_directories(ToodyEngine PRIVATE
+    ${Boost_INCLUDE_DIRS}
+    ${SUBMODULES_DIR}/includes
+    ${PROJECT_SOURCE_DIR}/sources
 )
-target_include_directories(glad
-    PUBLIC
-        ${PROJECT_SOURCE_DIR}/libHeaders/GLAD/
-)
-
-
-# add_library(application STATIC two.cpp three.h)
-# add_library(calclib STATIC src/calclib.cpp include/calc/lib.hpp)
-# target_include_directories(calclib PUBLIC include)
-# target_compile_features(calclib PUBLIC cxx_std_11)
-
-add_executable(application $(SOURCES))
-
-target_link_libraries(application
-    PRIVATE
-        ${PROJECT_SOURCE_DIR}/sources
-        glad)
-# set(CMAKE_CXX_STANDARD 20)
-
-# set(BUILD_DIR ${CMAKE_BINARY_DIR}/build)
-
-# message(STATUS "CXX Standard: ${CMAKE_CXX_STANDARD}")
-
-# # Add all cpp files located in the "src" directory and its subdirectories
-# file(GLOB_RECURSE SOURCES "src/*.cpp")
-
-# message(DEBUG "Sources: ${SOURCES}")
-
-# # Find the SFML library
-# # find_package(SFML 2.5.1 REQUIRED)
-# include(ExternalProject)
-#     ExternalProject_Add(SFML
-#         GIT_REPOSITORY    https://github.com/SFML/SFML.git
-#         GIT_TAG           master
-#         CMAKE_ARGS        -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/SFML-install
-#                             -DSFML_BUILD_EXAMPLES=OFF
-#                             -DSFML_BUILD_TESTS=OFF
-#                             -DSFML_BUILD_DOC=OFF
-#         PREFIX            ${BUILD_DIR}/SFML-prefix
-#         SOURCE_DIR        ${BUILD_DIR}/SFML-src
-#         BINARY_DIR        ${BUILD_DIR}/SFML-build
-#         INSTALL_DIR       ${BUILD_DIR}/SFML-install
-# )
-# include_directories(${BUILD_DIR}/SFML-install/include)
-# link_directories(${BUILD_DIR}/SFML-install/lib)
-# set(SFML_LIBRARIES sfml-graphics sfml-window sfml-system)
-
-
-# # Add the executable target
-# add_executable(toody-engine ${SOURCES})
-
-# # Link the SFML library to the target
-# target_link_libraries(toody-engine ${SFML_LIBRARIES})
-
-# cmake -S . -B build
-# # cmake --build build
