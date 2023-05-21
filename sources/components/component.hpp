@@ -31,23 +31,18 @@ class Component
     Component & operator= ( Component && component ) noexcept;
 
   protected:
-    template< cComponent C >
-    void add_child ( C * component );
-    template< cComponent C >
-    void add_child ( C & component );
-    template< cComponent C >
-    void add_child ( C & component, View const & view );
-    template< cComponent C >
-    void add_childs ( std::vector< C > & components );
-    template< cComponent C >
-    void remove_child ( C * component );
-    template< cComponent C >
-    void remove_child ( C & component );
+    void add_child ( Component & component );
+    void add_child ( Component & component, View const & view );
+    void add_child ( Component * component );
+    // Difficult to implement
+    // void add_childs ( std::vector< Component > & components );
+    // template< cComponent C >
+    // void add_childs( std::vector< C > & components );
 
-    void add_debug_window ( DebugWindow & debugWindow )
-    {
-        m_debugWindows.push_back( &debugWindow );
-    }
+    void remove_child ( Component * component );
+    void remove_child ( Component & component );
+
+    void add_debug_window ( DebugWindow & debugWindow );
 
   public:
     std::vector< Component const * > get_childs () const;
@@ -75,5 +70,3 @@ class Component
     // custom render - called after children render
     virtual void render_after ( RenderContext & context ) const;
 };
-
-#include "component.tpp"

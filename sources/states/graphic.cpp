@@ -9,7 +9,6 @@
 #include "interface/window.hpp"
 #include "libraries/imgui.hpp"
 
-
 static Shape::S_Data SAMPLE_DATA_A {
     { // positions          // colors         // texture coords   // normals
       -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f,  -0.5f, -0.5f, 1.0f, 0.0f,
@@ -57,8 +56,14 @@ GraphicState::GraphicState()
     m_models {}
 {
     this->add_child( m_camera );
-    this->add_childs( m_shapes );
-    this->add_childs( m_models );
+    for ( Shape & shape : m_shapes )
+    {
+        this->add_child( shape );
+    }
+    for ( Model & model : m_models )
+    {
+        this->add_child( model );
+    }
 
     for ( Shape & shape : m_shapes )
     {

@@ -30,6 +30,55 @@ Component & Component::operator= ( Component && component ) noexcept
     return *this;
 }
 
+void Component::add_child( Component & component )
+{
+    this->add_child( &component );
+}
+
+void Component::add_child( Component & component, View const & view )
+{
+    component.set_view( view );
+    this->add_child( component );
+}
+
+void Component::add_child( Component * component )
+{
+    m_childs.push_back( component );
+}
+
+// void Component::add_childs( std::vector< Component > & components )
+// {
+//     for ( Component & component : components )
+//     {
+//         this->add_child( component );
+//     }
+// }
+
+// template< cComponent C >
+// void Component::add_childs( std::vector< C > & components )
+// {
+//     for ( C & component : components )
+//     {
+//         this->add_child( component );
+//     }
+// }
+
+void Component::remove_child( Component * component )
+{
+    m_childs.erase( std::remove( m_childs.begin(), m_childs.end(), component ),
+                    m_childs.end() );
+}
+
+void Component::remove_child( Component & component )
+{
+    this->remove_child( &component );
+}
+
+void Component::add_debug_window( DebugWindow & debugWindow )
+{
+    m_debugWindows.push_back( &debugWindow );
+}
+
 std::vector< Component const * > Component::get_childs() const
 {
     std::vector< Component const * > childs {};
@@ -42,12 +91,13 @@ std::vector< Component const * > Component::get_childs() const
 
 std::vector< Component * > Component::get_childs()
 {
-    std::vector< Component * > childs {};
-    for ( Component * component : m_childs )
-    {
-        childs.push_back( component );
-    }
-    return childs;
+    // std::vector< Component * > childs {};
+    // for ( Component * component : m_childs )
+    // {
+    //     childs.push_back( component );
+    // }
+    // return childs;
+    return m_childs;
 }
 
 void Component::update_all( UpdateContext & context )

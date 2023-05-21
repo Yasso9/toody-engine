@@ -6,7 +6,10 @@ CollisionList::CollisionList(
     std::vector< StaticEntity2D > const & entityArray )
   : m_collisionArray { entityArray }
 {
-    this->add_childs( m_collisionArray );
+    for ( StaticEntity2D & entity : m_collisionArray )
+    {
+        this->add_child( entity );
+    }
 }
 
 std::vector< StaticEntity2D > const & CollisionList::get_entities() const
