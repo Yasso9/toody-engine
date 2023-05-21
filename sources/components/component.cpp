@@ -3,14 +3,17 @@
 #include "contexts/render_context.hpp"  // for RenderContext
 #include "contexts/update_context.hpp"  // for UpdateContext
 
-Component::Component() : m_childs {}, m_view { nullptr } {};
+Component::Component() : m_childs {}, m_debugWindows {}, m_view { nullptr } {};
 
 Component::Component( Component const & component ) noexcept
-  : m_childs { component.m_childs }, m_view { component.m_view }
+  : m_childs { component.m_childs },
+    m_debugWindows { component.m_debugWindows },
+    m_view { component.m_view }
 {}
 
 Component::Component( Component && component ) noexcept
   : m_childs { std::exchange( component.m_childs, {} ) },
+    m_debugWindows { std::exchange( component.m_debugWindows, {} ) },
     m_view { std::exchange( component.m_view, {} ) }
 {}
 
@@ -22,6 +25,7 @@ Component & Component::operator= ( Component const & component ) noexcept
 Component & Component::operator= ( Component && component ) noexcept
 {
     std::swap( m_childs, component.m_childs );
+    std::swap( m_debugWindows, component.m_debugWindows );
     std::swap( m_view, component.m_view );
     return *this;
 }
@@ -51,6 +55,16 @@ void Component::update_all( UpdateContext & context )
     this->update_before( context );
 
     this->update( context );
+
+    for ( DebugWindow * debugWindow : m_debugWindows )
+    {
+        // TODO : voir si on fait cette vérification ici ou dans la classe
+        // if ( ! debugWindow->is_showed() )
+        // {
+        //     continue;
+        // }
+        debugWindow->update_debug();
+    }
 
     for ( Component * component : this->get_childs() )
     {

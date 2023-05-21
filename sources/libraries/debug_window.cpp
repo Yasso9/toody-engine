@@ -6,17 +6,17 @@ DebugWindow::DebugWindow( std::string const & windowName )
   : m_windowName { windowName }, m_show { false }
 {}
 
-void DebugWindow::show()
+void DebugWindow::show_debug()
 {
     m_show = true;
 }
 
-void DebugWindow::hide()
+void DebugWindow::hide_debug()
 {
     m_show = false;
 }
 
-void DebugWindow::update()
+void DebugWindow::update_debug()
 {
     if ( ! m_show )
     {
@@ -25,9 +25,9 @@ void DebugWindow::update()
 
     if ( ImGui::Begin( m_windowName.c_str(), &m_show ) )
     {
-        this->show_when_enabled();
+        this->debug_window_content();
     }
     ImGui::End();
 }
 
-void DebugWindow::show_when_enabled() {};
+void DebugWindow::debug_window_content() {};

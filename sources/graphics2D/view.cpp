@@ -47,7 +47,7 @@ void View::set_zoom( float newZoom, math::Vector2F windowSize )
     }
 
     m_sfView.setSize( windowSize / newZoom );
-    this->add_text( "Zoom : {}", newZoom );
+    this->add_debug_text( "Zoom : {}", newZoom );
 }
 
 void View::set_zoom( float newZoom, Window const & window )
@@ -58,7 +58,7 @@ void View::set_zoom( float newZoom, Window const & window )
 void View::zoom( float factor, math::Vector2F windowSize )
 {
     m_sfView.zoom( 1.f - factor );
-    this->add_text( "Zoom : ", 1.f - factor );
+    this->add_debug_text( "Zoom : ", 1.f - factor );
 
     if ( this->get_zoom( windowSize ).get_max() > m_zoomMax )
     {
@@ -110,7 +110,7 @@ bool View::contain( math::PointF point ) const
     return point.is_inside( this->get_rectangle() );
 }
 
-void View::show_when_enabled()
+void View::debug_window_content()
 {
     ImGui::TextFmt( "View Position : {}", this->get_position().to_vector() );
     ImGui::TextFmt( "View Size : {}", this->get_size() );

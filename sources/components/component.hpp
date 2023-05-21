@@ -4,7 +4,8 @@
 
 #include "contexts/render_context.hpp"  // for RenderContext
 #include "contexts/update_context.hpp"  // for UpdateContext
-#include "graphics2D/view.hpp"  // for View
+#include "graphics2D/view.hpp"          // for View
+#include "libraries/debug_window.hpp"   // for DebugWindow
 
 class Component;
 // check if T is derived from Component
@@ -13,9 +14,10 @@ template< typename T > concept cComponent = std::derived_from< T, Component >;
 class Component
 {
   private:
-    std::vector< Component * > m_childs;
+    std::vector< Component * >   m_childs;
+    std::vector< DebugWindow * > m_debugWindows;
     // optionnal references so we use a pointer
-    View const *               m_view;
+    View const *                 m_view;
 
   protected:
     Component();
@@ -41,6 +43,11 @@ class Component
     void remove_child ( C * component );
     template< cComponent C >
     void remove_child ( C & component );
+
+    void add_debug_window ( DebugWindow & debugWindow )
+    {
+        m_debugWindows.push_back( &debugWindow );
+    }
 
   public:
     std::vector< Component const * > get_childs () const;

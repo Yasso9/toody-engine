@@ -21,7 +21,7 @@ struct ViewSettings
     ViewSettings()          = default;
     virtual ~ViewSettings() = default;
 
-    void edit ()
+    void sliders ()
     {
         ImGui::SliderFloat( "View Movement Speed", &moveSpeed, 0.f, 50.f,
                             "%.0f" );
@@ -37,9 +37,10 @@ class EditorState : public State
     View         m_view;
     ViewSettings m_viewSettings;
 
+    // TODO remove that data member
     std::map< std::string, bool > m_showWindow;
     bool                          m_showDemoWindow;
-    bool                          m_showViewWindow;
+    bool                          m_showOverlayWindow;
 
     tile::Map m_tilemap;
     ImageMap  m_imageMap;
@@ -60,4 +61,5 @@ class EditorState : public State
 
     void update_toolbar ( UpdateContext & context );
     void update_view ( UpdateContext & context );
+    void update_overlay ( UpdateContext & context );
 };
