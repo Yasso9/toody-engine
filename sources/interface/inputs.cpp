@@ -1,8 +1,11 @@
 #include "inputs.hpp"
 
+#include "graphics2D/view.hpp"  // for View
+
 // Define all the Inputs class
-Inputs::Inputs()
-  : m_mouseButtonsPressed {},
+Inputs::Inputs( Window & window )
+  : m_window { window },
+    m_mouseButtonsPressed {},
     m_mouseButtonsReleased {},
     m_keyPressed {},
     m_keyReleased {},
@@ -27,13 +30,10 @@ void Inputs::update( sf::Event event )
         m_windowClosed = true;
         break;
     case sf::Event::MouseMoved :
-        m_mouseMovement =
-            math::Vector2I { event.mouseMove.x, event.mouseMove.y }.to_float();
+        m_mouseMovement = { event.mouseMove.x, event.mouseMove.y };
         break;
     case sf::Event::MouseWheelScrolled :
-        m_mouseScroll = math::Vector2I { event.mouseWheelScroll.x,
-                                         event.mouseWheelScroll.y }
-                            .to_float();
+        m_mouseScroll = { event.mouseWheelScroll.x, event.mouseWheelScroll.y };
         break;
     case sf::Event::MouseEntered :
         m_mouseEnteredWindow = true;
@@ -76,8 +76,8 @@ void Inputs::clear()
     m_mouseButtonsReleased.clear();
     m_keyPressed.clear();
     m_keyReleased.clear();
-    m_mouseMovement      = math::Vector2F { 0.0f, 0.0f };
-    m_mouseScroll        = math::Vector2F { 0.0f, 0.0f };
+    m_mouseMovement      = { 0, 0 };
+    m_mouseScroll        = { 0, 0 };
     m_mouseEnteredWindow = false;
     m_mouseLeftWindow    = false;
     m_focusGained        = false;
@@ -113,12 +113,12 @@ bool Inputs::is_released( sf::Keyboard::Key key ) const
            != m_keyReleased.end();
 }
 
-math::Vector2F Inputs::get_mouse_movement() const
+math::Vector2I Inputs::get_mouse_movement() const
 {
     return m_mouseMovement;
 }
 
-math::Vector2F Inputs::get_mouse_scroll() const
+math::Vector2I Inputs::get_mouse_scroll() const
 {
     return m_mouseScroll;
 }
@@ -156,4 +156,49 @@ bool Inputs::is_window_resized() const
 char Inputs::get_text_entered() const
 {
     return m_textEntered;
+}
+
+math::Vector2I Inputs::get_mouse_position() const
+{
+    return sf::Mouse::getPosition( m_window );
+}
+
+math::Vector2F Inputs::get_mouse_position( View const & view ) const
+{
+    return ( this->get_mouse_position().to_float() / view.get_zoom( m_window ) )
+           + view.get_position();
+}
+
+void Inputs::set_mouse_position( math::Vector2I newMousePosition ) const
+{
+    sf::Mouse::setPosition( newMousePosition, m_window );
+}
+
+math::Vector2F Inputs::get_movement( KeyboardMove movementKey,
+                                     bool         invertMovement ) const
+{
+    math::Vector2F moveDirection { 0.f, 0.f };
+    if ( this->is_pressed( movementKey.up ) )
+    {
+        moveDirection += math::Vector2F { 0.f, -1.f };
+    }
+    if ( this->is_pressed( movementKey.right ) )
+    {
+        moveDirection += math::Vector2F { 1.f, 0.f };
+    }
+    if ( this->is_pressed( movementKey.down ) )
+    {
+        moveDirection += math::Vector2F { 0.f, 1.f };
+    }
+    if ( this->is_pressed( movementKey.left ) )
+    {
+        moveDirection += math::Vector2F { -1.f, 0.f };
+    }
+
+    if ( invertMovement )
+    {
+        moveDirection = -moveDirection;
+    }
+
+    return moveDirection;
 }

@@ -22,7 +22,7 @@
 #include "graphics2D/view.hpp"           // for View
 #include "maths/geometry/point.hpp"      // for PointF
 #include "maths/geometry/point.tpp"      // for Point::Point<Type>, Point:...
-#include "states/input.hpp"              // for get_mouse_position, is_pre...
+              // for get_mouse_position, is_pre...
 #include "tools/array/vector.hpp"
 #include "tools/assertion.hpp"  // for ASSERTION
 #include "tools/path.hpp"
@@ -94,15 +94,14 @@ namespace tile
         this->setPosition( 0.f, 0.f );
     }
 
-    void Map::update( UpdateContext context )
+    void Map::update( UpdateContext & context )
     {
         ImGui::SetNextWindowBgAlpha( 0.5f );
         if ( ImGui::Begin( "Tilemap Information" ) )
         {
             { /* UPDATE CURSOR */
                 math::PointF mousePosition {
-                    input::get_mouse_position_relative( context.window, m_view )
-                        .to_point() };
+                    context.inputs.get_mouse_position( m_view ).to_point() };
                 if ( ! this->get_tile_position( mousePosition ).has_value()
                      || ImGui::IsWindowHovered( ImGuiHoveredFlags_AnyWindow ) )
                 {
@@ -113,8 +112,7 @@ namespace tile
                 {
                     tile::Position tilePosition {
                         this->get_tile_position( mousePosition ).value() };
-                    if ( input::is_pressed( context.window,
-                                            sf::Mouse::Button::Left )
+                    if ( context.inputs.is_pressed( sf::Mouse::Button::Left )
                          && m_tileSelector.get_tile_selected().has_value() )
                     {
                         // There's a left click and the mouse is inside the
@@ -193,11 +191,9 @@ namespace tile
                         << "\n";
 
                     infoOutput << "Mouse Position - Absolute : "
-                               << input::get_mouse_position( context.window )
-                               << "\n";
-                    infoOutput << "Mouse Position - Relativ to View : "
-                               << input::get_mouse_position_relative(
-                                      context.window, m_view )
+                               << context.inputs.get_mouse_position() << "\n";
+                    infoOutput << "Mouse Position - Relative to View : "
+                               << context.inputs.get_mouse_position( m_view )
                                << "\n";
 
                     ImGui::Text( "%s", infoOutput.str().c_str() );
@@ -299,7 +295,7 @@ namespace tile
     {
         if ( ! m_view.contain( point ) )
         {
-            std::cerr << "The point isn't inside the view" << std::endl;
+            Trace::Error( "The point isn't inside the view" );
             return false;
         }
 

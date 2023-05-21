@@ -49,7 +49,7 @@ class Button final : public Transformable2D
 
     void synchronize_string ();
 
-    void render_before ( RenderContext context ) const override;
+    void render_before ( RenderContext & context ) const override;
 
     /// @brief shape of the button
     sf::RectangleShape m_shape {};

@@ -5,6 +5,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>  // for RenderWindow
 
 #include "maths/vector2.hpp"    // for Vector2U
+     // for S_KeyboardMove
 #include "tools/singleton.hpp"  // for Singleton
 
 namespace sf
@@ -31,7 +32,7 @@ class Window : public sf::RenderWindow
 
     bool is_hovered () const;
     /// @brief Check if the window have focus and if the mouse is inside the
-    /// windows
+    /// window
     bool has_absolute_focus () const;
 
     void reset_view ();
@@ -40,6 +41,8 @@ class Window : public sf::RenderWindow
                                                                 255 ) );
 
   private:
+    // Clear is overloaded
     using sf::RenderWindow::clear;
+    // Only the RenderContext can draw on the window
     using sf::RenderWindow::draw;
 };

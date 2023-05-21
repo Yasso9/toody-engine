@@ -23,8 +23,8 @@ class StaticEntity2D : public Component,
     ~StaticEntity2D() = default;
 
   protected:
-    void update ( UpdateContext context ) override;
-    void render ( RenderContext context ) const override;
+    void update ( UpdateContext & context ) override;
+    void render ( RenderContext & context ) const override;
 
   public:
     void set_customisation ( bool isCustomisable );

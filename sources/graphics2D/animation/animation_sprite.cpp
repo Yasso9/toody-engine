@@ -13,7 +13,7 @@ AnimationSprite::AnimationSprite( T_StateMap animations, std::string state,
     m_elapsedTime { 0.f }
 {}
 
-void AnimationSprite::update( UpdateContext context )
+void AnimationSprite::update( UpdateContext & context )
 {
     m_elapsedTime += context.deltaTime;
 

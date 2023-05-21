@@ -5,7 +5,7 @@
 #include "graphics2D/view.hpp"                      // for View
 #include "maths/geometry/polygon.hpp"               // for PolygonF
 #include "maths/vector2.hpp"                        // for Vector2F
-#include "states/input.hpp"                         // for S_KeyboardMove
+                         // for S_KeyboardMove
 
 class BasicEntity2D : public StaticEntity2D
 {
@@ -19,5 +19,5 @@ class BasicEntity2D : public StaticEntity2D
     void           set_speed ( float speed );
     void           set_speed ( math::Vector2F speed );
 
-    virtual void update ( UpdateContext context ) override;
+    virtual void update ( UpdateContext & context ) override;
 };

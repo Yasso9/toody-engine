@@ -5,6 +5,7 @@
 #include <string>      // for string
 
 #include <SFML/Graphics/Color.hpp>  // for Color
+#include <fmt/format.h>             // for format
 #include <imgui/imgui.h>            // for ImGuiColorEditFlags, ImGuiInputTe...
 
 #include "maths/vector3.hpp"
@@ -41,6 +42,13 @@ namespace ImGui
         sf::Color table_to_sfml ( float tableColor[4] );
     };  // namespace color
 
+    template< typename... Args >
+    void TextFmt ( fmt::format_string< Args... > fmt, Args &&... args )
+    {
+        std::string formattedString =
+            fmt::format( fmt, std::forward< Args >( args )... );
+        ImGui::Text( "%s", formattedString.c_str() );
+    }
 }  // namespace ImGui
 
 namespace ImGui_P

@@ -91,7 +91,6 @@ WARNINGS := \
 -Wmissing-include-dirs \
 -Wold-style-cast \
 -Woverloaded-virtual \
--Wvirtual-inheritance  \
 -Wredundant-decls \
 -Wshadow \
 -Wsign-conversion \
@@ -123,6 +122,8 @@ WARNINGS := \
 -Wlong-long \
 -Wsuggest-override \
 -fno-common \
+
+# -Wvirtual-inheritance
 
 ifeq ($(CXX),g++)
 WARNINGS:=$(WARNINGS) \

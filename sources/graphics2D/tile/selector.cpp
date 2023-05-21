@@ -16,7 +16,7 @@
 #include "maths/numerics.hpp"        // for division_reminder_u
 #include "maths/vector2.hpp"         // for Vector2F, Vector2, Vector2I
 #include "maths/vector2.tpp"         // for operator<<, operator+, Vector2:...
-#include "states/input.hpp"          // for get_mouse_position, is_pressed
+          // for get_mouse_position, is_pressed
 #include "tools/path.hpp"
 
 namespace tile
@@ -38,7 +38,7 @@ namespace tile
         return m_tileSelected;
     }
 
-    void Selector::update( UpdateContext context )
+    void Selector::update( UpdateContext & context )
     {
         ImGui::P_Show(
             "Tile Selector", NULL, ImGuiWindowFlags_AlwaysAutoResize, [&] () {
@@ -165,7 +165,7 @@ namespace tile
 
                         {  // UPDATE SELECTION RECT
                             math::Vector2F mousePosition {
-                                input::get_mouse_position( context.window ) };
+                                context.inputs.get_mouse_position() };
 
                             if ( ImGui::IsWindowHovered()
                                  && gridBorder.contain(
@@ -186,8 +186,7 @@ namespace tile
                                         + TILE_PIXEL_SIZE_VECTOR,
                                     m_gridColor.to_integer() );
 
-                                if ( input::is_pressed(
-                                         context.window,
+                                if ( context.inputs.is_pressed(
                                          sf::Mouse::Button::Left ) )
                                 {
                                     // There's a click, the tile selected change
@@ -211,8 +210,7 @@ namespace tile
                     {
                         std::ostringstream output {};
                         output << "Mouse Position : "
-                               << input::get_mouse_position( context.window )
-                               << "\n";
+                               << context.inputs.get_mouse_position() << "\n";
                         output << "Grid : " << gridBorder << "\n";
                         output << "Grid Scroll : " << scroll << "\n";
                         output << "Grid Max Scroll : " << maxScrollGrid << "\n";

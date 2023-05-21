@@ -26,7 +26,7 @@ class AnimationSprite : public Component
                      E_Direction direction );
 
   private:
-    void update ( UpdateContext context ) override;
+    void update ( UpdateContext & context ) override;
 
   public:
     E_Direction                 get_direction () const;

@@ -4,4 +4,4 @@ CollisionHandler::CollisionHandler( CollisionList & collisionList )
   : m_collisionList { collisionList }
 {}
 
-void CollisionHandler::update( UpdateContext /* context */ ) {}
+void CollisionHandler::update( UpdateContext & /* context */ ) {}

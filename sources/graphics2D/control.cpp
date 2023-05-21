@@ -1,7 +1,7 @@
 #include "control.hpp"
 
 Control::Control( CollisionList const & collisionList, View const & view,
-                  input::S_KeyboardMove movementKey )
+                  KeyboardMove movementKey )
   : m_collisionList { collisionList },
     m_view { view },
     m_movementKey { movementKey }
@@ -17,9 +17,10 @@ View const & Control::get_view() const
     return m_view;
 }
 
-math::Vector2F Control::get_input_movement( Window const & window ) const
+math::Vector2F Control::get_input_movement(
+    UpdateContext const & context ) const
 {
-    return input::get_movement_vector( window, m_movementKey );
+    return context.inputs.get_movement( m_movementKey );
 }
 
 bool Control::is_collision_detected( math::PolygonF entityPolygon ) const

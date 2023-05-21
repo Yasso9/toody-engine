@@ -23,8 +23,8 @@ namespace tile
         ~Table() = default;
 
       private:
-        void update ( UpdateContext context ) override;
-        void render ( RenderContext context ) const override;
+        void update ( UpdateContext & context ) override;
+        void render ( RenderContext & context ) const override;
 
       public:
         tile::Size get_size () const;

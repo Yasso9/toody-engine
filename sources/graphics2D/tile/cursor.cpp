@@ -19,7 +19,7 @@ namespace tile
         this->hide();
     }
 
-    void Cursor::render( RenderContext context ) const
+    void Cursor::render( RenderContext & context ) const
     {
         context.draw( m_shape );
     }

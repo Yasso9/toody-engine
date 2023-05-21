@@ -8,7 +8,7 @@
 #include <SFML/System/Vector2.hpp>         // for Vector2f
 #include <SFML/Window/Mouse.hpp>           // for Mouse, Mouse::Button, Mous...
 
-#include "game/game.hpp"
+#include "contexts/game_context.hpp"
 #include "game/resources.hpp"  // for get_font
 #include "game/settings.hpp"
 #include "interface/window.hpp"  // for Window
@@ -16,7 +16,7 @@
 #include "maths/geometry/rectangle.hpp"
 #include "maths/vector2.hpp"  // for Vector2, Vector2F, Vector2I
 #include "maths/vector2.tpp"  // for Vector2::operator Vector2<...
-#include "states/input.hpp"   // for get_mouse_position, is_pre...
+   // for get_mouse_position, is_pre...
 #include "tools/path.hpp"
 #include "tools/singleton.tpp"  // for Singleton::get_instance
 
@@ -42,8 +42,8 @@ static void reset_text_color ( std::vector< sf::Text > & texts )
     }
 }
 
-MainMenuState::MainMenuState( GameContext & gameContext )
-  : State { gameContext }, m_texts {}, m_background {}, m_menuBackground {}
+MainMenuState::MainMenuState()
+  : State {}, m_texts {}, m_background {}, m_menuBackground {}
 {
     math::Vector2F windowSize { Settings::get_instance().get_window_size() };
 
@@ -75,7 +75,7 @@ MainMenuState::MainMenuState( GameContext & gameContext )
     reset_text_color( m_texts );
 }
 
-void MainMenuState::update( UpdateContext context )
+void MainMenuState::update( UpdateContext & context )
 {
     // ImGui::P_Show( "Main Menu Debug", [&] () {
     //     std::stringstream output {};
@@ -89,7 +89,7 @@ void MainMenuState::update( UpdateContext context )
 
     for ( sf::Text & text : m_texts )
     {
-        if ( input::get_mouse_position( context.window )
+        if ( context.inputs.get_mouse_position()
                  .to_point()
                  .to_float()
                  .is_inside( get_rectangle( text ) ) )
@@ -98,28 +98,28 @@ void MainMenuState::update( UpdateContext context )
             text.setFillColor( sf::Color { 227, 139, 89 } );
 
             // There is a press on the button
-            if ( m_inputs.is_pressed( sf::Mouse::Button::Left )
+            if ( context.inputs.is_pressed( sf::Mouse::Button::Left )
                  || ( buttonHasBeenPressed
-                      && input::is_pressed( context.window,
-                                            sf::Mouse::Button::Left ) ) )
+                      && context.inputs.is_pressed(
+                          sf::Mouse::Button::Left ) ) )
             {
                 buttonHasBeenPressed = true;
                 // Color on pressed
                 text.setFillColor( sf::Color { 217, 68, 35 } );
             }
 
-            if ( m_inputs.is_released( sf::Mouse::Button::Left ) )
+            if ( context.inputs.is_released( sf::Mouse::Button::Left ) )
             {
                 // Color when choosing
                 text.setFillColor( sf::Color { 242, 255, 54 } );
-                m_gameContext.transition_to(
+                context.transition_to(
                     State::get_enum_state( text.getString() ) );
             }
         }
     }
 }
 
-void MainMenuState::render( RenderContext context ) const
+void MainMenuState::render( RenderContext & context ) const
 {
     context.draw( m_background );
     context.draw( m_menuBackground );

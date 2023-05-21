@@ -28,8 +28,8 @@ class Transformable : public Component
     virtual ~Transformable() = default;
 
   private:
-    virtual void update_all ( UpdateContext context ) override;
-    virtual void render_all ( RenderContext context ) const override;
+    virtual void update_all ( UpdateContext & context ) override;
+    virtual void render_all ( RenderContext & context ) const override;
 
   public:
     void move ( math::Vector3F tranlationVector );

@@ -8,7 +8,7 @@
 #include "graphics2D/sfml.hpp"
 #include "interface/window.hpp"
 #include "libraries/imgui.hpp"
-#include "states/input.hpp"
+
 
 static Shape::S_Data SAMPLE_DATA_A {
     { // positions          // colors         // texture coords   // normals
@@ -49,8 +49,8 @@ static Shape::S_Data SAMPLE_DATA_B { {
                                      {},
                                      { 3u, 2u } };
 
-GraphicState::GraphicState( GameContext & gameContext )
-  : State { gameContext },
+GraphicState::GraphicState()
+  : State {},
     m_camera {},
     m_shapes { Shape { m_camera, SAMPLE_DATA_A } },
     // m_models { Model { m_camera, "object3D/backpack.obj" } }
@@ -73,4 +73,4 @@ GraphicState::GraphicState( GameContext & gameContext )
     }
 }
 
-void GraphicState::update( UpdateContext /* context */ ) {}
+void GraphicState::update( UpdateContext & /* context */ ) {}

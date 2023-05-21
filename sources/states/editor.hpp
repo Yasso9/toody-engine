@@ -12,12 +12,34 @@
 #include "graphics2D/tile/map.hpp"   // for TileMap
 #include "states/state.hpp"          // for State
 
-class EditorState final : public State
+struct ViewSettings
 {
-    /// @brief 2D camera of the state
-    View m_view;
+    float moveSpeed { 1.f };
+    float zoomSpeed { 0.2f };
+    float rotateSpeed { 0.2f };
+
+    ViewSettings()          = default;
+    virtual ~ViewSettings() = default;
+
+    void edit ()
+    {
+        ImGui::SliderFloat( "View Movement Speed", &moveSpeed, 0.f, 50.f,
+                            "%.0f" );
+        ImGui::SliderFloat( "View Zoom Speed", &zoomSpeed, 0.f, 5.f, "%.2f" );
+        ImGui::SliderFloat( "View Rotate Speed", &rotateSpeed, 0.f, 5.f,
+                            "%.2f" );
+    }
+};
+
+class EditorState : public State
+{
+    /// camera
+    View         m_view;
+    ViewSettings m_viewSettings;
 
     std::map< std::string, bool > m_showWindow;
+    bool                          m_showDemoWindow;
+    bool                          m_showViewWindow;
 
     tile::Map m_tilemap;
     ImageMap  m_imageMap;
@@ -27,13 +49,15 @@ class EditorState final : public State
     // Player               m_player;
     CharacterEntity m_character;
 
-    Dialogue m_dialogue;
-
   public:
-    EditorState( GameContext & gameContext );
+    EditorState();
+    virtual ~EditorState() = default;
 
-    void update ( UpdateContext context ) override;
+    void update ( UpdateContext & context ) override;
 
   private:
     void reset_view ( math::Vector2F const & windowSize );
+
+    void update_toolbar ( UpdateContext & context );
+    void update_view ( UpdateContext & context );
 };

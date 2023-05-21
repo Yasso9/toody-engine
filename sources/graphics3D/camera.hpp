@@ -40,7 +40,7 @@ class Camera : public Component
     Camera();
 
   private:
-    void update ( UpdateContext context ) override;
+    void update ( UpdateContext & context ) override;
 
   public:
     /// @brief Space transformation

@@ -7,7 +7,7 @@
 #include <SFML/Window/Keyboard.hpp>        // for Keyboard, Keyboard::Z, Key...
 
 #include "game/resources.hpp"   // for get_texture
-#include "states/input.hpp"     // for is_pressed
+     // for is_pressed
 #include "tools/assertion.hpp"  // for ASSERTION
 #include "tools/tools.hpp"      // for E_Direction, E_Direction::...
 
@@ -104,7 +104,7 @@ void Player::set_state( Player::E_State const & playerState )
     this->m_state = playerState;
 }
 
-void Player::update_before( UpdateContext context )
+void Player::update_before( UpdateContext & context )
 {
     this->update_delta_time( context.deltaTime );
     this->update_movement();
@@ -113,7 +113,7 @@ void Player::update_before( UpdateContext context )
     this->m_lastState = { this->m_state, this->m_direction };
 }
 
-void Player::render_before( RenderContext context ) const
+void Player::render_before( RenderContext & context ) const
 {
     context.draw( m_sprite );
 }

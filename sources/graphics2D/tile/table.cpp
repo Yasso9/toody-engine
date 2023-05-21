@@ -14,7 +14,7 @@ namespace tile
 {
     Table::Table( sf::Texture const & texture ) : m_texture { texture } {}
 
-    void Table::update( UpdateContext context )
+    void Table::update( UpdateContext & context )
     {
         for ( Tile tile : m_array2D )
         {
@@ -22,7 +22,7 @@ namespace tile
         }
     }
 
-    void Table::render( RenderContext context ) const
+    void Table::render( RenderContext & context ) const
     {
         context.set_texture( m_texture );
 

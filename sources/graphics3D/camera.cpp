@@ -15,7 +15,7 @@
 #include "maths/vector2.tpp"         // for operator==, Vector2::operat...
 #include "maths/vector3.hpp"         // for Vector3F
 #include "maths/vector3.tpp"         // for Vector3::rotate
-#include "states/input.hpp"          // for is_pressed, get_mouse_position
+          // for is_pressed, get_mouse_position
 #include "tools/assertion.hpp"       // for ASSERTION
 #include "tools/singleton.tpp"       // for Singleton::get_instance
 
@@ -32,101 +32,101 @@ Camera::Camera()
     this->reset();
 }
 
-void Camera::update( UpdateContext context )
+void Camera::update( UpdateContext & context )
 {
     m_movementSpeed = 2.5f * context.deltaTime;
 
-    {  // Camera configuration
-        if ( input::is_pressed( context.window, sf::Keyboard::Space ) )
-        {
-            m_captureMouse = ! m_captureMouse;
-        }
-        if ( ImGui::Begin( "Camera" ) )
-        {
-            ImGui::Checkbox( "Mouse Captured ? (SPACE)", &m_captureMouse );
-        }
-        ImGui::End();
-    }
+    // {  // Camera configuration
+    //     if ( context.inputs.is_pressed( sf::Keyboard::Space ) )
+    //     {
+    //         m_captureMouse = ! m_captureMouse;
+    //     }
+    //     if ( ImGui::Begin( "Camera" ) )
+    //     {
+    //         ImGui::Checkbox( "Mouse Captured ? (SPACE)", &m_captureMouse );
+    //     }
+    //     ImGui::End();
+    // }
 
-    {  // Update the camera position
-        if ( input::is_pressed( context.window, sf::Keyboard::Z ) )
-        {
-            this->move( Camera::E_Movement::Up );
-        }
-        if ( input::is_pressed( context.window, sf::Keyboard::S ) )
-        {
-            this->move( Camera::E_Movement::Down );
-        }
-        if ( input::is_pressed( context.window, sf::Keyboard::Q ) )
-        {
-            this->move( Camera::E_Movement::Left );
-        }
-        if ( input::is_pressed( context.window, sf::Keyboard::D ) )
-        {
-            this->move( Camera::E_Movement::Right );
-        }
-        if ( input::is_pressed( context.window, sf::Keyboard::A ) )
-        {
-            this->move( Camera::E_Movement::In );
-        }
-        if ( input::is_pressed( context.window, sf::Keyboard::E ) )
-        {
-            this->move( Camera::E_Movement::Out );
-        }
-    }
+    // {  // Update the camera position
+    //     if ( context.inputs.is_pressed( sf::Keyboard::Z ) )
+    //     {
+    //         this->move( Camera::E_Movement::Up );
+    //     }
+    //     if ( context.inputs.is_pressed( sf::Keyboard::S ) )
+    //     {
+    //         this->move( Camera::E_Movement::Down );
+    //     }
+    //     if ( context.inputs.is_pressed( sf::Keyboard::Q ) )
+    //     {
+    //         this->move( Camera::E_Movement::Left );
+    //     }
+    //     if ( context.inputs.is_pressed( sf::Keyboard::D ) )
+    //     {
+    //         this->move( Camera::E_Movement::Right );
+    //     }
+    //     if ( context.inputs.is_pressed( sf::Keyboard::A ) )
+    //     {
+    //         this->move( Camera::E_Movement::In );
+    //     }
+    //     if ( context.inputs.is_pressed( sf::Keyboard::E ) )
+    //     {
+    //         this->move( Camera::E_Movement::Out );
+    //     }
+    // }
 
-    {  // Update the camera direction
-        math::Vector3F rotation { 0.f, 0.f, 0.f };
+    // {  // Update the camera direction
+    //     math::Vector3F rotation { 0.f, 0.f, 0.f };
 
-        if ( input::is_pressed( context.window, sf::Keyboard::Up ) )
-        {
-            rotation += { 1.f, 0.f, 0.f };
-        }
-        if ( input::is_pressed( context.window, sf::Keyboard::Down ) )
-        {
-            rotation += { -1.f, 0.f, 0.f };
-        }
-        if ( input::is_pressed( context.window, sf::Keyboard::Left ) )
-        {
-            rotation += { 0.f, 1.f, 0.f };
-        }
-        if ( input::is_pressed( context.window, sf::Keyboard::Right ) )
-        {
-            rotation += { 0.f, -1.f, 0.f };
-        }
-        if ( input::is_pressed( context.window, sf::Keyboard::B ) )
-        {
-            rotation += { 0.f, 0.f, -1.f };
-        }
-        if ( input::is_pressed( context.window, sf::Keyboard::N ) )
-        {
-            rotation += { 0.f, 0.f, 1.f };
-        }
+    // if ( context.inputs.is_pressed( sf::Keyboard::Up ) )
+    // {
+    //     rotation += { 1.f, 0.f, 0.f };
+    // }
+    // if ( context.inputs.is_pressed( sf::Keyboard::Down ) )
+    // {
+    //     rotation += { -1.f, 0.f, 0.f };
+    // }
+    // if ( context.inputs.is_pressed( sf::Keyboard::Left ) )
+    // {
+    //     rotation += { 0.f, 1.f, 0.f };
+    // }
+    // if ( context.inputs.is_pressed( sf::Keyboard::Right ) )
+    // {
+    //     rotation += { 0.f, -1.f, 0.f };
+    // }
+    // if ( context.inputs.is_pressed( sf::Keyboard::B ) )
+    // {
+    //     rotation += { 0.f, 0.f, -1.f };
+    // }
+    // if ( context.inputs.is_pressed( sf::Keyboard::N ) )
+    // {
+    //     rotation += { 0.f, 0.f, 1.f };
+    // }
 
-        this->rotate( rotation * 20.f );
-    }
+    // this->rotate( rotation * 20.f );
+    // }
 
-    {  // Update the camera direction with the mouse
-        if ( m_captureMouse )
-        {
-            math::Vector2F const windowCenter {
-                context.window.get_center_position() };
-            math::Vector2F const mousePosition {
-                input::get_mouse_position( context.window ) };
+    // {  // Update the camera direction with the mouse
+    //     if ( m_captureMouse )
+    //     {
+    //         math::Vector2F const windowCenter {
+    //             context.window.get_center_position() };
+    //         math::Vector2F const mousePosition {
+    //             input::get_mouse_position( context.window ) };
 
-            if ( windowCenter == mousePosition )
-            {
-                return;
-            }
-            // Gap between mousePosition and windowCenter
-            math::Vector2F offset { mousePosition - windowCenter };
+    // if ( windowCenter == mousePosition )
+    // {
+    //     return;
+    // }
+    // // Gap between mousePosition and windowCenter
+    // math::Vector2F offset { mousePosition - windowCenter };
 
-            // Reset Mouse Position
-            input::set_mouse_position( context.window, windowCenter.to_int() );
+    // // Reset Mouse Position
+    // input::set_mouse_position( context.window, windowCenter.to_int() );
 
-            this->rotate( { offset.y, offset.x, 0.f } );
-        }
-    }
+    // this->rotate( { offset.y, offset.x, 0.f } );
+    // }
+    // }
 
     if ( ImGui::Begin( "Camera" ) )
     {

@@ -1,5 +1,8 @@
 #include "component.hpp"
 
+#include "contexts/render_context.hpp"  // for RenderContext
+#include "contexts/update_context.hpp"  // for UpdateContext
+
 Component::Component() : m_childs {}, m_view { nullptr } {};
 
 Component::Component( Component const & component ) noexcept
@@ -43,7 +46,7 @@ std::vector< Component * > Component::get_childs()
     return childs;
 }
 
-void Component::update_all( UpdateContext context )
+void Component::update_all( UpdateContext & context )
 {
     this->update_before( context );
 
@@ -57,7 +60,7 @@ void Component::update_all( UpdateContext context )
     this->update_after( context );
 }
 
-void Component::render_all( RenderContext context ) const
+void Component::render_all( RenderContext & context ) const
 {
     if ( m_view != nullptr )
     {
@@ -86,14 +89,14 @@ void Component::set_view( View const & view )
     m_view = &view;
 }
 
-void Component::update_before( UpdateContext /* context */ ) {}
+void Component::update_before( UpdateContext & /* context */ ) {}
 
-void Component::update( UpdateContext /* context */ ) {}
+void Component::update( UpdateContext & /* context */ ) {}
 
-void Component::update_after( UpdateContext /* context */ ) {}
+void Component::update_after( UpdateContext & /* context */ ) {}
 
-void Component::render_before( RenderContext /* context */ ) const {}
+void Component::render_before( RenderContext & /* context */ ) const {}
 
-void Component::render( RenderContext /* context */ ) const {}
+void Component::render( RenderContext & /* context */ ) const {}
 
-void Component::render_after( RenderContext /* context */ ) const {}
+void Component::render_after( RenderContext & /* context */ ) const {}

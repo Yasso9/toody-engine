@@ -3,8 +3,8 @@
 #include <SFML/Window/Event.hpp>  // for Event, Event::Closed, Event::...
 #include <imgui/imgui-SFML.h>     // for Update, ProcessEvent
 
-#include "game/game.hpp"          // for GameContext
-#include "graphics3D/openGL.hpp"  // for check_error
+#include "contexts/game_context.hpp"  // for GameContext
+#include "graphics3D/openGL.hpp"      // for check_error
 
 /* static */ State::E_List State::get_enum_state( std::string enumString )
 {
@@ -32,17 +32,13 @@
     return stateList;
 }
 
-State::State( GameContext & gameContext )
-  : m_gameContext { gameContext }, m_inputs {}
-{}
+State::State() {}
 
-void State::update_all( UpdateContext context )
+void State::update_all( UpdateContext & context )
 {
     ImGui::SFML::Update( sf::Mouse::getPosition( context.window ),
                          context.window.get_size().to_float(),
                          sf::seconds( context.deltaTime ) );
-
-    m_inputs.clear();
 
     sf::Event event {};
     // The event loop must always be part of the main loop,
@@ -50,18 +46,18 @@ void State::update_all( UpdateContext context )
     while ( context.window.pollEvent( event ) )
     {
         ImGui::SFML::ProcessEvent( context.window, event );
-        m_inputs.update( event );
+        context.inputs.update( event );
     }
 
-    if ( m_inputs.is_window_closed() )
+    if ( context.inputs.is_window_closed() )
     {
-        m_gameContext.should_run( false );
+        context.shouldRun = false;
     }
 
     this->Component::update_all( context );
 }
 
-void State::render_all( RenderContext context ) const
+void State::render_all( RenderContext & context ) const
 {
     context.window.clear();
 

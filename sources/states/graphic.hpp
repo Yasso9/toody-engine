@@ -15,7 +15,7 @@ class GraphicState final : public State
     std::vector< Model > m_models;
 
   public:
-    GraphicState( GameContext & gameContext );
+    GraphicState();
 
-    void update ( UpdateContext context ) override;
+    void update ( UpdateContext & context ) override;
 };

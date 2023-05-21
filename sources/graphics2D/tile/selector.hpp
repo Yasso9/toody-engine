@@ -24,7 +24,7 @@ namespace tile
         Selector();
         virtual ~Selector() = default;
 
-        void update ( UpdateContext context ) override;
+        void update ( UpdateContext & context ) override;
 
         tile::Set const &               get_tileset () const;
         std::optional< tile::Position > get_tile_selected () const;

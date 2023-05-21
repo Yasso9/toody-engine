@@ -2,11 +2,11 @@
 
 #include <vector>  // for vector
 
-#include "components/contexts.hpp"  // for UpdateContext, RenderContext
-#include "graphics2D/view.hpp"      // for View
+#include "contexts/render_context.hpp"  // for RenderContext
+#include "contexts/update_context.hpp"  // for UpdateContext
+#include "graphics2D/view.hpp"  // for View
 
 class Component;
-
 // check if T is derived from Component
 template< typename T > concept cComponent = std::derived_from< T, Component >;
 
@@ -14,6 +14,7 @@ class Component
 {
   private:
     std::vector< Component * > m_childs;
+    // optionnal references so we use a pointer
     View const *               m_view;
 
   protected:
@@ -46,26 +47,26 @@ class Component
     std::vector< Component * >       get_childs ();
 
     // update the component
-    virtual void update_all ( UpdateContext context );
+    virtual void update_all ( UpdateContext & context );
     // draw the component to the render
-    virtual void render_all ( RenderContext context ) const;
+    virtual void render_all ( RenderContext & context ) const;
 
     void set_view ( View const & view );
 
   private:
     // custom update - called before children update
-    virtual void update_before ( UpdateContext context );
+    virtual void update_before ( UpdateContext & context );
     // custom update - order doesn't matter
-    virtual void update ( UpdateContext context );
+    virtual void update ( UpdateContext & context );
     // custom update - called after children update
-    virtual void update_after ( UpdateContext context );
+    virtual void update_after ( UpdateContext & context );
 
     // custom render - called before children render
-    virtual void render_before ( RenderContext context ) const;
+    virtual void render_before ( RenderContext & context ) const;
     // custom render - order doesn't matter
-    virtual void render ( RenderContext context ) const;
+    virtual void render ( RenderContext & context ) const;
     // custom render - called after children render
-    virtual void render_after ( RenderContext context ) const;
+    virtual void render_after ( RenderContext & context ) const;
 };
 
 #include "component.tpp"

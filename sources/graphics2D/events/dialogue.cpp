@@ -15,7 +15,7 @@
 #include "maths/geometry/point.hpp"  // for PointI, Point, PointF
 #include "maths/geometry/point.tpp"  // for Point::Point<Type>, Point:...
 #include "maths/vector2.tpp"         // for Vector2::to_float, Vector2...
-#include "states/input.hpp"          // for get_mouse_position, is_pre...
+          // for get_mouse_position, is_pre...
 #include "tools/path.hpp"
 #include "tools/singleton.tpp"  // for Singleton::get_instance
 #include "tools/traces.hpp"
@@ -120,7 +120,7 @@ void Dialogue::add_text( std::string textToAdd )
 // }
 // }
 
-void Dialogue::update( UpdateContext /* context */ )
+void Dialogue::update( UpdateContext & /* context */ )
 {
     if ( ! this->is_enabled() )
     {
@@ -159,7 +159,7 @@ void Dialogue::update( UpdateContext /* context */ )
     } );
 }
 
-void Dialogue::render( RenderContext context ) const
+void Dialogue::render( RenderContext & context ) const
 {
     if ( ! this->is_enabled() )
     {

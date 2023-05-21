@@ -2,9 +2,9 @@
 
 #include <imgui/imgui.h>  // for ShowDemoWindow
 
-TestState::TestState( GameContext & gameContext ) : State { gameContext } {}
+TestState::TestState() : State {} {}
 
-void TestState::update_before( UpdateContext /* context */ )
+void TestState::update_before( UpdateContext & /* context */ )
 {
     ImGui::ShowDemoWindow();
 }

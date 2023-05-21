@@ -12,5 +12,5 @@ class CollisionHandler : public Component
     virtual ~CollisionHandler() = default;
 
   private:
-    void update ( UpdateContext context ) override;
+    void update ( UpdateContext & context ) override;
 };

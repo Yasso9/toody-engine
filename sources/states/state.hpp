@@ -3,9 +3,6 @@
 #include <boost/describe.hpp>  // for BOOST_DESCRIBE_NESTED_ENUM
 
 #include "components/component.hpp"  // for Component
-#include "interface/inputs.hpp"      // for Inputs
-
-class GameContext;
 
 class State : public Component
 {
@@ -22,17 +19,13 @@ class State : public Component
 
     BOOST_DESCRIBE_NESTED_ENUM( E_List, MainMenu, Editor, Graphics, Test, Quit,
                                 EnumLast );
-
     static E_List                     get_enum_state ( std::string string );
     static std::vector< std::string > get_state_list ();
 
   protected:
-    GameContext & m_gameContext;
-    Inputs        m_inputs;
-
-    explicit State( GameContext & gameContext );
+    State();
 
   public:
-    void update_all ( UpdateContext context ) override;
-    void render_all ( RenderContext context ) const override;
+    void update_all ( UpdateContext & context ) override;
+    void render_all ( RenderContext & context ) const override;
 };

@@ -23,7 +23,7 @@ namespace tile
         virtual ~Cursor() = default;
 
       private:
-        void render ( RenderContext context ) const override;
+        void render ( RenderContext & context ) const override;
 
       public:
         void hide ();

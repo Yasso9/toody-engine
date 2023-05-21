@@ -3,16 +3,27 @@
 #include <SFML/Graphics/View.hpp>  // for View
 
 #include "interface/window.hpp"          // for Window
+#include "libraries/debug_window.hpp"    // for DebugWindow
 #include "maths/geometry/point.hpp"      // for PointF
 #include "maths/geometry/rectangle.hpp"  // for RectangleF
 #include "maths/vector2.hpp"             // for Vector2F
 
-class View : public sf::View
+class View : public DebugWindow
 {
   public:
-    View() : sf::View {} {}
+    sf::View m_sfView;
 
-    View( sf::View view ) noexcept : sf::View { view } {}
+  private:
+    float m_zoomMax;
+    float m_zoomMin;
+
+  public:
+    View();
+    View( sf::View const & sfView ) noexcept;
+    // View( math::RectangleF rectangle );
+
+    operator sf::View & ();
+    operator sf::View const & () const;
 
     math::Vector2F get_zoom ( math::Vector2F windowSize ) const;
     math::Vector2F get_zoom ( Window const & window ) const;
@@ -25,16 +36,16 @@ class View : public sf::View
     math::Vector2F   get_size () const;
     /// @brief Position of the center of the view
     math::Vector2F   get_center () const;
-    /// @brief Position where the view rectangle begin
+    /// @brief Position where the view rectangle begin (top left corner)
     math::PointF     get_position () const;
     /// @brief Position and size of the view (e.g. Rectangle)
     math::RectangleF get_rectangle () const;
 
+    float            get_rotation () const;
+    math::RectangleF get_viewport () const;
+
     /// @brief Check if a point is contained in the view
     bool contain ( math::PointF point ) const;
 
-  private:
-    using sf::View::getCenter;
-    using sf::View::getSize;
-    using sf::View::zoom;
+    virtual void show_when_enabled () override;
 };

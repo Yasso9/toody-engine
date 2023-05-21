@@ -115,7 +115,7 @@ Shape::~Shape()
     ShapeBuilder { *this }.destroy();
 }
 
-void Shape::update( UpdateContext /* context */ )
+void Shape::update( UpdateContext & /* context */ )
 {
     for ( unsigned int i = 0u; i < m_textures.size(); ++i )
     {
@@ -124,7 +124,7 @@ void Shape::update( UpdateContext /* context */ )
     }
 }
 
-void Shape::render( RenderContext /* context */ ) const
+void Shape::render( RenderContext & /* context */ ) const
 {
     GLenum const primitiveType { GL_TRIANGLES };
 

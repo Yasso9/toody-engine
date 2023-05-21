@@ -33,8 +33,8 @@ class Model final : public Transformable
     explicit Model( Camera const & camera, std::string const & filePathModel );
 
   private:
-    virtual void update ( UpdateContext context ) override;
-    virtual void render ( RenderContext context ) const override;
+    virtual void update ( UpdateContext & context ) override;
+    virtual void render ( RenderContext & context ) const override;
 
     /**
      * @brief Loads a model with supported ASSIMP extensions from file

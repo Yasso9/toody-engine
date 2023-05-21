@@ -37,7 +37,7 @@ Model::Model( Camera const & camera, std::string const & filePathModel )
     this->load_model();
 }
 
-void Model::update( UpdateContext /* context */ )
+void Model::update( UpdateContext & /* context */ )
 {
     for ( Mesh & mesh : this->m_meshes )
     {
@@ -45,7 +45,7 @@ void Model::update( UpdateContext /* context */ )
     }
 }
 
-void Model::render( RenderContext /* context */ ) const
+void Model::render( RenderContext & /* context */ ) const
 {
     for ( Mesh const & mesh : this->m_meshes )
     {

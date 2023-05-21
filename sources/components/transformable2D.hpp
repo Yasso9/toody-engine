@@ -14,7 +14,7 @@ class Transformable2D : public Component,
     virtual ~Transformable2D() = default;
 
   public:
-    virtual void render_all ( RenderContext context ) const override;
+    virtual void render_all ( RenderContext & context ) const override;
 
   protected:
     void set_next_transformation ( sf::Transform transformation );

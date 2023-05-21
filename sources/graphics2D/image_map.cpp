@@ -20,7 +20,7 @@ std::vector< S_Image > const & ImageMap::get_data() const
     return m_data;
 }
 
-void ImageMap::render_before( RenderContext context ) const
+void ImageMap::render_before( RenderContext & context ) const
 {
     for ( S_Image const & image : m_data )
     {

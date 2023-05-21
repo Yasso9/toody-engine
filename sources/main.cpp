@@ -1,25 +1,24 @@
 #include <cstdlib>  // for EXIT_SUCCESS
 
-#include "game/game.hpp"           // for Game
+#include "contexts/game_context.hpp"       // for Game
 #include "game/settings.hpp"       // for Window
+#include "interface/inputs.hpp"    // for Inputs
 #include "interface/window.hpp"    // for Settings
 #include "tools/system/clock.hpp"  // for Clock
 
 int main ()
 {
-    Window      window { "Toody Engine (Dev)" };
     GameContext game {};
     Clock       clock {};
 
     float const refreshRate { Settings::get_instance().get_refresh_rate() };
 
-    while ( game.should_run() )
+    while ( game.shouldRun )
     {
         float const deltaTime { clock.get_elapsed_time() };
         if ( deltaTime > refreshRate )
         {
-            game.get_state().update_all( UpdateContext { window, deltaTime } );
-            game.get_state().render_all( RenderContext { window } );
+            game.update( deltaTime );
 
             clock.reset();
         }

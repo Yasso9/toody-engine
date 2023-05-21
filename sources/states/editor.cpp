@@ -11,7 +11,7 @@
 #include <imgui/imgui.h>            // for Begin, End, MenuItem, Text
 
 #include "components/component.hpp"  // for Component::add_child
-#include "game/game.hpp"
+#include "contexts/game_context.hpp"
 #include "game/resources.hpp"                   // for get_texture
 #include "game/settings.hpp"                    // for Settings
 #include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
@@ -24,18 +24,21 @@
 #include "maths/geometry/rectangle.hpp"  // for RectangleF
 #include "maths/vector2.hpp"             // for Vector2F, Vector2, Vector2U
 #include "maths/vector2.tpp"             // for operator<<, operator*, opera...
-#include "states/input.hpp"              // for get_mouse_movement, get_mous...
+              // for get_mouse_movement, get_mous...
 #include "tools/path.hpp"
 #include "tools/singleton.tpp"  // for Singleton::get_instance
 
-EditorState::EditorState( GameContext & gameContext )
-  : State { gameContext },
+EditorState::EditorState()
+  : State {},
     m_view {},
+    m_viewSettings {},
     m_showWindow {
         { "demo_window", false }, { "debug_options", false },
         { "collision", false },   { "player_handling", false },
         { "dialogue", false },    { "view", false },
     },
+    m_showDemoWindow { false },
+    m_showViewWindow { false },
     m_tilemap { m_view },
     m_imageMap {},
     m_collisionList {},
@@ -44,14 +47,12 @@ EditorState::EditorState( GameContext & gameContext )
     //     { m_collisionList, m_view, input::ILKJ } },
     m_character { resources::get_texture( path::get_folder( path::Character )
                                           / "gold_sprite.png" ),
-                  { m_collisionList, m_view, input::ARROW } },
-    m_dialogue {}
+                  { m_collisionList, m_view, input::ARROW } }
 {
     this->add_child( m_tilemap, m_view );
     this->add_child( m_collisionList, m_view );
     // this->add_child( m_greenEntity, m_view );
     this->add_child( m_character, m_view );
-    this->add_child( m_dialogue );
     this->add_child( m_imageMap );
 
     m_tilemap.setPosition( 0.f, 0.f );
@@ -61,82 +62,12 @@ EditorState::EditorState( GameContext & gameContext )
     // m_greenEntity.setFillColor( sf::Color::Green );
     // m_greenEntity.setOutlineColor( sf::Color::Black );
     // m_greenEntity.setOutlineThickness( 2.f );
-
-    m_dialogue.set_enabled( m_showWindow.at( "dialogue" ) );
 }
 
-void EditorState::update( UpdateContext context )
+void EditorState::update( UpdateContext & context )
 {
-    {  // UPDATE VIEW
-        static float viewScrollSpeed { 0.2f };
-        static float viewMoveSpeedBase { 1.f };
-
-        ImGui::P_Show( "View Options", &m_showWindow.at( "view" ), [] () {
-            ImGui::SliderFloat( "View Scroll Speed", &viewScrollSpeed, 0.f, 5.f,
-                                "%.2f" );
-            ImGui::SliderFloat( "View Movement Speed", &viewMoveSpeedBase, 0.f,
-                                50.f, "%.0f" );
-        } );
-
-        float const          viewScrollValue { input::get_mouse_scroll()
-                                      * viewScrollSpeed };
-        math::Vector2F const viewMoveSpeed {
-            math::Vector2F { viewMoveSpeedBase, viewMoveSpeedBase }
-            / m_view.get_zoom( context.window ) };
-        math::Vector2F const viewMoveValue {
-            input::is_pressed( context.window, sf::Mouse::Right )
-                ? input::get_mouse_movement( context.window ) * viewMoveSpeed
-                : math::Vector2F { 0.f, 0.f } };
-
-        ImGui::P_Show( "View Options", &m_showWindow.at( "view" ), [&] () {
-            std::stringstream output {};
-            output << "View Center : " << m_view.get_center() << "\n";
-            output << "View Position : " << m_view.get_position() << "\n";
-            output << "View Size : " << m_view.get_size() << "\n";
-            output << "Mouse Scroll : " << input::get_mouse_scroll() << "\n";
-            output << "View Scroll Value : " << viewScrollValue << "\n";
-            output << "Mouse Movement : "
-                   << input::get_mouse_movement( context.window ) << "\n";
-            output << "View Movement Speed : " << viewMoveSpeed << "\n";
-            output << "View Movement Value : " << viewMoveValue << "\n";
-            ImGui::Text( "%s", output.str().c_str() );
-        } );
-
-        m_view.zoom( viewScrollValue, context.window );
-        m_view.move( viewMoveValue );
-    }
-
-    {  // UPDATE TOOLBAR
-        bool        quitEditor { false };
-        static bool resetView { false };
-        static bool showDemo { false };
-
-        if ( ImGui::BeginMainMenuBar() )
-        {  // UPDATE TOOLBAR
-            if ( ImGui::BeginMenu( "Options" ) )
-            {
-                ImGui::MenuItem( "Quit Editor", "Escape", &quitEditor );
-                ImGui::MenuItem( "Reset View", "Ctrl + C", &resetView );
-                ImGui::MenuItem( "Show Demo Window", "", &showDemo );
-                ImGui::EndMenu();
-            }
-            ImGui::EndMainMenuBar();
-        }
-
-        if ( quitEditor )
-        {
-            m_gameContext.transition_to( State::E_List::MainMenu );
-        }
-        if ( resetView )
-        {
-            this->reset_view( context.window.get_size().to_float() );
-            resetView = false;
-        }
-        if ( showDemo )
-        {
-            ImGui::ShowDemoWindow( &showDemo );
-        }
-    }
+    this->update_toolbar( context );
+    this->update_view( context );
 
     {  // UPDATE OVERLAY
         ImGuiWindowFlags const window_flags =
@@ -188,8 +119,6 @@ void EditorState::update( UpdateContext context )
                 }
                 ImGui::TreePop();
             }
-
-            m_dialogue.set_enabled( m_showWindow.at( "dialogue" ) );
         } );
     }
 
@@ -199,9 +128,9 @@ void EditorState::update( UpdateContext context )
             "Debug Options", &m_showWindow.at( "debug_options" ), [&] () {
                 std::stringstream windowTextOutput {};
                 windowTextOutput << std::boolalpha;
-                windowTextOutput << "MousePos : "
-                                 << input::get_mouse_position( context.window )
-                                 << "\n";
+                windowTextOutput
+                    << "MousePos : " << context.inputs.get_mouse_position()
+                    << "\n";
                 windowTextOutput << "CursorPos : "
                                  << math::Vector2F { ImGui::GetCursorPos() }
                                  << "\n";
@@ -235,10 +164,60 @@ void EditorState::update( UpdateContext context )
     }
 }
 
+void EditorState::update_toolbar( UpdateContext & context )
+{
+    bool quitEditor { false };
+    bool resetView { false };
+
+    if ( ImGui::BeginMainMenuBar() )
+    {
+        if ( ImGui::BeginMenu( "Options" ) )
+        {
+            ImGui::MenuItem( "Quit Editor", "Escape", &quitEditor );
+            ImGui::MenuItem( "Reset View", "Ctrl + C", &resetView );
+            ImGui::MenuItem( "Show Demo Window", "", &m_showDemoWindow );
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
+
+    if ( quitEditor )
+    {
+        context.transition_to( State::E_List::MainMenu );
+    }
+    if ( resetView )
+    {
+        this->reset_view( context.window.get_size().to_float() );
+    }
+    if ( m_showDemoWindow )
+    {
+        ImGui::ShowDemoWindow( &m_showDemoWindow );
+    }
+}
+
+void EditorState::update_view( UpdateContext & context )
+{
+    ImGui::P_Show( "View", &m_showViewWindow,
+                   [this] () { m_viewSettings.edit(); } );
+
+    float scrollValue { context.inputs.get_mouse_scroll().to_float().y
+                        * m_viewSettings.zoomSpeed };
+    m_view.zoom( scrollValue, context.window );
+
+    math::Vector2F moveSpeed {
+        math::Vector2F { m_viewSettings.moveSpeed, m_viewSettings.moveSpeed }
+        / m_view.get_zoom( context.window ) };
+    math::Vector2F const viewMoveValue {
+        context.inputs.is_pressed( sf::Mouse::Right )
+            ? context.inputs.get_mouse_movement().to_float() * moveSpeed
+            : math::Vector2F { 0.f, 0.f } };
+    m_view.m_sfView.move( viewMoveValue );
+}
+
 void EditorState::reset_view( math::Vector2F const & windowSize )
 {
-    m_view.setCenter( m_tilemap.get_center_absolute() );
-    m_view.setSize( windowSize );
+    m_view.m_sfView.setCenter( m_tilemap.get_center_absolute() );
+    m_view.m_sfView.setSize( windowSize );
     m_character.setPosition( m_view.get_center() );
 }
 

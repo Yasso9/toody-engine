@@ -30,7 +30,7 @@ namespace tile
         this->set_value( pixelValue );
     }
 
-    void Tile::render( RenderContext context ) const
+    void Tile::render( RenderContext & context ) const
     {
         context.draw( std::vector< sf::Vertex > { m_quad.vertices.begin(),
                                                   m_quad.vertices.end() },
