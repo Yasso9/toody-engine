@@ -37,10 +37,8 @@ class EditorState : public State
     View         m_view;
     ViewSettings m_viewSettings;
 
-    // TODO remove that data member
-    std::map< std::string, bool > m_showWindow;
-    bool                          m_showDemoWindow;
-    bool                          m_showOverlayWindow;
+    bool m_showDemoWindow;
+    bool m_showOverlayWindow;
 
     tile::Map m_tilemap;
     ImageMap  m_imageMap;

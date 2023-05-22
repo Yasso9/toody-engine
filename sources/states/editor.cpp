@@ -32,11 +32,6 @@ EditorState::EditorState()
   : State {},
     m_view {},
     m_viewSettings {},
-    m_showWindow {
-        { "demo_window", false }, { "debug_options", false },
-        { "collision", false },   { "player_handling", false },
-        { "dialogue", false },    { "view", false },
-    },
     m_showDemoWindow { false },
     m_showOverlayWindow { false },
     m_tilemap { m_view },
@@ -60,7 +55,7 @@ EditorState::EditorState()
 
     this->reset_view( Settings::get_instance().get_window_size() );
 
-    m_view.show_debug();
+    m_view.enable_debug();
 
     // m_greenEntity.setFillColor( sf::Color::Green );
     // m_greenEntity.setOutlineColor( sf::Color::Black );
@@ -72,47 +67,6 @@ void EditorState::update( UpdateContext & context )
     this->update_toolbar( context );
     this->update_view( context );
     this->update_overlay( context );
-
-    if ( m_showWindow.at( "debug_options" ) )
-    {  // UPDATE DEBUG
-        ImGui::P_Show(
-            "Debug Options", &m_showWindow.at( "debug_options" ), [&] () {
-                std::stringstream windowTextOutput {};
-                windowTextOutput << std::boolalpha;
-                windowTextOutput
-                    << "MousePos : " << context.inputs.get_mouse_position()
-                    << "\n";
-                windowTextOutput << "CursorPos : "
-                                 << math::Vector2F { ImGui::GetCursorPos() }
-                                 << "\n";
-                windowTextOutput
-                    << "CursorStartPos : "
-                    << math::Vector2F { ImGui::GetCursorStartPos() } << "\n";
-                windowTextOutput
-                    << "CursorScreenPos : "
-                    << math::Vector2F { ImGui::GetCursorScreenPos() } << "\n";
-                windowTextOutput
-                    << "ContentRegionAvail : "
-                    << math::Vector2F { ImGui::GetContentRegionAvail() }
-                    << "\n";
-
-                windowTextOutput << "\n";
-
-                windowTextOutput
-                    << "IsWindowFocused : " << ImGui::IsWindowFocused() << "\n";
-                windowTextOutput
-                    << "IsWindowHovered : " << ImGui::IsWindowHovered() << "\n";
-
-                windowTextOutput << "\n";
-
-                windowTextOutput
-                    << "IsAnyItemActive : " << ImGui::IsAnyItemActive() << "\n";
-                windowTextOutput
-                    << "IsAnyItemHovered : " << ImGui::IsAnyItemHovered()
-                    << "\n";
-                ImGui::Text( "%s", windowTextOutput.str().c_str() );
-            } );
-    }
 }
 
 void EditorState::update_toolbar( UpdateContext & context )
@@ -156,14 +110,15 @@ void EditorState::update_view( UpdateContext & context )
                         * m_viewSettings.zoomSpeed };
     m_view.zoom( scrollValue, context.window );
 
-    math::Vector2F moveSpeed {
-        math::Vector2F { m_viewSettings.moveSpeed, m_viewSettings.moveSpeed }
-        / m_view.get_zoom( context.window ) };
-    math::Vector2F const viewMoveValue {
-        context.inputs.is_pressed( sf::Mouse::Right )
-            ? context.inputs.get_mouse_movement().to_float() * moveSpeed
-            : math::Vector2F { 0.f, 0.f } };
-    m_view.m_sfView.move( viewMoveValue );
+    if ( context.inputs.is_pressed( sf::Mouse::Right ) )
+    {
+        math::Vector2F moveSpeed { math::Vector2F { m_viewSettings.moveSpeed,
+                                                    m_viewSettings.moveSpeed }
+                                   / m_view.get_zoom( context.window ) };
+        math::Vector2F const viewMoveValue {
+            context.inputs.get_mouse_movement().to_float() * moveSpeed };
+        m_view.m_sfView.move( viewMoveValue );
+    }
 }
 
 void EditorState::update_overlay( UpdateContext & context )
@@ -211,15 +166,6 @@ void EditorState::update_overlay( UpdateContext & context )
                                  ImGuiHoveredFlags_AnyWindow )
                           << "\n";
             ImGui::Text( "%s", overlayOutput.str().c_str() );
-        }
-
-        if ( ImGui::TreeNode( "Show Tools" ) )
-        {
-            for ( auto & element : m_showWindow )
-            {
-                ImGui::Checkbox( element.first.c_str(), &element.second );
-            }
-            ImGui::TreePop();
         }
     }
     ImGui::End();

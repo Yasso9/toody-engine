@@ -22,7 +22,7 @@
 #include "graphics2D/view.hpp"           // for View
 #include "maths/geometry/point.hpp"      // for PointF
 #include "maths/geometry/point.tpp"      // for Point::Point<Type>, Point:...
-              // for get_mouse_position, is_pre...
+                                         // for get_mouse_position, is_pre...
 #include "tools/array/vector.hpp"
 #include "tools/assertion.hpp"  // for ASSERTION
 #include "tools/path.hpp"
@@ -295,7 +295,6 @@ namespace tile
     {
         if ( ! m_view.contain( point ) )
         {
-            Trace::Error( "The point isn't inside the view" );
             return false;
         }
 

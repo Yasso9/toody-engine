@@ -6,12 +6,12 @@ DebugWindow::DebugWindow( std::string const & windowName )
   : m_windowName { windowName }, m_show { false }
 {}
 
-void DebugWindow::show_debug()
+void DebugWindow::enable_debug()
 {
     m_show = true;
 }
 
-void DebugWindow::hide_debug()
+void DebugWindow::disable_debug()
 {
     m_show = false;
 }
