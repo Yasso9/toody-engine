@@ -55,13 +55,13 @@ class Player : public Transformable2D
     ///        of this playerState according to the state
     std::map< Player::E_State,
               std::map< E_Direction, std::vector< unsigned int > > >
-                  m_spriteValue;
+        m_spriteValue;
     /// @brief Last state and direction of the player
     CompleteState m_lastState;
     /// @brief Index of the last sprite for the animation
-    unsigned int  m_lastSpriteIndex;
+    unsigned int m_lastSpriteIndex;
     /// @brief Time elapsed since last frame
-    float         m_timeElapsed;
+    float m_timeElapsed;
 
   public:
     Player();

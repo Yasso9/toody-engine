@@ -33,11 +33,11 @@ class View : public DebugWindow
     void           zoom ( float factor, Window const & window );
 
     /// @brief Size of the view
-    math::Vector2F   get_size () const;
+    math::Vector2F get_size () const;
     /// @brief Position of the center of the view
-    math::Vector2F   get_center () const;
+    math::Vector2F get_center () const;
     /// @brief Position where the view rectangle begin (top left corner)
-    math::PointF     get_position () const;
+    math::PointF get_position () const;
     /// @brief Position and size of the view (e.g. Rectangle)
     math::RectangleF get_rectangle () const;
 

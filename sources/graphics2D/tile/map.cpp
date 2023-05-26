@@ -258,7 +258,7 @@ namespace tile
     tile::Set const & Map::get_tileset() const
     {
         return this->m_tileSelector.get_tileset();
-    };
+    }
 
     tile::Size Map::get_size() const
     {

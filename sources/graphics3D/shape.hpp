@@ -18,7 +18,7 @@ class Shape final : public Transformable
     struct S_Data
     {
         // Attributes of the shape
-        std::vector< float >                         vertices {};
+        std::vector< float > vertices {};
         // Indices of the shape
         std::optional< std::vector< unsigned int > > indices {};
 

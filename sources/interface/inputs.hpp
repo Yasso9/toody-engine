@@ -24,14 +24,14 @@ class Inputs
     std::vector< sf::Keyboard::Key > m_keyReleased;
     math::Vector2I                   m_mouseMovement;
     /// x : Horizontal and y : vertical scroll
-    math::Vector2I                   m_mouseScroll;
-    bool                             m_mouseEnteredWindow;
-    bool                             m_mouseLeftWindow;
-    bool                             m_focusGained;
-    bool                             m_focusLost;
-    bool                             m_windowClosed;
-    bool                             m_windowResized;
-    char                             m_textEntered;
+    math::Vector2I m_mouseScroll;
+    bool           m_mouseEnteredWindow;
+    bool           m_mouseLeftWindow;
+    bool           m_focusGained;
+    bool           m_focusLost;
+    bool           m_windowClosed;
+    bool           m_windowResized;
+    char           m_textEntered;
 
   public:
     Inputs( Window & window );

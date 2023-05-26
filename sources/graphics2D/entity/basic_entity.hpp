@@ -5,7 +5,8 @@
 #include "graphics2D/view.hpp"                      // for View
 #include "maths/geometry/polygon.hpp"               // for PolygonF
 #include "maths/vector2.hpp"                        // for Vector2F
-                         // for S_KeyboardMove
+
+// for S_KeyboardMove
 
 class BasicEntity2D : public StaticEntity2D
 {

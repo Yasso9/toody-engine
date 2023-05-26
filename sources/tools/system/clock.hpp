@@ -10,7 +10,7 @@ class Clock
     virtual ~Clock() = default;
 
     /// @brief Restart the clock
-    void  reset ();
+    void reset ();
     /// @brief Return the elapsed time in seconds
     float get_elapsed_time () const;
 };

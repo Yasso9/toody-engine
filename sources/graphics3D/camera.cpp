@@ -15,7 +15,7 @@
 #include "maths/vector2.tpp"         // for operator==, Vector2::operat...
 #include "maths/vector3.hpp"         // for Vector3F
 #include "maths/vector3.tpp"         // for Vector3::rotate
-          // for is_pressed, get_mouse_position
+                                     // for is_pressed, get_mouse_position
 #include "tools/assertion.hpp"       // for ASSERTION
 #include "tools/singleton.tpp"       // for Singleton::get_instance
 

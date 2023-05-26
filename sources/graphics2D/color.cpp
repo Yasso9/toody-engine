@@ -60,4 +60,4 @@ void Color::set( Color::RGBA rgbaColor )
     m_table[1] = static_cast< float >( rgbaColor.g ) / COLOR_RANGE_F;
     m_table[2] = static_cast< float >( rgbaColor.b ) / COLOR_RANGE_F;
     m_table[3] = static_cast< float >( rgbaColor.a ) / COLOR_RANGE_F;
-};
+}

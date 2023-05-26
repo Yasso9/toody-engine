@@ -28,7 +28,7 @@ Enum< Type > Enum< Type >::operator++ ( int )
 }
 
 template< EnumType Type >
-bool Enum< Type >::operator<( Type const & enumValue )
+bool Enum< Type >::operator< ( Type const & enumValue )
 {
     return this->m_currentValue < enumValue;
 }

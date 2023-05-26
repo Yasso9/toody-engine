@@ -25,9 +25,9 @@ class Model final : public Transformable
      */
     std::map< std::string, Texture > m_texturesLoaded;
     /// @brief All the meshes that the model contains
-    std::vector< Mesh >              m_meshes;
+    std::vector< Mesh > m_meshes;
     /// @brief Path of the model object file
-    std::filesystem::path const      m_filePath;
+    std::filesystem::path const m_filePath;
 
   public:
     explicit Model( Camera const & camera, std::string const & filePathModel );

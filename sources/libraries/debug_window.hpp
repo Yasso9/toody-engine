@@ -21,7 +21,7 @@ class DebugWindow
 
     // This method call debug_window_content() and must be called 1 time per
     // frame in the update loop
-    void         update_debug ();
+    void update_debug ();
     // Method that contain elements to show when the window is enabled
     virtual void debug_window_content ();
 };

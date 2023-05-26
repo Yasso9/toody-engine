@@ -16,7 +16,7 @@
 #include "maths/numerics.hpp"        // for division_reminder_u
 #include "maths/vector2.hpp"         // for Vector2F, Vector2, Vector2I
 #include "maths/vector2.tpp"         // for operator<<, operator+, Vector2:...
-          // for get_mouse_position, is_pressed
+                                     // for get_mouse_position, is_pressed
 #include "tools/path.hpp"
 
 namespace tile
@@ -131,8 +131,8 @@ namespace tile
                                     m_gridColor.to_integer() );
 
                                 // Horizontal lines
-                                for ( int x = 0; x < gridBorder.size.x;
-                                      x += TILE_PIXEL_SIZE_I )
+                                for ( int x  = 0; x < gridBorder.size.x;
+                                      x     += TILE_PIXEL_SIZE_I )
                                 {
                                     math::LineI line {
                                         { gridBorder.position.x + x,
@@ -146,8 +146,8 @@ namespace tile
                                         m_gridColor.to_integer() );
                                 }
                                 // Vertical lines
-                                for ( int y = 0; y < gridBorder.size.y;
-                                      y += TILE_PIXEL_SIZE_I )
+                                for ( int y  = 0; y < gridBorder.size.y;
+                                      y     += TILE_PIXEL_SIZE_I )
                                 {
                                     math::LineI line {
                                         { gridBorder.position.x,

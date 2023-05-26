@@ -11,7 +11,7 @@ namespace tile
         math::Vector2U m_position;
         /// @brief number of tile in the X axis of the map/grid
         ///        where the tile is positionned
-        unsigned int   m_numberOfColumns;
+        unsigned int m_numberOfColumns;
 
       public:
         enum Type
@@ -27,7 +27,7 @@ namespace tile
         Position( math::Vector2U position, tile::Size mapSize, Type type );
 
         /// @brief get index of the tile
-        unsigned int   value () const;
+        unsigned int value () const;
         /// @brief get position in tile value
         math::Vector2U tile () const;
         /// @brief get position in pixel value
@@ -40,9 +40,9 @@ namespace tile
 
         bool is_inside ( tile::Size size ) const;
 
-        bool operator<( tile::Size size ) const;
+        bool operator< ( tile::Size size ) const;
         bool operator>= ( tile::Size size ) const;
-        bool operator<( tile::Position position ) const;
+        bool operator< ( tile::Position position ) const;
         bool operator>= ( tile::Position position ) const;
         /// @brief Compare position AND numberOfColumns
         bool operator== ( tile::Position position ) const;

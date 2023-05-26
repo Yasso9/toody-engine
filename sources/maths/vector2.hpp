@@ -60,7 +60,7 @@ namespace math
         /// @brief Move Assignement
         Vector2< Type > & operator= ( Vector2< Type > && vector2D ) noexcept;
         /// @brief Array operator
-        Type              operator[] ( std::size_t index ) const;
+        Type operator[] ( std::size_t index ) const;
 
         // ####################################################################
         // ######################## STREAM OPERATOR ###########################
@@ -189,8 +189,8 @@ namespace math
                       Vector2< TypeRight > const & vector2DRight );
 
     template< cPrimitive TypeLeft, cPrimitive TypeRight >
-    bool operator<( Vector2< TypeLeft > const &  vector2DLeft,
-                    Vector2< TypeRight > const & vector2DRight );
+    bool operator< ( Vector2< TypeLeft > const &  vector2DLeft,
+                     Vector2< TypeRight > const & vector2DRight );
 
     template< cPrimitive Type >
     bool operator> ( Vector2< Type > const & vector2DLeft,

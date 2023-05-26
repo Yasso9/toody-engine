@@ -8,7 +8,7 @@ indent_style = space
 [*.{cpp,hpp,tpp}]
 insert_final_newline = true
 
-[.clang-format]
+[.yml]
 indent_size = 2
 
 [Makefile]

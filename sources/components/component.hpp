@@ -16,7 +16,7 @@ class Component
 {
   private:
     // List of childs components
-    std::vector< Component * >   m_childs;
+    std::vector< Component * > m_childs;
     // List of debug windows attached to this component
     std::vector< DebugWindow * > m_debugWindows;
     // List of childs components represented as an array of components

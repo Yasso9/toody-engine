@@ -14,12 +14,12 @@ Shape2D::Shape2D( math::PolygonF polygon ) : m_polygon {}
 unsigned int Shape2D::get_point_count() const
 {
     return m_polygon.get_number_of_points();
-};
+}
 
 math::Vector2F Shape2D::get_point( unsigned int index ) const
 {
     return m_polygon[index];
-};
+}
 
 math::PointF Shape2D::get_position() const
 {

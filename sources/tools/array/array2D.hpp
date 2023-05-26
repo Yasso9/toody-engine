@@ -11,7 +11,7 @@ class Array2D
     std::vector< T > m_array2D;
     // x : index of columns
     // y : index of lines
-    math::Vector2U   m_size;
+    math::Vector2U m_size;
 
   public:
     Array2D();

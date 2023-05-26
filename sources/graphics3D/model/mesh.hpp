@@ -31,9 +31,9 @@ struct S_Vertex
     /// @brief bitangent
     glm::vec3 bitangent;
     /// @brief bone indexes which will influence this vertex
-    int       boneIDs[maxBoneInfluence];
+    int boneIDs[maxBoneInfluence];
     /// @brief weights from each bone
-    float     weights[maxBoneInfluence];
+    float weights[maxBoneInfluence];
 };
 
 class Mesh

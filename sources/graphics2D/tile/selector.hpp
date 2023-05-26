@@ -12,7 +12,7 @@ namespace tile
     class Selector : public Component
     {
         /// @brief Table of tiles where we can select our tile
-        tile::Set                       m_tileset;
+        tile::Set m_tileset;
         /// @brief posisition of the tile chosen. Is optional because at the
         /// beginning we can have no tile choose
         std::optional< tile::Position > m_tileSelected;

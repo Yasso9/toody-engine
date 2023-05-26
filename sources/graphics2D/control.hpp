@@ -6,7 +6,6 @@
 #include "maths/geometry/polygon.hpp"  // for PolygonF
 #include "maths/vector2.hpp"           // for Vector2F
 
-
 class Control
 {
     CollisionList const & m_collisionList;

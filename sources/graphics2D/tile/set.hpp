@@ -14,7 +14,7 @@ namespace tile
     {
         sf::Texture const & m_texture;
         /// @brief Absolute position of the tileset
-        math::Vector2F      m_position;
+        math::Vector2F m_position;
 
       public:
         /// @param position Position in pixel

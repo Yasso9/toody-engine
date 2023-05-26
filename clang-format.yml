@@ -1,14 +1,38 @@
 BasedOnStyle: Google
 AccessModifierOffset: -2
 AlignAfterOpenBracket: Align
-# AlignArrayOfStructures: Right # Buggy on some cases
-AlignConsecutiveAssignments: Consecutive # cannot put custom fields ?
-AlignConsecutiveBitFields: Consecutive # cannot put custom fields ?
-AlignConsecutiveDeclarations: AcrossComments # cannot put custom fields ?
-AlignConsecutiveMacros: Consecutive # cannot put custom fields ?
+AlignArrayOfStructures: None # Left/right buggy v16
+AlignConsecutiveAssignments: # Consecutive # Custom fields v16
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: true
+  PadOperators: true
+AlignConsecutiveBitFields: # Consecutive # Custom fields v16
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: true
+  PadOperators: true
+AlignConsecutiveDeclarations: # Consecutive # Custom fields v16
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: true
+  PadOperators: true
+AlignConsecutiveMacros: # Consecutive # Custom fields v16
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: true
+  PadOperators: true
 AlignEscapedNewlines: Left
 AlignOperands: Align
-AlignTrailingComments: true
+# AlignTrailingComments: true # < v16
+AlignTrailingComments: # >= v16 (doesn't work)
+  Kind: Always
+  OverEmptyLines: 0
+
 AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: Empty
@@ -18,11 +42,14 @@ AllowShortFunctionsOnASingleLine: Inline
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLambdasOnASingleLine: All
 AllowShortLoopsOnASingleLine: false
+
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: Yes
+
 BinPackArguments: true
 BinPackParameters: true
+
 BitFieldColonSpacing: After
 BraceWrapping:
   AfterCaseLabel:	true
@@ -43,24 +70,36 @@ BraceWrapping:
   SplitEmptyFunction: false
   SplitEmptyRecord: false
   SplitEmptyNamespace: false
+# BracedInitializerIndentWidth: 0 # v17
+
+BreakAfterAttributes: Never # v16
+BreakAfterJavaFieldAnnotations: true
+BreakArrays: false # v16
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Custom
-BreakBeforeConceptDeclarations: Allowed # Doesn't work
+BreakBeforeConceptDeclarations: Allowed
+BreakBeforeInlineASMColon: OnlyMultiline # v16
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
 BreakInheritanceList: AfterComma
 BreakStringLiterals: true
+
 ColumnLimit: 80
 CompactNamespaces: false
+
 ConstructorInitializerIndentWidth: 2
 ContinuationIndentWidth: 4
+# ContinuationIndentWidth: # Don't know what to put
+
 Cpp11BracedListStyle: true
-DeriveLineEnding: false
 DerivePointerAlignment: false
 DisableFormat: false
+
 EmptyLineAfterAccessModifier: Never
 EmptyLineBeforeAccessModifier: Always
+
 FixNamespaceComments: true
+
 # ForEachMacros: ['RANGES_FOR', 'FOREACH']
 # IfMacros: ['IF']
 IncludeBlocks: Regroup
@@ -78,48 +117,75 @@ IncludeCategories:
 # Header
   - Regex:           '".*"'
     Priority:        1
+
 IndentAccessModifiers: false
 IndentCaseBlocks: true
 IndentCaseLabels: false
-# IndentExternBlockStyle: AfterExternBlock # Doesn't work
+# IndentExternBlockStyle: AfterExternBlock # v16 (doesn't work)
 IndentGotoLabels: false
 IndentPPDirectives: AfterHash
 IndentRequires: true
-IndentRequiresClause: true # clang 15
+IndentRequiresClause: true
 IndentWidth: 4
 IndentWrappedFunctionNames: true
-InsertBraces: true # clang 15
+
+InsertBraces: true
+InsertNewlineAtEOF: true # v16
 InsertTrailingCommas: None # Cannot use that if BinPackArguments is set to true
+IntegerLiteralSeparator: # v16
+  Binary: 4
+  Decimal: 3
+  Hex: 2
+#   BinaryMinDigits: 4 # (doesn't work)
+#   DecimalMinDigits: 3 # (doesn't work)
+#   HexMinDigits: 2 # (doesn't work)
+
+# JavaImportGroups: ['com.example', 'com', 'org'] # Don't know what to put
 JavaScriptQuotes: Single
-JavaScriptWrapImports: false
+JavaScriptWrapImports: true
+
 KeepEmptyLinesAtTheStartOfBlocks: false
 LambdaBodyIndentation: Signature
+
 Language: Cpp
+LineEnding: LF # v16
+
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All
-# NamespaceMacros:
 PPIndentWidth: 4
-PackConstructorInitializers: NextLine # clang 14
+
+PackConstructorInitializers: NextLine
+
 # PenaltyBreakAssignment: 90
 # PenaltyBreakBeforeFirstCallParameter: 90
 # PenaltyBreakComment: 40
 # PenaltyBreakFirstLessLess: -10
+# PenaltyBreakOpenParenthesis: 20
 # PenaltyBreakString: 90
 # PenaltyBreakTemplateDeclaration: 200
 # PenaltyIndentedWhitespace: 150
 # PenaltyReturnTypeOnItsOwnLine: 150
+
 PointerAlignment: Middle
-# QualifierAlignment: Custom
-# QualifierOrder: ['inline', 'constexpr', 'static', 'type', 'const' ] # Still buggy ex : 'std::vector< Type > const Array2D< Type >::operator[] (unsigned int line ) const'
+QualifierAlignment: Custom # v16
+QualifierOrder: ['constexpr', 'inline', 'volatile', 'static', 'type', 'const' ] # v16
+# RawStringFormats # Don't know what to put
 ReferenceAlignment: Middle
+
 ReflowComments: true
 # RemoveBracesLLVM: false # Useless
-RequiresClausePosition: WithPreceding # clang 15
+RemoveSemicolon: true # v16
+
+RequiresClausePosition: WithPreceding
+RequiresExpressionIndentation: Keyword # v16
+
 SeparateDefinitionBlocks: Always
 ShortNamespaceLines: 0
+
 SortIncludes: CaseSensitive
 SortJavaStaticImport: Before
 SortUsingDeclarations: true
+
 SpaceAfterCStyleCast: false
 SpaceAfterLogicalNot: true
 SpaceAfterTemplateKeyword: false
@@ -129,6 +195,7 @@ SpaceBeforeCaseColon: true
 SpaceBeforeCpp11BracedList: true
 SpaceBeforeCtorInitializerColon: true
 SpaceBeforeInheritanceColon: true
+# SpaceBeforeJsonColon: false # v17
 SpaceBeforeParens: Custom
 SpaceBeforeParensOptions:
   AfterControlStatements: true
@@ -153,6 +220,6 @@ SpacesInLineCommentPrefix:
   Maximum: 1
 SpacesInParentheses: true
 SpacesInSquareBrackets: false
-Standard: c++20
-UseCRLF: true
+
+Standard: Latest
 UseTab: Never

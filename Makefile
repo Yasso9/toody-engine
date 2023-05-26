@@ -185,7 +185,7 @@ clean_libs:
 	$(SHOW)rm -rf $(LIBS_OBJ_DIR)
 
 format:
-	$(SHOW)clang-format -i --verbose -style=file:.clang-format \
+	$(SHOW)clang-format -i --verbose -style=file:$(CWD)/clang-format.yml \
 	$(call GET_FILES,$(SRC_DIR),*.cpp) \
 	$(call GET_FILES,$(SRC_DIR),*.hpp) \
 	$(call GET_FILES,$(SRC_DIR),*.tpp)

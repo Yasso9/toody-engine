@@ -5,8 +5,8 @@
 #include <SFML/Graphics/Shape.hpp>  // for Shape
 #include <SFML/System/Vector2.hpp>  // for Vector2f
 
-#include "contexts/update_context.hpp"
 #include "contexts/render_context.hpp"
+#include "contexts/update_context.hpp"
 #include "maths/geometry/point.hpp"    // for PointF
 #include "maths/geometry/polygon.hpp"  // for PolygonF
 #include "maths/vector2.hpp"           // for Vector2F

@@ -16,7 +16,7 @@ std::string Chunk::to_string() const
 
 void test_serializer ()
 {
-    std::vector< int > arrayA { 714545, 4524, 9, 10002 };
+    std::vector< int > arrayA { 714'545, 4'524, 9, 10'002 };
     std::cout << "arrayA : " << arrayA << std::endl;
 
     std::stringstream streamA {};
@@ -30,8 +30,8 @@ void test_serializer ()
     std::cout << "\n" << std::endl;
 
     std::vector< std::vector< int > > arrayB { { 745, 524, 879, 858 },
-                                               { 745, 454, 879, 45714 },
-                                               { 745, 45474, 4141, 858 },
+                                               { 745, 454, 879, 45'714 },
+                                               { 745, 45'474, 4'141, 858 },
                                                { 474, 454, 879, 858 } };
     std::cout << "arrayB : " << arrayB << std::endl;
 

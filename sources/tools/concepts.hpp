@@ -10,8 +10,9 @@ concept cPrimitive =
     std::is_integral_v< Type > || std::is_floating_point_v< Type >;
 
 /// @brief Require numbers type like float, int but not unsigned int
-template< typename Type > concept cRelativePrimitive = cPrimitive< Type > && not
-std::is_unsigned_v< Type >;
+template< typename Type >
+concept cRelativePrimitive =
+    cPrimitive< Type > && not std::is_unsigned_v< Type >;
 
 namespace math
 {
@@ -23,7 +24,7 @@ template< typename Type >
 concept cPrintableObject = requires ( Type type, std::ostream ostream ) {
                                {
                                    type.operator<< ( ostream )
-                                   } -> std::same_as< std::ostream & >;
+                               } -> std::same_as< std::ostream & >;
                            };
 
 template< typename Type >

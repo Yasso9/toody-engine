@@ -9,8 +9,8 @@
 #include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
 #include <imgui/imgui.h>                   // for InputFloat, Begin, Checkbox
 
+#include "contexts/render_context.hpp"  // for RenderContext
 #include "contexts/update_context.hpp"
-#include "contexts/render_context.hpp"       // for RenderContext
 #include "libraries/imgui.hpp"           // for P_ColorEditor, P_Begin
 #include "maths/geometry/line.hpp"       // for Segment::is_intersected_by
 #include "maths/geometry/point.hpp"      // for PointF

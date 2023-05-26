@@ -5,7 +5,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>  // for RenderWindow
 
 #include "maths/vector2.hpp"    // for Vector2U
-     // for S_KeyboardMove
+                                // for S_KeyboardMove
 #include "tools/singleton.hpp"  // for Singleton
 
 namespace sf

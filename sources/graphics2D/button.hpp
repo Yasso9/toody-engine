@@ -24,7 +24,7 @@ class Button final : public Transformable2D
     sf::Vector2f get_size () const;
     // void set_size( sf::Vector2f const & size );
     // void set_size( float const & sizeX, float const & sizeY );
-    void         set_size ( unsigned int const & characterSize );
+    void set_size ( unsigned int const & characterSize );
 
     void set_string ( std::string const & string );
 
@@ -54,5 +54,5 @@ class Button final : public Transformable2D
     /// @brief shape of the button
     sf::RectangleShape m_shape {};
     /// @brief text held inside the button
-    sf::Text           m_text {};
+    sf::Text m_text {};
 };

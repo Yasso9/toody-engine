@@ -17,8 +17,8 @@ class Dialogue : public Component
     sf::RectangleShape m_shape;
     sf::Text           m_text;
     /// @brief true if we show the dialogue, false otherwise
-    bool               m_isEnabled;
-    bool               m_showCustomisation;
+    bool m_isEnabled;
+    bool m_showCustomisation;
 
     std::string m_textRemaining;
 

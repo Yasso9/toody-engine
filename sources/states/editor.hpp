@@ -43,7 +43,7 @@ class EditorState : public State
     tile::Map m_tilemap;
     ImageMap  m_imageMap;
 
-    CollisionList   m_collisionList;
+    CollisionList m_collisionList;
     // ControllableEntity2D m_greenEntity;
     // Player               m_player;
     CharacterEntity m_character;

@@ -25,7 +25,7 @@ namespace tile
 
         tile::Cursor m_cursor;
         /// @brief view of the component that call the tilemap
-        View &       m_view;
+        View & m_view;
 
         std::filesystem::path m_saveFile;
 
@@ -40,11 +40,11 @@ namespace tile
         /// @brief Reference to the tileset that the tilemap use
         tile::Set const & get_tileset () const;
         /// @brief Size of the tilemap
-        tile::Size        get_size () const;
+        tile::Size get_size () const;
         /// @brief Absolute position of the center of the tilemap in pixel
-        math::Vector2F    get_center_absolute () const;
+        math::Vector2F get_center_absolute () const;
         /// @brief Relative position of the center of the tilemap in pixel
-        math::Vector2F    get_center_relative () const;
+        math::Vector2F get_center_relative () const;
 
         /// @brief Get the tile position of a point in the tilemap
         /// @return optionnal tile position if the point is in the tilemap

@@ -18,7 +18,7 @@ namespace tile
 
         Size( math::Vector2U size, Type type );
 
-        unsigned int   value () const;
+        unsigned int value () const;
         /// @brief get size in tile value
         math::Vector2U tile () const;
         /// @brief get size in pixel value

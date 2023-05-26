@@ -19,4 +19,4 @@ Timer::~Timer()
 
     Trace::Debug( "Elapsed Time for '" + m_indication + "' - "
                   + std::to_string( elapsedTime ) + " [ms]" );
-};
+}

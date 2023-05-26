@@ -63,11 +63,11 @@ void ShapeBuilder::objects_binding()
 
 void ShapeBuilder::vertex_shader_attribution()
 {
-    int const          valueType { GL_FLOAT };
+    int const valueType { GL_FLOAT };
     // Normalised means that the data is normalised to the range [-1, 1]
-    int const          isNormalised { GL_FALSE };
+    int const isNormalised { GL_FALSE };
     // Stride is the number of bytes between each vertex
-    int const          stride { 0 };
+    int const stride { 0 };
     // Offset is the number of bytes of the first vertex
     void const * const offset { nullptr };
 
