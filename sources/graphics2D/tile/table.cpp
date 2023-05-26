@@ -34,8 +34,7 @@ namespace tile
 
     tile::Size Table::get_size() const
     {
-        return tile::Size { this->Array2D< Tile >::size(),
-                            tile::Size::Tile };
+        return tile::Size { this->Array2D< Tile >::size(), tile::Size::Tile };
     }
 
     void Table::set_size( tile::Size size )

@@ -1,6 +1,7 @@
 #pragma once
 
-#include <vector>  // for vector
+#include <functional>  // for reference_wrapper
+#include <vector>      // for vector
 
 #include "contexts/render_context.hpp"  // for RenderContext
 #include "contexts/update_context.hpp"  // for UpdateContext
@@ -14,10 +15,16 @@ template< typename T > concept cComponent = std::derived_from< T, Component >;
 class Component
 {
   private:
+    // List of childs components
     std::vector< Component * >   m_childs;
+    // List of debug windows attached to this component
     std::vector< DebugWindow * > m_debugWindows;
+    // List of childs components represented as an array of components
+    // std::vector< std::reference_wrapper< std::vector< Component * > > >
+    //     m_arrayChilds;
+
     // optionnal references so we use a pointer
-    View const *                 m_view;
+    View const * m_view;
 
   protected:
     Component();
@@ -34,8 +41,17 @@ class Component
     void add_child ( Component & component );
     void add_child ( Component & component, View const & view );
     void add_child ( Component * component );
+
     // Difficult to implement
-    // void add_childs ( std::vector< Component > & components );
+    // template< cComponent C >
+    // void add_childs ( std::vector< C > & components )
+    // {
+    //     for ( C & component : components )
+    //     {
+    //         this->add_child( component );
+    //     }
+    // }
+
     // template< cComponent C >
     // void add_childs( std::vector< C > & components );
 

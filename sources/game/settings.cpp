@@ -4,9 +4,11 @@
 #include <fstream>     // for basic_istream<>::__istream_type, ifs...
 #include <string>      // for string, operator""s
 
+#include "tools/enum.hpp"    // for operator>>, operator<<
 #include "tools/path.hpp"    // for get_folder, E_Folder, E_Folder::Data
 #include "tools/traces.hpp"  // for FileIssue
 
+// TODO have this function available globally
 template< typename T,
           class Bd = boost::describe::describe_bases<
               T, boost::describe::mod_any_access >,
@@ -28,10 +30,12 @@ std::string get_description ( T const & value, char separator = '\n' )
 }
 
 Settings::Settings()
-  : m_filePath { path::get_folder( path::Data ) / "settings.txt" },
+  : SubWindow { "Settings" },
+    m_filePath { path::get_folder( path::Data ) / "settings.txt" },
     m_windowSize {},
     m_nbFramePerSecond {},
-    m_verticalSync {}
+    m_verticalSync {},
+    m_startupState {}
 {
     this->load();
 }
@@ -57,11 +61,42 @@ bool Settings::get_vertical_sync() const
     return m_verticalSync;
 }
 
+void Settings::update_gui_window()
+{
+    if ( ImGui::BeginWindow( *this ) )
+    {
+        ImGui::Text( "Window size" );
+        ImGui::SameLine();
+        ImGui::InputFloat( "Width", &m_windowSize.x );
+        ImGui::InputFloat( "Height", &m_windowSize.y );
+
+        ImGui::Text( "Frame rate" );
+        ImGui::InputFloat( "Frame rate", &m_nbFramePerSecond );
+
+        ImGui::Text( "Vertical sync" );
+        ImGui::Checkbox( "Vertical sync", &m_verticalSync );
+
+        ImGui::Text( "Startup state" );
+
+        if ( ImGui::Button( "Load Default" ) )
+        {
+            this->load_default();
+        }
+        ImGui::SameLine();
+        if ( ImGui::Button( "Save" ) )
+        {
+            this->save();
+        }
+    }
+    ImGui::End();
+}
+
 void Settings::load_default()
 {
     m_windowSize       = { 800.f, 600.f };
     m_nbFramePerSecond = 60.f;
     m_verticalSync     = true;
+    m_startupState     = State::MainMenu;
 
     this->save();
 }

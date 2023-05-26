@@ -137,3 +137,17 @@ namespace ImGui_P
         ImGui_P::Text( stream.str() );
     }
 }  // namespace ImGui_P
+
+// TODO all the function above will be deprecated : remove or improve them
+namespace ImGui
+{
+    bool BeginWindow ( SubWindow & subWindow )
+    {
+        if ( ! subWindow.showWindow )
+        {
+            return false;
+        }
+        return ImGui::Begin( subWindow.windowName.c_str(),
+                             &subWindow.showWindow );
+    }
+}  // namespace ImGui

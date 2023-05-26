@@ -17,10 +17,8 @@ Transformable::Transformable( Camera const & camera, sf::Shader & shader )
   : m_camera { camera }, m_shader { shader }, m_spaceModel { 1.f }
 {}
 
-void Transformable::update_all( UpdateContext & context )
+void Transformable::update( UpdateContext & context )
 {
-    this->Component::update_all( context );
-
     // Update the shader
     gl::S_SpaceMatrix spaceMatrix {
         this->get_space_matrix( context.window.get_aspect_ratio() ) };
@@ -33,12 +31,13 @@ void Transformable::update_all( UpdateContext & context )
         sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.projection ) } );
 }
 
-void Transformable::render_all( RenderContext & context ) const
+void Transformable::render_before( RenderContext & /* context */ ) const
 {
     sf::Shader::bind( &m_shader );
+}
 
-    this->Component::render_all( context );
-
+void Transformable::render_after( RenderContext & /* context */ ) const
+{
     sf::Shader::bind( NULL );
 }
 

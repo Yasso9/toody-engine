@@ -171,9 +171,9 @@ init_build:
 	$(SHOW)mkdir -p $(DEPS_DIR)
 
 cleanall : clean clean_libs
+	$(SHOW)rm -rf $(BUILD_DIR)
 clean : clean_exec
 	$(SHOW)echo "Clean Project"
-	$(SHOW)rm -rf $(BUILD_DIR)
 	$(SHOW)rm -rf $(OBJ_DIR)
 	$(SHOW)rm -rf $(DEPS_DIR)
 clean_exec:

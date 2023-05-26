@@ -33,7 +33,7 @@ struct ViewSettings
 
 class EditorState : public State
 {
-    /// camera
+    // 2D camera
     View         m_view;
     ViewSettings m_viewSettings;
 

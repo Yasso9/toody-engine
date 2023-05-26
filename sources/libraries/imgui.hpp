@@ -8,6 +8,7 @@
 #include <fmt/format.h>             // for format
 #include <imgui/imgui.h>            // for ImGuiColorEditFlags, ImGuiInputTe...
 
+#include "libraries/sub_window.hpp"  // for SubWindow
 #include "maths/vector3.hpp"
 
 // P stands for personnal fonctions (overloading ImGui)
@@ -41,6 +42,17 @@ namespace ImGui
         void      to_table ( sf::Color sfmlColor, float tableColor[4] );
         sf::Color table_to_sfml ( float tableColor[4] );
     };  // namespace color
+}  // namespace ImGui
+
+namespace ImGui_P
+{
+    void Text ( std::string string );
+    void Text ( std::ostringstream const & stream );
+}  // namespace ImGui_P
+
+namespace ImGui
+{
+    bool BeginWindow ( SubWindow & subWindow );
 
     template< typename... Args >
     void TextFmt ( fmt::format_string< Args... > fmt, Args &&... args )
@@ -50,9 +62,3 @@ namespace ImGui
         ImGui::Text( "%s", formattedString.c_str() );
     }
 }  // namespace ImGui
-
-namespace ImGui_P
-{
-    void Text ( std::string string );
-    void Text ( std::ostringstream const & stream );
-}  // namespace ImGui_P
