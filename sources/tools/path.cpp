@@ -26,8 +26,8 @@ namespace path
             folderRelativPath = get_folder( E_Folder::Resources ) / "tilesets";
             break;
         case E_Folder::Character :
-            folderRelativPath =
-                get_folder( E_Folder::Resources ) / "characters";
+            folderRelativPath = get_folder( E_Folder::Resources )
+                                / "characters";
             break;
         case E_Folder::Fonts :
             folderRelativPath = get_folder( E_Folder::Resources ) / "fonts";

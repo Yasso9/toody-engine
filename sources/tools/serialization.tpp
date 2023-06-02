@@ -16,8 +16,8 @@ Chunk serialize ( Type const & valueToSerialize )
 
 /// @brief String Type
 template< typename Type >
-concept C_String =
-    std::is_same_v< Type, std::string > || std::is_same_v< Type, char const * >;
+concept C_String = std::is_same_v< Type, std::string >
+                   || std::is_same_v< Type, char const * >;
 
 template< typename Type >
 static Type unstream ( std::stringstream & stream )

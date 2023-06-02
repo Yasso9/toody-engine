@@ -58,12 +58,12 @@ void Player::init_sprite_value()
                                     { E_Direction::Down, { 0u } },
                                     { E_Direction::Right, { 3u } },
                                     { E_Direction::Left, { 9u } } } } );
-    this->m_spriteValue.insert(
-        { Player::E_State::Walking,
-          { { E_Direction::Up, { 6u, 7u, 6u, 8u } },
-            { E_Direction::Down, { 0u, 1u, 0u, 2u } },
-            { E_Direction::Right, { 3u, 4u, 3u, 5u } },
-            { E_Direction::Left, { 9u, 10u, 9u, 11u } } } } );
+    this->m_spriteValue.insert( { Player::E_State::Walking,
+                                  { { E_Direction::Up, { 6u, 7u, 6u, 8u } },
+                                    { E_Direction::Down, { 0u, 1u, 0u, 2u } },
+                                    { E_Direction::Right, { 3u, 4u, 3u, 5u } },
+                                    { E_Direction::Left,
+                                      { 9u, 10u, 9u, 11u } } } } );
     this->m_spriteValue.insert( { Player::E_State::Running,
                                   { { E_Direction::Up, { 0u } },
                                     { E_Direction::Right, { 0u } },
@@ -89,9 +89,9 @@ void Player::init_sprite_number_of_cells()
             "sprite does not correspond to the size that the texture have" };
     }
 
-    this->m_spriteNumberOfCells =
-        sf::Vector2u { static_cast< unsigned int >( numberOfRow ),
-                       static_cast< unsigned int >( numberOfLine ) };
+    this->m_spriteNumberOfCells = sf::Vector2u {
+        static_cast< unsigned int >( numberOfRow ),
+        static_cast< unsigned int >( numberOfLine ) };
 }
 
 void Player::set_direction( E_Direction const & direction )
@@ -260,8 +260,8 @@ sf::IntRect Player::get_current_texture_rect()
     // Transform the sprite value into the sprite position
     sf::Vector2i spritePosition {};
     spritePosition.x = currentSpriteNumber % spriteSize.x;
-    spritePosition.y =
-        ( currentSpriteNumber - spritePosition.x ) / spriteSize.x;
+    spritePosition.y = ( currentSpriteNumber - spritePosition.x )
+                       / spriteSize.x;
 
     sf::IntRect textureRect {};
     // Transform the sprite position into the rectangle of the sprite in the

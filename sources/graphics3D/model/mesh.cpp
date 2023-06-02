@@ -82,16 +82,16 @@ void Mesh::generate()
     // all its items. The effect is that we can simply pass a pointer to the
     // struct and it translates perfectly to a glm::vec3/2 array which again
     // translates to 3/2 floats which translates to a byte array.
-    glBufferData(
-        GL_ARRAY_BUFFER,
-        static_cast< long >( this->m_vertices.size() * sizeof( S_Vertex ) ),
-        &m_vertices[0], GL_STATIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER,
+                  static_cast< long >( this->m_vertices.size()
+                                       * sizeof( S_Vertex ) ),
+                  &m_vertices[0], GL_STATIC_DRAW );
 
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, EBO );
-    glBufferData(
-        GL_ELEMENT_ARRAY_BUFFER,
-        static_cast< long >( this->m_indices.size() * sizeof( unsigned int ) ),
-        &this->m_indices[0], GL_STATIC_DRAW );
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER,
+                  static_cast< long >( this->m_indices.size()
+                                       * sizeof( unsigned int ) ),
+                  &this->m_indices[0], GL_STATIC_DRAW );
 
     std::vector< unsigned int > dataPerPoint { 3u, 3u, 2u, 3u, 3u, 4u, 4u };
     GLenum const                valueType { GL_FLOAT };
@@ -105,9 +105,10 @@ void Mesh::generate()
             static_cast< intptr_t >( vectorSizeCounter * sizeof( float ) ) ) };
 
         glEnableVertexAttribArray( location );
-        glVertexAttribPointer(
-            location, static_cast< int >( dataPerPoint[location] ), valueType,
-            hasDataToBeNormalised, fullSize, offsetStart );
+        glVertexAttribPointer( location,
+                               static_cast< int >( dataPerPoint[location] ),
+                               valueType, hasDataToBeNormalised, fullSize,
+                               offsetStart );
 
         vectorSizeCounter += dataPerPoint[location];
     }

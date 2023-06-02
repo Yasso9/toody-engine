@@ -44,8 +44,8 @@ namespace tile
 
     void Tile::set_value( math::Vector2F position )
     {
-        m_quad.set_texture_coord(
-            math::RectangleF { position, TILE_PIXEL_SIZE_VECTOR } );
+        m_quad.set_texture_coord( math::RectangleF { position,
+                                                     TILE_PIXEL_SIZE_VECTOR } );
     }
 
     void Tile::set_value( tile::Position position )
@@ -60,8 +60,8 @@ namespace tile
 
     void Tile::set_position( math::Vector2F position )
     {
-        m_quad.set_position(
-            math::RectangleF { position, TILE_PIXEL_SIZE_VECTOR } );
+        m_quad.set_position( math::RectangleF { position,
+                                                TILE_PIXEL_SIZE_VECTOR } );
     }
 
     void Tile::set_position( tile::Position position )

@@ -38,8 +38,8 @@ math::PolygonF Sprite::get_polygon() const
 void Sprite::select_animation( unsigned int index )
 {
     sf::IntRect textureRect {};
-    textureRect.left =
-        static_cast< int >( index ) * static_cast< int >( m_size.x );
+    textureRect.left = static_cast< int >( index )
+                       * static_cast< int >( m_size.x );
     textureRect.top    = 0;
     textureRect.width  = TILE_PIXEL_SIZE_I;
     textureRect.height = TILE_PIXEL_SIZE_I;

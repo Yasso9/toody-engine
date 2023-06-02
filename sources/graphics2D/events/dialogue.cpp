@@ -43,8 +43,8 @@ Dialogue::Dialogue()
     m_shape.setOutlineThickness( 3.f );
     m_shape.setOutlineColor( sf::Color::Black );
 
-    m_text.setFont(
-        resources::get_font( path::get_folder( path::Fonts ) / "arial.ttf" ) );
+    m_text.setFont( resources::get_font( path::get_folder( path::Fonts )
+                                         / "arial.ttf" ) );
     m_text.setCharacterSize( 30u );
     m_text.setFillColor( sf::Color::Red );
 

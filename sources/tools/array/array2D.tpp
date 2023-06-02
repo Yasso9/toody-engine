@@ -106,8 +106,9 @@ T & Array2D< T >::operator() ( unsigned int col, unsigned int row )
 template< typename T >
 math::Vector2U Array2D< T >::get_position( unsigned int index ) const
 {
-    return math::Vector2U { static_cast< unsigned int >(
-        index % m_size.x, std::floor( index / m_size.x ) ) };
+    return math::Vector2U {
+        static_cast< unsigned int >( index % m_size.x,
+                                     std::floor( index / m_size.x ) ) };
 }
 
 template< typename T >

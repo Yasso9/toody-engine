@@ -47,7 +47,7 @@ namespace math
 
     unsigned int division_reminder_u ( float leftValue, float rightValue )
     {
-        return static_cast< unsigned int >(
-            division_reminder( leftValue, rightValue ) );
+        return static_cast< unsigned int >( division_reminder( leftValue,
+                                                               rightValue ) );
     }
 }  // namespace math

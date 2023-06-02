@@ -15,8 +15,9 @@ namespace math
     {
         // Find the four orientations needed for general and
         // special cases
-        E_Orientation s1a_s1b_s2a = get_orientation(
-            segment1.pointA, segment1.pointB, segment2.pointA );
+        E_Orientation s1a_s1b_s2a = get_orientation( segment1.pointA,
+                                                     segment1.pointB,
+                                                     segment2.pointA );
 
         E_Orientation o2 = get_orientation( segment1.pointA, segment1.pointB,
                                             segment2.pointB );

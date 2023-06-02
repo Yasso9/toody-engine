@@ -112,8 +112,9 @@ void Settings::load()
 
     // List of all members of Settings
     boost::mp11::mp_for_each< boost::describe::describe_members<
-        Settings, boost::describe::mod_any_access > >(
-        [&, this] ( auto D ) { file >> this->*D.pointer; } );
+        Settings, boost::describe::mod_any_access > >( [&, this] ( auto D ) {
+        file >> this->*D.pointer;
+    } );
 }
 
 void Settings::save() const
@@ -126,6 +127,7 @@ void Settings::save() const
 
     // List of all members of Settings
     boost::mp11::mp_for_each< boost::describe::describe_members<
-        Settings, boost::describe::mod_any_access > >(
-        [&, this] ( auto D ) { file << this->*D.pointer << "\n"; } );
+        Settings, boost::describe::mod_any_access > >( [&, this] ( auto D ) {
+        file << this->*D.pointer << "\n";
+    } );
 }

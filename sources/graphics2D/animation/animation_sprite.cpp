@@ -66,23 +66,23 @@ void AnimationSprite::set_direction( math::Vector2F movement )
 
     if ( movement.x >= 0.f && movement.y >= 0.f )
     {
-        direction =
-            movement.x > movement.y ? E_Direction::Right : E_Direction::Down;
+        direction = movement.x > movement.y ? E_Direction::Right
+                                            : E_Direction::Down;
     }
     else if ( movement.x >= 0.f && movement.y <= 0.f )
     {
-        direction =
-            movement.x > -movement.y ? E_Direction::Right : E_Direction::Up;
+        direction = movement.x > -movement.y ? E_Direction::Right
+                                             : E_Direction::Up;
     }
     else if ( movement.x <= 0.f && movement.y >= 0.f )
     {
-        direction =
-            movement.x < -movement.y ? E_Direction::Left : E_Direction::Down;
+        direction = movement.x < -movement.y ? E_Direction::Left
+                                             : E_Direction::Down;
     }
     else if ( movement.x <= 0.f && movement.y <= 0.f )
     {
-        direction =
-            movement.x < movement.y ? E_Direction::Left : E_Direction::Up;
+        direction = movement.x < movement.y ? E_Direction::Left
+                                            : E_Direction::Up;
     }
 
     this->set_direction( direction );

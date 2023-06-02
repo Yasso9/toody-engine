@@ -22,13 +22,13 @@ void Transformable::update( UpdateContext & context )
     // Update the shader
     gl::S_SpaceMatrix spaceMatrix {
         this->get_space_matrix( context.window.get_aspect_ratio() ) };
-    m_shader.setUniform(
-        "model", sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.model ) } );
-    m_shader.setUniform(
-        "view", sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.view ) } );
-    m_shader.setUniform(
-        "projection",
-        sf::Glsl::Mat4 { glm::value_ptr( spaceMatrix.projection ) } );
+    m_shader.setUniform( "model", sf::Glsl::Mat4 {
+                                      glm::value_ptr( spaceMatrix.model ) } );
+    m_shader.setUniform( "view", sf::Glsl::Mat4 {
+                                     glm::value_ptr( spaceMatrix.view ) } );
+    m_shader.setUniform( "projection",
+                         sf::Glsl::Mat4 {
+                             glm::value_ptr( spaceMatrix.projection ) } );
 }
 
 void Transformable::render_before( RenderContext & /* context */ ) const
@@ -51,8 +51,9 @@ void Transformable::move( math::Vector3F tranlationVector )
 
 void Transformable::rotate( math::Vector3F rotationVector, float angle )
 {
-    glm::mat4 const rotationMatrix { glm::rotate(
-        glm::mat4 { 1.f }, glm::radians( angle ), rotationVector.to_glm() ) };
+    glm::mat4 const rotationMatrix { glm::rotate( glm::mat4 { 1.f },
+                                                  glm::radians( angle ),
+                                                  rotationVector.to_glm() ) };
 
     m_spaceModel *= rotationMatrix;
 }

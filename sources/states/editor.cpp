@@ -128,10 +128,12 @@ void EditorState::update_overlay( UpdateContext & context )
         return;
     }
 
-    ImGuiWindowFlags window_flags =
-        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize
-        | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing
-        | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove;
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration
+                                    | ImGuiWindowFlags_AlwaysAutoResize
+                                    | ImGuiWindowFlags_NoSavedSettings
+                                    | ImGuiWindowFlags_NoFocusOnAppearing
+                                    | ImGuiWindowFlags_NoNav
+                                    | ImGuiWindowFlags_NoMove;
 
     constexpr math::Vector2F WINDOW_PADDINGS { 10.f, 10.f };
     math::Vector2F const     overlayPosition {

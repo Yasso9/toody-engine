@@ -22,9 +22,10 @@ namespace input
                                   sf::Keyboard::S, sf::Keyboard::Q };
     constexpr KeyboardMove ILKJ { sf::Keyboard::I, sf::Keyboard::L,
                                   sf::Keyboard::K, sf::Keyboard::J };
-    constexpr KeyboardMove NUMPAD5321 {
-        sf::Keyboard::Numpad5, sf::Keyboard::Numpad3, sf::Keyboard::Numpad2,
-        sf::Keyboard::Numpad1 };
+    constexpr KeyboardMove NUMPAD5321 { sf::Keyboard::Numpad5,
+                                        sf::Keyboard::Numpad3,
+                                        sf::Keyboard::Numpad2,
+                                        sf::Keyboard::Numpad1 };
     constexpr KeyboardMove ARROW { sf::Keyboard::Up, sf::Keyboard::Right,
                                    sf::Keyboard::Down, sf::Keyboard::Left };
 }  // namespace input

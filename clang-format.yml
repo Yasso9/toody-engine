@@ -29,7 +29,7 @@ AlignConsecutiveMacros: # Consecutive # Custom fields v16
 AlignEscapedNewlines: Left
 AlignOperands: Align
 # AlignTrailingComments: true # < v16
-AlignTrailingComments: # >= v16 (doesn't work)
+AlignTrailingComments: # >= v16
   Kind: Always
   OverEmptyLines: 0
 
@@ -89,7 +89,6 @@ CompactNamespaces: false
 
 ConstructorInitializerIndentWidth: 2
 ContinuationIndentWidth: 4
-# ContinuationIndentWidth: # Don't know what to put
 
 Cpp11BracedListStyle: true
 DerivePointerAlignment: false
@@ -121,7 +120,7 @@ IncludeCategories:
 IndentAccessModifiers: false
 IndentCaseBlocks: true
 IndentCaseLabels: false
-# IndentExternBlockStyle: AfterExternBlock # v16 (doesn't work)
+IndentExternBlock: AfterExternBlock
 IndentGotoLabels: false
 IndentPPDirectives: AfterHash
 IndentRequires: true
@@ -156,15 +155,16 @@ PPIndentWidth: 4
 
 PackConstructorInitializers: NextLine
 
-# PenaltyBreakAssignment: 90
-# PenaltyBreakBeforeFirstCallParameter: 90
-# PenaltyBreakComment: 40
-# PenaltyBreakFirstLessLess: -10
-# PenaltyBreakOpenParenthesis: 20
-# PenaltyBreakString: 90
-# PenaltyBreakTemplateDeclaration: 200
-# PenaltyIndentedWhitespace: 150
-# PenaltyReturnTypeOnItsOwnLine: 150
+PenaltyBreakAssignment: 100
+PenaltyBreakBeforeFirstCallParameter: 50
+PenaltyBreakComment: 1000
+PenaltyBreakFirstLessLess: 200
+PenaltyBreakOpenParenthesis: 114
+PenaltyBreakString: 10
+PenaltyBreakTemplateDeclaration: 0
+PenaltyExcessCharacter: 1000000
+PenaltyIndentedWhitespace: 0
+PenaltyReturnTypeOnItsOwnLine: 300
 
 PointerAlignment: Middle
 QualifierAlignment: Custom # v16

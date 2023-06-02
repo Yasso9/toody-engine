@@ -14,9 +14,9 @@ namespace math
 namespace math
 {
     /// @brief comparion of float wit tolerance
-    bool are_equal (
-        float leftValue, float rightValue,
-        float precision = std::numeric_limits< float >::epsilon() );
+    bool are_equal ( float leftValue, float rightValue,
+                     float precision =
+                         std::numeric_limits< float >::epsilon() );
 
     /// @brief Check if the number is whole
     /// @param number the number to check

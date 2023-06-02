@@ -66,8 +66,8 @@ namespace ImGui
     {
         float vectorTable[3] { vector.x, vector.y, vector.z };
 
-        bool returnValue =
-            InputFloat3( label.c_str(), vectorTable, format, flags );
+        bool returnValue = InputFloat3( label.c_str(), vectorTable, format,
+                                        flags );
 
         vector.x = vectorTable[0];
         vector.y = vectorTable[1];
@@ -116,11 +116,11 @@ namespace ImGui
                            && ( tableColor[3] >= 0.f && tableColor[3] <= 1.f ),
                        "Table colors value must be between 0 and 1" );
 
-            return {
-                static_cast< sf::Uint8 >( tableColor[0] * COLOR_RANGE_U ),
-                static_cast< sf::Uint8 >( tableColor[1] * COLOR_RANGE_U ),
-                static_cast< sf::Uint8 >( tableColor[2] * COLOR_RANGE_U ),
-                static_cast< sf::Uint8 >( tableColor[3] * COLOR_RANGE_U ) };
+            return { static_cast< sf::Uint8 >( tableColor[0] * COLOR_RANGE_U ),
+                     static_cast< sf::Uint8 >( tableColor[1] * COLOR_RANGE_U ),
+                     static_cast< sf::Uint8 >( tableColor[2] * COLOR_RANGE_U ),
+                     static_cast< sf::Uint8 >( tableColor[3]
+                                               * COLOR_RANGE_U ) };
         }
     };  // namespace color
 }  // namespace ImGui

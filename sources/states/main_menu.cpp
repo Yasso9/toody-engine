@@ -58,11 +58,11 @@ MainMenuState::MainMenuState()
 
     for ( std::string stateName : State::get_state_list() )
     {
-        m_texts.push_back(
-            sf::Text { stateName,
-                       resources::get_font( path::get_folder( path::Fonts )
-                                            / "arial.ttf" ),
-                       27u } );
+        m_texts.push_back( sf::Text {
+            stateName,
+            resources::get_font( path::get_folder( path::Fonts )
+                                 / "arial.ttf" ),
+            27u } );
     }
 
     math::Vector2F position { 150.f, 250.f };
@@ -98,10 +98,10 @@ void MainMenuState::update( UpdateContext & context )
             text.setFillColor( sf::Color { 227, 139, 89 } );
 
             // There is a press on the button
-            if ( context.inputs.is_pressed( sf::Mouse::Button::Left )
-                 || ( buttonHasBeenPressed
-                      && context.inputs.is_pressed(
-                          sf::Mouse::Button::Left ) ) )
+            if (
+                context.inputs.is_pressed( sf::Mouse::Button::Left )
+                || ( buttonHasBeenPressed
+                     && context.inputs.is_pressed( sf::Mouse::Button::Left ) ) )
             {
                 buttonHasBeenPressed = true;
                 // Color on pressed
