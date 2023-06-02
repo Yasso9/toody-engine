@@ -77,6 +77,8 @@ void Settings::update_gui_window()
         ImGui::Checkbox( "Vertical sync", &m_verticalSync );
 
         ImGui::Text( "Startup state" );
+        // Dropdown list of State::E_List
+        // ImGui::Combo( "Startup state" );
 
         if ( ImGui::Button( "Load Default" ) )
         {
@@ -106,6 +108,7 @@ void Settings::load()
     std::ifstream file { m_filePath, std::ios::in };
     if ( ! file )
     {
+        Trace::FileIssue( m_filePath, "Can't read" );
         this->load_default();
         return;
     }
@@ -114,6 +117,7 @@ void Settings::load()
     boost::mp11::mp_for_each< boost::describe::describe_members<
         Settings, boost::describe::mod_any_access > >( [&, this] ( auto D ) {
         file >> this->*D.pointer;
+        Trace::Info( "{}", this->*D.pointer );
     } );
 }
 
@@ -122,7 +126,7 @@ void Settings::save() const
     std::ofstream file { m_filePath, std::ios::out | std::ios::trunc };
     if ( ! file )
     {
-        Trace::FileIssue( m_filePath, "Can't write settings to file" );
+        Trace::FileIssue( m_filePath, "Can't write" );
     }
 
     // List of all members of Settings

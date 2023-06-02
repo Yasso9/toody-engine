@@ -32,7 +32,7 @@ EditorState::EditorState()
   : State {},
     m_view {},
     m_viewSettings {},
-    m_showWindow { .demo = false, .overlay = false },
+    m_showWindow { .demo = false, .overlay = false, .view = false },
     m_tilemap { m_view },
     m_imageMap {},
     m_collisionList {},
@@ -62,6 +62,7 @@ void EditorState::update_toolbar( UpdateContext & context )
 {
     bool quitEditor { false };
     bool resetView { false };
+    bool generateTraces { false };
 
     if ( ImGui::BeginMainMenuBar() )
     {
@@ -71,6 +72,10 @@ void EditorState::update_toolbar( UpdateContext & context )
             ImGui::MenuItem( "Reset View", "Ctrl + C", &resetView );
             ImGui::MenuItem( "Show Demo Window", "", &m_showWindow.demo );
             ImGui::MenuItem( "Show Overlay", "", &m_showWindow.overlay );
+            ImGui::MenuItem( "Edit View Settings", "", &m_showWindow.view );
+
+            ImGui::MenuItem( "Generate Traces", "", &generateTraces );
+
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
@@ -88,12 +93,19 @@ void EditorState::update_toolbar( UpdateContext & context )
     {
         ImGui::ShowDemoWindow( &m_showWindow.demo );
     }
+    if ( generateTraces )
+    {
+        Trace::GenerateTest();
+    }
 }
 
 void EditorState::update_view( UpdateContext & context )
 {
-    // ImGui::P_Show( "View", &m_showViewWindow,
-    //                [this] () { m_viewSettings.sliders(); } );
+    if ( ImGui::Begin( "View", m_showWindow.view ) )
+    {
+        m_viewSettings.sliders();
+    }
+    ImGui::End();
 
     // View Scroll
     float scrollY = context.inputs.get_mouse_scroll().to_float().y;

@@ -5,12 +5,12 @@
 
 GameContext::GameContext() : UpdateContext {}, RenderContext {}
 {
-    Trace::Info( "Game Started" );
+    Trace::Success( "Game Started" );
 }
 
 GameContext::~GameContext()
 {
-    Trace::Info( "Game Ended" );
+    Trace::Success( "Game Ended" );
 }
 
 void GameContext::update( float aDeltaTime )

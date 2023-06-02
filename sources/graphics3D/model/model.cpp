@@ -33,7 +33,7 @@ Model::Model( Camera const & camera, std::string const & filePathModel )
 {
     Timer timer { filePathModel };
 
-    Trace::Info( "Loading Model - " + filePathModel );
+    Trace::Info( "Loading Model - {}", filePathModel );
     this->load_model();
 }
 
@@ -65,8 +65,8 @@ void Model::load_model()
     if ( ! scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE
          || ! scene->mRootNode )
     {
-        Trace::FileIssue( m_filePath, std::string { "Assimp - " }
-                                          + importer.GetErrorString() );
+        Trace::FileIssue( m_filePath, "Assimp - {}",
+                          importer.GetErrorString() );
     }
 
     // process ASSIMP's root node recursively

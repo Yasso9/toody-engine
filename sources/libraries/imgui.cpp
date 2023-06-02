@@ -159,6 +159,10 @@ namespace ImGui
     bool Begin ( std::string const & name, bool & isWindowOpen,
                  ImGuiWindowFlags flags )
     {
+        if ( ! isWindowOpen )
+        {
+            return false;
+        }
         return ImGui::Begin( name.c_str(), &isWindowOpen, flags );
     }
 }  // namespace ImGui

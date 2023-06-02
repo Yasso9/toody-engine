@@ -17,6 +17,6 @@ Timer::~Timer()
                                                                  - m_beginTime )
             .count() };
 
-    Trace::Debug( "Elapsed Time for '" + m_indication + "' - "
-                  + std::to_string( elapsedTime ) + " [ms]" );
+    Trace::Debug( "Elapsed Time for '{}' - {} [ms]", m_indication,
+                  elapsedTime );
 }

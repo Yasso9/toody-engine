@@ -126,7 +126,7 @@ namespace gl
                 break;
             }
 
-            Trace::Error( errorMessage );
+            Trace::Error( "{}", errorMessage );
             return false;
         }
 

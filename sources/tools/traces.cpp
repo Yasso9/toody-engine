@@ -1,39 +1,17 @@
 #include "traces.hpp"
 
-#include <iostream>
-
 namespace Trace
 {
-    void Error ( std::string const & message )
+    void GenerateTest ()
     {
-        std::cout << "ERROR          : " << message << std::endl;
+        Trace::Error( "{}", "This is an Error Trace" );
+        Trace::Warning( "{}", "This is a Warning Trace" );
+        Trace::Success( "{}", "This is a Success Trace" );
+        Trace::Info( "{}", "This is an Info Trace" );
+        Trace::Debug( "{}", "This is a Debug Trace" );
+        Trace::FileIssue( "path/to/file", "{}", "This is a File Issue Trace" );
+        Trace::FileNotFound( "path/to/file", "{}",
+                             "This is a File Not Found Trace" );
     }
 
-    void Warning ( std::string const & message )
-    {
-        std::cout << "WARNING        : " << message << std::endl;
-    }
-
-    void Info ( std::string const & message )
-    {
-        std::cout << "INFO           : " << message << std::endl;
-    }
-
-    void Debug ( std::string const & message )
-    {
-        std::cout << "DEBUG          : " << message << std::endl;
-    }
-
-    void FileNotFound ( std::string const & filePath,
-                        std::string const & message )
-    {
-        std::cout << "FILE NOT FOUND : '" << filePath << "' - " << message
-                  << std::endl;
-    }
-
-    void FileIssue ( std::string const & filePath, std::string const & message )
-    {
-        std::cout << "FILE ISSUE     : '" << filePath << "' - " << message
-                  << std::endl;
-    }
 }  // namespace Trace

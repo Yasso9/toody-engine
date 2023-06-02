@@ -88,7 +88,6 @@ namespace tile
             std::stringstream stream {};
             stream << content;
             stream >> m_table;
-            std::cout << "Table " << m_table << std::endl;
         }
 
         this->setPosition( 0.f, 0.f );

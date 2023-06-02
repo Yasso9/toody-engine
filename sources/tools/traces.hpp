@@ -1,16 +1,31 @@
 #pragma once
 
-#include <string>
+#include <string>  // for string
+
+#include <fmt/format.h>  // for format
 
 namespace Trace
 {
-    void Error ( std::string const & message = "" );
-    void Warning ( std::string const & message = "" );
-    void Info ( std::string const & message = "" );
-    void Debug ( std::string const & message = "" );
+    template< typename... Args >
+    void Error ( fmt::format_string< Args... > fmt, Args &&... args );
+    template< typename... Args >
+    void Warning ( fmt::format_string< Args... > fmt, Args &&... args );
+    template< typename... Args >
+    void Success ( fmt::format_string< Args... > fmt, Args &&... args );
+    template< typename... Args >
+    void Info ( fmt::format_string< Args... > fmt, Args &&... args );
+    template< typename... Args >
+    void Debug ( fmt::format_string< Args... > fmt, Args &&... args );
 
-    void FileNotFound ( std::string const & filePath,
-                        std::string const & message = "" );
-    void FileIssue ( std::string const & filePath,
-                     std::string const & message = "" );
+    template< typename... Args >
+    void FileNotFound ( std::string const &           filePath,
+                        fmt::format_string< Args... > fmt = "",
+                        Args &&... args );
+    template< typename... Args >
+    void FileIssue ( std::string const &           filePath,
+                     fmt::format_string< Args... > fmt = "", Args &&... args );
+
+    void GenerateTest();
 }  // namespace Trace
+
+#include "traces_impl.hpp"

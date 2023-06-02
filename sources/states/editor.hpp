@@ -19,6 +19,7 @@ class EditorState : public State
     {
         bool demo;
         bool overlay;
+        bool view;
     };
 
     // 2D camera
