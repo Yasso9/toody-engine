@@ -150,4 +150,15 @@ namespace ImGui
         return ImGui::Begin( subWindow.windowName.c_str(),
                              &subWindow.showWindow );
     }
+
+    bool Begin ( std::string const & name, ImGuiWindowFlags flags )
+    {
+        return ImGui::Begin( name.c_str(), NULL, flags );
+    }
+
+    bool Begin ( std::string const & name, bool & isWindowOpen,
+                 ImGuiWindowFlags flags )
+    {
+        return ImGui::Begin( name.c_str(), &isWindowOpen, flags );
+    }
 }  // namespace ImGui

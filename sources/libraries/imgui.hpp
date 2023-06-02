@@ -54,6 +54,17 @@ namespace ImGui
 {
     bool BeginWindow ( SubWindow & subWindow );
 
+    bool Begin ( std::string const & name, ImGuiWindowFlags flags = 0 );
+    bool Begin ( std::string const & name, bool & isWindowOpen,
+                 ImGuiWindowFlags flags = 0 );
+
+    // TODO make Begin deprecated
+    // [[deprecated(
+    //     "Please use bool Begin ( std::string const & name) "
+    //     "instead" )]] IMGUI_API bool
+    //     Begin ( char const * name, bool * p_open = NULL,
+    //             ImGuiWindowFlags flags = 0 );
+
     template< typename... Args >
     void TextFmt ( fmt::format_string< Args... > fmt, Args &&... args )
     {

@@ -32,34 +32,23 @@ EditorState::EditorState()
   : State {},
     m_view {},
     m_viewSettings {},
-    m_showDemoWindow { false },
-    m_showOverlayWindow { false },
+    m_showWindow { .demo = false, .overlay = false },
     m_tilemap { m_view },
     m_imageMap {},
     m_collisionList {},
-    // m_greenEntity {
-    //     math::RectangleF { 0.f, 0.f, 40.f, 40.f },
-    //     { m_collisionList, m_view, input::ILKJ } },
     m_character { resources::get_texture( path::get_folder( path::Character )
                                           / "gold_sprite.png" ),
                   { m_collisionList, m_view, input::ARROW } }
 {
     this->add_child( m_tilemap, m_view );
     this->add_child( m_collisionList, m_view );
-    // this->add_child( m_greenEntity, m_view );
     this->add_child( m_character, m_view );
     this->add_child( m_imageMap );
     this->add_debug_window( m_view );
-
-    m_tilemap.setPosition( 0.f, 0.f );
-
-    this->reset_view( Settings::get_instance().get_window_size() );
-
     m_view.enable_debug();
 
-    // m_greenEntity.setFillColor( sf::Color::Green );
-    // m_greenEntity.setOutlineColor( sf::Color::Black );
-    // m_greenEntity.setOutlineThickness( 2.f );
+    m_tilemap.setPosition( 0.f, 0.f );
+    this->reset_view( Settings::get_instance().get_window_size() );
 }
 
 void EditorState::update( UpdateContext & context )
@@ -80,8 +69,8 @@ void EditorState::update_toolbar( UpdateContext & context )
         {
             ImGui::MenuItem( "Quit Editor", "Escape", &quitEditor );
             ImGui::MenuItem( "Reset View", "Ctrl + C", &resetView );
-            ImGui::MenuItem( "Show Demo Window", "", &m_showDemoWindow );
-            ImGui::MenuItem( "Show Overlay", "", &m_showOverlayWindow );
+            ImGui::MenuItem( "Show Demo Window", "", &m_showWindow.demo );
+            ImGui::MenuItem( "Show Overlay", "", &m_showWindow.overlay );
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
@@ -95,9 +84,9 @@ void EditorState::update_toolbar( UpdateContext & context )
     {
         this->reset_view( context.window.get_size().to_float() );
     }
-    if ( m_showDemoWindow )
+    if ( m_showWindow.demo )
     {
-        ImGui::ShowDemoWindow( &m_showDemoWindow );
+        ImGui::ShowDemoWindow( &m_showWindow.demo );
     }
 }
 
@@ -106,24 +95,28 @@ void EditorState::update_view( UpdateContext & context )
     // ImGui::P_Show( "View", &m_showViewWindow,
     //                [this] () { m_viewSettings.sliders(); } );
 
-    float scrollValue { context.inputs.get_mouse_scroll().to_float().y
-                        * m_viewSettings.zoomSpeed };
-    m_view.zoom( scrollValue, context.window );
-
-    if ( context.inputs.is_pressed( sf::Mouse::Right ) )
+    // View Scroll
+    float scrollY = context.inputs.get_mouse_scroll().to_float().y;
+    if ( scrollY != 0.f )
     {
-        math::Vector2F moveSpeed { math::Vector2F { m_viewSettings.moveSpeed,
-                                                    m_viewSettings.moveSpeed }
+        m_view.zoom( scrollY * m_viewSettings.get_zoom_speed(),
+                     context.window );
+    }
+
+    // View Movement
+    math::Vector2I mouseMovement = context.inputs.get_mouse_movement();
+    if ( mouseMovement != math::Vector2I::ZERO
+         && context.inputs.is_pressed( sf::Mouse::Middle ) )
+    {
+        math::Vector2F moveSpeed { m_viewSettings.get_move_speed_vec()
                                    / m_view.get_zoom( context.window ) };
-        math::Vector2F const viewMoveValue {
-            context.inputs.get_mouse_movement().to_float() * moveSpeed };
-        m_view.m_sfView.move( viewMoveValue );
+        m_view.m_sfView.move( mouseMovement.to_float() * moveSpeed );
     }
 }
 
 void EditorState::update_overlay( UpdateContext & context )
 {
-    if ( ! m_showOverlayWindow )
+    if ( ! m_showWindow.overlay )
     {
         return;
     }
@@ -134,7 +127,6 @@ void EditorState::update_overlay( UpdateContext & context )
                                     | ImGuiWindowFlags_NoFocusOnAppearing
                                     | ImGuiWindowFlags_NoNav
                                     | ImGuiWindowFlags_NoMove;
-
     constexpr math::Vector2F WINDOW_PADDINGS { 10.f, 10.f };
     math::Vector2F const     overlayPosition {
         math::Vector2F { ImGui::GetMainViewport()->WorkPos }
@@ -142,33 +134,15 @@ void EditorState::update_overlay( UpdateContext & context )
 
     ImGui::SetNextWindowPos( overlayPosition, ImGuiCond_Always );
     ImGui::SetNextWindowBgAlpha( 0.8f );
-    if ( ImGui::Begin( "Editor Main", &m_showOverlayWindow, window_flags ) )
+    if ( ImGui::Begin( "Editor Main", m_showWindow.overlay, window_flags ) )
     {
-        std::stringstream frameRateStream {};
-        frameRateStream << "Frame Rate : "
-                        << std::round( 1.f / context.deltaTime ) << "\n";
-        ImGui::Text( "%s", frameRateStream.str().c_str() );
-
-        static bool customizeCollision { false };
-        ImGui::Checkbox( "Customize Collisions ?", &customizeCollision );
-        m_collisionList.set_customisation( customizeCollision );
-
-        static bool showDebug { false };
-        ImGui::Checkbox( "Show Debug", &showDebug );
-        if ( showDebug )
-        {
-            std::stringstream overlayOutput {};
-            overlayOutput << "Window Position : " << overlayPosition << "\n";
-            overlayOutput << "Is Any Window Focused ? " << std::boolalpha
-                          << ImGui::IsWindowFocused(
-                                 ImGuiFocusedFlags_AnyWindow )
-                          << "\n";
-            overlayOutput << "Is Any Window Hovered ? : "
-                          << ImGui::IsWindowHovered(
-                                 ImGuiHoveredFlags_AnyWindow )
-                          << "\n";
-            ImGui::Text( "%s", overlayOutput.str().c_str() );
-        }
+        ImGui::TextFmt( "Frame Rate : {}",
+                        std::round( 1.f / context.deltaTime ) );
+        ImGui::TextFmt( "Window Position : {}", overlayPosition );
+        ImGui::TextFmt( "Is Any Window Focused ? {}",
+                        ImGui::IsWindowFocused( ImGuiFocusedFlags_AnyWindow ) );
+        ImGui::TextFmt( "Is Any Window Hovered ? : {}",
+                        ImGui::IsWindowHovered( ImGuiHoveredFlags_AnyWindow ) );
     }
     ImGui::End();
 }
@@ -179,23 +153,3 @@ void EditorState::reset_view( math::Vector2F const & windowSize )
     m_view.m_sfView.setSize( windowSize );
     m_character.setPosition( m_view.get_center() );
 }
-
-// void EditorState::update_collision_window()
-// {
-// ImGui::P_Show( "Collisions", &m_showWindow.at( "collision" ), [&] () {
-//     std::stringstream output {};
-//     output << "Green Polygon : " << m_greenEntity.get_polygon().print()
-//            << "\n";
-
-// for ( StaticEntity2D const & entity : m_collisionList.get_entities() )
-// {
-//     output << "Intersection with " << entity.get_position() << " ? "
-//            << std::boolalpha
-//            << m_greenEntity.is_intersected_by( entity ) << "\n";
-// }
-// output << "Is collision detected : "
-//        << m_greenEntity.is_collision_detected() << "\n";
-
-// ImGui::Text( "%s", output.str().c_str() );
-// } );
-// }

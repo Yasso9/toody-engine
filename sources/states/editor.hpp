@@ -8,37 +8,24 @@
 #include "graphics2D/entity/controllable_entity.hpp"  // for MoveableEntity2D
 #include "graphics2D/entity/player.hpp"               // for Player
 #include "graphics2D/events/dialogue.hpp"
-#include "graphics2D/image_map.hpp"  // for ImageMap
-#include "graphics2D/tile/map.hpp"   // for TileMap
-#include "states/state.hpp"          // for State
-
-struct ViewSettings
-{
-    float moveSpeed { 1.f };
-    float zoomSpeed { 0.2f };
-    float rotateSpeed { 0.2f };
-
-    ViewSettings()          = default;
-    virtual ~ViewSettings() = default;
-
-    void sliders ()
-    {
-        ImGui::SliderFloat( "View Movement Speed", &moveSpeed, 0.f, 50.f,
-                            "%.0f" );
-        ImGui::SliderFloat( "View Zoom Speed", &zoomSpeed, 0.f, 5.f, "%.2f" );
-        ImGui::SliderFloat( "View Rotate Speed", &rotateSpeed, 0.f, 5.f,
-                            "%.2f" );
-    }
-};
+#include "graphics2D/image_map.hpp"      // for ImageMap
+#include "graphics2D/tile/map.hpp"       // for TileMap
+#include "graphics2D/view_settings.hpp"  // for ViewSettings
+#include "states/state.hpp"              // for State
 
 class EditorState : public State
 {
+    struct ShowWindow
+    {
+        bool demo;
+        bool overlay;
+    };
+
     // 2D camera
     View         m_view;
     ViewSettings m_viewSettings;
 
-    bool m_showDemoWindow;
-    bool m_showOverlayWindow;
+    ShowWindow m_showWindow;
 
     tile::Map m_tilemap;
     ImageMap  m_imageMap;
@@ -50,7 +37,7 @@ class EditorState : public State
 
   public:
     EditorState();
-    virtual ~EditorState() = default;
+    ~EditorState() = default;
 
     void update ( UpdateContext & context ) override;
 

@@ -36,10 +36,10 @@ namespace math
         // ########################## CONSTRUCTORS ############################
         // ####################################################################
 
-        constexpr Vector2() noexcept : x( 0 ), y( 0 ) {}
+        constexpr Vector2() noexcept : x { 0 }, y { 0 } {}
 
         constexpr Vector2( Type xAxisValue, Type yAxisValue ) noexcept
-          : x( xAxisValue ), y( yAxisValue )
+          : x { xAxisValue }, y { yAxisValue }
         {}
 
         Vector2( sf::Vector2< Type > const & sfmlVector );
@@ -47,7 +47,7 @@ namespace math
         constexpr virtual ~Vector2() = default;
 
         // ####################################################################
-        // ########################## STREAM COPY #############################
+        // ########################## RULE OF FIVE ############################
         // ####################################################################
 
         /// @brief Copy Constructor
@@ -59,11 +59,15 @@ namespace math
             Vector2< Type > const & vector2D ) noexcept;
         /// @brief Move Assignement
         Vector2< Type > & operator= ( Vector2< Type > && vector2D ) noexcept;
-        /// @brief Array operator
-        Type operator[] ( std::size_t index ) const;
 
         // ####################################################################
-        // ######################## STREAM OPERATOR ###########################
+        // ######################### STATIC MEMBERS ###########################
+        // ####################################################################
+
+        constexpr static Vector2< Type > const ZERO { 0, 0 };
+
+        // ####################################################################
+        // ######################## STREAM OPERATORS ##########################
         // ####################################################################
 
         template< cPrimitive TypeStream >
@@ -74,7 +78,7 @@ namespace math
                                            Vector2< Type > & vector );
 
         // ####################################################################
-        // ##################### ASSIGNEMENT OPERATOR #########################
+        // ##################### ASSIGNEMENT OPERATORS ########################
         // ####################################################################
 
         Vector2< Type > operator-= ( Vector2< Type > rhs );
@@ -82,6 +86,13 @@ namespace math
         Vector2< Type > operator*= ( Vector2< Type > rhs );
         Vector2< Type > operator/= ( Vector2< Type > rhs );
         Vector2< Type > operator/= ( float factor );
+
+        // ####################################################################
+        // ######################## OTHER OPERATORS ###########################
+        // ####################################################################
+
+        /// @brief Array operator
+        Type operator[] ( std::size_t index ) const;
 
         // ####################################################################
         // ############################### CAST ###############################
