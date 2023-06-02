@@ -25,7 +25,7 @@ namespace Trace
     void FileIssue ( std::string const &           filePath,
                      fmt::format_string< Args... > fmt = "", Args &&... args );
 
-    void GenerateTest();
+    void GenerateTest ();
 }  // namespace Trace
 
 #include "traces_impl.hpp"

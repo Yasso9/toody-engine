@@ -2,25 +2,25 @@ BasedOnStyle: Google
 AccessModifierOffset: -2
 AlignAfterOpenBracket: Align
 AlignArrayOfStructures: None # Left/right buggy v16
-AlignConsecutiveAssignments: # Consecutive # Custom fields v16
+AlignConsecutiveAssignments:
   Enabled: true
   AcrossEmptyLines: false
   AcrossComments: false
   AlignCompound: true
   PadOperators: true
-AlignConsecutiveBitFields: # Consecutive # Custom fields v16
+AlignConsecutiveBitFields:
   Enabled: true
   AcrossEmptyLines: false
   AcrossComments: false
   AlignCompound: true
   PadOperators: true
-AlignConsecutiveDeclarations: # Consecutive # Custom fields v16
+AlignConsecutiveDeclarations:
   Enabled: true
   AcrossEmptyLines: false
   AcrossComments: false
   AlignCompound: true
   PadOperators: true
-AlignConsecutiveMacros: # Consecutive # Custom fields v16
+AlignConsecutiveMacros:
   Enabled: true
   AcrossEmptyLines: false
   AcrossComments: false
@@ -28,10 +28,10 @@ AlignConsecutiveMacros: # Consecutive # Custom fields v16
   PadOperators: true
 AlignEscapedNewlines: Left
 AlignOperands: Align
-# AlignTrailingComments: true # < v16
-AlignTrailingComments: # >= v16
-  Kind: Always
-  OverEmptyLines: 0
+AlignTrailingComments: true # < v16
+# AlignTrailingComments: # >= v16
+#   Kind: Always
+#   OverEmptyLines: 0
 
 AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
@@ -72,13 +72,13 @@ BraceWrapping:
   SplitEmptyNamespace: false
 # BracedInitializerIndentWidth: 0 # v17
 
-BreakAfterAttributes: Never # v16
+# BreakAfterAttributes: Never # v16
 BreakAfterJavaFieldAnnotations: true
-BreakArrays: false # v16
+# BreakArrays: false # v16
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Custom
 BreakBeforeConceptDeclarations: Allowed
-BreakBeforeInlineASMColon: OnlyMultiline # v16
+# BreakBeforeInlineASMColon: OnlyMultiline # v16
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
 BreakInheritanceList: AfterComma
@@ -129,12 +129,12 @@ IndentWidth: 4
 IndentWrappedFunctionNames: true
 
 InsertBraces: true
-InsertNewlineAtEOF: true # v16
+# InsertNewlineAtEOF: true # v16
 InsertTrailingCommas: None # Cannot use that if BinPackArguments is set to true
-IntegerLiteralSeparator: # v16
-  Binary: 4
-  Decimal: 3
-  Hex: 2
+# IntegerLiteralSeparator: # v16
+#   Binary: 4
+#   Decimal: 3
+#   Hex: 2
 #   BinaryMinDigits: 4 # (doesn't work)
 #   DecimalMinDigits: 3 # (doesn't work)
 #   HexMinDigits: 2 # (doesn't work)
@@ -147,7 +147,7 @@ KeepEmptyLinesAtTheStartOfBlocks: false
 LambdaBodyIndentation: Signature
 
 Language: Cpp
-LineEnding: LF # v16
+# LineEnding: LF # v16
 
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All
@@ -167,17 +167,17 @@ PenaltyIndentedWhitespace: 0
 PenaltyReturnTypeOnItsOwnLine: 300
 
 PointerAlignment: Middle
-QualifierAlignment: Custom # v16
-QualifierOrder: ['constexpr', 'inline', 'volatile', 'static', 'type', 'const' ] # v16
+# QualifierAlignment: Custom # v16
+# QualifierOrder: ['constexpr', 'inline', 'volatile', 'static', 'type', 'const' ] # v16
 # RawStringFormats # Don't know what to put
 ReferenceAlignment: Middle
 
 ReflowComments: true
 # RemoveBracesLLVM: false # Useless
-RemoveSemicolon: true # v16
+# RemoveSemicolon: true # v16
 
 RequiresClausePosition: WithPreceding
-RequiresExpressionIndentation: Keyword # v16
+# RequiresExpressionIndentation: Keyword # v16
 
 SeparateDefinitionBlocks: Always
 ShortNamespaceLines: 0
@@ -203,15 +203,15 @@ SpaceBeforeParensOptions:
   AfterFunctionDefinitionName: true
   AfterIfMacros: true
   AfterOverloadedOperator: true
-  AfterRequiresInClause: true # clang 15
-  AfterRequiresInExpression: true # clang 15
+  AfterRequiresInClause: true
+  AfterRequiresInExpression: true
   BeforeNonEmptyParentheses: false
 SpaceBeforeRangeBasedForLoopColon: true
 SpaceBeforeSquareBrackets: false
 SpaceInEmptyBlock: false
 SpaceInEmptyParentheses: false
 SpacesBeforeTrailingComments: 2
-SpacesInAngles: Always # clang 13
+SpacesInAngles: Always
 SpacesInCStyleCastParentheses: true
 SpacesInConditionalStatement: true
 SpacesInContainerLiterals: true

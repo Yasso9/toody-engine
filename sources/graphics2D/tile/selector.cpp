@@ -131,7 +131,7 @@ namespace tile
                                     m_gridColor.to_integer() );
 
                                 // Horizontal lines
-                                for ( int x  = 0; x < gridBorder.size.x;
+                                for ( int x = 0; x < gridBorder.size.x;
                                       x     += TILE_PIXEL_SIZE_I )
                                 {
                                     math::LineI line {
@@ -146,7 +146,7 @@ namespace tile
                                         m_gridColor.to_integer() );
                                 }
                                 // Vertical lines
-                                for ( int y  = 0; y < gridBorder.size.y;
+                                for ( int y = 0; y < gridBorder.size.y;
                                       y     += TILE_PIXEL_SIZE_I )
                                 {
                                     math::LineI line {

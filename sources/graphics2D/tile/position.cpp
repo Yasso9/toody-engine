@@ -86,7 +86,7 @@ namespace tile
         return this->tile().to_point().is_inside( { 0u, 0u }, size.tile() );
     }
 
-    bool Position::operator< ( tile::Size size ) const
+    bool Position::operator<( tile::Size size ) const
     {
         return this->tile() < size.tile();
     }
@@ -96,7 +96,7 @@ namespace tile
         return ! ( *this < size );
     }
 
-    bool Position::operator< ( tile::Position position ) const
+    bool Position::operator<( tile::Position position ) const
     {
         return this->tile() < position.tile();
     }

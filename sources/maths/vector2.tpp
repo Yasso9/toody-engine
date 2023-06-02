@@ -378,8 +378,8 @@ namespace math
     }
 
     template< cPrimitive TypeLeft, cPrimitive TypeRight >
-    bool operator< ( Vector2< TypeLeft > const &  vector2DLeft,
-                     Vector2< TypeRight > const & vector2DRight )
+    bool operator<( Vector2< TypeLeft > const &  vector2DLeft,
+                    Vector2< TypeRight > const & vector2DRight )
     {
         return vector2DLeft.x < static_cast< TypeLeft >( vector2DRight.x )
                && vector2DLeft.y < static_cast< TypeLeft >( vector2DRight.y );

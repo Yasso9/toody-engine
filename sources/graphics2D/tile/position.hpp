@@ -40,9 +40,9 @@ namespace tile
 
         bool is_inside ( tile::Size size ) const;
 
-        bool operator< ( tile::Size size ) const;
+        bool operator<( tile::Size size ) const;
         bool operator>= ( tile::Size size ) const;
-        bool operator< ( tile::Position position ) const;
+        bool operator<( tile::Position position ) const;
         bool operator>= ( tile::Position position ) const;
         /// @brief Compare position AND numberOfColumns
         bool operator== ( tile::Position position ) const;

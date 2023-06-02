@@ -82,7 +82,7 @@ namespace resources
         std::filesystem::path vertexPath {};
         std::filesystem::path fragmentPath {};
 
-        bool operator< ( S_ShaderFiles const & rhs ) const
+        bool operator<( S_ShaderFiles const & rhs ) const
         {
             return this->vertexPath < rhs.vertexPath
                    && this->fragmentPath < rhs.fragmentPath;

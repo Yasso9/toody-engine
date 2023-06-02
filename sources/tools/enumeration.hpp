@@ -26,7 +26,7 @@ class Enum
     Enum & operator-- ();
     Enum   operator-- ( int );
 
-    bool operator< ( Type const & enumValue );
+    bool operator<( Type const & enumValue );
     bool operator> ( Type const & enumValue );
 };
 
