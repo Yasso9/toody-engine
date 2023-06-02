@@ -47,5 +47,5 @@ class View : public DebugWindow
     /// @brief Check if a point is contained in the view
     bool contain ( math::PointF point ) const;
 
-    virtual void debug_window_content () override;
+    void update_gui () override;
 };

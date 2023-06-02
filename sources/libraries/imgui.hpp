@@ -8,10 +8,9 @@
 #include <fmt/format.h>             // for format
 #include <imgui/imgui.h>            // for ImGuiColorEditFlags, ImGuiInputTe...
 
-#include "libraries/sub_window.hpp"  // for SubWindow
 #include "maths/vector3.hpp"
 
-// P stands for personnal fonctions (overloading ImGui)
+class SubWindow;
 
 namespace ImGui
 {

@@ -35,7 +35,7 @@ class Settings : public Singleton< Settings >,
     bool           get_vertical_sync () const;
     State::E_List  get_startup_state () const;
 
-    void update_gui_window () override;
+    void update_gui () override;
 
   private:
     // load the default configuration

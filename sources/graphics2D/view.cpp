@@ -110,7 +110,7 @@ bool View::contain( math::PointF point ) const
     return point.is_inside( this->get_rectangle() );
 }
 
-void View::debug_window_content()
+void View::update_gui()
 {
     ImGui::TextFmt( "View Position : {}", this->get_position().to_vector() );
     ImGui::TextFmt( "View Size : {}", this->get_size() );

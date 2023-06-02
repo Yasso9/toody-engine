@@ -61,7 +61,7 @@ bool Settings::get_vertical_sync() const
     return m_verticalSync;
 }
 
-void Settings::update_gui_window()
+void Settings::update_gui()
 {
     if ( ImGui::BeginWindow( *this ) )
     {
@@ -95,7 +95,7 @@ void Settings::update_gui_window()
 
 void Settings::load_default()
 {
-    m_windowSize       = { 800.f, 600.f };
+    m_windowSize       = { 1600.f, 900.f };
     m_nbFramePerSecond = 60.f;
     m_verticalSync     = true;
     m_startupState     = State::MainMenu;
@@ -132,7 +132,7 @@ void Settings::load()
 
     if ( ! stream::is_ended( file ) )
     {
-        Trace::Error( "Settings file to much parameters '{}'",
+        Trace::Error( "Settings file contains to much parameters '{}'",
                       m_filePath.string() );
         error = true;
     }

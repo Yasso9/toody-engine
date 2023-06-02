@@ -2,14 +2,32 @@
 
 #include <string>
 
+#include <libraries/imgui.hpp>  // for ImGuiWindowFlags
+
 class SubWindow
 {
-  public:
-    std::string windowName;
-    bool        showWindow;
+    std::string      m_windowName;
+    bool             m_show;
+    ImGuiWindowFlags m_flags;
 
-    SubWindow( std::string const & name, bool show = false );
+  public:
+    SubWindow( std::string const & name );
     virtual ~SubWindow() = default;
 
-    virtual void update_gui_window () = 0;
+    void show ();
+    void hide ();
+    void set_enabled ( bool enabled );
+    bool is_enabled () const;
+    void set_window_flags ( ImGuiWindowFlags flags );
+
+    // This method call update_gui() and must be called 1 time per
+    // frame in the update loop
+    void update_all ();
+
+  protected:
+    // Method that contain elements to show when the window is enabled. Should
+    // be overrided
+    virtual void update_gui ();
+
+    friend bool ImGui::BeginWindow( SubWindow & subWindow );
 };

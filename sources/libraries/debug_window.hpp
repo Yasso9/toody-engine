@@ -4,42 +4,31 @@
 
 #include <fmt/format.h>
 
-class DebugWindow
-{
-    std::string m_windowName;
-    bool        m_show;
-
-  public:
-    DebugWindow( std::string const & windowName );
-    virtual ~DebugWindow() = default;
-
-    template< typename... Args >
-    void add_debug_text ( fmt::format_string< Args... > fmt, Args &&... args );
-
-    void enable_debug ();
-    void disable_debug ();
-
-    // This method call debug_window_content() and must be called 1 time per
-    // frame in the update loop
-    void update_debug ();
-    // Method that contain elements to show when the window is enabled. Should
-    // be overrided
-    virtual void debug_window_content ();
-};
-
+#include "libraries/sub_window.hpp"  // for SubWindowZ
 // implementation
 #include "libraries/imgui.hpp"  // for ImGui::Begin, ImGui::End, ImGui::Text
+
+class DebugWindow : public SubWindow
+{
+  public:
+    DebugWindow( std::string const & name );
+    virtual ~DebugWindow() = default;
+
+    // Must not be called inside update_gui(). Just use TextFmt instead
+    template< typename... Args >
+    void add_debug_text ( fmt::format_string< Args... > fmt, Args &&... args );
+};
 
 template< typename... Args >
 void DebugWindow::add_debug_text( fmt::format_string< Args... > fmt,
                                   Args &&... args )
 {
-    if ( ! m_show )
+    if ( ! this->is_enabled() )
     {
         return;
     }
 
-    if ( ImGui::Begin( m_windowName.c_str(), &m_show ) )
+    if ( ImGui::BeginWindow( *this ) )
     {
         ImGui::TextFmt( fmt, std::forward< Args >( args )... );
     }

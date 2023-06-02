@@ -119,7 +119,7 @@ void Component::update_all( UpdateContext & context )
         // {
         //     continue;
         // }
-        debugWindow->update_debug();
+        debugWindow->update_all();
     }
 
     for ( Component * component : this->get_childs() )

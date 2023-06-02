@@ -6,6 +6,7 @@
 #include <SFML/Config.hpp>  // for Uint8
 
 #include "graphics2D/constants.hpp"  // for COLOR_RANGE
+#include "libraries/sub_window.hpp"  // for SubWindow
 #include "tools/assertion.hpp"       // for ASSERTION
 
 namespace ImGui
@@ -143,12 +144,12 @@ namespace ImGui
 {
     bool BeginWindow ( SubWindow & subWindow )
     {
-        if ( ! subWindow.showWindow )
+        if ( ! subWindow.is_enabled() )
         {
             return false;
         }
-        return ImGui::Begin( subWindow.windowName.c_str(),
-                             &subWindow.showWindow );
+        return ImGui::Begin( subWindow.m_windowName, subWindow.m_show,
+                             subWindow.m_flags );
     }
 
     bool Begin ( std::string const & name, ImGuiWindowFlags flags )

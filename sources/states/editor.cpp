@@ -45,7 +45,7 @@ EditorState::EditorState()
     this->add_child( m_character, m_view );
     this->add_child( m_imageMap );
     this->add_debug_window( m_view );
-    m_view.enable_debug();
+    m_view.show();
 
     m_tilemap.setPosition( 0.f, 0.f );
     this->reset_view( Settings::get_instance().get_window_size() );
