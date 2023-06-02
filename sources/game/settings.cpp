@@ -99,8 +99,6 @@ void Settings::load_default()
     m_nbFramePerSecond = 60.f;
     m_verticalSync     = true;
     m_startupState     = State::MainMenu;
-
-    this->save();
 }
 
 void Settings::load()
@@ -110,15 +108,40 @@ void Settings::load()
     {
         Trace::FileIssue( m_filePath, "Can't read" );
         this->load_default();
+        this->save();
         return;
     }
 
+    bool error = false;
     // List of all members of Settings
     boost::mp11::mp_for_each< boost::describe::describe_members<
         Settings, boost::describe::mod_any_access > >( [&, this] ( auto D ) {
+        if ( file.peek() == std::ifstream::traits_type::eof() )
+        {
+            Trace::Error( "Unexpected end of file '{}'", m_filePath.string() );
+            error = true;
+        }
         file >> this->*D.pointer;
-        Trace::Info( "{}", this->*D.pointer );
+        if ( ! file )
+        {
+            Trace::Error( "Failed to read '{}'", m_filePath.string() );
+            error = true;
+        }
+        // Trace::Debug( "Settings : {} -> {}", this->*D.pointer, D.name );
     } );
+
+    if ( ! stream::is_ended( file ) )
+    {
+        Trace::Error( "Settings file to much parameters '{}'",
+                      m_filePath.string() );
+        error = true;
+    }
+
+    if ( error )
+    {
+        this->load_default();
+        this->save();
+    }
 }
 
 void Settings::save() const

@@ -57,4 +57,24 @@ namespace stream
 
         return static_cast< char >( character );
     }
+
+    // That check if we are at the end of a stream or if there is only
+    // whitespace remaining
+    bool is_ended ( std::istream const & stream )
+    {
+        // Make a copy of the stream to avoid modifying the original
+        std::istream streamCopy { stream.rdbuf() };
+
+        char c;
+        while ( streamCopy.get( c ) )
+        {
+            if ( ! std::isspace( c ) )
+            {  // Found a non-whitespace character
+                return false;
+            }
+        }
+        // If we get here, we've either hit EOF or only found whitespace
+        // characters
+        return true;
+    }
 }  // namespace stream

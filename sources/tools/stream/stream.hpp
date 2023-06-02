@@ -9,7 +9,10 @@ namespace stream
 {
     // If the next character is character, it is ignored int the stream
     bool ignore_next ( std::istream & stream, char character );
+    // TODO this function must have a const parameter
     char peek_next ( std::istream & stream );
+
+    bool is_ended ( std::istream const & stream );
 }  // namespace stream
 
 /// @brief Reading vector
