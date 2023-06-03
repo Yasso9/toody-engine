@@ -85,19 +85,19 @@ void Settings::update_gui()
     {
         ImGui::TextFmt( "{:<20}", "Window size" );
         ImGui::SameLine();
-        ImGui::InputFloat( "", &m_windowSize.x );
+        ImGui::InputFloat( "##WindowSizeWidth", &m_windowSize.x );
         ImGui::SameLine();
-        ImGui::InputFloat( "", &m_windowSize.y );
+        ImGui::InputFloat( "##WindowSizeHeight", &m_windowSize.y );
 
         ImGui::TextFmt( "{:<20}", "Frame rate" );
         ImGui::SameLine();
-        ImGui::InputFloat( "", &m_nbFramePerSecond );
+        ImGui::InputFloat( "##Framerate", &m_nbFramePerSecond );
 
-        ImGui::TextFmt( "{:<20}", "Vertical sync" );
+        ImGui::TextFmt( "{:<20}", "Vertical Sync" );
         ImGui::SameLine();
-        ImGui::Checkbox( "", &m_verticalSync );
+        ImGui::Checkbox( "##VerticalSync", &m_verticalSync );
 
-        ImGui::TextFmt( "{:<20}", "Startup state" );
+        ImGui::TextFmt( "{:<20}", "Startup State" );
         ImGui::SameLine();
         std::vector< std::string > stateList     = get_list< StateList >();
         std::string                selectedState = to_string( m_startupState );
@@ -123,7 +123,7 @@ void Settings::update_gui()
 
         ImGui::TextFmt( "{:<20}", "UI Scale" );
         ImGui::SameLine();
-        if ( ImGui::InputFloat( "", &m_uiScale, 0.5f, 1.f ) )
+        if ( ImGui::InputFloat( "##UIScale", &m_uiScale, 0.5f, 1.f ) )
         {
             if ( m_uiScale < 0.5f )
             {
@@ -137,7 +137,7 @@ void Settings::update_gui()
 
         ImGui::TextFmt( "{:<20}", "Font Scale" );
         ImGui::SameLine();
-        if ( ImGui::InputFloat( "", &m_fontScale, 0.5f, 1.f ) )
+        if ( ImGui::InputFloat( "##FontScale", &m_fontScale, 0.5f, 1.f ) )
         {
             if ( m_fontScale < 0.5f )
             {

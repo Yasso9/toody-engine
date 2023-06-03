@@ -3,7 +3,8 @@
 #include <functional>  // for function
 #include <stddef.h>    // for NULL
 
-#include <SFML/Config.hpp>  // for Uint8
+#include <SFML/Config.hpp>     // for Uint8
+#include <imgui/imgui-SFML.h>  // for ImGui::SFML::UpdateFontTexture
 
 #include "game/resources.hpp"        // for get_font
 #include "game/settings.hpp"         // for Settings
@@ -180,8 +181,16 @@ namespace ImGui
         Trace::Info( "Font scale: {}", fontScale );
 
         ImGuiIO & io = ImGui::GetIO();
-        io.Fonts->AddFontFromFileTTF( resources::fonts::INTER_REGULAR.c_str(),
-                                      fontScale * 20.f );
+        Trace::Debug( "Font path: {}",
+                      resources::fonts::INTER_REGULAR.c_str() );
+        io.Fonts->Clear();
+        // io.Fonts->AddFontDefault();
+        io.Fonts->AddFontFromFileTTF( resources::fonts::ARIAL.string().c_str(),
+                                      fontScale * 16.f );
+        if ( ! ImGui::SFML::UpdateFontTexture() )
+        {
+            Trace::Error( "Failed to setup font texture!" );
+        }
 
         // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
