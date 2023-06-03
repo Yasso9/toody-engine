@@ -1,27 +1,22 @@
 #pragma once
 
-#include <boost/describe.hpp>  // for BOOST_DESCRIBE_NESTED_ENUM
-
 #include "components/component.hpp"  // for Component
+#include "tools/enum.hpp"
+
+enum class StateList
+{
+    MainMenu = 0,
+    Editor,
+    Graphics,
+    Test,
+    Quit,
+    LAST_ENUM_NAME
+};
+BOOST_DESCRIBE_ENUM( StateList, MainMenu, Editor, Graphics, Test, Quit,
+                     LAST_ENUM_NAME );
 
 class State : public Component
 {
-  public:
-    enum E_List
-    {
-        MainMenu = 0,
-        Editor,
-        Graphics,
-        Test,
-        Quit,
-        EnumLast,
-    };
-
-    BOOST_DESCRIBE_NESTED_ENUM( E_List, MainMenu, Editor, Graphics, Test, Quit,
-                                EnumLast );
-    static E_List                     get_enum_state ( std::string string );
-    static std::vector< std::string > get_state_list ();
-
   protected:
     State();
 

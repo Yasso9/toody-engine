@@ -1,9 +1,10 @@
 #include "update_context.hpp"
 
+#include "game/settings.hpp"     // for Settings
 #include "states/editor.hpp"     // for EditorState
 #include "states/graphic.hpp"    // for GraphicState
 #include "states/main_menu.hpp"  // for MainMenuState
-#include "states/state.hpp"      // for State::E_List
+#include "states/state.hpp"      // for StateList
 #include "states/test.hpp"       // for TestState
 
 UpdateContext::UpdateContext()
@@ -13,8 +14,7 @@ UpdateContext::UpdateContext()
     deltaTime { 0.f },
     shouldRun { true }
 {
-    // this->transition_to( State::MainMenu );
-    this->transition_to( std::make_shared< MainMenuState >() );
+    this->transition_to( Settings::get_instance().get_startup_state() );
 }
 
 void UpdateContext::transition_to( std::shared_ptr< State > state )
@@ -22,23 +22,23 @@ void UpdateContext::transition_to( std::shared_ptr< State > state )
     m_state = state;
 }
 
-void UpdateContext::transition_to( int state )
+void UpdateContext::transition_to( StateList state )
 {
-    switch ( static_cast< State::E_List >( state ) )
+    switch ( static_cast< StateList >( state ) )
     {
-    case State::MainMenu :
+    case StateList::MainMenu :
         this->transition_to( std::make_shared< MainMenuState >() );
         break;
-    case State::Editor :
+    case StateList::Editor :
         this->transition_to( std::make_shared< EditorState >() );
         break;
-    case State::Graphics :
+    case StateList::Graphics :
         this->transition_to( std::make_shared< GraphicState >() );
         break;
-    case State::Test :
+    case StateList::Test :
         this->transition_to( std::make_shared< TestState >() );
         break;
-    case State::Quit :
+    case StateList::Quit :
         this->transition_to( std::make_shared< MainMenuState >() );
         shouldRun = false;
         break;

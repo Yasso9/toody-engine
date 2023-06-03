@@ -15,27 +15,27 @@ namespace Trace
     void Error ( fmt::format_string< Args... > fmt, Args &&... args )
     {
         fmt::print( fmt::fg( fmt::color::orange_red ) | fmt::emphasis::bold,
-                    "[ERROR]          {}\n", FORMAT_STRING( fmt, args ) );
+                    "{:<15} {}\n", "[ERROR]", FORMAT_STRING( fmt, args ) );
     }
 
     template< typename... Args >
     void Warning ( fmt::format_string< Args... > fmt, Args &&... args )
     {
         fmt::print( fmt::fg( fmt::color::orange ) | fmt::emphasis::bold,
-                    "[WARNING]        {}\n", FORMAT_STRING( fmt, args ) );
+                    "{:<15} {}\n", "[WARNING]", FORMAT_STRING( fmt, args ) );
     }
 
     template< typename... Args >
     void Success ( fmt::format_string< Args... > fmt, Args &&... args )
     {
         fmt::print( fmt::fg( fmt::color::green ) | fmt::emphasis::bold,
-                    "[SUCCESS]        {}\n", FORMAT_STRING( fmt, args ) );
+                    "{:<15} {}\n", "[SUCCESS]", FORMAT_STRING( fmt, args ) );
     }
 
     template< typename... Args >
     void Info ( fmt::format_string< Args... > fmt, Args &&... args )
     {
-        fmt::print( fmt::fg( fmt::color::sky_blue ), "[INFO]           {}\n",
+        fmt::print( fmt::fg( fmt::color::sky_blue ), "{:<15} {}\n", "[INFO]",
                     FORMAT_STRING( fmt, args ) );
     }
 
@@ -43,7 +43,7 @@ namespace Trace
     void Debug ( fmt::format_string< Args... > fmt, Args &&... args )
     {
         fmt::print( fmt::fg( fmt::color::gray ) | fmt::emphasis::italic,
-                    "[DEBUG]          {}\n", FORMAT_STRING( fmt, args ) );
+                    "{:<15} {}\n", "[DEBUG]", FORMAT_STRING( fmt, args ) );
     }
 
     template< typename... Args >
@@ -51,7 +51,7 @@ namespace Trace
                         fmt::format_string< Args... > fmt, Args &&... args )
     {
         fmt::print( fmt::fg( fmt::color::light_golden_rod_yellow ),
-                    "[FILE NOT FOUND] '{}' : {}\n", filePath,
+                    "{:<15} '{}' : {}\n", "[FILE NOT FOUND]", filePath,
                     FORMAT_STRING( fmt, args ) );
     }
 
@@ -60,7 +60,7 @@ namespace Trace
                      fmt::format_string< Args... > fmt, Args &&... args )
     {
         fmt::print( fmt::fg( fmt::color::light_golden_rod_yellow ),
-                    "[FILE ISSUE]     '{}' : {}\n", filePath,
+                    "{:<15} '{}' : {}\n", "[FILE ISSUE]", filePath,
                     FORMAT_STRING( fmt, args ) );
     }
 }  // namespace Trace

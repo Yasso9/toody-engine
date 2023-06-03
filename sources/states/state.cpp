@@ -3,34 +3,7 @@
 #include <SFML/Window/Event.hpp>  // for Event, Event::Closed, Event::...
 #include <imgui/imgui-SFML.h>     // for Update, ProcessEvent
 
-#include "contexts/game_context.hpp"  // for GameContext
-#include "graphics3D/openGL.hpp"      // for check_error
-
-/* static */ State::E_List State::get_enum_state( std::string enumString )
-{
-    State::E_List enumValue {};
-    boost::mp11::mp_for_each<
-        boost::describe::describe_enumerators< State::E_List > >(
-        [&] ( auto D ) {
-            if ( enumString == D.name )
-            {
-                enumValue = D.value;
-                return;
-            }
-        } );
-    return enumValue;
-}
-
-/* static */ std::vector< std::string > State::get_state_list()
-{
-    std::vector< std::string > stateList {};
-
-    boost::mp11::mp_for_each<
-        boost::describe::describe_enumerators< State::E_List > >(
-        [&] ( auto D ) { stateList.push_back( D.name ); } );
-
-    return stateList;
-}
+#include "graphics3D/openGL.hpp"  // for check_error
 
 State::State() {}
 

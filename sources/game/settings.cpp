@@ -4,6 +4,7 @@
 #include <fstream>     // for basic_istream<>::__istream_type, ifs...
 #include <string>      // for string, operator""s
 
+#include "states/state.hpp"  // for StateList
 #include "tools/enum.hpp"    // for operator>>, operator<<
 #include "tools/path.hpp"    // for get_folder, E_Folder, E_Folder::Data
 #include "tools/traces.hpp"  // for FileIssue
@@ -61,24 +62,52 @@ bool Settings::get_vertical_sync() const
     return m_verticalSync;
 }
 
+StateList Settings::get_startup_state() const
+{
+    return m_startupState;
+}
+
 void Settings::update_gui()
 {
     if ( ImGui::BeginWindow( *this ) )
     {
-        ImGui::Text( "Window size" );
+        ImGui::TextFmt( "{:<20}", "Window size" );
         ImGui::SameLine();
-        ImGui::InputFloat( "Width", &m_windowSize.x );
-        ImGui::InputFloat( "Height", &m_windowSize.y );
+        ImGui::InputFloat( "", &m_windowSize.x );
+        ImGui::SameLine();
+        ImGui::InputFloat( "", &m_windowSize.y );
 
-        ImGui::Text( "Frame rate" );
-        ImGui::InputFloat( "Frame rate", &m_nbFramePerSecond );
+        ImGui::TextFmt( "{:<20}", "Frame rate" );
+        ImGui::SameLine();
+        ImGui::InputFloat( "", &m_nbFramePerSecond );
 
-        ImGui::Text( "Vertical sync" );
-        ImGui::Checkbox( "Vertical sync", &m_verticalSync );
+        ImGui::TextFmt( "{:<20}", "Vertical sync" );
+        ImGui::SameLine();
+        ImGui::Checkbox( "", &m_verticalSync );
 
-        ImGui::Text( "Startup state" );
-        // Dropdown list of State::E_List
-        // ImGui::Combo( "Startup state" );
+        ImGui::TextFmt( "{:<20}", "Startup state" );
+        ImGui::SameLine();
+        std::vector< std::string > stateList     = get_list< StateList >();
+        std::string                selectedState = to_string( m_startupState );
+        if ( ImGui::BeginCombo( "##Startup State Combo",
+                                selectedState.c_str() ) )
+        {
+            for ( std::string const & state : stateList )
+            {
+                bool isSelected = ( state == selectedState );
+                if ( ImGui::Selectable( state.c_str(), isSelected ) )
+                {
+                    m_startupState = to_enum< StateList >( state );
+                }
+                // Set the initial focus when opening the combo (scrolling +
+                // keyboard navigation focus)
+                if ( isSelected )
+                {
+                    ImGui::SetItemDefaultFocus();
+                }
+            }
+            ImGui::EndCombo();
+        }
 
         if ( ImGui::Button( "Load Default" ) )
         {
@@ -98,7 +127,7 @@ void Settings::load_default()
     m_windowSize       = { 1600.f, 900.f };
     m_nbFramePerSecond = 60.f;
     m_verticalSync     = true;
-    m_startupState     = State::MainMenu;
+    m_startupState     = StateList::MainMenu;
 }
 
 void Settings::load()

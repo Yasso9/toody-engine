@@ -56,7 +56,7 @@ MainMenuState::MainMenuState()
     m_menuBackground.setPosition( 50.f, 0.f );
     m_menuBackground.setSize( { windowSize.x / 5, windowSize.y } );
 
-    for ( std::string stateName : State::get_state_list() )
+    for ( std::string stateName : get_list< StateList >() )
     {
         m_texts.push_back( sf::Text {
             stateName,
@@ -113,7 +113,7 @@ void MainMenuState::update( UpdateContext & context )
                 // Color when choosing
                 text.setFillColor( sf::Color { 242, 255, 54 } );
                 context.transition_to(
-                    State::get_enum_state( text.getString() ) );
+                    to_enum< StateList >( text.getString() ) );
             }
         }
     }

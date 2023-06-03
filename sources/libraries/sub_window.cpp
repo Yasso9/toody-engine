@@ -3,7 +3,7 @@
 #include "libraries/imgui.hpp"  // for ImGui::Begin, ImGui::End
 
 SubWindow::SubWindow( std::string const & name )
-  : m_windowName { name }, m_show { true }, m_flags { ImGuiWindowFlags_None }
+  : m_windowName { name }, m_show { false }, m_flags { ImGuiWindowFlags_None }
 {}
 
 void SubWindow::show()
@@ -24,6 +24,16 @@ void SubWindow::set_enabled( bool enabled )
 bool SubWindow::is_enabled() const
 {
     return m_show;
+}
+
+bool & SubWindow::is_enabled()
+{
+    return m_show;
+}
+
+void SubWindow::toggle_enabled()
+{
+    m_show = ! m_show;
 }
 
 void SubWindow::set_window_flags( ImGuiWindowFlags flags )

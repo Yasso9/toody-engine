@@ -14,10 +14,13 @@ class SubWindow
     SubWindow( std::string const & name );
     virtual ~SubWindow() = default;
 
-    void show ();
-    void hide ();
-    void set_enabled ( bool enabled );
-    bool is_enabled () const;
+    void   show ();
+    void   hide ();
+    void   set_enabled ( bool enabled );
+    bool   is_enabled () const;
+    bool & is_enabled ();
+    void   toggle_enabled ();
+
     void set_window_flags ( ImGuiWindowFlags flags );
 
     // This method call update_gui() and must be called 1 time per

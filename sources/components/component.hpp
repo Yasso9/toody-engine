@@ -6,7 +6,7 @@
 #include "contexts/render_context.hpp"  // for RenderContext
 #include "contexts/update_context.hpp"  // for UpdateContext
 #include "graphics2D/view.hpp"          // for View
-#include "libraries/debug_window.hpp"   // for DebugWindow
+#include "libraries/sub_window.hpp"     // for SubWindow
 
 class Component;
 // check if T is derived from Component
@@ -14,11 +14,10 @@ template< typename T > concept cComponent = std::derived_from< T, Component >;
 
 class Component
 {
-  private:
     // List of childs components
     std::vector< Component * > m_childs;
     // List of debug windows attached to this component
-    std::vector< DebugWindow * > m_debugWindows;
+    std::vector< SubWindow * > m_subWindows;
     // List of childs components represented as an array of components
     // std::vector< std::reference_wrapper< std::vector< Component * > > >
     //     m_arrayChilds;
@@ -58,7 +57,8 @@ class Component
     void remove_child ( Component * component );
     void remove_child ( Component & component );
 
-    void add_debug_window ( DebugWindow & debugWindow );
+    void add_sub_window ( SubWindow & subWindow );
+    void remove_sub_window ( SubWindow & subWindow );
 
   public:
     std::vector< Component const * > get_childs () const;

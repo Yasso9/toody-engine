@@ -44,8 +44,8 @@ EditorState::EditorState()
     this->add_child( m_collisionList, m_view );
     this->add_child( m_character, m_view );
     this->add_child( m_imageMap );
-    this->add_debug_window( m_view );
-    m_view.show();
+    this->add_sub_window( m_view );
+    this->add_sub_window( Settings::get_instance() );
 
     m_tilemap.setPosition( 0.f, 0.f );
     this->reset_view( Settings::get_instance().get_window_size() );
@@ -75,6 +75,8 @@ void EditorState::update_toolbar( UpdateContext & context )
             ImGui::MenuItem( "Edit View Settings", "", &m_showWindow.view );
 
             ImGui::MenuItem( "Generate Traces", "", &generateTraces );
+            ImGui::MenuItem( "Manage Settings", "",
+                             &Settings::get_instance().is_enabled() );
 
             ImGui::EndMenu();
         }
@@ -83,7 +85,7 @@ void EditorState::update_toolbar( UpdateContext & context )
 
     if ( quitEditor )
     {
-        context.transition_to( State::E_List::MainMenu );
+        context.transition_to( StateList::MainMenu );
     }
     if ( resetView )
     {
