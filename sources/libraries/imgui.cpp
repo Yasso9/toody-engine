@@ -5,9 +5,12 @@
 
 #include <SFML/Config.hpp>  // for Uint8
 
+#include "game/resources.hpp"        // for get_font
+#include "game/settings.hpp"         // for Settings
 #include "graphics2D/constants.hpp"  // for COLOR_RANGE
 #include "libraries/sub_window.hpp"  // for SubWindow
 #include "tools/assertion.hpp"       // for ASSERTION
+#include "tools/traces.hpp"
 
 namespace ImGui
 {
@@ -165,5 +168,75 @@ namespace ImGui
             return false;
         }
         return ImGui::Begin( name.c_str(), &isWindowOpen, flags );
+    }
+
+    void ResetStyle ()
+    {
+        // float uiScale = std::sqrt( this->get_display_scale().x
+        //    * this->get_display_scale().y );
+        float uiScale   = Settings::get_instance().get_ui_scale();
+        float fontScale = Settings::get_instance().get_font_scale();
+        Trace::Info( "UI scale: {}", uiScale );
+        Trace::Info( "Font scale: {}", fontScale );
+
+        ImGuiIO & io = ImGui::GetIO();
+        io.Fonts->AddFontFromFileTTF( resources::fonts::INTER_REGULAR.c_str(),
+                                      fontScale * 20.f );
+
+        // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+        ImGui::StyleColorsDark();
+
+        ImGuiStyle & style = ImGui::GetStyle();
+
+        style.WindowPadding     = ImVec2 { 10.f, 10.f };
+        style.FramePadding      = ImVec2 { 10.f, 10.f };
+        style.CellPadding       = ImVec2 { 10.f, 10.f };
+        style.ItemSpacing       = ImVec2 { 10.f, 10.f };
+        style.ItemInnerSpacing  = ImVec2 { 10.f, 10.f };
+        style.TouchExtraPadding = ImVec2 { 0.f, 0.f };
+
+        style.IndentSpacing = 15.f;
+        style.ScrollbarSize = 15.f;
+        style.GrabMinSize   = 15.f;
+
+        style.WindowBorderSize = 0.f;
+        style.ChildBorderSize  = 0.f;
+        style.FrameBorderSize  = 0.f;
+        style.PopupBorderSize  = 0.f;
+        style.TabBorderSize    = 0.f;
+
+        style.WindowRounding    = 6.f;
+        style.ChildRounding     = 6.f;
+        style.FrameRounding     = 6.f;
+        style.PopupRounding     = 6.f;
+        style.ScrollbarRounding = 6.f;
+        style.GrabRounding      = 6.f;
+        style.TabRounding       = 6.f;
+
+        style.WindowTitleAlign         = ImVec2 { 0.5f, 0.5f };
+        style.WindowMenuButtonPosition = ImGuiDir_None;
+        style.ColorButtonPosition      = ImGuiDir_Right;
+        style.ButtonTextAlign          = ImVec2 { 0.5f, 0.5f };
+        style.SelectableTextAlign      = ImVec2 { 0.f, 0.5f };
+        // style.SeparatorTextBorderSize  = 3.f;
+        // style.SeparatorTextAlign       = ImVec2 { 0.5f, 0.5f };
+        // style.SeparatorTextPadding     = ImVec2 { 0.5f, 0.5f };
+        style.LogSliderDeadzone = 0.5f;
+
+        style.DisplaySafeAreaPadding = ImVec2 { 3.f, 3.f };
+
+        style.Colors[ImGuiCol_TableHeaderBg]     = ImVec4 { 0.25f, 0.25f, 0.25f,
+                                                        1.00f };
+        style.Colors[ImGuiCol_TableBorderLight]  = ImVec4 { 0.80f, 0.80f, 0.80f,
+                                                           1.00f };
+        style.Colors[ImGuiCol_TableBorderStrong] = ImVec4 { 0.70f, 0.70f, 0.70f,
+                                                            1.00f };
+        style.Colors[ImGuiCol_Text] = ImVec4 { 1.0f, 1.0f, 1.0f, 1.0f };
+        style.Colors[ImGuiCol_TextSelectedBg] = ImVec4 { 0.0f, 0.0f, 0.0f,
+                                                         1.0f };
+
+        style.ScaleAllSizes( uiScale );
     }
 }  // namespace ImGui

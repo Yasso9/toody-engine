@@ -24,6 +24,8 @@ class Settings : public Singleton< Settings >,
     float          m_nbFramePerSecond;
     bool           m_verticalSync;
     StateList      m_startupState;
+    float          m_uiScale;
+    float          m_fontScale;
 
     Settings();
 
@@ -37,6 +39,8 @@ class Settings : public Singleton< Settings >,
     float          get_refresh_rate () const;
     bool           get_vertical_sync () const;
     StateList      get_startup_state () const;
+    float          get_ui_scale () const;
+    float          get_font_scale () const;
 
   private:
     // load the default configuration
@@ -48,5 +52,5 @@ class Settings : public Singleton< Settings >,
 
     BOOST_DESCRIBE_CLASS( Settings, (), (), (),
                           ( m_windowSize, m_nbFramePerSecond, m_verticalSync,
-                            m_startupState ) )
+                            m_startupState, m_uiScale, m_fontScale ) )
 };

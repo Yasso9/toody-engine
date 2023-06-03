@@ -71,4 +71,6 @@ namespace ImGui
             fmt::format( fmt, std::forward< Args >( args )... );
         ImGui::Text( "%s", formattedString.c_str() );
     }
+
+    void ResetStyle ();
 }  // namespace ImGui

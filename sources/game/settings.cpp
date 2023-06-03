@@ -36,7 +36,9 @@ Settings::Settings()
     m_windowSize {},
     m_nbFramePerSecond {},
     m_verticalSync {},
-    m_startupState {}
+    m_startupState {},
+    m_uiScale {},
+    m_fontScale {}
 {
     this->load();
 }
@@ -65,6 +67,16 @@ bool Settings::get_vertical_sync() const
 StateList Settings::get_startup_state() const
 {
     return m_startupState;
+}
+
+float Settings::get_ui_scale() const
+{
+    return m_uiScale;
+}
+
+float Settings::get_font_scale() const
+{
+    return m_fontScale;
 }
 
 void Settings::update_gui()
@@ -109,6 +121,34 @@ void Settings::update_gui()
             ImGui::EndCombo();
         }
 
+        ImGui::TextFmt( "{:<20}", "UI Scale" );
+        ImGui::SameLine();
+        if ( ImGui::InputFloat( "", &m_uiScale, 0.5f, 1.f ) )
+        {
+            if ( m_uiScale < 0.5f )
+            {
+                m_uiScale = 0.5f;
+            }
+            else if ( m_uiScale > 4.f )
+            {
+                m_uiScale = 4.f;
+            }
+        }
+
+        ImGui::TextFmt( "{:<20}", "Font Scale" );
+        ImGui::SameLine();
+        if ( ImGui::InputFloat( "", &m_fontScale, 0.5f, 1.f ) )
+        {
+            if ( m_fontScale < 0.5f )
+            {
+                m_fontScale = 0.5f;
+            }
+            else if ( m_fontScale > 4.f )
+            {
+                m_fontScale = 4.f;
+            }
+        }
+
         if ( ImGui::Button( "Load Default" ) )
         {
             this->load_default();
@@ -118,6 +158,7 @@ void Settings::update_gui()
         {
             this->save();
         }
+        ImGui::Text( "* Restart the game to apply changes" );
     }
     ImGui::End();
 }
@@ -128,6 +169,8 @@ void Settings::load_default()
     m_nbFramePerSecond = 60.f;
     m_verticalSync     = true;
     m_startupState     = StateList::MainMenu;
+    m_uiScale          = 1.f;
+    m_fontScale        = 1.f;
 }
 
 void Settings::load()

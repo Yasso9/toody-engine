@@ -10,10 +10,25 @@ namespace sf
     class Texture;
 }  // namespace sf
 
+using fspath = std::filesystem::path;
+
 namespace resources
 {
-    sf::Texture const & get_texture ( std::filesystem::path const & file );
-    sf::Font const &    get_font ( std::filesystem::path const & file );
+    sf::Texture const & get_texture ( fspath const & file );
+    sf::Font const &    get_font ( fspath const & file );
     sf::Shader &        get_shader ( std::string const & vertexShaderFile,
                                      std::string const & fragmentShaderFile );
-};  // namespace resources
+
+    fspath const FOLDER { "resources" };
+
+    namespace fonts
+    {
+        fspath const FOLDER { resources::FOLDER / "fonts" };
+
+        fspath const ARIAL { fonts::FOLDER / "arial.ttf" };
+        fspath const INTER_REGULAR { fonts::FOLDER / "Inter-Regular.ttf" };
+        fspath const SATOSHI_VARIABLE { fonts::FOLDER / "SatoshiVariable.ttf" };
+        fspath const SWITZER_VARIABLE { fonts::FOLDER / "SwitzerVariable.ttf" };
+        fspath const TUFFY { fonts::FOLDER / "tuffy.ttf" };
+    }  // namespace fonts
+};     // namespace resources

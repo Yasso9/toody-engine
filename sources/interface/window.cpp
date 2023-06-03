@@ -68,6 +68,8 @@ Window::Window( std::string const & title )
             Trace::Error( "ImGui initialization failed" );
         }
 
+        ImGui::ResetStyle();
+
         // To disable the use of imgui.ini file
         // ImGui::GetIO().IniFilename = nullptr;
     }

@@ -5,7 +5,6 @@
 #include <SFML/Graphics/RenderWindow.hpp>  // for RenderWindow
 
 #include "maths/vector2.hpp"    // for Vector2U
-                                // for S_KeyboardMove
 #include "tools/singleton.hpp"  // for Singleton
 
 namespace sf
@@ -14,7 +13,6 @@ namespace sf
     class Drawable;
 }  // namespace sf
 
-/// @brief check if the class can be drawn
 template< typename T >
 concept C_IsDrawable = std::is_base_of< sf::Drawable, T >::value;
 
@@ -31,8 +29,7 @@ class Window : public sf::RenderWindow
     math::Vector2U get_center_position () const;
 
     bool is_hovered () const;
-    /// @brief Check if the window have focus and if the mouse is inside the
-    /// window
+    // Check if the window have focus and if the mouse is inside the window
     bool has_absolute_focus () const;
 
     void reset_view ();

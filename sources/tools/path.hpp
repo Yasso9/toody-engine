@@ -3,6 +3,7 @@
 #include <filesystem>  // for path
 #include <string>      // for string
 
+// TODO delete this file. Use ressources.hpp instead
 namespace path
 {
     enum E_Folder
