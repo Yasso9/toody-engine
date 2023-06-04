@@ -57,6 +57,10 @@ namespace ImGui
     bool Begin ( std::string const & name, bool & isWindowOpen,
                  ImGuiWindowFlags flags = 0 );
 
+    bool InputVec ( std::string const & label, math::Vector2F & vector,
+                    std::string const & format = "%.3f",
+                    ImGuiInputTextFlags flags  = 0 );
+
     // TODO make Begin deprecated
     // [[deprecated(
     //     "Please use bool Begin ( std::string const & name) "

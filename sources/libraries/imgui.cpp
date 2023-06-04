@@ -171,6 +171,19 @@ namespace ImGui
         return ImGui::Begin( name.c_str(), &isWindowOpen, flags );
     }
 
+    bool InputVec ( std::string const & label, math::Vector2F & vector,
+                    std::string const & format, ImGuiInputTextFlags flags )
+    {
+        float vec2[2] = { vector.x, vector.y };
+        if ( ImGui::InputFloat2( label.c_str(), vec2, format.c_str(), flags ) )
+        {
+            vector.x = vec2[0];
+            vector.y = vec2[1];
+            return true;
+        }
+        return false;
+    }
+
     void ResetStyle ()
     {
         // float uiScale = std::sqrt( this->get_display_scale().x
@@ -185,8 +198,11 @@ namespace ImGui
                       resources::fonts::INTER_REGULAR.c_str() );
         io.Fonts->Clear();
         // io.Fonts->AddFontDefault();
-        io.Fonts->AddFontFromFileTTF( resources::fonts::ARIAL.string().c_str(),
-                                      fontScale * 16.f );
+        // io.Fonts->AddFontFromFileTTF(
+        // resources::fonts::ARIAL.string().c_str(),
+        //                               fontScale * 16.f );
+        io.Fonts->AddFontFromFileTTF(
+            resources::fonts::FIRA_MONO.string().c_str(), fontScale * 16.f );
         if ( ! ImGui::SFML::UpdateFontTexture() )
         {
             Trace::Error( "Failed to setup font texture!" );

@@ -26,6 +26,7 @@ namespace resources
         fspath const FOLDER { resources::FOLDER / "fonts" };
 
         fspath const ARIAL { fonts::FOLDER / "arial.ttf" };
+        fspath const FIRA_MONO { fonts::FOLDER / "FiraMono-Regular.ttf" };
         fspath const INTER_REGULAR { fonts::FOLDER / "Inter-Regular.ttf" };
         fspath const SATOSHI_VARIABLE { fonts::FOLDER / "SatoshiVariable.ttf" };
         fspath const SWITZER_VARIABLE { fonts::FOLDER / "SwitzerVariable.ttf" };

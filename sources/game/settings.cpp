@@ -83,21 +83,28 @@ void Settings::update_gui()
 {
     if ( ImGui::BeginWindow( *this ) )
     {
-        ImGui::TextFmt( "{:<20}", "Window size" );
-        ImGui::SameLine();
-        ImGui::InputFloat( "##WindowSizeWidth", &m_windowSize.x );
-        ImGui::SameLine();
-        ImGui::InputFloat( "##WindowSizeHeight", &m_windowSize.y );
+        unsigned int aligment = 25;
 
-        ImGui::TextFmt( "{:<20}", "Frame rate" );
+        ImGui::TextFmt( "{:<{}}", "Window size", aligment );
         ImGui::SameLine();
-        ImGui::InputFloat( "##Framerate", &m_nbFramePerSecond );
+        ImGui::InputVec( "##WindowSize", m_windowSize, "%.0f" );
 
-        ImGui::TextFmt( "{:<20}", "Vertical Sync" );
+        ImGui::TextFmt( "{:<{}}", "Frame rate", aligment );
+        ImGui::SameLine();
+        if ( ImGui::InputFloat( "##Framerate", &m_nbFramePerSecond, 1.f, 5.f,
+                                "%.0f" ) )
+        {
+            if ( m_nbFramePerSecond < 5.f )
+            {
+                m_nbFramePerSecond = 5.f;
+            }
+        }
+
+        ImGui::TextFmt( "{:<{}}", "Vertical Sync", aligment );
         ImGui::SameLine();
         ImGui::Checkbox( "##VerticalSync", &m_verticalSync );
 
-        ImGui::TextFmt( "{:<20}", "Startup State" );
+        ImGui::TextFmt( "{:<{}}", "Startup State", aligment );
         ImGui::SameLine();
         std::vector< std::string > stateList     = get_list< StateList >();
         std::string                selectedState = to_string( m_startupState );
@@ -121,9 +128,9 @@ void Settings::update_gui()
             ImGui::EndCombo();
         }
 
-        ImGui::TextFmt( "{:<20}", "UI Scale" );
+        ImGui::TextFmt( "{:<{}}", "UI Scale", aligment );
         ImGui::SameLine();
-        if ( ImGui::InputFloat( "##UIScale", &m_uiScale, 0.5f, 1.f ) )
+        if ( ImGui::InputFloat( "##UIScale", &m_uiScale, 0.5f, 1.f, "%.1f" ) )
         {
             if ( m_uiScale < 0.5f )
             {
@@ -135,9 +142,10 @@ void Settings::update_gui()
             }
         }
 
-        ImGui::TextFmt( "{:<20}", "Font Scale" );
+        ImGui::TextFmt( "{:<{}}", "Font Scale", aligment );
         ImGui::SameLine();
-        if ( ImGui::InputFloat( "##FontScale", &m_fontScale, 0.5f, 1.f ) )
+        if ( ImGui::InputFloat( "##FontScale", &m_fontScale, 0.5f, 1.f,
+                                "%.1f" ) )
         {
             if ( m_fontScale < 0.5f )
             {
