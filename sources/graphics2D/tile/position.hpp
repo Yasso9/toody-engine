@@ -7,10 +7,12 @@ namespace tile
 {
     class Position
     {
-        /// @brief Position in tile value
+        // math::Vector2U const TILE_SIZE { 32.f, 32.f };
+
+        // Position in tile value
         math::Vector2U m_position;
-        /// @brief number of tile in the X axis of the map/grid
-        ///        where the tile is positionned
+        // number of tile in the X axis of the map/grid where the tile is
+        // positionned
         unsigned int m_numberOfColumns;
 
       public:
@@ -26,11 +28,11 @@ namespace tile
                   Type type );
         Position( math::Vector2U position, tile::Size mapSize, Type type );
 
-        /// @brief get index of the tile
+        // get index of the tile
         unsigned int value () const;
-        /// @brief get position in tile value
+        // get position in tile value
         math::Vector2U tile () const;
-        /// @brief get position in pixel value
+        // position in pixel value
         math::Vector2U pixel () const;
 
         unsigned int get_number_of_columns () const;
@@ -38,15 +40,42 @@ namespace tile
         void set_value ( unsigned int newValue );
         void set_value ( math::Vector2U position, Type type );
 
-        bool is_inside ( tile::Size size ) const;
+        bool is_inside ( tile::Size const & size ) const;
 
-        bool operator<( tile::Size size ) const;
-        bool operator>= ( tile::Size size ) const;
-        bool operator<( tile::Position position ) const;
-        bool operator>= ( tile::Position position ) const;
-        /// @brief Compare position AND numberOfColumns
-        bool operator== ( tile::Position position ) const;
+        // ####################################################################
+        // ########################## OPERATORS <=> ###########################
+        // ####################################################################
+
+        bool operator<( tile::Size const & size ) const;
+        bool operator>= ( tile::Size const & size ) const;
+        bool operator<( tile::Position const & position ) const;
+        bool operator>= ( tile::Position const & position ) const;
+        // Compare position AND numberOfColumns
+        bool operator== ( tile::Position const & position ) const;
+        bool operator!= ( tile::Position const & position ) const;
+
+        // ####################################################################
+        // ########################## OPERATORS +/- ###########################
+        // ####################################################################
+
+        friend Position   operator+ ( tile::Position const & pos,
+                                    tile::Size const &     size );
+        friend Position   operator- ( tile::Position const & pos,
+                                    tile::Size const &     size );
+        friend Position   operator+ ( tile::Position const & posL,
+                                    tile::Position const & posR );
+        friend Position   operator- ( tile::Position const & posL,
+                                    tile::Position const & posR );
+        friend Position & operator+= ( tile::Position &   pos,
+                                       tile::Size const & size );
+        friend Position & operator-= ( tile::Position &   pos,
+                                       tile::Size const & size );
+        friend Position & operator+= ( tile::Position &       posL,
+                                       tile::Position const & posR );
+        friend Position & operator-= ( tile::Position &       posL,
+                                       tile::Position const & posR );
 
         std::string debug_string ( std::string name = "" ) const;
     };
+
 }  // namespace tile

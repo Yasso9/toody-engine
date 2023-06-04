@@ -3,7 +3,9 @@
 #include "libraries/imgui.hpp"  // for ImGui::Begin, ImGui::End
 
 SubWindow::SubWindow( std::string const & name )
-  : m_windowName { name }, m_show { false }, m_flags { ImGuiWindowFlags_None }
+  : m_windowName { name },
+    m_show { false },
+    m_flags { ImGui::DEFAULT_WINDOW_FLAGS }
 {}
 
 void SubWindow::show()

@@ -234,6 +234,22 @@ namespace math
         return *this = this->get_norm();
     }
 
+    template< cPrimitive Type >
+    Vector2< Type > max ( Vector2< Type > const & lhs,
+                          Vector2< Type > const & rhs )
+    {
+        return Vector2< Type > { std::max( lhs.x, rhs.x ),
+                                 std::max( lhs.y, rhs.y ) };
+    }
+
+    template< cPrimitive Type >
+    Vector2< Type > min ( Vector2< Type > const & lhs,
+                          Vector2< Type > const & rhs )
+    {
+        return Vector2< Type > { std::min( lhs.x, rhs.x ),
+                                 std::min( lhs.y, rhs.y ) };
+    }
+
     /* ********************************************************************
      *************************** STREAM OPERATOR **************************
      ******************************************************************* */

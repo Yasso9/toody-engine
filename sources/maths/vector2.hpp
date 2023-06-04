@@ -141,6 +141,13 @@ namespace math
         float           get_length () const;
         Vector2< Type > get_norm () const;
         Vector2< Type > normalize ();
+
+        template< cPrimitive T >
+        friend Vector2< T > max ( Vector2< T > const & lhs,
+                                  Vector2< T > const & rhs );
+        template< cPrimitive T >
+        friend Vector2< T > min ( Vector2< T > const & lhs,
+                                  Vector2< T > const & rhs );
     };
 
     // ####################################################################
@@ -223,7 +230,8 @@ struct fmt::formatter< math::Vector2< T > >
     template< typename FormatContext >
     auto format ( math::Vector2< T > const & vec2, FormatContext & ctx )
     {
-        // The format for MyType is "{a: <value_of_a>, b: <value_of_b>, c:
+        // The format for MyType is "{a:
+        // <value_of_a>, b: <value_of_b>, c:
         // <value_of_c>}"
         return format_to( ctx.out(), "{{x: {}, y: {}}}", vec2.x, vec2.y );
     }

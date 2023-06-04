@@ -13,26 +13,25 @@ namespace tile
     class Set
     {
         sf::Texture const & m_texture;
-        /// @brief Absolute position of the tileset
+        // Absolute position of the tileset
         math::Vector2F m_position;
 
       public:
-        /// @param position Position in pixel
-        explicit Set( sf::Texture const & texture,
-                      math::Vector2F position = math::Vector2F { 0.f, 0.f } );
-        virtual ~Set() = default;
+        explicit Set( sf::Texture const & texture );
+        ~Set() = default;
 
         sf::Texture const & get_texture () const;
-        math::Vector2F      get_position () const;
-        math::Vector2F      get_end_position () const;
 
-        tile::Size   get_size () const;
-        unsigned int get_number_of_tile () const;
-        unsigned int get_number_of_columns () const;
+        math::Vector2F get_position () const;
+        void           set_position ( math::Vector2F pos );
+        math::Vector2F get_bound_pos () const;
+        tile::Size     get_size () const;
+        unsigned int   get_number_of_tile () const;
 
-        tile::Position get_tile_position ( math::PointF point ) const;
-        void           set_position ( math::Vector2F const & position );
+        tile::Position get_position ( math::PointF         point,
+                                      tile::Position::Type type ) const;
+        tile::Position get_position ( unsigned int value ) const;
 
-        bool contain ( math::PointF const & point ) const;
+        bool contain ( math::PointF point ) const;
     };
 }  // namespace tile

@@ -51,15 +51,51 @@ namespace ImGui_P
 
 namespace ImGui
 {
-    bool BeginWindow ( SubWindow & subWindow );
+    constexpr ImGuiWindowFlags DEFAULT_WINDOW_FLAGS =
+        ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse;
+    constexpr const char * DEFAULT_FLOAT_FORMAT = "%.3f";
 
-    bool Begin ( std::string const & name, ImGuiWindowFlags flags = 0 );
-    bool Begin ( std::string const & name, bool & isWindowOpen,
-                 ImGuiWindowFlags flags = 0 );
+    bool BeginWindow ( SubWindow & subWindow );
+    bool BeginWindow ( std::string const & name,
+                       ImGuiWindowFlags    flags = DEFAULT_WINDOW_FLAGS );
+    bool BeginWindow ( std::string const & name, bool & isWindowOpen,
+                       ImGuiWindowFlags flags = DEFAULT_WINDOW_FLAGS );
+
+    // ####################################################################
+    // ############################# INPUT ################################
+    // ####################################################################
 
     bool InputVec ( std::string const & label, math::Vector2F & vector,
-                    std::string const & format = "%.3f",
+                    std::string const & format = DEFAULT_FLOAT_FORMAT,
                     ImGuiInputTextFlags flags  = 0 );
+    bool InputVec ( std::string const & label, math::Vector2I & vec,
+                    ImGuiInputTextFlags flags = 0 );
+
+    // ####################################################################
+    // ############################ SLIDERS ###############################
+    // ####################################################################
+
+    bool SliderVec ( std::string const & label, math::Vector2F & vec, float min,
+                     float               max,
+                     std::string const & format = DEFAULT_FLOAT_FORMAT,
+                     ImGuiSliderFlags    flags  = 0 );
+    bool SliderVec ( std::string const & label, math::Vector2I & vec, int min,
+                     int max, ImGuiSliderFlags flags = 0 );
+    bool SliderVec ( std::string const & label, math::Vector2U & vec,
+                     unsigned int min, unsigned int max,
+                     ImGuiSliderFlags flags = 0 );
+
+    // ####################################################################
+    // ######################## WINDOWS SCROLLING #########################
+    // ####################################################################
+
+    math::Vector2F GetScroll ();
+    void           SetScroll ( math::Vector2F const & scroll );
+    math::Vector2F GetScrollMax ();
+
+    // ####################################################################
+    // ############################### TEXT ###############################
+    // ####################################################################
 
     // TODO make Begin deprecated
     // [[deprecated(

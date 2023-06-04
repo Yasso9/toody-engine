@@ -103,7 +103,7 @@ void EditorState::update_toolbar( UpdateContext & context )
 
 void EditorState::update_view( UpdateContext & context )
 {
-    if ( ImGui::Begin( "View", m_showWindow.view ) )
+    if ( ImGui::BeginWindow( "View", m_showWindow.view ) )
     {
         m_viewSettings.sliders();
     }
@@ -135,12 +135,12 @@ void EditorState::update_overlay( UpdateContext & context )
         return;
     }
 
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration
-                                    | ImGuiWindowFlags_AlwaysAutoResize
-                                    | ImGuiWindowFlags_NoSavedSettings
-                                    | ImGuiWindowFlags_NoFocusOnAppearing
-                                    | ImGuiWindowFlags_NoNav
-                                    | ImGuiWindowFlags_NoMove;
+    ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDecoration
+                                   | ImGuiWindowFlags_AlwaysAutoResize
+                                   | ImGuiWindowFlags_NoSavedSettings
+                                   | ImGuiWindowFlags_NoFocusOnAppearing
+                                   | ImGuiWindowFlags_NoNav
+                                   | ImGuiWindowFlags_NoMove;
     constexpr math::Vector2F WINDOW_PADDINGS { 10.f, 10.f };
     math::Vector2F const     overlayPosition {
         math::Vector2F { ImGui::GetMainViewport()->WorkPos }
@@ -148,7 +148,8 @@ void EditorState::update_overlay( UpdateContext & context )
 
     ImGui::SetNextWindowPos( overlayPosition, ImGuiCond_Always );
     ImGui::SetNextWindowBgAlpha( 0.8f );
-    if ( ImGui::Begin( "Editor Main", m_showWindow.overlay, window_flags ) )
+    if ( ImGui::BeginWindow( "Editor Main", m_showWindow.overlay,
+                             windowFlags ) )
     {
         ImGui::TextFmt( "Frame Rate : {}",
                         std::round( 1.f / context.deltaTime ) );

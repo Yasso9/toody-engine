@@ -10,23 +10,28 @@
 
 namespace tile
 {
-    Set::Set( sf::Texture const & texture, math::Vector2F position )
-      : m_texture { texture }, m_position { position }
+    Set::Set( sf::Texture const & texture )
+      : m_texture { texture }, m_position { 0.f, 0.f }
     {}
 
     sf::Texture const & Set::get_texture() const
     {
-        return this->m_texture;
+        return m_texture;
     }
 
     math::Vector2F Set::get_position() const
     {
-        return this->m_position;
+        return m_position;
     }
 
-    math::Vector2F Set::get_end_position() const
+    void Set::set_position( math::Vector2F pos )
     {
-        return this->get_position() + this->get_size().pixel();
+        m_position = pos;
+    }
+
+    math::Vector2F Set::get_bound_pos() const
+    {
+        return this->get_position() + this->get_size().pixel().to_float();
     }
 
     tile::Size Set::get_size() const
@@ -36,30 +41,22 @@ namespace tile
 
     unsigned int Set::get_number_of_tile() const
     {
-        math::Vector2U tileSize { this->get_size().tile() };
-        return tileSize.x * tileSize.y;
+        math::Vector2U sizeInTile { this->get_size().tile() };
+        return sizeInTile.x * sizeInTile.y;
     }
 
-    unsigned int Set::get_number_of_columns() const
+    tile::Position Set::get_position( math::PointF         point,
+                                      tile::Position::Type type ) const
     {
-        return static_cast< unsigned int >(
-                   std::floor( this->m_texture.getSize().x ) )
-               / TILE_PIXEL_SIZE_U;
+        return tile::Position { point.to_u_int(), this->get_size(), type };
     }
 
-    tile::Position Set::get_tile_position( math::PointF point ) const
+    tile::Position Set::get_position( unsigned int value ) const
     {
-        return tile::Position { point.to_vector().to_u_int(),
-                                this->get_number_of_columns(),
-                                tile::Position::Pixel };
+        return tile::Position { value, this->get_size() };
     }
 
-    void Set::set_position( math::Vector2F const & position )
-    {
-        this->m_position = position;
-    }
-
-    bool Set::contain( math::PointF const & point ) const
+    bool Set::contain( math::PointF point ) const
     {
         return point.is_inside( this->get_position(),
                                 this->get_size().pixel().to_float() );

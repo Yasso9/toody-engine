@@ -152,17 +152,17 @@ namespace ImGui
         {
             return false;
         }
-        return ImGui::Begin( subWindow.m_windowName, subWindow.m_show,
-                             subWindow.m_flags );
+        return ImGui::BeginWindow( subWindow.m_windowName, subWindow.m_show,
+                                   subWindow.m_flags );
     }
 
-    bool Begin ( std::string const & name, ImGuiWindowFlags flags )
+    bool BeginWindow ( std::string const & name, ImGuiWindowFlags flags )
     {
         return ImGui::Begin( name.c_str(), NULL, flags );
     }
 
-    bool Begin ( std::string const & name, bool & isWindowOpen,
-                 ImGuiWindowFlags flags )
+    bool BeginWindow ( std::string const & name, bool & isWindowOpen,
+                       ImGuiWindowFlags flags )
     {
         if ( ! isWindowOpen )
         {
@@ -171,17 +171,98 @@ namespace ImGui
         return ImGui::Begin( name.c_str(), &isWindowOpen, flags );
     }
 
-    bool InputVec ( std::string const & label, math::Vector2F & vector,
+    bool InputVec ( std::string const & label, math::Vector2F & vec,
                     std::string const & format, ImGuiInputTextFlags flags )
     {
-        float vec2[2] = { vector.x, vector.y };
-        if ( ImGui::InputFloat2( label.c_str(), vec2, format.c_str(), flags ) )
+        float vecArray[2] = { vec.x, vec.y };
+        if ( ImGui::InputFloat2( label.c_str(), vecArray, format.c_str(),
+                                 flags ) )
         {
-            vector.x = vec2[0];
-            vector.y = vec2[1];
+            vec.x = vecArray[0];
+            vec.y = vecArray[1];
             return true;
         }
         return false;
+    }
+
+    bool InputVec ( std::string const & label, math::Vector2I & vec,
+                    ImGuiInputTextFlags flags )
+    {
+        int vecArray[2] = { vec.x, vec.y };
+        if ( ImGui::InputInt2( label.c_str(), vecArray, flags ) )
+        {
+            vec.x = static_cast< int >( vecArray[0] );
+            vec.y = static_cast< int >( vecArray[1] );
+            return true;
+        }
+        return false;
+    }
+
+    bool SliderVec ( std::string const & label, math::Vector2F & vec, float min,
+                     float max, std::string const & format,
+                     ImGuiSliderFlags flags )
+    {
+        float vecArray[2] = { vec.x, vec.y };
+        if ( ImGui::SliderFloat2( label.c_str(), vecArray, min, max,
+                                  format.c_str(), flags ) )
+        {
+            vec.x = vecArray[0];
+            vec.y = vecArray[1];
+            return true;
+        }
+        return false;
+    }
+
+    bool SliderVec ( std::string const & label, math::Vector2I & vec, int min,
+                     int max, ImGuiSliderFlags flags )
+    {
+        int vecArray[2] = { vec.x, vec.y };
+        if ( ImGui::SliderInt2( label.c_str(), vecArray, min, max, "%d",
+                                flags ) )
+        {
+            vec.x = vecArray[0];
+            vec.y = vecArray[1];
+            return true;
+        }
+        return false;
+    }
+
+    bool SliderVec ( std::string const & label, math::Vector2U & vec,
+                     unsigned int min, unsigned int max,
+                     ImGuiSliderFlags flags )
+    {
+        int vecArray[2] = { static_cast< int >( vec.x ),
+                            static_cast< int >( vec.y ) };
+        if ( ImGui::SliderInt2( label.c_str(), vecArray,
+                                static_cast< int >( min ),
+                                static_cast< int >( max ), "%u", flags ) )
+        {
+            vec.x = static_cast< unsigned int >( vecArray[0] );
+            vec.y = static_cast< unsigned int >( vecArray[1] );
+            return true;
+        }
+        return false;
+    }
+
+    // ####################################################################
+    // ######################## WINDOWS SCROLLING #########################
+    // ####################################################################
+
+    math::Vector2F GetScroll ()
+    {
+        return math::Vector2F { ImGui::GetScrollX(), ImGui::GetScrollY() };
+    }
+
+    void SetScroll ( math::Vector2F const & scroll )
+    {
+        ImGui::SetScrollX( scroll.x );
+        ImGui::SetScrollY( scroll.y );
+    }
+
+    math::Vector2F GetScrollMax ()
+    {
+        return math::Vector2F { ImGui::GetScrollMaxX(),
+                                ImGui::GetScrollMaxY() };
     }
 
     void ResetStyle ()

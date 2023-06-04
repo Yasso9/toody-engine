@@ -22,7 +22,6 @@ class EditorState : public State
         bool view;
     };
 
-    // 2D camera
     View         m_view;
     ViewSettings m_viewSettings;
 
@@ -31,9 +30,7 @@ class EditorState : public State
     tile::Map m_tilemap;
     ImageMap  m_imageMap;
 
-    CollisionList m_collisionList;
-    // ControllableEntity2D m_greenEntity;
-    // Player               m_player;
+    CollisionList   m_collisionList;
     CharacterEntity m_character;
 
   public:
