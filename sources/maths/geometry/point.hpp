@@ -76,4 +76,6 @@ namespace math
                          Point< Type > pointC );
 }  // namespace math
 
+DEFINE_FORMATTER_TEMPLATE( math::Point, "{}", value.to_vector() );
+
 #include "point.tpp"

@@ -8,6 +8,7 @@
 
 #include "graphics2D/sfml.hpp"
 #include "tools/concepts.hpp"
+#include "tools/fmt.hpp"
 #include "tools/stream/stream.hpp"
 
 namespace math
@@ -207,8 +208,8 @@ namespace math
                       Vector2< TypeRight > const & vector2DRight );
 
     template< cPrimitive TypeLeft, cPrimitive TypeRight >
-    bool operator<( Vector2< TypeLeft > const &  vector2DLeft,
-                    Vector2< TypeRight > const & vector2DRight );
+    bool operator< ( Vector2< TypeLeft > const &  vector2DLeft,
+                     Vector2< TypeRight > const & vector2DRight );
 
     template< cPrimitive Type >
     bool operator> ( Vector2< Type > const & vector2DLeft,
@@ -222,19 +223,7 @@ namespace math
     Vector2< Type > operator- ( Vector2< Type > const & vector2D );
 }  // namespace math
 
-template< cPrimitive T >
-struct fmt::formatter< math::Vector2< T > >
-{
-    constexpr auto parse ( format_parse_context & ctx ) { return ctx.begin(); }
-
-    template< typename FormatContext >
-    auto format ( math::Vector2< T > const & vec2, FormatContext & ctx )
-    {
-        // The format for MyType is "{a:
-        // <value_of_a>, b: <value_of_b>, c:
-        // <value_of_c>}"
-        return format_to( ctx.out(), "{{x: {}, y: {}}}", vec2.x, vec2.y );
-    }
-};
+DEFINE_FORMATTER_TEMPLATE( math::Vector2, "( x: {}, y: {} )", value.x,
+                           value.y );
 
 #include "vector2.tpp"

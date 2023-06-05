@@ -59,7 +59,8 @@ namespace math
     template< cPrimitive Type >
     bool is_intersection ( Polygon< Type > polygonLeft,
                            Polygon< Type > polygonRight );
-
 }  // namespace math
+
+DEFINE_FORMATTER_TEMPLATE( math::Polygon, "{}", value.print() );
 
 #include "polygon.tpp"

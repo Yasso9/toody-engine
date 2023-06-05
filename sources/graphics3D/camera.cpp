@@ -1,6 +1,6 @@
 #include "camera.hpp"
 
-#include <string>  // for allocator
+#include <string>                        // for allocator
 
 #include <SFML/Window/Keyboard.hpp>      // for Keyboard, Keyboard::B, Keyb...
 #include <glm/detail/type_vec3.hpp>      // for vec<>::(anonymous), vec
@@ -10,14 +10,14 @@
 
 #include "application/interface/window.hpp"  // for Window
 #include "imgui/imgui.hpp"
-#include "maths/geometry/point.tpp"  // for Point::Point<Type>
-#include "maths/vector2.hpp"         // for Vector2F, Vector2I, Vector2U
-#include "maths/vector2.tpp"         // for operator==, Vector2::operat...
-#include "maths/vector3.hpp"         // for Vector3F
-#include "maths/vector3.tpp"         // for Vector3::rotate
-                                     // for is_pressed, get_mouse_position
-#include "tools/assertion.hpp"       // for ASSERTION
-#include "tools/singleton.tpp"       // for Singleton::get_instance
+#include "maths/geometry/point.tpp"          // for Point::Point<Type>
+#include "maths/vector2.hpp"                 // for Vector2F, Vector2I, Vector2U
+#include "maths/vector2.tpp"    // for operator==, Vector2::operat...
+#include "maths/vector3.hpp"    // for Vector3F
+#include "maths/vector3.tpp"    // for Vector3::rotate
+                                // for is_pressed, get_mouse_position
+#include "tools/assertion.hpp"  // for ASSERTION
+#include "tools/singleton.tpp"  // for Singleton::get_instance
 
 Camera::Camera()
   : m_position {},
@@ -135,10 +135,11 @@ void Camera::update( UpdateContext & context )
             this->reset();
         }
 
-        ImGui::P_InputVector3F(
-            "Direction", m_direction, [] ( math::Vector3F & directionChanged ) {
-                directionChanged = math::normalize( directionChanged );
-            } );
+        // ImGui::P_InputVector3F(
+        //     "Direction", m_direction, [] ( math::Vector3F & directionChanged
+        //     ) {
+        //         directionChanged = math::normalize( directionChanged );
+        //     } );
 
         std::stringstream output {};
         output << "Position : " << m_position << "\n";

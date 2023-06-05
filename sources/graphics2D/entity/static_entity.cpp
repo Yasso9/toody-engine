@@ -1,17 +1,16 @@
 #include "static_entity.hpp"
 
-#include <algorithm>  // for max, min
-#include <sstream>    // for operator<<, basic_ostream:...
-#include <string>     // for allocator, string, basic_s...
-#include <vector>     // for vector
+#include <algorithm>                       // for max, min
+#include <sstream>                         // for operator<<, basic_ostream:...
+#include <string>                          // for allocator, string, basic_s...
+#include <vector>                          // for vector
 
 #include <SFML/Graphics/Color.hpp>         // for Color, Color::Red
 #include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
-#include <imgui/imgui.h>                   // for InputFloat, Begin, Checkbox
 
 #include "application/contexts/render_context.hpp"  // for RenderContext
 #include "application/contexts/update_context.hpp"
-#include "imgui/imgui.hpp"           // for P_ColorEditor, P_Begin
+#include "imgui/imgui.hpp"
 #include "maths/geometry/line.hpp"       // for Segment::is_intersected_by
 #include "maths/geometry/point.hpp"      // for PointF
 #include "maths/geometry/point.hpp"      // for Point::is_inside
@@ -21,33 +20,33 @@
 namespace customisation
 {
     static void circle_shape ( std::string windowName, int shapeID,
-                               sf::CircleShape & circleShape )
+                               sf::CircleShape & /* circleShape */ )
     {
         if ( ImGui::Begin( windowName.c_str() ) )
         {
             ImGui::PushID( shapeID );
 
-            sf::Color    background { circleShape.getFillColor() };
-            sf::Color    outline { circleShape.getOutlineColor() };
-            float        outlineThickness { circleShape.getOutlineThickness() };
-            float        radius { circleShape.getRadius() };
-            unsigned int numberOfPoint {
-                static_cast< unsigned int >( circleShape.getPointCount() ) };
+            // sf::Color    background { circleShape.getFillColor() };
+            // sf::Color    outline { circleShape.getOutlineColor() };
+            // float        outlineThickness { circleShape.getOutlineThickness()
+            // }; float        radius { circleShape.getRadius() }; unsigned int
+            // numberOfPoint {
+            //     static_cast< unsigned int >( circleShape.getPointCount() ) };
 
-            std::stringstream output {};
-            output << "Shape n" << shapeID << "\n";
-            ImGui::Text( "%s", output.str().c_str() );
-            ImGui::P_ColorEditor( "Background Color", background );
-            ImGui::P_ColorEditor( "Outline Color", outline );
-            ImGui::InputFloat( "Outline Thickness", &outlineThickness );
-            ImGui::InputFloat( "Radius", &radius );
-            ImGui::P_InputNumber( "Number of Point", numberOfPoint );
+            // std::stringstream output {};
+            // output << "Shape n" << shapeID << "\n";
+            // ImGui::Text( "%s", output.str().c_str() );
+            // ImGui::P_ColorEditor( "Background Color", background );
+            // ImGui::P_ColorEditor( "Outline Color", outline );
+            // ImGui::InputFloat( "Outline Thickness", &outlineThickness );
+            // ImGui::InputFloat( "Radius", &radius );
+            // ImGui::P_InputNumber( "Number of Point", numberOfPoint );
 
-            circleShape.setFillColor( background );
-            circleShape.setOutlineColor( outline );
-            circleShape.setOutlineThickness( outlineThickness );
-            circleShape.setRadius( radius );
-            circleShape.setPointCount( numberOfPoint );
+            // circleShape.setFillColor( background );
+            // circleShape.setOutlineColor( outline );
+            // circleShape.setOutlineThickness( outlineThickness );
+            // circleShape.setRadius( radius );
+            // circleShape.setPointCount( numberOfPoint );
 
             ImGui::PopID();
         }
@@ -84,10 +83,12 @@ void StaticEntity2D::update( UpdateContext & /* context */ )
         return;
     }
 
-    ImGui::P_Show( "Customise Entity", &m_isCustomisable, [&] () {
+    if ( ImGui::BeginWindow( "Customise Entity", m_isCustomisable ) )
+    {
         customisation::circle_shape( "Customise Entity", m_ID, m_pointShape );
         ImGui::Checkbox( "Edit Points ?", &m_editPoint );
-    } );
+    }
+    ImGui::EndWindow();
 }
 
 void StaticEntity2D::render( RenderContext & context ) const

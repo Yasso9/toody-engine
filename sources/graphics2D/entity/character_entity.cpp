@@ -52,25 +52,25 @@ void CharacterEntity::update( UpdateContext & context )
 
     this->set_next_transformation( this->getTransform() );
 
-    ImGui::P_Show( "Character", &m_isWindowShowed, [=, *this] () {
-        std::ostringstream stream {};
-        stream << "Entity Position : " << this->getPosition() << "\n";
-        stream << "Sprite Position : " << m_sprite.get_position() << "\n";
-        stream << "Size : " << m_sprite.get_size() << "\n";
-        stream << "Entity Polygon : " << this->get_polygon() << "\n";
-        stream << "Sprite Polygon : " << m_sprite.get_polygon() << "\n";
-        stream << "Movement : " << movement << "\n";
-        stream << "Current Direction : "
-               << to_string( m_animation.get_direction() ) << "\n";
-        stream << "Current State : " << m_animation.get_state() << "\n";
-        stream << "Current Sprite : " << m_animation.get_current_sprite()
-               << "\n";
-        stream << "Number of collisions : "
-               << m_control.get_collisions().get_entities().size() << "\n";
-        stream << "Is Collision Detected : " << std::boolalpha
-               << isCollisionDetected << "\n";
-        ImGui_P::Text( stream );
-    } );
+    if ( ImGui::BeginWindow( "Character", m_isWindowShowed ) )
+    {
+        ImGui::TextFmt( "Entity Position : {}",
+                        math::Vector2F { this->getPosition() } );
+        ImGui::TextFmt( "Sprite Position : {}", m_sprite.get_position() );
+        ImGui::TextFmt( "Size : {}", m_sprite.get_size() );
+        ImGui::TextFmt( "Entity Polygon : {}", this->get_polygon() );
+        ImGui::TextFmt( "Sprite Polygon : {}", m_sprite.get_polygon() );
+        ImGui::TextFmt( "Movement : {}", movement );
+        ImGui::TextFmt( "Current Direction : {}",
+                        to_string( m_animation.get_direction() ) );
+        ImGui::TextFmt( "Current State : {}", m_animation.get_state() );
+        ImGui::TextFmt( "Current Sprite : {}",
+                        m_animation.get_current_sprite() );
+        ImGui::TextFmt( "Number of collisions : {}",
+                        m_control.get_collisions().get_entities().size() );
+        ImGui::TextFmt( "Is Collision Detected : {}", isCollisionDetected );
+    }
+    ImGui::EndWindow();
 }
 
 math::PolygonF CharacterEntity::get_polygon() const
