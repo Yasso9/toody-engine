@@ -17,7 +17,7 @@
 
 namespace
 {
-    bool is_file_suitable ( std::filesystem::path      path,
+    bool is_file_suitable ( fspath                     path,
                             std::vector< std::string > imageExtensionHandled )
     {
         // The path should exist and the extension must tell us that is an image
@@ -28,9 +28,9 @@ namespace
                       != imageExtensionHandled.end();
     }
 
-    sf::Texture const & get_texture ( std::filesystem::path const & file )
+    sf::Texture const & get_texture ( fspath const & file )
     {
-        static std::map< std::filesystem::path, sf::Texture > textures {};
+        static std::map< fspath, sf::Texture > textures {};
 
         if ( ! is_file_suitable( file, { ".jpg", ".png" } ) )
         {
@@ -58,9 +58,9 @@ namespace
         return textures.at( file );
     }
 
-    sf::Font const & get_font ( std::filesystem::path const & file )
+    sf::Font const & get_font ( fspath const & file )
     {
-        static std::map< std::filesystem::path, sf::Font > fonts {};
+        static std::map< fspath, sf::Font > fonts {};
 
         if ( ! is_file_suitable( file, { ".ttf" } ) )
         {

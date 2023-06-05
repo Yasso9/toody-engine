@@ -17,15 +17,15 @@ class Config : public Singleton< Config >,
 {
     ENABLE_SINGLETON( Config );
 
-    // Settings file path
     std::filesystem::path m_filePath;
 
-    math::Vector2F m_windowSize;
-    float          m_nbFramePerSecond;
-    bool           m_verticalSync;
-    StateList      m_startupState;
-    float          m_uiScale;
-    float          m_fontScale;
+    math::Vector2F        m_windowSize;
+    float                 m_nbFramePerSecond;
+    bool                  m_verticalSync;
+    StateList             m_startupState;
+    float                 m_uiScale;
+    float                 m_fontScale;
+    std::filesystem::path m_tilemapSavePath;
 
     Config();
 
@@ -34,13 +34,14 @@ class Config : public Singleton< Config >,
 
     void update_gui () override;
 
-    math::Vector2F get_window_size () const;
-    sf::VideoMode  get_video_mode () const;
-    float          get_refresh_rate () const;
-    bool           get_vertical_sync () const;
-    StateList      get_startup_state () const;
-    float          get_ui_scale () const;
-    float          get_font_scale () const;
+    math::Vector2F        get_window_size () const;
+    sf::VideoMode         get_video_mode () const;
+    float                 get_refresh_rate () const;
+    bool                  get_vertical_sync () const;
+    StateList             get_startup_state () const;
+    float                 get_ui_scale () const;
+    float                 get_font_scale () const;
+    std::filesystem::path get_tilemap_save_path () const;
 
   private:
     // load the default configuration
@@ -52,5 +53,6 @@ class Config : public Singleton< Config >,
 
     BOOST_DESCRIBE_CLASS( Config, (), (), (),
                           ( m_windowSize, m_nbFramePerSecond, m_verticalSync,
-                            m_startupState, m_uiScale, m_fontScale ) )
+                            m_startupState, m_uiScale, m_fontScale,
+                            m_tilemapSavePath ) )
 };

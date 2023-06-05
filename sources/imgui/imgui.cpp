@@ -19,6 +19,14 @@ namespace ImGui
     // ############################# WINDOW ###############################
     // ####################################################################
 
+    namespace
+    {
+        void WindowConfig ()
+        {
+            ImGui::SetNextWindowBgAlpha( 0.5f );
+        }
+    }  // namespace
+
     bool BeginWindow ( SubWindow & subWindow )
     {
         if ( ! subWindow.is_enabled() )
@@ -31,6 +39,7 @@ namespace ImGui
 
     bool BeginWindow ( std::string const & name, ImGuiWindowFlags flags )
     {
+        WindowConfig();
         return ImGui::Begin( name.c_str(), NULL, flags );
     }
 
@@ -41,6 +50,7 @@ namespace ImGui
         {
             return false;
         }
+        WindowConfig();
         return ImGui::Begin( name.c_str(), &isWindowOpen, flags );
     }
 

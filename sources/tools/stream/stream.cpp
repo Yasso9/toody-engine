@@ -1,6 +1,9 @@
 #include "stream.hpp"
 
+#include <fstream>
 #include <iostream>
+#include <sstream>
+#include <string>
 
 namespace stream
 {
@@ -77,4 +80,37 @@ namespace stream
         // characters
         return true;
     }
+
+    std::string get_string ( std::ifstream const & stream )
+    {
+        // Copy the stream's content to a stringstream.
+        std::stringstream ss;
+        ss << stream.rdbuf();
+
+        // Create a string using the range constructor, which takes two
+        // iterators.
+        // std::istreambuf_iterator<char>(stream) is an iterator that begins at
+        // the current position of stream. std::istreambuf_iterator<char>() is a
+        // special "end of stream" iterator. This constructor will read
+        // characters from the stream until it reaches the end of the stream,
+        // and initialize the string with the characters it reads.
+        return std::string( std::istreambuf_iterator< char > { ss },
+                            std::istreambuf_iterator< char > {} );
+    }
+
 }  // namespace stream
+
+namespace fs
+{
+    std::string get_content ( std::filesystem::path const & file )
+    {
+        std::ifstream tilemapData { file };
+        if ( tilemapData )
+        {
+            return stream::get_string( tilemapData );
+        }
+
+        tilemapData.close();
+        return "";
+    }
+}  // namespace fs

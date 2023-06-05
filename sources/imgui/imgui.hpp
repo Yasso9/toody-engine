@@ -1,14 +1,11 @@
 #pragma once
 
-#include <functional>               // for function
-#include <stdint.h>                 // for uint32_t
-#include <string>                   // for string
+#include <string>             // for string
 
-#include <SFML/Graphics/Color.hpp>  // for Color
-#include <fmt/format.h>             // for format
-#include <imgui/imgui.h>            // for ImGuiColorEditFlags, ImGuiInputTe...
+#include <fmt/format.h>       // for format
+#include <imgui/imgui.h>      // for ImGuiInputTextFlags, ImGuiSliderFlags, etc
 
-#include "maths/vector3.hpp"
+#include "maths/vector2.hpp"  // for Vector2F, Vector2I, Vector2U
 
 class SubWindow;
 

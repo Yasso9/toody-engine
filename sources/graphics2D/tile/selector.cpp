@@ -1,22 +1,22 @@
 #include "selector.hpp"
 
-#include <sstream>                   // for operator<<, basic_ostream, stri...
-#include <string>                    // for char_traits, allocator, basic_s...
+#include <sstream>                    // for operator<<, basic_ostream, stri...
+#include <string>                     // for char_traits, allocator, basic_s...
 
-#include <SFML/Graphics/Color.hpp>   // for Color
-#include <SFML/Window/Mouse.hpp>     // for Mouse, Mouse::Button, Mouse::Left
-#include <imgui/imgui-SFML.h>        // for Image
-#include <imgui/imgui.h>             // for GetWindowDrawList, IsWindowHovered
+#include <SFML/Graphics/Color.hpp>    // for Color
+#include <SFML/Window/Mouse.hpp>      // for Mouse, Mouse::Button, Mouse::Left
+#include <imgui/imgui-SFML.h>         // for Image
+#include <imgui/imgui.h>              // for GetWindowDrawList, IsWindowHovered
 
-#include "application/resources.hpp"        // for get_texture
-#include "graphics2D/constants.hpp"  // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZE_U
-#include "imgui/imgui.hpp"       // for table_to_sfml, to_integer, to_t...
+#include "application/resources.hpp"  // for get_texture
+#include "graphics2D/constants.hpp"   // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZE_U
+#include "imgui/imgui.hpp"            // for table_to_sfml, to_integer, to_t...
 #include "maths/geometry/line.hpp"
-#include "maths/geometry/point.tpp"  // for Point::Point<Type>
-#include "maths/numerics.hpp"        // for division_reminder_u
-#include "maths/vector2.hpp"         // for Vector2F, Vector2, Vector2I
-#include "maths/vector2.tpp"         // for operator<<, operator+, Vector2:...
-                                     // for get_mouse_position, is_pressed
+#include "maths/geometry/point.tpp"   // for Point::Point<Type>
+#include "maths/numerics.hpp"         // for division_reminder_u
+#include "maths/vector2.hpp"          // for Vector2F, Vector2, Vector2I
+#include "maths/vector2.tpp"          // for operator<<, operator+, Vector2:...
+                                      // for get_mouse_position, is_pressed
 
 namespace tile
 {
@@ -55,7 +55,7 @@ namespace tile
                                     windowFlags ) )
             {
                 this->update_scroll( context );
-                this->show_tileset();
+                this->update_tileset();
 
                 if ( m_show.grid )
                 {
@@ -161,7 +161,7 @@ namespace tile
         }
     }
 
-    void Selector::show_tileset()
+    void Selector::update_tileset()
     {
         m_tileset.set_position( ImGui::GetCursorScreenPos() );
         ImGui::Image( m_tileset.get_texture() );

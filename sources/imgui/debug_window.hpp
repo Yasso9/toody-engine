@@ -14,6 +14,7 @@ class DebugWindow : public SubWindow
     DebugWindow( std::string const & name );
     virtual ~DebugWindow() = default;
 
+    // Made to be called from anywhere
     // Must not be called inside update_gui(). Just use TextFmt instead
     template< typename... Args >
     void add_debug_text ( fmt::format_string< Args... > fmt, Args &&... args );

@@ -1,13 +1,13 @@
 #include "configuration.hpp"
 
-#include <filesystem>          // for operator/, path
-#include <fstream>             // for basic_istream<>::__istream_type, ifs...
-#include <string>              // for string, operator""s
+#include <filesystem>  // for operator/, path
+#include <fstream>     // for basic_istream<>::__istream_type, ifs...
+#include <string>      // for string, operator""s
 
 #include "application/resources.hpp"  // for resources
-#include "states/state.hpp"    // for StateList
-#include "tools/enum.hpp"      // for operator>>, operator<<
-#include "tools/traces.hpp"    // for FileIssue
+#include "states/state.hpp"           // for StateList
+#include "tools/enum.hpp"             // for operator>>, operator<<
+#include "tools/traces.hpp"           // for FileIssue
 
 // TODO have this function available globally
 template< typename T,
@@ -38,7 +38,8 @@ Config::Config()
     m_verticalSync {},
     m_startupState {},
     m_uiScale {},
-    m_fontScale {}
+    m_fontScale {},
+    m_tilemapSavePath {}
 {
     this->load();
 }
@@ -77,6 +78,11 @@ float Config::get_ui_scale() const
 float Config::get_font_scale() const
 {
     return m_fontScale;
+}
+
+std::filesystem::path Config::get_tilemap_save_path() const
+{
+    return m_tilemapSavePath;
 }
 
 void Config::update_gui()
@@ -179,6 +185,7 @@ void Config::load_default()
     m_startupState     = StateList::MainMenu;
     m_uiScale          = 1.f;
     m_fontScale        = 1.f;
+    m_tilemapSavePath  = resource::app_data::get_path( "tilemap.txt" );
 }
 
 void Config::load()
@@ -236,5 +243,9 @@ void Config::save() const
     boost::mp11::mp_for_each< boost::describe::describe_members<
         Config, boost::describe::mod_any_access > >( [&, this] ( auto D ) {
         file << this->*D.pointer << "\n";
+        if ( ! file )
+        {
+            Trace::Error( "Failed to write in '{}'", m_filePath.string() );
+        }
     } );
 }

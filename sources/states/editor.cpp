@@ -1,30 +1,29 @@
 #include "editor.hpp"
 
-#include <algorithm>                 // for max, copy
-#include <sstream>                   // for operator<<, basic_ostream
-#include <stddef.h>                  // for NULL
-#include <vector>                    // for vector
+#include <algorithm>                // for max, copy
+#include <sstream>                  // for operator<<, basic_ostream
+#include <stddef.h>                 // for NULL
+#include <vector>                   // for vector
 
-#include <SFML/Graphics/Color.hpp>   // for Color, Color::Black, Color::...
-#include <SFML/System/Vector2.hpp>   // for Vector2f
-#include <SFML/Window/Mouse.hpp>     // for Mouse, Mouse::Right
-#include <imgui/imgui.h>             // for Begin, End, MenuItem, Text
+#include <SFML/Graphics/Color.hpp>  // for Color, Color::Black, Color::...
+#include <SFML/System/Vector2.hpp>  // for Vector2f
+#include <SFML/Window/Mouse.hpp>    // for Mouse, Mouse::Right
+#include <imgui/imgui.h>            // for Begin, End, MenuItem, Text
 
 #include "application/components/component.hpp"  // for Component::add_child
-#include "application/contexts/game_context.hpp"
-#include "application/resources.hpp"        // for get_texture
 #include "application/configuration.hpp"         // for Settings
-#include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
-#include "graphics2D/sfml.hpp"                  // for operator<<
-#include "graphics2D/view.hpp"                  // for View
-#include "application/interface/window.hpp"                 // for Window
-#include "imgui/imgui.hpp"                  // for P_Begin
-#include "maths/geometry/point.hpp"             // for PointF
+#include "application/contexts/game_context.hpp"
+#include "application/interface/window.hpp"      // for Window
+#include "application/resources.hpp"             // for get_texture
+#include "graphics2D/entity/static_entity.hpp"   // for StaticEntity2D
+#include "graphics2D/sfml.hpp"                   // for operator<<
+#include "graphics2D/view.hpp"                   // for View
+#include "imgui/imgui.hpp"                       // for P_Begin
+#include "maths/geometry/point.hpp"              // for PointF
 #include "maths/geometry/polygon.tpp"    // for Polygon::Polygon<Type>, Poly...
 #include "maths/geometry/rectangle.hpp"  // for RectangleF
 #include "maths/vector2.hpp"             // for Vector2F, Vector2, Vector2U
 #include "maths/vector2.tpp"             // for operator<<, operator*, opera...
-                                         // for get_mouse_movement, get_mous...
 #include "tools/singleton.tpp"           // for Singleton::get_instance
 
 EditorState::EditorState()
@@ -53,7 +52,10 @@ void EditorState::update( UpdateContext & context )
 {
     this->update_toolbar( context );
     this->update_view( context );
-    this->update_overlay( context );
+    if ( m_showWindow.overlay )
+    {
+        this->update_overlay( context );
+    }
 }
 
 void EditorState::update_toolbar( UpdateContext & context )
@@ -128,11 +130,6 @@ void EditorState::update_view( UpdateContext & context )
 
 void EditorState::update_overlay( UpdateContext & context )
 {
-    if ( ! m_showWindow.overlay )
-    {
-        return;
-    }
-
     ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDecoration
                                    | ImGuiWindowFlags_AlwaysAutoResize
                                    | ImGuiWindowFlags_NoSavedSettings

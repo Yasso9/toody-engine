@@ -5,7 +5,7 @@
 #include "SFML/Graphics/Sprite.hpp"
 #include "application/components/component.hpp"  // for Component
 #include "graphics2D/color.hpp"
-#include "graphics2D/tile/set.hpp"   // for Tileset
+#include "graphics2D/tile/set.hpp"               // for Tileset
 
 namespace tile
 {
@@ -44,6 +44,6 @@ namespace tile
         void update_selection ( UpdateContext & context );
         void update_informations ( UpdateContext & context );
 
-        void show_tileset ();
+        void update_tileset ();
     };
 }  // namespace tile
