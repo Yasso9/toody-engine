@@ -4,8 +4,8 @@
 #include <string>     // for string_literals
 
 // using namespace std::string_literals;
-#include "interface/window.hpp"  // for Window
-#include "libraries/imgui.hpp"   // for ImGui::Begin, ImGui::End, ImGui::Text
+#include "application/interface/window.hpp"  // for Window
+#include "imgui/imgui.hpp"   // for ImGui::Begin, ImGui::End, ImGui::Text
 #include "maths/vector2.tpp"     // for operator/, Vector2::Vector2<Type>
 #include "tools/singleton.tpp"   // for Singleton::get_instance
 

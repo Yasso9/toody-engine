@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include <libraries/imgui.hpp>  // for ImGuiWindowFlags
+#include "imgui/imgui.hpp"  // for ImGuiWindowFlags
 
 class SubWindow
 {

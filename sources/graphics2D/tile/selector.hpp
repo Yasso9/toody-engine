@@ -3,7 +3,7 @@
 #include <optional>
 
 #include "SFML/Graphics/Sprite.hpp"
-#include "components/component.hpp"  // for Component
+#include "application/components/component.hpp"  // for Component
 #include "graphics2D/color.hpp"
 #include "graphics2D/tile/set.hpp"   // for Tileset
 

@@ -2,8 +2,8 @@
 
 #include <SFML/Graphics/View.hpp>  // for View
 
-#include "interface/window.hpp"          // for Window
-#include "libraries/debug_window.hpp"    // for DebugWindow
+#include "application/interface/window.hpp"          // for Window
+#include "imgui/debug_window.hpp"    // for DebugWindow
 #include "maths/geometry/point.hpp"      // for PointF
 #include "maths/geometry/rectangle.hpp"  // for RectangleF
 #include "maths/vector2.hpp"             // for Vector2F

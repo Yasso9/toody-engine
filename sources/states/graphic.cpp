@@ -4,10 +4,10 @@
 
 #include <glm/ext/vector_float3.hpp>  // for vec3
 
-#include "components/component.hpp"  // for Component::add_childs
+#include "application/components/component.hpp"  // for Component::add_childs
 #include "graphics2D/sfml.hpp"
-#include "interface/window.hpp"
-#include "libraries/imgui.hpp"
+#include "application/interface/window.hpp"
+#include "imgui/imgui.hpp"
 
 static Shape::S_Data SAMPLE_DATA_A {
     { // positions          // colors         // texture coords   // normals

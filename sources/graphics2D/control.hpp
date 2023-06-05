@@ -2,7 +2,7 @@
 
 #include "graphics2D/collision/collision_list.hpp"  // for CollisionList
 #include "graphics2D/view.hpp"                      // for View
-#include "interface/keyboard_move.hpp"
+#include "application/interface/keyboard_move.hpp"
 #include "maths/geometry/polygon.hpp"  // for PolygonF
 #include "maths/vector2.hpp"           // for Vector2F
 

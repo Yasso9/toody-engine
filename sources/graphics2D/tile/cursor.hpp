@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
-#include "components/component.hpp"
+#include "application/components/component.hpp"
 
 namespace tile
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <filesystem>
-#include <string>  // for string
+#include <filesystem>  // for std::filesystem::path
+#include <string>      // for string
 
 namespace sf
 {

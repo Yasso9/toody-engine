@@ -1,7 +1,7 @@
 #include "character_entity.hpp"
 
 #include "graphics2D/control.hpp"
-#include "libraries/imgui.hpp"
+#include "imgui/imgui.hpp"
 
 CharacterEntity::CharacterEntity( sf::Texture const & texture, Control control )
   : m_sprite { texture, { 30.f, 30.f } },

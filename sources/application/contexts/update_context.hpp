@@ -2,9 +2,9 @@
 
 #include <memory>  // for shared_ptr
 
-#include "contexts/base_context.hpp"  // for BaseContext
-#include "interface/inputs.hpp"       // for Inputs
-#include "interface/window.hpp"       // for Window
+#include "application/contexts/base_context.hpp"  // for BaseContext
+#include "application/interface/inputs.hpp"       // for Inputs
+#include "application/interface/window.hpp"       // for Window
 
 class State;
 enum class StateList;

@@ -1,6 +1,6 @@
 #include "view_settings.hpp"
 
-#include "libraries/imgui.hpp"
+#include "imgui/imgui.hpp"
 
 ViewSettings::ViewSettings()
   : m_moveSpeed { 1.f }, m_zoomSpeed { 0.2f }, m_rotateSpeed { 0.2f }

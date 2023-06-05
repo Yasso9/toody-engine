@@ -6,16 +6,16 @@
 #include <boost/describe.hpp>
 #include <boost/mp11.hpp>
 
-#include "libraries/sub_window.hpp"  // for SubWindow
-#include "maths/vector2.hpp"         // for Vector2F
-#include "tools/singleton.hpp"       // for Singleton, ENABLE_SINGLETON
+#include "imgui/sub_window.hpp"  // for SubWindow
+#include "maths/vector2.hpp"     // for Vector2F
+#include "tools/singleton.hpp"   // for Singleton, ENABLE_SINGLETON
 
 enum class StateList;
 
-class Settings : public Singleton< Settings >,
-                 public SubWindow
+class Config : public Singleton< Config >,
+               public SubWindow
 {
-    ENABLE_SINGLETON( Settings );
+    ENABLE_SINGLETON( Config );
 
     // Settings file path
     std::filesystem::path m_filePath;
@@ -27,10 +27,10 @@ class Settings : public Singleton< Settings >,
     float          m_uiScale;
     float          m_fontScale;
 
-    Settings();
+    Config();
 
   public:
-    ~Settings() = default;
+    ~Config() = default;
 
     void update_gui () override;
 
@@ -50,7 +50,7 @@ class Settings : public Singleton< Settings >,
     // save settings to file
     void save () const;
 
-    BOOST_DESCRIBE_CLASS( Settings, (), (), (),
+    BOOST_DESCRIBE_CLASS( Config, (), (), (),
                           ( m_windowSize, m_nbFramePerSecond, m_verticalSync,
                             m_startupState, m_uiScale, m_fontScale ) )
 };

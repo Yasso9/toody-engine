@@ -6,10 +6,10 @@
 #include <SFML/Config.hpp>           // for Uint8
 #include <imgui/imgui-SFML.h>        // for ImGui::SFML::UpdateFontTexture
 
-#include "game/resources.hpp"        // for get_font
-#include "game/settings.hpp"         // for Settings
+#include "application/resources.hpp"        // for get_font
+#include "application/configuration.hpp"         // for Settings
 #include "graphics2D/constants.hpp"  // for COLOR_RANGE
-#include "libraries/sub_window.hpp"  // for SubWindow
+#include "imgui/sub_window.hpp"  // for SubWindow
 #include "tools/assertion.hpp"       // for ASSERTION
 #include "tools/traces.hpp"
 
@@ -269,8 +269,8 @@ namespace ImGui
     {
         // float uiScale = std::sqrt( this->get_display_scale().x
         //    * this->get_display_scale().y );
-        float uiScale   = Settings::get_instance().get_ui_scale();
-        float fontScale = Settings::get_instance().get_font_scale();
+        float uiScale   = Config::get_instance().get_ui_scale();
+        float fontScale = Config::get_instance().get_font_scale();
         Trace::Info( "UI scale: {}", uiScale );
         Trace::Info( "Font scale: {}", fontScale );
 

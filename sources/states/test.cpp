@@ -4,9 +4,7 @@
 
 TestState::TestState() : State {} {}
 
-void TestState::update_before( UpdateContext & /* context */ )
+void TestState::update( UpdateContext & /* context */ )
 {
     ImGui::ShowDemoWindow();
 }
-
-// void TestState::render() const {}

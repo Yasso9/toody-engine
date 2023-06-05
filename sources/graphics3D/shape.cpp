@@ -7,7 +7,7 @@
 #include <fmt/core.h>                // for format
 #include <glad/glad.h>               // for GLenum, glDeleteBuffers, GL_ELE...
 
-#include "game/resources.hpp"        // for get_texture, get_shader
+#include "application/resources.hpp"        // for get_texture, get_shader
 #include "graphics3D/openGL.hpp"     // for draw_arrays, draw_elements
 #include "graphics3D/shape_builder.hpp"  // for ShapeBuilder
 

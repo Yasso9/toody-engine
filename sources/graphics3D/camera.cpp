@@ -8,8 +8,8 @@
 #include <glm/glm.hpp>                   // for radians
 #include <glm/gtc/matrix_transform.hpp>  // for perspective
 
-#include "interface/window.hpp"  // for Window
-#include "libraries/imgui.hpp"
+#include "application/interface/window.hpp"  // for Window
+#include "imgui/imgui.hpp"
 #include "maths/geometry/point.tpp"  // for Point::Point<Type>
 #include "maths/vector2.hpp"         // for Vector2F, Vector2I, Vector2U
 #include "maths/vector2.tpp"         // for operator==, Vector2::operat...

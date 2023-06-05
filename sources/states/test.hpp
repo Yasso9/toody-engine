@@ -6,8 +6,6 @@ class TestState final : public State
 {
   public:
     TestState();
-    virtual ~TestState() = default;
 
-    void update_before ( UpdateContext & context ) override;
-    // void render( sf::RenderTarget & target ) const override;
+    void update ( UpdateContext & context ) override;
 };

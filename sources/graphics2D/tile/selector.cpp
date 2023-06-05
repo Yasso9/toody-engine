@@ -8,9 +8,9 @@
 #include <imgui/imgui-SFML.h>        // for Image
 #include <imgui/imgui.h>             // for GetWindowDrawList, IsWindowHovered
 
-#include "game/resources.hpp"        // for get_texture
+#include "application/resources.hpp"        // for get_texture
 #include "graphics2D/constants.hpp"  // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZE_U
-#include "libraries/imgui.hpp"       // for table_to_sfml, to_integer, to_t...
+#include "imgui/imgui.hpp"       // for table_to_sfml, to_integer, to_t...
 #include "maths/geometry/line.hpp"
 #include "maths/geometry/point.tpp"  // for Point::Point<Type>
 #include "maths/numerics.hpp"        // for division_reminder_u

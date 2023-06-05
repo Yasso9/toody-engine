@@ -1,12 +1,12 @@
 #pragma once
 
-#include <functional>  // for reference_wrapper
-#include <vector>      // for vector
+#include <functional>                               // for reference_wrapper
+#include <vector>                                   // for vector
 
-#include "contexts/render_context.hpp"  // for RenderContext
-#include "contexts/update_context.hpp"  // for UpdateContext
-#include "graphics2D/view.hpp"          // for View
-#include "libraries/sub_window.hpp"     // for SubWindow
+#include "application/contexts/render_context.hpp"  // for RenderContext
+#include "application/contexts/update_context.hpp"  // for UpdateContext
+#include "graphics2D/view.hpp"                      // for View
+#include "imgui/sub_window.hpp"                     // for SubWindow
 
 class Component;
 // check if T is derived from Component

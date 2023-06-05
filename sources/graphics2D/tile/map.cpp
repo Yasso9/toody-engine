@@ -14,8 +14,8 @@
 #include <ext/alloc_traits.h>              // for __alloc_traits<>::value_type
 #include <imgui/imgui.h>                   // for Button, Text, InputText
 
-#include "components/component.hpp"        // for Component::add_child
-#include "game/resources.hpp"              // for resource::app_data
+#include "application/components/component.hpp"        // for Component::add_child
+#include "application/resources.hpp"              // for resource::app_data
 #include "graphics2D/constants.hpp"        // for TILE_PIXEL_SIZE_I, TILE_PI...
 #include "graphics2D/sfml.hpp"             // for operator<<
 #include "graphics2D/tile/position.hpp"  // for tile::Position, tile::Position...

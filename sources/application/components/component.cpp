@@ -1,7 +1,7 @@
 #include "component.hpp"
 
-#include "contexts/render_context.hpp"  // for RenderContext
-#include "contexts/update_context.hpp"  // for UpdateContext
+#include "application/contexts/render_context.hpp"  // for RenderContext
+#include "application/contexts/update_context.hpp"  // for UpdateContext
 
 Component::Component()
   : m_childs {},

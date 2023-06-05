@@ -1,10 +1,10 @@
 #pragma once
 
-#include <glm/ext/matrix_float4x4.hpp>  // for mat4
+#include <glm/ext/matrix_float4x4.hpp>           // for mat4
 
-#include "components/component.hpp"  // for Component
-#include "graphics3D/openGL.hpp"     // for S_SpaceMatrix
-#include "maths/vector3.hpp"         // for Vector3F
+#include "application/components/component.hpp"  // for Component
+#include "graphics3D/openGL.hpp"                 // for S_SpaceMatrix
+#include "maths/vector3.hpp"                     // for Vector3F
 
 class Camera;
 class Render;

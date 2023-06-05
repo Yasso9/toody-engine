@@ -1,6 +1,6 @@
 #pragma once
 
-#include "contexts/base_context.hpp"  // for BaseContext
+#include "application/contexts/base_context.hpp"  // for BaseContext
 
 class RenderContext : virtual public BaseContext
 {

@@ -16,7 +16,7 @@
 #include <glm/ext/vector_float3.hpp>  // for vec3
 #include <glm/fwd.hpp>                // for vec2
 
-#include "game/resources.hpp"         // for get_shader
+#include "application/resources.hpp"  // for get_shader
 #include "tools/timer.hpp"            // for Timer
 #include "tools/traces.hpp"
 

@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics/Transformable.hpp>  // for Transformable
 
-#include "components/component.hpp"  // for Component
+#include "application/components/component.hpp"  // for Component
 
 class Transformable2D : public Component,
                         public sf::Transformable

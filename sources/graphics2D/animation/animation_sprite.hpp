@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 
-#include "components/component.hpp"
+#include "application/components/component.hpp"
 #include "graphics2D/cardinal_direction.hpp"
 
 class AnimationSprite : public Component

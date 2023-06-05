@@ -1,6 +1,6 @@
 #include "sub_window.hpp"
 
-#include "libraries/imgui.hpp"  // for ImGui::Begin, ImGui::End
+#include "imgui/imgui.hpp"  // for ImGui::Begin, ImGui::End
 
 SubWindow::SubWindow( std::string const & name )
   : m_windowName { name },

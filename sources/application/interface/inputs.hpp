@@ -6,8 +6,8 @@
 #include <SFML/Window/Keyboard.hpp>  // for sf::Keyboard
 #include <SFML/Window/Mouse.hpp>     // for sf::Mouse
 
-#include "interface/keyboard_move.hpp"  // for
-#include "interface/window.hpp"         // for Window
+#include "application/interface/keyboard_move.hpp"  // for
+#include "application/interface/window.hpp"         // for Window
 #include "maths/vector2.hpp"            // for Vector2I
 
 class View;

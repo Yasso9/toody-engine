@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics/Sprite.hpp>  // for Sprite
 
-#include "components/component.hpp"
+#include "application/components/component.hpp"
 #include "maths/geometry/polygon.hpp"
 
 class Sprite : public sf::Sprite,

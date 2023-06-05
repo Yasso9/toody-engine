@@ -8,11 +8,11 @@
 #include <SFML/System/Vector2.hpp>         // for Vector2f
 #include <SFML/Window/Mouse.hpp>           // for Mouse, Mouse::Button, Mous...
 
-#include "contexts/game_context.hpp"
-#include "game/resources.hpp"    // for get_font
-#include "game/settings.hpp"
-#include "interface/window.hpp"  // for Window
-#include "libraries/imgui.hpp"
+#include "application/contexts/game_context.hpp"
+#include "application/resources.hpp"    // for get_font
+#include "application/configuration.hpp"
+#include "application/interface/window.hpp"  // for Window
+#include "imgui/imgui.hpp"
 #include "maths/geometry/rectangle.hpp"
 #include "maths/vector2.hpp"    // for Vector2, Vector2F, Vector2I
 #include "maths/vector2.tpp"    // for Vector2::operator Vector2<...
@@ -44,7 +44,7 @@ static void reset_text_color ( std::vector< sf::Text > & texts )
 MainMenuState::MainMenuState()
   : State {}, m_texts {}, m_background {}, m_menuBackground {}
 {
-    math::Vector2F windowSize { Settings::get_instance().get_window_size() };
+    math::Vector2F windowSize { Config::get_instance().get_window_size() };
 
     m_background.setTexture( &resource::image::get( "main_menu.jpg" ) );
     m_background.setPosition( 0.f, 0.f );

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/component.hpp"  // for Component
+#include "application/components/component.hpp"  // for Component
 #include "tools/enum.hpp"
 
 enum class StateList

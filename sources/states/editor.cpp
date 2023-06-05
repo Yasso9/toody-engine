@@ -10,15 +10,15 @@
 #include <SFML/Window/Mouse.hpp>     // for Mouse, Mouse::Right
 #include <imgui/imgui.h>             // for Begin, End, MenuItem, Text
 
-#include "components/component.hpp"  // for Component::add_child
-#include "contexts/game_context.hpp"
-#include "game/resources.hpp"        // for get_texture
-#include "game/settings.hpp"         // for Settings
+#include "application/components/component.hpp"  // for Component::add_child
+#include "application/contexts/game_context.hpp"
+#include "application/resources.hpp"        // for get_texture
+#include "application/configuration.hpp"         // for Settings
 #include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
 #include "graphics2D/sfml.hpp"                  // for operator<<
 #include "graphics2D/view.hpp"                  // for View
-#include "interface/window.hpp"                 // for Window
-#include "libraries/imgui.hpp"                  // for P_Begin
+#include "application/interface/window.hpp"                 // for Window
+#include "imgui/imgui.hpp"                  // for P_Begin
 #include "maths/geometry/point.hpp"             // for PointF
 #include "maths/geometry/polygon.tpp"    // for Polygon::Polygon<Type>, Poly...
 #include "maths/geometry/rectangle.hpp"  // for RectangleF
@@ -43,10 +43,10 @@ EditorState::EditorState()
     this->add_child( m_character, m_view );
     this->add_child( m_imageMap );
     this->add_sub_window( m_view );
-    this->add_sub_window( Settings::get_instance() );
+    this->add_sub_window( Config::get_instance() );
 
     m_tilemap.setPosition( 0.f, 0.f );
-    this->reset_view( Settings::get_instance().get_window_size() );
+    this->reset_view( Config::get_instance().get_window_size() );
 }
 
 void EditorState::update( UpdateContext & context )
@@ -74,7 +74,7 @@ void EditorState::update_toolbar( UpdateContext & context )
 
             ImGui::MenuItem( "Generate Traces", "", &generateTraces );
             ImGui::MenuItem( "Manage Settings", "",
-                             &Settings::get_instance().is_enabled() );
+                             &Config::get_instance().is_enabled() );
 
             ImGui::EndMenu();
         }

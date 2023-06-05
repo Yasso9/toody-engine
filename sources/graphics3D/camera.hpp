@@ -4,7 +4,7 @@
 #include <glm/ext/vector_float3.hpp>  // for vec3
 #include <glm/fwd.hpp>                // for mat4
 
-#include "components/component.hpp"
+#include "application/components/component.hpp"
 #include "maths/maths.hpp"
 
 class Camera : public Component

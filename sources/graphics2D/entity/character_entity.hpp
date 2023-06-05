@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "components/transformable2D.hpp"
+#include "application/components/transformable2D.hpp"
 #include "graphics2D/animation/animation_sprite.hpp"
 #include "graphics2D/drawable/sprite.hpp"
 #include "graphics2D/entity/controllable_entity.hpp"

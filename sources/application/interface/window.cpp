@@ -10,7 +10,7 @@
 #include <SFML/Window/WindowStyle.hpp>      // for Default
 #include <imgui/imgui-SFML.h>               // for Init, ProcessEvent, Render
 
-#include "game/settings.hpp"         // for Settings
+#include "application/configuration.hpp"         // for Settings
 #include "graphics3D/openGL.hpp"     // for clear_window, initialize
 #include "maths/geometry/point.hpp"  // for PointI
 #include "maths/geometry/point.tpp"  // for Point::Point<Type>, Point...
@@ -38,7 +38,7 @@ Window::Window( std::string const & title )
         contextSettings.minorVersion      = 6;
 
         this->sf::RenderWindow::create(
-            Settings::get_instance().get_video_mode(), title, windowStyle,
+            Config::get_instance().get_video_mode(), title, windowStyle,
             contextSettings );
     }
 
@@ -47,7 +47,7 @@ Window::Window( std::string const & title )
         this->requestFocus();
         this->setKeyRepeatEnabled( false );
         this->setVerticalSyncEnabled(
-            Settings::get_instance().get_vertical_sync() );
+            Config::get_instance().get_vertical_sync() );
 
         if ( ! this->setActive( true ) )
         {

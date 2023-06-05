@@ -1,6 +1,6 @@
 #include "update_context.hpp"
 
-#include "game/settings.hpp"     // for Settings
+#include "application/configuration.hpp"     // for Settings
 #include "states/editor.hpp"     // for EditorState
 #include "states/graphic.hpp"    // for GraphicState
 #include "states/main_menu.hpp"  // for MainMenuState
@@ -14,7 +14,7 @@ UpdateContext::UpdateContext()
     deltaTime { 0.f },
     shouldRun { true }
 {
-    this->transition_to( Settings::get_instance().get_startup_state() );
+    this->transition_to( Config::get_instance().get_startup_state() );
 }
 
 void UpdateContext::transition_to( std::shared_ptr< State > state )

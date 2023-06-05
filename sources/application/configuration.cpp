@@ -1,10 +1,10 @@
-#include "settings.hpp"
+#include "configuration.hpp"
 
 #include <filesystem>          // for operator/, path
 #include <fstream>             // for basic_istream<>::__istream_type, ifs...
 #include <string>              // for string, operator""s
 
-#include "game/resources.hpp"  // for resources
+#include "application/resources.hpp"  // for resources
 #include "states/state.hpp"    // for StateList
 #include "tools/enum.hpp"      // for operator>>, operator<<
 #include "tools/traces.hpp"    // for FileIssue
@@ -30,7 +30,7 @@ std::string get_description ( T const & value, char separator = '\n' )
     return os.str();
 }
 
-Settings::Settings()
+Config::Config()
   : SubWindow { "Settings" },
     m_filePath { resource::app_data::SETTINGS },
     m_windowSize {},
@@ -43,43 +43,43 @@ Settings::Settings()
     this->load();
 }
 
-math::Vector2F Settings::get_window_size() const
+math::Vector2F Config::get_window_size() const
 {
     return m_windowSize;
 }
 
-sf::VideoMode Settings::get_video_mode() const
+sf::VideoMode Config::get_video_mode() const
 {
     math::Vector2U windowSizeUInt { m_windowSize.to_u_int() };
     return sf::VideoMode { windowSizeUInt.x, windowSizeUInt.y };
 }
 
-float Settings::get_refresh_rate() const
+float Config::get_refresh_rate() const
 {
     return 1.f / m_nbFramePerSecond;
 }
 
-bool Settings::get_vertical_sync() const
+bool Config::get_vertical_sync() const
 {
     return m_verticalSync;
 }
 
-StateList Settings::get_startup_state() const
+StateList Config::get_startup_state() const
 {
     return m_startupState;
 }
 
-float Settings::get_ui_scale() const
+float Config::get_ui_scale() const
 {
     return m_uiScale;
 }
 
-float Settings::get_font_scale() const
+float Config::get_font_scale() const
 {
     return m_fontScale;
 }
 
-void Settings::update_gui()
+void Config::update_gui()
 {
     if ( ImGui::BeginWindow( *this ) )
     {
@@ -171,7 +171,7 @@ void Settings::update_gui()
     ImGui::End();
 }
 
-void Settings::load_default()
+void Config::load_default()
 {
     m_windowSize       = { 1600.f, 900.f };
     m_nbFramePerSecond = 60.f;
@@ -181,7 +181,7 @@ void Settings::load_default()
     m_fontScale        = 1.f;
 }
 
-void Settings::load()
+void Config::load()
 {
     std::ifstream file { m_filePath, std::ios::in };
     if ( ! file )
@@ -195,7 +195,7 @@ void Settings::load()
     bool error = false;
     // List of all members of Settings
     boost::mp11::mp_for_each< boost::describe::describe_members<
-        Settings, boost::describe::mod_any_access > >( [&, this] ( auto D ) {
+        Config, boost::describe::mod_any_access > >( [&, this] ( auto D ) {
         if ( file.peek() == std::ifstream::traits_type::eof() )
         {
             Trace::Error( "Unexpected end of file '{}'", m_filePath.string() );
@@ -224,7 +224,7 @@ void Settings::load()
     }
 }
 
-void Settings::save() const
+void Config::save() const
 {
     std::ofstream file { m_filePath, std::ios::out | std::ios::trunc };
     if ( ! file )
@@ -234,7 +234,7 @@ void Settings::save() const
 
     // List of all members of Settings
     boost::mp11::mp_for_each< boost::describe::describe_members<
-        Settings, boost::describe::mod_any_access > >( [&, this] ( auto D ) {
+        Config, boost::describe::mod_any_access > >( [&, this] ( auto D ) {
         file << this->*D.pointer << "\n";
     } );
 }

@@ -4,9 +4,9 @@
 
 #include <fmt/format.h>
 
-#include "libraries/sub_window.hpp"  // for SubWindowZ
+#include "imgui/sub_window.hpp"  // for SubWindowZ
 // implementation
-#include "libraries/imgui.hpp"  // for ImGui::Begin, ImGui::End, ImGui::Text
+#include "imgui/imgui.hpp"  // for ImGui::Begin, ImGui::End, ImGui::Text
 
 class DebugWindow : public SubWindow
 {
