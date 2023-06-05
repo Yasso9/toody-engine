@@ -23,7 +23,7 @@ namespace tile
         tile::Selector m_tileSelector;
         tile::Table    m_table;
 
-        tile::Cursor m_cursor;
+        tile::MouseCursor m_cursor;
         // view of the component that call the tilemap
         View & m_view;
 
@@ -41,6 +41,7 @@ namespace tile
         math::Vector2F get_center_absolute () const;
         // Relative position of the center of the tilemap in pixel
         math::Vector2F get_center_relative () const;
+        View const &   get_view () const;
 
         // optionnal tile position if the point is in the tilemap
         std::optional< tile::Position > get_position (

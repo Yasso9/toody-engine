@@ -31,19 +31,25 @@
 #include "tools/stream/stream.hpp"
 #include "tools/tools.tpp"               // for is_rectangle
 
-// TODO change all cout and cerr
-
 namespace tile
 {
     Map::Map( View & view )
       : m_tileSelector {},
         m_table { m_tileSelector.get_tileset().get_texture() },
-        m_cursor { Cursor::Outline },
+        m_cursor { MouseCursor::Outline },
         m_view { view }
     {
         this->add_child( m_tileSelector );
         this->add_child( m_table );
         this->add_child( m_cursor );
+
+        m_cursor.on_click( [this] ( tile::Position const & tilePosition ) {
+            if ( m_tileSelector.get_tile_selected().has_value() )
+            {
+                this->change_tile( tilePosition,
+                                   m_tileSelector.get_tile_selected().value() );
+            }
+        } );
 
         // Load table from file
         std::string content {
@@ -61,7 +67,7 @@ namespace tile
 
     void Map::update( UpdateContext & context )
     {
-        this->update_cursor( context );
+        m_cursor.manual_update( context, *this );
 
         if ( ImGui::BeginWindow( "Tilemap Informations" ) )
         {
@@ -98,6 +104,11 @@ namespace tile
         return math::Vector2F { this->get_size().pixel().to_float() / 2.f };
     }
 
+    View const & Map::get_view() const
+    {
+        return m_view;
+    }
+
     std::optional< tile::Position > Map::get_position(
         math::PointF point ) const
     {
@@ -131,8 +142,6 @@ namespace tile
 
     void Map::save() const
     {
-        std::cout << "Saved" << std::endl;
-
         std::ofstream stream { Config::get_instance().get_tilemap_save_path(),
                                std::ios::out | std::ios::trunc };
         stream << m_table;
@@ -143,13 +152,14 @@ namespace tile
     {
         if ( position >= this->get_size() )
         {
-            std::cerr << "Tilemap position not comptatible with current tilemap"
-                      << std::endl;
+            Trace::Warning(
+                "Tilemap position not comptatible with current tilemap" );
         }
         if ( value >= this->get_tileset().get_size() )
         {
-            std::cerr << "Tileset position not comptatible with current tileset"
-                      << std::endl;
+            Trace::Warning(
+                "Tileset position not comptatible with current "
+                "tileset" );
         }
 
         m_table( position.tile().x, position.tile().y ).set_value( value );
@@ -169,7 +179,8 @@ namespace tile
             return;
         }
 
-        m_cursor.show_at_position( tilePosition.value().pixel().to_float() );
+        m_cursor.show();
+        m_cursor.set_position( tilePosition.value().pixel().to_float() );
 
         if ( context.inputs.is_pressed( sf::Mouse::Button::Left )
              && m_tileSelector.get_tile_selected().has_value() )
