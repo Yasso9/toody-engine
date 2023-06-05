@@ -79,3 +79,5 @@ namespace tile
     };
 
 }  // namespace tile
+
+DEFINE_FORMATTER( tile::Position, "{{ tile={} }}", value.tile() );

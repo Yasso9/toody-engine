@@ -1,11 +1,11 @@
 #include "map.hpp"
 
-#include <algorithm>                       // for max
-#include <cstdlib>                         // for strtoul
+#include <algorithm>  // for max
+#include <cstdlib>    // for strtoul
 #include <fstream>
-#include <memory>                          // for allocator_traits<>::value_...
-#include <sstream>                         // for operator<<, basic_ostream
-#include <string>                          // for char_traits, to_string
+#include <memory>   // for allocator_traits<>::value_...
+#include <sstream>  // for operator<<, basic_ostream
+#include <string>   // for char_traits, to_string
 
 #include <SFML/Graphics/Color.hpp>         // for Color, Color::Transparent
 #include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
@@ -25,11 +25,11 @@
 #include "maths/geometry/point.hpp"      // for PointF
 #include "maths/geometry/point.tpp"      // for Point::Point<Type>, Point:...
 #include "tools/array/vector.hpp"
-#include "tools/assertion.hpp"           // for ASSERTION
-#include "tools/serialization.hpp"       // for Serializer, Unserializer
-#include "tools/serialization.tpp"       // for Serializer::Serializer<Typ...
+#include "tools/assertion.hpp"      // for ASSERTION
+#include "tools/serialization.hpp"  // for Serializer, Unserializer
+#include "tools/serialization.tpp"  // for Serializer::Serializer<Typ...
 #include "tools/stream/stream.hpp"
-#include "tools/tools.tpp"               // for is_rectangle
+#include "tools/tools.tpp"  // for is_rectangle
 
 namespace tile
 {
@@ -44,6 +44,7 @@ namespace tile
         this->add_child( m_cursor );
 
         m_cursor.on_click( [this] ( tile::Position const & tilePosition ) {
+            Trace::Debug( "Clicked on tile: ", tilePosition.tile() );
             if ( m_tileSelector.get_tile_selected().has_value() )
             {
                 this->change_tile( tilePosition,
@@ -165,32 +166,6 @@ namespace tile
         m_table( position.tile().x, position.tile().y ).set_value( value );
     }
 
-    void Map::update_cursor( UpdateContext & context )
-    {
-        math::PointF mousePosition {
-            context.inputs.get_mouse_position( m_view ).to_point() };
-        std::optional< tile::Position > tilePosition {
-            this->get_position( mousePosition ) };
-
-        if ( ! tilePosition.has_value()
-             || ImGui::IsWindowHovered( ImGuiHoveredFlags_AnyWindow ) )
-        {  // The mouse is outside the tilemap
-            m_cursor.hide();
-            return;
-        }
-
-        m_cursor.show();
-        m_cursor.set_position( tilePosition.value().pixel().to_float() );
-
-        if ( context.inputs.is_pressed( sf::Mouse::Button::Left )
-             && m_tileSelector.get_tile_selected().has_value() )
-        {
-            // There's a left click and the mouse is inside the tilemap
-            this->change_tile( tilePosition.value(),
-                               m_tileSelector.get_tile_selected().value() );
-        }
-    }
-
     void Map::update_size( UpdateContext & /* context */ )
     {
         math::Vector2U size { this->get_size().tile() };
@@ -231,11 +206,6 @@ namespace tile
             infoOutput << "View - Position : " << m_view.get_position() << "\n";
             infoOutput << "View - Zoom : " << m_view.get_zoom( context.window )
                        << "\n";
-
-            infoOutput << "Mouse Position - Absolute : "
-                       << context.inputs.get_mouse_position() << "\n";
-            infoOutput << "Mouse Position - Relative to View : "
-                       << context.inputs.get_mouse_position( m_view ) << "\n";
 
             ImGui::Text( "%s", infoOutput.str().c_str() );
         }

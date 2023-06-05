@@ -27,3 +27,5 @@ namespace tile
         void set_value ( math::Vector2U position, Type type );
     };
 }  // namespace tile
+
+DEFINE_FORMATTER( tile::Size, "{{ tile={} }}", value.tile() );

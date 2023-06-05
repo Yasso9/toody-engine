@@ -1,36 +1,33 @@
 #include "selector.hpp"
 
-#include <sstream>                    // for operator<<, basic_ostream, stri...
-#include <string>                     // for char_traits, allocator, basic_s...
+#include <sstream>  // for operator<<, basic_ostream, stri...
+#include <string>   // for char_traits, allocator, basic_s...
 
-#include <SFML/Graphics/Color.hpp>    // for Color
-#include <SFML/Window/Mouse.hpp>      // for Mouse, Mouse::Button, Mouse::Left
-#include <imgui/imgui-SFML.h>         // for Image
-#include <imgui/imgui.h>              // for GetWindowDrawList, IsWindowHovered
+#include <SFML/Graphics/Color.hpp>  // for Color
+#include <SFML/Window/Mouse.hpp>    // for Mouse, Mouse::Button, Mouse::Left
+#include <imgui/imgui-SFML.h>       // for Image
+#include <imgui/imgui.h>            // for GetWindowDrawList, IsWindowHovered
 
 #include "application/resources.hpp"  // for get_texture
 #include "graphics2D/constants.hpp"   // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZE_U
 #include "imgui/imgui.hpp"            // for table_to_sfml, to_integer, to_t...
 #include "maths/geometry/line.hpp"
-#include "maths/geometry/point.tpp"   // for Point::Point<Type>
-#include "maths/numerics.hpp"         // for division_reminder_u
-#include "maths/vector2.hpp"          // for Vector2F, Vector2, Vector2I
-#include "maths/vector2.tpp"          // for operator<<, operator+, Vector2:...
-                                      // for get_mouse_position, is_pressed
+#include "maths/geometry/point.tpp"  // for Point::Point<Type>
+#include "maths/numerics.hpp"        // for division_reminder_u
+#include "maths/vector2.hpp"         // for Vector2F, Vector2, Vector2I
+#include "maths/vector2.tpp"         // for operator<<, operator+, Vector2:...
+                                     // for get_mouse_position, is_pressed
 
 namespace tile
 {
     Selector::Selector()
-      // TODO have tilemap as a parameter
+      // TODO have tileset as a parameter
       : m_tileset { resource::tileset::get( "town.png" ) },
-        m_subTilesetPosition {
-            m_tileset.get_position( { 0, 0 }, tile::Position::Tile ) },
-        m_subTilesetSize { math::min( m_tileset.get_size().tile(),
-                                      math::Vector2U { 12, 12 } ),
-                           tile::Size::Tile },
+        m_subTileset { m_tileset, { { 12, 12 }, tile::Size::Tile } },
         m_tileSelected { std::nullopt },
         m_gridColor { Color::RGBA { 118, 118, 118, 255 } },
-        m_show { .debug = false, .grid = true, .scrollbar = false }
+        m_show { .grid = true, .scrollbar = false },
+        m_debugWindow { "Selector Informations" }
     {}
 
     void Selector::update( UpdateContext & context )
@@ -39,10 +36,10 @@ namespace tile
         {
             this->update_settings( context );
 
-            math::Vector2U size { m_subTilesetSize.tile() };
+            math::Vector2U size { m_subTileset.size.tile() };
             if ( ImGui::SliderVec( "TileSet Size", size, 4, 16 ) )
             {
-                m_subTilesetSize.set_value( size, tile::Size::Tile );
+                m_subTileset.size.set_value( size, tile::Size::Tile );
             }
 
             ImGuiWindowFlags windowFlags = ImGuiWindowFlags_None;
@@ -51,7 +48,7 @@ namespace tile
                 windowFlags |= ImGuiWindowFlags_NoScrollbar;
             }
             if ( ImGui::BeginChild( "scrolling_texture",
-                                    m_subTilesetSize.pixel().to_float(), true,
+                                    m_subTileset.size.pixel().to_float(), true,
                                     windowFlags ) )
             {
                 this->update_scroll( context );
@@ -66,11 +63,7 @@ namespace tile
             }
             ImGui::EndChild();
 
-            ImGui::Checkbox( "Show Debug Informations ?", &m_show.debug );
-            if ( m_show.debug )
-            {
-                this->update_informations( context );
-            }
+            this->update_informations( context );
         }
     }
 
@@ -88,6 +81,7 @@ namespace tile
     {
         ImGui::Checkbox( "Enable Grid ?", &m_show.grid );
         ImGui::Checkbox( "Show Scrollbar ?", &m_show.scrollbar );
+        ImGui::Checkbox( "Show Debug ?", &m_debugWindow.is_enabled() );
         if ( m_show.grid )
         {
             ImGui::ColorEdit4( "Grid Color", m_gridColor.to_table() );
@@ -129,9 +123,9 @@ namespace tile
 
     void Selector::update_scroll( UpdateContext & /* context */ )
     {
-        m_subTilesetPosition = tile::Position { ImGui::GetScroll().to_u_int(),
-                                                m_subTilesetSize,
-                                                tile::Position::Pixel };
+        m_subTileset.firstTile = tile::Position { ImGui::GetScroll().to_u_int(),
+                                                  m_subTileset.size,
+                                                  tile::Position::Pixel };
     }
 
     void Selector::update_selection( UpdateContext & context )
@@ -140,12 +134,15 @@ namespace tile
 
         if ( ImGui::IsWindowHovered()
              && mousePosition.to_point().to_u_int().is_inside(
-                 m_subTilesetPosition.pixel(), m_subTilesetSize.pixel() ) )
+                 m_subTileset.firstTile.pixel(), m_subTileset.size.pixel() ) )
         {  // the mouse is inside the tileset grid
             tile::Position selectionPosition { m_tileset.get_position(
                 mousePosition.to_point().to_float()
                     - m_tileset.get_position().to_point(),
                 tile::Position::Pixel ) };
+
+            // m_debugWindow.add_debug_text( "Selection Position : {}",
+            //                               selectionPosition );
 
             // Selection Rectangle
             ImGui::GetWindowDrawList()->AddRectFilled(
@@ -167,26 +164,20 @@ namespace tile
         ImGui::Image( m_tileset.get_texture() );
     }
 
-    void Selector::update_informations( UpdateContext & context )
+    void Selector::update_informations( UpdateContext & /* context */ )
     {
-        std::ostringstream output {};
-        output << "Mouse Position : " << context.inputs.get_mouse_position()
-               << "\n";
-        output << "Tileset Position : " << m_tileset.get_position() << "\n";
-        output << "Tileset Size : " << m_tileset.get_size().tile() << "\n";
-        output << "SubTileset Position : " << m_subTilesetPosition.pixel()
-               << "\n";
-        output << "SubTileset Size : " << m_subTilesetSize.tile() << "\n";
-        output << "Current Tile Selected : ";
-        if ( m_tileSelected.has_value() )
-        {
-            output << m_tileSelected.value().value() << "\n";
-        }
-        else
-        {
-            output << "None"
-                   << "\n";
-        }
-        ImGui::Text( "%s", output.str().c_str() );
+        m_debugWindow.add_debug_text( "Tileset Position : {}",
+                                      m_tileset.get_position() );
+        m_debugWindow.add_debug_text( "Tileset Size : {}",
+                                      m_tileset.get_size() );
+        m_debugWindow.add_debug_text( "SubTileset Position : {}",
+                                      m_subTileset.firstTile );
+        m_debugWindow.add_debug_text( "SubTileset Size : {}",
+                                      m_subTileset.size );
+        m_debugWindow.add_debug_text(
+            "Current Tile Selected : {}",
+            m_tileSelected.has_value()
+                ? std::to_string( m_tileSelected.value().value() )
+                : "None" );
     }
 }  // namespace tile

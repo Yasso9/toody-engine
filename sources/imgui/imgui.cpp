@@ -1,10 +1,10 @@
 #include "imgui.hpp"
 
-#include <functional>                     // for function
-#include <stddef.h>                       // for NULL
+#include <functional>  // for function
+#include <stddef.h>    // for NULL
 
-#include <SFML/Config.hpp>                // for Uint8
-#include <imgui/imgui-SFML.h>             // for ImGui::SFML::UpdateFontTexture
+#include <SFML/Config.hpp>     // for Uint8
+#include <imgui/imgui-SFML.h>  // for ImGui::SFML::UpdateFontTexture
 
 #include "application/configuration.hpp"  // for Settings
 #include "application/resources.hpp"      // for get_font
@@ -159,6 +159,16 @@ namespace ImGui
     {
         return math::Vector2F { ImGui::GetScrollMaxX(),
                                 ImGui::GetScrollMaxY() };
+    }
+
+    // ####################################################################
+    // ######################## WINDOWS UTILITIES #########################
+    // ####################################################################
+
+    bool IsWindowFocusedOrHovered ( ImGuiFocusedFlags flags )
+    {
+        return ImGui::IsWindowFocused( flags )
+               || ImGui::IsWindowHovered( flags );
     }
 
     // ####################################################################

@@ -1,16 +1,16 @@
 #pragma once
 
 #include <filesystem>
-#include <iostream>                                    // for ostream
-#include <vector>                                      // for vector
+#include <iostream>  // for ostream
+#include <vector>    // for vector
 
 #include "application/components/transformable2D.hpp"  // for TransformableComponent
 #include "graphics2D/tile/cursor.hpp"
-#include "graphics2D/tile/selector.hpp"                // for TileSelector
-#include "graphics2D/tile/table.hpp"                   // for Tile
-#include "graphics2D/tile/tile.hpp"                    // for Tile
-#include "maths/vector2.hpp"                           // for Vector2F, Vector2U
-#include "maths/vector2.tpp"  // for operator/, Vector2::oper...
+#include "graphics2D/tile/selector.hpp"  // for TileSelector
+#include "graphics2D/tile/table.hpp"     // for Tile
+#include "graphics2D/tile/tile.hpp"      // for Tile
+#include "maths/vector2.hpp"             // for Vector2F, Vector2U
+#include "maths/vector2.tpp"             // for operator/, Vector2::oper...
 
 class Render;
 class Set;
@@ -55,7 +55,6 @@ namespace tile
       private:
         void change_tile ( tile::Position position, tile::Position value );
 
-        void update_cursor ( UpdateContext & context );
         void update_size ( UpdateContext & context );
         void update_informations ( UpdateContext & context );
     };

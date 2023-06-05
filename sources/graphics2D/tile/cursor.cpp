@@ -24,15 +24,13 @@ namespace tile
     void MouseCursor::manual_update( UpdateContext &   context,
                                      tile::Map const & tilemap )
     {
-        math::PointF mousePosition {
-            context.inputs.get_mouse_position( tilemap.get_view() )
-                .to_point() };
-
+        math::Vector2F mousePosition {
+            context.inputs.get_mouse_position( tilemap.get_view() ) };
         std::optional< tile::Position > tilePosition {
-            tilemap.get_position( mousePosition ) };
+            tilemap.get_position( mousePosition.to_point() ) };
 
         if ( ! tilePosition.has_value()
-             || ImGui::IsWindowHovered( ImGuiHoveredFlags_AnyWindow ) )
+             || ImGui::IsWindowFocusedOrHovered( ImGuiHoveredFlags_AnyWindow ) )
         {  // The mouse is outside the tilemap
             this->hide();
             return;

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <string>             // for string
+#include <string>  // for string
 
-#include <fmt/format.h>       // for format
-#include <imgui/imgui.h>      // for ImGuiInputTextFlags, ImGuiSliderFlags, etc
+#include <fmt/format.h>   // for format
+#include <imgui/imgui.h>  // for ImGuiInputTextFlags, ImGuiSliderFlags, etc
 
 #include "maths/vector2.hpp"  // for Vector2F, Vector2I, Vector2U
 
@@ -67,6 +67,12 @@ namespace ImGui
     math::Vector2F GetScrollMax ();
 
     // ####################################################################
+    // ######################## WINDOWS UTILITIES #########################
+    // ####################################################################
+
+    bool IsWindowFocusedOrHovered ( ImGuiFocusedFlags flags = 0 );
+
+    // ####################################################################
     // ############################### TEXT ###############################
     // ####################################################################
 
@@ -75,7 +81,8 @@ namespace ImGui
     {
         std::string formattedString =
             fmt::format( fmt, std::forward< Args >( args )... );
-        ImGui::Text( "%s", formattedString.c_str() );
+        // ImGui::Text( "%s", formattedString.c_str() );
+        ImGui::TextUnformatted( formattedString.c_str() );
     }
 
     // ####################################################################

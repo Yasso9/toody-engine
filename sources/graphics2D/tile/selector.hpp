@@ -5,7 +5,7 @@
 #include "SFML/Graphics/Sprite.hpp"
 #include "application/components/component.hpp"  // for Component
 #include "graphics2D/color.hpp"
-#include "graphics2D/tile/set.hpp"               // for Tileset
+#include "graphics2D/tile/set.hpp"  // for Tileset
 
 namespace tile
 {
@@ -13,14 +13,24 @@ namespace tile
     {
         struct Show
         {
-            bool debug;
             bool grid;
             bool scrollbar;
         };
 
-        tile::Set      m_tileset;
-        tile::Position m_subTilesetPosition;
-        tile::Size     m_subTilesetSize;
+        struct SubTileset
+        {
+            tile::Size     size;
+            tile::Position firstTile;
+
+            SubTileset( tile::Set const & tileset, tile::Size const & maxSize )
+              : size { math::min( tileset.get_size().tile(), maxSize.tile() ),
+                       tile::Size::Tile },
+                firstTile { { 0, 0 }, size, tile::Position::Tile }
+            {}
+        };
+
+        tile::Set  m_tileset;
+        SubTileset m_subTileset;
         // position of the tile chosen. Is optional because at the beginning we
         // can have no tile choose
         std::optional< tile::Position > m_tileSelected;
@@ -28,6 +38,8 @@ namespace tile
         Color m_gridColor;
 
         Show m_show;
+
+        DebugWindow m_debugWindow;
 
       public:
         Selector();
