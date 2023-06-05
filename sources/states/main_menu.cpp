@@ -1,7 +1,7 @@
 #include "main_menu.hpp"
 
 #include <sstream>
-#include <string>  // for string, allocator
+#include <string>                          // for string, allocator
 
 #include <SFML/Graphics/Color.hpp>         // for Color, Color::Black
 #include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
@@ -9,15 +9,14 @@
 #include <SFML/Window/Mouse.hpp>           // for Mouse, Mouse::Button, Mous...
 
 #include "contexts/game_context.hpp"
-#include "game/resources.hpp"  // for get_font
+#include "game/resources.hpp"    // for get_font
 #include "game/settings.hpp"
 #include "interface/window.hpp"  // for Window
 #include "libraries/imgui.hpp"
 #include "maths/geometry/rectangle.hpp"
-#include "maths/vector2.hpp"  // for Vector2, Vector2F, Vector2I
-#include "maths/vector2.tpp"  // for Vector2::operator Vector2<...
-                              // for get_mouse_position, is_pre...
-#include "tools/path.hpp"
+#include "maths/vector2.hpp"    // for Vector2, Vector2F, Vector2I
+#include "maths/vector2.tpp"    // for Vector2::operator Vector2<...
+                                // for get_mouse_position, is_pre...
 #include "tools/singleton.tpp"  // for Singleton::get_instance
 
 static math::RectangleF get_rectangle ( sf::Text text )
@@ -47,8 +46,7 @@ MainMenuState::MainMenuState()
 {
     math::Vector2F windowSize { Settings::get_instance().get_window_size() };
 
-    m_background.setTexture( &resources::get_texture(
-        path::get_folder( path::Resources ) / "images/main_menu.jpg" ) );
+    m_background.setTexture( &resource::image::get( "main_menu.jpg" ) );
     m_background.setPosition( 0.f, 0.f );
     m_background.setSize( windowSize );
 
@@ -59,10 +57,7 @@ MainMenuState::MainMenuState()
     for ( std::string stateName : get_list< StateList >() )
     {
         m_texts.push_back( sf::Text {
-            stateName,
-            resources::get_font( path::get_folder( path::Fonts )
-                                 / "arial.ttf" ),
-            27u } );
+            stateName, resource::font::get( "FiraMono-Regular.ttf" ), 27u } );
     }
 
     math::Vector2F position { 150.f, 250.f };

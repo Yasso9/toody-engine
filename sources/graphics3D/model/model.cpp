@@ -1,7 +1,7 @@
 #include "model.hpp"
 
-#include <algorithm>  // for max
-#include <iostream>   // for operator<<, basic_ostream, endl
+#include <algorithm>                  // for max
+#include <iostream>                   // for operator<<, basic_ostream, endl
 
 #include <assimp/Importer.hpp>        // for Importer
 #include <assimp/material.h>          // for aiMaterial
@@ -16,9 +16,8 @@
 #include <glm/ext/vector_float3.hpp>  // for vec3
 #include <glm/fwd.hpp>                // for vec2
 
-#include "game/resources.hpp"  // for get_shader
-#include "tools/path.hpp"      // for get_folder, E_Folder, E_Folder:...
-#include "tools/timer.hpp"     // for Timer
+#include "game/resources.hpp"         // for get_shader
+#include "tools/timer.hpp"            // for Timer
 #include "tools/traces.hpp"
 
 static glm::vec3 to_vector3 ( aiVector3D const & assimpVector3D );
@@ -26,10 +25,10 @@ static glm::vec2 to_vector2 ( aiVector3D const & assimpVector3D );
 
 Model::Model( Camera const & camera, std::string const & filePathModel )
   : Transformable( camera,
-                   resources::get_shader( "shader.vert", "shader.frag" ) ),
+                   resource::shader::get( "shader.vert", "shader.frag" ) ),
     m_texturesLoaded {},
     m_meshes {},
-    m_filePath( path::get_folder( path::E_Folder::Resources ) / filePathModel )
+    m_filePath( resource::object3D::get_path( filePathModel ) )
 {
     Timer timer { filePathModel };
 

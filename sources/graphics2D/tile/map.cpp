@@ -1,11 +1,11 @@
 #include "map.hpp"
 
-#include <algorithm>  // for max
-#include <cstdlib>    // for strtoul
+#include <algorithm>                       // for max
+#include <cstdlib>                         // for strtoul
 #include <fstream>
-#include <memory>   // for allocator_traits<>::value_...
-#include <sstream>  // for operator<<, basic_ostream
-#include <string>   // for char_traits, to_string
+#include <memory>                          // for allocator_traits<>::value_...
+#include <sstream>                         // for operator<<, basic_ostream
+#include <string>                          // for char_traits, to_string
 
 #include <SFML/Graphics/Color.hpp>         // for Color, Color::Transparent
 #include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
@@ -14,21 +14,20 @@
 #include <ext/alloc_traits.h>              // for __alloc_traits<>::value_type
 #include <imgui/imgui.h>                   // for Button, Text, InputText
 
-#include "components/component.hpp"      // for Component::add_child
-#include "graphics2D/constants.hpp"      // for TILE_PIXEL_SIZE_I, TILE_PI...
-#include "graphics2D/sfml.hpp"           // for operator<<
+#include "components/component.hpp"        // for Component::add_child
+#include "game/resources.hpp"              // for resource::app_data
+#include "graphics2D/constants.hpp"        // for TILE_PIXEL_SIZE_I, TILE_PI...
+#include "graphics2D/sfml.hpp"             // for operator<<
 #include "graphics2D/tile/position.hpp"  // for tile::Position, tile::Position...
 #include "graphics2D/tile/set.hpp"       // for Tileset
 #include "graphics2D/view.hpp"           // for View
 #include "maths/geometry/point.hpp"      // for PointF
 #include "maths/geometry/point.tpp"      // for Point::Point<Type>, Point:...
-                                         // for get_mouse_position, is_pre...
 #include "tools/array/vector.hpp"
-#include "tools/assertion.hpp"  // for ASSERTION
-#include "tools/path.hpp"
-#include "tools/serialization.hpp"  // for Serializer, Unserializer
-#include "tools/serialization.tpp"  // for Serializer::Serializer<Typ...
-#include "tools/tools.tpp"          // for is_rectangle
+#include "tools/assertion.hpp"           // for ASSERTION
+#include "tools/serialization.hpp"       // for Serializer, Unserializer
+#include "tools/serialization.tpp"       // for Serializer::Serializer<Typ...
+#include "tools/tools.tpp"               // for is_rectangle
 
 /// @brief Stream to string
 static std::string get_string ( std::ifstream & stream )
@@ -73,7 +72,7 @@ namespace tile
         m_table { m_tileSelector.get_tileset().get_texture() },
         m_cursor { Cursor::Outline },
         m_view { view },
-        m_saveFile { path::get_folder( path::Data ) / "tilemap.txt" }
+        m_saveFile { resource::app_data::TILEMAP }
     {
         this->add_child( m_tileSelector );
         this->add_child( m_table );

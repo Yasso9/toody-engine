@@ -1,18 +1,18 @@
 #include "player.hpp"
 
-#include <stdexcept>  // for domain_error
+#include <stdexcept>                       // for domain_error
 
 #include <SFML/Graphics/RenderTarget.hpp>  // for RenderTarget
 #include <SFML/Graphics/Texture.hpp>       // for Texture
 #include <SFML/Window/Keyboard.hpp>        // for Keyboard, Keyboard::Z, Key...
 
-#include "game/resources.hpp"   // for get_texture
-                                // for is_pressed
-#include "tools/assertion.hpp"  // for ASSERTION
-#include "tools/tools.hpp"      // for E_Direction, E_Direction::...
+#include "game/resources.hpp"              // for resource::character::get
+#include "tools/assertion.hpp"             // for ASSERTION
+#include "tools/tools.hpp"                 // for E_Direction, E_Direction::...
 
+// TODO remove this class
 Player::Player()
-  : m_texture( resources::get_texture( "gold_sprite.png" ) ),
+  : m_texture( resource::character::get( "gold_sprite.png" ) ),
     m_sprite( m_texture ),
     m_name( "Unkown" ),
     m_speed( 30.f ),

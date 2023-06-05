@@ -1,10 +1,10 @@
 #include "imgui.hpp"
 
-#include <functional>  // for function
-#include <stddef.h>    // for NULL
+#include <functional>                // for function
+#include <stddef.h>                  // for NULL
 
-#include <SFML/Config.hpp>     // for Uint8
-#include <imgui/imgui-SFML.h>  // for ImGui::SFML::UpdateFontTexture
+#include <SFML/Config.hpp>           // for Uint8
+#include <imgui/imgui-SFML.h>        // for ImGui::SFML::UpdateFontTexture
 
 #include "game/resources.hpp"        // for get_font
 #include "game/settings.hpp"         // for Settings
@@ -275,15 +275,10 @@ namespace ImGui
         Trace::Info( "Font scale: {}", fontScale );
 
         ImGuiIO & io = ImGui::GetIO();
-        Trace::Debug( "Font path: {}",
-                      resources::fonts::INTER_REGULAR.c_str() );
         io.Fonts->Clear();
         // io.Fonts->AddFontDefault();
-        // io.Fonts->AddFontFromFileTTF(
-        // resources::fonts::ARIAL.string().c_str(),
-        //                               fontScale * 16.f );
         io.Fonts->AddFontFromFileTTF(
-            resources::fonts::FIRA_MONO.string().c_str(), fontScale * 16.f );
+            resource::font::FIRA_MONO.string().c_str(), fontScale * 16.f );
         if ( ! ImGui::SFML::UpdateFontTexture() )
         {
             Trace::Error( "Failed to setup font texture!" );

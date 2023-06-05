@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstddef>  // for size_t
+#include <cstddef>                    // for size_t
 
 #include <SFML/Graphics/Texture.hpp>  // for Texture
 
@@ -10,11 +10,11 @@
 
 namespace tile
 {
+    // Table of tiles
     class Set
     {
         sf::Texture const & m_texture;
-        // Absolute position of the tileset
-        math::Vector2F m_position;
+        math::Vector2F      m_position;
 
       public:
         explicit Set( sf::Texture const & texture );
@@ -24,6 +24,7 @@ namespace tile
 
         math::Vector2F get_position () const;
         void           set_position ( math::Vector2F pos );
+        // position of the bottom right corner
         math::Vector2F get_bound_pos () const;
         tile::Size     get_size () const;
         unsigned int   get_number_of_tile () const;

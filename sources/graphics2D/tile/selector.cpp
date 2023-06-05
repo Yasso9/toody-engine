@@ -1,12 +1,12 @@
 #include "selector.hpp"
 
-#include <sstream>  // for operator<<, basic_ostream, stri...
-#include <string>   // for char_traits, allocator, basic_s...
+#include <sstream>                   // for operator<<, basic_ostream, stri...
+#include <string>                    // for char_traits, allocator, basic_s...
 
-#include <SFML/Graphics/Color.hpp>  // for Color
-#include <SFML/Window/Mouse.hpp>    // for Mouse, Mouse::Button, Mouse::Left
-#include <imgui/imgui-SFML.h>       // for Image
-#include <imgui/imgui.h>            // for GetWindowDrawList, IsWindowHovered
+#include <SFML/Graphics/Color.hpp>   // for Color
+#include <SFML/Window/Mouse.hpp>     // for Mouse, Mouse::Button, Mouse::Left
+#include <imgui/imgui-SFML.h>        // for Image
+#include <imgui/imgui.h>             // for GetWindowDrawList, IsWindowHovered
 
 #include "game/resources.hpp"        // for get_texture
 #include "graphics2D/constants.hpp"  // for TILE_PIXEL_SIZE, TILE_PIXEL_SIZE_U
@@ -17,14 +17,12 @@
 #include "maths/vector2.hpp"         // for Vector2F, Vector2, Vector2I
 #include "maths/vector2.tpp"         // for operator<<, operator+, Vector2:...
                                      // for get_mouse_position, is_pressed
-#include "tools/path.hpp"
 
 namespace tile
 {
     Selector::Selector()
       // TODO have tilemap as a parameter
-      : m_tileset { resources::get_texture( path::get_folder( path::Tilesets )
-                                            / "tilemap.png" ) },
+      : m_tileset { resource::tileset::get( "town.png" ) },
         m_subTilesetPosition {
             m_tileset.get_position( { 0, 0 }, tile::Position::Tile ) },
         m_subTilesetSize { math::min( m_tileset.get_size().tile(),

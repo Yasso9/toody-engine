@@ -1,17 +1,16 @@
 #pragma once
 
-#include <map>     // for map
-#include <string>  // for string
+#include <map>                                        // for map
+#include <string>                                     // for string
 
-#include "graphics2D/collision/collision_list.hpp"  // for CollisionList
+#include "graphics2D/collision/collision_list.hpp"    // for CollisionList
 #include "graphics2D/entity/character_entity.hpp"
 #include "graphics2D/entity/controllable_entity.hpp"  // for MoveableEntity2D
 #include "graphics2D/entity/player.hpp"               // for Player
-#include "graphics2D/events/dialogue.hpp"
-#include "graphics2D/image_map.hpp"      // for ImageMap
-#include "graphics2D/tile/map.hpp"       // for TileMap
-#include "graphics2D/view_settings.hpp"  // for ViewSettings
-#include "states/state.hpp"              // for State
+#include "graphics2D/image_map.hpp"                   // for ImageMap
+#include "graphics2D/tile/map.hpp"                    // for TileMap
+#include "graphics2D/view_settings.hpp"               // for ViewSettings
+#include "states/state.hpp"                           // for State
 
 class EditorState : public State
 {

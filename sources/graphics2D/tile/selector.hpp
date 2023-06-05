@@ -5,7 +5,7 @@
 #include "SFML/Graphics/Sprite.hpp"
 #include "components/component.hpp"  // for Component
 #include "graphics2D/color.hpp"
-#include "graphics2D/tile/set.hpp"  // for Tileset
+#include "graphics2D/tile/set.hpp"   // for Tileset
 
 namespace tile
 {
@@ -18,7 +18,6 @@ namespace tile
             bool scrollbar;
         };
 
-        // Table of tiles
         tile::Set      m_tileset;
         tile::Position m_subTilesetPosition;
         tile::Size     m_subTilesetSize;

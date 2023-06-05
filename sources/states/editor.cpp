@@ -1,19 +1,19 @@
 #include "editor.hpp"
 
-#include <algorithm>  // for max, copy
-#include <sstream>    // for operator<<, basic_ostream
-#include <stddef.h>   // for NULL
-#include <vector>     // for vector
+#include <algorithm>                 // for max, copy
+#include <sstream>                   // for operator<<, basic_ostream
+#include <stddef.h>                  // for NULL
+#include <vector>                    // for vector
 
-#include <SFML/Graphics/Color.hpp>  // for Color, Color::Black, Color::...
-#include <SFML/System/Vector2.hpp>  // for Vector2f
-#include <SFML/Window/Mouse.hpp>    // for Mouse, Mouse::Right
-#include <imgui/imgui.h>            // for Begin, End, MenuItem, Text
+#include <SFML/Graphics/Color.hpp>   // for Color, Color::Black, Color::...
+#include <SFML/System/Vector2.hpp>   // for Vector2f
+#include <SFML/Window/Mouse.hpp>     // for Mouse, Mouse::Right
+#include <imgui/imgui.h>             // for Begin, End, MenuItem, Text
 
 #include "components/component.hpp"  // for Component::add_child
 #include "contexts/game_context.hpp"
-#include "game/resources.hpp"                   // for get_texture
-#include "game/settings.hpp"                    // for Settings
+#include "game/resources.hpp"        // for get_texture
+#include "game/settings.hpp"         // for Settings
 #include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
 #include "graphics2D/sfml.hpp"                  // for operator<<
 #include "graphics2D/view.hpp"                  // for View
@@ -25,8 +25,7 @@
 #include "maths/vector2.hpp"             // for Vector2F, Vector2, Vector2U
 #include "maths/vector2.tpp"             // for operator<<, operator*, opera...
                                          // for get_mouse_movement, get_mous...
-#include "tools/path.hpp"
-#include "tools/singleton.tpp"  // for Singleton::get_instance
+#include "tools/singleton.tpp"           // for Singleton::get_instance
 
 EditorState::EditorState()
   : State {},
@@ -36,8 +35,7 @@ EditorState::EditorState()
     m_tilemap { m_view },
     m_imageMap {},
     m_collisionList {},
-    m_character { resources::get_texture( path::get_folder( path::Character )
-                                          / "gold_sprite.png" ),
+    m_character { resource::character::get( "gold_sprite.png" ),
                   { m_collisionList, m_view, input::ARROW } }
 {
     this->add_child( m_tilemap, m_view );

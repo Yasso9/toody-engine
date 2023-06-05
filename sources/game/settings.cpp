@@ -1,13 +1,13 @@
 #include "settings.hpp"
 
-#include <filesystem>  // for operator/, path
-#include <fstream>     // for basic_istream<>::__istream_type, ifs...
-#include <string>      // for string, operator""s
+#include <filesystem>          // for operator/, path
+#include <fstream>             // for basic_istream<>::__istream_type, ifs...
+#include <string>              // for string, operator""s
 
-#include "states/state.hpp"  // for StateList
-#include "tools/enum.hpp"    // for operator>>, operator<<
-#include "tools/path.hpp"    // for get_folder, E_Folder, E_Folder::Data
-#include "tools/traces.hpp"  // for FileIssue
+#include "game/resources.hpp"  // for resources
+#include "states/state.hpp"    // for StateList
+#include "tools/enum.hpp"      // for operator>>, operator<<
+#include "tools/traces.hpp"    // for FileIssue
 
 // TODO have this function available globally
 template< typename T,
@@ -32,7 +32,7 @@ std::string get_description ( T const & value, char separator = '\n' )
 
 Settings::Settings()
   : SubWindow { "Settings" },
-    m_filePath { path::get_folder( path::Data ) / "settings.txt" },
+    m_filePath { resource::app_data::SETTINGS },
     m_windowSize {},
     m_nbFramePerSecond {},
     m_verticalSync {},
