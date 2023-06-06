@@ -62,7 +62,7 @@ namespace math
             };
         }
 
-        Vector3U to_u_int () const
+        Vector3U to_uint () const
         {
             return Vector3U {
                 static_cast< unsigned int >( this->x ),

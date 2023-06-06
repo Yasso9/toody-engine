@@ -122,7 +122,7 @@ namespace tile
             point - math::Vector2F { this->getPosition() } };
 
         return tile::Position { pointRelative, this->get_size(),
-                                tile::Position::Pixel };
+                                tile::Type::Pixel };
     }
 
     bool Map::contain( math::PointF point ) const
@@ -138,7 +138,7 @@ namespace tile
 
     bool Map::is_comptatible( tile::Position position ) const
     {
-        return this->get_size().tile().x == position.get_number_of_columns();
+        return this->get_size().tile().x == position.sizeX();
     }
 
     void Map::save() const
@@ -171,7 +171,7 @@ namespace tile
         math::Vector2U size { this->get_size().tile() };
         if ( ImGui::SliderVec( "Tilemap Size", size, 1, 50 ) )
         {
-            m_table.set_size( tile::Size { size, tile::Size::Tile } );
+            m_table.set_size( tile::Size { size, tile::Type::Tile } );
         }
     }
 
@@ -186,7 +186,7 @@ namespace tile
             if ( m_tileSelector.get_tile_selected().has_value() )
             {
                 infoOutput << "Tileset - Tile Selected : "
-                           << m_tileSelector.get_tile_selected().value().value()
+                           << m_tileSelector.get_tile_selected().value().index()
                            << "\n";
             }
             else

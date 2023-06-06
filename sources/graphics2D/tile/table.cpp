@@ -34,7 +34,7 @@ namespace tile
 
     tile::Size Table::get_size() const
     {
-        return tile::Size { this->Array2D< Tile >::size(), tile::Size::Tile };
+        return tile::Size { this->Array2D< Tile >::size(), tile::Type::Tile };
     }
 
     void Table::set_size( tile::Size size )
@@ -48,13 +48,13 @@ namespace tile
     void Table::update_tiles_position()
     {
         tile::Position i_position { math::Vector2U { 0u, 0u }, m_size.x,
-                                    tile::Position::Tile };
+                                    tile::Type::Tile };
 
         for ( Tile & tile : m_array2D )
         {
             tile.set_position( i_position );
 
-            i_position.set_value( i_position.value() + 1 );
+            i_position.index( i_position.index() + 1 );
         }
     }
 

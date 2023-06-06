@@ -4,7 +4,6 @@
 #include <memory>   // for allocator
 #include <sstream>
 
-#include "graphics2D/tile/tools.hpp"
 #include "maths/geometry/point.hpp"
 #include "maths/vector2.tpp"    // for Vector2::operator=, floor, oper...
 #include "tools/assertion.hpp"  // for ASSERTION
@@ -12,79 +11,58 @@
 
 namespace tile
 {
-    Position::Position( unsigned int value, unsigned int numberOfColumns )
-      : m_position {}, m_numberOfColumns { numberOfColumns }
+    Position::Position( unsigned int index, unsigned int numberOfColumns )
+      : Cell {}, m_sizeX { numberOfColumns }
     {
-        this->set_value( value );
+        this->index( index );
     }
 
-    Position::Position( unsigned int value, tile::Size mapSize )
-      : Position { value, mapSize.tile().x }
+    Position::Position( unsigned int index, tile::Size mapSize )
+      : Position { index, mapSize.tile().x }
     {}
 
     Position::Position( math::Vector2U position, unsigned int numberOfColumns,
                         Type type )
-      : m_position {}, m_numberOfColumns { numberOfColumns }
-    {
-        this->set_value( position, type );
-    }
+      : Cell { position, type }, m_sizeX { numberOfColumns }
+    {}
 
     Position::Position( math::Vector2U position, tile::Size mapSize, Type type )
       : Position { position, mapSize.tile().x, type }
     {}
 
-    unsigned int Position::value() const
+    unsigned int Position::index() const
     {
-        return m_position.y * m_numberOfColumns + m_position.x;
+        math::Vector2U tilePos { this->tile() };
+        return tilePos.y * this->sizeX() + tilePos.x;
     }
 
-    math::Vector2U Position::tile() const
+    void Position::index( unsigned int value )
     {
-        return m_position;
+        this->set_tile_position(
+            { value % this->sizeX(),
+              static_cast< unsigned int >( math::whole_part(
+                  static_cast< float >( value )
+                  / static_cast< float >( this->sizeX() ) ) ) } );
     }
 
-    math::Vector2U Position::pixel() const
+    unsigned int Position::sizeX() const
     {
-        return tile_to_pixel_position( this->tile() );
+        return m_sizeX;
     }
 
-    unsigned int Position::get_number_of_columns() const
+    Cell Position::to_cell() const
     {
-        return m_numberOfColumns;
-    }
-
-    void Position::set_value( unsigned int value )
-    {
-        // Cast the tile value to a vector position
-        m_position.x = value % m_numberOfColumns;
-        m_position.y = static_cast< unsigned int >(
-            math::whole_part( static_cast< float >( value )
-                              / static_cast< float >( m_numberOfColumns ) ) );
-
-        /// @remark We don't know if value is too big for the grid
-    }
-
-    void Position::set_value( math::Vector2U position, Type type )
-    {
-        m_position = position;
-
-        if ( type == Type::Pixel )
-        {
-            m_position = pixel_to_tile_position( m_position );
-        }
-
-        // Position too big for the current grid
-        if ( m_position.x >= m_numberOfColumns )
-        {
-            Trace::Error( "Position {} X axis too big for {}", m_position,
-                          m_numberOfColumns );
-        }
+        return *this;
     }
 
     bool Position::is_inside( tile::Size const & size ) const
     {
         return this->tile().to_point().is_inside( { 0u, 0u }, size.tile() );
     }
+
+    // ####################################################################
+    // ########################## OPERATORS <=> ###########################
+    // ####################################################################
 
     bool Position::operator<( tile::Size const & size ) const
     {
@@ -108,8 +86,8 @@ namespace tile
 
     bool Position::operator== ( tile::Position const & position ) const
     {
-        return this->m_position == position.m_position
-               && this->m_numberOfColumns == position.m_numberOfColumns;
+        return this->tile() == position.tile()
+               && this->sizeX() == position.sizeX();
     }
 
     bool Position::operator!= ( tile::Position const & position ) const
@@ -124,53 +102,49 @@ namespace tile
     Position operator+ ( tile::Position const & pos, tile::Size const & size )
     {
         math::Vector2U position = pos.tile() + size.tile();
-        if ( position.x >= pos.get_number_of_columns() )
+        if ( position.x >= pos.sizeX() )
         {
             Trace::Warning( "tile::Position overflow" );
-            position.x = pos.get_number_of_columns() - 1;
+            position.x = pos.sizeX() - 1;
         }
-        return Position { position, pos.get_number_of_columns(),
-                          Position::Type::Tile };
+        return Position { position, pos.sizeX(), Type::Tile };
     }
 
     Position operator- ( tile::Position const & pos, tile::Size const & size )
     {
-        int value = static_cast< int >( pos.value() )
-                    - static_cast< int >( size.value() );
+        int value = static_cast< int >( pos.index() )
+                    - static_cast< int >( size.index() );
         if ( value < 0 )
         {
             Trace::Warning( "tile::Position underflow" );
             value = 0;
         }
-        return Position { static_cast< unsigned int >( value ),
-                          pos.get_number_of_columns() };
+        return Position { static_cast< unsigned int >( value ), pos.sizeX() };
     }
 
     Position operator+ ( tile::Position const & posL,
                          tile::Position const & posR )
     {
         math::Vector2U position = posL.tile() + posR.tile();
-        if ( position.x >= posL.get_number_of_columns() )
+        if ( position.x >= posL.sizeX() )
         {
             Trace::Warning( "tile::Position overflow" );
-            position.x = posL.get_number_of_columns() - 1;
+            position.x = posL.sizeX() - 1;
         }
-        return Position { position, posL.get_number_of_columns(),
-                          Position::Type::Tile };
+        return Position { position, posL.sizeX(), Type::Tile };
     }
 
     Position operator- ( tile::Position const & posL,
                          tile::Position const & posR )
     {
-        int value = static_cast< int >( posL.value() )
-                    - static_cast< int >( posR.value() );
+        int value = static_cast< int >( posL.index() )
+                    - static_cast< int >( posR.index() );
         if ( value < 0 )
         {
             Trace::Warning( "tile::Position underflow" );
             value = 0;
         }
-        return Position { static_cast< unsigned int >( value ),
-                          posL.get_number_of_columns() };
+        return Position { static_cast< unsigned int >( value ), posL.sizeX() };
     }
 
     Position & operator+= ( tile::Position & pos, tile::Size const & size )
@@ -193,17 +167,15 @@ namespace tile
         return posL = posL - posR;
     }
 
-    std::string Position::debug_string( std::string name ) const
+    void Position::set_tile_position( math::Vector2U position )
     {
-        if ( name != "" )
-        {
-            name += " ";
-        }
+        Cell::set_tile_position( position );
 
-        std::ostringstream stream {};
-        stream << name << "pixel position : " << this->pixel() << "\n";
-        stream << name << "tile position : " << this->tile() << "\n";
-        stream << name << "tile value : " << this->value() << "\n";
-        return stream.str().c_str();
+        if ( this->tile().x >= m_sizeX )
+        {  // Position too big for the current grid
+            Trace::Warning( "Position {} X axis too big for {}", this->tile(),
+                            m_sizeX );
+        }
     }
+
 }  // namespace tile

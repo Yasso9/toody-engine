@@ -42,7 +42,7 @@ namespace math
         explicit operator Point< OtherType > () const;
 
         Vector2< float >        to_float () const  = delete;
-        Vector2< unsigned int > to_u_int () const  = delete;
+        Vector2< unsigned int > to_uint () const  = delete;
         Vector2< int >          to_int () const    = delete;
         Vector2< std::size_t >  to_size_t () const = delete;
 
@@ -50,7 +50,7 @@ namespace math
 
         Point< float > to_float () const
             requires ( not std::is_same_v< Type, float > );
-        Point< unsigned int > to_u_int () const
+        Point< unsigned int > to_uint () const
             requires ( not std::is_same_v< Type, unsigned int > );
         Point< int > to_int () const
             requires ( not std::is_same_v< Type, int > );

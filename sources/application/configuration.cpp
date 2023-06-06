@@ -51,7 +51,7 @@ math::Vector2F Config::get_window_size() const
 
 sf::VideoMode Config::get_video_mode() const
 {
-    math::Vector2U windowSizeUInt { m_windowSize.to_u_int() };
+    math::Vector2U windowSizeUInt { m_windowSize.to_uint() };
     return sf::VideoMode { windowSizeUInt.x, windowSizeUInt.y };
 }
 

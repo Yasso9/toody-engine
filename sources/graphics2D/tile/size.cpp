@@ -1,36 +1,32 @@
 #include "size.hpp"
 
-#include "graphics2D/tile/tools.hpp"
-
 namespace tile
 {
-    Size::Size( math::Vector2U size, Type type ) : m_size {}
+    Size::Size() : Cell {} {}
+
+    Size::Size( math::Vector2U size, Type type ) : Cell { size, type } {}
+
+    Size::Size( unsigned int x, unsigned int y, Type type )
+      : Cell { x, y, type }
+    {}
+
+    unsigned int Size::index() const
     {
-        this->set_value( size, type );
+        math::Vector2U tilePos { this->tile() };
+        return tilePos.y * tilePos.x + tilePos.x;
     }
 
-    unsigned int Size::value() const
+    void Size::index( unsigned int newValue )
     {
-        return m_size.x * m_size.x + m_size.y;
+        this->set_tile_position(
+            { newValue % this->tile().x,
+              static_cast< unsigned int >( math::whole_part(
+                  static_cast< float >( newValue )
+                  / static_cast< float >( this->tile().x ) ) ) } );
     }
 
-    math::Vector2U Size::tile() const
+    Cell Size::to_cell() const
     {
-        return m_size;
-    }
-
-    math::Vector2U Size::pixel() const
-    {
-        return tile::tile_to_pixel_position( this->tile() );
-    }
-
-    void Size::set_value( math::Vector2U position, Type type )
-    {
-        m_size = position;
-
-        if ( type == Type::Pixel )
-        {
-            m_size = tile::pixel_to_tile_position( position );
-        }
+        return *this;
     }
 }  // namespace tile

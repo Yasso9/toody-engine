@@ -118,7 +118,7 @@ namespace math
     }
 
     template< cPrimitive Type >
-    Vector2< unsigned int > Vector2< Type >::to_u_int() const
+    Vector2< unsigned int > Vector2< Type >::to_uint() const
         requires ( not std::is_same_v< Type, unsigned int > )
     {
         return static_cast< Vector2< unsigned int > >( *this );

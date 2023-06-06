@@ -45,7 +45,7 @@ namespace math
     }
 
     template< cPrimitive Type >
-    Point< unsigned int > Point< Type >::to_u_int() const
+    Point< unsigned int > Point< Type >::to_uint() const
         requires ( not std::is_same_v< Type, unsigned int > )
     {
         return static_cast< Point< unsigned int > >( *this );

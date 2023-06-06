@@ -36,7 +36,7 @@ namespace tile
 
     tile::Size Set::get_size() const
     {
-        return tile::Size { m_texture.getSize(), tile::Size::Pixel };
+        return tile::Size { m_texture.getSize(), tile::Type::Pixel };
     }
 
     unsigned int Set::get_number_of_tile() const
@@ -45,10 +45,11 @@ namespace tile
         return sizeInTile.x * sizeInTile.y;
     }
 
-    tile::Position Set::get_position( math::PointF         point,
-                                      tile::Position::Type type ) const
+    // TODO change arg to tile::Cell
+    tile::Position Set::get_position( math::PointF point,
+                                      tile::Type   type ) const
     {
-        return tile::Position { point.to_u_int(), this->get_size(), type };
+        return tile::Position { point.to_uint(), this->get_size(), type };
     }
 
     tile::Position Set::get_position( unsigned int value ) const

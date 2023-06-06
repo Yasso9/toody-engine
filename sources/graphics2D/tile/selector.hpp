@@ -24,8 +24,8 @@ namespace tile
 
             SubTileset( tile::Set const & tileset, tile::Size const & maxSize )
               : size { math::min( tileset.get_size().tile(), maxSize.tile() ),
-                       tile::Size::Tile },
-                firstTile { { 0, 0 }, size, tile::Position::Tile }
+                       tile::Type::Tile },
+                firstTile { { 0, 0 }, size, tile::Type::Tile }
             {}
         };
 

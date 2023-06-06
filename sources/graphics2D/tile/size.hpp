@@ -1,31 +1,20 @@
 #pragma once
 
-#include "maths/vector2.hpp"
+#include "graphics2D/tile/cell.hpp"
 
 namespace tile
 {
-    class Size
+    class Size : public Cell
     {
-        /// @brief Size in tile value
-        math::Vector2U m_size;
-
       public:
-        enum Type
-        {
-            Tile = 0,
-            Pixel
-        };
+        Size();
+        Size( math::Vector2U position, Type type );
+        Size( unsigned int x, unsigned int y, Type type );
 
-        Size( math::Vector2U size, Type type );
-
-        unsigned int value () const;
-        /// @brief get size in tile value
-        math::Vector2U tile () const;
-        /// @brief get size in pixel value
-        math::Vector2U pixel () const;
-
-        void set_value ( math::Vector2U position, Type type );
+        unsigned int index () const;
+        void         index ( unsigned int newValue );
+        Cell         to_cell () const;
     };
 }  // namespace tile
 
-DEFINE_FORMATTER( tile::Size, "{{ tile={} }}", value.tile() );
+DEFINE_FORMATTER( tile::Size, "{}", value.to_cell() );

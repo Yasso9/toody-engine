@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstddef>                    // for size_t
+#include <cstddef>  // for size_t
 
 #include <SFML/Graphics/Texture.hpp>  // for Texture
 
@@ -29,8 +29,8 @@ namespace tile
         tile::Size     get_size () const;
         unsigned int   get_number_of_tile () const;
 
-        tile::Position get_position ( math::PointF         point,
-                                      tile::Position::Type type ) const;
+        tile::Position get_position ( math::PointF point,
+                                      tile::Type   type ) const;
         tile::Position get_position ( unsigned int value ) const;
 
         bool contain ( math::PointF point ) const;

@@ -23,7 +23,7 @@ namespace tile
     Selector::Selector()
       // TODO have tileset as a parameter
       : m_tileset { resource::tileset::get( "town.png" ) },
-        m_subTileset { m_tileset, { { 12, 12 }, tile::Size::Tile } },
+        m_subTileset { m_tileset, { 12, 12, tile::Type::Tile } },
         m_tileSelected { std::nullopt },
         m_gridColor { Color::RGBA { 118, 118, 118, 255 } },
         m_show { .grid = true, .scrollbar = false },
@@ -39,7 +39,7 @@ namespace tile
             math::Vector2U size { m_subTileset.size.tile() };
             if ( ImGui::SliderVec( "TileSet Size", size, 4, 16 ) )
             {
-                m_subTileset.size.set_value( size, tile::Size::Tile );
+                m_subTileset.size.tile( size );
             }
 
             ImGuiWindowFlags windowFlags = ImGuiWindowFlags_None;
@@ -123,9 +123,9 @@ namespace tile
 
     void Selector::update_scroll( UpdateContext & /* context */ )
     {
-        m_subTileset.firstTile = tile::Position { ImGui::GetScroll().to_u_int(),
+        m_subTileset.firstTile = tile::Position { ImGui::GetScroll().to_uint(),
                                                   m_subTileset.size,
-                                                  tile::Position::Pixel };
+                                                  tile::Type::Pixel };
     }
 
     void Selector::update_selection( UpdateContext & context )
@@ -133,13 +133,13 @@ namespace tile
         math::Vector2I mousePosition { context.inputs.get_mouse_position() };
 
         if ( ImGui::IsWindowHovered()
-             && mousePosition.to_point().to_u_int().is_inside(
+             && mousePosition.to_point().to_uint().is_inside(
                  m_subTileset.firstTile.pixel(), m_subTileset.size.pixel() ) )
         {  // the mouse is inside the tileset grid
             tile::Position selectionPosition { m_tileset.get_position(
                 mousePosition.to_point().to_float()
                     - m_tileset.get_position().to_point(),
-                tile::Position::Pixel ) };
+                tile::Type::Pixel ) };
 
             // m_debugWindow.add_debug_text( "Selection Position : {}",
             //                               selectionPosition );
@@ -177,7 +177,7 @@ namespace tile
         m_debugWindow.add_debug_text(
             "Current Tile Selected : {}",
             m_tileSelected.has_value()
-                ? std::to_string( m_tileSelected.value().value() )
+                ? std::to_string( m_tileSelected.value().index() )
                 : "None" );
     }
 }  // namespace tile

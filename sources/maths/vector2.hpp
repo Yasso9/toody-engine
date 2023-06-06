@@ -109,7 +109,7 @@ namespace math
 
         Vector2< float > to_float () const
             requires ( not std::is_same_v< Type, float > );
-        Vector2< unsigned int > to_u_int () const
+        Vector2< unsigned int > to_uint () const
             requires ( not std::is_same_v< Type, unsigned int > );
         Vector2< int > to_int () const
             requires ( not std::is_same_v< Type, int > );
@@ -208,8 +208,8 @@ namespace math
                       Vector2< TypeRight > const & vector2DRight );
 
     template< cPrimitive TypeLeft, cPrimitive TypeRight >
-    bool operator< ( Vector2< TypeLeft > const &  vector2DLeft,
-                     Vector2< TypeRight > const & vector2DRight );
+    bool operator<( Vector2< TypeLeft > const &  vector2DLeft,
+                    Vector2< TypeRight > const & vector2DRight );
 
     template< cPrimitive Type >
     bool operator> ( Vector2< Type > const & vector2DLeft,
