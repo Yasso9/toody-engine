@@ -4,14 +4,14 @@
 
 #include <SFML/Graphics/Texture.hpp>  // for Texture
 
-#include "graphics2D/tile/position.hpp"
+#include "graphics2D/tile/grid.hpp"  // for Grid
 #include "maths/geometry/point.hpp"  // for PointF, PointU
 #include "maths/vector2.hpp"         // for Vector2F, Vector2U
 
 namespace tile
 {
     // Table of tiles
-    class Set
+    class Set : public Grid
     {
         sf::Texture const & m_texture;
         math::Vector2F      m_position;
@@ -22,17 +22,8 @@ namespace tile
 
         sf::Texture const & get_texture () const;
 
-        math::Vector2F get_position () const;
-        void           set_position ( math::Vector2F pos );
-        // position of the bottom right corner
-        math::Vector2F get_bound_pos () const;
-        tile::Size     get_size () const;
-        unsigned int   get_number_of_tile () const;
-
-        tile::Position get_position ( math::PointF point,
-                                      tile::Type   type ) const;
-        tile::Position get_position ( unsigned int value ) const;
-
-        bool contain ( math::PointF point ) const;
+        math::Vector2F get_position () const override;
+        void           set_position ( math::Vector2F pos ) override;
+        tile::Size     get_size () const override;
     };
 }  // namespace tile

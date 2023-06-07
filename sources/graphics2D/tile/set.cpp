@@ -29,37 +29,8 @@ namespace tile
         m_position = pos;
     }
 
-    math::Vector2F Set::get_bound_pos() const
-    {
-        return this->get_position() + this->get_size().pixel().to_float();
-    }
-
     tile::Size Set::get_size() const
     {
         return tile::Size { m_texture.getSize(), tile::Type::Pixel };
-    }
-
-    unsigned int Set::get_number_of_tile() const
-    {
-        math::Vector2U sizeInTile { this->get_size().tile() };
-        return sizeInTile.x * sizeInTile.y;
-    }
-
-    // TODO change arg to tile::Cell
-    tile::Position Set::get_position( math::PointF point,
-                                      tile::Type   type ) const
-    {
-        return tile::Position { point.to_uint(), this->get_size(), type };
-    }
-
-    tile::Position Set::get_position( unsigned int value ) const
-    {
-        return tile::Position { value, this->get_size() };
-    }
-
-    bool Set::contain( math::PointF point ) const
-    {
-        return point.is_inside( this->get_position(),
-                                this->get_size().pixel().to_float() );
     }
 }  // namespace tile

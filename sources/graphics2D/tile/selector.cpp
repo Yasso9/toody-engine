@@ -16,13 +16,13 @@
 #include "maths/numerics.hpp"        // for division_reminder_u
 #include "maths/vector2.hpp"         // for Vector2F, Vector2, Vector2I
 #include "maths/vector2.tpp"         // for operator<<, operator+, Vector2:...
-                                     // for get_mouse_position, is_pressed
+#include "tools/traces.hpp"          // for Trace::Warning
 
 namespace tile
 {
-    Selector::Selector()
-      // TODO have tileset as a parameter
-      : m_tileset { resource::tileset::get( "town.png" ) },
+    Selector::Selector( tile::Set const & tileset )
+      : SubWindow { "Tile Selector" },
+        m_tileset { tileset },
         m_subTileset { m_tileset, { 12, 12, tile::Type::Tile } },
         m_tileSelected { std::nullopt },
         m_gridColor { Color::RGBA { 118, 118, 118, 255 } },
@@ -32,7 +32,7 @@ namespace tile
 
     void Selector::update( UpdateContext & context )
     {
-        if ( ImGui::BeginWindow( "Tile Selector" ) )
+        if ( ImGui::BeginWindow( *this ) )
         {
             this->update_settings( context );
 
@@ -52,13 +52,14 @@ namespace tile
                                     windowFlags ) )
             {
                 this->update_scroll( context );
-                this->update_tileset();
+
+                // m_tileset.set_position( ImGui::GetCursorScreenPos() );
+                ImGui::Image( m_tileset.get_texture() );
 
                 if ( m_show.grid )
                 {
                     this->update_grid( context );
                 }
-
                 this->update_selection( context );
             }
             ImGui::EndChild();
@@ -72,7 +73,7 @@ namespace tile
         return m_tileset;
     }
 
-    std::optional< tile::Position > Selector::get_tile_selected() const
+    std::optional< tile::CellPos > Selector::get_tile_selected() const
     {
         return m_tileSelected;
     }
@@ -123,9 +124,9 @@ namespace tile
 
     void Selector::update_scroll( UpdateContext & /* context */ )
     {
-        m_subTileset.firstTile = tile::Position { ImGui::GetScroll().to_uint(),
-                                                  m_subTileset.size,
-                                                  tile::Type::Pixel };
+        m_subTileset.firstTile = tile::CellPos { ImGui::GetScroll().to_uint(),
+                                                 m_subTileset.size,
+                                                 tile::Type::Pixel };
     }
 
     void Selector::update_selection( UpdateContext & context )
@@ -136,10 +137,16 @@ namespace tile
              && mousePosition.to_point().to_uint().is_inside(
                  m_subTileset.firstTile.pixel(), m_subTileset.size.pixel() ) )
         {  // the mouse is inside the tileset grid
-            tile::Position selectionPosition { m_tileset.get_position(
-                mousePosition.to_point().to_float()
-                    - m_tileset.get_position().to_point(),
-                tile::Type::Pixel ) };
+            auto selectionPos = mousePosition - m_tileset.get_position();
+            if ( selectionPos < math::Vector2I::ZERO )
+            {
+                Trace::Warning(
+                    "Selector::update_selection : selectionPos < 0" );
+            }
+            tile::CellPos selectionPosition {
+                m_tileset
+                    .position( { selectionPos.to_uint(), tile::Type::Pixel } )
+                    .value() };
 
             // m_debugWindow.add_debug_text( "Selection Position : {}",
             //                               selectionPosition );
@@ -156,12 +163,6 @@ namespace tile
                 m_tileSelected = selectionPosition;
             }
         }
-    }
-
-    void Selector::update_tileset()
-    {
-        m_tileset.set_position( ImGui::GetCursorScreenPos() );
-        ImGui::Image( m_tileset.get_texture() );
     }
 
     void Selector::update_informations( UpdateContext & /* context */ )

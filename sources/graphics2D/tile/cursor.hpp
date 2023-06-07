@@ -3,7 +3,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include "application/components/component.hpp"
-#include "graphics2D/tile/position.hpp"
+#include "graphics2D/tile/cellpos.hpp"
 
 namespace tile
 {
@@ -20,7 +20,7 @@ namespace tile
 
         sf::RectangleShape                      m_shape;
         Type                                    m_type;
-        std::function< void( tile::Position ) > m_on_click;
+        std::function< void( tile::CellPos ) > m_on_click;
 
       public:
         MouseCursor( Type type );
@@ -35,7 +35,7 @@ namespace tile
         void hide ();
         void show ();
         void set_position ( math::Vector2F position );
-        void on_click ( std::function< void( tile::Position ) > callback );
+        void on_click ( std::function< void( tile::CellPos ) > callback );
 
       private:
         void set_color ( sf::Color color );

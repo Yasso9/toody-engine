@@ -17,13 +17,13 @@
 #include "application/components/component.hpp"  // for Component::add_child
 #include "application/configuration.hpp"         // for Config
 #include "application/resources.hpp"             // for resource::app_data
-#include "graphics2D/constants.hpp"      // for TILE_PIXEL_SIZE_I, TILE_PI...
-#include "graphics2D/sfml.hpp"           // for operator<<
-#include "graphics2D/tile/position.hpp"  // for tile::Position, tile::Position...
-#include "graphics2D/tile/set.hpp"       // for Tileset
-#include "graphics2D/view.hpp"           // for View
-#include "maths/geometry/point.hpp"      // for PointF
-#include "maths/geometry/point.tpp"      // for Point::Point<Type>, Point:...
+#include "graphics2D/constants.hpp"     // for TILE_PIXEL_SIZE_I, TILE_PI...
+#include "graphics2D/sfml.hpp"          // for operator<<
+#include "graphics2D/tile/cellpos.hpp"  // for tile::Position, tile::Position...
+#include "graphics2D/tile/set.hpp"      // for Tileset
+#include "graphics2D/view.hpp"          // for View
+#include "maths/geometry/point.hpp"     // for PointF
+#include "maths/geometry/point.tpp"     // for Point::Point<Type>, Point:...
 #include "tools/array/vector.hpp"
 #include "tools/assertion.hpp"      // for ASSERTION
 #include "tools/serialization.hpp"  // for Serializer, Unserializer
@@ -34,7 +34,7 @@
 namespace tile
 {
     Map::Map( View & view )
-      : m_tileSelector {},
+      : m_tileSelector { tile::Set { resource::tileset::get( "town.png" ) } },
         m_table { m_tileSelector.get_tileset().get_texture() },
         m_cursor { MouseCursor::Outline },
         m_view { view }
@@ -43,7 +43,7 @@ namespace tile
         this->add_child( m_table );
         this->add_child( m_cursor );
 
-        m_cursor.on_click( [this] ( tile::Position const & tilePosition ) {
+        m_cursor.on_click( [this] ( tile::CellPos const & tilePosition ) {
             Trace::Debug( "Clicked on tile: ", tilePosition.tile() );
             if ( m_tileSelector.get_tile_selected().has_value() )
             {
@@ -110,8 +110,7 @@ namespace tile
         return m_view;
     }
 
-    std::optional< tile::Position > Map::get_position(
-        math::PointF point ) const
+    std::optional< tile::CellPos > Map::get_position( math::PointF point ) const
     {
         if ( ! this->contain( point ) )
         {
@@ -121,8 +120,8 @@ namespace tile
         math::Vector2U pointRelative {
             point - math::Vector2F { this->getPosition() } };
 
-        return tile::Position { pointRelative, this->get_size(),
-                                tile::Type::Pixel };
+        return tile::CellPos { pointRelative, this->get_size(),
+                               tile::Type::Pixel };
     }
 
     bool Map::contain( math::PointF point ) const
@@ -136,7 +135,7 @@ namespace tile
                                 this->get_size().pixel().to_float() );
     }
 
-    bool Map::is_comptatible( tile::Position position ) const
+    bool Map::is_comptatible( tile::CellPos position ) const
     {
         return this->get_size().tile().x == position.sizeX();
     }
@@ -149,7 +148,7 @@ namespace tile
         stream.close();
     }
 
-    void Map::change_tile( tile::Position position, tile::Position value )
+    void Map::change_tile( tile::CellPos position, tile::CellPos value )
     {
         if ( position >= this->get_size() )
         {

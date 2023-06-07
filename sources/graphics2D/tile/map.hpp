@@ -44,16 +44,16 @@ namespace tile
         View const &   get_view () const;
 
         // optionnal tile position if the point is in the tilemap
-        std::optional< tile::Position > get_position (
+        std::optional< tile::CellPos > get_position (
             math::PointF point ) const;
 
         bool contain ( math::PointF point ) const;
-        bool is_comptatible ( tile::Position position ) const;
+        bool is_comptatible ( tile::CellPos position ) const;
 
         void save () const;
 
       private:
-        void change_tile ( tile::Position position, tile::Position value );
+        void change_tile ( tile::CellPos position, tile::CellPos value );
 
         void update_size ( UpdateContext & context );
         void update_informations ( UpdateContext & context );

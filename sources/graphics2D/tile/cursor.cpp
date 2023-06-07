@@ -26,7 +26,7 @@ namespace tile
     {
         math::Vector2F mousePosition {
             context.inputs.get_mouse_position( tilemap.get_view() ) };
-        std::optional< tile::Position > tilePosition {
+        std::optional< tile::CellPos > tilePosition {
             tilemap.get_position( mousePosition.to_point() ) };
 
         if ( ! tilePosition.has_value()
@@ -70,7 +70,7 @@ namespace tile
     }
 
     void MouseCursor::on_click(
-        std::function< void( tile::Position ) > callback )
+        std::function< void( tile::CellPos ) > callback )
     {
         m_on_click = callback;
     }

@@ -19,7 +19,7 @@ namespace tile
 {
     Tile::Tile() : Tile { math::Vector2F { 0, 0 }, math::Vector2F { 0, 0 } } {}
 
-    Tile::Tile( tile::Position position, tile::Position value )
+    Tile::Tile( tile::CellPos position, tile::CellPos value )
       : Tile { position.pixel().to_float(), value.pixel().to_float() }
     {}
 
@@ -48,7 +48,7 @@ namespace tile
                                                      TILE_PIXEL_SIZE_VECTOR } );
     }
 
-    void Tile::set_value( tile::Position position )
+    void Tile::set_value( tile::CellPos position )
     {
         this->set_value( position.pixel().to_float() );
     }
@@ -64,7 +64,7 @@ namespace tile
                                                 TILE_PIXEL_SIZE_VECTOR } );
     }
 
-    void Tile::set_position( tile::Position position )
+    void Tile::set_position( tile::CellPos position )
     {
         this->set_position( position.pixel().to_float() );
     }

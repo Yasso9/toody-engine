@@ -1,10 +1,10 @@
 #pragma once
 
-#include "graphics2D/tile/cell.hpp"
+#include "graphics2D/tile/position.hpp"  // for Cell
 
 namespace tile
 {
-    class Size : public Cell
+    class Size : public Position
     {
       public:
         Size();
@@ -13,7 +13,9 @@ namespace tile
 
         unsigned int index () const;
         void         index ( unsigned int newValue );
-        Cell         to_cell () const;
+        Position     to_cell () const;
+
+        unsigned int nb_of_tile () const;
     };
 }  // namespace tile
 

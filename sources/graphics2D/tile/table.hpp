@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "application/components/component.hpp"
-#include "graphics2D/tile/position.hpp"
+#include "graphics2D/tile/cellpos.hpp"
 #include "graphics2D/tile/tile.hpp"
 #include "maths/vector2.hpp"
 #include "tools/array/array2D.hpp"

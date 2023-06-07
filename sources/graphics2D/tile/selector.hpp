@@ -9,7 +9,8 @@
 
 namespace tile
 {
-    class Selector : public Component
+    class Selector : public Component,
+                     public SubWindow
     {
         struct Show
         {
@@ -19,8 +20,8 @@ namespace tile
 
         struct SubTileset
         {
-            tile::Size     size;
-            tile::Position firstTile;
+            tile::Size    size;
+            tile::CellPos firstTile;
 
             SubTileset( tile::Set const & tileset, tile::Size const & maxSize )
               : size { math::min( tileset.get_size().tile(), maxSize.tile() ),
@@ -29,11 +30,11 @@ namespace tile
             {}
         };
 
-        tile::Set  m_tileset;
-        SubTileset m_subTileset;
+        tile::Set const & m_tileset;
+        SubTileset        m_subTileset;
         // position of the tile chosen. Is optional because at the beginning we
         // can have no tile choose
-        std::optional< tile::Position > m_tileSelected;
+        std::optional< tile::CellPos > m_tileSelected;
 
         Color m_gridColor;
 
@@ -42,12 +43,13 @@ namespace tile
         DebugWindow m_debugWindow;
 
       public:
-        Selector();
+        Selector( tile::Set const & tileset );
 
         void update ( UpdateContext & context ) override;
 
-        tile::Set const &               get_tileset () const;
-        std::optional< tile::Position > get_tile_selected () const;
+        tile::Set const & get_tileset () const;
+        void              set_tileset ( tile::Set const & tileset );
+        std::optional< tile::CellPos > get_tile_selected () const;
 
       private:
         void update_settings ( UpdateContext & context );
@@ -55,7 +57,5 @@ namespace tile
         void update_scroll ( UpdateContext & context );
         void update_selection ( UpdateContext & context );
         void update_informations ( UpdateContext & context );
-
-        void update_tileset ();
     };
 }  // namespace tile

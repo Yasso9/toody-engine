@@ -2,12 +2,12 @@
 
 namespace tile
 {
-    Size::Size() : Cell {} {}
+    Size::Size() : Position {} {}
 
-    Size::Size( math::Vector2U size, Type type ) : Cell { size, type } {}
+    Size::Size( math::Vector2U size, Type type ) : Position { size, type } {}
 
     Size::Size( unsigned int x, unsigned int y, Type type )
-      : Cell { x, y, type }
+      : Position { x, y, type }
     {}
 
     unsigned int Size::index() const
@@ -25,8 +25,13 @@ namespace tile
                   / static_cast< float >( this->tile().x ) ) ) } );
     }
 
-    Cell Size::to_cell() const
+    Position Size::to_cell() const
     {
         return *this;
+    }
+
+    unsigned int Size::nb_of_tile() const
+    {
+        return this->tile().x * this->tile().y;
     }
 }  // namespace tile

@@ -2,7 +2,7 @@
 
 #include "graphics2D/surface/quad_vertex.hpp"  // for QuadVertex
 #include "graphics2D/tile/map.hpp"             // for TileMap
-#include "graphics2D/tile/position.hpp"  // for tile::Position, tile::Position:...
+#include "graphics2D/tile/cellpos.hpp"  // for tile::Position, tile::Position:...
 #include "graphics2D/tile/set.hpp"       // for Tileset
 #include "tools/array/vector.hpp"
 #include "tools/assertion.hpp"
@@ -47,7 +47,7 @@ namespace tile
 
     void Table::update_tiles_position()
     {
-        tile::Position i_position { math::Vector2U { 0u, 0u }, m_size.x,
+        tile::CellPos i_position { math::Vector2U { 0u, 0u }, m_size.x,
                                     tile::Type::Tile };
 
         for ( Tile & tile : m_array2D )

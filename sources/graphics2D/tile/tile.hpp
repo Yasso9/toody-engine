@@ -7,7 +7,7 @@
 
 namespace tile
 {
-    class Position;
+    class CellPos;
     class Map;
     class Set;
 }  // namespace tile
@@ -20,7 +20,7 @@ namespace tile
 
       public:
         Tile();
-        Tile( tile::Position position, tile::Position value );
+        Tile( tile::CellPos position, tile::CellPos value );
         Tile( math::Vector2F pixelPosition, math::Vector2F pixelValue );
 
       private:
@@ -29,11 +29,11 @@ namespace tile
       public:
         math::Vector2F get_value () const;
         void           set_value ( math::Vector2F position );
-        void           set_value ( tile::Position position );
+        void           set_value ( tile::CellPos position );
 
         math::Vector2F get_position () const;
         void           set_position ( math::Vector2F position );
-        void           set_position ( tile::Position position );
+        void           set_position ( tile::CellPos position );
 
         /// @brief Get all the current data of the tile
         /// @return String containing the current data of the tile
