@@ -21,20 +21,20 @@ math::Vector2F QuadVertex::set_texture_coord() const
 
 void QuadVertex::set_position( math::RectangleF const & rectangle )
 {
-    this->vertices[0].position = rectangle.position;
-    this->vertices[1].position = rectangle.position
+    this->vertices[0].position = rectangle.pos;
+    this->vertices[1].position = rectangle.pos
                                  + math::Vector2F { rectangle.size.x, 0.f };
-    this->vertices[2].position = rectangle.position + rectangle.size;
-    this->vertices[3].position = rectangle.position
+    this->vertices[2].position = rectangle.pos + rectangle.size;
+    this->vertices[3].position = rectangle.pos
                                  + math::Vector2F { 0.f, rectangle.size.y };
 }
 
 void QuadVertex::set_texture_coord( math::RectangleF const & rectangle )
 {
-    this->vertices[0].texCoords = rectangle.position;
-    this->vertices[1].texCoords = rectangle.position
+    this->vertices[0].texCoords = rectangle.pos;
+    this->vertices[1].texCoords = rectangle.pos
                                   + math::Vector2F { rectangle.size.x, 0.f };
-    this->vertices[2].texCoords = rectangle.position + rectangle.size;
-    this->vertices[3].texCoords = rectangle.position
+    this->vertices[2].texCoords = rectangle.pos + rectangle.size;
+    this->vertices[3].texCoords = rectangle.pos
                                   + math::Vector2F { 0.f, rectangle.size.y };
 }

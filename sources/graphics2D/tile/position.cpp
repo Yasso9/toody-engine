@@ -26,6 +26,11 @@ namespace tile
         return m_tilePosition * m_tileSizePixel;
     }
 
+    math::Vector2U Position::pixel_abs( math::Vector2F const & gridPos ) const
+    {
+        return this->pixel() + gridPos;
+    }
+
     void Position::tile( math::Vector2U position )
     {
         this->set_tile_position( position );

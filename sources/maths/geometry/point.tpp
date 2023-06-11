@@ -85,7 +85,7 @@ namespace math
     template< cPrimitive Type >
     bool Point< Type >::is_inside( Rectangle< Type > rectangle ) const
     {
-        return this->is_inside( rectangle.position, rectangle.size );
+        return this->is_inside( rectangle.pos, rectangle.size );
     }
 
     template< cPrimitive Type >

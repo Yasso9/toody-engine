@@ -10,9 +10,7 @@
 
 namespace tile
 {
-    Set::Set( sf::Texture const & texture )
-      : m_texture { texture }, m_position { 0.f, 0.f }
-    {}
+    Set::Set( sf::Texture const & texture ) : m_texture { texture } {}
 
     sf::Texture const & Set::get_texture() const
     {
@@ -21,13 +19,10 @@ namespace tile
 
     math::Vector2F Set::get_position() const
     {
-        return m_position;
+        return { 0.f, 0.f };
     }
 
-    void Set::set_position( math::Vector2F pos )
-    {
-        m_position = pos;
-    }
+    void Set::set_position( math::Vector2F const & /* pos */ ) {}
 
     tile::Size Set::get_size() const
     {

@@ -32,7 +32,7 @@ class Config : public Singleton< Config >,
   public:
     ~Config() = default;
 
-    void update_gui () override;
+    void update_window ( UpdateContext & context ) override;
 
     math::Vector2F        get_window_size () const;
     sf::VideoMode         get_video_mode () const;

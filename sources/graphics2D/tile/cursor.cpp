@@ -27,7 +27,8 @@ namespace tile
         math::Vector2F mousePosition {
             context.inputs.get_mouse_position( tilemap.get_view() ) };
         std::optional< tile::CellPos > tilePosition {
-            tilemap.get_position( mousePosition.to_point() ) };
+            tilemap.position( { mousePosition.to_uint(),
+                                tile::Type::Pixel } ) };
 
         if ( ! tilePosition.has_value()
              || ImGui::IsWindowFocusedOrHovered( ImGuiHoveredFlags_AnyWindow ) )
@@ -36,8 +37,8 @@ namespace tile
             return;
         }
 
-        this->show();
         this->set_position( tilePosition.value().pixel().to_float() );
+        this->show();
 
         if ( context.inputs.is_pressed( sf::Mouse::Button::Left ) )
         {

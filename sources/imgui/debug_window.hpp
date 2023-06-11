@@ -15,7 +15,8 @@ class DebugWindow : public SubWindow
     virtual ~DebugWindow() = default;
 
     // Made to be called from anywhere
-    // Must not be called inside update_gui(). Just use TextFmt instead
+    // Must not be called inside update_window ( UpdateContext & context ). Just
+    // use TextFmt instead
     template< typename... Args >
     void add_debug_text ( fmt::format_string< Args... > fmt, Args &&... args );
 };
@@ -24,7 +25,7 @@ template< typename... Args >
 void DebugWindow::add_debug_text( fmt::format_string< Args... > fmt,
                                   Args &&... args )
 {
-    if ( ! this->is_enabled() )
+    if ( ! this->is_window_enabled() )
     {
         return;
     }

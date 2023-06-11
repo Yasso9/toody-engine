@@ -49,10 +49,10 @@ namespace math
     {
         m_points.resize( 4 );
 
-        m_points[0] = rectangle.position;
-        m_points[1] = rectangle.position + rectangle.size.get_x_axis();
-        m_points[2] = rectangle.position + rectangle.size;
-        m_points[3] = rectangle.position + rectangle.size.get_y_axis();
+        m_points[0] = rectangle.pos;
+        m_points[1] = rectangle.pos + rectangle.size.get_x_axis();
+        m_points[2] = rectangle.pos + rectangle.size;
+        m_points[3] = rectangle.pos + rectangle.size.get_y_axis();
     }
 
     template< cPrimitive Type >

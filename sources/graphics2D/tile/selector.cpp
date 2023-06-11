@@ -20,57 +20,90 @@
 
 namespace tile
 {
-    Selector::Selector( tile::Set const & tileset )
-      : SubWindow { "Tile Selector" },
-        m_tileset { tileset },
-        m_subTileset { m_tileset, { 12, 12, tile::Type::Tile } },
-        m_tileSelected { std::nullopt },
-        m_gridColor { Color::RGBA { 118, 118, 118, 255 } },
-        m_show { .grid = true, .scrollbar = false },
-        m_debugWindow { "Selector Informations" }
+    SubTileset::SubTileset( tile::Set const &  tileset,
+                            tile::Size const & maxSize )
+      : m_position {},
+        m_size { math::min( tileset.get_size().tile(), maxSize.tile() ),
+                 tile::Type::Tile },
+        m_firstTile { { 0, 0 }, m_size, tile::Type::Tile }
     {}
 
-    void Selector::update( UpdateContext & context )
+    math::Vector2F SubTileset::get_position() const
     {
-        if ( ImGui::BeginWindow( *this ) )
+        return m_position;
+    }
+
+    void SubTileset::set_position( math::Vector2F const & pos )
+    {
+        m_position = pos;
+    }
+
+    tile::Size SubTileset::get_size() const
+    {
+        return m_size;
+    }
+
+    tile::CellPos SubTileset::first_tile() const
+    {
+        return m_firstTile;
+    }
+
+    void SubTileset::set_first_tile( math::Vector2F const & scroll )
+    {
+        m_firstTile = tile::CellPos { scroll.to_uint(), m_size,
+                                      tile::Type::Pixel };
+    }
+
+    void SubTileset::size_slider()
+    {
+        math::Vector2U size { m_size.tile() };
+        if ( ImGui::SliderVec( "TileSet Size", size, 4, 16 ) )
         {
-            this->update_settings( context );
-
-            math::Vector2U size { m_subTileset.size.tile() };
-            if ( ImGui::SliderVec( "TileSet Size", size, 4, 16 ) )
-            {
-                m_subTileset.size.tile( size );
-            }
-
-            ImGuiWindowFlags windowFlags = ImGuiWindowFlags_None;
-            if ( ! m_show.scrollbar )
-            {
-                windowFlags |= ImGuiWindowFlags_NoScrollbar;
-            }
-            if ( ImGui::BeginChild( "scrolling_texture",
-                                    m_subTileset.size.pixel().to_float(), true,
-                                    windowFlags ) )
-            {
-                this->update_scroll( context );
-
-                // m_tileset.set_position( ImGui::GetCursorScreenPos() );
-                ImGui::Image( m_tileset.get_texture() );
-
-                if ( m_show.grid )
-                {
-                    this->update_grid( context );
-                }
-                this->update_selection( context );
-            }
-            ImGui::EndChild();
-
-            this->update_informations( context );
+            m_size.tile( size );
         }
     }
 
-    tile::Set const & Selector::get_tileset() const
+    Selector::Selector( std::shared_ptr< tile::Set const > tileset )
+      : SubWindow { "Tile Selector" },
+        m_tileset { tileset },
+        m_subTileset { *m_tileset, { 12, 12, tile::Type::Tile } },
+        m_tileSelected { std::nullopt },
+        m_gridColor { Color::RGBA { 118, 118, 118, 255 } },
+        m_showElements { .grid = true },
+        m_debugWindow { "Selector Informations" }
     {
-        return m_tileset;
+        this->add_child( m_debugWindow );
+
+        this->show_window();
+    }
+
+    void Selector::update_window( UpdateContext & context )
+    {
+        this->update_config( context );
+        m_subTileset.size_slider();
+
+        if ( ImGui::BeginChild( "scrolling_texture",
+                                m_subTileset.get_size().pixel().to_float(),
+                                true, ImGuiWindowFlags_NoScrollbar ) )
+        {
+            this->update_scroll( context );
+
+            this->update_image( context );
+
+            if ( m_showElements.grid )
+            {
+                this->update_grid( context );
+            }
+            this->update_selection( context );
+        }
+        ImGui::EndChild();
+
+        this->update_informations( context );
+    }
+
+    void Selector::set_tileset( std::shared_ptr< tile::Set const > tileset )
+    {
+        m_tileset = tileset;
     }
 
     std::optional< tile::CellPos > Selector::get_tile_selected() const
@@ -78,89 +111,86 @@ namespace tile
         return m_tileSelected;
     }
 
-    void Selector::update_settings( UpdateContext & /* context */ )
+    void Selector::update_config( UpdateContext & /* context */ )
     {
-        ImGui::Checkbox( "Enable Grid ?", &m_show.grid );
-        ImGui::Checkbox( "Show Scrollbar ?", &m_show.scrollbar );
-        ImGui::Checkbox( "Show Debug ?", &m_debugWindow.is_enabled() );
-        if ( m_show.grid )
+        ImGui::Checkbox( "Enable Grid ?", &m_showElements.grid );
+        ImGui::Checkbox( "Show Debug ?", &m_debugWindow.is_window_enabled() );
+        if ( m_showElements.grid )
         {
             ImGui::ColorEdit4( "Grid Color", m_gridColor.to_table() );
         }
     }
 
+    void Selector::update_scroll( UpdateContext & /* context */ )
+    {
+        m_subTileset.set_first_tile( ImGui::GetScroll() );
+    }
+
+    void Selector::update_image( UpdateContext & /* context */ )
+    {
+        m_subTileset.set_position( ImGui::GetCursorScreenPos() );
+        ImGui::Image( m_tileset->get_texture() );
+    }
+
     void Selector::update_grid( UpdateContext & /* context */ )
     {
+        math::RectangleF gridRect { m_subTileset.get_rect() };
+
         // Border
-        ImGui::GetWindowDrawList()->AddRect( m_tileset.get_position(),
-                                             m_tileset.get_bound_pos(),
+        ImGui::GetWindowDrawList()->AddRect( gridRect.pos, gridRect.bound_pos(),
                                              m_gridColor.to_integer() );
 
         // Horizontal lines
-        for ( unsigned int x = 0; x < m_tileset.get_size().tile().x; ++x )
+        for ( unsigned int x = 0; x < m_tileset->get_size().tile().x; ++x )
         {
             float       xPixel = static_cast< float >( x ) * TILE_PIXEL_SIZE;
-            math::LineF line { { m_tileset.get_position().x + xPixel,
-                                 m_tileset.get_position().y },
-                               { m_tileset.get_position().x + xPixel,
-                                 m_tileset.get_bound_pos().y } };
+            math::LineF line { { gridRect.pos.x + xPixel, gridRect.pos.y },
+                               { gridRect.pos.x + xPixel,
+                                 gridRect.bound_pos().y } };
 
             ImGui::GetWindowDrawList()->AddLine( line.pointA, line.pointB,
                                                  m_gridColor.to_integer() );
         }
         // Vertical lines
-        for ( unsigned int y = 0; y < m_tileset.get_size().tile().y; ++y )
+        for ( unsigned int y = 0; y < m_tileset->get_size().tile().y; ++y )
         {
             float       yPixel = static_cast< float >( y ) * TILE_PIXEL_SIZE;
-            math::LineF line { { m_tileset.get_position().x,
-                                 m_tileset.get_position().y + yPixel },
-                               { m_tileset.get_bound_pos().x,
-                                 m_tileset.get_position().y + yPixel } };
+            math::LineF line { { gridRect.pos.x, gridRect.pos.y + yPixel },
+                               { gridRect.bound_pos().x,
+                                 gridRect.pos.y + yPixel } };
 
             ImGui::GetWindowDrawList()->AddLine( line.pointA, line.pointB,
                                                  m_gridColor.to_integer() );
         }
     }
 
-    void Selector::update_scroll( UpdateContext & /* context */ )
-    {
-        m_subTileset.firstTile = tile::CellPos { ImGui::GetScroll().to_uint(),
-                                                 m_subTileset.size,
-                                                 tile::Type::Pixel };
-    }
-
     void Selector::update_selection( UpdateContext & context )
     {
-        math::Vector2I mousePosition { context.inputs.get_mouse_position() };
+        math::Vector2I mousePos { context.inputs.get_mouse_position() };
 
-        if ( ImGui::IsWindowHovered()
-             && mousePosition.to_point().to_uint().is_inside(
-                 m_subTileset.firstTile.pixel(), m_subTileset.size.pixel() ) )
-        {  // the mouse is inside the tileset grid
-            auto selectionPos = mousePosition - m_tileset.get_position();
-            if ( selectionPos < math::Vector2I::ZERO )
+        if ( ! ImGui::IsWindowHovered() )
+        {
+            return;
+        }
+
+        std::optional< math::Vector2F > rectPosOpt {
+            m_subTileset.get_cell_abs_pos( mousePos.to_float() ) };
+        if ( ! rectPosOpt.has_value() )
+        {  // the mouse is not inside the tileset grid
+            return;
+        }
+
+        // Selection rectangle
+        ImGui::GetWindowDrawList()->AddRectFilled( rectPosOpt.value(),
+                                                   rectPosOpt.value()
+                                                       + TILE_PIXEL_SIZE_VECTOR,
+                                                   m_gridColor.to_integer() );
+        if ( context.inputs.is_pressed( sf::Mouse::Button::Left ) )
+        {
+            m_tileSelected = m_subTileset.get_cell_pos( mousePos.to_float() );
+            if ( ! m_tileSelected.has_value() )
             {
-                Trace::Warning(
-                    "Selector::update_selection : selectionPos < 0" );
-            }
-            tile::CellPos selectionPosition {
-                m_tileset
-                    .position( { selectionPos.to_uint(), tile::Type::Pixel } )
-                    .value() };
-
-            // m_debugWindow.add_debug_text( "Selection Position : {}",
-            //                               selectionPosition );
-
-            // Selection Rectangle
-            ImGui::GetWindowDrawList()->AddRectFilled(
-                selectionPosition.pixel().to_float() + m_tileset.get_position(),
-                selectionPosition.pixel().to_float() + m_tileset.get_position()
-                    + TILE_PIXEL_SIZE_VECTOR,
-                m_gridColor.to_integer() );
-
-            if ( context.inputs.is_pressed( sf::Mouse::Button::Left ) )
-            {
-                m_tileSelected = selectionPosition;
+                Trace::Error( "Tile should be selected" );
             }
         }
     }
@@ -168,13 +198,16 @@ namespace tile
     void Selector::update_informations( UpdateContext & /* context */ )
     {
         m_debugWindow.add_debug_text( "Tileset Position : {}",
-                                      m_tileset.get_position() );
+                                      m_tileset->get_position() );
         m_debugWindow.add_debug_text( "Tileset Size : {}",
-                                      m_tileset.get_size() );
+                                      m_tileset->get_size() );
         m_debugWindow.add_debug_text( "SubTileset Position : {}",
-                                      m_subTileset.firstTile );
+                                      m_subTileset.get_position() );
         m_debugWindow.add_debug_text( "SubTileset Size : {}",
-                                      m_subTileset.size );
+                                      m_subTileset.get_size() );
+        m_debugWindow.add_debug_text( "SubTileset First Tile : {}",
+                                      m_subTileset.first_tile() );
+        // TODO : overload fmt for std::optional
         m_debugWindow.add_debug_text(
             "Current Tile Selected : {}",
             m_tileSelected.has_value()

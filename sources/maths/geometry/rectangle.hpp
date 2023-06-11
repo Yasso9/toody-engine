@@ -8,11 +8,12 @@
 // TODO create a TPP file
 namespace math
 {
+    // TODO rename to Rect
     template< cPrimitive Type >
     class Rectangle
     {
       public:
-        Point< Type >   position;
+        Point< Type >   pos;
         Vector2< Type > size;
 
         Rectangle() : Rectangle { 0, 0, 0, 0 } {}
@@ -22,40 +23,40 @@ namespace math
         {}
 
         Rectangle( Type x, Type y, Type width, Type height )
-          : position { x, y }, size { width, height }
+          : pos { x, y }, size { width, height }
         {}
 
         Rectangle( sf::Rect< Type > const & sfRect )
           : Rectangle { sfRect.left, sfRect.top, sfRect.width, sfRect.height }
         {}
 
-        math::Vector2< Type > end_position () const { return position + size; }
+        math::Vector2< Type > bound_pos () const { return pos + size; }
 
-        bool contain ( math::Point< Type > point ) const
+        bool contains ( math::Point< Type > point ) const
         {
             return point.is_inside( *this );
         }
 
         operator sf::Rect< Type > () const
         {
-            return sf::Rect< Type > { position.x, position.y, size.x, size.y };
+            return sf::Rect< Type > { pos.x, pos.y, size.x, size.y };
         }
 
         Rectangle< Type > operator+ ( Vector2< Type > const & rhs )
         {
-            return Rectangle< Type > { position + rhs, size };
+            return Rectangle< Type > { pos + rhs, size };
         }
 
         Rectangle< Type > operator- ( Vector2< Type > const & rhs )
         {
-            return Rectangle< Type > { position - rhs, size };
+            return Rectangle< Type > { pos - rhs, size };
         }
 
         template< typename TypeBis >
         friend std::ostream & operator<< (
             std::ostream & stream, Rectangle< TypeBis > const & rectangle )
         {
-            return stream << "{ Pos:" << rectangle.position
+            return stream << "{ Pos:" << rectangle.pos
                           << " Size:" << rectangle.size << " }";
         }
     };

@@ -2,11 +2,11 @@
 
 #include <SFML/Graphics/View.hpp>  // for View
 
-#include "application/interface/window.hpp"          // for Window
-#include "imgui/debug_window.hpp"    // for DebugWindow
-#include "maths/geometry/point.hpp"      // for PointF
-#include "maths/geometry/rectangle.hpp"  // for RectangleF
-#include "maths/vector2.hpp"             // for Vector2F
+#include "application/interface/window.hpp"  // for Window
+#include "imgui/debug_window.hpp"            // for DebugWindow
+#include "maths/geometry/point.hpp"          // for PointF
+#include "maths/geometry/rectangle.hpp"      // for RectangleF
+#include "maths/vector2.hpp"                 // for Vector2F
 
 class View : public DebugWindow
 {
@@ -20,8 +20,11 @@ class View : public DebugWindow
   public:
     View();
     View( sf::View const & sfView ) noexcept;
-    // View( math::RectangleF rectangle );
 
+  private:
+    void update_window ( UpdateContext & context ) override;
+
+  public:
     operator sf::View & ();
     operator sf::View const & () const;
 
@@ -46,6 +49,4 @@ class View : public DebugWindow
 
     /// @brief Check if a point is contained in the view
     bool contain ( math::PointF point ) const;
-
-    void update_gui () override;
 };

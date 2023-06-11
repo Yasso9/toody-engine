@@ -1,12 +1,12 @@
 #pragma once
 
-#include <functional>                               // for reference_wrapper
-#include <vector>                                   // for vector
+#include <functional>  // for reference_wrapper
+#include <vector>      // for vector
 
 #include "application/contexts/render_context.hpp"  // for RenderContext
 #include "application/contexts/update_context.hpp"  // for UpdateContext
-#include "graphics2D/view.hpp"                      // for View
-#include "imgui/sub_window.hpp"                     // for SubWindow
+
+class View;
 
 class Component;
 // check if T is derived from Component
@@ -16,11 +16,6 @@ class Component
 {
     // List of childs components
     std::vector< Component * > m_childs;
-    // List of debug windows attached to this component
-    std::vector< SubWindow * > m_subWindows;
-    // List of childs components represented as an array of components
-    // std::vector< std::reference_wrapper< std::vector< Component * > > >
-    //     m_arrayChilds;
 
     // optionnal references so we use a pointer
     View const * m_view;
@@ -41,24 +36,8 @@ class Component
     void add_child ( Component & component, View const & view );
     void add_child ( Component * component );
 
-    // Difficult to implement
-    // template< cComponent C >
-    // void add_childs ( std::vector< C > & components )
-    // {
-    //     for ( C & component : components )
-    //     {
-    //         this->add_child( component );
-    //     }
-    // }
-
-    // template< cComponent C >
-    // void add_childs( std::vector< C > & components );
-
     void remove_child ( Component * component );
     void remove_child ( Component & component );
-
-    void add_sub_window ( SubWindow & subWindow );
-    void remove_sub_window ( SubWindow & subWindow );
 
   public:
     std::vector< Component const * > get_childs () const;
@@ -69,7 +48,8 @@ class Component
     // draw the component to the render
     virtual void render_all ( RenderContext & context ) const;
 
-    void set_view ( View const & view );
+    void         set_view ( View const & view );
+    View const & get_view () const;
 
   private:
     // custom update - called before children update

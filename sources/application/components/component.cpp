@@ -2,23 +2,16 @@
 
 #include "application/contexts/render_context.hpp"  // for RenderContext
 #include "application/contexts/update_context.hpp"  // for UpdateContext
+#include "graphics2D/view.hpp"                      // for View
 
-Component::Component()
-  : m_childs {},
-    m_subWindows {} /* , m_arrayChilds {} */,
-    m_view { nullptr } {};
+Component::Component() : m_childs {}, m_view { nullptr } {};
 
 Component::Component( Component const & component ) noexcept
-  : m_childs { component.m_childs },
-    m_subWindows { component.m_subWindows },
-    // m_arrayChilds { component.m_arrayChilds },
-    m_view { component.m_view }
+  : m_childs { component.m_childs }, m_view { component.m_view }
 {}
 
 Component::Component( Component && component ) noexcept
   : m_childs { std::exchange( component.m_childs, {} ) },
-    m_subWindows { std::exchange( component.m_subWindows, {} ) },
-    // m_arrayChilds { std::exchange( component.m_arrayChilds, {} ) },
     m_view { std::exchange( component.m_view, {} ) }
 {}
 
@@ -30,8 +23,6 @@ Component & Component::operator= ( Component const & component ) noexcept
 Component & Component::operator= ( Component && component ) noexcept
 {
     std::swap( m_childs, component.m_childs );
-    std::swap( m_subWindows, component.m_subWindows );
-    // std::swap( m_arrayChilds, component.m_arrayChilds );
     std::swap( m_view, component.m_view );
     return *this;
 }
@@ -80,18 +71,6 @@ void Component::remove_child( Component & component )
     this->remove_child( &component );
 }
 
-void Component::add_sub_window( SubWindow & subWindow )
-{
-    m_subWindows.push_back( &subWindow );
-}
-
-void Component::remove_sub_window( SubWindow & subWindow )
-{
-    m_subWindows.erase( std::remove( m_subWindows.begin(), m_subWindows.end(),
-                                     &subWindow ),
-                        m_subWindows.end() );
-}
-
 std::vector< Component const * > Component::get_childs() const
 {
     std::vector< Component const * > childs {};
@@ -118,16 +97,6 @@ void Component::update_all( UpdateContext & context )
     this->update_before( context );
 
     this->update( context );
-
-    for ( SubWindow * subWindow : m_subWindows )
-    {
-        // TODO : voir si on fait cette vérification ici ou dans la classe
-        // if ( ! subWindow->is_showed() )
-        // {
-        //     continue;
-        // }
-        subWindow->update_all();
-    }
 
     for ( Component * component : this->get_childs() )
     {
@@ -164,6 +133,11 @@ void Component::render_all( RenderContext & context ) const
 void Component::set_view( View const & view )
 {
     m_view = &view;
+}
+
+View const & Component::get_view() const
+{
+    return *m_view;
 }
 
 void Component::update_before( UpdateContext & /* context */ ) {}

@@ -29,7 +29,7 @@ math::PolygonF Sprite::get_polygon() const
 {
     math::RectangleF spriteRectangle {};
 
-    spriteRectangle.position = this->get_position();
+    spriteRectangle.pos = this->get_position();
     spriteRectangle.size     = this->get_size();
 
     return spriteRectangle;

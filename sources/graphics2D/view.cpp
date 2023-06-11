@@ -5,9 +5,9 @@
 
 // using namespace std::string_literals;
 #include "application/interface/window.hpp"  // for Window
-#include "imgui/imgui.hpp"   // for ImGui::Begin, ImGui::End, ImGui::Text
-#include "maths/vector2.tpp"     // for operator/, Vector2::Vector2<Type>
-#include "tools/singleton.tpp"   // for Singleton::get_instance
+#include "imgui/imgui.hpp"      // for ImGui::Begin, ImGui::End, ImGui::Text
+#include "maths/vector2.tpp"    // for operator/, Vector2::Vector2<Type>
+#include "tools/singleton.tpp"  // for Singleton::get_instance
 
 View::View() : View { sf::View {} } {}
 
@@ -110,7 +110,7 @@ bool View::contain( math::PointF point ) const
     return point.is_inside( this->get_rectangle() );
 }
 
-void View::update_gui()
+void View::update_window( UpdateContext & /* context */ )
 {
     ImGui::TextFmt( "View Position : {}", this->get_position().to_vector() );
     ImGui::TextFmt( "View Size : {}", this->get_size() );

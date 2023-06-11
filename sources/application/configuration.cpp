@@ -85,7 +85,7 @@ std::filesystem::path Config::get_tilemap_save_path() const
     return m_tilemapSavePath;
 }
 
-void Config::update_gui()
+void Config::update_window( UpdateContext & /* context */ )
 {
     if ( ImGui::BeginWindow( *this ) )
     {

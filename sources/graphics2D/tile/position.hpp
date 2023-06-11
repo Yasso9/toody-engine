@@ -25,6 +25,7 @@ namespace tile
 
         math::Vector2U tile () const;
         math::Vector2U pixel () const;
+        math::Vector2U pixel_abs ( math::Vector2F const & gridPos ) const;
 
         void tile ( math::Vector2U position );
         void pixel ( math::Vector2U position );

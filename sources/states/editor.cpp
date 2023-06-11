@@ -1,9 +1,9 @@
 #include "editor.hpp"
 
-#include <algorithm>                // for max, copy
-#include <sstream>                  // for operator<<, basic_ostream
-#include <stddef.h>                 // for NULL
-#include <vector>                   // for vector
+#include <algorithm>  // for max, copy
+#include <sstream>    // for operator<<, basic_ostream
+#include <stddef.h>   // for NULL
+#include <vector>     // for vector
 
 #include <SFML/Graphics/Color.hpp>  // for Color, Color::Black, Color::...
 #include <SFML/System/Vector2.hpp>  // for Vector2f
@@ -13,13 +13,13 @@
 #include "application/components/component.hpp"  // for Component::add_child
 #include "application/configuration.hpp"         // for Settings
 #include "application/contexts/game_context.hpp"
-#include "application/interface/window.hpp"      // for Window
-#include "application/resources.hpp"             // for get_texture
-#include "graphics2D/entity/static_entity.hpp"   // for StaticEntity2D
-#include "graphics2D/sfml.hpp"                   // for operator<<
-#include "graphics2D/view.hpp"                   // for View
-#include "imgui/imgui.hpp"                       // for P_Begin
-#include "maths/geometry/point.hpp"              // for PointF
+#include "application/interface/window.hpp"     // for Window
+#include "application/resources.hpp"            // for get_texture
+#include "graphics2D/entity/static_entity.hpp"  // for StaticEntity2D
+#include "graphics2D/sfml.hpp"                  // for operator<<
+#include "graphics2D/view.hpp"                  // for View
+#include "imgui/imgui.hpp"                      // for P_Begin
+#include "maths/geometry/point.hpp"             // for PointF
 #include "maths/geometry/polygon.tpp"    // for Polygon::Polygon<Type>, Poly...
 #include "maths/geometry/rectangle.hpp"  // for RectangleF
 #include "maths/vector2.hpp"             // for Vector2F, Vector2, Vector2U
@@ -31,18 +31,22 @@ EditorState::EditorState()
     m_view {},
     m_viewSettings {},
     m_showWindow { .demo = false, .overlay = false, .view = false },
-    m_tilemap { m_view },
+    m_tileset {
+        std::make_shared< tile::Set >( resource::tileset::get( "town.png" ) ) },
+    m_tilemap { m_tileset },
+    m_tileSelector { m_tileset },
     m_imageMap {},
     m_collisionList {},
     m_character { resource::character::get( "gold_sprite.png" ),
                   { m_collisionList, m_view, input::ARROW } }
 {
     this->add_child( m_tilemap, m_view );
+    this->add_child( m_tileSelector );
     this->add_child( m_collisionList, m_view );
     this->add_child( m_character, m_view );
     this->add_child( m_imageMap );
-    this->add_sub_window( m_view );
-    this->add_sub_window( Config::get_instance() );
+    // this->add_sub_window( m_view );
+    // this->add_sub_window( Config::get_instance() );
 
     m_tilemap.setPosition( 0.f, 0.f );
     this->reset_view( Config::get_instance().get_window_size() );
@@ -76,7 +80,7 @@ void EditorState::update_toolbar( UpdateContext & context )
 
             ImGui::MenuItem( "Generate Traces", "", &generateTraces );
             ImGui::MenuItem( "Manage Settings", "",
-                             &Config::get_instance().is_enabled() );
+                             &Config::get_instance().is_window_enabled() );
 
             ImGui::EndMenu();
         }

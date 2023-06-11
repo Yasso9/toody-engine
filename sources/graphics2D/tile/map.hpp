@@ -18,38 +18,29 @@ class View;
 
 namespace tile
 {
-    class Map : public Transformable2D
+    // TODO change name to Tilemap
+    class Map : public Transformable2D,
+                public Grid
     {
-        tile::Selector m_tileSelector;
-        tile::Table    m_table;
-
-        tile::MouseCursor m_cursor;
-        // view of the component that call the tilemap
-        View & m_view;
+        std::shared_ptr< tile::Set const > m_tileset;
+        tile::Table                        m_table;
+        tile::MouseCursor                  m_cursor;
 
       public:
-        explicit Map( View & view );
+        explicit Map( std::shared_ptr< tile::Set const > tileset );
         virtual ~Map() = default;
 
       private:
         void update ( UpdateContext & context ) override;
 
       public:
-        tile::Set const & get_tileset () const;
-        tile::Size        get_size () const;
-        // Absolute position of the center of the tilemap in pixel
-        math::Vector2F get_center_absolute () const;
-        // Relative position of the center of the tilemap in pixel
-        math::Vector2F get_center_relative () const;
-        View const &   get_view () const;
+        math::Vector2F get_position () const override;
+        void           set_position ( math::Vector2F const & pos ) override;
+        tile::Size     get_size () const override;
 
-        // optionnal tile position if the point is in the tilemap
-        std::optional< tile::CellPos > get_position (
-            math::PointF point ) const;
+        std::shared_ptr< tile::Set const > get_tileset () const;
 
-        bool contain ( math::PointF point ) const;
-        bool is_comptatible ( tile::CellPos position ) const;
-
+        void load ( std::filesystem::path const & path );
         void save () const;
 
       private:

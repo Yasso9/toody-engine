@@ -10,11 +10,11 @@
 
 namespace tile
 {
+    // TODO change name to Tileset
     // Table of tiles
     class Set : public Grid
     {
         sf::Texture const & m_texture;
-        math::Vector2F      m_position;
 
       public:
         explicit Set( sf::Texture const & texture );
@@ -23,7 +23,7 @@ namespace tile
         sf::Texture const & get_texture () const;
 
         math::Vector2F get_position () const override;
-        void           set_position ( math::Vector2F pos ) override;
+        void           set_position ( math::Vector2F const & pos ) override;
         tile::Size     get_size () const override;
     };
 }  // namespace tile

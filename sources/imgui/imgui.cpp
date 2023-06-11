@@ -29,7 +29,7 @@ namespace ImGui
 
     bool BeginWindow ( SubWindow & subWindow )
     {
-        if ( ! subWindow.is_enabled() )
+        if ( ! subWindow.is_window_enabled() )
         {
             return false;
         }

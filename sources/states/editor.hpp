@@ -1,9 +1,9 @@
 #pragma once
 
-#include <map>                                        // for map
-#include <string>                                     // for string
+#include <map>     // for map
+#include <string>  // for string
 
-#include "graphics2D/collision/collision_list.hpp"    // for CollisionList
+#include "graphics2D/collision/collision_list.hpp"  // for CollisionList
 #include "graphics2D/entity/character_entity.hpp"
 #include "graphics2D/entity/controllable_entity.hpp"  // for MoveableEntity2D
 #include "graphics2D/entity/player.hpp"               // for Player
@@ -26,8 +26,10 @@ class EditorState : public State
 
     ShowWindow m_showWindow;
 
-    tile::Map m_tilemap;
-    ImageMap  m_imageMap;
+    std::shared_ptr< tile::Set > m_tileset;
+    tile::Map                    m_tilemap;
+    tile::Selector               m_tileSelector;
+    ImageMap                     m_imageMap;
 
     CollisionList   m_collisionList;
     CharacterEntity m_character;

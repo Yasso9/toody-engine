@@ -33,37 +33,26 @@
 
 namespace tile
 {
-    Map::Map( View & view )
-      : m_tileSelector { tile::Set { resource::tileset::get( "town.png" ) } },
-        m_table { m_tileSelector.get_tileset().get_texture() },
-        m_cursor { MouseCursor::Outline },
-        m_view { view }
+    Map::Map( std::shared_ptr< tile::Set const > tileset )
+      : m_tileset { tileset },
+        m_table { m_tileset->get_texture() },
+        m_cursor { MouseCursor::Outline }
     {
-        this->add_child( m_tileSelector );
         this->add_child( m_table );
         this->add_child( m_cursor );
 
-        m_cursor.on_click( [this] ( tile::CellPos const & tilePosition ) {
-            Trace::Debug( "Clicked on tile: ", tilePosition.tile() );
-            if ( m_tileSelector.get_tile_selected().has_value() )
-            {
-                this->change_tile( tilePosition,
-                                   m_tileSelector.get_tile_selected().value() );
-            }
-        } );
+        // m_cursor.on_click( [this] ( tile::CellPos const & tilePosition ) {
+        //     Trace::Debug( "Clicked on tile: ", tilePosition.tile() );
+        //     if ( m_tileSelector.get_tile_selected().has_value() )
+        //     {
+        //         this->change_tile( tilePosition,
+        //                            m_tileSelector.get_tile_selected().value()
+        //                            );
+        //     }
+        // } );
 
-        // Load table from file
-        std::string content {
-            fs::get_content( Config::get_instance().get_tilemap_save_path() ) };
-        if ( content == "" )
-        {
-            content = "{ ( 1, 1 ) | [ (0, 0) ] }";
-        }
-        std::stringstream stream {};
-        stream << content;
-        stream >> m_table;
-
-        this->setPosition( 0.f, 0.f );
+        this->load( Config::get_instance().get_tilemap_save_path() );
+        // this->setPosition( 0.f, 0.f );
     }
 
     void Map::update( UpdateContext & context )
@@ -84,9 +73,14 @@ namespace tile
         ImGui::EndWindow();
     }
 
-    tile::Set const & Map::get_tileset() const
+    math::Vector2F Map::get_position() const
     {
-        return this->m_tileSelector.get_tileset();
+        return this->getPosition();
+    }
+
+    void Map::set_position( math::Vector2F const & pos )
+    {
+        this->setPosition( pos );
     }
 
     tile::Size Map::get_size() const
@@ -94,50 +88,22 @@ namespace tile
         return m_table.get_size();
     }
 
-    math::Vector2F Map::get_center_absolute() const
+    std::shared_ptr< tile::Set const > Map::get_tileset() const
     {
-        return this->get_center_relative()
-               + math::Vector2F { this->getPosition() };
+        return this->m_tileset;
     }
 
-    math::Vector2F Map::get_center_relative() const
+    void Map::load( std::filesystem::path const & path )
     {
-        return math::Vector2F { this->get_size().pixel().to_float() / 2.f };
-    }
-
-    View const & Map::get_view() const
-    {
-        return m_view;
-    }
-
-    std::optional< tile::CellPos > Map::get_position( math::PointF point ) const
-    {
-        if ( ! this->contain( point ) )
+        // Load table from file
+        std::string content { fs::get_content( path ) };
+        if ( content == "" )
         {
-            return std::nullopt;
+            content = "{ ( 1, 1 ) | [ (0, 0) ] }";
         }
-
-        math::Vector2U pointRelative {
-            point - math::Vector2F { this->getPosition() } };
-
-        return tile::CellPos { pointRelative, this->get_size(),
-                               tile::Type::Pixel };
-    }
-
-    bool Map::contain( math::PointF point ) const
-    {
-        if ( ! m_view.contain( point ) )
-        {
-            return false;
-        }
-
-        return point.is_inside( math::PointF { this->getPosition() },
-                                this->get_size().pixel().to_float() );
-    }
-
-    bool Map::is_comptatible( tile::CellPos position ) const
-    {
-        return this->get_size().tile().x == position.sizeX();
+        std::stringstream stream {};
+        stream << content;
+        stream >> m_table;
     }
 
     void Map::save() const
@@ -155,7 +121,7 @@ namespace tile
             Trace::Warning(
                 "Tilemap position not comptatible with current tilemap" );
         }
-        if ( value >= this->get_tileset().get_size() )
+        if ( value >= this->get_tileset()->get_size() )
         {
             Trace::Warning(
                 "Tileset position not comptatible with current "
@@ -174,7 +140,7 @@ namespace tile
         }
     }
 
-    void Map::update_informations( UpdateContext & context )
+    void Map::update_informations( UpdateContext & /* context */ )
     {
         static bool showDebug { true };
         ImGui::Checkbox( "Show debug informations ?", &showDebug );
@@ -182,29 +148,12 @@ namespace tile
         {
             std::ostringstream infoOutput {};
 
-            if ( m_tileSelector.get_tile_selected().has_value() )
-            {
-                infoOutput << "Tileset - Tile Selected : "
-                           << m_tileSelector.get_tile_selected().value().index()
-                           << "\n";
-            }
-            else
-            {
-                infoOutput << "Tileset - Tile Selected : None\n";
-            }
-
             infoOutput << "Tilemap - Position : " << this->getPosition()
                        << "\n";
             infoOutput << "Tilemap - Size : " << this->get_size().pixel()
                        << "\n";
             infoOutput << "Tilemap - Number of Tile : "
                        << this->get_size().tile() << "\n";
-
-            infoOutput << "View - Center : " << m_view.get_center() << "\n";
-            infoOutput << "View - Size : " << m_view.get_size() << "\n";
-            infoOutput << "View - Position : " << m_view.get_position() << "\n";
-            infoOutput << "View - Zoom : " << m_view.get_zoom( context.window )
-                       << "\n";
 
             ImGui::Text( "%s", infoOutput.str().c_str() );
         }

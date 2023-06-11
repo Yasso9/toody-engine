@@ -161,7 +161,10 @@ run :
 	$(SHOW)LD_LIBRARY_PATH="$(LIBS_OBJ_DIR)" $(EXEC)
 debug :
 	$(SHOW)echo "Debugging $(EXEC)"
-	$(SHOW)gdb -quiet $(EXEC)
+	$(SHOW)gdb \
+		-ex "set env LD_LIBRARY_PATH $(LIBS_OBJ_DIR)" \
+		-ex "run" \
+		-quiet $(EXEC)
 
 init_build:
 	$(SHOW)echo "Create Build Directories"
