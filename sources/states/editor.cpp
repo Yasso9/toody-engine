@@ -20,11 +20,11 @@
 #include "graphics2D/view.hpp"                  // for View
 #include "imgui/imgui.hpp"                      // for P_Begin
 #include "maths/geometry/point.hpp"             // for PointF
-#include "maths/geometry/polygon.tpp"    // for Polygon::Polygon<Type>, Poly...
-#include "maths/geometry/rectangle.hpp"  // for RectangleF
-#include "maths/vector2.hpp"             // for Vector2F, Vector2, Vector2U
-#include "maths/vector2.tpp"             // for operator<<, operator*, opera...
-#include "tools/singleton.tpp"           // for Singleton::get_instance
+#include "maths/geometry/polygon.tpp"  // for Polygon::Polygon<Type>, Poly...
+#include "maths/geometry/rect.hpp"     // for RectangleF
+#include "maths/vector2.hpp"           // for Vector2F, Vector2, Vector2U
+#include "maths/vector2.tpp"           // for operator<<, operator*, opera...
+#include "tools/singleton.tpp"         // for Singleton::get_instance
 
 EditorState::EditorState()
   : State {},

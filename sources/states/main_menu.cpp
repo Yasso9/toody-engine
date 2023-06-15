@@ -13,7 +13,7 @@
 #include "application/configuration.hpp"
 #include "application/interface/window.hpp"  // for Window
 #include "imgui/imgui.hpp"
-#include "maths/geometry/rectangle.hpp"
+#include "maths/geometry/rect.hpp"
 #include "maths/vector2.hpp"    // for Vector2, Vector2F, Vector2I
 #include "maths/vector2.tpp"    // for Vector2::operator Vector2<...
                                 // for get_mouse_position, is_pre...

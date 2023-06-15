@@ -5,7 +5,7 @@
 #include "application/interface/window.hpp"  // for Window
 #include "imgui/debug_window.hpp"            // for DebugWindow
 #include "maths/geometry/point.hpp"          // for PointF
-#include "maths/geometry/rectangle.hpp"      // for RectangleF
+#include "maths/geometry/rect.hpp"      // for RectangleF
 #include "maths/vector2.hpp"                 // for Vector2F
 
 class View : public DebugWindow

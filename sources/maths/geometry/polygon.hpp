@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "maths/geometry/point.hpp"
-#include "maths/geometry/rectangle.hpp"
+#include "maths/geometry/rect.hpp"
 #include "tools/concepts.hpp"
 
 namespace math

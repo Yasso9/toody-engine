@@ -4,7 +4,7 @@
 
 #include <SFML/Graphics/VertexArray.hpp>  // for VertexArray
 
-#include "maths/geometry/rectangle.hpp"  // for RectangleF
+#include "maths/geometry/rect.hpp"  // for RectangleF
 #include "maths/vector2.hpp"             // for Vector2F
 
 class QuadVertex

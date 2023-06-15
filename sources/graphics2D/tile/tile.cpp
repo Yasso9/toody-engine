@@ -11,7 +11,7 @@
 #include "graphics2D/tile/selector.hpp"  // for TileSelector
 #include "maths/geometry/point.hpp"      // for Point
 #include "maths/geometry/point.tpp"      // for Point::Point<Type>
-#include "maths/geometry/rectangle.hpp"  // for RectangleF
+#include "maths/geometry/rect.hpp"  // for RectangleF
 #include "maths/vector2.hpp"             // for Vector2U, Vector2F, Vector2
 #include "maths/vector2.tpp"             // for Vector2::operator=, operator+
 

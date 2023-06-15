@@ -135,13 +135,14 @@ namespace tile
     void Selector::update_grid( UpdateContext & /* context */ )
     {
         math::RectangleF gridRect { m_subTileset.get_rect() };
+        gridRect += m_subTileset.first_tile().pixel().to_float();
 
         // Border
         ImGui::GetWindowDrawList()->AddRect( gridRect.pos, gridRect.bound_pos(),
                                              m_gridColor.to_integer() );
 
         // Horizontal lines
-        for ( unsigned int x = 0; x < m_tileset->get_size().tile().x; ++x )
+        for ( unsigned int x = 0; x < m_subTileset.get_size().tile().x; ++x )
         {
             float       xPixel = static_cast< float >( x ) * TILE_PIXEL_SIZE;
             math::LineF line { { gridRect.pos.x + xPixel, gridRect.pos.y },
@@ -152,7 +153,7 @@ namespace tile
                                                  m_gridColor.to_integer() );
         }
         // Vertical lines
-        for ( unsigned int y = 0; y < m_tileset->get_size().tile().y; ++y )
+        for ( unsigned int y = 0; y < m_subTileset.get_size().tile().y; ++y )
         {
             float       yPixel = static_cast< float >( y ) * TILE_PIXEL_SIZE;
             math::LineF line { { gridRect.pos.x, gridRect.pos.y + yPixel },
@@ -166,13 +167,12 @@ namespace tile
 
     void Selector::update_selection( UpdateContext & context )
     {
-        math::Vector2I mousePos { context.inputs.get_mouse_position() };
-
         if ( ! ImGui::IsWindowHovered() )
         {
             return;
         }
 
+        math::Vector2I mousePos { context.inputs.get_mouse_position() };
         std::optional< math::Vector2F > rectPosOpt {
             m_subTileset.get_cell_abs_pos( mousePos.to_float() ) };
         if ( ! rectPosOpt.has_value() )
@@ -180,9 +180,11 @@ namespace tile
             return;
         }
 
+        math::Vector2F rectPosWithScroll { rectPosOpt.value() };
+
         // Selection rectangle
-        ImGui::GetWindowDrawList()->AddRectFilled( rectPosOpt.value(),
-                                                   rectPosOpt.value()
+        ImGui::GetWindowDrawList()->AddRectFilled( rectPosWithScroll,
+                                                   rectPosWithScroll
                                                        + TILE_PIXEL_SIZE_VECTOR,
                                                    m_gridColor.to_integer() );
         if ( context.inputs.is_pressed( sf::Mouse::Button::Left ) )

@@ -5,7 +5,7 @@
 #include "graphics2D/tile/cellpos.hpp"   // for CellPos
 #include "graphics2D/tile/position.hpp"  // for Position
 #include "graphics2D/tile/size.hpp"      // for Size
-#include "maths/geometry/rectangle.hpp"  // for RectangleF
+#include "maths/geometry/rect.hpp"  // for RectangleF
 #include "maths/vector2.hpp"             // for Vector2F
 
 namespace tile
